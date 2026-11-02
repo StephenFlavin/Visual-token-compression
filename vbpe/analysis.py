@@ -424,7 +424,17 @@ def _analyse_condition(rows: list[dict], thresholds, n_boot: int, seed: int) -> 
             with np.errstate(invalid="ignore", divide="ignore"):
                 rb = bps[s] / best_boot
             rb[np.isinf(bps[s]) & np.isinf(best_boot)] = np.nan
-            d.update(ratio=r, ratio_lo=_q(rb, 0.025), ratio_hi=_q(rb, 0.975),
+            # censoring: P = smallest grid x means "<= x" (left); None means "> grid max" (right)
+            cs = d["censored"]
+            cb = res[best]["censored"] if best_p is not None else "right"
+            bound = None
+            if cs == "left" and cb == "left" and s != best:
+                bound = "undetermined"
+            elif cs == "left" and s != best:
+                bound = "upper"            # true ratio <= reported
+            elif cb == "left" and s != best:
+                bound = "lower"            # true ratio >= reported
+            d.update(ratio=r, ratio_lo=_q(rb, 0.025), ratio_hi=_q(rb, 0.975), ratio_bound=bound,
                      saving=None if r is None else 1 - r)
         out["thresholds"][f"{thr:g}"] = {"best_latin": best, "best_latin_p": best_p, "schemes": res}
     return out
@@ -462,6 +472,10 @@ def _verdicts(cond: dict[str, dict], phase: int) -> dict[str, str]:
         r, c, s, d, best, bp = min(cands, key=lambda z: z[0])
         detail = (f"best case {s} on {c}: P@{thr:.0%}={_fmt(d['p'])} vs {best} {_fmt(bp)} px^2/char, "
                   f"ratio {r:.2f} (95% CI {_fmt(d['ratio_lo'], 2)}-{_fmt(d['ratio_hi'], 2)})")
+        if d.get("ratio_bound"):
+            what = "undetermined" if d["ratio_bound"] == "undetermined" else f"only a {d['ratio_bound']} bound"
+            detail += (f"; WARNING ratio is {what} (threshold reached at the smallest budget "
+                       "- extend the grid downwards)")
         passed = r <= 1 - bar
         hi = d["ratio_hi"]
         lo = d["ratio_lo"]
@@ -610,11 +624,15 @@ def plot_curves(rows: list[dict], path: str | Path, n_boot: int = 1000, title: s
         for hh, ll in zip(h, l):
             if ll not in labels:
                 handles.append(hh); labels.append(ll)
+    ncol = max(1, min(len(labels), 4 * n))
+    nrow = max(1, math.ceil(len(labels) / ncol))
+    if nrow > 1:
+        fig.set_size_inches(fig.get_size_inches()[0], fig.get_size_inches()[1] + 0.3 * (nrow - 1))
     if handles:
-        fig.legend(handles, labels, loc="lower center", ncol=min(len(labels), 8), frameon=False,
+        fig.legend(handles, labels, loc="lower center", ncol=ncol, frameon=False,
                    fontsize=9, bbox_to_anchor=(0.5, -0.01))
     fig.suptitle(title or "CER vs pixel budget", fontsize=12, color=TEXT_PRIMARY, x=0.01, ha="left")
-    fig.tight_layout(rect=(0, 0.06, 1, 0.97))
+    fig.tight_layout(rect=(0, 0.02 + 0.05 * nrow, 1, 0.97))
     path = Path(path)
     fig.savefig(path, dpi=150, facecolor="white")
     plt.close(fig)
@@ -630,8 +648,10 @@ def plot_p_bars(head: dict, path: str | Path, title: str | None = None) -> Path:
 
     conds = head["conditions"]
     n = max(1, len(conds))
-    fig, axes = plt.subplots(1, n, figsize=(6.4 * n, 4.6), squeeze=False)
     thr_keys = [f"{t:g}" for t in THRESHOLDS]
+    n_s = max([len({s for tk in thr_keys for s in a["thresholds"].get(tk, {}).get("schemes", {})})
+               for a in conds.values()] or [1])
+    fig, axes = plt.subplots(1, n, figsize=(max(6.4, 1.15 * n_s + 0.8) * n, 4.6), squeeze=False)
     width = 0.38
     for ax, (c, a) in zip(axes[0], conds.items()):
         _style_axes(ax)
@@ -665,9 +685,13 @@ def plot_p_bars(head: dict, path: str | Path, title: str | None = None) -> Path:
                        alpha=1.0 if k == 0 else 0.45, hatch=None if k == 0 else "///",
                        edgecolor="white", linewidth=0.8, zorder=2)
                 lo = d["lo"] if d["lo"] is not None else d["p"]
-                hi = d["hi"] if d["hi"] is not None else ymax * 1.5
+                hi = d["hi"] if d["hi"] is not None else ymax * 1.8
                 ax.errorbar(i + off, d["p"], yerr=[[d["p"] - lo], [hi - d["p"]]], fmt="none",
-                            ecolor=TEXT_PRIMARY, elinewidth=1, capsize=3, zorder=3)
+                            ecolor=TEXT_PRIMARY, elinewidth=1, capsize=3 if d["hi"] is not None else 0,
+                            zorder=3)
+                if d["hi"] is None:   # CI open to the right: some replicates never reach the threshold
+                    ax.annotate("", xy=(i + off, hi * 1.08), xytext=(i + off, hi * 0.92),
+                                arrowprops={"arrowstyle": "-|>", "color": TEXT_PRIMARY, "lw": 1})
                 if d["censored"] == "left":
                     ax.text(i + off, d["p"], "≤", ha="center", va="bottom", fontsize=8, color=TEXT_PRIMARY)
             bp = t.get("best_latin_p")
@@ -678,7 +702,8 @@ def plot_p_bars(head: dict, path: str | Path, title: str | None = None) -> Path:
         for s in schemes:
             d10 = a["thresholds"].get(thr_keys[1], {}).get("schemes", {}).get(s, {})
             r = d10.get("ratio")
-            labels.append(s if s in LATIN_SCHEMES or r is None else f"{s}\n×{r:.2f} @10%")
+            pre = {"upper": "≤", "lower": "≥", "undetermined": "?"}.get(d10.get("ratio_bound"), "")
+            labels.append(s if s in LATIN_SCHEMES or r is None else f"{s}\n{pre}×{r:.2f} @10%")
         ax.set_xticks(range(len(schemes)))
         ax.set_xticklabels(labels, fontsize=8, rotation=0)
         ax.set_yscale("log")
@@ -726,7 +751,9 @@ def _md_table(a: dict) -> list[str]:
                 p = f"> {d['grid'][1]:.0f} (not reached)"
             else:
                 p = ("≤ " if d["censored"] == "left" else "") + f"{d['p']:.1f} [{_fmt(d['lo'])}, {_fmt(d['hi'])}]"
-            r = "—" if d["ratio"] is None else f"{d['ratio']:.2f} [{_fmt(d['ratio_lo'], 2)}, {_fmt(d['ratio_hi'], 2)}]"
+            pre = {"upper": "≤ ", "lower": "≥ ", "undetermined": "? "}.get(d.get("ratio_bound"), "")
+            r = "—" if d["ratio"] is None else (f"{pre}{d['ratio']:.2f} [{_fmt(d['ratio_lo'], 2)}, "
+                                                f"{_fmt(d['ratio_hi'], 2)}]")
             cells += [p, r, _fmt(d["vision_tokens_per_1k_chars"], 1), _fmt(d["compression"], 2)]
         lines.append("| " + " | ".join(cells) + " |")
     return lines
@@ -770,7 +797,8 @@ def write_summary(rows: list[dict], out_dir: str | Path, n_boot: int = 1000, tit
           "ratio = P(scheme)/P(best Latin) (best of latin, latin_condensed at that threshold); "
           "CI = paired passage bootstrap. compr = text tokens / vision tokens at P (Claude: "
           f"px/{config.CLAUDE_PX_PER_TOKEN} = 28x28 patches, "
-          f"text ≈ chars/4). '≤' = already below threshold at the smallest budget.", "",
+          f"text ≈ chars/4). '≤' on P = already below threshold at the smallest budget; on a ratio "
+          "'≤'/'≥'/'?' = upper/lower bound/undetermined because of that censoring.", "",
           "## Verdicts", ""]
     md += [f"* {v}" for v in head["verdicts"].values()]
     for c, a in head["conditions"].items():
