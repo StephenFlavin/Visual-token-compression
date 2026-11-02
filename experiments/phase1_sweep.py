@@ -41,8 +41,15 @@ from vbpe import config, metrics  # noqa: E402
 from vbpe.layout import render_page  # noqa: E402
 
 DEFAULT_SCHEMES = ["latin", "latin_condensed", "subst300", "subst1000", "quad3"]
-DEFAULT_BUDGETS = [4, 6, 9, 13, 18, 27, 40, 60]
-PILOT_BUDGETS = [2, 3, 4, 6, 9, 13, 18, 27, 40, 60, 100]
+DEFAULT_BUDGETS = [8, 11, 14, 17, 20, 23, 27, 32, 40, 60]
+PILOT_BUDGETS = [6, 8, 11, 14, 17, 20, 23, 27, 32, 40, 60, 90]
+MIN_SIDE = 56
+
+# Heuristic refusal / non-transcription detector (recorded per row, not used for scoring).
+_REFUSAL = re.compile(
+    r"\b(I can(?:no|')t|I am unable|I'm unable|unable to (?:read|make out|transcribe|discern)|"
+    r"cannot (?:read|make out|transcribe|discern)|(?:not|isn't|is not) (?:legible|readable)|illegible|"
+    r"too (?:small|blurry|low[- ]resolution|pixelated)|no (?:legible|readable) text)", re.I)
 
 # Cost heuristic ($ per 1M tokens, input/output), by model-name substring. Used ONLY for the
 # pre-flight estimate; real rows record the cost reported by vbpe.claude_eval.
@@ -70,6 +77,33 @@ BUILTIN_SAMPLE = (
     "now forms part of a long-distance walking route. Birds such as herons, kingfishers and dippers "
     "are common along the banks, and otters returned to the upper valley in the late 1990s."
 )
+
+
+# ------------------------------------------------------------------------------------ geometry
+def canvas_size(budget: float, n_chars: int, patch: int | None = None) -> tuple[int, int]:
+    """Near-square canvas whose sides are multiples of the Claude patch (28 px), min 56 px.
+
+    Picks (k x k) or (k+1 x k) patches (W >= H) with area closest to budget * n_chars, which halves
+    the budget quantisation of a strictly square 28-multiple grid.
+    """
+    P = patch or config.CLAUDE_PATCH
+    target = budget * n_chars / (P * P)
+    best = None
+    k0 = max(1, int(math.sqrt(target)))
+    for k in range(max(1, k0 - 2), k0 + 3):
+        for w, h in ((k, k), (k + 1, k)):
+            err = abs(math.log(max(w * h, 1e-9) / target))
+            if best is None or err < best[0]:
+                best = (err, w, h)
+    W, H = max(MIN_SIDE, best[1] * P), max(MIN_SIDE, best[2] * P)
+    return W, H
+
+
+def looks_like_refusal(output: str, target: str) -> bool:
+    """True if the reply reads like a refusal/comment, or is far shorter than the target."""
+    if _REFUSAL.search(output or ""):
+        return True
+    return len(metrics.normalize(output or "")) < 0.5 * len(metrics.normalize(target))
 
 
 # -------------------------------------------------------------------------------------- passages
@@ -194,8 +228,8 @@ def make_fake_transcriber(noise: float, targets: dict[str, dict]):
 
 
 # ------------------------------------------------------------------------------------------- run
-def job_key(variant, model, passage_id, scheme, budget) -> str:
-    return f"{variant}|{model}|{passage_id}|{scheme}|{budget:g}"
+def job_key(variant, model, effort, passage_id, scheme, budget) -> str:
+    return f"{variant}|{model}|{effort}|{passage_id}|{scheme}|{budget:g}"
 
 
 def read_done(path: Path) -> set[str]:
@@ -206,7 +240,8 @@ def read_done(path: Path) -> set[str]:
                 continue
             r = json.loads(line)
             if not r.get("error") or r.get("skipped"):     # failed calls are retried
-                done.add(job_key(r["variant"], r["model"], r["passage_id"], r["scheme"], r["budget"]))
+                done.add(job_key(r["variant"], r["model"], r.get("effort"), r["passage_id"], r["scheme"],
+                                 r["budget"]))
     return done
 
 
@@ -220,6 +255,9 @@ def parse_args(argv=None):
     ap.add_argument("--passage-chars", type=int, default=None,
                     help="truncate passages at a sentence/word boundary to ~N chars")
     ap.add_argument("--model", default=None, help="Claude model (default: vbpe.claude_eval.DEFAULT_MODEL)")
+    ap.add_argument("--effort", default="low",
+                    help="CLI effort passed to claude_eval.transcribe (low|medium|high|xhigh|max; "
+                         "'none' = CLI default). Adaptive thinking ~doubles cost with no CER gain.")
     ap.add_argument("--workers", type=int, default=8)
     ap.add_argument("--run-name", default=None, help="default: [dryrun-]pilot | [dryrun-]main-<variant>")
     ap.add_argument("--out-dir", default=str(config.RESULTS / "phase1"), help="parent of the run dir")
@@ -245,6 +283,8 @@ def parse_args(argv=None):
         a.n_passages = a.n_passages or 1
     a.schemes = a.schemes or list(DEFAULT_SCHEMES)
     a.budgets = a.budgets or list(DEFAULT_BUDGETS)
+    if a.effort and a.effort.lower() in ("none", "default", ""):
+        a.effort = None
     if a.run_name is None:
         a.run_name = ("dryrun-" if a.dry_run else "") + ("pilot" if a.pilot else f"main-{a.variant}")
     return a
@@ -288,39 +328,48 @@ def main(argv=None) -> int:
         for sname, sch in schemes.items():
             units = None
             target = None
+            sizes_seen: dict[tuple[int, int], float] = {}
             for b in a.budgets:
-                k = job_key(a.variant, model, p["id"], sname, b)
+                W, H = canvas_size(b, n)
+                if (W, H) in sizes_seen:   # coarse 28-px grid: two budgets -> same canvas
+                    print(f"note: {p['id']}/{sname}: budget {b:g} gives the same {W}x{H} canvas as "
+                          f"{sizes_seen[(W, H)]:g}; skipped", file=sys.stderr)
+                    continue
+                sizes_seen[(W, H)] = b
+                k = job_key(a.variant, model, a.effort, p["id"], sname, b)
                 if k in done:
                     continue
-                side = int(round(math.sqrt(b * n)))
-                base = {"run": a.run_name, "phase": 1, "model": model, "variant": a.variant,
+                base = {"run": a.run_name, "phase": 1, "model": model, "effort": a.effort,
+                        "variant": a.variant,
                         "passage_id": p["id"], "corpus": src, "scheme": sname, "budget": b,
-                        "n_chars": n, "W": side, "H": side, "px_per_char": metrics.px_per_char(side, side, text),
-                        "vision_tokens": metrics.vision_tokens(side, side),
+                        "n_chars": n, "W": W, "H": H, "px_per_char": metrics.px_per_char(W, H, text),
+                        "vision_tokens": metrics.vision_tokens(W, H),
                         "key_image_tokens": key_tokens[sname],
                         "text_tokens_est": metrics.text_tokens_est(text)}
                 empty = {"output_text": "", "cost_usd": 0.0, "input_tokens": 0, "output_tokens": 0,
                          "latency_s": 0.0, "cached": False}
-                if side > config.CLAUDE_MAX_EDGE or side * side > config.CLAUDE_MAX_AREA:
+                if max(W, H) > config.CLAUDE_MAX_EDGE or W * H > config.CLAUDE_MAX_AREA:
                     immediate.append({**base, "em": None, "n_lines": 0, "fit": None, "skipped": True,
-                                      "cer": None, "symbol_cer": None, **empty,
-                                      "error": f"too_large: {side}x{side} exceeds Claude limits"})
+                                      "cer": None, "symbol_cer": None, "refusal": None, **empty,
+                                      "error": f"too_large: {W}x{H} exceeds Claude limits"})
                     continue
                 if units is None:
                     units = sch.encode(text)
                     target = sch.transcription_target(text)
-                img, info = render_page(units, side, side)
+                img, info = render_page(units, W, H)
                 (img_dir / sname).mkdir(parents=True, exist_ok=True)
                 img.save(img_dir / sname / f"{p['id']}_{b:g}.png")
                 base.update(em=info["em"], n_lines=info["n_lines"], fit=bool(info["fit"]))
                 if not info["fit"]:
-                    immediate.append({**base, "skipped": True, "cer": 1.0, "symbol_cer": 1.0, **empty,
-                                      "error": None})
+                    immediate.append({**base, "skipped": True, "cer": 1.0, "symbol_cer": 1.0,
+                                      "refusal": None, **empty, "error": None})
                     continue
                 job = {"images": sch.vlm_key_images() + [img], "system": sch.vlm_system_prompt(),
                        "prompt": sch.vlm_prompt(), "meta": {"key": k, "passage_id": p["id"]}}
                 if a.model:
                     job["model"] = a.model
+                if not a.dry_run:
+                    job["effort"] = a.effort
                 info2 = {"base": base, "text": text, "target": target, "scheme": sch, "em": info["em"],
                          "vision_tokens": base["vision_tokens"], "key_image_tokens": key_tokens[sname],
                          "prompt_tokens": (len(job["system"]) + len(job["prompt"])) / 4 + 10,
@@ -328,14 +377,22 @@ def main(argv=None) -> int:
                 pending.append((job, info2))
 
     # ---- cost estimate & gate ----
-    prices = price_for(model, a.price_in, a.price_out)
+    est_model = model
+    if a.dry_run:   # estimate what the real run would cost (importing claude_eval makes no calls)
+        try:
+            from vbpe import claude_eval as _ce
+            est_model = a.model or _ce.DEFAULT_MODEL
+        except Exception:
+            est_model = a.model or ""
+    prices = price_for(est_model, a.price_in, a.price_out)
     per = [a.cost_per_call if a.cost_per_call is not None else est_call_cost(i, prices, a.call_overhead)
            for _, i in pending]
     est = sum(per)
-    print(f"run={a.run_name} model={model} variant={a.variant} passages={len(passages)} ({src}) "
+    print(f"run={a.run_name} model={model} effort={a.effort} variant={a.variant} passages={len(passages)} ({src}) "
           f"schemes={list(schemes)} budgets={[f'{b:g}' for b in a.budgets]}")
     print(f"already done: {len(done)}  no-call rows: {len(immediate)}  calls to make: {len(pending)}")
-    print(f"ESTIMATED COST: ${est:.2f} (~${(est / max(1, len(pending))):.3f}/call; prices in/out "
+    print(f"ESTIMATED COST{' (if run for real with ' + est_model + ')' if a.dry_run else ''}: ${est:.2f} "
+          f"(~${(est / max(1, len(pending))):.3f}/call; prices in/out "
           f"${prices[0]}/${prices[1]} per Mtok + ${a.call_overhead} overhead; claude_eval cache may lower it)")
     if not a.dry_run and pending:
         if a.max_cost is not None and est > a.max_cost:
@@ -369,17 +426,20 @@ def main(argv=None) -> int:
                 err = res.get("error")
                 sch = info["scheme"]
                 row = {**info["base"], "skipped": False}
-                if err:
-                    row.update(cer=None, symbol_cer=None)
-                else:
-                    row.update(cer=metrics.cer(info["text"], sch.decode(out)),
-                               symbol_cer=metrics.cer(info["target"], out))
+                row.update(cer=None, symbol_cer=None, refusal=None)
+                if not err:
+                    try:
+                        row.update(cer=metrics.cer(info["text"], sch.decode(out)),
+                                   symbol_cer=metrics.cer(info["target"], out),
+                                   refusal=looks_like_refusal(out, info["target"]))
+                    except Exception as e:   # a decode crash must not lose the paid output
+                        err = f"decode_failed: {type(e).__name__}: {e}"
                 row.update(output_text=out, cost_usd=res.get("cost_usd") or 0.0,
                            input_tokens=res.get("input_tokens"), output_tokens=res.get("output_tokens"),
                            latency_s=res.get("latency_s"), cached=bool(res.get("cached")), error=err)
                 if res.get("model") and not a.dry_run:
                     row["served_model"] = res["model"]
-                spent += row["cost_usd"]
+                spent += 0.0 if row["cached"] else row["cost_usd"]
                 f.write(json.dumps(row) + "\n")
         n_done += len(part)
         print(f"  {n_done}/{len(pending)} calls, ${spent:.2f} spent, {time.time() - t0:.0f}s", flush=True)

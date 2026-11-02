@@ -545,8 +545,11 @@ def plot_curves(rows: list[dict], path: str | Path, n_boot: int = 1000, title: s
         sec = ax.secondary_xaxis("top", functions=(lambda v: v * 1000 / config.CLAUDE_PX_PER_TOKEN,
                                                    lambda t: t * config.CLAUDE_PX_PER_TOKEN / 1000))
         sec.set_xlabel("vision tokens per 1k chars", color=TEXT_SECONDARY, fontsize=9)
+        tok = [v * 1000 / config.CLAUDE_PX_PER_TOKEN for v in ax.get_xlim()]
+        sec.xaxis.set_major_locator(FixedLocator([t for t in (1, 2, 3, 5, 10, 20, 30, 50, 100, 200, 300, 500)
+                                                  if tok[0] <= t <= tok[1]]))
+        sec.xaxis.set_minor_locator(NullLocator())
         sec.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}"))
-        sec.xaxis.set_minor_formatter(FuncFormatter(lambda v, _: ""))
         sec.tick_params(colors=TEXT_SECONDARY, labelsize=8)
         sec.spines["top"].set_color(TEXT_SECONDARY)
         n_units = len({_unit(r) for r in rs})
@@ -575,7 +578,7 @@ def plot_p_bars(head: dict, path: str | Path, title: str | None = None) -> Path:
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     from matplotlib.patches import Patch
-    from matplotlib.ticker import FuncFormatter
+    from matplotlib.ticker import FixedLocator, FuncFormatter, NullLocator
 
     conds = head["conditions"]
     n = max(1, len(conds))
@@ -631,7 +634,11 @@ def plot_p_bars(head: dict, path: str | Path, title: str | None = None) -> Path:
         ax.set_xticks(range(len(schemes)))
         ax.set_xticklabels(labels, fontsize=8, rotation=0)
         ax.set_yscale("log")
-        ax.set_ylim(ymin / 1.6, ymax * 2.0)
+        lo_, hi_ = ymin / 1.6, ymax * 2.0
+        ax.set_ylim(lo_, hi_)
+        ax.yaxis.set_major_locator(FixedLocator([v for v in (0.5, 1, 2, 3, 5, 10, 20, 30, 50, 100, 200, 300, 500)
+                                                 if lo_ <= v <= hi_]))
+        ax.yaxis.set_minor_locator(NullLocator())
         ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}"))
         ax.set_ylabel("px² per char needed (log)", color=TEXT_PRIMARY, fontsize=10)
         ax.set_title(c, fontsize=10, color=TEXT_PRIMARY, loc="left")
