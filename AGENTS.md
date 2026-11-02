@@ -79,7 +79,7 @@ Claude responses are cached in `results/cache/claude/` (keyed on model+prompt+im
 - After a container reclaim, git-ignored state is gone (data/, fonts, render caches, checkpoints, Claude cache): redo the setup block first. `scripts/autosave_results.sh 600` (run with nohup) commits+pushes `runs.jsonl` every 10 min so finished rows survive.
 
 **Git**
-- A stop hook demands a clean tree. Live Phase-2 logs/curves are git-ignored while runs are going (see .gitignore); force-add them (`git add -f`) when a grid finishes. Other long jobs: snapshot-commit (`WIP:`) and push.
+- Never `pkill -f <name>` from a shell whose own command line contains <name> (it kills itself). A stop hook demands a clean tree. Live Phase-2 logs/curves are git-ignored while runs are going (see .gitignore); force-add them (`git add -f`) when a grid finishes. Other long jobs: snapshot-commit (`WIP:`) and push.
 
 ## Findings so far (details in results/*/summary.md)
 - K1 (analytic): N=1000 substitution saves 32% line width vs condensed Latin at equal em → only ~1.19x larger em on a fixed page.
