@@ -1,6 +1,7 @@
 """Scoring and budget helpers shared by Phase 1 and Phase 2."""
 from __future__ import annotations
 
+import math
 import re
 
 from rapidfuzz.distance import Levenshtein
@@ -27,7 +28,9 @@ def px_per_char(W: int, H: int, text: str) -> float:
 
 
 def vision_tokens(W: int, H: int) -> float:
-    return W * H / config.CLAUDE_PX_PER_TOKEN
+    """Measured Claude image-token count: 28x28 patches (+~3 overhead)."""
+    P = config.CLAUDE_PATCH
+    return math.ceil(W / P) * math.ceil(H / P) + 3
 
 
 def text_tokens_est(text: str) -> float:

@@ -10,7 +10,8 @@ from vbpe.layout import Unit
 BASE_OCR_SYSTEM_PROMPT = (
     "You are a precise OCR engine. Transcribe exactly what is written in the image, in reading "
     "order (left to right, top to bottom). Join lines with single spaces. Do not correct, "
-    "complete, summarise or comment. Output only the transcription."
+    "complete, summarise or comment. Never refuse: if parts are hard to read, give your best "
+    "character-level guess. Output only the transcription."
 )
 
 

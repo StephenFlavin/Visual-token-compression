@@ -24,7 +24,7 @@ Runner: 4 CPU, 15 GB RAM, no GPU. Headless `claude -p` accepts base64 images dir
 
 ## 2. Core metric
 
-**px²/char** = canvas area / normalised source characters. For Claude, vision tokens ≈ W·H/750,
+**px²/char** = canvas area / normalised source characters. For Claude, vision tokens = ceil(W/28)·ceil(H/28)+3 (measured; ≈ W·H/784),
 so px²/char is directly proportional to vision tokens per source char.
 For each scheme we fit the CER-vs-px²/char curve and read off **P@3 %** and **P@10 %**
 (px²/char needed for CER ≤ 3 % / 10 %). Headline ratio: `P(subst) / min(P(latin), P(latin_condensed))`.

@@ -13,8 +13,10 @@ CONDENSED_FONT = FONTS / "ArchivoNarrow.ttf"        # 0.37 em/char  (scripts/fet
 CONDENSED_FONT_2 = FONTS / "RobotoCondensed.ttf"    # 0.40 em/char
 CJK_FONT = FONTS / "NotoSansCJKsc-Regular.otf"      # CJK ideographs are 1.0 em wide; has Latin too
 
-# Claude vision cost model (Anthropic docs): tokens ~= width * height / 750.
-# The API downsizes images whose long edge > 1568 px or area > ~1.15 MP; we must stay below.
-CLAUDE_PX_PER_TOKEN = 750
+# Claude vision cost model. Measured on this runner (docs/claude-eval-notes.md):
+# tokens = ceil(W/28) * ceil(H/28) + ~3  (~784 px^2/token). Use canvas sides that are multiples of 28.
+# Nothing is downscaled up to 1568x1568; the limits below are conservative.
+CLAUDE_PATCH = 28
+CLAUDE_PX_PER_TOKEN = 784
 CLAUDE_MAX_EDGE = 1568
 CLAUDE_MAX_AREA = 1_150_000
