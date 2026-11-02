@@ -1,0 +1,22 @@
+[train] 1 jobs (0 done), parallel=1
+[lg_fixed_n0_default_em5] vocab=88 expand=2 params=1018120 train=5000 h=6 meanW=126 channel={'preset': 'default', 'ss': 4, 'margin': 2, 'test_only': False, 'phase_x': True, 'phase_y': True, 'scale': (1.0, 1.0), 'eval_scale': None, 'filters': ('area', 'bilinear', 'bicubic'), 'eval_filter': 'bilinear', 'blur': (0.0, 0.5), 'contrast': (0.7, 1.0), 'bg': (0.0, 0.05), 'gamma': (0.8, 1.25), 'noise': (0.0, 0.06), 'jpeg': (0.0, 0.0), 'quantize': True}
+[lg_fixed_n0_default_em5] step 100 loss 4.341 val_cer 1.0000 (29.3s)
+[lg_fixed_n0_default_em5] step 200 loss 3.175 val_cer 1.0000 (60.1s)
+[lg_fixed_n0_default_em5] step 300 loss 3.146 val_cer 1.0000 (91.9s)
+[lg_fixed_n0_default_em5] TEST eval-channel clean: cer=1.0000
+[lg_fixed_n0_default_em5] TEST eval-channel harsh+heldout: cer=1.0000
+[lg_fixed_n0_default_em5] TEST cer=1.0000 (phase2 latin em5: 0.005153145695364238) px/char=15.29 best_step=100 time=92s
+[train] result {'channel': 'default', 'scheme': 'lg_fixed_n0', 'em': 5.0, 'cer': 1.0, 'px_per_char': 15.28939456890771, 'error': None}
+# E0 training calibration
+
+| channel | em | h | px2/char | CER | Phase-2 latin CER | steps |
+|---|---|---|---|---|---|---|
+| default | 5 | 6 | 15.29 | 1.0000 | 0.005153145695364238 | 300 |
+
+P@3% (px2/char at CER 3%, isotonic + log-linear interpolation, vbpe.analysis.p_at):
+
+* Phase-2 latin (phase2_main): 15.110262199297157
+* default: None
+
+Calibration target (PLAN E0): a preset within ~15% of Phase-2 latin P@3%.
+

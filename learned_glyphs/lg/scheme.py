@@ -38,8 +38,9 @@ path relative to ``learned_glyphs/results`` with ``/`` written as ``+`` and a tr
 Names must not contain ``/`` because Phase 2 uses the scheme name in cache / log / checkpoint
 file names. ``@sha8`` (first 8 hex chars of the bank file's sha1) is verified on load so cached
 Phase-2 renders are content-addressed. ``make_lg_scheme(name)`` resolves such names; the parent
-hook is a 3-line addition to ``vbpe.crnn.data.resolve_scheme`` (see experiments/transfer_eval.py
-``BRIDGE_PATCH``).
+hook is a 3-line addition to ``vbpe.crnn.data.resolve_scheme`` (``BRIDGE_PATCH`` below);
+``install_phase2_hook()`` applies the same hook at runtime, so ``lg.transfer.bridge_phase2`` needs
+no parent edit.
 """
 from __future__ import annotations
 
@@ -294,3 +295,51 @@ def make_lg_scheme(name: str) -> LearnedGlyphScheme:
     if sha is not None and bank_sha8(p) != sha:
         raise ValueError(f"{name!r}: bank {p} changed (sha {bank_sha8(p)} != {sha})")
     return LearnedGlyphScheme(p, name=name)
+
+
+def phase2_hook_installed() -> bool:
+    """True if ``vbpe.crnn.data.resolve_scheme`` resolves ``lg:`` names (parent patch or runtime hook)."""
+    import inspect
+
+    from vbpe.crnn import data as D
+    if getattr(D.resolve_scheme, "_lg_hook", False):
+        return True
+    try:
+        return '"lg:"' in inspect.getsource(D.resolve_scheme)
+    except (OSError, TypeError):
+        return False
+
+
+def install_phase2_hook() -> None:
+    """Runtime equivalent of the parent patch (BRIDGE_PATCH): make the unchanged Phase-2 data /
+    training code resolve ``lg:`` scheme names in THIS process (and forked render workers).
+    Idempotent; a no-op when the parent already has the hook."""
+    from vbpe.crnn import data as D
+    if phase2_hook_installed():
+        return
+    orig = D.resolve_scheme
+
+    def resolve_scheme(name: str):
+        if name.startswith("lg:"):
+            return make_lg_scheme(name)
+        return orig(name)
+
+    resolve_scheme._lg_hook = True
+    resolve_scheme.__doc__ = orig.__doc__
+    D.resolve_scheme = resolve_scheme
+
+
+BRIDGE_PATCH = '''\
+--- a/vbpe/crnn/data.py
++++ b/vbpe/crnn/data.py
+@@ def resolve_scheme(name: str):
+     """``get_scheme`` plus the synthetic stub schemes used for tests (``stub_*``)."""
+     if name.startswith("stub_"):
+         from vbpe.crnn.stubs import make_stub_scheme
+         return make_stub_scheme(name)
++    if name.startswith("lg:"):         # learned glyph bank: lg:<key>[@sha8] (learned_glyphs/lg/scheme.py)
++        from learned_glyphs.lg.scheme import make_lg_scheme
++        return make_lg_scheme(name)
+     from vbpe.schemes import get_scheme
+     return get_scheme(name)
+'''

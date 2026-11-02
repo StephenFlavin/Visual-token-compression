@@ -1,0 +1,5 @@
+[transfer_lg_fixed_n0_h8] bank=lg_fixed_n0_h8.pt scheme=lg_fixed_n0 symbols=95 h=8 col_stride=2 expand=2 pad=4 reader_params=1020176 channel=default
+[transfer_lg_fixed_n0_h8] step 100 loss 4.962 val_cer 1.0000 (41.7s)
+[transfer_lg_fixed_n0_h8] step 200 loss 3.175 val_cer 1.0000 (83.5s)
+[transfer_lg_fixed_n0_h8] step 300 loss 3.101 val_cer 1.0000 (126.3s)
+[transfer_lg_fixed_n0_h8] TEST cer=1.0000 symbol_cer=1.0000 px/char=26.89 best_step=100 time=126s

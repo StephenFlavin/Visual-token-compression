@@ -1,0 +1,619 @@
+{
+ "headline": {
+  "phase": 2,
+  "n_rows": 14,
+  "conditions": {
+   "all": {
+    "n_units": null,
+    "paired_bootstrap": false,
+    "text_tokens_per_char": 0.25,
+    "thresholds": {
+     "0.03": {
+      "best_latin": "latin",
+      "best_latin_p": 15.110262199297157,
+      "schemes": {
+       "latin": {
+        "p": 15.110262199297157,
+        "censored": null,
+        "lo": 15.110262199297157,
+        "hi": 15.110262199297157,
+        "frac_crossed": 1.0,
+        "vision_tokens_per_1k_chars": 19.273293621552494,
+        "compression": 12.971316937777345,
+        "grid": [
+         9.839399337768555,
+         39.392608642578125
+        ],
+        "ratio": 1.0,
+        "ratio_lo": 1.0,
+        "ratio_hi": 1.0,
+        "ratio_bound": null,
+        "saving": 0.0
+       },
+       "latin_condensed": {
+        "p": 44.59295654296875,
+        "censored": "left",
+        "lo": 44.59295654296875,
+        "hi": 44.59295654296875,
+        "frac_crossed": 1.0,
+        "vision_tokens_per_1k_chars": 56.878771100725444,
+        "compression": 4.395312964080749,
+        "grid": [
+         44.59295654296875,
+         44.59295654296875
+        ],
+        "ratio": 2.9511702679152028,
+        "ratio_lo": 2.9511702679152028,
+        "ratio_hi": 2.9511702679152028,
+        "ratio_bound": "upper",
+        "saving": -1.9511702679152028
+       },
+       "quad3": {
+        "p": 37.49830627441406,
+        "censored": "left",
+        "lo": 37.49830627441406,
+        "hi": 37.49830627441406,
+        "frac_crossed": 1.0,
+        "vision_tokens_per_1k_chars": 47.82947228879345,
+        "compression": 5.2269027450377195,
+        "grid": [
+         37.49830627441406,
+         37.49830627441406
+        ],
+        "ratio": 2.481644976098315,
+        "ratio_lo": 2.481644976098315,
+        "ratio_hi": 2.481644976098315,
+        "ratio_bound": "upper",
+        "saving": -1.4816449760983148
+       },
+       "quad4": {
+        "p": 33.49998092651367,
+        "censored": "left",
+        "lo": 33.49998092651367,
+        "hi": 33.49998092651367,
+        "frac_crossed": 1.0,
+        "vision_tokens_per_1k_chars": 42.72956750830826,
+        "compression": 5.850749599826642,
+        "grid": [
+         33.49998092651367,
+         33.49998092651367
+        ],
+        "ratio": 2.2170350510576777,
+        "ratio_lo": 2.2170350510576777,
+        "ratio_hi": 2.2170350510576777,
+        "ratio_bound": "upper",
+        "saving": -1.2170350510576777
+       },
+       "lg_fixed_n0/calib": {
+        "p": null,
+        "censored": "right",
+        "lo": null,
+        "hi": null,
+        "frac_crossed": 0.0,
+        "vision_tokens_per_1k_chars": null,
+        "compression": null,
+        "grid": [
+         15.28939456890771,
+         15.28939456890771
+        ],
+        "ratio": null,
+        "ratio_lo": null,
+        "ratio_hi": null,
+        "ratio_bound": null,
+        "saving": null
+       },
+       "lg_fixed_n0/transfer": {
+        "p": null,
+        "censored": "right",
+        "lo": null,
+        "hi": null,
+        "frac_crossed": 0.0,
+        "vision_tokens_per_1k_chars": null,
+        "compression": null,
+        "grid": [
+         26.893141877505272,
+         26.893141877505272
+        ],
+        "ratio": null,
+        "ratio_lo": null,
+        "ratio_hi": null,
+        "ratio_bound": null,
+        "saving": null
+       },
+       "lg_learned_n0/bridge": {
+        "p": null,
+        "censored": "right",
+        "lo": null,
+        "hi": null,
+        "frac_crossed": 0.0,
+        "vision_tokens_per_1k_chars": null,
+        "compression": null,
+        "grid": [
+         10.778980255126953,
+         15.27633285522461
+        ],
+        "ratio": null,
+        "ratio_lo": null,
+        "ratio_hi": null,
+        "ratio_bound": null,
+        "saving": null
+       },
+       "lg_learned_n0/joint": {
+        "p": null,
+        "censored": "right",
+        "lo": null,
+        "hi": null,
+        "frac_crossed": 0.0,
+        "vision_tokens_per_1k_chars": null,
+        "compression": null,
+        "grid": [
+         21.0,
+         21.0
+        ],
+        "ratio": null,
+        "ratio_lo": null,
+        "ratio_hi": null,
+        "ratio_bound": null,
+        "saving": null
+       },
+       "lg_learned_n0/transfer": {
+        "p": null,
+        "censored": "right",
+        "lo": null,
+        "hi": null,
+        "frac_crossed": 0.0,
+        "vision_tokens_per_1k_chars": null,
+        "compression": null,
+        "grid": [
+         15.29583492887263,
+         15.29583492887263
+        ],
+        "ratio": null,
+        "ratio_lo": null,
+        "ratio_hi": null,
+        "ratio_bound": null,
+        "saving": null
+       }
+      }
+     },
+     "0.1": {
+      "best_latin": "latin",
+      "best_latin_p": 14.356631203122037,
+      "schemes": {
+       "latin": {
+        "p": 14.356631203122037,
+        "censored": null,
+        "lo": 14.356631203122037,
+        "hi": 14.356631203122037,
+        "frac_crossed": 1.0,
+        "vision_tokens_per_1k_chars": 18.312029595818924,
+        "compression": 13.652227826077835,
+        "grid": [
+         9.839399337768555,
+         39.392608642578125
+        ],
+        "ratio": 1.0,
+        "ratio_lo": 1.0,
+        "ratio_hi": 1.0,
+        "ratio_bound": null,
+        "saving": 0.0
+       },
+       "latin_condensed": {
+        "p": 44.59295654296875,
+        "censored": "left",
+        "lo": 44.59295654296875,
+        "hi": 44.59295654296875,
+        "frac_crossed": 1.0,
+        "vision_tokens_per_1k_chars": 56.878771100725444,
+        "compression": 4.395312964080749,
+        "grid": [
+         44.59295654296875,
+         44.59295654296875
+        ],
+        "ratio": 3.1060877661377435,
+        "ratio_lo": 3.1060877661377435,
+        "ratio_hi": 3.1060877661377435,
+        "ratio_bound": "upper",
+        "saving": -2.1060877661377435
+       },
+       "quad3": {
+        "p": 37.49830627441406,
+        "censored": "left",
+        "lo": 37.49830627441406,
+        "hi": 37.49830627441406,
+        "frac_crossed": 1.0,
+        "vision_tokens_per_1k_chars": 47.82947228879345,
+        "compression": 5.2269027450377195,
+        "grid": [
+         37.49830627441406,
+         37.49830627441406
+        ],
+        "ratio": 2.611915409950739,
+        "ratio_lo": 2.611915409950739,
+        "ratio_hi": 2.611915409950739,
+        "ratio_bound": "upper",
+        "saving": -1.611915409950739
+       },
+       "quad4": {
+        "p": 33.49998092651367,
+        "censored": "left",
+        "lo": 33.49998092651367,
+        "hi": 33.49998092651367,
+        "frac_crossed": 1.0,
+        "vision_tokens_per_1k_chars": 42.72956750830826,
+        "compression": 5.850749599826642,
+        "grid": [
+         33.49998092651367,
+         33.49998092651367
+        ],
+        "ratio": 2.3334151621327894,
+        "ratio_lo": 2.3334151621327894,
+        "ratio_hi": 2.3334151621327894,
+        "ratio_bound": "upper",
+        "saving": -1.3334151621327894
+       },
+       "lg_fixed_n0/calib": {
+        "p": null,
+        "censored": "right",
+        "lo": null,
+        "hi": null,
+        "frac_crossed": 0.0,
+        "vision_tokens_per_1k_chars": null,
+        "compression": null,
+        "grid": [
+         15.28939456890771,
+         15.28939456890771
+        ],
+        "ratio": null,
+        "ratio_lo": null,
+        "ratio_hi": null,
+        "ratio_bound": null,
+        "saving": null
+       },
+       "lg_fixed_n0/transfer": {
+        "p": null,
+        "censored": "right",
+        "lo": null,
+        "hi": null,
+        "frac_crossed": 0.0,
+        "vision_tokens_per_1k_chars": null,
+        "compression": null,
+        "grid": [
+         26.893141877505272,
+         26.893141877505272
+        ],
+        "ratio": null,
+        "ratio_lo": null,
+        "ratio_hi": null,
+        "ratio_bound": null,
+        "saving": null
+       },
+       "lg_learned_n0/bridge": {
+        "p": null,
+        "censored": "right",
+        "lo": null,
+        "hi": null,
+        "frac_crossed": 0.0,
+        "vision_tokens_per_1k_chars": null,
+        "compression": null,
+        "grid": [
+         10.778980255126953,
+         15.27633285522461
+        ],
+        "ratio": null,
+        "ratio_lo": null,
+        "ratio_hi": null,
+        "ratio_bound": null,
+        "saving": null
+       },
+       "lg_learned_n0/joint": {
+        "p": null,
+        "censored": "right",
+        "lo": null,
+        "hi": null,
+        "frac_crossed": 0.0,
+        "vision_tokens_per_1k_chars": null,
+        "compression": null,
+        "grid": [
+         21.0,
+         21.0
+        ],
+        "ratio": null,
+        "ratio_lo": null,
+        "ratio_hi": null,
+        "ratio_bound": null,
+        "saving": null
+       },
+       "lg_learned_n0/transfer": {
+        "p": null,
+        "censored": "right",
+        "lo": null,
+        "hi": null,
+        "frac_crossed": 0.0,
+        "vision_tokens_per_1k_chars": null,
+        "compression": null,
+        "grid": [
+         15.29583492887263,
+         15.29583492887263
+        ],
+        "ratio": null,
+        "ratio_lo": null,
+        "ratio_hi": null,
+        "ratio_bound": null,
+        "saving": null
+       }
+      }
+     }
+    }
+   }
+  },
+  "verdicts": {
+   "K3": "K3 (Phase 2: subst P@3% >= 30% below best Latin): UNDETERMINED - no substitution scheme in data.",
+   "quadrant": "Quadrant (Phase 2 rule: killed if P@3% >= best Latin): KILLED; quad3/all ratio 2.48, quad4/all ratio 2.22"
+  }
+ },
+ "curves": {
+  "all": {
+   "latin": {
+    "scheme": "latin",
+    "budget": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "px_per_char": [
+     9.839399337768555,
+     15.387175559997559,
+     22.14126205444336,
+     30.128984451293945,
+     39.392608642578125
+    ],
+    "mean": [
+     0.6169288079470199,
+     0.005153145695364238,
+     0.002918046357615894,
+     0.0007243377483443709,
+     0.0008485099337748345
+    ],
+    "lo": [
+     0.6169288079470199,
+     0.005153145695364238,
+     0.002918046357615894,
+     0.0007243377483443709,
+     0.0008485099337748345
+    ],
+    "hi": [
+     0.6169288079470199,
+     0.005153145695364238,
+     0.002918046357615894,
+     0.0007243377483443709,
+     0.0008485099337748345
+    ],
+    "smoothed": [
+     0.6169288079470199,
+     0.005153145695364238,
+     0.002918046357615894,
+     0.0007864238410596027,
+     0.0007864238410596027
+    ],
+    "n": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ]
+   },
+   "latin_condensed": {
+    "scheme": "latin_condensed",
+    "budget": [
+     null
+    ],
+    "px_per_char": [
+     44.59295654296875
+    ],
+    "mean": [
+     0.0006829470198675497
+    ],
+    "lo": [
+     0.0006829470198675497
+    ],
+    "hi": [
+     0.0006829470198675497
+    ],
+    "smoothed": [
+     0.0006829470198675497
+    ],
+    "n": [
+     1.0
+    ]
+   },
+   "quad3": {
+    "scheme": "quad3",
+    "budget": [
+     null
+    ],
+    "px_per_char": [
+     37.49830627441406
+    ],
+    "mean": [
+     0.008505794701986756
+    ],
+    "lo": [
+     0.008505794701986756
+    ],
+    "hi": [
+     0.008505794701986756
+    ],
+    "smoothed": [
+     0.008505794701986756
+    ],
+    "n": [
+     1.0
+    ]
+   },
+   "quad4": {
+    "scheme": "quad4",
+    "budget": [
+     null
+    ],
+    "px_per_char": [
+     33.49998092651367
+    ],
+    "mean": [
+     0.017860099337748344
+    ],
+    "lo": [
+     0.017860099337748344
+    ],
+    "hi": [
+     0.017860099337748344
+    ],
+    "smoothed": [
+     0.017860099337748344
+    ],
+    "n": [
+     1.0
+    ]
+   },
+   "lg_fixed_n0/calib": {
+    "scheme": "lg_fixed_n0/calib",
+    "budget": [
+     null
+    ],
+    "px_per_char": [
+     15.28939456890771
+    ],
+    "mean": [
+     1.0
+    ],
+    "lo": [
+     1.0
+    ],
+    "hi": [
+     1.0
+    ],
+    "smoothed": [
+     1.0
+    ],
+    "n": [
+     1.0
+    ]
+   },
+   "lg_fixed_n0/transfer": {
+    "scheme": "lg_fixed_n0/transfer",
+    "budget": [
+     null
+    ],
+    "px_per_char": [
+     26.893141877505272
+    ],
+    "mean": [
+     1.0
+    ],
+    "lo": [
+     1.0
+    ],
+    "hi": [
+     1.0
+    ],
+    "smoothed": [
+     1.0
+    ],
+    "n": [
+     1.0
+    ]
+   },
+   "lg_learned_n0/bridge": {
+    "scheme": "lg_learned_n0/bridge",
+    "budget": [
+     null,
+     null
+    ],
+    "px_per_char": [
+     10.778980255126953,
+     15.27633285522461
+    ],
+    "mean": [
+     1.0,
+     1.0
+    ],
+    "lo": [
+     1.0,
+     1.0
+    ],
+    "hi": [
+     1.0,
+     1.0
+    ],
+    "smoothed": [
+     1.0,
+     1.0
+    ],
+    "n": [
+     1.0,
+     1.0
+    ]
+   },
+   "lg_learned_n0/joint": {
+    "scheme": "lg_learned_n0/joint",
+    "budget": [
+     null
+    ],
+    "px_per_char": [
+     21.0
+    ],
+    "mean": [
+     0.7111637975466447
+    ],
+    "lo": [
+     0.7111637975466447
+    ],
+    "hi": [
+     0.7111637975466447
+    ],
+    "smoothed": [
+     0.7111637975466447
+    ],
+    "n": [
+     1.0
+    ]
+   },
+   "lg_learned_n0/transfer": {
+    "scheme": "lg_learned_n0/transfer",
+    "budget": [
+     null
+    ],
+    "px_per_char": [
+     15.29583492887263
+    ],
+    "mean": [
+     1.0
+    ],
+    "lo": [
+     1.0
+    ],
+    "hi": [
+     1.0
+    ],
+    "smoothed": [
+     1.0
+    ],
+    "n": [
+     1.0
+    ]
+   }
+  }
+ },
+ "prior_credit": {},
+ "refusal_rates": {},
+ "counts": {
+  "rows": 14,
+  "usable": 14,
+  "skipped_no_fit": 0,
+  "errors": 0
+ },
+ "cost_usd_total": 0
+}

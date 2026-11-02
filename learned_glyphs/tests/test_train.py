@@ -199,10 +199,79 @@ def test_tiny_training_reduces_loss_and_row_schema(tmp_path, lines):
 
 
 def test_token_and_fixed_code_paths(tmp_path, lines):
-    for kw in (dict(n_tokens=300), dict(n_tokens=300, learn_glyphs=False)):
+    for kw in (dict(n_tokens=300, oversample_alpha=0.5), dict(n_tokens=300, learn_glyphs=False)):
         cfg = _tiny(tmp_path, steps=6, eval_every=3, **kw)
         row = T.train_joint(cfg, log=lambda m: None, train_lines=lines[40:] * 2,
                             eval_lines=(lines[:8], lines[8:16]), save=False)[0]
         assert row["n_symbols"] == 395 and row["seg_ratio"] < 0.9
-        assert row["glyph_params"] == (0 if not cfg.learn_glyphs else row["glyph_params"])
-        assert row["glyph_params"] > 0 or not cfg.learn_glyphs
+        assert (row["glyph_params"] > 0) == cfg.learn_glyphs
+        assert row["bits_per_char"] > 0 and row["bits_per_px2"] >= 0
+        assert row["min_hamming_ss"] is not None and "cer_heldout" in row
+        import inspect
+        if "test_only" in inspect.signature(T.lg1()[2].__init__).parameters:
+            assert row["cer_heldout"] is not None
+
+
+def test_readers_resets_and_guard(tmp_path, lines):
+    msgs = []
+    cfg = _tiny(tmp_path, steps=8, eval_every=4, n_readers=2, reader_resets=2, reset_until=0.5,
+                guard_ss=2)
+    assert cfg.scheme == "lg_learned_n0_rr2_nr2" and T.reset_steps(cfg) == [2, 4]
+    row = T.train_joint(cfg, log=msgs.append, train_lines=lines[40:] * 2,
+                        eval_lines=(lines[:8], lines[8:16]))[0]
+    assert row["n_readers"] == 2 and row["reader_resets"] == 2
+    assert sum("re-initialised" in m for m in msgs) == 2
+    from learned_glyphs.lg.glyphs import GlyphBank
+    bank = GlyphBank.load(tmp_path / "t" / "banks" / f"{cfg.tag}.pt")
+    with torch.no_grad():
+        ink = bank(tau=0.2, hard=True)
+    assert float(ink[:, :, :2].abs().sum()) == 0.0              # left guard band baked in
+    w = bank.widths_ss
+    assert all(float(ink[i, :, w[i] - 2: w[i]].sum()) == 0.0 for i in range(len(w)))
+    rep = json.loads((tmp_path / "t" / "glyph_report" / f"{cfg.tag}.json").read_text())
+    assert "nearest_pairs" in rep and "top_confusions" in rep
+
+
+def test_penalties():
+    k = 4
+    big = torch.zeros(1, 16, 16)
+    big[0, 4:12, 4:12] = 1
+    thin = torch.zeros(1, 16, 16)
+    thin[0, :, 7] = 1
+    m = torch.ones(1, 16, 16)
+    assert float(T.min_feature_penalty(big, m, k)) == 0.0
+    assert float(T.min_feature_penalty(thin, m, k)) > 0.05
+    assert float(T.min_feature_penalty(1 - thin, m, k)) > 0.05     # thin gap
+    ink = torch.stack([torch.zeros(16, 16), big[0], torch.ones(16, 16)])
+    mm = torch.ones(3, 16, 16)
+    # glyph 0 (space) skipped; glyph 1 coverage .25 inside band; glyph 2 coverage 1 -> .55 over
+    assert float(T.coverage_penalty(ink, mm, 0.10, 0.45)) == pytest.approx(0.55 / 2)
+
+
+def test_channel_ramp_levels():
+    Channel = T.lg1()[2]
+    cfg = T.JointConfig(channel="default", channel_ramp=0.5, steps=100)
+    ramp = T.make_channel_ramp(cfg, Channel, log=lambda m: None)
+    if len(ramp) == 1:
+        pytest.skip("Channel has no params dataclass (stub)")
+    assert len(ramp) == T.RAMP_LEVELS
+    assert T.channel_at(cfg, ramp, 1) is ramp[0] and T.channel_at(cfg, ramp, 100) is ramp[-1]
+    assert ramp[0].params.noise == (0.0, 0.0) and ramp[-1].params == Channel("default").params
+
+
+PH2 = ROOT / "results" / "phase2" / "phase2_main" / "checkpoints" / "latin_em7.pt"
+
+
+@pytest.mark.skipif(not PH2.exists(), reason="no Phase-2 latin checkpoint")
+def test_frozen_reader_mode(tmp_path, lines):
+    cfg = _tiny(tmp_path, steps=4, eval_every=2, height_px=8, frozen_reader=str(PH2), model={})
+    row = T.train_joint(cfg, log=lambda m: None, train_lines=lines[40:],
+                        eval_lines=(lines[:8], lines[8:16]), save=False)[0]
+    assert row["train_mode"] == "frozen_reader" and row["scheme"] == "lg_learned_n0_frozenreader"
+    assert row["glyph_params"] > 0 and row["reader_resets"] == 0
+    a = Alphabet.build(0)
+    import torch as _t
+    vocab = _t.load(PH2, weights_only=False)["vocab"]
+    cm = T.ClassMap(a, vocab)
+    assert cm.n_classes == len(vocab) + 2
+    assert a.decode(cm.decode(cm.targets([a.encode("The cat")])[0].tolist())) == "The cat"

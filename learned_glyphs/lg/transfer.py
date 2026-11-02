@@ -131,7 +131,8 @@ def alphabet_for_bank(bank):
 def train_reader_on_bank(bank_path, cfg: TransferConfig | None = None, log=print,
                          train_lines=None, eval_lines=None, save: bool = True) -> list[dict]:
     """Fresh reader on a frozen bank. Returns [row]; with ``save`` appends it to
-    ``<out_dir>/runs.jsonl`` and writes curves/, readers/, samples/ files (tag = transfer_<bank stem>).
+    ``<out_dir>/runs.jsonl`` and writes curves/, checkpoints/ (reader, git-ignored), samples/ files
+    (tag = transfer_<bank stem>).
 
     ``train_lines`` / ``eval_lines=(val, test)`` override the corpus (tests / smoke)."""
     import torch
@@ -205,7 +206,7 @@ def train_reader_on_bank(bank_path, cfg: TransferConfig | None = None, log=print
 
     curve_f = None
     if save:
-        for sub in ("curves", "readers", "samples"):
+        for sub in ("curves", "checkpoints", "samples"):
             (out_dir / sub).mkdir(parents=True, exist_ok=True)
         curve_f = open(out_dir / "curves" / f"{tag}.jsonl", "w")
     log(f"[{tag}] bank={bank_path.name} scheme={scheme} symbols={len(alphabet)} h={height_px} "
@@ -285,7 +286,7 @@ def train_reader_on_bank(bank_path, cfg: TransferConfig | None = None, log=print
     if save:
         torch.save({"state": best["reader"], "n_classes": alphabet.n_classes, "col_stride": stride,
                     "expand": expand, "model": cfg.model, "config": asdict(cfg)},
-                   out_dir / "readers" / f"{tag}.pt")
+                   out_dir / "checkpoints" / f"{tag}.pt")
         with open(out_dir / "samples" / f"{tag}.txt", "w") as fh:
             for i in range(min(cfg.n_samples, len(test_t))):
                 fh.write(f"REF {test_t[i]}\nHYP {ev['preds'][i]}\n\n")
@@ -328,3 +329,74 @@ def run_job(args: tuple[str, dict]) -> list[dict]:
             fh.flush()
             print(msg, flush=True)
         return train_reader_on_bank(p, cfg, log=log)
+
+
+# ------------------------------------------------------------------------------ bridge (E3)
+def bridge_phase2(bank_path, em: float, *, steps: int = 3500, run_name: str = "bridge",
+                  out_root: str | Path | None = None, n_train: int = 40_000, n_val: int = 300,
+                  n_test: int = 1000, batch: int = 32, eval_every: int = 250, threads: int = 1,
+                  seed: int = 0, render_workers: int = 1, allow_fallback: bool = False,
+                  cache_dir: str | Path | None = None, log=print) -> list[dict]:
+    """E3: score a bank with the UNCHANGED Phase-2 pipeline (vbpe.crnn.data rendering via
+    vbpe.layout + vbpe.crnn.train.train_model) at layout em ``em``.
+
+    The bank is registered as scheme ``lg:<key>@<sha8>`` via the runtime hook (no parent edit).
+    Phase-2 data are built exactly as ``vbpe.crnn.train.load_data`` does, except that the render
+    cache lives in ``<out>/cache`` (git-ignored). Writes the raw Phase-2 row (phase=2) to
+    ``<out>/phase2/runs.jsonl`` and a PLAN-schema row (phase="lg", train_mode="bridge",
+    scheme = the bank's lg scheme name) to ``<out>/runs.jsonl``. Returns [lg row].
+    """
+    from vbpe.crnn import data as D
+    from vbpe.crnn.train import TrainConfig, train_model
+
+    from .scheme import bank_sha8, install_phase2_hook, make_lg_scheme, scheme_name_for
+
+    install_phase2_hook()
+    bank_path = resolve_bank_path(bank_path)
+    name = scheme_name_for(bank_path)
+    sch = make_lg_scheme(name)
+    out = Path(out_root or RESULTS) / run_name
+    cache = Path(cache_dir) if cache_dir else out / "cache"
+    cfg = TrainConfig(scheme=name, em=float(em), steps=steps, batch=batch, eval_every=eval_every,
+                      n_train=n_train, n_val=n_val, n_test=n_test, threads=threads, seed=seed,
+                      render_workers=render_workers, allow_fallback=allow_fallback,
+                      render={"supersample": 4})
+    kw = dict(seed=cfg.data_seed, rp=cfg.render_params(), workers=render_workers,
+              allow_fallback=allow_fallback, cache_dir=cache)
+    train = D.build_lineset(name, cfg.em, "train", n_train, train=True, tag="train", **kw)
+    test = D.build_lineset(name, cfg.em, "val", n_test, tag="test", **kw)
+    val = D.build_lineset(name, cfg.em, "val", n_val, skip=n_test, tag="val", **kw)
+    p2 = train_model(cfg, out / "phase2", data=(train, {cfg.em: val}, {cfg.em: test}), log=log)[0]
+    bank = load_frozen_bank(bank_path)
+    src = source_row(bank_path)
+    row = {
+        "phase": "lg", "run": run_name, "train_mode": "bridge",
+        "scheme": bank_scheme_name(bank, sch.alphabet.n_tokens, src), "em": float(em),
+        "height_px": 1.2 * float(em), "px_per_char": p2["px_per_char"], "cer": p2["cer"],
+        "symbol_cer": p2["symbol_cer"], "steps": steps, "channel": "phase2",
+        "n_tokens": sch.alphabet.n_tokens,
+        "learn_glyphs": bool(src.get("learn_glyphs")) if src else getattr(bank, "logits", None) is not None,
+        "train_time_s": p2["train_time_s"],
+        "phase2_scheme": name, "bank_path": _rel(bank_path), "bank_sha8": bank_sha8(bank_path),
+        "source_tag": bank_path.stem, "bank_native_em": sch.native_em, "bank_height_px": sch.height_px,
+        "best_step": p2["best_step"], "n_params": p2["n_params"], "vocab_size": p2["vocab_size"],
+        "expand": p2["expand"], "corpus": p2["corpus"], "n_test": p2["n_test"], "seed": seed,
+    }
+    with open(out / "runs.jsonl", "a") as fh:
+        fh.write(json.dumps(row) + "\n")
+    log(f"[bridge {bank_path.stem} em={em:g}] cer={row['cer']:.4f} px/char={row['px_per_char']:.2f}")
+    return [row]
+
+
+def bridge_job(args: tuple[str, float, dict]) -> list[dict]:
+    """Process-pool entry point for ``bridge_phase2`` (logs to <out>/logs/bridge_<stem>_em<em>.log)."""
+    bank_path, em, kw = args
+    out = Path(kw.get("out_root") or RESULTS) / kw.get("run_name", "bridge")
+    log_path = out / "logs" / f"bridge_{Path(bank_path).stem}_em{em:g}.log"
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(log_path, "w") as fh:
+        def log(msg: str) -> None:
+            fh.write(msg + "\n")
+            fh.flush()
+            print(msg, flush=True)
+        return bridge_phase2(bank_path, em, log=log, **kw)

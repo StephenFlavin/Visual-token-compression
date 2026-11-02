@@ -1,0 +1,167 @@
+{
+ "threshold": 0.03,
+ "n_tokens": 300,
+ "best_phase2_latin": [
+  15.110262199297157,
+  null
+ ],
+ "modes": {
+  "joint": {
+   "P_learned_n0": [
+    null,
+    "right"
+   ],
+   "P_learned_n300": [
+    null,
+    "missing"
+   ],
+   "P_fixed_ref": [
+    null,
+    "right"
+   ],
+   "S1": [
+    null,
+    "neither crosses"
+   ],
+   "S2": [
+    null,
+    "missing"
+   ],
+   "R_tokens_vs_fixed": [
+    null,
+    "missing"
+   ],
+   "R_tokens_vs_phase2_latin": [
+    null,
+    "missing"
+   ]
+  },
+  "transfer": {
+   "P_learned_n0": [
+    null,
+    "right"
+   ],
+   "P_learned_n300": [
+    null,
+    "missing"
+   ],
+   "P_fixed_ref": [
+    null,
+    "right"
+   ],
+   "S1": [
+    null,
+    "neither crosses"
+   ],
+   "S2": [
+    null,
+    "missing"
+   ],
+   "R_tokens_vs_fixed": [
+    null,
+    "missing"
+   ],
+   "R_tokens_vs_phase2_latin": [
+    null,
+    "missing"
+   ]
+  },
+  "bridge": {
+   "P_learned_n0": [
+    null,
+    "right"
+   ],
+   "P_learned_n300": [
+    null,
+    "missing"
+   ],
+   "P_fixed_ref": [
+    15.110262199297157,
+    null
+   ],
+   "S1": [
+    Infinity,
+    "learned never crosses"
+   ],
+   "S2": [
+    null,
+    "missing"
+   ],
+   "R_tokens_vs_fixed": [
+    null,
+    "missing"
+   ],
+   "R_tokens_vs_phase2_latin": [
+    null,
+    "missing"
+   ]
+  },
+  "joint/harsh": {
+   "P_learned_n0": [
+    null,
+    "missing"
+   ],
+   "P_learned_n300": [
+    null,
+    "missing"
+   ],
+   "P_fixed_ref": [
+    null,
+    "missing"
+   ],
+   "S1": [
+    null,
+    "missing"
+   ],
+   "S2": [
+    null,
+    "missing"
+   ],
+   "R_tokens_vs_fixed": [
+    null,
+    "missing"
+   ],
+   "R_tokens_vs_phase2_latin": [
+    null,
+    "n/a"
+   ]
+  },
+  "transfer/harsh": {
+   "P_learned_n0": [
+    null,
+    "missing"
+   ],
+   "P_learned_n300": [
+    null,
+    "missing"
+   ],
+   "P_fixed_ref": [
+    null,
+    "missing"
+   ],
+   "S1": [
+    null,
+    "missing"
+   ],
+   "S2": [
+    null,
+    "missing"
+   ],
+   "R_tokens_vs_fixed": [
+    null,
+    "missing"
+   ],
+   "R_tokens_vs_phase2_latin": [
+    null,
+    "n/a"
+   ]
+  }
+ },
+ "criteria": {
+  "transfer vs fixed (same channel)": false,
+  "transfer vs Phase-2 best Latin": false,
+  "bridge vs Phase-2 best Latin": false,
+  "harsh transfer vs harsh fixed": false
+ },
+ "GO": false
+}

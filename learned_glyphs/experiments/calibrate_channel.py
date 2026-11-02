@@ -50,6 +50,7 @@ SYMBOLS = [chr(c) for c in range(32, 127)]
 S2I = {s: i for i, s in enumerate(SYMBOLS)}
 HIST_EDGES = [0.0, 0.02, 0.1, 0.3, 0.5, 0.7, 0.9, 0.98, 1.0001]
 PRESETS = ["clean", "default", "harsh"]
+STAT_PRESETS = PRESETS + ["harsh+heldout"]      # test-only channel: eval stats only
 SCHEME = "lg_fixed_n0"
 
 
@@ -199,11 +200,12 @@ def run_stats(args, out: Path) -> dict:
         for p in args.presets:
             ch = Channel(p)
             xe, we = bank_lines(bank, ch, lines, train=False)
-            xt, wt = bank_lines(bank, ch, lines, train=True, gen=torch.Generator().manual_seed(1))
             stats[f"{p}_eval"] = pixel_stats(xe.numpy(), we.numpy())
-            stats[f"{p}_train"] = pixel_stats(xt.numpy(), wt.numpy())
             imgs[f"{p}_eval"] = (xe.numpy(), we.numpy())
-            imgs[f"{p}_train"] = (xt.numpy(), wt.numpy())
+            if not ch.test_only:
+                xt, wt = bank_lines(bank, ch, lines, train=True, gen=torch.Generator().manual_seed(1))
+                stats[f"{p}_train"] = pixel_stats(xt.numpy(), wt.numpy())
+                imgs[f"{p}_train"] = (xt.numpy(), wt.numpy())
             mads[p] = aligned_mad(bank, ch, lines[: args.n_mad], em)
         for k, s in stats.items():
             if k.startswith("pil"):
@@ -222,6 +224,8 @@ def run_stats(args, out: Path) -> dict:
             rows = []
             for k in ["pil_eval"] + [f"{p}_eval" for p in args.presets] + ["pil_train"] + \
                      [f"{p}_train" for p in args.presets]:
+                if k not in imgs:
+                    continue
                 x, w = imgs[k]
                 rows.append((k, x[li, 0, :, : int(w[li])]))
             save_strip(out / "strips" / f"em{em:g}_line{li}.png", rows)
@@ -257,8 +261,10 @@ def stats_markdown(res: dict, presets) -> str:
     L += ["", "Mean dist per preset (lower = closer to PIL):", ""]
     for mode in ("eval", "train"):
         for p in presets:
-            v = [r["stats"][f"{p}_{mode}"]["dist_vs_pil"] for r in res["ems"].values()]
-            L.append(f"* {p}_{mode}: {np.mean(v):.3f}")
+            v = [r["stats"][f"{p}_{mode}"]["dist_vs_pil"] for r in res["ems"].values()
+                 if f"{p}_{mode}" in r["stats"]]
+            if v:
+                L.append(f"* {p}_{mode}: {np.mean(v):.3f}")
     return "\n".join(L) + "\n"
 
 
@@ -392,6 +398,10 @@ def train_job(job: dict) -> dict:
     curve_f.close()
     model.load_state_dict(best["state"])
     ev = _evaluate(model, _prerender(bank, ch_eval, test), test, vocab)
+    extra = {}
+    for pe in job.get("extra_eval") or []:
+        extra[pe] = _evaluate(model, _prerender(bank, Channel(pe), test), test, vocab)["cer"]
+        log(f"[{tag}] TEST eval-channel {pe}: cer={extra[pe]:.4f}")
     ref = phase2_latin_cer().get(em)
     row = {"phase": "lg", "run": out.name, "train_mode": "calib", "scheme": SCHEME, "em": em,
            "px_per_char": float(np.mean(test.ppc)), "cer": ev["cer"], "symbol_cer": ev["cer"],
@@ -401,7 +411,7 @@ def train_job(job: dict) -> dict:
            "s_per_step": round((train_time - eval_time) / steps, 4), "expand": expand,
            "col_stride": stride, "n_train": len(train.texts), "n_test": len(test.texts),
            "batch": job["batch"], "seed": seed, "corpus": corpus, "channel_params": ch_train.describe(),
-           "phase2_latin_cer": ref}
+           "phase2_latin_cer": ref, "extra_eval_cer": extra}
     log(f"[{tag}] TEST cer={ev['cer']:.4f} (phase2 latin em{em:g}: {ref}) px/char={row['px_per_char']:.2f} "
         f"best_step={best['step']} time={train_time:.0f}s")
     with open(out / "samples" / f"{tag}.txt", "w") as fh:
@@ -476,7 +486,7 @@ def run_training(args, out: Path) -> None:
                 done.add((r["channel"], float(r["em"]), r["steps"]))
     base = {"steps": args.steps, "batch": args.batch, "n_train": args.n_train, "n_val": args.n_val,
             "n_test": args.n_test, "eval_every": args.eval_every, "out": str(out), "threads": 1,
-            "eval_preset": args.eval_preset}
+            "eval_preset": args.eval_preset, "extra_eval": args.extra_eval}
     jobs = [dict(base, kind="bank", em=em, preset=p)
             for em in sorted(args.train_ems, reverse=True) for p in args.train_presets
             if (p, float(em), args.steps) not in done]
@@ -500,15 +510,17 @@ def run_training(args, out: Path) -> None:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--ems", type=float, nargs="+", default=[4, 5, 6, 7, 8])
-    ap.add_argument("--presets", nargs="+", default=PRESETS)
+    ap.add_argument("--presets", nargs="+", default=STAT_PRESETS, help="presets for pixel stats")
     ap.add_argument("--n-lines", type=int, default=256, help="lines for pixel stats")
     ap.add_argument("--n-mad", type=int, default=64, help="lines for the aligned MAD")
     ap.add_argument("--n-strip", type=int, default=3)
     ap.add_argument("--no-stats", action="store_true")
     ap.add_argument("--train", action="store_true", help="train CRNN readers (E0 CER calibration)")
     ap.add_argument("--train-ems", type=float, nargs="+", default=None, help="default: --ems")
-    ap.add_argument("--train-presets", nargs="+", default=None, help="default: --presets")
+    ap.add_argument("--train-presets", nargs="+", default=PRESETS)
     ap.add_argument("--eval-preset", default=None, help="evaluate with this preset (default: same)")
+    ap.add_argument("--extra-eval", nargs="*", default=["clean", "harsh+heldout"],
+                    help="also report test CER through these (eval-only) channels")
     ap.add_argument("--steps", type=int, default=3500)
     ap.add_argument("--batch", type=int, default=32)
     ap.add_argument("--n-train", type=int, default=40_000)
@@ -530,9 +542,9 @@ def main(argv=None) -> int:
             args.steps = 300
         args.n_train, args.n_val, args.n_test, args.eval_every = 5000, 100, 200, 100
         args.train_ems = args.train_ems or [5]
-        args.train_presets = args.train_presets or ["default"]
+        if args.train_presets == PRESETS:
+            args.train_presets = ["default"]
     args.train_ems = args.train_ems or args.ems
-    args.train_presets = args.train_presets or args.presets
     out = args.out or (OUT.with_name("calibration_quick") if args.quick else OUT)
     out.mkdir(parents=True, exist_ok=True)
     (out / "args.json").write_text(json.dumps({k: (str(v) if isinstance(v, Path) else v)

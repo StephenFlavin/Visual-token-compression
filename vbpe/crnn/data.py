@@ -134,6 +134,9 @@ def resolve_scheme(name: str):
     if name.startswith("stub_"):
         from vbpe.crnn.stubs import make_stub_scheme
         return make_stub_scheme(name)
+    if name.startswith("lg:"):  # learned glyph bank as a bitmap-font scheme (learned_glyphs/lg/scheme.py)
+        from learned_glyphs.lg.scheme import make_lg_scheme
+        return make_lg_scheme(name)
     from vbpe.schemes import get_scheme
     return get_scheme(name)
 
