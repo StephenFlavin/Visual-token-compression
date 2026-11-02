@@ -1,1 +1,5 @@
 [phase2] run=phase2_main mode=per_em jobs=5 (rows already done: 0) steps=3500
+[crnn.data] rendered latin em8 train: 40000 lines, H=15, mean W=200, 108.18s (3 workers)
+[crnn.data] rendered latin em7 train: 40000 lines, H=14, mean W=176, 101.27s (3 workers)
+[crnn.data] rendered latin em7 test: 1000 lines, H=14, mean W=178, 2.57s (3 workers)
+[crnn.data] rendered latin em7 val: 300 lines, H=14, mean W=178, 1.0s (3 workers)

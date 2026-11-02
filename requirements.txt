@@ -7,3 +7,4 @@ matplotlib>=3.9
 # CPU torch for Phase 2:  pip install --index-url https://download.pytorch.org/whl/cpu torch
 torch>=2.5
 pytest
+rapidocr-onnxruntime  # Phase 1b reader
