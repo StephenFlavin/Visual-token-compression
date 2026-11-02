@@ -2,3 +2,37 @@
 [crnn.data] rendered quad4 em=7 train: 8000 lines, H=14, mean W=69, 5.62s (2 workers)
 [crnn.data] rendered quad4 em=7 test: 300 lines, H=14, mean W=70, 0.84s (2 workers)
 [crnn.data] rendered quad4 em=7 val: 300 lines, H=14, mean W=70, 0.75s (2 workers)
+[crnn.data] rendered subst1000 em=7 train: 8000 lines, H=14, mean W=92, 36.75s (2 workers)
+[crnn.data] rendered subst1000 em=7 test: 300 lines, H=14, mean W=92, 5.88s (2 workers)
+[crnn.data] rendered subst1000 em=7 val: 300 lines, H=14, mean W=92, 5.52s (2 workers)
+[phase2] pre-render done in 56s
+[quad4_em7] vocab=88 col_stride=2 expand=4 params=1149704 train=8000 H=14 meanW=69
+[subst1000_em7] vocab=1087 col_stride=2 expand=2 params=1274863 train=8000 H=14 meanW=92
+[quad4_em7] step 100 loss 5.062 val_cer 1.0000 (29.5s)
+[subst1000_em7] step 100 loss 10.629 val_cer 1.0000 (56.2s)
+[quad4_em7] step 200 loss 3.128 val_cer 1.0000 (58.5s)
+[quad4_em7] step 300 loss 3.109 val_cer 1.0000 (85.4s)
+[subst1000_em7] step 200 loss 5.040 val_cer 1.0000 (105.5s)
+[quad4_em7] step 400 loss 3.074 val_cer 1.0000 (117.0s)
+[subst1000_em7] step 300 loss 4.837 val_cer 0.9707 (147.8s)
+[quad4_em7] step 500 loss 2.832 val_cer 0.9833 (150.9s)
+[quad4_em7] step 600 loss 2.768 val_cer 0.8078 (180.4s)
+[quad4_em7] TEST cer=0.8067 symbol_cer=0.7948 px/char=11.4 best_step=600 time=180s
+[subst1000_em7] step 400 loss 4.354 val_cer 0.8185 (185.9s)
+[subst1000_em7] step 500 loss 3.944 val_cer 0.7508 (219.7s)
+[subst1000_em7] step 600 loss 3.806 val_cer 0.7432 (254.3s)
+[subst1000_em7] TEST cer=0.7510 symbol_cer=0.8216 px/char=15.2 best_step=600 time=254s
+[phase2] 2 runs in 318s -> /home/user/visual-bpe/results/phase2/smoke_paths/runs.jsonl
+  quad4            em=7    px/char=  11.4 cer=0.8067 sym_cer=0.7948 best@600 180s
+  subst1000        em=7    px/char=  15.2 cer=0.7510 sym_cer=0.8216 best@600 254s
+[phase2] run=smoke_paths jobs=1 (skipped 2 done) steps=60
+[crnn.data] rendered stub_cjk em=6 train: 3000 lines, H=12, mean W=132, 32.4s (1 workers)
+[crnn.data] rendered stub_cjk em=6 test: 200 lines, H=12, mean W=134, 0.92s (1 workers)
+[crnn.data] rendered stub_cjk em=6 val: 100 lines, H=12, mean W=134, 0.42s (1 workers)
+[phase2] pre-render done in 34s
+[stub_cjk_em6] vocab=849 col_stride=2 expand=2 params=1213697 train=3000 H=12 meanW=132
+[stub_cjk_em6] step 30 loss 10.880 val_cer 1.0000 (13.9s)
+[stub_cjk_em6] step 60 loss 4.779 val_cer 1.0000 (26.9s)
+[stub_cjk_em6] TEST cer=1.0000 symbol_cer=1.0000 px/char=19.2 best_step=30 time=27s
+[phase2] 1 runs in 64s -> /home/user/visual-bpe/results/phase2/smoke_paths/runs.jsonl
+  stub_cjk         em=6    px/char=  19.2 cer=1.0000 sym_cer=1.0000 best@30 27s

@@ -1,21 +1,20 @@
 {
  "schemes": [
-  "quad4",
-  "subst1000"
+  "stub_cjk"
  ],
  "ems": [
-  7.0
+  6.0
  ],
- "steps": 600,
+ "steps": 60,
  "batch": 32,
  "lr": 0.002,
- "eval_every": 100,
+ "eval_every": 30,
  "threads": 1,
- "parallel": 2,
+ "parallel": 1,
  "render_workers": null,
- "n_train": 8000,
- "n_val": 300,
- "n_test": 300,
+ "n_train": 3000,
+ "n_val": 100,
+ "n_test": 200,
  "seed": 0,
  "supersample": 4,
  "hidden": null,
