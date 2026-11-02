@@ -1,3 +1,17 @@
 [latin_em5] vocab=88 col_stride=2 expand=2 params=1018120 train=20000 H=11 meanW=127
 [latin_em5] step 100 loss 5.516 val_cer 1.0000 (32.5s)
 [latin_em5] step 200 loss 3.193 val_cer 0.9979 (62.4s)
+[latin_em5] step 300 loss 2.873 val_cer 0.6904 (94.4s)
+[latin_em5] step 400 loss 1.767 val_cer 0.3395 (126.4s)
+[latin_em5] step 500 loss 0.886 val_cer 0.1377 (159.5s)
+[latin_em5] step 600 loss 0.516 val_cer 0.0712 (193.2s)
+[latin_em5] step 700 loss 0.385 val_cer 0.0461 (226.5s)
+[latin_em5] step 800 loss 0.308 val_cer 0.0368 (261.1s)
+[latin_em5] step 900 loss 0.266 val_cer 0.0316 (294.1s)
+[latin_em5] step 1000 loss 0.237 val_cer 0.0273 (328.8s)
+[latin_em5] step 1100 loss 0.214 val_cer 0.0246 (364.2s)
+[latin_em5] step 1200 loss 0.197 val_cer 0.0212 (399.0s)
+[latin_em5] step 1300 loss 0.189 val_cer 0.0211 (432.1s)
+[latin_em5] step 1400 loss 0.179 val_cer 0.0199 (463.6s)
+[latin_em5] step 1500 loss 0.176 val_cer 0.0199 (495.5s)
+[latin_em5] TEST cer=0.0193 symbol_cer=0.0193 px/char=15.4 best_step=1400 time=496s

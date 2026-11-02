@@ -1,0 +1,4 @@
+[phase2] run=smoke_paths jobs=2 (skipped 0 done) steps=600
+[crnn.data] rendered quad4 em=7 train: 8000 lines, H=14, mean W=69, 5.62s (2 workers)
+[crnn.data] rendered quad4 em=7 test: 300 lines, H=14, mean W=70, 0.84s (2 workers)
+[crnn.data] rendered quad4 em=7 val: 300 lines, H=14, mean W=70, 0.75s (2 workers)

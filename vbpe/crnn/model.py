@@ -6,7 +6,7 @@ Images are fed at their *native* rendered resolution (H = round(1.2*em) + 4 px, 
 The CNN is height-agnostic: a full-resolution 3x3 conv (16 channels, so the following 2x2 max-pool
 can keep every pixel's information in its channels), 2x2 max-pool, a 3x3 conv, an adaptive
 max-pool capping the height at 6 rows (no-op for em <= 7; bounds CPU cost at large ems), a width
-max-pool for em >= 8 (see below), a 3x3 conv, then
+max-pool if col_stride = 4 (unused by default), a 3x3 conv, then
 ``AdaptiveAvgPool2d((4, None))`` + a learned projection collapse the height to one feature vector
 per column (keeping coarse vertical position, which matters for packed quadrant cells).
 We do NOT resize to a fixed model height: downscaling would destroy the resolution effect we
@@ -16,8 +16,8 @@ vocabulary-sized output layer and the frame-expansion layer, set by the rule bel
 
 CTC time axis
 -------------
-The BiLSTM runs over W // s columns, s = ``data.col_stride_for_em(em)`` (2 px for em < 8, 4 px
-from em 8: a column is always 0.25-0.4 em wide; the extra width pool keeps large-em runs cheap).
+The BiLSTM runs over W // s columns, s = ``data.col_stride_for_em(em)`` = 2 px for every scheme
+and em (s = 4 is supported - an extra width pool - but learned more slowly in the smoke test).
 The LSTM is the sequential, CPU-expensive part, so instead of making it longer we expand each
 LSTM output into E CTC frames with a learned linear map *after* the LSTM (T = (W // s) * E).
 E (``data.choose_expand``; one rule for every scheme) is the smallest integer giving T >= 2L+1

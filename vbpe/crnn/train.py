@@ -126,7 +126,7 @@ def train_run(cfg: TrainConfig, out_dir: Path | None = None, data=None, log=prin
     batches = D.bucket_batches(train.widths, cfg.batch, rng)
     best = {"cer": math.inf, "step": 0, "state": None}
     curve, loss_acc, n_acc = [], 0.0, 0
-    t0 = time.time()
+    t0, c0 = time.time(), time.process_time()
     eval_time = 0.0
     model.train()
     for step in range(1, cfg.steps + 1):
@@ -158,6 +158,7 @@ def train_run(cfg: TrainConfig, out_dir: Path | None = None, data=None, log=prin
             if ev["cer"] < best["cer"]:
                 best = {"cer": ev["cer"], "step": step, "state": copy.deepcopy(model.state_dict())}
     train_time = time.time() - t0
+    train_cpu = time.process_time() - c0
     if curve_f:
         curve_f.close()
     model.load_state_dict(best["state"])
@@ -170,6 +171,7 @@ def train_run(cfg: TrainConfig, out_dir: Path | None = None, data=None, log=prin
         "col_stride": stride, "expand": expand,
         "vocab_size": len(vocab), "n_train": len(train), "n_val": len(val), "n_test": len(test),
         "batch": cfg.batch, "threads": cfg.threads, "s_per_step": round((train_time - eval_time) / cfg.steps, 4),
+        "train_cpu_s": round(train_cpu, 1),
         "render_time_s": sum(s.info.get("render_time_s", 0) for s in (train, val, test)),
         "corpus": train.info.get("corpus"), "render": train.info.get("render"),
         "input_height": train.height, "seed": cfg.seed, "config": asdict(cfg),

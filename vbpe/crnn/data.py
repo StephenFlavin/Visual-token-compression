@@ -19,8 +19,10 @@ Fairness rules (identical for every scheme)
 * Eval (val/test) lines: exact nominal em, seeded random phase, no photometric noise.
 * px_per_char of a line = line_spacing * em' * sum(unit advances) / len(normalize(line))
   (content area, margins excluded - consistent with page-level px^2/char).
-* CTC frames: the reader's BiLSTM runs over W // s columns, s = ``col_stride_for_em(em)``
-  (2 px for em < 8, 4 px otherwise - a function of em only), and each column is expanded into E
+* CTC frames: the reader's BiLSTM runs over W // s columns, s = 2 px for every scheme and em
+  (``col_stride_for_em``; a 4-px stride at em >= 8 was tried and learned more slowly - it packs
+  several narrow glyphs into one column, which would also penalise dense schemes), and each
+  column is expanded into E
   CTC frames, T = (W // s) * E. E is chosen per (scheme, em) by ONE rule for all schemes: the
   smallest integer with T >= 2L+1 for EVERY rendered sample (train, val and test).
 """
@@ -327,9 +329,9 @@ class Vocab:
 
 # ----------------------------------------------------------------------------- CTC frame rule
 def col_stride_for_em(em: float) -> int:
-    """Pixel stride of the BiLSTM columns: depends on em only (same for every scheme) so that a
-    column is always 0.25-0.4 em wide (2 px below em 8, 4 px from em 8)."""
-    return 2 if em < 8 else 4
+    """Pixel stride of the BiLSTM columns. Fixed at 2 px (uniform per-pixel processing for every
+    scheme and em). The model also supports 4 (cheaper; slower to learn in the smoke test)."""
+    return 2
 
 
 def n_frames(width, col_stride: int, expand: int):
