@@ -3,3 +3,4 @@
 {"step": 750, "train_loss": 0.1965, "val_cer": 0.01599, "val_cer_by_em": {"8": 0.01599}, "lr": 0.0019716568151060235, "elapsed_s": 684.6}
 {"step": 1000, "train_loss": 0.0559, "val_cer": 0.0051, "val_cer_by_em": {"8": 0.0051}, "lr": 0.0018763071748171432, "elapsed_s": 832.0}
 {"step": 1250, "train_loss": 0.0352, "val_cer": 0.00317, "val_cer_by_em": {"8": 0.00317}, "lr": 0.0017202368903109597, "elapsed_s": 978.6}
+{"step": 1500, "train_loss": 0.0292, "val_cer": 0.00345, "val_cer_by_em": {"8": 0.00345}, "lr": 0.0015142603560695772, "elapsed_s": 1126.6}

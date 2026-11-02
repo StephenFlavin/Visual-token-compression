@@ -1,13 +1,9 @@
 {
  "schemes": [
-  "latin"
+  "quad3"
  ],
  "ems": [
-  4.0,
-  5.0,
-  6.0,
-  7.0,
-  8.0
+  12.0
  ],
  "mixed_ems": null,
  "steps": 3500,
@@ -15,8 +11,8 @@
  "lr": 0.002,
  "eval_every": null,
  "threads": 1,
- "parallel": 3,
- "render_workers": null,
+ "parallel": 1,
+ "render_workers": 1,
  "n_train": null,
  "n_val": 300,
  "n_test": 1000,

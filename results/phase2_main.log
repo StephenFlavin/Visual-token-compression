@@ -30,3 +30,7 @@
 [latin_em6] step 1750 loss 0.065 val_cer 0.0058  (973.9s)
 [latin_em7] step 1500 loss 0.033 val_cer 0.0025  (977.8s)
 [latin_em8] step 1250 loss 0.035 val_cer 0.0032  (978.6s)
+[latin_em6] step 2000 loss 0.055 val_cer 0.0052  (1080.6s)
+[latin_em7] step 1750 loss 0.027 val_cer 0.0028  (1107.2s)
+[latin_em8] step 1500 loss 0.029 val_cer 0.0034  (1126.6s)
+[latin_em6] step 2250 loss 0.045 val_cer 0.0052  (1187.6s)

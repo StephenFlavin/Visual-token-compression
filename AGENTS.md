@@ -25,7 +25,8 @@ python3 -m pytest -q tests                            # ~100 tests, <15 s, no ne
 | Phase 1 Claude, Latin only | `python3 experiments/phase1_sweep.py --variant natural --n-passages 6 --schemes latin latin_condensed --budgets 14 17 20 23 27 32 40 --run-name latin_natural --max-cost 5 --yes` | ~$1.9 for 84 calls |
 | Phase 1 dry run (free) | add `--dry-run [--fake-noise 0.03]` | fake transcriber, no Claude |
 | Phase 1b OCR zero-shot | `python3 experiments/phase1b_ocr.py --variant natural --n-passages 6` (and `--variant scrambled --n-passages 3`) | CPU, ~5 s/page, 2 workers; resumable |
-| Phase 2 CRNN grid | `experiments/phase2_main.sh` (per-em, 3500 steps, 26 runs, ~4 h on 3 cores) | resumable; logs in `results/phase2_main.log` |
+| Phase 2 CRNN grid | `experiments/phase2_main.sh` (per-em, 3500 steps, 26 runs) | resumable; logs in `results/phase2_main.log`. Runs groups sequentially with a 3-worker pool → idle cores; prefer the driver below |
+| Phase 2 core-filling scheduler | `nohup python3 experiments/phase2_driver.py > results/phase2_driver.log 2>&1 &` | one process per (scheme, em), largest em first, keeps 4 cores busy (subtracts other busy phase2 processes); per-job logs in `results/phase2/<run>/driver/` |
 | Phase 2 single runs | `python3 experiments/phase2_train.py --schemes latin --ems 5 8 --steps 3500 --parallel 3 --threads 1 --run-name X` | `--smoke` for a quick check |
 | Analysis | `python3 -m vbpe.analysis <runs.jsonl> [more runs.jsonl] --out DIR` | works for Phase 1, 1b and 2 rows; writes summary.md/json + plots |
 | Claude vision checks | `python3 scripts/check_claude_vision.py` | token formula, legibility, latency (~$0.5) |
@@ -68,6 +69,9 @@ Claude responses are cached in `results/cache/claude/` (keyed on model+prompt+im
 **Analysis**
 - K2 verdict text can say "neither subst nor best Latin reaches CER x" when only subst fails — read the table, not just the verdict line.
 - With 1 passage, bootstrap CIs collapse to a point.
+
+- Real speed on this runner: ~0.6–0.8 s/step per run at 1 thread (latin em6–8), so a 3500-step run ≈ 40 min; budget ~6 h for 26 runs on 3 cores, ~4.5 h on 4.
+- Never edit a running bash script (bash reads it incrementally). To change plans mid-run, SIGKILL the wrapper bash only — its python child keeps running.
 
 **Git**
 - A stop hook demands a clean tree; long-running jobs append to `runs.jsonl`/logs continuously, so snapshot-commit (`WIP:`) and push while jobs run.
