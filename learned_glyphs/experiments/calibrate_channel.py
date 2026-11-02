@@ -458,11 +458,12 @@ def summarise_training(out: Path) -> str:
     rows = [json.loads(x) for x in (out / "runs.jsonl").read_text().splitlines() if x.strip()]
     p2 = [json.loads(x) for x in PHASE2_RUNS.read_text().splitlines()] if PHASE2_RUNS.exists() else []
     p2 = [r for r in p2 if r.get("scheme") == "latin"]
-    L = ["# E0 training calibration", "", "| channel | em | h | px2/char | CER | Phase-2 latin CER | steps |",
-         "|---|---|---|---|---|---|---|"]
+    L = ["# E0 training calibration", "", "| channel | em | h | px2/char | CER | CER via other eval channels | Phase-2 latin CER | steps |",
+         "|---|---|---|---|---|---|---|---|"]
     for r in sorted(rows, key=lambda r: (r["channel"], r["em"])):
+        ex = " ".join(f"{k}={v:.4f}" for k, v in (r.get("extra_eval_cer") or {}).items())
         L.append(f"| {r['channel']} | {r['em']:g} | {r['height_px']} | {r['px_per_char']:.2f} | "
-                 f"{r['cer']:.4f} | {r.get('phase2_latin_cer')} | {r['steps']} |")
+                 f"{r['cer']:.4f} | {ex} | {r.get('phase2_latin_cer')} | {r['steps']} |")
     L += ["", "P@3% (px2/char at CER 3%, isotonic + log-linear interpolation, vbpe.analysis.p_at):", ""]
     ref = p_at(p2, "latin", 0.03) if p2 else None
     L.append(f"* Phase-2 latin (phase2_main): {ref}")
@@ -470,7 +471,12 @@ def summarise_training(out: Path) -> str:
         sub = [dict(r, scheme=SCHEME) for r in rows if r["channel"] == ch]
         p = p_at(sub, SCHEME, 0.03) if len({r["em"] for r in sub}) > 1 else None
         rel = f" ({p / ref:.2f}x Phase 2)" if p and ref else ""
-        L.append(f"* {ch}: {p}{rel}")
+        L.append(f"* train {ch} / eval {sub[0].get('eval_channel', ch)}: {p}{rel}")
+        for pe in sorted({k for r in sub for k in (r.get("extra_eval_cer") or {})}):
+            se = [dict(r, cer=r["extra_eval_cer"][pe]) for r in sub if pe in (r.get("extra_eval_cer") or {})]
+            p = p_at(se, SCHEME, 0.03) if len({r["em"] for r in se}) > 1 else None
+            rel = f" ({p / ref:.2f}x Phase 2)" if p and ref else ""
+            L.append(f"  * eval through {pe}: {p}{rel}")
     L += ["", "Calibration target (PLAN E0): a preset within ~15% of Phase-2 latin P@3%."]
     return "\n".join(L) + "\n"
 

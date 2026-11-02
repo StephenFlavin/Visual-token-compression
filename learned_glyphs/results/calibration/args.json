@@ -1,0 +1,49 @@
+{
+ "ems": [
+  4,
+  5,
+  6,
+  7,
+  8
+ ],
+ "presets": [
+  "clean",
+  "default",
+  "harsh",
+  "harsh+heldout"
+ ],
+ "n_lines": 256,
+ "n_mad": 64,
+ "n_strip": 3,
+ "no_stats": false,
+ "train": false,
+ "train_ems": [
+  4,
+  5,
+  6,
+  7,
+  8
+ ],
+ "train_presets": [
+  "clean",
+  "default",
+  "harsh"
+ ],
+ "eval_preset": null,
+ "extra_eval": [
+  "clean",
+  "harsh+heldout"
+ ],
+ "steps": 3500,
+ "batch": 32,
+ "n_train": 40000,
+ "n_val": 300,
+ "n_test": 1000,
+ "eval_every": 250,
+ "pil_ref": false,
+ "parallel": 1,
+ "threads": 1,
+ "no_resume": false,
+ "quick": false,
+ "out": null
+}
