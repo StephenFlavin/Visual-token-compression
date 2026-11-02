@@ -16,3 +16,4 @@ learned_glyphs/results/**/checkpoints/
 learned_glyphs/results/**/cache/
 learned_glyphs/results/**/logs/
 learned_glyphs/results/**/curves/
+learned_glyphs/results/**/readers/
