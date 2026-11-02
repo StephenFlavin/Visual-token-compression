@@ -16,6 +16,9 @@ Fairness rules (identical for every scheme)
   quality at tiny sizes, which would otherwise confound scheme comparisons).
   Photometric augmentation (contrast jitter, gaussian noise) is applied per batch in
   ``augment_batch`` (cheap, fresh every epoch).
+* Mixed-em mode (one model per scheme for all ems): each train line's nominal em is drawn
+  uniformly from the em list with the same per-line rng (identical draws for every scheme); val
+  and test sets are rendered separately at each em (the same caches as single-em mode).
 * Eval (val/test) lines: exact nominal em, seeded random phase, no photometric noise.
 * px_per_char of a line = line_spacing * em' * sum(unit advances) / len(normalize(line))
   (content area, margins excluded - consistent with page-level px^2/char).
@@ -32,8 +35,10 @@ import hashlib
 import json
 import math
 import multiprocessing as mp
+import os
 import random
 import re
+import shutil
 import sys
 import time
 from dataclasses import asdict, dataclass
@@ -170,12 +175,19 @@ def line_rng(seed: int, split: str, idx: int) -> np.random.Generator:
     return np.random.default_rng([seed, SPLIT_IDS[split], idx])
 
 
-def render_sample(scheme, line: str, em: float, rp: RenderParams, rng: np.random.Generator,
+def render_sample(scheme, line: str, em, rp: RenderParams, rng: np.random.Generator,
                   train: bool) -> tuple[np.ndarray, tuple[str, ...], float, float]:
-    """-> (uint8 image HxW, white=255; label tuple; px_per_char; em used)."""
+    """-> (uint8 image HxW, white=255; label tuple; px_per_char; em used).
+
+    ``em`` is a number, or a tuple of ems for mixed-em training: the nominal em is then drawn
+    uniformly from it with the same per-line rng (after jitter and phase, so line i gets the same
+    jitter/phase as in single-em mode and the same em draw under every scheme).
+    """
     units = scheme.encode(line)
     j = rng.uniform(-rp.em_jitter, rp.em_jitter)        # always drawn: keeps streams aligned
     phase = rng.uniform(0.0, 1.0)
+    if isinstance(em, (tuple, list)):
+        em = em[int(rng.integers(len(em)))]
     e = em * (1 + j) if train else float(em)
     pre = [PhaseOffset(phase, e)] if rp.phase else []
     img = np.asarray(render_line(pre + units, e, rp.layout()), dtype=np.uint8)
@@ -204,13 +216,17 @@ def _render_chunk(args):
 # ----------------------------------------------------------------------------- dataset
 class LineSet:
     """Pre-rendered lines. Images are stored concatenated along width: ``images[:, off[i]:off[i+1]]``
-    (uint8, white background, padded at the bottom to a common height H)."""
+    (uint8, white background, top-aligned and padded at the bottom to a common height H; the
+    rendered height of each line is in ``heights`` so batches can be cropped)."""
 
     def __init__(self, images: np.ndarray, offsets: np.ndarray, labels: list[tuple[str, ...]],
-                 texts: list[str], ppc: np.ndarray, ems: np.ndarray, info: dict):
+                 texts: list[str], ppc: np.ndarray, ems: np.ndarray, info: dict,
+                 heights: np.ndarray | None = None):
         self.images, self.offsets = images, offsets
         self.labels, self.texts, self.ppc, self.ems, self.info = labels, texts, ppc, ems, info
         self.widths = np.diff(offsets).astype(np.int64)
+        self.heights = (np.full(len(texts), images.shape[0], dtype=np.int64) if heights is None
+                        else np.asarray(heights, dtype=np.int64))
         self.label_lens = np.array([len(x) for x in labels], dtype=np.int64)
 
     @property
@@ -225,45 +241,61 @@ class LineSet:
 
     # -- persistence
     def save(self, d: Path) -> None:
-        d.mkdir(parents=True, exist_ok=True)
-        np.save(d / "images.npy", self.images)
-        np.save(d / "offsets.npy", self.offsets)
-        np.save(d / "ppc.npy", self.ppc)
-        np.save(d / "ems.npy", self.ems)
+        """Write to a private temp dir, then rename it into place (safe with concurrent writers;
+        the first complete copy wins)."""
+        tmpd = d.with_name(f"{d.name}.tmp{os.getpid()}")
+        tmpd.mkdir(parents=True, exist_ok=True)
+        np.save(tmpd / "images.npy", self.images)
+        np.save(tmpd / "offsets.npy", self.offsets)
+        np.save(tmpd / "ppc.npy", self.ppc)
+        np.save(tmpd / "ems.npy", self.ems)
+        np.save(tmpd / "heights.npy", self.heights)
         meta = {"info": self.info, "texts": self.texts, "labels": ["\x1f".join(x) for x in self.labels]}
-        tmp = d / "meta.json.tmp"
-        tmp.write_text(json.dumps(meta))
-        tmp.rename(d / "meta.json")          # meta.json written last = cache complete
+        (tmpd / "meta.json").write_text(json.dumps(meta))
+        try:
+            tmpd.rename(d)
+        except OSError:                       # another process finished first
+            shutil.rmtree(tmpd, ignore_errors=True)
 
     @classmethod
     def load(cls, d: Path, mmap: bool = False) -> "LineSet":
         meta = json.loads((d / "meta.json").read_text())
         labels = [tuple(s.split("\x1f")) if s else () for s in meta["labels"]]
+        hp = d / "heights.npy"
         return cls(np.load(d / "images.npy", mmap_mode="r" if mmap else None), np.load(d / "offsets.npy"),
-                   labels, meta["texts"], np.load(d / "ppc.npy"), np.load(d / "ems.npy"), meta["info"])
+                   labels, meta["texts"], np.load(d / "ppc.npy"), np.load(d / "ems.npy"), meta["info"],
+                   np.load(hp) if hp.exists() else None)
 
 
-def _cache_key(scheme: str, em: float, split: str, n: int, skip: int, seed: int, train: bool,
+def _em_name(em) -> str:
+    return "mixed" + "-".join(f"{e:g}" for e in em) if isinstance(em, (tuple, list)) else f"em{em:g}"
+
+
+def _cache_key(scheme: str, em, split: str, n: int, skip: int, seed: int, train: bool,
                rp: RenderParams, corpus_tag: str) -> str:
-    blob = json.dumps([CODE_VERSION, scheme, float(em), split, n, skip, seed, train, asdict(rp),
+    em = [float(e) for e in em] if isinstance(em, (tuple, list)) else float(em)
+    blob = json.dumps([CODE_VERSION, scheme, em, split, n, skip, seed, train, asdict(rp),
                        corpus_tag], sort_keys=True)
     return hashlib.sha1(blob.encode()).hexdigest()[:10]
 
 
-def build_lineset(scheme: str, em: float, split: str, n: int, *, skip: int = 0, seed: int = 0,
+def build_lineset(scheme: str, em, split: str, n: int, *, skip: int = 0, seed: int = 0,
                   train: bool = False, rp: RenderParams = RenderParams(), workers: int = 2,
                   cache_dir: Path | None = CACHE_DIR, allow_fallback: bool = False,
                   tag: str | None = None, verbose: bool = True) -> LineSet:
-    """Render (or load from cache) ``n`` lines of ``split`` for ``scheme`` at ``em``.
+    """Render (or load from cache) ``n`` lines of ``split`` for ``scheme`` at ``em``
+    (a number, or a tuple of ems: each line's em drawn uniformly from it - mixed-em training).
 
     ``split`` is the corpus split ('train'/'val'); ``tag`` names the subset for seeding/caching
     ('train', 'val', 'test'); defaults to ``split``.
     """
     tag = tag or split
+    if isinstance(em, list):
+        em = tuple(em)
     lines, corpus = source_lines(split, n, skip=skip, seed=seed, allow_fallback=allow_fallback)
     text_hash = hashlib.sha1("\n".join(lines).encode()).hexdigest()[:12]
     key = _cache_key(scheme, em, tag, n, skip, seed, train, rp, f"{corpus}:{text_hash}")
-    d = cache_dir / f"{scheme}_em{em:g}_{tag}_{n}_{key}" if cache_dir else None
+    d = cache_dir / f"{scheme}_{_em_name(em)}_{tag}_{n}_{key}" if cache_dir else None
     if d is not None and (d / "meta.json").exists():
         return LineSet.load(d)
     t0 = time.time()
@@ -277,22 +309,25 @@ def build_lineset(scheme: str, em: float, split: str, n: int, *, skip: int = 0, 
         _worker_init(scheme)
         parts = [_render_chunk(j) for j in jobs]
     samples = [s for p in parts for s in p]
-    H = max(rp.max_height(em), max(s[0].shape[0] for s in samples))
+    H = max(rp.max_height(max(em) if isinstance(em, tuple) else em),
+            max(s[0].shape[0] for s in samples))
     widths = np.array([s[0].shape[1] for s in samples], dtype=np.int64)
     offsets = np.concatenate([[0], np.cumsum(widths)]).astype(np.int64)
     images = np.full((H, int(offsets[-1])), 255, dtype=np.uint8)
     for (img, *_), o in zip(samples, offsets[:-1]):
         images[: img.shape[0], o:o + img.shape[1]] = img
-    info = {"scheme": scheme, "em": float(em), "split": split, "tag": tag, "n": len(samples),
+    info = {"scheme": scheme, "em": list(em) if isinstance(em, tuple) else float(em), "split": split, "tag": tag, "n": len(samples),
             "seed": seed, "train": train, "render": asdict(rp), "corpus": corpus,
             "render_time_s": round(time.time() - t0, 2), "workers": workers}
     ls = LineSet(images, offsets, [s[1] for s in samples], lines,
                  np.array([s[2] for s in samples], dtype=np.float32),
-                 np.array([s[3] for s in samples], dtype=np.float32), info)
+                 np.array([s[3] for s in samples], dtype=np.float32), info,
+                 np.array([s[0].shape[0] for s in samples], dtype=np.int64))
+    del samples, parts
     if d is not None:
         ls.save(d)
     if verbose:
-        print(f"[crnn.data] rendered {scheme} em={em:g} {tag}: {len(ls)} lines, H={H}, "
+        print(f"[crnn.data] rendered {scheme} {_em_name(em)} {tag}: {len(ls)} lines, H={H}, "
               f"mean W={widths.mean():.0f}, {info['render_time_s']}s ({workers} workers)",
               file=sys.stderr)
     return ls
@@ -378,10 +413,10 @@ def collate(ls: LineSet, idx: np.ndarray, vocab: Vocab | None = None):
 
     idx = np.asarray(idx)
     widths = ls.widths[idx]
-    Wm = int(widths.max())
-    x = np.zeros((len(idx), 1, ls.height, Wm), dtype=np.float32)
+    Wm, Hb = int(widths.max()), int(ls.heights[idx].max())      # crop height to the batch max
+    x = np.zeros((len(idx), 1, Hb, Wm), dtype=np.float32)
     for b, i in enumerate(idx):
-        x[b, 0, :, : widths[b]] = (255 - ls.image(int(i))) / 255.0
+        x[b, 0, :, : widths[b]] = (255 - ls.image(int(i))[:Hb]) / 255.0
     out = [torch.from_numpy(x), torch.from_numpy(widths)]
     if vocab is not None:
         tg = [vocab.encode(ls.labels[int(i)]) for i in idx]

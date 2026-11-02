@@ -1,0 +1,39 @@
+{
+ "schemes": [
+  "latin"
+ ],
+ "ems": [
+  4,
+  5,
+  6,
+  7,
+  8,
+  10
+ ],
+ "mixed_ems": [
+  4.0,
+  5.0,
+  6.0,
+  7.0,
+  8.0,
+  10.0
+ ],
+ "steps": 1500,
+ "batch": 32,
+ "lr": 0.002,
+ "eval_every": 250,
+ "threads": 1,
+ "parallel": 1,
+ "render_workers": 2,
+ "n_train": 20000,
+ "n_val": 100,
+ "n_test": 200,
+ "seed": 0,
+ "supersample": 4,
+ "hidden": null,
+ "norm": "gn",
+ "run_name": "diag_mixed_gn",
+ "smoke": true,
+ "no_resume": false,
+ "prerender_only": false
+}

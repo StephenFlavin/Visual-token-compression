@@ -8,7 +8,7 @@ import torch
 
 from vbpe.crnn import data as D
 from vbpe.crnn.model import CRNN, greedy_decode
-from vbpe.crnn.train import TrainConfig, evaluate, train_run
+from vbpe.crnn.train import TrainConfig, evaluate, train_model, train_run
 
 torch.set_num_threads(1)
 
@@ -70,7 +70,7 @@ def test_lineset_roundtrip_and_cache(tmp_path):
     assert ls2.texts == ls.texts and ls2.labels == ls.labels
     np.testing.assert_array_equal(ls2.images, ls.images)
     x, w, tg, tl = D.collate(ls, np.arange(4), D.Vocab.from_labels(ls.labels))
-    assert x.shape == (4, 1, ls.height, int(w.max())) and float(x.max()) <= 1.0
+    assert x.shape == (4, 1, int(ls.heights[:4].max()), int(w.max())) and float(x.max()) <= 1.0
     assert int(tl.sum()) == len(tg)
 
 
@@ -166,3 +166,60 @@ def test_train_run_writes_row(tmp_path):
     m = CRNN(len(v), col_stride=2, expand=D.choose_expand(te.widths, te.label_lens, 2))
     ev = evaluate(m, te, v, D.resolve_scheme("latin"))
     assert ev["cer"] >= 0 and ev["n"] == 2
+
+
+def _concat(sets):
+    """Concatenate LineSets of different heights (helper for mixed-em tests)."""
+    H = max(s.height for s in sets)
+    imgs = [np.pad(s.images, ((0, H - s.height), (0, 0)), constant_values=255) for s in sets]
+    off = np.concatenate([[0], np.cumsum(np.concatenate([s.widths for s in sets]))])
+    return D.LineSet(np.concatenate(imgs, 1), off, [l for s in sets for l in s.labels],
+                     [t for s in sets for t in s.texts], np.concatenate([s.ppc for s in sets]),
+                     np.concatenate([s.ems for s in sets]), {},
+                     np.concatenate([s.heights for s in sets]))
+
+
+def test_mixed_em_draws_identical_across_schemes():
+    ems = (4.0, 6.0, 10.0)
+    seen = set()
+    for i in range(30):
+        a = D.render_sample(D.resolve_scheme("latin"), LINES[0], ems, D.RenderParams(),
+                            D.line_rng(0, "train", i), True)
+        b = D.render_sample(D.resolve_scheme("stub_cjk"), LINES[0], ems, D.RenderParams(),
+                            D.line_rng(0, "train", i), True)
+        assert a[3] == b[3]
+        nominal = min(ems, key=lambda e: abs(e - a[3]))
+        assert abs(a[3] / nominal - 1) <= 0.02 + 1e-9
+        seen.add(nominal)
+        # same jitter as single-em mode at that em
+        c = D.render_sample(D.resolve_scheme("latin"), LINES[0], nominal, D.RenderParams(),
+                            D.line_rng(0, "train", i), True)
+        assert c[3] == a[3]
+    assert seen == set(ems)
+
+
+def test_mixed_lineset_and_height_crop(tmp_path):
+    ls = D.build_lineset("latin", (4, 10), "val", 16, workers=1, cache_dir=tmp_path, train=True,
+                         allow_fallback=True, verbose=False)
+    assert len(set(ls.heights.tolist())) >= 2 and ls.height >= ls.heights.max()
+    ls2 = D.build_lineset("latin", [4, 10], "val", 16, workers=1, cache_dir=tmp_path, train=True,
+                          allow_fallback=True)
+    np.testing.assert_array_equal(ls2.heights, ls.heights)
+    small = np.where(ls.heights == ls.heights.min())[0][:2]
+    x, _ = D.collate(ls, small)
+    assert x.shape[2] == ls.heights.min()
+
+
+def test_train_model_mixed_rows(tmp_path):
+    ems = [5.0, 8.0]
+    tr = _concat([_lineset("latin", 5, LINES, train=True), _lineset("latin", 8, LINES, train=True)])
+    vals = {em: _lineset("latin", em, LINES[:2]) for em in ems}
+    tests = {em: _lineset("latin", em, LINES[2:]) for em in ems}
+    cfg = TrainConfig(scheme="latin", mixed_ems=ems, steps=4, batch=4, eval_every=2)
+    rows = train_model(cfg, tmp_path, data=(tr, vals, tests), log=lambda *_: None)
+    assert [r["em"] for r in rows] == ems
+    assert all(r["train_mode"] == "mixed" and r["steps"] == 4 for r in rows)
+    assert rows[0]["px_per_char"] < rows[1]["px_per_char"]
+    assert len(open(tmp_path / "runs.jsonl").read().splitlines()) == 2
+    pts = [json.loads(x) for x in open(tmp_path / "curves" / "latin_mixed5-8.jsonl")]
+    assert set(pts[-1]["val_cer_by_em"]) == {"5", "8"}

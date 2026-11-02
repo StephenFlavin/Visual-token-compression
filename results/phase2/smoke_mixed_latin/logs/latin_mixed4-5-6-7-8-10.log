@@ -1,0 +1,11 @@
+[latin_mixed4-5-6-7-8-10] vocab=88 col_stride=2 expand=3 params=1083912 train=6000 H=17 meanW=168
+[latin_mixed4-5-6-7-8-10] step 200 loss 5.848 val_cer 1.0000 4:1.0000 5:1.0000 6:1.0000 7:1.0000 8:1.0000 10:1.0000 (93.6s)
+[latin_mixed4-5-6-7-8-10] step 400 loss 3.089 val_cer 0.9980 4:1.0000 5:0.9996 6:0.9983 7:0.9979 8:0.9946 10:0.9973 (187.0s)
+[latin_mixed4-5-6-7-8-10] step 600 loss 2.709 val_cer 0.7795 4:0.8085 5:0.7753 6:0.7708 7:0.7780 8:0.7697 10:0.7749 (282.1s)
+[latin_mixed4-5-6-7-8-10] step 800 loss 2.497 val_cer 0.7638 4:0.7985 5:0.7575 6:0.7565 7:0.7581 8:0.7438 10:0.7685 (379.6s)
+[latin_mixed4-5-6-7-8-10] TEST em=4 cer=0.8164 symbol_cer=0.7848 px/char=9.8 best_step=800 time=380s
+[latin_mixed4-5-6-7-8-10] TEST em=5 cer=0.7644 symbol_cer=0.7478 px/char=15.4 best_step=800 time=380s
+[latin_mixed4-5-6-7-8-10] TEST em=6 cer=0.7655 symbol_cer=0.7502 px/char=22.1 best_step=800 time=380s
+[latin_mixed4-5-6-7-8-10] TEST em=7 cer=0.7686 symbol_cer=0.7532 px/char=30.1 best_step=800 time=380s
+[latin_mixed4-5-6-7-8-10] TEST em=8 cer=0.7491 symbol_cer=0.7368 px/char=39.3 best_step=800 time=380s
+[latin_mixed4-5-6-7-8-10] TEST em=10 cer=0.7631 symbol_cer=0.7510 px/char=61.4 best_step=800 time=380s

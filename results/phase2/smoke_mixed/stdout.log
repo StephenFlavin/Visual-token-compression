@@ -1,0 +1,61 @@
+[phase2] run=smoke_mixed mode=mixed jobs=2 (rows already done: 0) steps=300
+[crnn.data] rendered subst1000 mixed4-5-6-7-8-10 train: 6000 lines, H=17, mean W=88, 28.1s (2 workers)
+[crnn.data] rendered subst1000 em4 test: 200 lines, H=10, mean W=54, 4.74s (2 workers)
+[crnn.data] rendered subst1000 em5 test: 200 lines, H=11, mean W=67, 5.26s (2 workers)
+[crnn.data] rendered subst1000 em6 test: 200 lines, H=12, mean W=79, 4.97s (2 workers)
+[crnn.data] rendered subst1000 em7 test: 200 lines, H=14, mean W=92, 5.3s (2 workers)
+[crnn.data] rendered subst1000 em8 test: 200 lines, H=15, mean W=104, 5.82s (2 workers)
+[crnn.data] rendered subst1000 em10 test: 200 lines, H=17, mean W=129, 5.35s (2 workers)
+[crnn.data] rendered subst1000 em4 val: 100 lines, H=10, mean W=55, 5.32s (2 workers)
+[crnn.data] rendered subst1000 em5 val: 100 lines, H=11, mean W=68, 4.71s (2 workers)
+[crnn.data] rendered subst1000 em6 val: 100 lines, H=12, mean W=81, 5.36s (2 workers)
+[crnn.data] rendered subst1000 em7 val: 100 lines, H=14, mean W=93, 5.27s (2 workers)
+[crnn.data] rendered subst1000 em8 val: 100 lines, H=15, mean W=106, 5.09s (2 workers)
+[crnn.data] rendered subst1000 em10 val: 100 lines, H=17, mean W=131, 5.31s (2 workers)
+[crnn.data] rendered latin mixed4-5-6-7-8-10 train: 6000 lines, H=17, mean W=168, 18.98s (2 workers)
+[crnn.data] rendered latin em4 test: 200 lines, H=10, mean W=104, 0.58s (2 workers)
+[crnn.data] rendered latin em5 test: 200 lines, H=11, mean W=129, 0.6s (2 workers)
+[crnn.data] rendered latin em6 test: 200 lines, H=12, mean W=153, 0.59s (2 workers)
+[crnn.data] rendered latin em7 test: 200 lines, H=14, mean W=178, 0.73s (2 workers)
+[crnn.data] rendered latin em8 test: 200 lines, H=15, mean W=203, 0.63s (2 workers)
+[crnn.data] rendered latin em10 test: 200 lines, H=17, mean W=253, 0.78s (2 workers)
+[crnn.data] rendered latin em4 val: 100 lines, H=10, mean W=104, 0.41s (2 workers)
+[crnn.data] rendered latin em5 val: 100 lines, H=11, mean W=129, 0.38s (2 workers)
+[crnn.data] rendered latin em6 val: 100 lines, H=12, mean W=153, 0.36s (2 workers)
+[crnn.data] rendered latin em7 val: 100 lines, H=14, mean W=178, 0.36s (2 workers)
+[crnn.data] rendered latin em8 val: 100 lines, H=15, mean W=203, 0.33s (2 workers)
+[crnn.data] rendered latin em10 val: 100 lines, H=17, mean W=253, 0.43s (2 workers)
+[phase2] pre-render done in 116s
+[subst1000_mixed4-5-6-7-8-10] vocab=1085 col_stride=2 expand=3 params=1340141 train=6000 H=17 meanW=88
+[latin_mixed4-5-6-7-8-10] vocab=88 col_stride=2 expand=3 params=1083912 train=6000 H=17 meanW=168
+[subst1000_mixed4-5-6-7-8-10] step 100 loss 11.605 val_cer 1.0000 4:1.0000 5:1.0000 6:1.0000 7:1.0000 8:1.0000 10:1.0000 (55.4s)
+[latin_mixed4-5-6-7-8-10] step 100 loss 6.513 val_cer 1.0000 4:1.0000 5:1.0000 6:1.0000 7:1.0000 8:1.0000 10:1.0000 (69.2s)
+[subst1000_mixed4-5-6-7-8-10] step 200 loss 5.159 val_cer 1.0000 4:1.0000 5:1.0000 6:1.0000 7:1.0000 8:1.0000 10:1.0000 (112.6s)
+[latin_mixed4-5-6-7-8-10] step 200 loss 3.253 val_cer 1.0000 4:1.0000 5:1.0000 6:1.0000 7:1.0000 8:1.0000 10:1.0000 (120.8s)
+[subst1000_mixed4-5-6-7-8-10] step 300 loss 5.047 val_cer 1.0000 4:1.0000 5:1.0000 6:1.0000 7:1.0000 8:1.0000 10:1.0000 (171.0s)
+[subst1000_mixed4-5-6-7-8-10] TEST em=4 cer=1.0000 symbol_cer=1.0000 px/char=4.9 best_step=100 time=171s
+[subst1000_mixed4-5-6-7-8-10] TEST em=5 cer=1.0000 symbol_cer=1.0000 px/char=7.7 best_step=100 time=171s
+[subst1000_mixed4-5-6-7-8-10] TEST em=6 cer=1.0000 symbol_cer=1.0000 px/char=11.1 best_step=100 time=171s
+[latin_mixed4-5-6-7-8-10] step 300 loss 3.180 val_cer 1.0000 4:1.0000 5:1.0000 6:1.0000 7:1.0000 8:1.0000 10:1.0000 (172.5s)
+[subst1000_mixed4-5-6-7-8-10] TEST em=7 cer=1.0000 symbol_cer=1.0000 px/char=15.1 best_step=100 time=171s
+[latin_mixed4-5-6-7-8-10] TEST em=4 cer=1.0000 symbol_cer=1.0000 px/char=9.8 best_step=100 time=172s
+[subst1000_mixed4-5-6-7-8-10] TEST em=8 cer=1.0000 symbol_cer=1.0000 px/char=19.8 best_step=100 time=171s
+[latin_mixed4-5-6-7-8-10] TEST em=5 cer=1.0000 symbol_cer=1.0000 px/char=15.4 best_step=100 time=172s
+[latin_mixed4-5-6-7-8-10] TEST em=6 cer=1.0000 symbol_cer=1.0000 px/char=22.1 best_step=100 time=172s
+[latin_mixed4-5-6-7-8-10] TEST em=7 cer=1.0000 symbol_cer=1.0000 px/char=30.1 best_step=100 time=172s
+[subst1000_mixed4-5-6-7-8-10] TEST em=10 cer=1.0000 symbol_cer=1.0000 px/char=30.9 best_step=100 time=171s
+[latin_mixed4-5-6-7-8-10] TEST em=8 cer=1.0000 symbol_cer=1.0000 px/char=39.3 best_step=100 time=172s
+[latin_mixed4-5-6-7-8-10] TEST em=10 cer=1.0000 symbol_cer=1.0000 px/char=61.4 best_step=100 time=172s
+[phase2] 2 models, 12 rows in 300s -> /home/user/visual-bpe/results/phase2/smoke_mixed/runs.jsonl
+  latin            em=4    px/char=   9.8 cer=1.0000 sym_cer=1.0000 best@100 172s
+  latin            em=5    px/char=  15.4 cer=1.0000 sym_cer=1.0000 best@100 172s
+  latin            em=6    px/char=  22.1 cer=1.0000 sym_cer=1.0000 best@100 172s
+  latin            em=7    px/char=  30.1 cer=1.0000 sym_cer=1.0000 best@100 172s
+  latin            em=8    px/char=  39.3 cer=1.0000 sym_cer=1.0000 best@100 172s
+  latin            em=10   px/char=  61.4 cer=1.0000 sym_cer=1.0000 best@100 172s
+  subst1000        em=4    px/char=   4.9 cer=1.0000 sym_cer=1.0000 best@100 171s
+  subst1000        em=5    px/char=   7.7 cer=1.0000 sym_cer=1.0000 best@100 171s
+  subst1000        em=6    px/char=  11.1 cer=1.0000 sym_cer=1.0000 best@100 171s
+  subst1000        em=7    px/char=  15.1 cer=1.0000 sym_cer=1.0000 best@100 171s
+  subst1000        em=8    px/char=  19.8 cer=1.0000 sym_cer=1.0000 best@100 171s
+  subst1000        em=10   px/char=  30.9 cer=1.0000 sym_cer=1.0000 best@100 171s

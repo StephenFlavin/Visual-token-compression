@@ -1,0 +1,10 @@
+[latin_mixed4-5-6-7-8-10] vocab=88 col_stride=2 expand=3 params=1083912 train=6000 H=17 meanW=168
+[latin_mixed4-5-6-7-8-10] step 100 loss 6.513 val_cer 1.0000 4:1.0000 5:1.0000 6:1.0000 7:1.0000 8:1.0000 10:1.0000 (69.2s)
+[latin_mixed4-5-6-7-8-10] step 200 loss 3.253 val_cer 1.0000 4:1.0000 5:1.0000 6:1.0000 7:1.0000 8:1.0000 10:1.0000 (120.8s)
+[latin_mixed4-5-6-7-8-10] step 300 loss 3.180 val_cer 1.0000 4:1.0000 5:1.0000 6:1.0000 7:1.0000 8:1.0000 10:1.0000 (172.5s)
+[latin_mixed4-5-6-7-8-10] TEST em=4 cer=1.0000 symbol_cer=1.0000 px/char=9.8 best_step=100 time=172s
+[latin_mixed4-5-6-7-8-10] TEST em=5 cer=1.0000 symbol_cer=1.0000 px/char=15.4 best_step=100 time=172s
+[latin_mixed4-5-6-7-8-10] TEST em=6 cer=1.0000 symbol_cer=1.0000 px/char=22.1 best_step=100 time=172s
+[latin_mixed4-5-6-7-8-10] TEST em=7 cer=1.0000 symbol_cer=1.0000 px/char=30.1 best_step=100 time=172s
+[latin_mixed4-5-6-7-8-10] TEST em=8 cer=1.0000 symbol_cer=1.0000 px/char=39.3 best_step=100 time=172s
+[latin_mixed4-5-6-7-8-10] TEST em=10 cer=1.0000 symbol_cer=1.0000 px/char=61.4 best_step=100 time=172s

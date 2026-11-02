@@ -29,9 +29,9 @@ import torch
 from torch import nn
 
 
-def _conv(cin: int, cout: int) -> nn.Sequential:
-    return nn.Sequential(nn.Conv2d(cin, cout, 3, padding=1, bias=False), nn.BatchNorm2d(cout),
-                         nn.ReLU(inplace=True))
+def _conv(cin: int, cout: int, norm: str = "bn") -> nn.Sequential:
+    nl = nn.BatchNorm2d(cout) if norm == "bn" else nn.GroupNorm(8, cout)
+    return nn.Sequential(nn.Conv2d(cin, cout, 3, padding=1, bias=False), nl, nn.ReLU(inplace=True))
 
 
 class _HeightCap(nn.Module):
@@ -51,17 +51,17 @@ class _HeightCap(nn.Module):
 class CRNN(nn.Module):
     def __init__(self, n_classes: int, col_stride: int = 2, expand: int = 1, channels=(16, 64, 96),
                  mid_height: int = 6, pooled_height: int = 4, d_model: int = 192, hidden: int = 128,
-                 layers: int = 2, dropout: float = 0.1):
+                 layers: int = 2, dropout: float = 0.1, norm: str = "bn"):
         super().__init__()
         assert col_stride in (2, 4), col_stride
         c1, c2, c3 = channels
         self.col_stride, self.expand = col_stride, int(expand)
         self.pw2 = col_stride // 2
         self.cnn = nn.Sequential(
-            _conv(1, c1), nn.MaxPool2d(2, 2), _conv(c1, c2),
+            _conv(1, c1, norm), nn.MaxPool2d(2, 2), _conv(c1, c2, norm),
             _HeightCap(mid_height),
             nn.MaxPool2d((1, 2), (1, 2)) if self.pw2 > 1 else nn.Identity(),
-            _conv(c2, c3),
+            _conv(c2, c3, norm),
             nn.AdaptiveAvgPool2d((pooled_height, None)),
         )
         self.proj = nn.Sequential(nn.Linear(c3 * pooled_height, d_model), nn.ReLU(inplace=True),
