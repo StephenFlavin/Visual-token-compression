@@ -28,6 +28,8 @@ Runner: 4 CPU, 15 GB RAM, no GPU. Headless `claude -p` accepts base64 images dir
 so px²/char is directly proportional to vision tokens per source char.
 For each scheme we fit the CER-vs-px²/char curve and read off **P@3 %** and **P@10 %**
 (px²/char needed for CER ≤ 3 % / 10 %). Headline ratio: `P(subst) / min(P(latin), P(latin_condensed))`.
+"Best Latin" = min over all Latin baselines. Note: Glyph's genetic rendering search chose a *wide* font (Verdana 9px, no condensing) — `latin` (DejaVu Sans, a Verdana-like humanist sans) covers that end; condensed may lose for Claude despite winning on width.
+Also report each scheme's natural − scrambled CER gap as "prior credit" (DeepSeek-OCR loses 35–70 pts on random-letter text), since symbol streams get no language prior zero-shot; this is why K3 (Phase 2), not K2, is decisive.
 
 CER = Levenshtein(normalise(ref), normalise(decode(output))) / len(ref); normalise collapses whitespace.
 
@@ -42,7 +44,7 @@ CER = Levenshtein(normalise(ref), normalise(decode(output))) / len(ref); normali
 ### Phase 1 — zero-shot Claude sweep
 * Passages: ~3 000-char, sentence-shuffled from WikiText-103 **test** split (6 natural + 3 word-scrambled).
 * Schemes (main grid): `latin`, `latin_condensed`, `subst300`, `subst1000`, `quad3` (+ `quad4`, `subst300_legend` small side runs).
-* Budgets: px²/char ∈ ~{4, 6, 9, 13, 18, 27, 40, 60}, square canvases (final grid chosen by a pilot).
+* Budgets: px²/char ∈ ~{9, 13, 18, 27, 40, 60, 90}, square canvases (final grid chosen by a pilot). Prior art (docs/prior-art.md): published legible regimes are ~13–100 px²/char (Glyph's tuned setting ≈45–55; LensVLM 15× ≈13 and mostly illegible), so <9 is likely uninformative.
 * Pilot first (1 passage, all schemes, wide grid) → report cost/call, then main sweep.
 * Est. ~360 calls. Cost per call measured in pilot (probe: $0.013 for a tiny image; expect ~$0.03–0.10 with ~800 output tokens).
 
@@ -62,6 +64,7 @@ Predictions: (P1) quadrant needs ≥ 30 % *more* px²/char than best Latin. (P2)
 * **K2 (Phase 1)** – subst never achieves ≥ 20 % lower P@10 % than best Latin (natural *or* scrambled) → zero-shot negative.
 * **K3 (Phase 2, decisive)** – subst P@3 % not ≥ 30 % below best Latin (the concept doc's own bar) → **kill**.
 * Quadrant killed if its Phase-2 P@3 % ≥ best Latin.
+* Context for any positive result: text-side compression (mean pooling, learned compressors, C3 at 98% @20×) already matches or beats optical compression, so RESULTS.md must state the win relative to that ceiling.
 * If subst passes but quadrant fails → idea reduces to "bigger alphabet"; next step would be *learned* glyphs (end-to-end optimised against the reader), not hand-designed ones.
 
 ## 5. Interfaces (contract for all work packages)
