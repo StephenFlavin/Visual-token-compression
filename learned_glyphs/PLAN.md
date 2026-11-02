@@ -51,6 +51,26 @@ Width policy (default, configurable): char cell width = round(0.45·h) px, token
 CPU only (4 cores, shared with the parent project's Phase-2 grid until it finishes). Every run: 1 torch
 thread. Target ≤ 40 min per run. Smoke tests during development: ≤ 5 CPU-min per agent.
 
+
+## Amendments from prior art (learned_glyphs/docs/prior-art.md)
+* **Channel realism is about geometry more than noise** (StegaStamp: no spatial distortions → chance on real
+  captures). `harsh` preset: random sub-pixel shift, random non-integer scale 0.8–1.25 with random resize filter
+  (box/bilinear/bicubic/lanczos), blur σ 0.3–1.2 px, gamma/contrast/offset, noise σ ≤ 0.1, differentiable JPEG
+  q 40–90 (or a straight-through approximation). Plus a **test-only** held-out degradation set never used in training
+  (real PIL JPEG, unseen resize filter) for every headline number.
+* **Rule out pixel-alignment / grey-level codes by construction**: hard-binarised banks only; minimum feature size
+  ≥ 1 output pixel (penalise sub-pixel detail, e.g. smoothness/erosion penalty at ss res); zero-ink guard band at
+  cell edges; ink coverage within ~10–45%.
+* **Report bits/px²** (empirical entropy of the symbol stream × (1 − symbol error)/area) next to px²/char.
+  Sanity ceiling: per-char gains > ~3× over Phase-2 Latin are treated as channel exploitation until proven otherwise.
+* **Extra baselines**: frozen random binary codebook; hand-made 3×2 block code (smartfonts); Tom Thumb-style 4×6
+  pixel font.
+* **Co-adaptation countermeasures**: channel strength ramp from clean; periodic reader re-initialisation or 2–3
+  readers; oversample rare tokens; monitor glyph-pair confusions/duplicates. Transfer (E2) remains the real test.
+* Cheap extra arm (E5): optimise glyphs against a FROZEN pretrained reader (e.g. the Phase-2 latin CRNN, or PP-OCR
+  recogniser) — no co-adaptation possible.
+* Naming: "Visual BPE" collides with ICLR-2025 BPE-on-visual-tokens work; use "learned glyph alphabet" in write-ups.
+
 ## Interfaces (contract between work packages)
 
 ```python
