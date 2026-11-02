@@ -12,3 +12,6 @@ results/phase2/*/logs/
 results/phase2/*/curves/
 results/phase2/*/driver/
 results/phase2_*.log
+learned_glyphs/results/**/checkpoints/
+learned_glyphs/results/**/cache/
+learned_glyphs/results/**/logs/
