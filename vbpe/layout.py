@@ -11,7 +11,8 @@ Geometry conventions (all in pixels, ``em`` = font size passed to FreeType):
     ``[baseline - 0.85*em, baseline + 0.25*em]``.
   * Line pitch = ``line_spacing * em``. Baseline of line i =
     ``margin + i*pitch + (line_spacing - 1)/2*em + 0.8*em``.
-  * Line breaks are allowed only *after* a unit whose ``source`` ends with whitespace.
+  * Line breaks are allowed *after* a unit whose ``source`` ends with whitespace, and *before*
+    a non-space unit whose ``source`` starts with whitespace.
     Units with ``is_space=True`` that land at the end of a line are not drawn and take no width.
   * A unit's ``advance(em)`` is its horizontal footprint in pixels at that em.
 """
@@ -94,6 +95,11 @@ class LayoutParams:
 def _words(units: list[Unit]) -> list[list[Unit]]:
     words, cur = [], []
     for u in units:
+        # also allow a break BEFORE a non-space unit whose source starts with whitespace
+        # (e.g. a substitution glyph for " the "), so such glyphs can start a line
+        if cur and not u.is_space and u.source[:1].isspace():
+            words.append(cur)
+            cur = []
         cur.append(u)
         if u.source[-1:].isspace():
             words.append(cur)
