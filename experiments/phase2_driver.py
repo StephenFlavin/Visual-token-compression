@@ -19,7 +19,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 TICKS = os.sysconf("SC_CLK_TCK")
 
-DEFAULT_JOBS = ([(s, e) for s in ("latin_condensed", "subst300", "subst1000") for e in (5, 6, 7, 8, 10)]
+# Full Phase-2 grid. Finished (scheme, em) rows are skipped by phase2_train, so re-running this
+# driver after a crash/reclaim resumes the grid (in-flight runs restart from step 0).
+DEFAULT_JOBS = ([("latin", e) for e in (4, 5, 6, 7, 8)]
+                + [(s, e) for s in ("latin_condensed", "subst300", "subst1000") for e in (5, 6, 7, 8, 10)]
                 + [(q, e) for q in ("quad3", "quad4") for e in (8, 10, 12)])
 
 

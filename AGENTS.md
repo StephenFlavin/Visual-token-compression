@@ -73,6 +73,11 @@ Claude responses are cached in `results/cache/claude/` (keyed on model+prompt+im
 - Real speed on this runner: ~0.6–0.8 s/step per run at 1 thread (latin em6–8), so a 3500-step run ≈ 40 min; budget ~6 h for 26 runs on 3 cores, ~4.5 h on 4.
 - Never edit a running bash script (bash reads it incrementally). To change plans mid-run, SIGKILL the wrapper bash only — its python child keeps running.
 
+**Resuming after a crash, usage limit or container reclaim**
+- Phase 2 makes no Claude calls, so usage limits don't affect it. Resume = re-run `nohup python3 experiments/phase2_driver.py > results/phase2_driver.log 2>&1 &` (covers the whole grid incl. latin); finished (scheme, em) rows in `runs.jsonl` are skipped. In-flight runs restart from step 0 (checkpoints are only written at the end of a run).
+- Phase 1 Claude sweeps: re-run the same command; finished rows are skipped and responses come from `results/cache/claude/`. Errors (incl. usage-limit errors) are not cached, so they are retried on re-run.
+- After a container reclaim, git-ignored state is gone (data/, fonts, render caches, checkpoints, Claude cache): redo the setup block first. `scripts/autosave_results.sh 600` (run with nohup) commits+pushes `runs.jsonl` every 10 min so finished rows survive.
+
 **Git**
 - A stop hook demands a clean tree. Live Phase-2 logs/curves are git-ignored while runs are going (see .gitignore); force-add them (`git add -f`) when a grid finishes. Other long jobs: snapshot-commit (`WIP:`) and push.
 
