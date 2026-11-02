@@ -2,8 +2,11 @@
 """Phase 1: zero-shot Claude transcription sweep over (passage x scheme x pixel budget).
 
 For every passage, scheme and budget B (px^2 per normalised source char) we render the passage on a
-square canvas of side round(sqrt(B * n_chars)) at the largest fitting em, ask Claude to transcribe
-it, decode the transcription with the scheme and score CER against the source.
+near-square canvas of area ~B * n_chars whose sides are multiples of Claude's 28-px patch (k x k or
+(k+1) x k patches, min 56 px; see ``canvas_size``) at the largest fitting em, ask Claude to
+transcribe it, decode the transcription with the scheme and score CER against the source. The row's
+``px_per_char`` is the ACTUAL W*H/n_chars; ``budget`` is the nominal grid value. Budgets that land on
+an already-used canvas size are skipped.
 
 Outputs (results/phase1/<run>/):
   runs.jsonl          one row per (passage, scheme, budget); resumable (existing rows are skipped)

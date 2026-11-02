@@ -46,7 +46,7 @@ TEXT_PRIMARY, TEXT_SECONDARY, GRID = "#0b0b0b", "#52514e", "#e4e3df"
 
 # ----------------------------------------------------------------------------------------- loading
 def _row_key(r: dict) -> tuple:
-    return (r.get("run"), r.get("model"), r.get("variant"), r.get("passage_id", r.get("group")),
+    return (r.get("run"), r.get("model"), r.get("effort"), r.get("variant"), r.get("passage_id", r.get("group")),
             r.get("scheme"), r.get("budget"), r.get("em") if r.get("budget") is None else None)
 
 
@@ -96,15 +96,58 @@ def detect_phase(rows: list[dict]) -> int:
 
 
 def conditions(rows: list[dict]) -> dict[str, list[dict]]:
-    """Split rows into analysis conditions: one per variant (and per model if several)."""
-    models = {r.get("model") for r in rows}
+    """Split rows into analysis conditions: one per variant (and per model / effort if several)."""
     out: dict[str, list[dict]] = defaultdict(list)
+    sfx = _setting_namer(rows)
     for r in rows:
-        c = r.get("variant") or "all"
-        if len(models) > 1:
-            c = f"{c}|{r.get('model')}"
-        out[c].append(r)
+        out[(r.get("variant") or "all") + sfx(r)].append(r)
     return dict(sorted(out.items()))
+
+
+def _setting_namer(rows: list[dict]):
+    """r -> "|<model>|effort=<e>" suffix, naming only the fields that vary across ``rows``."""
+    many_models = len({x.get("model") for x in rows}) > 1
+    many_efforts = len({x.get("effort") for x in rows}) > 1
+
+    def name(r: dict) -> str:
+        return ((f"|{r.get('model')}" if many_models else "")
+                + (f"|effort={r.get('effort')}" if many_efforts else ""))
+    return name
+
+
+def prior_credit(rows: list[dict]) -> dict:
+    """Per (setting, scheme, budget): mean CER natural, scrambled and natural - scrambled.
+
+    Negative = the language prior helps (natural text is read better). Passages differ between
+    variants, so this is an unpaired difference of means. Empty if only one variant is present.
+    """
+    rows = usable_rows(rows)
+    acc: dict = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(list))))
+    sfx = _setting_namer(rows)
+    for r in rows:
+        if r.get("variant") in ("natural", "scrambled"):
+            acc[sfx(r).lstrip("|") or "all"][r["scheme"]][_xkey(r)][r["variant"]].append(r["cer"])
+    out: dict = {}
+    for setting, by_s in acc.items():
+        for s in schemes_in([{"scheme": k} for k in by_s]):
+            for b in sorted(by_s[s]):
+                d = by_s[s][b]
+                if d.get("natural") and d.get("scrambled"):
+                    nat, scr = float(np.mean(d["natural"])), float(np.mean(d["scrambled"]))
+                    out.setdefault(setting, {}).setdefault(s, {})[f"{b:g}"] = {
+                        "natural": nat, "scrambled": scr, "diff": nat - scr,
+                        "n_natural": len(d["natural"]), "n_scrambled": len(d["scrambled"])}
+    return out
+
+
+def refusal_rates(rows: list[dict]) -> dict:
+    """Fraction of answered calls flagged ``refusal`` per condition / scheme (rows lacking the key ignored)."""
+    out: dict = {}
+    for c, rs in conditions([r for r in rows if r.get("refusal") is not None]).items():
+        for s in schemes_in(rs):
+            v = [bool(r["refusal"]) for r in rs if r["scheme"] == s]
+            out.setdefault(c, {})[s] = {"rate": float(np.mean(v)), "n": len(v)}
+    return out
 
 
 def schemes_in(rows: list[dict]) -> list[str]:
@@ -323,7 +366,11 @@ def _text_tokens_per_char(rows: list[dict]) -> float:
 
 
 def compression_at(p: float | None, text_tokens_per_char: float = DEFAULT_TEXT_TOKENS_PER_CHAR):
-    """text tokens / vision tokens for the same text at px^2/char = p (Claude: tokens = px/750)."""
+    """text tokens / vision tokens for the same text at px^2/char = p.
+
+    Vision tokens use the large-image approximation px / config.CLAUDE_PX_PER_TOKEN (28x28 patches =
+    784 px/token; metrics.vision_tokens adds patch rounding and ~3 tokens of overhead).
+    """
     if p is None or p <= 0:
         return None
     return text_tokens_per_char / (p / config.CLAUDE_PX_PER_TOKEN)
@@ -536,15 +583,16 @@ def plot_curves(rows: list[dict], path: str | Path, n_boot: int = 1000, title: s
         ax.yaxis.set_major_locator(FixedLocator(yt))
         ax.yaxis.set_minor_locator(NullLocator())
         ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:.1%}" if v < 0.01 else f"{v:.0%}"))
-        xt = [v for v in (1, 2, 3, 4, 6, 9, 13, 18, 27, 40, 60, 100, 150, 250) if
-              (not xs_all) or (min(xs_all) / 1.2 <= v <= max(xs_all) * 1.2)]
+        nominal = sorted({r["budget"] for r in rs if r.get("budget") is not None})
+        cand = nominal if 2 <= len(nominal) <= 14 else (1, 2, 3, 4, 6, 9, 13, 18, 27, 40, 60, 100, 150, 250)
+        xt = [v for v in cand if (not xs_all) or (min(xs_all) / 1.2 <= v <= max(xs_all) * 1.2)]
         ax.xaxis.set_major_locator(FixedLocator(xt))
         ax.xaxis.set_minor_locator(NullLocator())
         ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}"))
         ax.set_xlabel(xlabel, color=TEXT_PRIMARY, fontsize=10)
         sec = ax.secondary_xaxis("top", functions=(lambda v: v * 1000 / config.CLAUDE_PX_PER_TOKEN,
                                                    lambda t: t * config.CLAUDE_PX_PER_TOKEN / 1000))
-        sec.set_xlabel("vision tokens per 1k chars", color=TEXT_SECONDARY, fontsize=9)
+        sec.set_xlabel(f"≈ vision tokens per 1k chars (px/{config.CLAUDE_PX_PER_TOKEN})", color=TEXT_SECONDARY, fontsize=9)
         tok = [v * 1000 / config.CLAUDE_PX_PER_TOKEN for v in ax.get_xlim()]
         sec.xaxis.set_major_locator(FixedLocator([t for t in (1, 2, 3, 5, 10, 20, 30, 50, 100, 200, 300, 500)
                                                   if tok[0] <= t <= tok[1]]))
@@ -708,7 +756,9 @@ def write_summary(rows: list[dict], out_dir: str | Path, n_boot: int = 1000, tit
     n_skipped = sum(1 for r in all_rows if r.get("skipped"))
     n_err = sum(1 for r in all_rows if r.get("error"))
     cost = sum(r.get("cost_usd") or 0 for r in all_rows)
-    summary = {"headline": head, "curves": curves,
+    pc = prior_credit(rows)
+    rr = refusal_rates(rows)
+    summary = {"headline": head, "curves": curves, "prior_credit": pc, "refusal_rates": rr,
                "counts": {"rows": len(all_rows), "usable": len(rows), "skipped_no_fit": n_skipped,
                           "errors": n_err}, "cost_usd_total": cost}
     (out / "summary.json").write_text(json.dumps(_jsonable(summary), indent=1))
@@ -718,8 +768,9 @@ def write_summary(rows: list[dict], out_dir: str | Path, n_boot: int = 1000, tit
           f"{n_err} errors. Total recorded cost: ${cost:.2f}.", "",
           "P@x = px²/char at which the isotonic-smoothed mean CER first reaches x (log-x interpolation). "
           "ratio = P(scheme)/P(best Latin) (best of latin, latin_condensed at that threshold); "
-          "CI = paired passage bootstrap. compr = text tokens / vision tokens at P (Claude: px/750, "
-          "text ≈ chars/4). '≤' = already below threshold at the smallest budget.", "",
+          "CI = paired passage bootstrap. compr = text tokens / vision tokens at P (Claude: "
+          f"px/{config.CLAUDE_PX_PER_TOKEN} = 28x28 patches, "
+          f"text ≈ chars/4). '≤' = already below threshold at the smallest budget.", "",
           "## Verdicts", ""]
     md += [f"* {v}" for v in head["verdicts"].values()]
     for c, a in head["conditions"].items():
@@ -737,6 +788,23 @@ def write_summary(rows: list[dict], out_dir: str | Path, n_boot: int = 1000, tit
         for s, cv in cs.items():
             m = {(b if b is not None else round(x, 1)): v for b, x, v in zip(cv["budget"], cv["px_per_char"], cv["mean"])}
             md.append(f"| {s} | " + " | ".join("" if b not in m else f"{m[b]:.3f}" for b in budgets) + " |")
+    if rr:
+        md += ["", "## Refusal / non-transcription rate (heuristic)", "",
+               "| condition | " + " | ".join(schemes_in(rows)) + " |", "|" + "---|" * (len(schemes_in(rows)) + 1)]
+        for c, d in rr.items():
+            md.append(f"| {c} | " + " | ".join(f"{d[s]['rate']:.0%} (n={d[s]['n']})" if s in d else ""
+                                               for s in schemes_in(rows)) + " |")
+    if pc:
+        md += ["", "## Prior credit: mean CER(natural) - mean CER(scrambled)", "",
+               "Negative = the language prior helps. Unpaired (different passages per variant).", ""]
+        for setting, by_s in pc.items():
+            bs = sorted({float(b) for d in by_s.values() for b in d})
+            md += [f"Setting: {setting}", "", "| scheme | " + " | ".join(f"{b:g}" for b in bs) + " |",
+                   "|" + "---|" * (len(bs) + 1)]
+            for sname, d in by_s.items():
+                md.append(f"| {sname} | " + " | ".join(f"{d[f'{b:g}']['diff']:+.3f}" if f"{b:g}" in d else ""
+                                                       for b in bs) + " |")
+            md.append("")
     if plots and rows:
         plot_curves(rows, out / "cer_curves.png", n_boot=n_boot, title=title and f"{title}: CER vs pixel budget")
         plot_p_bars(head, out / "p_at_bars.png")

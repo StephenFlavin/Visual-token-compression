@@ -19,7 +19,7 @@ Fairness rules (identical for every scheme)
 * Eval (val/test) lines: exact nominal em, seeded random phase, no photometric noise.
 * px_per_char of a line = line_spacing * em' * sum(unit advances) / len(normalize(line))
   (content area, margins excluded - consistent with page-level px^2/char).
-* CTC frames: the reader emits T = n_frames(W, f) frames for an image of width W; the frame
+* CTC frames: the reader emits T = n_frames(W, f) ~= f*W frames for an image of width W; the frame
   factor f is chosen per (scheme, em) by ONE rule for all schemes: the smallest f in
   FRAME_FACTORS such that T >= 2L+1 for EVERY rendered sample (train, val and test).
 """
@@ -326,10 +326,17 @@ class Vocab:
 
 # ----------------------------------------------------------------------------- CTC frame rule
 def n_frames(width, f: float):
-    """Frames the model emits for an input of ``width`` px at frame factor ``f``."""
-    if f < 1:
-        return np.asarray(width) // int(round(1 / f))
-    return np.asarray(width) * int(f)
+    """CTC frames the model emits for an input of ``width`` px at frame factor ``f`` (~f per px).
+
+    Must match ``CRNN.output_lengths``: the CNN halves the width once (W//2 columns), f=1/4 halves
+    it again, and for f >= 1 every column is expanded into 2f output frames.
+    """
+    w = np.asarray(width) // 2
+    if f <= 0.25:
+        return w // 2
+    if f <= 0.5:
+        return w
+    return w * int(round(2 * f))
 
 
 def choose_frame_factor(widths, label_lens, factors: Sequence[float] = FRAME_FACTORS) -> float:
