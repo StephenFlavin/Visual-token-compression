@@ -1,0 +1,89 @@
+[
+ {
+  "W": 2576,
+  "H": 1456,
+  "image_tokens": 3001,
+  "patches28": 4784,
+  "text": "OK",
+  "model": "claude-opus-5-5",
+  "input_tokens": 3545,
+  "output_tokens": 4,
+  "cost_usd": 0.017803000000000003,
+  "latency_s": 2.06,
+  "cached": false,
+  "error": null,
+  "usage": {
+   "input_tokens": 2,
+   "cache_creation_input_tokens": 3543,
+   "cache_read_input_tokens": 0,
+   "output_tokens": 4
+  },
+  "thinking_tokens": 0,
+  "model_usage": {
+   "claude-opus-5-5": {
+    "in": 3545,
+    "out": 4,
+    "cost": 0.017803000000000003
+   }
+  },
+  "attempts": 1
+ },
+ {
+  "W": 3200,
+  "H": 1600,
+  "image_tokens": 2640,
+  "patches28": 6670,
+  "text": "OK",
+  "model": "claude-opus-5-5",
+  "input_tokens": 3184,
+  "output_tokens": 4,
+  "cost_usd": 0.015998000000000002,
+  "latency_s": 3.098,
+  "cached": false,
+  "error": null,
+  "usage": {
+   "input_tokens": 2,
+   "cache_creation_input_tokens": 3182,
+   "cache_read_input_tokens": 0,
+   "output_tokens": 4
+  },
+  "thinking_tokens": 0,
+  "model_usage": {
+   "claude-opus-5-5": {
+    "in": 3184,
+    "out": 4,
+    "cost": 0.015998000000000002
+   }
+  },
+  "attempts": 1
+ },
+ {
+  "W": 1568,
+  "H": 1568,
+  "image_tokens": 3141,
+  "patches28": 3136,
+  "text": "OK",
+  "model": "claude-opus-5-5",
+  "input_tokens": 3685,
+  "output_tokens": 4,
+  "cost_usd": 0.018503000000000002,
+  "latency_s": 1.683,
+  "cached": false,
+  "error": null,
+  "usage": {
+   "input_tokens": 2,
+   "cache_creation_input_tokens": 3683,
+   "cache_read_input_tokens": 0,
+   "output_tokens": 4
+  },
+  "thinking_tokens": 0,
+  "model_usage": {
+   "claude-opus-5-5": {
+    "in": 3685,
+    "out": 4,
+    "cost": 0.018503000000000002
+   }
+  },
+  "attempts": 1
+ }
+]

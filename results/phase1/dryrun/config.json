@@ -1,0 +1,37 @@
+{
+ "schemes": [
+  "latin",
+  "latin_condensed",
+  "subst300",
+  "subst1000",
+  "quad3"
+ ],
+ "budgets": [
+  4,
+  6,
+  9,
+  13,
+  18,
+  27,
+  40,
+  60
+ ],
+ "variant": "natural",
+ "n_passages": 4,
+ "passage_chars": null,
+ "model": null,
+ "workers": 8,
+ "run_name": "dryrun",
+ "out_dir": "/home/user/visual-bpe/results/phase1",
+ "dry_run": true,
+ "fake_noise": 0.03,
+ "pilot": false,
+ "max_cost": null,
+ "cost_per_call": null,
+ "price_in": null,
+ "price_out": null,
+ "call_overhead": 0.013,
+ "yes": false,
+ "chunk": null,
+ "no_analysis": false
+}

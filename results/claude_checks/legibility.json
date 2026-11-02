@@ -1,0 +1,484 @@
+{
+ "n_chars": 1411,
+ "workers": 8,
+ "wall_s": 28.106494044999863,
+ "errors": 0,
+ "rows": [
+  {
+   "scheme": "latin",
+   "target_em": 4,
+   "em": 4.03,
+   "W": 129,
+   "H": 129,
+   "n_lines": 25,
+   "px_per_char": 11.79376328844791,
+   "vision_tokens": 22.188,
+   "cer": 0.8355776045357902,
+   "text": "The text in this image is too small and low-resolution for me to transcribe accurately. I can make out only fragments, such as \"The harbour office keeps a ledger of every boat that\u2026\", but most words are illegible, and guessing would give you an inaccurate transcription. Could you upload a higher-resolution or zoomed-in version?",
+   "model": "claude-opus-5-5",
+   "input_tokens": 633,
+   "output_tokens": 427,
+   "cost_usd": 0.011703,
+   "latency_s": 12.139,
+   "cached": false,
+   "error": null,
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 631,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 427
+   },
+   "thinking_tokens": 323,
+   "model_usage": {
+    "claude-opus-5-5": {
+     "in": 633,
+     "out": 427,
+     "cost": 0.011703
+    }
+   },
+   "attempts": 1
+  },
+  {
+   "scheme": "latin",
+   "target_em": 5,
+   "em": 5.0,
+   "W": 158,
+   "H": 158,
+   "n_lines": 25,
+   "px_per_char": 17.692416725726435,
+   "vision_tokens": 33.285333333333334,
+   "cer": 0.3720765414599575,
+   "text": "The harbour office keeps a ledger of every lamp that has ever burned on the eastern cliffs. Most entries are dull: a date, a keeper's initials, the number of gallons of oil delivered by the supply boat, and a short remark about the weather. In the winter of the great storm, however, the handwriting changes. The keeper who held the post in the lantern room recorded one winter night, and the gulls sheltered on the gallery rail like a row of grey coats, and he wrote that the wind had pressed against the glass so hard he could see the panes bow. He kept the lamp burning all night, and the only light lost was a flicker where the wind found a gap in the shutters. By morning the snow had reached the gallery, and the lighthouse was cut off from the village. The entries that follow are short and unsteady. For three days, and then four, only a date and a time are recorded. They stayed for nine days, eating salted cod and boiling snow for tea, and the keeper's daughter kept the log in his place. When the supply boat returned it carried a letter of thanks from the owner, a new brass burner, and forty-two gallons of oil collected by the families of the crew. The ledger is not kept in the pantry now; it is in the harbour office, and visitors can still see one pitched pane, slightly greener than the others, facing the reef where the ship was saved.",
+   "model": "claude-opus-5-5",
+   "input_tokens": 644,
+   "output_tokens": 1345,
+   "cost_usd": 0.030118000000000002,
+   "latency_s": 22.671,
+   "cached": false,
+   "error": null,
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 642,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1345
+   },
+   "thinking_tokens": 914,
+   "model_usage": {
+    "claude-opus-5-5": {
+     "in": 644,
+     "out": 1345,
+     "cost": 0.030118000000000002
+    }
+   },
+   "attempts": 1
+  },
+  {
+   "scheme": "latin",
+   "target_em": 6,
+   "em": 6.0,
+   "W": 188,
+   "H": 188,
+   "n_lines": 25,
+   "px_per_char": 25.048901488306164,
+   "vision_tokens": 47.12533333333333,
+   "cer": 0.007795889440113395,
+   "text": "The harbour office keeps a ledger of every lamp that has ever burned on the eastern cliffs. Most entries are dull: a date, a keeper's initials, the number of gallons of oil delivered by the supply boat, and a short remark about the weather. In the hours of the great storm, however, the handwriting changes. The keeper wrote that the glass in the lantern room cracked twice in one night, that the gulls sheltered on the gallery rail like a row of grey coats, and that a fishing schooner called the Margaret Hale circled past so close he could read the letters on her stern. He lit a second lamp in the kitchen window as a spare, because the main light was failing whenever the wind found a gap in the shutters. By morning the schooner had anchored behind the reef and her crew of seven rowed ashore, cold but unhurt. They stayed for nine days, eating salted cod and potatoes, mending nets, and teaching the keeper's daughter to splice rope. When the supply boat returned it carried a letter of thanks from the owners, a new brass burner, and forty-two pounds in coins collected by the families of the crew. The keeper recorded the sum to the penny, then added a line that no inspector ever questioned: spent on paint, glass, and a better kettle. Visitors who climb the tower today can still see the patched pane, slightly greener than the others, facing the reef where the Margaret Hale waited out the weather.",
+   "model": "claude-opus-5-5",
+   "input_tokens": 659,
+   "output_tokens": 1050,
+   "cost_usd": 0.024293,
+   "latency_s": 16.33,
+   "cached": false,
+   "error": null,
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 657,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1050
+   },
+   "thinking_tokens": 590,
+   "model_usage": {
+    "claude-opus-5-5": {
+     "in": 659,
+     "out": 1050,
+     "cost": 0.024293
+    }
+   },
+   "attempts": 1
+  },
+  {
+   "scheme": "latin",
+   "target_em": 7,
+   "em": 7.0,
+   "W": 218,
+   "H": 218,
+   "n_lines": 25,
+   "px_per_char": 33.68107725017718,
+   "vision_tokens": 63.36533333333333,
+   "cer": 0.0,
+   "text": "The harbour office keeps a ledger of every lamp that has ever burned on the eastern cliffs. Most entries are dull: a date, a keeper's initials, the number of gallons of oil delivered by the supply boat, and a short remark about the weather. In the winter of the great storm, however, the handwriting changes. The keeper wrote that the glass in the lantern room cracked twice in one night, that the gulls sheltered on the gallery rail like a row of grey coats, and that a fishing schooner called the Margaret Hale drifted past so close he could read the letters on her stern. He lit a second lamp in the kitchen window as a spare, because the main light was failing whenever the wind found a gap in the shutters. By morning the schooner had anchored behind the reef and her crew of seven rowed ashore, cold but unhurt. They stayed for nine days, eating salted cod and potatoes, mending nets, and teaching the keeper's daughter to splice rope. When the supply boat returned it carried a letter of thanks from the owners, a new brass burner, and forty-two pounds in coins collected by the families of the crew. The keeper recorded the sum to the penny, then added a line that no inspector ever questioned: spent on paint, glass, and a better kettle. Visitors who climb the tower today can still see the patched pane, slightly greener than the others, facing the reef where the Margaret Hale waited out the weather.",
+   "model": "claude-opus-5-5",
+   "input_tokens": 673,
+   "output_tokens": 461,
+   "cost_usd": 0.012582999999999999,
+   "latency_s": 12.416,
+   "cached": false,
+   "error": null,
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 671,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 461
+   },
+   "thinking_tokens": 0,
+   "model_usage": {
+    "claude-opus-5-5": {
+     "in": 673,
+     "out": 461,
+     "cost": 0.012582999999999999
+    }
+   },
+   "attempts": 1
+  },
+  {
+   "scheme": "latin",
+   "target_em": 8,
+   "em": 8.01,
+   "W": 248,
+   "H": 248,
+   "n_lines": 25,
+   "px_per_char": 43.58894401133948,
+   "vision_tokens": 82.00533333333334,
+   "cer": 0.0,
+   "text": "The harbour office keeps a ledger of every lamp that has ever burned on the eastern cliffs. Most entries are dull: a date, a keeper's initials, the number of gallons of oil delivered by the supply boat, and a short remark about the weather. In the winter of the great storm, however, the handwriting changes. The keeper wrote that the glass in the lantern room cracked twice in one night, that the gulls sheltered on the gallery rail like a row of grey coats, and that a fishing schooner called the Margaret Hale drifted past so close he could read the letters on her stern. He lit a second lamp in the kitchen window as a spare, because the main light was failing whenever the wind found a gap in the shutters. By morning the schooner had anchored behind the reef and her crew of seven rowed ashore, cold but unhurt. They stayed for nine days, eating salted cod and potatoes, mending nets, and teaching the keeper's daughter to splice rope. When the supply boat returned it carried a letter of thanks from the owners, a new brass burner, and forty-two pounds in coins collected by the families of the crew. The keeper recorded the sum to the penny, then added a line that no inspector ever questioned: spent on paint, glass, and a better kettle. Visitors who climb the tower today can still see the patched pane, slightly greener than the others, facing the reef where the Margaret Hale waited out the weather.",
+   "model": "claude-opus-5-5",
+   "input_tokens": 691,
+   "output_tokens": 461,
+   "cost_usd": 0.012672999999999999,
+   "latency_s": 11.645,
+   "cached": false,
+   "error": null,
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 689,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 461
+   },
+   "thinking_tokens": 0,
+   "model_usage": {
+    "claude-opus-5-5": {
+     "in": 691,
+     "out": 461,
+     "cost": 0.012672999999999999
+    }
+   },
+   "attempts": 1
+  },
+  {
+   "scheme": "latin",
+   "target_em": 10,
+   "em": 10.01,
+   "W": 308,
+   "H": 308,
+   "n_lines": 25,
+   "px_per_char": 67.23175053153791,
+   "vision_tokens": 126.48533333333333,
+   "cer": 0.0,
+   "text": "The harbour office keeps a ledger of every lamp that has ever burned on the eastern cliffs. Most entries are dull: a date, a keeper's initials, the number of gallons of oil delivered by the supply boat, and a short remark about the weather. In the winter of the great storm, however, the handwriting changes. The keeper wrote that the glass in the lantern room cracked twice in one night, that the gulls sheltered on the gallery rail like a row of grey coats, and that a fishing schooner called the Margaret Hale drifted past so close he could read the letters on her stern. He lit a second lamp in the kitchen window as a spare, because the main light was failing whenever the wind found a gap in the shutters. By morning the schooner had anchored behind the reef and her crew of seven rowed ashore, cold but unhurt. They stayed for nine days, eating salted cod and potatoes, mending nets, and teaching the keeper's daughter to splice rope. When the supply boat returned it carried a letter of thanks from the owners, a new brass burner, and forty-two pounds in coins collected by the families of the crew. The keeper recorded the sum to the penny, then added a line that no inspector ever questioned: spent on paint, glass, and a better kettle. Visitors who climb the tower today can still see the patched pane, slightly greener than the others, facing the reef where the Margaret Hale waited out the weather.",
+   "model": "claude-opus-5-5",
+   "input_tokens": 731,
+   "output_tokens": 461,
+   "cost_usd": 0.012872999999999999,
+   "latency_s": 10.869,
+   "cached": false,
+   "error": null,
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 729,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 461
+   },
+   "thinking_tokens": 0,
+   "model_usage": {
+    "claude-opus-5-5": {
+     "in": 731,
+     "out": 461,
+     "cost": 0.012872999999999999
+    }
+   },
+   "attempts": 1
+  },
+  {
+   "scheme": "latin",
+   "target_em": 12,
+   "em": 12.01,
+   "W": 368,
+   "H": 368,
+   "n_lines": 25,
+   "px_per_char": 95.97732104890149,
+   "vision_tokens": 180.56533333333334,
+   "cer": 0.0,
+   "text": "The harbour office keeps a ledger of every lamp that has ever burned on the eastern cliffs. Most entries are dull: a date, a keeper's initials, the number of gallons of oil delivered by the supply boat, and a short remark about the weather. In the winter of the great storm, however, the handwriting changes. The keeper wrote that the glass in the lantern room cracked twice in one night, that the gulls sheltered on the gallery rail like a row of grey coats, and that a fishing schooner called the Margaret Hale drifted past so close he could read the letters on her stern. He lit a second lamp in the kitchen window as a spare, because the main light was failing whenever the wind found a gap in the shutters. By morning the schooner had anchored behind the reef and her crew of seven rowed ashore, cold but unhurt. They stayed for nine days, eating salted cod and potatoes, mending nets, and teaching the keeper's daughter to splice rope. When the supply boat returned it carried a letter of thanks from the owners, a new brass burner, and forty-two pounds in coins collected by the families of the crew. The keeper recorded the sum to the penny, then added a line that no inspector ever questioned: spent on paint, glass, and a better kettle. Visitors who climb the tower today can still see the patched pane, slightly greener than the others, facing the reef where the Margaret Hale waited out the weather.",
+   "model": "claude-opus-5-5",
+   "input_tokens": 804,
+   "output_tokens": 461,
+   "cost_usd": 0.013237999999999998,
+   "latency_s": 9.406,
+   "cached": false,
+   "error": null,
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 802,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 461
+   },
+   "thinking_tokens": 0,
+   "model_usage": {
+    "claude-opus-5-5": {
+     "in": 804,
+     "out": 461,
+     "cost": 0.013237999999999998
+    }
+   },
+   "attempts": 1
+  },
+  {
+   "scheme": "latin_condensed",
+   "target_em": 4,
+   "em": 4.01,
+   "W": 109,
+   "H": 109,
+   "n_lines": 21,
+   "px_per_char": 8.420269312544296,
+   "vision_tokens": 15.841333333333333,
+   "cer": 0.666194188518781,
+   "text": "The father who has pledge ledge of every first harvest lived in a house with Westminster red-brick, a lake, a fragrant cedar, the earliest gathered of lightly filtered steps not offered to the woodlot. In the case of fragrant dark leaves there was the nursery fixed against the cold and broken glass, a lane remembered between men wrought far up the hill wall which the gold dust sold by the old copper and when it was the long bare letter in the fields. The low and quiet, the hollow by the river where the larch and alder stood, the willow and the ash, a row of elms, and fields of corn and hay. There was the mill and the hedge, the black pool, the stile and the path that led across the meadow to the church, the bell and the bridge, the wood and the green lane, the farm, the house, the barn and the lake where the ducks swam on the water in the evening, and the light faded on the hill above the house.",
+   "model": "claude-opus-5-5",
+   "input_tokens": 626,
+   "output_tokens": 705,
+   "cost_usd": 0.017228,
+   "latency_s": 15.287,
+   "cached": false,
+   "error": null,
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 624,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 705
+   },
+   "thinking_tokens": 414,
+   "model_usage": {
+    "claude-opus-5-5": {
+     "in": 626,
+     "out": 705,
+     "cost": 0.017228
+    }
+   },
+   "attempts": 1
+  },
+  {
+   "scheme": "latin_condensed",
+   "target_em": 5,
+   "em": 5.04,
+   "W": 135,
+   "H": 135,
+   "n_lines": 21,
+   "px_per_char": 12.916371367824238,
+   "vision_tokens": 24.3,
+   "cer": 0.6548547129695251,
+   "text": "The talk on afterwards adapted our way back to the moment and that we never told; and that the old pass ended away to tell the ones by now in which they had made the players, the tender of the evening and the fairly sold of them. We began on a cool and lovely he shook the hands, and so set it was like the play, of the poems. The players on the one side who had the house and wholes, and who had sent for them as for the end of the place, by the green and the fire of the light, and then to the right and all a fever to the place when an edge of the pass. As the night went on, the play for they had gone to the house to see the place and what was in the way of the fire: in the half of the half for those who were who the way and a little of the time, and the way did not turn to the house, as it was that all and the same, and the thing, as far as the house was on the left, and all of the people for a way they had left them in the Margaret Howard of the evening.",
+   "model": "claude-opus-5-5",
+   "input_tokens": 633,
+   "output_tokens": 634,
+   "cost_usd": 0.015843,
+   "latency_s": 9.006,
+   "cached": false,
+   "error": null,
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 631,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 634
+   },
+   "thinking_tokens": 360,
+   "model_usage": {
+    "claude-opus-5-5": {
+     "in": 633,
+     "out": 634,
+     "cost": 0.015843
+    }
+   },
+   "attempts": 1
+  },
+  {
+   "scheme": "latin_condensed",
+   "target_em": 6,
+   "em": 6.03,
+   "W": 160,
+   "H": 160,
+   "n_lines": 21,
+   "px_per_char": 18.143160878809354,
+   "vision_tokens": 34.13333333333333,
+   "cer": 0.46562721474131824,
+   "text": "The harbour office sleeps at edge of every lamp that has ever burned on the eastern cliffs. Most of the visitors would see a date, all seeing at night, the number of glass of olive steps was fifty-one, each one of them as dark and burnt as the wood is in the centre of the old stone, however, the hooking shingles. They kept the lights the old pine-tar in the lantern room cracked even on one night. In all the gulls that rose from the glow, nail like a seed of porcelain, and the starling of thereabouts called the Elegant Island Bird and as it nested on an island would the letter on the main, it all a second step on this kitchen window was a space beneath them a night was taking at the hand of a land and paper a final edition. The morning of the arrival of the late afternoon, the cool rain of a fire and the crew of seven rowed across, oddest and unhat. They all again for none tidings, and none spoken word as always, and long ending, and leading the shape all daughter to gather up its scraps. When the supply boat churned out one of stained rags than the very least, in some time the sunrise, and they had reported in a done not without all three walls on the sea them. The house kept recorded the hours for they are, then with it like that no response from the questioned, smart on part of, plus of, and a better settle. Visitors who visited the summer then they could from the patched pane, slightly greener than the others, facing the reef where the little gaunt island would lend the shore.",
+   "model": "claude-opus-5-5",
+   "input_tokens": 646,
+   "output_tokens": 1234,
+   "cost_usd": 0.027908000000000002,
+   "latency_s": 17.205,
+   "cached": false,
+   "error": null,
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 644,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1234
+   },
+   "thinking_tokens": 770,
+   "model_usage": {
+    "claude-opus-5-5": {
+     "in": 646,
+     "out": 1234,
+     "cost": 0.027908000000000002
+    }
+   },
+   "attempts": 1
+  },
+  {
+   "scheme": "latin_condensed",
+   "target_em": 7,
+   "em": 7.03,
+   "W": 185,
+   "H": 185,
+   "n_lines": 21,
+   "px_per_char": 24.255846917080085,
+   "vision_tokens": 45.63333333333333,
+   "cer": 0.007795889440113395,
+   "text": "The harbour office keeps a ledger of every lamp that has ever burned on the eastern cliffs. Most entries are dull: a date, a keeper's initials, the number of gallons of oil delivered by the supply boat, and a short remark about the weather. In the winter of the great storm, however, the handwriting changes. The keeper wrote that the glass in the lantern room rattled twice in one night, that the gulls sheltered on the gallery rail like a row of grey coats, and that a fishing schooner called the Margaret Hale drifted past so close he could read the letters on her stern. He lit a second lamp in the kitchen window as a spare, because the main light kept sliding whenever the wind found a gap in the shutters. By morning the schooner had anchored behind the reef and her crew of seven rowed ashore, cold but unhurt. They stayed for nine days, eating salted cod and potatoes, mending nets, and teaching the keeper's daughter to splice rope. When the supply boat returned it carried a letter of thanks from the owners, a new brass burner, and forty-two pounds in coins collected by the families of the crew. The keeper recorded the sum to the penny, then added a line that no inspector ever questioned: spent on paint, glass, and a better kettle. Visitors who climb the tower today can still see the patched pane, slightly greener than the others, facing the reef where the Margaret Hale waited out the weather.",
+   "model": "claude-opus-5-5",
+   "input_tokens": 658,
+   "output_tokens": 501,
+   "cost_usd": 0.013308,
+   "latency_s": 7.849,
+   "cached": false,
+   "error": null,
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 656,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 501
+   },
+   "thinking_tokens": 38,
+   "model_usage": {
+    "claude-opus-5-5": {
+     "in": 658,
+     "out": 501,
+     "cost": 0.013308
+    }
+   },
+   "attempts": 1
+  },
+  {
+   "scheme": "latin_condensed",
+   "target_em": 8,
+   "em": 8.0,
+   "W": 210,
+   "H": 210,
+   "n_lines": 21,
+   "px_per_char": 31.25442948263643,
+   "vision_tokens": 58.8,
+   "cer": 0.001417434443656981,
+   "text": "The harbour office keeps a ledger of every lamp that has ever burned on the eastern cliffs. Most entries are dull: a date, a keeper's initials, the number of gallons of oil delivered by the supply boat, and a short remark about the weather. In the winter of the great storm, however, the handwriting changes. The keeper wrote that the glass in the lantern room cracked twice in one night, that the gulls sheltered on the gallery rail like a row of grey coats, and that a fishing schooner called the Margaret Hale drifted past so close he could read the letters on her stern. He lit a second lamp in the kitchen window as a spare, because the main light was fading whenever the wind found a gap in the shutters. By morning the schooner had anchored behind the reef and her crew of seven rowed ashore, cold but unhurt. They stayed for nine days, eating salted cod and potatoes, mending nets, and teaching the keeper's daughter to splice rope. When the supply boat returned it carried a letter of thanks from the owners, a new brass burner, and forty-two pounds in coins collected by the families of the crew. The keeper recorded the sum to the penny, then added a line that no inspector ever questioned: spent on paint, glass, and a better kettle. Visitors who climb the tower today can still see the patched pane, slightly greener than the others, facing the reef where the Margaret Hale waited out the weather.",
+   "model": "claude-opus-5-5",
+   "input_tokens": 675,
+   "output_tokens": 500,
+   "cost_usd": 0.013373,
+   "latency_s": 7.711,
+   "cached": false,
+   "error": null,
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 673,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 500
+   },
+   "thinking_tokens": 39,
+   "model_usage": {
+    "claude-opus-5-5": {
+     "in": 675,
+     "out": 500,
+     "cost": 0.013373
+    }
+   },
+   "attempts": 1
+  },
+  {
+   "scheme": "latin_condensed",
+   "target_em": 10,
+   "em": 10.04,
+   "W": 261,
+   "H": 261,
+   "n_lines": 21,
+   "px_per_char": 48.2785258681786,
+   "vision_tokens": 90.828,
+   "cer": 0.0,
+   "text": "The harbour office keeps a ledger of every lamp that has ever burned on the eastern cliffs. Most entries are dull: a date, a keeper's initials, the number of gallons of oil delivered by the supply boat, and a short remark about the weather. In the winter of the great storm, however, the handwriting changes. The keeper wrote that the glass in the lantern room cracked twice in one night, that the gulls sheltered on the gallery rail like a row of grey coats, and that a fishing schooner called the Margaret Hale drifted past so close he could read the letters on her stern. He lit a second lamp in the kitchen window as a spare, because the main light was failing whenever the wind found a gap in the shutters. By morning the schooner had anchored behind the reef and her crew of seven rowed ashore, cold but unhurt. They stayed for nine days, eating salted cod and potatoes, mending nets, and teaching the keeper's daughter to splice rope. When the supply boat returned it carried a letter of thanks from the owners, a new brass burner, and forty-two pounds in coins collected by the families of the crew. The keeper recorded the sum to the penny, then added a line that no inspector ever questioned: spent on paint, glass, and a better kettle. Visitors who climb the tower today can still see the patched pane, slightly greener than the others, facing the reef where the Margaret Hale waited out the weather.",
+   "model": "claude-opus-5-5",
+   "input_tokens": 710,
+   "output_tokens": 472,
+   "cost_usd": 0.012988,
+   "latency_s": 5.923,
+   "cached": false,
+   "error": null,
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 708,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 472
+   },
+   "thinking_tokens": 11,
+   "model_usage": {
+    "claude-opus-5-5": {
+     "in": 710,
+     "out": 472,
+     "cost": 0.012988
+    }
+   },
+   "attempts": 1
+  },
+  {
+   "scheme": "latin_condensed",
+   "target_em": 12,
+   "em": 12.03,
+   "W": 311,
+   "H": 311,
+   "n_lines": 21,
+   "px_per_char": 68.54783841247342,
+   "vision_tokens": 128.96133333333333,
+   "cer": 0.0,
+   "text": "The harbour office keeps a ledger of every lamp that has ever burned on the eastern cliffs. Most entries are dull: a date, a keeper's initials, the number of gallons of oil delivered by the supply boat, and a short remark about the weather. In the winter of the great storm, however, the handwriting changes. The keeper wrote that the glass in the lantern room cracked twice in one night, that the gulls sheltered on the gallery rail like a row of grey coats, and that a fishing schooner called the Margaret Hale drifted past so close he could read the letters on her stern. He lit a second lamp in the kitchen window as a spare, because the main light was failing whenever the wind found a gap in the shutters. By morning the schooner had anchored behind the reef and her crew of seven rowed ashore, cold but unhurt. They stayed for nine days, eating salted cod and potatoes, mending nets, and teaching the keeper's daughter to splice rope. When the supply boat returned it carried a letter of thanks from the owners, a new brass burner, and forty-two pounds in coins collected by the families of the crew. The keeper recorded the sum to the penny, then added a line that no inspector ever questioned: spent on paint, glass, and a better kettle. Visitors who climb the tower today can still see the patched pane, slightly greener than the others, facing the reef where the Margaret Hale waited out the weather.",
+   "model": "claude-opus-5-5",
+   "input_tokens": 753,
+   "output_tokens": 461,
+   "cost_usd": 0.012982999999999998,
+   "latency_s": 4.346,
+   "cached": false,
+   "error": null,
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 751,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 461
+   },
+   "thinking_tokens": 0,
+   "model_usage": {
+    "claude-opus-5-5": {
+     "in": 753,
+     "out": 461,
+     "cost": 0.012982999999999998
+    }
+   },
+   "attempts": 1
+  }
+ ]
+}

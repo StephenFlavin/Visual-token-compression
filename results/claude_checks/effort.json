@@ -1,0 +1,107 @@
+[
+ {
+  "effort": "low",
+  "scheme": "latin",
+  "target_em": 5,
+  "em": 5.0,
+  "W": 158,
+  "H": 158,
+  "n_lines": 25,
+  "px_per_char": 17.692416725726435,
+  "vision_tokens": 33.285333333333334,
+  "cer": 0.3097094259390503,
+  "text": "The harbour office keeps a ledger of every lamp that has ever burned on the eastern cliffs. Most entries ask but a date, a keeper's initials, the number of gallons of oil delivered by the supply boat, and a short remark about weather. In the winter of the great storm, however, the hand writing changes. The keeper who held the post in the lantern room cracked one pane of glass but the gull sheltered on the gallery rail for a fire of grey coals and a flickering stub of candle. The relief boat could not get so close he could read the letters on her name. He lit a second lamp in the kitchen window and a pace beside the main light was falling over every wind found a gap in the shutters. By morning the snow had drifted level with the sill and the keeper wrote only: light held, oil short, wind fair. They waited for nine days, eating salted cod and boiling rainwater for tea, and the keeper read his daughter's letters aloud to one another to pass the time. When the supply boat returned it carried a letter of thanks from the owner, a new brass burner, and forty-two pounds in coins collected by the families of the crews. That sale record ends abruptly in the margin to the pantry, then one day she stayed as the cook. Her coat pegs on the wall and they wrote that the year she arrived, the station had a lighthouse cat and her pen was the foremost was one tied. A brief pencil note: patched pane, slightly greener than the others facing the reef where the Margaret Rose waited out the weather.",
+  "model": "claude-opus-5-5",
+  "input_tokens": 645,
+  "output_tokens": 482,
+  "cost_usd": 0.012863,
+  "latency_s": 9.392,
+  "cached": false,
+  "error": null,
+  "usage": {
+   "input_tokens": 2,
+   "cache_creation_input_tokens": 643,
+   "cache_read_input_tokens": 0,
+   "output_tokens": 482
+  },
+  "thinking_tokens": 0,
+  "model_usage": {
+   "claude-opus-5-5": {
+    "in": 645,
+    "out": 482,
+    "cost": 0.012863
+   }
+  },
+  "attempts": 1
+ },
+ {
+  "effort": "low",
+  "scheme": "latin",
+  "target_em": 6,
+  "em": 6.0,
+  "W": 188,
+  "H": 188,
+  "n_lines": 25,
+  "px_per_char": 25.048901488306164,
+  "vision_tokens": 47.12533333333333,
+  "cer": 0.01913536498936924,
+  "text": "The harbour office keeps a ledger of every lamp that has ever burned on the eastern cliffs. Most entries are dull: a date, a keeper's initials, the number of gallons of oil delivered by the supply boat, and a short remark about the weather. One entry in the great storm, however, the handwriting changes. The keeper wrote that the glass in the lantern room cracked twice in one night, that the gulls sheltered on the gallery rail like a row of grey coats, and that a fishing schooner called the Margaret Hale circled past so close he could read the letters on her stern. He lit a second lamp in the kitchen window as a spare, because the main light was failing whenever the wind found a gap in the shutters. By morning the schooner had anchored behind the reef and her crew of seven rowed ashore, cold but unhurt. They stayed for nine days, eating salted cod and potatoes, mending nets, and teaching the keeper's daughter to tie knots. When the supply boat returned it carried a letter of thanks from the owners, a new brass burner, and forty-two pounds in coins collected by the families of the crew. The keeper recorded the gift to the penny, then added a line that no inspector ever questioned: spent on paint, glass, and a better kettle. Visitors who climb the tower today can still see the patched pane, slightly greener than the others, facing the reef where the Margaret Hale waited out the weather.",
+  "model": "claude-opus-5-5",
+  "input_tokens": 660,
+  "output_tokens": 459,
+  "cost_usd": 0.012478,
+  "latency_s": 7.259,
+  "cached": false,
+  "error": null,
+  "usage": {
+   "input_tokens": 2,
+   "cache_creation_input_tokens": 658,
+   "cache_read_input_tokens": 0,
+   "output_tokens": 459
+  },
+  "thinking_tokens": 0,
+  "model_usage": {
+   "claude-opus-5-5": {
+    "in": 660,
+    "out": 459,
+    "cost": 0.012478
+   }
+  },
+  "attempts": 1
+ },
+ {
+  "effort": "low",
+  "scheme": "latin_condensed",
+  "target_em": 6,
+  "em": 6.03,
+  "W": 160,
+  "H": 160,
+  "n_lines": 21,
+  "px_per_char": 18.143160878809354,
+  "vision_tokens": 34.13333333333333,
+  "cer": 0.6725726435152374,
+  "text": "The harbour office stood at the edge of every tide that has ever touched the eastern cliffs. Most of its records sat at a slant, its pages yellow, the names of all ships and others written by the wind. Sometimes, no one could tell which vessel left the river or the weather, its course, however, the harbourmaster kept them. The nights are full of the glow of the lantern room once lighthouse men brought it to the path, while the light on the gallery all its window panes rattled, and a fishing boat came close to the long pier. Above the pier, the old mud-stained shed was long, dark, its narrow door was locked. It was the last proper building at the edge of the town, a space between the old houses and the rail. Each time the morning boat came in, the fishermen waited by the door, carrying their nets and sail, and the sound of the old voices at the water reached them across the street. A traveller, unsure where to go next, came to ask the harbour office for advice on boats, and lessons about the passage. The keeper laid out tide tables, scraped a chair for him, and there, opened among maps, read the clerk's note above the desk: wind lower than ever, small boats keep off the open water, wait for the light from the harbour, and come in slow. At noon the clouds broke, a gull settled on the post, and the traveller thanked the keeper, signed the book in his own hand, and walked toward the pier with his bag, the ledger closed again.",
+  "model": "claude-opus-5-5",
+  "input_tokens": 645,
+  "output_tokens": 451,
+  "cost_usd": 0.012243,
+  "latency_s": 8.687,
+  "cached": false,
+  "error": null,
+  "usage": {
+   "input_tokens": 2,
+   "cache_creation_input_tokens": 643,
+   "cache_read_input_tokens": 0,
+   "output_tokens": 451
+  },
+  "thinking_tokens": 0,
+  "model_usage": {
+   "claude-opus-5-5": {
+    "in": 645,
+    "out": 451,
+    "cost": 0.012243
+   }
+  },
+  "attempts": 1
+ }
+]

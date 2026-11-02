@@ -1,0 +1,69 @@
+{
+ "reps": 3,
+ "rows": [
+  {
+   "scheme": "latin",
+   "target_em": 6,
+   "em": 6.0,
+   "W": 188,
+   "H": 188,
+   "n_lines": 25,
+   "px_per_char": 25.048901488306164,
+   "vision_tokens": 47.12533333333333,
+   "texts": [
+    "The harbour office keeps a ledger of every lamp that has ever burned on the eastern cliffs. Most entries are dull: a date, a keeper's initials, the number of gallons of oil delivered by the supply boat, and a short remark about the weather in the hours before. But one ledger, from the year of the great storm, however, the handwriting changes. The keeper wrote that the glass in the lantern room cracked twice in one night, that the gulls sheltered on the gallery rail like a row of grey coats, and that a fishing schooner called the Margaret Ellen drifted past so close he could read the letters on her stern. He lit a second lamp in the kitchen window as a spare, because the main light was failing whenever the wind found a gap in the shutters. By morning the schooner had anchored behind the reef and her crew of seven rowed ashore, cold but unhurt. They stayed for nine days, eating salted cod and potatoes, mending nets, and teaching the keeper's daughter to tell knots. When the supply boat returned it carried a letter of thanks from the owners, a new brass burner, and forty-two pounds in coins collected by the families of the crew. The keeper recorded the sum to the penny, then added a line that no inspector ever questioned: spent on paint, glass, and a better kettle. Visitors who climb the tower today can still see the patched pane, slightly greener than the others, facing the reef where the Margaret Ellen waited out the weather.",
+    "The harbour office keeps a ledger of every lamp that has ever burned on the eastern cliffs. Most entries are dull: a date, a keeper's initials, the number of gallons of oil delivered by the supply boat, and a short remark about the weather in the morning of the great storm, however, the handwriting changes. The keeper wrote that the glass in the lantern room cracked twice in one night, that the gulls sheltered on the gallery rail like a row of grey coats, and that a fishing schooner called the Margaret Hale drifted past so close he could read the letters on her stern. He kept the light burning in the kitchen window as a spare, because the main light was failing whenever the wind found a gap in the shutters. By morning the schooner had anchored behind the reef and her crew of seven rowed ashore, cold but unhurt. They stayed for nine days, eating salted cod and potatoes, mending nets, and teaching the keeper's daughter to tie knots. When the supply boat returned it carried a letter of thanks from the owners, a new brass burner, and forty-two pounds in coins collected by the families of the crew. The keeper recorded the gift to the penny, then added a line that no inspector ever questioned: spent on paint, glass, and a better kettle. Visitors who climb the lower tower today can still see the patched pane, slightly greener than the others, facing the reef where the Margaret Hale waited out the weather.",
+    "The harbour office keeps a ledger of every lamp that has ever burned on the eastern cliffs. Most entries are dull: a date, a keeper's initials, the number of gallons of oil delivered by the supply boat, and a short remark about the weather. On the evening of the great storm, however, the handwriting changes. The keeper wrote that the glass in the lantern room cracked twice in one night, that the gulls sheltered on the gallery rail like a row of grey coats, and that a fishing schooner called the Margaret Hale drifted past so close he could read the letters on her stern. He lit a second lamp in the kitchen window as a spare, because the main light was failing whenever the wind found a gap in the shutters. By morning the schooner had anchored behind the reef and her crew of seven rowed ashore, cold but unhurt. They stayed for nine days, eating salted cod and potatoes, mending nets, and teaching the keeper's daughter to tie knots. When the supply boat returned it carried a letter of thanks from the owners, a new brass burner, and forty-two pounds in coins collected by the families of the crew. The keeper recorded the sum to the penny, then added a line that no inspector ever questioned: spent on paint, glass, and a better kettle. Visitors who climb the tower today can still see the patched pane, slightly greener than the others, facing the reef where the Margaret Hale waited out the weather."
+   ],
+   "cer_vs_ref": [
+    0.039688164422395464,
+    0.031892274982282066,
+    0.010630758327427357
+   ],
+   "pairwise_cer": [
+    0.0531767955801105,
+    0.034530386740331494,
+    0.023926812104152005
+   ],
+   "identical": false,
+   "cost_usd": 0.053273999999999995,
+   "errors": [
+    null,
+    null,
+    null
+   ]
+  },
+  {
+   "scheme": "latin",
+   "target_em": 8,
+   "em": 8.01,
+   "W": 248,
+   "H": 248,
+   "n_lines": 25,
+   "px_per_char": 43.58894401133948,
+   "vision_tokens": 82.00533333333334,
+   "texts": [
+    "The harbour office keeps a ledger of every lamp that has ever burned on the eastern cliffs. Most entries are dull: a date, a keeper's initials, the number of gallons of oil delivered by the supply boat, and a short remark about the weather. In the winter of the great storm, however, the handwriting changes. The keeper wrote that the glass in the lantern room cracked twice in one night, that the gulls sheltered on the gallery rail like a row of grey coats, and that a fishing schooner called the Margaret Hale drifted past so close he could read the letters on her stern. He lit a second lamp in the kitchen window as a spare, because the main light was failing whenever the wind found a gap in the shutters. By morning the schooner had anchored behind the reef and her crew of seven rowed ashore, cold but unhurt. They stayed for nine days, eating salted cod and potatoes, mending nets, and teaching the keeper's daughter to splice rope. When the supply boat returned it carried a letter of thanks from the owners, a new brass burner, and forty-two pounds in coins collected by the families of the crew. The keeper recorded the sum to the penny, then added a line that no inspector ever questioned: spent on paint, glass, and a better kettle. Visitors who climb the tower today can still see the patched pane, slightly greener than the others, facing the reef where the Margaret Hale waited out the weather.",
+    "The harbour office keeps a ledger of every lamp that has ever burned on the eastern cliffs. Most entries are dull: a date, a keeper's initials, the number of gallons of oil delivered by the supply boat, and a short remark about the weather. In the winter of the great storm, however, the handwriting changes. The keeper wrote that the glass in the lantern room cracked twice in one night, that the gulls sheltered on the gallery rail like a row of grey coats, and that a fishing schooner called the Margaret Hale drifted past so close he could read the letters on her stern. He lit a second lamp in the kitchen window as a spare, because the main light was failing whenever the wind found a gap in the shutters. By morning the schooner had anchored behind the reef and her crew of seven rowed ashore, cold but unhurt. They stayed for nine days, eating salted cod and potatoes, mending nets, and teaching the keeper's daughter to splice rope. When the supply boat returned it carried a letter of thanks from the owners, a new brass burner, and forty-two pounds in coins collected by the families of the crew. The keeper recorded the sum to the penny, then added a line that no inspector ever questioned: spent on paint, glass, and a better kettle. Visitors who climb the tower today can still see the patched pane, slightly greener than the others, facing the reef where the Margaret Hale waited out the weather.",
+    "The harbour office keeps a ledger of every lamp that has ever burned on the eastern cliffs. Most entries are dull: a date, a keeper's initials, the number of gallons of oil delivered by the supply boat, and a short remark about the weather. In the winter of the great storm, however, the handwriting changes. The keeper wrote that the glass in the lantern room cracked twice in one night, that the gulls sheltered on the gallery rail like a row of grey coats, and that a fishing schooner called the Margaret Hale drifted past so close he could read the letters on her stern. He lit a second lamp in the kitchen window as a spare, because the main light was failing whenever the wind found a gap in the shutters. By morning the schooner had anchored behind the reef and her crew of seven rowed ashore, cold but unhurt. They stayed for nine days, eating salted cod and potatoes, mending nets, and teaching the keeper's daughter to splice rope. When the supply boat returned it carried a letter of thanks from the owners, a new brass burner, and forty-two pounds in coins collected by the families of the crew. The keeper recorded the sum to the penny, then added a line that no inspector ever questioned: spent on paint, glass, and a better kettle. Visitors who climb the tower today can still see the patched pane, slightly greener than the others, facing the reef where the Margaret Hale waited out the weather."
+   ],
+   "cer_vs_ref": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "pairwise_cer": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "identical": true,
+   "cost_usd": 0.038019,
+   "errors": [
+    null,
+    null,
+    null
+   ]
+  }
+ ]
+}

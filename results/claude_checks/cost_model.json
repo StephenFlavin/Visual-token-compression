@@ -1,0 +1,8 @@
+{
+ "n": 24,
+ "cost_fixed_usd": -0.0005231708532799893,
+ "usd_per_Minput": 5.164353577305898,
+ "usd_per_Moutput": 20.5156488005783,
+ "latency_fixed_s": 2.1659683191195875,
+ "latency_per_output_token_s": 0.014200125946068592
+}
