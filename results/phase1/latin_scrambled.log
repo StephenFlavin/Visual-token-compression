@@ -1,0 +1,49 @@
+run=latin_scrambled model=claude-opus-5-5 effort=low variant=scrambled passages=3 (corpus) schemes=['latin', 'latin_condensed'] budgets=['14', '17', '20', '23', '27', '32', '40']
+already done: 0  no-call rows: 0  calls to make: 42
+ESTIMATED COST: $1.19 (~$0.028/call; prices in/out $4.0/$20.0 per Mtok + $0.013 overhead; claude_eval cache may lower it)
+[claude] 1/32  new cost $0.0115  cached 0  errors 0  8s
+[claude] 2/32  new cost $0.0239  cached 0  errors 0  9s
+[claude] 3/32  new cost $0.0383  cached 0  errors 0  10s
+[claude] 4/32  new cost $0.0573  cached 0  errors 0  14s
+[claude] 5/32  new cost $0.0757  cached 0  errors 0  14s
+[claude] 6/32  new cost $0.0875  cached 0  errors 0  17s
+[claude] 7/32  new cost $0.1046  cached 0  errors 0  17s
+[claude] 8/32  new cost $0.1189  cached 0  errors 0  18s
+[claude] 9/32  new cost $0.1425  cached 0  errors 0  21s
+[claude] 10/32  new cost $0.1525  cached 0  errors 0  23s
+[claude] 11/32  new cost $0.1680  cached 0  errors 0  24s
+[claude] 12/32  new cost $0.1777  cached 0  errors 0  26s
+[claude] 13/32  new cost $0.1880  cached 0  errors 0  27s
+[claude] 14/32  new cost $0.2129  cached 0  errors 0  28s
+[claude] 15/32  new cost $0.2244  cached 0  errors 0  31s
+[claude] 16/32  new cost $0.2480  cached 0  errors 0  31s
+[claude] 17/32  new cost $0.2610  cached 0  errors 0  33s
+[claude] 18/32  new cost $0.2902  cached 0  errors 0  34s
+[claude] 19/32  new cost $0.3037  cached 0  errors 0  35s
+[claude] 20/32  new cost $0.3136  cached 0  errors 0  36s
+[claude] 21/32  new cost $0.3242  cached 0  errors 0  37s
+[claude] 22/32  new cost $0.3478  cached 0  errors 0  37s
+[claude] 23/32  new cost $0.3572  cached 0  errors 0  38s
+[claude] 24/32  new cost $0.3755  cached 0  errors 0  41s
+[claude] 25/32  new cost $0.3872  cached 0  errors 0  43s
+[claude] 26/32  new cost $0.4013  cached 0  errors 0  43s
+[claude] 27/32  new cost $0.4120  cached 0  errors 0  44s
+[claude] 28/32  new cost $0.4349  cached 0  errors 0  47s
+[claude] 29/32  new cost $0.4468  cached 0  errors 0  47s
+[claude] 30/32  new cost $0.4653  cached 0  errors 0  47s
+[claude] 31/32  new cost $0.4886  cached 0  errors 0  65s
+[claude] 32/32  new cost $0.5138  cached 0  errors 0  68s
+  32/42 calls, $0.51 spent, 68s
+[claude] 1/10  new cost $0.0105  cached 0  errors 0  7s
+[claude] 2/10  new cost $0.0241  cached 0  errors 0  8s
+[claude] 3/10  new cost $0.0372  cached 0  errors 0  9s
+[claude] 4/10  new cost $0.0503  cached 0  errors 0  11s
+[claude] 5/10  new cost $0.0632  cached 0  errors 0  11s
+[claude] 6/10  new cost $0.0817  cached 0  errors 0  19s
+[claude] 7/10  new cost $0.1052  cached 0  errors 0  23s
+[claude] 8/10  new cost $0.1335  cached 0  errors 0  27s
+[claude] 9/10  new cost $0.1582  cached 0  errors 0  29s
+[claude] 10/10  new cost $0.1882  cached 0  errors 0  38s
+  42/42 calls, $0.70 spent, 106s
+K2 (Phase 1: subst P@10% >= 20% below best Latin, natural or scrambled): UNDETERMINED - no substitution scheme in data.
+summary: /home/user/visual-bpe/results/phase1/latin_scrambled/summary.md
