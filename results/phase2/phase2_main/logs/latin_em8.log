@@ -1,0 +1,3 @@
+[latin_em8] vocab=91 col_stride=2 expand=2 params=1018891 train=40000 H=15 meanW=200
+[latin_em8] step 250 loss 5.383 val_cer 1.0000  (236.3s)
+[latin_em8] step 500 loss 2.566 val_cer 0.1606  (469.0s)

@@ -1,0 +1,2 @@
+{"step": 250, "train_loss": 5.3826, "val_cer": 1.0, "val_cer_by_em": {"8": 1.0}, "lr": 0.0009709924920531302, "elapsed_s": 236.3}
+{"step": 500, "train_loss": 2.5661, "val_cer": 0.16057, "val_cer_by_em": {"8": 0.16057}, "lr": 0.001990079091347839, "elapsed_s": 469.0}
