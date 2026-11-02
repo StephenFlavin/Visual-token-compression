@@ -1,0 +1,9 @@
+pillow>=12
+numpy>=2
+rapidfuzz>=3
+jiwer>=4
+datasets>=3
+matplotlib>=3.9
+# CPU torch for Phase 2:  pip install --index-url https://download.pytorch.org/whl/cpu torch
+torch>=2.5
+pytest
