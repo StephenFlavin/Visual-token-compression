@@ -37,7 +37,10 @@ Anti-degeneracy (learned banks only; PLAN amendments):
   * ``coverage_weight`` (default 1.0) x ``coverage_penalty`` (local: LG1's squared hinge is ~100x
     weaker at these scales and does not skip the space): mean over non-space glyphs of the LINEAR
     hinge distance of each glyph's ink coverage from [coverage_lo, coverage_hi] = [0.10, 0.45];
-  * ``ink_penalty`` / ``entropy_penalty`` (off): mean ink / mean binary entropy of soft glyphs.
+  * ``ink_penalty`` / ``entropy_penalty`` (off): mean ink / mean binary entropy of soft glyphs;
+  * all penalty weights ramp linearly 0 -> 1 over the first ``penalty_ramp`` (0.3) x steps, so CTC
+    shapes the glyphs before the morphology terms act (with full weight from step 1 the
+    min-feature term erased most random-init ink in the smoke: mean ink 0.05, many blank glyphs).
 
 Co-adaptation countermeasures:
   * ``channel_ramp`` (default 0.3): channel strength ramps linearly from the ``clean`` preset to
@@ -136,6 +139,7 @@ class JointConfig:
     coverage_hi: float = 0.45
     ink_penalty: float = 0.0
     entropy_penalty: float = 0.0
+    penalty_ramp: float = 0.3             # penalty weights ramp 0 -> 1 over this fraction of steps
     # co-adaptation countermeasures
     channel_ramp: float = 0.3
     reader_resets: int = 0
@@ -788,6 +792,7 @@ def train_joint(cfg: JointConfig, log=print, train_lines=None, eval_lines=None,
         loss = loss / len(readers)
         skipped += int((lens < 2 * tl + 1).sum())
         pen = torch.zeros(())
+        pw = min(1.0, step / max(1.0, cfg.penalty_ramp * cfg.steps)) if cfg.penalty_ramp > 0 else 1.0
         if gparams:
             if cfg.min_feature_weight:
                 pen = pen + cfg.min_feature_weight * feature_penalty(
@@ -802,6 +807,7 @@ def train_joint(cfg: JointConfig, log=print, train_lines=None, eval_lines=None,
                 p = bank(tau=tau_at(cfg, step), hard=False).clamp(1e-6, 1 - 1e-6)
                 ent = -(p * p.log() + (1 - p) * (1 - p).log()) * cmask
                 pen = pen + cfg.entropy_penalty * ent.sum() / area
+        pen = pw * pen
         total = loss + pen
         opt.zero_grad(set_to_none=True)
         total.backward()
@@ -853,7 +859,7 @@ def train_joint(cfg: JointConfig, log=print, train_lines=None, eval_lines=None,
                 + f" tau {pt['tau']:.3f} hard={int(pt['hard'])} chan={pt['channel_level']} "
                 f"ink={mean_ink:.3f} ({pt['elapsed_s']}s)")
             loss_acc = pen_acc = n_acc = 0
-            if ev["cer"] < best["cer"]:
+            if ev["cer"] <= best["cer"]:          # ties -> later checkpoint
                 best = snapshot(ev["cer"], step, ri)
     train_time = time.time() - t0
     train_cpu = time.process_time() - c0
