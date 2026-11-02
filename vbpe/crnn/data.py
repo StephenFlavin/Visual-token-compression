@@ -19,9 +19,10 @@ Fairness rules (identical for every scheme)
 * Eval (val/test) lines: exact nominal em, seeded random phase, no photometric noise.
 * px_per_char of a line = line_spacing * em' * sum(unit advances) / len(normalize(line))
   (content area, margins excluded - consistent with page-level px^2/char).
-* CTC frames: the reader emits T = n_frames(W, f) ~= f*W frames for an image of width W; the frame
-  factor f is chosen per (scheme, em) by ONE rule for all schemes: the smallest f in
-  FRAME_FACTORS such that T >= 2L+1 for EVERY rendered sample (train, val and test).
+* CTC frames: the reader's BiLSTM runs over W // s columns, s = ``col_stride_for_em(em)``
+  (2 px for em < 8, 4 px otherwise - a function of em only), and each column is expanded into E
+  CTC frames, T = (W // s) * E. E is chosen per (scheme, em) by ONE rule for all schemes: the
+  smallest integer with T >= 2L+1 for EVERY rendered sample (train, val and test).
 """
 from __future__ import annotations
 
@@ -45,7 +46,7 @@ from vbpe.metrics import normalize
 
 CODE_VERSION = 1                     # bump to invalidate caches when rendering code changes
 CACHE_DIR = config.RESULTS / "phase2" / "cache"
-FRAME_FACTORS = (0.25, 0.5, 1, 2, 3, 4)
+MAX_EXPAND = 16
 SPLIT_IDS = {"train": 0, "val": 1, "test": 2}
 FALLBACK_CORPUS = "FALLBACK:pydoc_topics"
 
@@ -325,27 +326,25 @@ class Vocab:
 
 
 # ----------------------------------------------------------------------------- CTC frame rule
-def n_frames(width, f: float):
-    """CTC frames the model emits for an input of ``width`` px at frame factor ``f`` (~f per px).
-
-    Must match ``CRNN.output_lengths``: the CNN halves the width once (W//2 columns), f=1/4 halves
-    it again, and for f >= 1 every column is expanded into 2f output frames.
-    """
-    w = np.asarray(width) // 2
-    if f <= 0.25:
-        return w // 2
-    if f <= 0.5:
-        return w
-    return w * int(round(2 * f))
+def col_stride_for_em(em: float) -> int:
+    """Pixel stride of the BiLSTM columns: depends on em only (same for every scheme) so that a
+    column is always 0.25-0.4 em wide (2 px below em 8, 4 px from em 8)."""
+    return 2 if em < 8 else 4
 
 
-def choose_frame_factor(widths, label_lens, factors: Sequence[float] = FRAME_FACTORS) -> float:
-    """Smallest frame factor with T >= 2L+1 for every sample (same rule for all schemes)."""
+def n_frames(width, col_stride: int, expand: int):
+    """CTC frames for an input of ``width`` px: W // col_stride LSTM columns, each expanded into
+    ``expand`` output frames (must match ``CRNN.output_lengths``)."""
+    return (np.asarray(width) // col_stride) * expand
+
+
+def choose_expand(widths, label_lens, col_stride: int, max_expand: int = MAX_EXPAND) -> int:
+    """Smallest expansion E with T = (W // s) * E >= 2L+1 for EVERY sample (rule for all schemes)."""
     w, L = np.asarray(widths), np.asarray(label_lens)
-    for f in sorted(factors):
-        if np.all(n_frames(w, f) >= 2 * L + 1):
-            return f
-    raise ValueError(f"no frame factor in {factors} satisfies T >= 2L+1 "
+    for e in range(1, max_expand + 1):
+        if np.all(n_frames(w, col_stride, e) >= 2 * L + 1):
+            return e
+    raise ValueError(f"no expansion <= {max_expand} satisfies T >= 2L+1 "
                      f"(worst W/L = {np.min(w / np.maximum(L, 1)):.2f})")
 
 

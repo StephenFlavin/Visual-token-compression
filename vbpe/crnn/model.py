@@ -3,8 +3,10 @@
 Input-resolution policy
 -----------------------
 Images are fed at their *native* rendered resolution (H = round(1.2*em) + 4 px, never resized).
-The CNN is height-agnostic: a full-resolution 3x3 conv (32 channels, so the following 2x2 max-pool
-can keep every pixel's information in its channels), 2x2 max-pool, two more 3x3 convs, then
+The CNN is height-agnostic: a full-resolution 3x3 conv (16 channels, so the following 2x2 max-pool
+can keep every pixel's information in its channels), 2x2 max-pool, a 3x3 conv, an adaptive
+max-pool capping the height at 6 rows (no-op for em <= 7; bounds CPU cost at large ems), a width
+max-pool for em >= 8 (see below), a 3x3 conv, then
 ``AdaptiveAvgPool2d((4, None))`` + a learned projection collapse the height to one feature vector
 per column (keeping coarse vertical position, which matters for packed quadrant cells).
 We do NOT resize to a fixed model height: downscaling would destroy the resolution effect we
@@ -14,11 +16,12 @@ vocabulary-sized output layer and the frame-expansion layer, set by the rule bel
 
 CTC time axis
 -------------
-The BiLSTM runs over W/2 columns (W/4 when f = 1/4). The per-run *frame factor* f
-(``data.choose_frame_factor``; one rule for every scheme: smallest f in {1/4,1/2,1,2,3,4} with
-T >= 2L+1 for every sample) sets the number of CTC frames T ~= f*W: for f >= 1 each LSTM output
-is expanded into E = 2f frames by a learned linear map *after* the LSTM, so dense multi-label
-cells at tiny ems get enough CTC slots without making the (sequential, CPU-expensive) LSTM longer.
+The BiLSTM runs over W // s columns, s = ``data.col_stride_for_em(em)`` (2 px for em < 8, 4 px
+from em 8: a column is always 0.25-0.4 em wide; the extra width pool keeps large-em runs cheap).
+The LSTM is the sequential, CPU-expensive part, so instead of making it longer we expand each
+LSTM output into E CTC frames with a learned linear map *after* the LSTM (T = (W // s) * E).
+E (``data.choose_expand``; one rule for every scheme) is the smallest integer giving T >= 2L+1
+for every sample, so dense multi-label cells at tiny ems get enough CTC slots.
 """
 from __future__ import annotations
 
@@ -31,19 +34,34 @@ def _conv(cin: int, cout: int) -> nn.Sequential:
                          nn.ReLU(inplace=True))
 
 
-class CRNN(nn.Module):
-    def __init__(self, n_classes: int, frame_factor: float = 1, channels=(32, 64, 96),
-                 pooled_height: int = 4, d_model: int = 192, hidden: int = 128, layers: int = 2,
-                 dropout: float = 0.1):
+class _HeightCap(nn.Module):
+    """Adaptive max-pool of the height down to ``cap`` rows (no-op if already <= cap). Bounds the
+    CNN cost at large ems; small ems (where CER thresholds are crossed) are never pooled here."""
+
+    def __init__(self, cap: int):
         super().__init__()
-        self.frame_factor = frame_factor
+        self.cap = cap
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        if x.shape[2] <= self.cap:
+            return x
+        return nn.functional.adaptive_max_pool2d(x, (self.cap, x.shape[3]))
+
+
+class CRNN(nn.Module):
+    def __init__(self, n_classes: int, col_stride: int = 2, expand: int = 1, channels=(16, 64, 96),
+                 mid_height: int = 6, pooled_height: int = 4, d_model: int = 192, hidden: int = 128,
+                 layers: int = 2, dropout: float = 0.1):
+        super().__init__()
+        assert col_stride in (2, 4), col_stride
         c1, c2, c3 = channels
-        self.pw2 = 2 if frame_factor <= 0.25 else 1
-        self.expand = int(round(2 * frame_factor)) if frame_factor >= 1 else 1
+        self.col_stride, self.expand = col_stride, int(expand)
+        self.pw2 = col_stride // 2
         self.cnn = nn.Sequential(
-            _conv(1, c1), nn.MaxPool2d(2, 2),
-            _conv(c1, c2), _conv(c2, c3),
+            _conv(1, c1), nn.MaxPool2d(2, 2), _conv(c1, c2),
+            _HeightCap(mid_height),
             nn.MaxPool2d((1, 2), (1, 2)) if self.pw2 > 1 else nn.Identity(),
+            _conv(c2, c3),
             nn.AdaptiveAvgPool2d((pooled_height, None)),
         )
         self.proj = nn.Sequential(nn.Linear(c3 * pooled_height, d_model), nn.ReLU(inplace=True),
@@ -51,12 +69,12 @@ class CRNN(nn.Module):
         self.rnn = nn.LSTM(d_model, hidden, num_layers=layers, bidirectional=True, batch_first=True,
                            dropout=dropout if layers > 1 else 0.0)
         h2 = 2 * hidden
-        self.expander = (nn.Sequential(nn.Linear(h2, h2 * self.expand), nn.ReLU(inplace=True))
-                         if self.expand > 1 else None)
+        # always present (E=1 too) so every run has the same depth
+        self.expander = nn.Sequential(nn.Linear(h2, h2 * self.expand), nn.ReLU(inplace=True))
         self.head = nn.Linear(h2, n_classes)
 
     def output_lengths(self, widths: torch.Tensor) -> torch.Tensor:
-        return (widths // 2 // self.pw2) * self.expand
+        return (widths // self.col_stride) * self.expand
 
     def forward(self, x: torch.Tensor, widths: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
         """x (B,1,H,W) -> (log_probs (T,B,C), out_lens (B,)).
@@ -67,12 +85,11 @@ class CRNN(nn.Module):
         f = self.cnn(x)                                   # B, C, h, T
         B, C, h, T = f.shape
         f = self.proj(f.permute(0, 3, 1, 2).reshape(B, T, C * h))
-        cols = (widths // 2 // self.pw2).clamp(min=1, max=T)
+        cols = (widths // self.col_stride).clamp(min=1, max=T)
         mask = torch.arange(T)[None, :] < cols[:, None]
         f = f * mask[:, :, None]
         out, _ = self.rnn(f)
-        if self.expander is not None:
-            out = self.expander(out).reshape(B, T * self.expand, -1)
+        out = self.expander(out).reshape(B, T * self.expand, -1)
         lens = cols * self.expand
         return self.head(out).log_softmax(-1).transpose(0, 1), lens
 

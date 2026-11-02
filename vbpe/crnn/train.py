@@ -105,9 +105,11 @@ def train_run(cfg: TrainConfig, out_dir: Path | None = None, data=None, log=prin
     train, val, test = data if data is not None else load_data(cfg)
     scheme = D.resolve_scheme(cfg.scheme)
     vocab = D.Vocab.from_labels(train.labels)
-    ff = D.choose_frame_factor(np.concatenate([s.widths for s in (train, val, test)]),
-                               np.concatenate([s.label_lens for s in (train, val, test)]))
-    model = CRNN(len(vocab), frame_factor=ff, **cfg.model)
+    stride = D.col_stride_for_em(cfg.em)
+    expand = D.choose_expand(np.concatenate([s.widths for s in (train, val, test)]),
+                             np.concatenate([s.label_lens for s in (train, val, test)]), stride)
+    ff = expand / stride                               # CTC frames per input px
+    model = CRNN(len(vocab), col_stride=stride, expand=expand, **cfg.model)
     opt = torch.optim.AdamW(model.parameters(), lr=cfg.lr, weight_decay=cfg.weight_decay)
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=cfg.lr, total_steps=cfg.steps,
                                                 pct_start=cfg.pct_start)
@@ -118,7 +120,7 @@ def train_run(cfg: TrainConfig, out_dir: Path | None = None, data=None, log=prin
         out_dir.mkdir(parents=True, exist_ok=True)
         (out_dir / "curves").mkdir(exist_ok=True)
         curve_f = open(out_dir / "curves" / f"{tag}.jsonl", "w")
-    log(f"[{tag}] vocab={len(vocab)} frame_factor={ff} params={n_params(model)} "
+    log(f"[{tag}] vocab={len(vocab)} col_stride={stride} expand={expand} params={n_params(model)} "
         f"train={len(train)} H={train.height} meanW={train.widths.mean():.0f}")
 
     batches = D.bucket_batches(train.widths, cfg.batch, rng)
@@ -165,6 +167,7 @@ def train_run(cfg: TrainConfig, out_dir: Path | None = None, data=None, log=prin
         "px_per_char": float(np.mean(test.ppc)), "cer": te["cer"], "symbol_cer": te["symbol_cer"],
         "steps": cfg.steps, "train_time_s": round(train_time, 1), "n_params": n_params(model),
         "best_step": best["step"], "best_val_cer": best["cer"], "frame_factor": ff,
+        "col_stride": stride, "expand": expand,
         "vocab_size": len(vocab), "n_train": len(train), "n_val": len(val), "n_test": len(test),
         "batch": cfg.batch, "threads": cfg.threads, "s_per_step": round((train_time - eval_time) / cfg.steps, 4),
         "render_time_s": sum(s.info.get("render_time_s", 0) for s in (train, val, test)),
@@ -174,7 +177,7 @@ def train_run(cfg: TrainConfig, out_dir: Path | None = None, data=None, log=prin
     if out_dir is not None:
         ck = out_dir / "checkpoints"
         ck.mkdir(exist_ok=True)
-        torch.save({"state": best["state"], "vocab": vocab.to_json(), "frame_factor": ff,
+        torch.save({"state": best["state"], "vocab": vocab.to_json(), "col_stride": stride, "expand": expand,
                     "config": asdict(cfg)}, ck / f"{tag}.pt")
         (out_dir / "samples").mkdir(exist_ok=True)
         with open(out_dir / "samples" / f"{tag}.txt", "w") as fh:
