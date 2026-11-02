@@ -10,3 +10,5 @@
 [latin_em8] vocab=88 col_stride=4 expand=3 params=1083912 train=20000 H=15 meanW=200
 [latin_em5] step 100 loss 5.516 val_cer 1.0000 (32.5s)
 [latin_em8] step 100 loss 6.251 val_cer 1.0000 (36.8s)
+[latin_em5] step 200 loss 3.193 val_cer 0.9979 (62.4s)
+[latin_em8] step 200 loss 3.195 val_cer 1.0000 (71.4s)

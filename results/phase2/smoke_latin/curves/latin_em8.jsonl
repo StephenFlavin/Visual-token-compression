@@ -1,1 +1,2 @@
 {"step": 100, "train_loss": 6.2507, "val_cer": 1.0, "val_symbol_cer": 1.0, "lr": 0.0008791940256274531, "elapsed_s": 36.8}
+{"step": 200, "train_loss": 3.1946, "val_cer": 1.0, "val_symbol_cer": 1.0, "lr": 0.0019461279970960329, "elapsed_s": 71.4}
