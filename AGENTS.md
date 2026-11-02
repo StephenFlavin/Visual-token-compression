@@ -28,6 +28,8 @@ python3 -m pytest -q tests                            # ~100 tests, <15 s, no ne
 | Phase 2 CRNN grid | `experiments/phase2_main.sh` (per-em, 3500 steps, 26 runs) | resumable; logs in `results/phase2_main.log`. Runs groups sequentially with a 3-worker pool → idle cores; prefer the driver below |
 | Phase 2 core-filling scheduler | `nohup python3 experiments/phase2_driver.py > results/phase2_driver.log 2>&1 &` | one process per (scheme, em), largest em first, keeps 4 cores busy (subtracts other busy phase2 processes); per-job logs in `results/phase2/<run>/driver/` |
 | Phase 2 single runs | `python3 experiments/phase2_train.py --schemes latin --ems 5 8 --steps 3500 --parallel 3 --threads 1 --run-name X` | `--smoke` for a quick check |
+| CPU job queue (any experiments) | append single-core commands to `results/queue.txt`; `nohup python3 scripts/job_queue.py results/queue.txt [--after-phase2] > results/queue.log 2>&1 &` | backfills free cores (subtracts busy Phase-2 processes); new lines can be appended while it runs; per-job logs in `results/queue_logs/` |
+| Learned glyphs (sub-project) | see `learned_glyphs/PLAN.md`; `learned_glyphs/experiments/train_joint.py`, `calibrate_channel.py`, `transfer_eval.py` | `--dry-run` prints configs; `--grid e1` for the 2x2 grid |
 | Analysis | `python3 -m vbpe.analysis <runs.jsonl> [more runs.jsonl] --out DIR` | works for Phase 1, 1b and 2 rows; writes summary.md/json + plots |
 | Claude vision checks | `python3 scripts/check_claude_vision.py` | token formula, legibility, latency (~$0.5) |
 

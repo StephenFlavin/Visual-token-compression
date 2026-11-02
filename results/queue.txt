@@ -1,0 +1,7 @@
+# Overnight CPU queue (scripts/job_queue.py). One single-core job per line.
+# Stage 1: learned-glyph pilot at h=7 px (~ em 5.8) + channel calibration (E0, default train / clean eval)
+python3 learned_glyphs/experiments/train_joint.py --n-tokens 0 --height-px 7 --learn-glyphs --run-name lg_pilot
+python3 learned_glyphs/experiments/train_joint.py --n-tokens 300 --height-px 7 --learn-glyphs --run-name lg_pilot
+python3 learned_glyphs/experiments/train_joint.py --n-tokens 0 --height-px 7 --no-learn-glyphs --font latin --run-name lg_pilot
+python3 learned_glyphs/experiments/calibrate_channel.py --no-stats --train --train-ems 5 --train-presets default --eval-preset clean
+python3 learned_glyphs/experiments/calibrate_channel.py --no-stats --train --train-ems 6 --train-presets default --eval-preset clean
