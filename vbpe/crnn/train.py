@@ -26,7 +26,7 @@ from vbpe.metrics import normalize
 class TrainConfig:
     scheme: str
     em: float
-    steps: int = 3000
+    steps: int = 3500
     batch: int = 32
     lr: float = 2e-3
     weight_decay: float = 1e-2
@@ -164,7 +164,8 @@ def train_run(cfg: TrainConfig, out_dir: Path | None = None, data=None, log=prin
     model.load_state_dict(best["state"])
     te = evaluate(model, test, vocab, scheme, return_preds=True)
     row = {
-        "phase": 2, "scheme": cfg.scheme, "em": float(cfg.em),
+        "phase": 2, "run": out_dir.name if out_dir is not None else None,
+        "scheme": cfg.scheme, "em": float(cfg.em),
         "px_per_char": float(np.mean(test.ppc)), "cer": te["cer"], "symbol_cer": te["symbol_cer"],
         "steps": cfg.steps, "train_time_s": round(train_time, 1), "n_params": n_params(model),
         "best_step": best["step"], "best_val_cer": best["cer"], "frame_factor": ff,

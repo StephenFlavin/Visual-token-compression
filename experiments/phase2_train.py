@@ -25,7 +25,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from vbpe.crnn.train import TrainConfig, default_out, load_data, train_run  # noqa: E402
 
 DEFAULT_SCHEMES = ["latin", "latin_condensed", "subst300", "subst1000", "quad3", "quad4"]
-DEFAULT_EMS = [5, 6, 7, 8, 10, 12]
+# latin already reaches CER ~2% at em 5 (smoke), so the grid starts at em 4; quad needs the top end
+DEFAULT_EMS = [4, 5, 6, 7, 8, 10]
+DEFAULT_STEPS = 3500
 
 
 def _train_job(cfg_dict: dict, out_dir: str) -> dict:
@@ -44,7 +46,7 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--schemes", nargs="+", default=DEFAULT_SCHEMES)
     ap.add_argument("--ems", nargs="+", type=float, default=DEFAULT_EMS)
-    ap.add_argument("--steps", type=int, default=None, help="default 3000 (smoke: 600)")
+    ap.add_argument("--steps", type=int, default=None, help=f"default {DEFAULT_STEPS} (smoke: 600)")
     ap.add_argument("--batch", type=int, default=32)
     ap.add_argument("--lr", type=float, default=2e-3)
     ap.add_argument("--eval-every", type=int, default=None, help="default 250 (smoke: 100)")
@@ -64,7 +66,7 @@ def main(argv=None) -> int:
     ap.add_argument("--prerender-only", action="store_true")
     a = ap.parse_args(argv)
 
-    steps = a.steps or (600 if a.smoke else 3000)
+    steps = a.steps or (600 if a.smoke else DEFAULT_STEPS)
     run = a.run_name or ("smoke" if a.smoke else time.strftime("run_%Y%m%d_%H%M"))
     out = default_out(run)
     out.mkdir(parents=True, exist_ok=True)
