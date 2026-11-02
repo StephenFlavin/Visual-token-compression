@@ -2,3 +2,6 @@
 [latin_em7] step 250 loss 5.039 val_cer 1.0000  (201.5s)
 [latin_em7] step 500 loss 2.602 val_cer 0.2177  (396.2s)
 [latin_em7] step 750 loss 0.239 val_cer 0.0126  (589.6s)
+[latin_em7] step 1000 loss 0.072 val_cer 0.0059  (736.4s)
+[latin_em7] step 1250 loss 0.045 val_cer 0.0048  (857.4s)
+[latin_em7] step 1500 loss 0.033 val_cer 0.0025  (977.8s)
