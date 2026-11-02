@@ -1,2 +1,0 @@
-{"step": 20, "train_loss": 5.4485, "val_cer": 1.0, "val_symbol_cer": 1.0, "lr": 0.001183752782818499, "ctc_infeasible": 0, "elapsed_s": 7.4}
-{"step": 40, "train_loss": 3.2632, "val_cer": 1.0, "val_symbol_cer": 1.0, "lr": 4.273806641670601e-06, "ctc_infeasible": 0, "elapsed_s": 13.7}
