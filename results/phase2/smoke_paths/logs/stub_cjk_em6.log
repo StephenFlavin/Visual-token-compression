@@ -1,4 +1,0 @@
-[stub_cjk_em6] vocab=849 col_stride=2 expand=2 params=1213697 train=3000 H=12 meanW=132
-[stub_cjk_em6] step 30 loss 10.880 val_cer 1.0000 (13.9s)
-[stub_cjk_em6] step 60 loss 4.779 val_cer 1.0000 (26.9s)
-[stub_cjk_em6] TEST cer=1.0000 symbol_cer=1.0000 px/char=19.2 best_step=30 time=27s

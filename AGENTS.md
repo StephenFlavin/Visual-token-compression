@@ -74,7 +74,7 @@ Claude responses are cached in `results/cache/claude/` (keyed on model+prompt+im
 - Never edit a running bash script (bash reads it incrementally). To change plans mid-run, SIGKILL the wrapper bash only — its python child keeps running.
 
 **Git**
-- A stop hook demands a clean tree; long-running jobs append to `runs.jsonl`/logs continuously, so snapshot-commit (`WIP:`) and push while jobs run.
+- A stop hook demands a clean tree. Live Phase-2 logs/curves are git-ignored while runs are going (see .gitignore); force-add them (`git add -f`) when a grid finishes. Other long jobs: snapshot-commit (`WIP:`) and push.
 
 ## Findings so far (details in results/*/summary.md)
 - K1 (analytic): N=1000 substitution saves 32% line width vs condensed Latin at equal em → only ~1.19x larger em on a fixed page.

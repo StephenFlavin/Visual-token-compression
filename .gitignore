@@ -7,3 +7,8 @@ data/
 results/**/images/
 results/**/cache/
 results/**/checkpoints/
+# live training logs (force-add with `git add -f` once a run has finished)
+results/phase2/*/logs/
+results/phase2/*/curves/
+results/phase2/*/driver/
+results/phase2_*.log

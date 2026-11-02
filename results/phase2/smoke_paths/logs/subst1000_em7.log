@@ -1,8 +1,0 @@
-[subst1000_em7] vocab=1087 col_stride=2 expand=2 params=1274863 train=8000 H=14 meanW=92
-[subst1000_em7] step 100 loss 10.629 val_cer 1.0000 (56.2s)
-[subst1000_em7] step 200 loss 5.040 val_cer 1.0000 (105.5s)
-[subst1000_em7] step 300 loss 4.837 val_cer 0.9707 (147.8s)
-[subst1000_em7] step 400 loss 4.354 val_cer 0.8185 (185.9s)
-[subst1000_em7] step 500 loss 3.944 val_cer 0.7508 (219.7s)
-[subst1000_em7] step 600 loss 3.806 val_cer 0.7432 (254.3s)
-[subst1000_em7] TEST cer=0.7510 symbol_cer=0.8216 px/char=15.2 best_step=600 time=254s

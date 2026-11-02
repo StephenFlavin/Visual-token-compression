@@ -1,8 +1,0 @@
-[quad4_em7] vocab=88 col_stride=2 expand=4 params=1149704 train=8000 H=14 meanW=69
-[quad4_em7] step 100 loss 5.062 val_cer 1.0000 (29.5s)
-[quad4_em7] step 200 loss 3.128 val_cer 1.0000 (58.5s)
-[quad4_em7] step 300 loss 3.109 val_cer 1.0000 (85.4s)
-[quad4_em7] step 400 loss 3.074 val_cer 1.0000 (117.0s)
-[quad4_em7] step 500 loss 2.832 val_cer 0.9833 (150.9s)
-[quad4_em7] step 600 loss 2.768 val_cer 0.8078 (180.4s)
-[quad4_em7] TEST cer=0.8067 symbol_cer=0.7948 px/char=11.4 best_step=600 time=180s
