@@ -258,13 +258,13 @@ def build_lineset(scheme: str, em: float, split: str, n: int, *, skip: int = 0, 
     ('train', 'val', 'test'); defaults to ``split``.
     """
     tag = tag or split
-    corpus_tag = "fallback" if allow_fallback else "corpus"
-    key = _cache_key(scheme, em, tag, n, skip, seed, train, rp, corpus_tag)
+    lines, corpus = source_lines(split, n, skip=skip, seed=seed, allow_fallback=allow_fallback)
+    text_hash = hashlib.sha1("\n".join(lines).encode()).hexdigest()[:12]
+    key = _cache_key(scheme, em, tag, n, skip, seed, train, rp, f"{corpus}:{text_hash}")
     d = cache_dir / f"{scheme}_em{em:g}_{tag}_{n}_{key}" if cache_dir else None
     if d is not None and (d / "meta.json").exists():
         return LineSet.load(d)
     t0 = time.time()
-    lines, corpus = source_lines(split, n, skip=skip, seed=seed, allow_fallback=allow_fallback)
     chunk = max(16, math.ceil(len(lines) / (workers * 8)))
     jobs = [(i, lines[i:i + chunk], em, rp, seed, tag, train) for i in range(0, len(lines), chunk)]
     if workers > 1 and len(jobs) > 1:

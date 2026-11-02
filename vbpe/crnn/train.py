@@ -139,7 +139,7 @@ def train_run(cfg: TrainConfig, out_dir: Path | None = None, data=None, log=prin
         nn.utils.clip_grad_norm_(model.parameters(), cfg.grad_clip)
         opt.step()
         sched.step()
-        loss_acc += float(loss)
+        loss_acc += loss.item()
         n_acc += 1
         if step % cfg.eval_every == 0 or step == cfg.steps:
             te = time.time()

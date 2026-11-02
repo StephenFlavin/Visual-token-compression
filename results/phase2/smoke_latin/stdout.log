@@ -1,0 +1,12 @@
+[phase2] run=smoke_latin jobs=2 (skipped 0 done) steps=1500
+[crnn.data] rendered latin em=8 train: 20000 lines, H=15, mean W=200, 43.08s (2 workers)
+[crnn.data] rendered latin em=8 test: 1000 lines, H=15, mean W=203, 2.24s (2 workers)
+[crnn.data] rendered latin em=8 val: 300 lines, H=15, mean W=202, 0.78s (2 workers)
+[crnn.data] rendered latin em=5 train: 20000 lines, H=11, mean W=127, 39.95s (2 workers)
+[crnn.data] rendered latin em=5 test: 1000 lines, H=11, mean W=128, 2.0s (2 workers)
+[crnn.data] rendered latin em=5 val: 300 lines, H=11, mean W=128, 0.85s (2 workers)
+[phase2] pre-render done in 90s
+[latin_em5] vocab=88 col_stride=2 expand=2 params=1018120 train=20000 H=11 meanW=127
+[latin_em8] vocab=88 col_stride=4 expand=3 params=1083912 train=20000 H=15 meanW=200
+[latin_em5] step 100 loss 5.516 val_cer 1.0000 (32.5s)
+[latin_em8] step 100 loss 6.251 val_cer 1.0000 (36.8s)
