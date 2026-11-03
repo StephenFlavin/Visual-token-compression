@@ -95,7 +95,9 @@ def main(argv=None) -> int:
     if rows.exists():
         for l in rows.read_text().splitlines():
             r = json.loads(l)
-            if all(r.get(k) == v for k, v in key.items()):
+            # colour rows scored before the hypothesis-stripping fix (no score_v) are redone
+            stale = a.encoding.startswith("col_") and r.get("score_v", 1) < 2
+            if all(r.get(k) == v for k, v in key.items()) and not stale:
                 print(f"[probe] skip, done: {key}")
                 return 0
     t0 = time.time()
