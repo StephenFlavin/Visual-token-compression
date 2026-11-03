@@ -1,0 +1,16 @@
+[quad3_em12] vocab=91 col_stride=2 expand=2 params=1018891 train=40000 H=20 meanW=129
+[quad3_em12] step 250 loss 4.386 val_cer 1.0000  (101.9s)
+[quad3_em12] step 500 loss 2.629 val_cer 0.4870  (204.9s)
+[quad3_em12] step 750 loss 0.828 val_cer 0.0834  (309.1s)
+[quad3_em12] step 1000 loss 0.318 val_cer 0.0458  (417.4s)
+[quad3_em12] step 1250 loss 0.211 val_cer 0.0300  (518.2s)
+[quad3_em12] step 1500 loss 0.160 val_cer 0.0225  (616.4s)
+[quad3_em12] step 1750 loss 0.131 val_cer 0.0181  (712.1s)
+[quad3_em12] step 2000 loss 0.110 val_cer 0.0148  (802.5s)
+[quad3_em12] step 2250 loss 0.097 val_cer 0.0152  (893.8s)
+[quad3_em12] step 2500 loss 0.086 val_cer 0.0115  (986.7s)
+[quad3_em12] step 2750 loss 0.074 val_cer 0.0099  (1078.7s)
+[quad3_em12] step 3000 loss 0.068 val_cer 0.0097  (1172.0s)
+[quad3_em12] step 3250 loss 0.063 val_cer 0.0097  (1266.7s)
+[quad3_em12] step 3500 loss 0.063 val_cer 0.0081  (1362.8s)
+[quad3_em12] TEST em=12 cer=0.0085 symbol_cer=0.0085 px/char=37.5 best_step=3500 time=1363s

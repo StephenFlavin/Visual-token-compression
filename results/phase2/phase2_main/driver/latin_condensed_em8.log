@@ -1,0 +1,26 @@
+[phase2] run=phase2_main mode=per_em jobs=1 (rows already done: 9) steps=3500
+[crnn.data] rendered latin_condensed em8 train: 40000 lines, H=15, mean W=146, 211.7s (1 workers)
+[crnn.data] rendered latin_condensed em8 test: 1000 lines, H=15, mean W=148, 3.65s (1 workers)
+[crnn.data] rendered latin_condensed em8 val: 300 lines, H=15, mean W=148, 1.11s (1 workers)
+[phase2] pre-render done in 218s
+[latin_condensed_em8] vocab=91 col_stride=2 expand=2 params=1018891 train=40000 H=15 meanW=146
+[latin_condensed_em8] step 250 loss 4.610 val_cer 1.0000  (95.4s)
+[latin_condensed_em8] step 500 loss 2.345 val_cer 0.1926  (190.4s)
+[latin_condensed_em8] step 750 loss 0.369 val_cer 0.0476  (289.8s)
+[latin_condensed_em8] step 1000 loss 0.146 val_cer 0.0210  (388.9s)
+[latin_condensed_em8] step 1250 loss 0.093 val_cer 0.0148  (482.7s)
+[latin_condensed_em8] step 1500 loss 0.069 val_cer 0.0071  (578.4s)
+[latin_condensed_em8] step 1750 loss 0.056 val_cer 0.0059  (677.5s)
+[latin_condensed_em8] step 2000 loss 0.049 val_cer 0.0057  (777.5s)
+[latin_condensed_em8] step 2250 loss 0.042 val_cer 0.0042  (877.8s)
+[latin_condensed_em8] step 2500 loss 0.036 val_cer 0.0036  (976.5s)
+[latin_condensed_em8] step 2750 loss 0.029 val_cer 0.0026  (1074.4s)
+[latin_condensed_em8] step 3000 loss 0.027 val_cer 0.0024  (1175.0s)
+[latin_condensed_em8] step 3250 loss 0.024 val_cer 0.0024  (1275.5s)
+[latin_condensed_em8] step 3500 loss 0.024 val_cer 0.0021  (1375.7s)
+[latin_condensed_em8] TEST em=8 cer=0.0025 symbol_cer=0.0025 px/char=28.5 best_step=3500 time=1376s
+[phase2] 1 models, 1 rows in 1599s -> /home/user/visual-bpe/results/phase2/phase2_main/runs.jsonl
+  latin_condensed  em=8    px/char=  28.5 cer=0.0025 sym_cer=0.0025 best@3500 1376s
+[phase2] run=phase2_main mode=per_em jobs=0 (rows already done: 19) steps=3500
+[phase2] pre-render done in 0s
+[phase2] 0 models, 0 rows in 0s -> /home/user/visual-bpe/results/phase2/phase2_main/runs.jsonl

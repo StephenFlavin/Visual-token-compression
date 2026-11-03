@@ -1,13 +1,20 @@
-# Overnight CPU queue (scripts/job_queue.py). One single-core job per line.
-# Stage 0: Phase-2 convergence check (3x steps) at the critical ems, subst AND latin (fairness)
-python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes subst1000 --ems 8
-python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes subst1000 --ems 7
-python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes latin --ems 5
-python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes subst300 --ems 7
-python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes latin --ems 4
-# Stage 1: learned-glyph pilot at h=7 px (~ em 5.8) + channel calibration (E0, default train / clean eval)
-python3 learned_glyphs/experiments/train_joint.py --n-tokens 0 --height-px 7 --learn-glyphs --run-name lg_pilot
-python3 learned_glyphs/experiments/train_joint.py --n-tokens 300 --height-px 7 --learn-glyphs --run-name lg_pilot
-python3 learned_glyphs/experiments/train_joint.py --n-tokens 0 --height-px 7 --no-learn-glyphs --font latin --run-name lg_pilot
-python3 learned_glyphs/experiments/calibrate_channel.py --no-stats --train --train-ems 5 --train-presets default --eval-preset clean
-python3 learned_glyphs/experiments/calibrate_channel.py --no-stats --train --train-ems 6 --train-presets default --eval-preset clean
+# Round 2 (2026-11-03 02:45): K3 frontier convergence — 3x steps at the low ems where the 3% crossing happens
+python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes latin_condensed --ems 5
+python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes subst300 --ems 6
+python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes subst1000 --ems 6
+python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes latin_condensed --ems 4.5
+python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes subst300 --ems 5
+python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes subst1000 --ems 5
+python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes latin --ems 4.5
+# Learned glyphs E1 at lower heights (h=5,6) + E2 transfer of pilot banks + harsh-channel training
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1 --heights 6 --modes learned --n-tokens-list 300
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1 --heights 6 --modes learned --n-tokens-list 0
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1 --heights 6 --modes fixed --n-tokens-list 0
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1 --heights 5 --modes learned --n-tokens-list 300
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1 --heights 5 --modes learned --n-tokens-list 0
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1 --heights 5 --modes fixed --n-tokens-list 0
+python3 learned_glyphs/experiments/transfer_eval.py --banks learned_glyphs/results/lg_pilot/banks/lg_learned_n300_h7.pt --run-name e2_transfer --parallel 1
+python3 learned_glyphs/experiments/transfer_eval.py --banks learned_glyphs/results/lg_pilot/banks/lg_learned_n0_h7.pt --run-name e2_transfer --parallel 1
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1_harsh --channel harsh --heights 7 --modes learned --n-tokens-list 300
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1_harsh --channel harsh --heights 7 --modes fixed --n-tokens-list 0
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1 --heights 6 --modes fixed --n-tokens-list 300

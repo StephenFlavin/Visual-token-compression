@@ -15,21 +15,15 @@
  "n_lines": 256,
  "n_mad": 64,
  "n_strip": 3,
- "no_stats": false,
- "train": false,
+ "no_stats": true,
+ "train": true,
  "train_ems": [
-  4,
-  5,
-  6,
-  7,
-  8
+  6.0
  ],
  "train_presets": [
-  "clean",
-  "default",
-  "harsh"
+  "default"
  ],
- "eval_preset": null,
+ "eval_preset": "clean",
  "extra_eval": [
   "clean",
   "harsh+heldout"

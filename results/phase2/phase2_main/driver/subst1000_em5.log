@@ -1,0 +1,23 @@
+[phase2] run=phase2_main mode=per_em jobs=1 (rows already done: 22) steps=3500
+[crnn.data] rendered subst1000 em5 train: 40000 lines, H=11, mean W=67, 150.04s (1 workers)
+[crnn.data] rendered subst1000 em5 test: 1000 lines, H=11, mean W=67, 1.74s (1 workers)
+[crnn.data] rendered subst1000 em5 val: 300 lines, H=11, mean W=67, 0.49s (1 workers)
+[phase2] pre-render done in 153s
+[subst1000_em5] vocab=1091 col_stride=2 expand=3 params=1341683 train=40000 H=11 meanW=67
+[subst1000_em5] step 250 loss 9.791 val_cer 1.0000  (48.2s)
+[subst1000_em5] step 500 loss 4.909 val_cer 0.9881  (94.9s)
+[subst1000_em5] step 750 loss 4.082 val_cer 0.7268  (142.3s)
+[subst1000_em5] step 1000 loss 3.273 val_cer 0.6700  (189.2s)
+[subst1000_em5] step 1250 loss 2.747 val_cer 0.6663  (234.4s)
+[subst1000_em5] step 1500 loss 2.410 val_cer 0.5971  (280.5s)
+[subst1000_em5] step 1750 loss 2.110 val_cer 0.5376  (328.7s)
+[subst1000_em5] step 2000 loss 1.921 val_cer 0.5022  (376.5s)
+[subst1000_em5] step 2250 loss 1.763 val_cer 0.4740  (424.5s)
+[subst1000_em5] step 2500 loss 1.636 val_cer 0.4276  (471.3s)
+[subst1000_em5] step 2750 loss 1.531 val_cer 0.4160  (518.6s)
+[subst1000_em5] step 3000 loss 1.473 val_cer 0.3921  (565.7s)
+[subst1000_em5] step 3250 loss 1.442 val_cer 0.3877  (613.9s)
+[subst1000_em5] step 3500 loss 1.430 val_cer 0.3855  (662.6s)
+[subst1000_em5] TEST em=5 cer=0.3719 symbol_cer=0.2905 px/char=7.8 best_step=3500 time=663s
+[phase2] 1 models, 1 rows in 819s -> /home/user/visual-bpe/results/phase2/phase2_main/runs.jsonl
+  subst1000        em=5    px/char=   7.8 cer=0.3719 sym_cer=0.2905 best@3500 663s

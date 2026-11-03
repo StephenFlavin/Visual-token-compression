@@ -1,0 +1,53 @@
+[driver] start ('quad3', 12) (external busy=0, running=1, left=25)
+[driver] start ('quad4', 12) (external busy=0, running=2, left=24)
+[driver] start ('latin_condensed', 10) (external busy=0, running=3, left=23)
+[driver] start ('subst300', 10) (external busy=0, running=4, left=22)
+[driver] done ('quad3', 12) rc=0
+[driver] done ('quad4', 12) rc=0
+[driver] done ('latin_condensed', 10) rc=0
+[driver] done ('subst300', 10) rc=0
+[driver] start ('subst1000', 10) (external busy=0, running=1, left=21)
+[driver] start ('quad3', 10) (external busy=0, running=2, left=20)
+[driver] start ('quad4', 10) (external busy=0, running=3, left=19)
+[driver] start ('latin', 8) (external busy=0, running=4, left=18)
+[driver] done ('subst1000', 10) rc=0
+[driver] done ('quad3', 10) rc=0
+[driver] done ('quad4', 10) rc=0
+[driver] done ('latin', 8) rc=0
+[driver] start ('latin_condensed', 8) (external busy=0, running=1, left=17)
+[driver] start ('subst300', 8) (external busy=0, running=2, left=16)
+[driver] start ('subst1000', 8) (external busy=0, running=3, left=15)
+[driver] start ('quad3', 8) (external busy=0, running=4, left=14)
+[driver] done ('latin_condensed', 8) rc=0
+[driver] done ('subst300', 8) rc=0
+[driver] done ('subst1000', 8) rc=0
+[driver] done ('quad3', 8) rc=0
+[driver] start ('quad4', 8) (external busy=0, running=1, left=13)
+[driver] start ('latin', 7) (external busy=0, running=2, left=12)
+[driver] start ('latin_condensed', 7) (external busy=0, running=3, left=11)
+[driver] start ('subst300', 7) (external busy=0, running=4, left=10)
+[driver] done ('quad4', 8) rc=0
+[driver] done ('latin', 7) rc=0
+[driver] done ('latin_condensed', 7) rc=0
+[driver] done ('subst300', 7) rc=0
+[driver] start ('subst1000', 7) (external busy=0, running=1, left=9)
+[driver] start ('latin', 6) (external busy=0, running=2, left=8)
+[driver] start ('latin_condensed', 6) (external busy=0, running=3, left=7)
+[driver] start ('subst300', 6) (external busy=0, running=4, left=6)
+[driver] done ('latin', 6) rc=0
+[driver] start ('subst1000', 6) (external busy=0, running=4, left=5)
+[driver] done ('latin_condensed', 6) rc=0
+[driver] start ('latin', 5) (external busy=0, running=4, left=4)
+[driver] done ('latin', 5) rc=0
+[driver] start ('latin_condensed', 5) (external busy=0, running=4, left=3)
+[driver] done ('subst1000', 7) rc=0
+[driver] done ('subst300', 6) rc=0
+[driver] start ('subst300', 5) (external busy=0, running=3, left=2)
+[driver] start ('subst1000', 5) (external busy=0, running=4, left=1)
+[driver] done ('subst1000', 6) rc=0
+[driver] start ('latin', 4) (external busy=0, running=4, left=0)
+[driver] done ('latin', 4) rc=0
+[driver] done ('latin_condensed', 5) rc=0
+[driver] done ('subst300', 5) rc=0
+[driver] done ('subst1000', 5) rc=0
+[driver] all jobs finished

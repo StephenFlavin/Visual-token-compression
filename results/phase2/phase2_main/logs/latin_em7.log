@@ -1,0 +1,16 @@
+[latin_em7] vocab=91 col_stride=2 expand=2 params=1018891 train=40000 H=14 meanW=176
+[latin_em7] step 250 loss 5.039 val_cer 1.0000  (201.5s)
+[latin_em7] step 500 loss 2.602 val_cer 0.2177  (396.2s)
+[latin_em7] step 750 loss 0.239 val_cer 0.0126  (589.6s)
+[latin_em7] step 1000 loss 0.072 val_cer 0.0059  (736.4s)
+[latin_em7] step 1250 loss 0.045 val_cer 0.0048  (857.4s)
+[latin_em7] step 1500 loss 0.033 val_cer 0.0025  (977.8s)
+[latin_em7] step 1750 loss 0.027 val_cer 0.0028  (1107.2s)
+[latin_em7] step 2000 loss 0.022 val_cer 0.0018  (1234.5s)
+[latin_em7] step 2250 loss 0.018 val_cer 0.0016  (1363.3s)
+[latin_em7] step 2500 loss 0.015 val_cer 0.0013  (1495.4s)
+[latin_em7] step 2750 loss 0.012 val_cer 0.0010  (1628.8s)
+[latin_em7] step 3000 loss 0.011 val_cer 0.0010  (1755.6s)
+[latin_em7] step 3250 loss 0.010 val_cer 0.0009  (1880.8s)
+[latin_em7] step 3500 loss 0.009 val_cer 0.0008  (1996.4s)
+[latin_em7] TEST em=7 cer=0.0007 symbol_cer=0.0007 px/char=30.1 best_step=3500 time=1996s

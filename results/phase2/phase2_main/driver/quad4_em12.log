@@ -1,0 +1,26 @@
+[phase2] run=phase2_main mode=per_em jobs=1 (rows already done: 3) steps=3500
+[crnn.data] rendered quad4 em12 train: 40000 lines, H=20, mean W=116, 30.56s (1 workers)
+[crnn.data] rendered quad4 em12 test: 1000 lines, H=20, mean W=117, 0.56s (1 workers)
+[crnn.data] rendered quad4 em12 val: 300 lines, H=20, mean W=117, 0.18s (1 workers)
+[phase2] pre-render done in 32s
+[quad4_em12] vocab=91 col_stride=2 expand=3 params=1084683 train=40000 H=20 meanW=116
+[quad4_em12] step 250 loss 5.140 val_cer 1.0000  (90.0s)
+[quad4_em12] step 500 loss 2.691 val_cer 0.5602  (179.9s)
+[quad4_em12] step 750 loss 1.297 val_cer 0.2124  (271.4s)
+[quad4_em12] step 1000 loss 0.613 val_cer 0.0964  (358.6s)
+[quad4_em12] step 1250 loss 0.378 val_cer 0.0631  (446.8s)
+[quad4_em12] step 1500 loss 0.285 val_cer 0.0478  (532.6s)
+[quad4_em12] step 1750 loss 0.224 val_cer 0.0345  (621.0s)
+[quad4_em12] step 2000 loss 0.196 val_cer 0.0291  (708.6s)
+[quad4_em12] step 2250 loss 0.169 val_cer 0.0229  (796.1s)
+[quad4_em12] step 2500 loss 0.154 val_cer 0.0202  (882.0s)
+[quad4_em12] step 2750 loss 0.134 val_cer 0.0190  (970.3s)
+[quad4_em12] step 3000 loss 0.126 val_cer 0.0191  (1057.6s)
+[quad4_em12] step 3250 loss 0.118 val_cer 0.0176  (1148.3s)
+[quad4_em12] step 3500 loss 0.119 val_cer 0.0175  (1242.3s)
+[quad4_em12] TEST em=12 cer=0.0179 symbol_cer=0.0178 px/char=33.5 best_step=3500 time=1242s
+[phase2] 1 models, 1 rows in 1281s -> /home/user/visual-bpe/results/phase2/phase2_main/runs.jsonl
+  quad4            em=12   px/char=  33.5 cer=0.0179 sym_cer=0.0178 best@3500 1242s
+[phase2] run=phase2_main mode=per_em jobs=0 (rows already done: 19) steps=3500
+[phase2] pre-render done in 0s
+[phase2] 0 models, 0 rows in 0s -> /home/user/visual-bpe/results/phase2/phase2_main/runs.jsonl
