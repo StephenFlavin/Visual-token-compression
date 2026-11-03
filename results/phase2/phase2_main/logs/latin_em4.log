@@ -9,3 +9,8 @@
 [latin_em4] step 2000 loss 0.534 val_cer 0.0361  (363.6s)
 [latin_em4] step 2250 loss 0.493 val_cer 0.0342  (410.4s)
 [latin_em4] step 2500 loss 0.460 val_cer 0.0289  (456.7s)
+[latin_em4] step 2750 loss 0.434 val_cer 0.0252  (502.3s)
+[latin_em4] step 3000 loss 0.415 val_cer 0.0230  (548.1s)
+[latin_em4] step 3250 loss 0.407 val_cer 0.0226  (594.3s)
+[latin_em4] step 3500 loss 0.406 val_cer 0.0230  (640.7s)
+[latin_em4] TEST em=4 cer=0.0254 symbol_cer=0.0254 px/char=9.8 best_step=3250 time=641s
