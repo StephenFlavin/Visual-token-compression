@@ -1,7 +1,7 @@
 # Visual BPE: results so far (living document)
 
-Status: **2026-11-03 08:30 UTC.** Phase 2 (K3) is decided. Learned glyphs: converged results in; round 6
-(bridge frontier, harsh channel, transfer) running from `results/queue_r6.txt`.
+Status: **2026-11-03 10:20 UTC.** Phase 2 (K3) is decided. Learned glyphs: converged bridge meets the GO bar (see the verdict at the end);
+round 7 running from `results/queue_r7.txt`.
 
 Metric throughout: **px²/char** = canvas area / source characters. **P@x** = px²/char at which CER
 first reaches x (isotonic fit, log-x interpolation). Lower is better.
@@ -126,29 +126,36 @@ Converged results (10.5k steps). "joint" = glyphs and reader trained together th
 | latin (Phase 2) | em3 | – | 5.54 | 4.51% | – |
 | latin (Phase 2) | em3.5 | – | 7.53 | 1.73% | – |
 
-**Bridge results (08:50, unchanged Phase-2 pipeline, fresh reader, 10.5k steps). These supersede the joint-only verdict
-written at 08:30, which said whole-pixel glyphs only tie Latin:**
+**Learned-glyph verdict (10:20 UTC, converged = 10.5k steps; supersedes the joint-only verdict written at 08:30).**
+"Bridge" = frozen bank rendered by the unchanged Phase-2 pipeline with a fresh reader. This is the apples-to-apples
+comparison with Phase 2. The jointly trained reader lags far behind, because it chases moving glyphs.
 
-| bank | h | px²/char | bridge CER | (joint CER) |
+| bank | h | px²/char | bridge CER | joint CER |
 |---|---|---|---|---|
 | learned N=300 | 3 | 2.5 | 7.95% | 20.8% |
 | learned N=300 | 4 | 5.88 | 0.14% | 0.60% |
+| learned N=300, whole-pixel | 4 | 5.9 | 2.08% | 6.75% |
 | learned N=300, whole-pixel | 5 | 7.3 | 0.59% | 1.80% |
-| latin (Phase 2) | em3 / em3.5 / em4 | 5.54 / 7.53 / 9.84 | 4.51% / 1.73% / 0.58% | – |
 
-1. The bridge reader does much better than the jointly trained reader on the same frozen bank, because joint
-   training spends its steps chasing moving glyphs. The bridge is the apples-to-apples comparison with Phase 2.
-2. **Unconstrained learned N=300: bridge P@3% ≈ 4.3 px²/char** (log-x interpolation between 2.5 and 5.88) against Latin's
-   ≈ 6.3, i.e. **≈ 32% fewer px²**. That is just past the ≥30% GO bar, but the interpolation spans a wide gap, so
-   treat it as borderline.
-3. **Whole-pixel N=300 also beats Latin in the bridge:** 0.59% at 7.3 px²/char, where Latin needs ~9.8 px²/char for
-   0.58% (≈ 0.74×). So the advantage is not only grey-level coding. The joint-only numbers had understated it.
-   The whole-pixel h4 bridge (queued) gives its P@3%.
-4. Tokens help at convergence.
+P@x from `vbpe.analysis.p_at` (isotonic + log-x interpolation), against converged Phase-2 Latin (DejaVu):
 
-Open checks before calling GO: harsh channel (running), E2 transfer (running), the whole-pixel bridge P@3%, and the
-untestable-here question of whether a VLM image encoder reads such glyphs at all.
+| | P@3% | P@1% | ratio vs Latin (3% / 1%) |
+|---|---|---|---|
+| latin (Phase 2) | 6.54 | 8.92 | 1 / 1 |
+| latin_condensed | 8.32 | 17.1 | 1.27 / 1.92 |
+| learned N=300, bridge | 4.31 | 5.35 | **0.66 / 0.60** |
+| learned N=300 whole-pixel, bridge | ≤5.9 (below lowest point) | 6.91 | ≤0.90 / **0.77** |
 
-Pending (round 6, `results/queue_r6.txt`, ~45 min): bridge of N=300 h3 bank (em 2.5); bridge of whole-pixel N=300
-h5 bank; converged harsh channel joint, learned N=300 h5 vs fixed DejaVu N=0 h5; converged E2 transfer of the
-N=300 h4 bank.
+Other checks:
+* **E2 transfer** (fresh reader through our own channel, N=300 h4 bank): 0.29% at 5.88 (joint 0.60%).
+* **Harsh channel, converged, h5:** learned N=300 39.1% CER at 7.35 px²/char against fixed DejaVu 67.9% at 10.8. Both are poor
+  at h5, but learning helps more under harsh degradation, not less.
+
+**Against the pre-registered GO rule** (≥30% fewer px²/char than best fixed Latin in transfer and bridge, gain survives harsh):
+* Unconstrained learned N=300: **34% fewer at 3% CER, 40% fewer at 1%** in the bridge. The gain survives harsh. → **meets GO** on this
+  runner. Caveat: part of the gain is grey-level coding that a VLM encoder or JPEG may not preserve.
+* Whole-pixel N=300: 23% fewer at 1%, ≥10% fewer at 3% (h3 point pending). This is a real but smaller "better low-res font plus
+  tokens" effect.
+* What this runner cannot test: whether a pretrained VLM image encoder reads such glyphs. That is the GPU follow-up.
+
+Pending (round 7, `results/queue_r7.txt`, ~75 min): whole-pixel N=300 h3 (joint, then bridge) for its P@3%; E2 transfer of the N=300 h3 bank; converged harsh channel at h7 (learned N=300 vs fixed DejaVu).

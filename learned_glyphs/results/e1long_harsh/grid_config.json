@@ -3,9 +3,9 @@
   "--grid",
   "e1",
   "--modes",
-  "fixed",
+  "learned",
   "--n-tokens-list",
-  "0",
+  "300",
   "--run-name",
   "e1long_harsh",
   "--channel",
@@ -13,15 +13,15 @@
   "--steps",
   "10500",
   "--heights",
-  "5"
+  "7"
  ],
  "configs": [
   {
-   "n_tokens": 0,
-   "height_px": 5,
+   "n_tokens": 300,
+   "height_px": 7,
    "char_w": null,
    "token_w": null,
-   "learn_glyphs": false,
+   "learn_glyphs": true,
    "init": "random",
    "font": "latin",
    "token_glyphs": "cjk",

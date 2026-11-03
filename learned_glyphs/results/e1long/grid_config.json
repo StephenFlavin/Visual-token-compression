@@ -9,9 +9,9 @@
   "--steps",
   "10500",
   "--n-tokens-list",
-  "0",
+  "300",
   "--heights",
-  "5",
+  "3",
   "--pixel-block",
   "--guard-ss",
   "0",
@@ -20,8 +20,8 @@
  ],
  "configs": [
   {
-   "n_tokens": 0,
-   "height_px": 5,
+   "n_tokens": 300,
+   "height_px": 3,
    "char_w": null,
    "token_w": null,
    "learn_glyphs": true,
