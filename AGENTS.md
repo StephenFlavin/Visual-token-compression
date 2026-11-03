@@ -91,4 +91,5 @@ Claude responses are cached in `results/cache/claude/` (keyed on model+prompt+im
 - Claude, natural text: DejaVu P@3% = 29.4 px²/char [28.6, 30.2] ≈ 37 vision tokens / 1k chars (~6.7x vs text tokens).
 - PP-OCR zero-shot: subst1000 P@10% = 0.89x best Latin (K2 bar 0.80 → negative); at 3% subst is 1.17x worse; subst3000 worse than subst1000. Scrambled passages give the same numbers (prior credit ≈ 0), so PP-OCR's result is not a language-prior artefact.
 - Quadrant: letters end up 22–29% smaller than condensed Latin at the same canvas; Claude cannot read it at any budget.
-- Phase 2 (decisive, K3): running.
+- Phase 2 (decisive, K3): **KILL.** Converged CRNNs: latin (DejaVu) 1.73% CER at 7.5 px²/char; subst300 2.26% at 8.9; subst1000 5.75% at 7.8; quadrant ≥3× worse. Plain Latin wins. Use `scripts/merge_phase2.py` (longest run per scheme/em) before `vbpe.analysis`. Details in docs/RESULTS.md.
+- Learned glyph alphabet (learned_glyphs/): pilot learns blob/grey-level codes; it only counts if it survives E2 transfer + harsh channel.

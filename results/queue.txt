@@ -13,3 +13,6 @@ python3 learned_glyphs/experiments/transfer_eval.py --banks learned_glyphs/resul
 python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1_harsh --channel harsh --heights 7 --modes learned --n-tokens-list 300
 python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1_harsh --channel harsh --heights 7 --modes fixed --n-tokens-list 0
 python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1 --heights 6 --modes fixed --n-tokens-list 300
+# Round 2d: curve completeness (verdict already decided)
+python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes latin --ems 3
+python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes subst300 --ems 4.5

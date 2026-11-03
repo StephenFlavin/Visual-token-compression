@@ -62,7 +62,7 @@ Predictions: (P1) quadrant needs ≥ 30 % *more* px²/char than best Latin. (P2)
 
 * **K1** – if subst1000 saves < 15 % line width vs condensed Latin at equal em → strong prior of failure.
 * **K2 (Phase 1)** – subst never achieves ≥ 20 % lower P@10 % than best Latin (natural *or* scrambled) → zero-shot negative.
-* **K3 (Phase 2, decisive)** – subst P@3 % not ≥ 30 % below best Latin (the concept doc's own bar) → **kill**.
+* **K3 (Phase 2, decisive)** – subst P@3 % not ≥ 30 % below best Latin (the concept doc's own bar) → **kill**. **Outcome (2026-11-03): KILLED** — converged plain DejaVu Latin beats subst300/subst1000 at every budget (docs/RESULTS.md).
 * Quadrant killed if its Phase-2 P@3 % ≥ best Latin.
 * Context for any positive result: text-side compression (mean pooling, learned compressors, C3 at 98% @20×) already matches or beats optical compression, so RESULTS.md must state the win relative to that ceiling.
 * If subst passes but quadrant fails → idea reduces to "bigger alphabet"; next step would be *learned* glyphs (end-to-end optimised against the reader), not hand-designed ones.
