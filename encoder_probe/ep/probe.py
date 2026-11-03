@@ -5,14 +5,15 @@ never add it, so the CER it reaches is an upper bound on what the frozen tokens 
 identity encoder (raw pixel patches) gives each encoding's ceiling under the same probe.
 
 For text line i (rows [i*p, (i+1)*p)), let r0 = top row // 16 (patch row), dy = top row % 16:
-  x_t = [token(r0, t), token(r0+1, t)]          for the 14 patch columns t (r0+1 zeroed past the edge)
-   -> Linear_dy (2*768 -> hid)                   one input projection per in-patch offset dy
+  x_t = token(r0, t) for the 14 patch columns t, plus token(r0+1, t) if the line straddles two patch rows
+   -> Linear_dy (768 or 2*768 -> hid=1024)       one input projection per in-patch offset dy
    -> BN, GELU, dilated residual Conv1d stack over the 14 positions
    -> Conv1x1 (hid -> 16*E*(n_classes+1))       per-token head: 16 columns x E frames each
    -> 224*E frames, CTC over the line's labels.
 
-(v1 unpatchified tokens to a per-pixel feature map and read pixel strips; it could not learn even on
-raw pixels -- the random token->pixel mixing gives CTC no locality to bootstrap from. See PLAN.md.)
+(v1 unpatchified the tokens to a per-pixel feature map and read pixel strips with a shared conv reader. The
+reader learns in ~100 steps on true pixels, but through the learned token->pixel map it stayed at unigram
+level for 1500 steps even on identity tokens: CTC gets no locality to bootstrap the map from. See PLAN.md.)
 """
 from __future__ import annotations
 
@@ -46,12 +47,18 @@ class ResBlock(nn.Module):
 
 
 class Probe(nn.Module):
-    def __init__(self, pitch: int, n_classes: int, d: int = 768, hid: int = 512, expand: int = 3,
-                 dils=(1, 2, 4, 1)):
+    def __init__(self, pitch: int, n_classes: int, d: int = 768, hid: int = 1024, expand: int = 3,
+                 dils=(1, 2)):
         super().__init__()
         self.pitch, self.d, self.expand, self.n_out = pitch, d, expand, n_classes + 1
-        self.w_in = nn.Parameter(torch.randn(PATCH, 2 * d, hid) / math.sqrt(2 * d))
-        self.b_in = nn.Parameter(torch.zeros(PATCH, hid))
+        # one input projection per in-patch offset dy that this pitch uses; lines that straddle two
+        # patch rows (dy + pitch > 16) also see the token row below
+        dys = sorted({(i * pitch) % PATCH for i in range(W // pitch)})
+        self.straddle = {dy: dy + pitch > PATCH for dy in dys}
+        self.w_in = nn.ParameterDict({str(dy): nn.Parameter(
+            torch.randn((2 if self.straddle[dy] else 1) * d, hid) / math.sqrt((2 if self.straddle[dy] else 1) * d))
+            for dy in dys})
+        self.b_in = nn.ParameterDict({str(dy): nn.Parameter(torch.zeros(hid)) for dy in dys})
         self.bn_in = nn.BatchNorm1d(hid)
         self.blocks = nn.Sequential(*[ResBlock(hid, k) for k in dils])
         self.out = nn.Conv1d(hid, PATCH * expand * self.n_out, 1)
@@ -64,13 +71,15 @@ class Probe(nn.Module):
         """feat (B,14,14,d); (page, line) index pairs -> log-probs (T=224*E, N, n_out) for CTC."""
         top = line_idx * self.pitch
         r0, dy = top // PATCH, top % PATCH
-        r1 = (r0 + 1).clamp(max=GRID - 1)
-        nxt = feat[page_idx, r1] * (r0 + 1 < GRID).to(feat.dtype)[:, None, None]
-        x = torch.cat([feat[page_idx, r0], nxt], -1)                               # (N, 14, 2d)
-        h = x.new_zeros(len(line_idx), GRID, self.w_in.shape[2])
-        for v in torch.unique(dy).tolist():
-            m = dy == v
-            h[m] = x[m] @ self.w_in[v].to(x.dtype) + self.b_in[v].to(x.dtype)
+        order = torch.argsort(dy)
+        uniq, counts = torch.unique(dy[order], return_counts=True)
+        hs = []
+        for v, idx in zip(uniq.tolist(), order.split(counts.tolist())):
+            x = feat[page_idx[idx], r0[idx]]                                       # (n, 14, d)
+            if self.straddle[v]:
+                x = torch.cat([x, feat[page_idx[idx], (r0[idx] + 1).clamp(max=GRID - 1)]], -1)
+            hs.append(x @ self.w_in[str(v)].to(x.dtype) + self.b_in[str(v)].to(x.dtype))
+        h = torch.cat(hs)[torch.argsort(order)]                                    # (N, 14, hid)
         h = F.gelu(self.bn_in(h.transpose(1, 2)))
         y = self.out(self.blocks(h))                                               # (N, 16*E*n_out, 14)
         N = y.shape[0]

@@ -70,7 +70,7 @@ def main(argv=None) -> int:
     ap.add_argument("--test-pages", type=int, default=16)
     ap.add_argument("--batch-pages", type=int, default=2)
     ap.add_argument("--lines-per-page", type=int, default=16)
-    ap.add_argument("--lr", type=float, default=1e-3)
+    ap.add_argument("--lr", type=float, default=3e-3)
     ap.add_argument("--eval-every", type=int, default=500)
     ap.add_argument("--threads", type=int, default=1)
     ap.add_argument("--seed", type=int, default=0)
@@ -119,7 +119,7 @@ def main(argv=None) -> int:
     print(f"[probe] {key} pitch={enc.pitch} lines/page={enc.n_lines} classes={len(classes)} "
           f"px2/char={ppc:.2f} chars/token={256 / ppc:.1f} feat_time={t_feat:.0f}s", flush=True)
     probe = Probe(enc.pitch, len(classes))
-    opt = torch.optim.AdamW(probe.parameters(), lr=a.lr, weight_decay=1e-4)
+    opt = torch.optim.AdamW(probe.parameters(), lr=a.lr, weight_decay=1e-4, fused=True)
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=a.lr, total_steps=a.steps, pct_start=0.05)
     curve = []
     for step in range(1, a.steps + 1):

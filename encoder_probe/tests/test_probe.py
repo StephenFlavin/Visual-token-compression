@@ -33,12 +33,25 @@ def test_patchify_unpatchify_inverse():
 
 
 def test_probe_shapes_and_greedy():
-    pr = Probe(pitch=5, n_classes=7)
-    feat = pr.features(torch.randn(2, 196, 768))
-    assert feat.shape == (2, pr.c, 224, 224)
-    lp = pr.read(feat, torch.tensor([0, 1, 1]), torch.tensor([0, 3, 43]))
-    assert lp.shape == (224 * pr.expand, 3, 8)
-    assert len(greedy(lp)) == 3
+    for pitch, lines in ((5, [0, 3, 43]), (1, [0, 17, 223]), (10, [0, 9, 21])):
+        pr = Probe(pitch=pitch, n_classes=7, hid=64)
+        feat = pr.features(torch.randn(2, 196, 768))
+        assert feat.shape == (2, GRID, GRID, 768)
+        lp = pr.read(feat, torch.tensor([0, 1, 1]), torch.tensor(lines))
+        assert lp.shape == (224 * pr.expand, 3, 8)
+        assert len(greedy(lp)) == 3
+
+
+def test_probe_line_order_preserved():
+    """Grouping lines by dy must not permute the outputs: each line's log-probs depend on its own tokens."""
+    torch.manual_seed(0)
+    pr = Probe(pitch=6, n_classes=7, hid=32).eval()
+    feat = pr.features(torch.randn(1, 196, 768))
+    lines = torch.tensor([5, 0, 3, 2])
+    full = pr.read(feat, torch.zeros(4, dtype=torch.long), lines)
+    for k in range(4):
+        one = pr.read(feat, torch.zeros(1, dtype=torch.long), lines[k:k + 1])
+        assert torch.allclose(full[:, k], one[:, 0], atol=1e-5)
 
 
 def test_identity_encoder_and_jpeg():
