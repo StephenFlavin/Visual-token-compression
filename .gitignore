@@ -21,3 +21,5 @@ results/queue_logs/
 results/queue.log
 results/queue_*.log
 results/autosave.log
+# encoder_probe round 2: partial VLM weights and cached frozen-encoder tokens
+encoder_probe/cache/
