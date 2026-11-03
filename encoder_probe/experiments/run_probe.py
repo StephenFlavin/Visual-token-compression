@@ -70,7 +70,8 @@ def main(argv=None) -> int:
     ap.add_argument("--test-pages", type=int, default=16)
     ap.add_argument("--batch-pages", type=int, default=2)
     ap.add_argument("--lines-per-page", type=int, default=16)
-    ap.add_argument("--lr", type=float, default=3e-3)
+    ap.add_argument("--lr", type=float, default=2e-3)
+    ap.add_argument("--recon-weight", type=float, default=10.0, help="aux MSE weight (feature ch 0-2 -> clean page)")
     ap.add_argument("--eval-every", type=int, default=500)
     ap.add_argument("--threads", type=int, default=1)
     ap.add_argument("--seed", type=int, default=0)
@@ -106,6 +107,7 @@ def main(argv=None) -> int:
         imgs = np.stack([degrade(p.img, a.cond) for p in pages])
         return torch.from_numpy(model(imgs))
     tok_tr, tok_te = toks(tr), toks(te)
+    pix_tr = torch.from_numpy(np.stack([p.img for p in tr])).permute(0, 3, 1, 2).contiguous()  # clean, uint8
     mu = tok_tr.mean((0, 1), keepdim=True)
     sd = tok_tr.std((0, 1), keepdim=True).clamp_min(1e-3)
     tok_tr, tok_te = (tok_tr - mu) / sd, (tok_te - mu) / sd
@@ -130,11 +132,14 @@ def main(argv=None) -> int:
             for i in rng.choice(ok, min(a.lines_per_page, len(ok)), replace=False):
                 pi.append(k), li.append(int(i)), ys.append(tgt[p][i])
         with torch.autocast("cpu", dtype=torch.bfloat16, enabled=not a.no_bf16):
-            logp = probe.read(probe.features(tok_tr[pb]), torch.tensor(pi), torch.tensor(li))
+            feat = probe.features(tok_tr[pb])
+            logp = probe.read(feat, torch.tensor(pi), torch.tensor(li))
         logp = logp.float()
         T = logp.shape[0]
-        loss = F.ctc_loss(logp, torch.cat(ys), torch.full((len(ys),), T, dtype=torch.long),
-                          torch.tensor([len(y) for y in ys]), blank=0, zero_infinity=True)
+        ctc = F.ctc_loss(logp, torch.cat(ys), torch.full((len(ys),), T, dtype=torch.long),
+                         torch.tensor([len(y) for y in ys]), blank=0, zero_infinity=True)
+        rec = probe.recon_loss(feat, pix_tr[pb].float() / 127.5 - 1)
+        loss = ctc + a.recon_weight * rec
         opt.zero_grad()
         loss.backward()
         torch.nn.utils.clip_grad_norm_(probe.parameters(), 5.0)
@@ -143,11 +148,11 @@ def main(argv=None) -> int:
         if step % a.eval_every == 0 or step == a.steps:
             c, _ = evaluate(probe, tok_te, te, enc, classes, max_pages=4, bf16=not a.no_bf16)
             curve.append((step, round(c, 5)))
-            print(f"[probe] step {step} loss {loss.item():.3f} val_cer {c:.4f} ({time.time() - t0:.0f}s)", flush=True)
+            print(f"[probe] step {step} ctc {ctc.item():.3f} rec {rec.item():.4f} val_cer {c:.4f} ({time.time() - t0:.0f}s)", flush=True)
     cer, samples = evaluate(probe, tok_te, te, enc, classes, bf16=not a.no_bf16)
     row = {**key, "phase": "probe", "scheme": f"{enc.family}@{a.encoder}/{a.cond}", "family": enc.family,
            "pitch": enc.pitch, "px_per_char": ppc, "budget": round(ppc, 3), "chars_per_token": 256 / ppc,
-           "cer": cer, "bf16": not a.no_bf16, "n_test_chars": chars, "curve": curve, "train_time_s": time.time() - t0,
+           "cer": cer, "bf16": not a.no_bf16, "recon_weight": a.recon_weight, "lr": a.lr, "n_test_chars": chars, "curve": curve, "train_time_s": time.time() - t0,
            "samples": samples}
     print(f"[probe] TEST {key} cer={cer:.4f} px2/char={ppc:.2f} chars/token={256 / ppc:.1f}", flush=True)
     for r, h in samples[:2]:

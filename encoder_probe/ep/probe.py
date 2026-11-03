@@ -1,19 +1,21 @@
-"""Probe: frozen 14x14 token grid -> per-line CTC reader that works at token resolution.
+"""Probe: frozen token grid -> per-pixel feature map -> per-line dilated-conv CTC reader.
 
 The same probe is trained for every (encoding, encoder, condition). It can only lose information,
 never add it, so the CER it reaches is an upper bound on what the frozen tokens destroy; the
 identity encoder (raw pixel patches) gives each encoding's ceiling under the same probe.
 
-For text line i (rows [i*p, (i+1)*p)), let r0 = top row // 16 (patch row), dy = top row % 16:
-  x_t = token(r0, t) for the 14 patch columns t, plus token(r0+1, t) if the line straddles two patch rows
-   -> Linear_dy (768 or 2*768 -> hid=1024)       one input projection per in-patch offset dy
-   -> BN, GELU, dilated residual Conv1d stack over the 14 positions
-   -> Conv1x1 (hid -> 16*E*(n_classes+1))       per-token head: 16 columns x E frames each
-   -> 224*E frames, CTC over the line's labels.
+  tokens (B,196,768), standardised per dim
+   -> [Conv3x3 (768->1024) -> GELU -> Conv1x1 (1024 -> 16*16*c)] + Conv1x1 skip   [unpatchify, c=8]
+   -> feature map (B, c, 224, 224); channels 0-2 get an auxiliary MSE loss to the clean page (train pages only),
+      channels 3-7 are free and enter through a learned per-channel gate initialised to 0
+   -> line strip i = rows [i*p, (i+1)*p) -> (c*p, 224) -> dilated residual Conv1d stack (shared over columns)
+   -> E frames per column -> CTC over the line's labels.
 
-(v1 unpatchified the tokens to a per-pixel feature map and read pixel strips with a shared conv reader. The
-reader learns in ~100 steps on true pixels, but through the learned token->pixel map it stayed at unigram
-level for 1500 steps even on identity tokens: CTC gets no locality to bootstrap the map from. See PLAN.md.)
+The auxiliary pixel loss is what makes this trainable: without it CTC alone never bootstraps the
+token->pixel map (pilot: unigram-level CER after 1500 steps even on identity tokens), and a probe that
+reads tokens directly with per-position heads learns but memorises the 200 training pages (latin_p8
+identity: train loss 0.006, test CER 13.7%). See PLAN.md. The loss only uses training pages, so the
+probe still cannot put information into test tokens that the encoder removed.
 """
 from __future__ import annotations
 
@@ -47,44 +49,42 @@ class ResBlock(nn.Module):
 
 
 class Probe(nn.Module):
-    def __init__(self, pitch: int, n_classes: int, d: int = 768, hid: int = 1024, expand: int = 3,
-                 dils=(1, 2)):
+    def __init__(self, pitch: int, n_classes: int, d: int = 768, c: int = 8, hid: int = 1024,
+                 w: int = 128, expand: int = 3, dils=(1, 2, 4, 8)):
         super().__init__()
-        self.pitch, self.d, self.expand, self.n_out = pitch, d, expand, n_classes + 1
-        # one input projection per in-patch offset dy that this pitch uses; lines that straddle two
-        # patch rows (dy + pitch > 16) also see the token row below
-        dys = sorted({(i * pitch) % PATCH for i in range(W // pitch)})
-        self.straddle = {dy: dy + pitch > PATCH for dy in dys}
-        self.w_in = nn.ParameterDict({str(dy): nn.Parameter(
-            torch.randn((2 if self.straddle[dy] else 1) * d, hid) / math.sqrt((2 if self.straddle[dy] else 1) * d))
-            for dy in dys})
-        self.b_in = nn.ParameterDict({str(dy): nn.Parameter(torch.zeros(hid)) for dy in dys})
-        self.bn_in = nn.BatchNorm1d(hid)
-        self.blocks = nn.Sequential(*[ResBlock(hid, k) for k in dils])
-        self.out = nn.Conv1d(hid, PATCH * expand * self.n_out, 1)
+        self.pitch, self.c, self.expand, self.n_out = pitch, c, expand, n_classes + 1
+        self.grid = nn.Sequential(nn.Conv2d(d, hid, 3, padding=1), nn.GELU(),
+                                  nn.Conv2d(hid, PATCH * PATCH * c, 1))
+        self.skip = nn.Conv2d(d, PATCH * PATCH * c, 1)
+        self.gate = nn.Parameter(torch.zeros(c - 3))   # free channels 3.. start closed (see features)
+        self.inp = nn.Sequential(nn.Conv1d(c * pitch, w, 3, padding=1), nn.BatchNorm1d(w), nn.GELU())
+        self.blocks = nn.Sequential(*[ResBlock(w, k) for k in dils])
+        self.out = nn.Conv1d(w, expand * self.n_out, 1)
 
     def features(self, tok: torch.Tensor) -> torch.Tensor:
-        """(B, 196, d) -> (B, 14, 14, d) token grid."""
-        return tok.reshape(tok.shape[0], GRID, GRID, -1)
+        """(B, 196, d) tokens -> (B, c, 224, 224) feature map; channels 0-2 are trained to be the page."""
+        B = tok.shape[0]
+        g = tok.transpose(1, 2).reshape(B, -1, GRID, GRID)
+        f = unpatchify(self.grid(g) + self.skip(g), self.c)
+        # channels 0-2 are the pixel reconstruction; the free channels enter through a learned gate that
+        # starts at 0 (open, their untrained noise swamped the reconstruction and stalled the reader)
+        return torch.cat([f[:, :3], f[:, 3:] * self.gate.to(f.dtype)[None, :, None, None]], 1)
+
+    @staticmethod
+    def recon_loss(feat: torch.Tensor, page: torch.Tensor) -> torch.Tensor:
+        """MSE between feature channels 0-2 and the clean page (B, 3, 224, 224) scaled to [-1, 1]."""
+        return F.mse_loss(feat[:, :3].float(), page)
 
     def read(self, feat: torch.Tensor, page_idx: torch.Tensor, line_idx: torch.Tensor) -> torch.Tensor:
-        """feat (B,14,14,d); (page, line) index pairs -> log-probs (T=224*E, N, n_out) for CTC."""
-        top = line_idx * self.pitch
-        r0, dy = top // PATCH, top % PATCH
-        order = torch.argsort(dy)
-        uniq, counts = torch.unique(dy[order], return_counts=True)
-        hs = []
-        for v, idx in zip(uniq.tolist(), order.split(counts.tolist())):
-            x = feat[page_idx[idx], r0[idx]]                                       # (n, 14, d)
-            if self.straddle[v]:
-                x = torch.cat([x, feat[page_idx[idx], (r0[idx] + 1).clamp(max=GRID - 1)]], -1)
-            hs.append(x @ self.w_in[str(v)].to(x.dtype) + self.b_in[str(v)].to(x.dtype))
-        h = torch.cat(hs)[torch.argsort(order)]                                    # (N, 14, hid)
-        h = F.gelu(self.bn_in(h.transpose(1, 2)))
-        y = self.out(self.blocks(h))                                               # (N, 16*E*n_out, 14)
+        """feat (B,c,224,224); (page, line) index pairs -> log-probs (T=224*E, N, n_out) for CTC."""
+        p = self.pitch
+        rows = line_idx[:, None] * p + torch.arange(p)[None]                      # (N, p)
+        strips = feat[page_idx[:, None], :, rows]                                 # (N, p, c, 224)
+        x = strips.permute(0, 2, 1, 3).reshape(len(line_idx), self.c * p, W)
+        y = self.out(self.blocks(self.inp(x)))                                    # (N, E*n_out, 224)
         N = y.shape[0]
-        y = y.reshape(N, PATCH, self.expand, self.n_out, GRID).permute(4, 1, 2, 0, 3)
-        return F.log_softmax(y.reshape(GRID * PATCH * self.expand, N, self.n_out), -1)
+        y = y.reshape(N, self.expand, self.n_out, W).permute(3, 1, 0, 2).reshape(W * self.expand, N, self.n_out)
+        return F.log_softmax(y, -1)
 
 
 def greedy(logp: torch.Tensor) -> list[list[int]]:
