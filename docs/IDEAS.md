@@ -30,4 +30,6 @@ the same spot in two words ("boom" / "zoo": the "oo") are not completely covered
 channel) to `encoder_probe` and run it through identity/clean, identity/jpeg75 and siglip/clean with the unchanged probe.
 Go on only if it beats `latin` chars/token at 3% CER through siglip with JPEG.
 
-**Status:** recorded; not queued. Run it after the encoder_probe controls.
+**Status:** built, not run (2026-11-03). Encodings `mono_p*`, `rgb3_p*`, `rgbw_p*_{chan,paint}` in
+`encoder_probe/ep/rgb_overlay.py`; design, pre-registered predictions, decision rule and the 48-command grid
+in [encoder_probe/RGB_OVERLAY.md](../encoder_probe/RGB_OVERLAY.md). Only a 300-step smoke run exists.

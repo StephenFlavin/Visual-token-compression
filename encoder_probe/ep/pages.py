@@ -142,6 +142,9 @@ class ColourEncoding(Encoding):
 
 
 def get_encoding(name: str) -> Encoding:
+    if name.startswith(("mono_p", "rgb3_p", "rgb3a_p", "rgbw_p")):  # RGB overlay families (rgb_overlay.py)
+        from encoder_probe.ep.rgb_overlay import get_rgb_encoding
+        return get_rgb_encoding(name)
     if name.startswith("latin_p"):
         from vbpe.schemes.latin import LatinScheme
         p = int(name[len("latin_p"):])
