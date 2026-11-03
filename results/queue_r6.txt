@@ -1,0 +1,6 @@
+# round 6 (08:25): bridge frontier at h3, whole-pixel bank through Phase-2 pipeline, converged harsh channel, converged E2 transfer
+python3 learned_glyphs/experiments/transfer_eval.py --bridge --run-name e3_bridge_long --parallel 1 --steps 10500 --banks learned_glyphs/results/e1long/banks/lg_learned_n300_h3.pt --ems 2.5
+python3 learned_glyphs/experiments/transfer_eval.py --bridge --run-name e3_bridge_long --parallel 1 --steps 10500 --banks learned_glyphs/results/e1long/banks/lg_learned_n300_pb_h5.pt --ems 4.1667
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --modes learned --n-tokens-list 300 --run-name e1long_harsh --channel harsh --steps 10500 --heights 5
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --modes fixed --n-tokens-list 0 --run-name e1long_harsh --channel harsh --steps 10500 --heights 5
+python3 learned_glyphs/experiments/transfer_eval.py --run-name e2_transfer_long --parallel 1 --steps 10500 --banks learned_glyphs/results/e1long/banks/lg_learned_n300_h4.pt

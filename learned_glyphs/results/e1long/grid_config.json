@@ -9,14 +9,19 @@
   "--steps",
   "10500",
   "--n-tokens-list",
-  "300",
+  "0",
   "--heights",
-  "3"
+  "5",
+  "--pixel-block",
+  "--guard-ss",
+  "0",
+  "--scheme-suffix",
+  "_pb"
  ],
  "configs": [
   {
-   "n_tokens": 300,
-   "height_px": 3,
+   "n_tokens": 0,
+   "height_px": 5,
    "char_w": null,
    "token_w": null,
    "learn_glyphs": true,
@@ -40,8 +45,8 @@
    "tau_start": 1.0,
    "tau_end": 0.2,
    "hard_from": 0.6,
-   "guard_ss": 1,
-   "pixel_block": false,
+   "guard_ss": 0,
+   "pixel_block": true,
    "min_feature_weight": 1.0,
    "coverage_weight": 1.0,
    "coverage_lo": 0.1,
@@ -67,7 +72,7 @@
    "threads": 1,
    "run_name": "e1long",
    "out_root": null,
-   "scheme_suffix": "",
+   "scheme_suffix": "_pb",
    "model": {}
   }
  ]

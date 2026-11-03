@@ -19,3 +19,4 @@ learned_glyphs/results/**/curves/
 learned_glyphs/results/**/readers/
 results/queue_logs/
 results/queue.log
+results/queue_*.log

@@ -46,3 +46,4 @@ python3 learned_glyphs/experiments/train_joint.py --grid e1 --modes learned --ru
 python3 learned_glyphs/experiments/train_joint.py --grid e1 --modes learned --run-name e1long --steps 10500 --n-tokens-list 300 --heights 3
 python3 learned_glyphs/experiments/transfer_eval.py --bridge --run-name e3_bridge_long --parallel 1 --steps 10500 --banks learned_glyphs/results/e1long/banks/lg_learned_n300_h4.pt --ems 3.3333
 python3 learned_glyphs/experiments/train_joint.py --grid e1 --modes learned --run-name e1long --steps 10500 --n-tokens-list 0 --heights 5 --pixel-block --guard-ss 0 --scheme-suffix _pb
+# round 6 moved to results/queue_r6.txt (restarting a queue re-claims from line 1)
