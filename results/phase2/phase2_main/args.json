@@ -1,9 +1,9 @@
 {
  "schemes": [
-  "subst1000"
+  "quad3"
  ],
  "ems": [
-  6.0
+  8.0
  ],
  "mixed_ems": null,
  "steps": 3500,
