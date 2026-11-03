@@ -41,6 +41,10 @@ The CRNN results so far (Phase 2, learned_glyphs) read pixels directly, with no 
      test CER 77%; p8 0.13%, p6 0.17%). Same run with seed 1: 1.5% at 1000 steps; without free channels:
      0.26% at 1000 steps. The free channels are a memorisation path, so the grid was restarted without them
      (final probe above). Decided on identity runs only, before any SigLIP grid row existed.
+  5. Scoring fix (18:04, mid-grid): colour refs are raw fixed-length chunks that can start or end with a space,
+     but hypotheses were whitespace-normalised, adding a ~0.4% CER floor to colour rows. Hypotheses are no
+     longer stripped for colour encodings (rows carry `score_v: 2`); the 4 identity/clean colour rows scored
+     before the fix were re-run after the grid.
   Pilot rows in results/pilot are from probe 1 and are not used.
 * Metric: CER on held-out pages vs **chars per vision token** = 256 / px²/char (text tokens ≈ 4 chars/token).
   C@3% = chars per token at which CER reaches 3% (from `vbpe.analysis.p_at` on px²/char).

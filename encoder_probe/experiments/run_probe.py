@@ -22,7 +22,6 @@ sys.path.insert(0, str(ROOT))
 from encoder_probe.ep.encoders import Encoder, degrade  # noqa: E402
 from encoder_probe.ep.pages import H, W, get_encoding, make_pages  # noqa: E402
 from encoder_probe.ep.probe import Probe, edit_distance, greedy  # noqa: E402
-from vbpe.metrics import normalize  # noqa: E402
 
 GRID_ENCODINGS = ["latin_p4", "latin_p5", "latin_p6", "latin_p8", "latin_p10",
                   "col_b1", "col_b2", "col_b3", "col_b4",
@@ -51,7 +50,7 @@ def evaluate(probe, tok, pages, enc, classes, max_pages=None, batch_pages=2, bf1
                 lp = probe.read(feat, torch.tensor(pi), torch.tensor(li))
             dec = greedy(lp.float())
             for d, r in zip(dec, refs):
-                hyp = normalize(enc.decode("".join(classes[j - 1] for j in d)))
+                hyp = enc.clean_hyp(enc.decode("".join(classes[j - 1] for j in d)))
                 errs += edit_distance(r, hyp)
                 n += len(r)
                 if len(samples) < 3:
@@ -153,7 +152,7 @@ def main(argv=None) -> int:
     cer, samples = evaluate(probe, tok_te, te, enc, classes, bf16=not a.no_bf16)
     row = {**key, "phase": "probe", "scheme": f"{enc.family}@{a.encoder}/{a.cond}", "family": enc.family,
            "pitch": enc.pitch, "px_per_char": ppc, "budget": round(ppc, 3), "chars_per_token": 256 / ppc,
-           "cer": cer, "bf16": not a.no_bf16, "recon_weight": a.recon_weight, "free_channels": a.free_channels, "lr": a.lr, "n_test_chars": chars, "curve": curve, "train_time_s": time.time() - t0,
+           "cer": cer, "score_v": 2, "bf16": not a.no_bf16, "recon_weight": a.recon_weight, "free_channels": a.free_channels, "lr": a.lr, "n_test_chars": chars, "curve": curve, "train_time_s": time.time() - t0,
            "samples": samples}
     print(f"[probe] TEST {key} cer={cer:.4f} px2/char={ppc:.2f} chars/token={256 / ppc:.1f}", flush=True)
     for r, h in samples[:2]:

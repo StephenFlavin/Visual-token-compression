@@ -67,3 +67,13 @@ def test_identity_encoder_and_jpeg():
     assert Encoder("identity")(img[None]).shape == (1, 196, 768)
     j = degrade(img, "jpeg75")
     assert j.shape == img.shape and np.abs(j.astype(int) - img).mean() > 5
+
+
+def test_colour_hypothesis_not_stripped():
+    """Colour refs are raw chunks (may start/end with a space); a perfect read must score 0 CER."""
+    enc = ColourEncoding(3)
+    pg = make_pages(enc, "test", 2)
+    refs = [r for p in pg for r in p.refs]
+    assert any(r != r.strip() for r in refs)
+    assert all(enc.clean_hyp(r) == r for r in refs)
+    assert get_encoding("latin_p6").clean_hyp("  a  b ") == "a b"

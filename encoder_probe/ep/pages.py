@@ -67,6 +67,10 @@ class Encoding:
     def decode(self, labels: str) -> str:
         return labels
 
+    def clean_hyp(self, s: str) -> str:
+        """Hypothesis post-processing matching how ``refs`` were made (normalised source text)."""
+        return normalize(s)
+
     def render(self, text: str, pos: int) -> tuple[Page, int]:  # pragma: no cover - interface
         raise NotImplementedError
 
@@ -117,6 +121,10 @@ class ColourEncoding(Encoding):
         self.b = b
         self.pal = palette()
         self.idx = {c: i for i, c in enumerate(PRINTABLE)}
+
+    def clean_hyp(self, s: str) -> str:
+        # refs are raw fixed-length chunks (they can start/end with a space): do not strip the hypothesis
+        return s
 
     def render(self, text: str, pos: int) -> tuple[Page, int]:
         b, per = self.b, W // self.b
