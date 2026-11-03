@@ -7,16 +7,22 @@
   "--modes",
   "learned",
   "--heights",
-  "4",
+  "5",
   "--n-tokens-list",
-  "0"
+  "300",
+  "--char-w",
+  "2",
+  "--token-w",
+  "4",
+  "--scheme-suffix",
+  "_cw2tw4"
  ],
  "configs": [
   {
-   "n_tokens": 0,
-   "height_px": 4,
-   "char_w": null,
-   "token_w": null,
+   "n_tokens": 300,
+   "height_px": 5,
+   "char_w": 2,
+   "token_w": 4,
    "learn_glyphs": true,
    "init": "random",
    "font": "latin",
@@ -65,7 +71,7 @@
    "threads": 1,
    "run_name": "e1w",
    "out_root": null,
-   "scheme_suffix": "",
+   "scheme_suffix": "_cw2tw4",
    "model": {}
   }
  ]

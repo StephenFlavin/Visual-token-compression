@@ -30,3 +30,8 @@ python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1pb --mo
 python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1pb --modes learned --pixel-block --guard-ss 0 --scheme-suffix _pb --heights 5 --n-tokens-list 300
 python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1pb --modes learned --pixel-block --guard-ss 0 --scheme-suffix _pb --heights 4 --n-tokens-list 0
 python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1pb --modes learned --pixel-block --guard-ss 0 --scheme-suffix _pb --heights 6 --n-tokens-list 300
+# Round 4 (05:35): learned N=0 frontier + convergence (latin converged P@3% ~6.3 px2/char: em3 4.51% @5.54, em3.5 1.73% @7.53)
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --modes learned --n-tokens-list 0 --run-name e1w --heights 3
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --modes learned --n-tokens-list 0 --run-name e1long --steps 10500 --heights 4
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --modes learned --n-tokens-list 0 --run-name e1long --steps 10500 --heights 3
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --modes learned --n-tokens-list 300 --run-name e1long --steps 10500 --heights 4
