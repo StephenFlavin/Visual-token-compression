@@ -18,9 +18,19 @@ The CRNN results so far (Phase 2, learned_glyphs) read pixels directly, with no 
 * Encoders (frozen): `identity` (raw 16×16×3 patches = ceiling), `siglip` (google/siglip-base-patch16-224, last layer),
   optional `clip` (openai/clip-vit-base-patch16, penultimate layer). All give 196 tokens of 768 dims (one per 16×16 patch).
 * Conditions: `clean` (PNG) and `jpeg75` (PIL JPEG q75, 4:2:0 chroma subsampling), applied before the encoder.
-* Probe (identical for every run, trained from scratch): standardised tokens → 3×3 conv over the 14×14 grid →
-  per-pixel features (unpatchify) → per-line dilated conv reader → CTC. It can only lose information, so its CER is
-  an upper bound on what the frozen tokens destroy. Identity runs give each encoding's ceiling under the same probe.
+* Probe (identical for every run, trained from scratch): standardised tokens -> per text line, the 14 tokens of
+  the patch row holding the line's top (plus the row below if the line straddles two patch rows) -> one linear
+  projection per in-patch row offset dy (768 or 1536 -> 1024) -> BN, GELU, 2 dilated residual Conv1d blocks over
+  the 14 token positions -> per-token head emitting 16 columns x 3 frames -> CTC. AdamW (fused) lr 3e-3, OneCycle,
+  32 lines/step from 200 train pages, bf16 autocast. It can only lose information, so its CER is an upper bound
+  on what the frozen tokens destroy. Identity runs give each encoding's ceiling under the same probe.
+  **Probe change before the grid (2026-11-03):** the first probe (3x3 conv over the token grid -> unpatchify to a
+  6-channel per-pixel map -> per-line pixel-strip CTC reader) failed the pilot: after 1500 steps identity/col_b1
+  was at 72% CER (unigram level), siglip/latin_p6 72%, siglip/col_b2 98%. Its reader learns in ~100 steps on true
+  pixels, but the learned token->pixel map gives CTC no locality to bootstrap from (also with a purely linear map
+  or a linear skip). The token-resolution probe above learns: identity/col_b4 loss 0.01 by 1100 steps,
+  siglip/latin_p8 0.11 by 700, identity/col_b1 still dropping steeply at 700 (debug runs, 50 train pages).
+  Grid: 3000 steps per run (pilot rows in results/pilot are from the old probe and are not used).
 * Metric: CER on held-out pages vs **chars per vision token** = 256 / px²/char (text tokens ≈ 4 chars/token).
   C@3% = chars per token at which CER reaches 3% (from `vbpe.analysis.p_at` on px²/char).
 
