@@ -1,16 +1,22 @@
-"""Probe: frozen token grid -> per-pixel features -> per-line CTC reader.
+"""Probe: frozen 14x14 token grid -> per-line CTC reader that works at token resolution.
 
 The same probe is trained for every (encoding, encoder, condition). It can only lose information,
 never add it, so the CER it reaches is an upper bound on what the frozen tokens destroy; the
 identity encoder (raw pixel patches) gives each encoding's ceiling under the same probe.
 
-  tokens (B,196,768), standardised per dim
-   -> Conv3x3 over the 14x14 grid (768->hid) -> GELU -> Conv1x1 (hid -> 16*16*c)  [unpatchify]
-   -> feature map (B, c, 224, 224)
-   -> line strip i = rows [i*p, (i+1)*p) -> (c*p, 224) -> dilated residual Conv1d stack
-   -> E frames per column -> CTC over the line's labels.
+For text line i (rows [i*p, (i+1)*p)), let r0 = top row // 16 (patch row), dy = top row % 16:
+  x_t = [token(r0, t), token(r0+1, t)]          for the 14 patch columns t (r0+1 zeroed past the edge)
+   -> Linear_dy (2*768 -> hid)                   one input projection per in-patch offset dy
+   -> BN, GELU, dilated residual Conv1d stack over the 14 positions
+   -> Conv1x1 (hid -> 16*E*(n_classes+1))       per-token head: 16 columns x E frames each
+   -> 224*E frames, CTC over the line's labels.
+
+(v1 unpatchified tokens to a per-pixel feature map and read pixel strips; it could not learn even on
+raw pixels -- the random token->pixel mixing gives CTC no locality to bootstrap from. See PLAN.md.)
 """
 from __future__ import annotations
+
+import math
 
 import torch
 import torch.nn as nn
@@ -40,31 +46,36 @@ class ResBlock(nn.Module):
 
 
 class Probe(nn.Module):
-    def __init__(self, pitch: int, n_classes: int, d: int = 768, c: int = 6, hid: int = 512,
-                 w: int = 128, expand: int = 3, dils=(1, 2, 4, 8)):
+    def __init__(self, pitch: int, n_classes: int, d: int = 768, hid: int = 512, expand: int = 3,
+                 dils=(1, 2, 4, 1)):
         super().__init__()
-        self.pitch, self.c, self.expand, self.n_out = pitch, c, expand, n_classes + 1
-        self.grid = nn.Sequential(nn.Conv2d(d, hid, 3, padding=1), nn.GELU(),
-                                  nn.Conv2d(hid, PATCH * PATCH * c, 1))
-        self.inp = nn.Sequential(nn.Conv1d(c * pitch, w, 3, padding=1), nn.BatchNorm1d(w), nn.GELU())
-        self.blocks = nn.Sequential(*[ResBlock(w, k) for k in dils])
-        self.out = nn.Conv1d(w, expand * self.n_out, 1)
+        self.pitch, self.d, self.expand, self.n_out = pitch, d, expand, n_classes + 1
+        self.w_in = nn.Parameter(torch.randn(PATCH, 2 * d, hid) / math.sqrt(2 * d))
+        self.b_in = nn.Parameter(torch.zeros(PATCH, hid))
+        self.bn_in = nn.BatchNorm1d(hid)
+        self.blocks = nn.Sequential(*[ResBlock(hid, k) for k in dils])
+        self.out = nn.Conv1d(hid, PATCH * expand * self.n_out, 1)
 
     def features(self, tok: torch.Tensor) -> torch.Tensor:
-        B = tok.shape[0]
-        g = tok.transpose(1, 2).reshape(B, -1, GRID, GRID)
-        return unpatchify(self.grid(g), self.c)
+        """(B, 196, d) -> (B, 14, 14, d) token grid."""
+        return tok.reshape(tok.shape[0], GRID, GRID, -1)
 
     def read(self, feat: torch.Tensor, page_idx: torch.Tensor, line_idx: torch.Tensor) -> torch.Tensor:
-        """feat (B,c,224,224); (page, line) index pairs -> log-probs (T, N, n_out) for CTC."""
-        p = self.pitch
-        rows = line_idx[:, None] * p + torch.arange(p)[None]                      # (N, p)
-        strips = feat[page_idx[:, None], :, rows]                                 # (N, p, c, 224)
-        x = strips.permute(0, 2, 1, 3).reshape(len(line_idx), self.c * p, W)
-        y = self.out(self.blocks(self.inp(x)))                                    # (N, E*n_out, 224)
+        """feat (B,14,14,d); (page, line) index pairs -> log-probs (T=224*E, N, n_out) for CTC."""
+        top = line_idx * self.pitch
+        r0, dy = top // PATCH, top % PATCH
+        r1 = (r0 + 1).clamp(max=GRID - 1)
+        nxt = feat[page_idx, r1] * (r0 + 1 < GRID).to(feat.dtype)[:, None, None]
+        x = torch.cat([feat[page_idx, r0], nxt], -1)                               # (N, 14, 2d)
+        h = x.new_zeros(len(line_idx), GRID, self.w_in.shape[2])
+        for v in torch.unique(dy).tolist():
+            m = dy == v
+            h[m] = x[m] @ self.w_in[v].to(x.dtype) + self.b_in[v].to(x.dtype)
+        h = F.gelu(self.bn_in(h.transpose(1, 2)))
+        y = self.out(self.blocks(h))                                               # (N, 16*E*n_out, 14)
         N = y.shape[0]
-        y = y.reshape(N, self.expand, self.n_out, W).permute(3, 1, 0, 2).reshape(W * self.expand, N, self.n_out)
-        return F.log_softmax(y, -1)
+        y = y.reshape(N, PATCH, self.expand, self.n_out, GRID).permute(4, 1, 2, 0, 3)
+        return F.log_softmax(y.reshape(GRID * PATCH * self.expand, N, self.n_out), -1)
 
 
 def greedy(logp: torch.Tensor) -> list[list[int]]:
