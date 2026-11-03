@@ -20,3 +20,4 @@ learned_glyphs/results/**/readers/
 results/queue_logs/
 results/queue.log
 results/queue_*.log
+results/autosave.log
