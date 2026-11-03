@@ -5,9 +5,10 @@ never add it, so the CER it reaches is an upper bound on what the frozen tokens 
 identity encoder (raw pixel patches) gives each encoding's ceiling under the same probe.
 
   tokens (B,196,768), standardised per dim
-   -> [Conv3x3 (768->1024) -> GELU -> Conv1x1 (1024 -> 16*16*c)] + Conv1x1 skip   [unpatchify, c=8]
-   -> feature map (B, c, 224, 224); channels 0-2 get an auxiliary MSE loss to the clean page (train pages only),
-      channels 3-7 are free and enter through a learned per-channel gate initialised to 0
+   -> [Conv3x3 (768->1024) -> GELU -> Conv1x1 (1024 -> 16*16*c)] + Conv1x1 skip   [unpatchify, c=3]
+   -> feature map (B, 3, 224, 224) = a reconstructed page: auxiliary MSE loss (x10) to the clean page
+      (training pages only). Optional extra "free" channels (c > 3) enter through a gate initialised at 0;
+      the grid uses none (with 5 free channels, identity/latin_p10 memorised its training pages: 77% test CER).
    -> line strip i = rows [i*p, (i+1)*p) -> (c*p, 224) -> dilated residual Conv1d stack (shared over columns)
    -> E frames per column -> CTC over the line's labels.
 
@@ -49,7 +50,7 @@ class ResBlock(nn.Module):
 
 
 class Probe(nn.Module):
-    def __init__(self, pitch: int, n_classes: int, d: int = 768, c: int = 8, hid: int = 1024,
+    def __init__(self, pitch: int, n_classes: int, d: int = 768, c: int = 3, hid: int = 1024,
                  w: int = 128, expand: int = 3, dils=(1, 2, 4, 8)):
         super().__init__()
         self.pitch, self.c, self.expand, self.n_out = pitch, c, expand, n_classes + 1

@@ -19,10 +19,10 @@ The CRNN results so far (Phase 2, learned_glyphs) read pixels directly, with no 
   optional `clip` (openai/clip-vit-base-patch16, penultimate layer). All give 196 tokens of 768 dims (one per 16×16 patch).
 * Conditions: `clean` (PNG) and `jpeg75` (PIL JPEG q75, 4:2:0 chroma subsampling), applied before the encoder.
 * Probe (identical for every run, trained from scratch): standardised tokens -> [3x3 conv over the 14x14 grid
-  (768->1024) -> GELU -> 1x1 conv] + 1x1 linear skip -> unpatchify to an 8-channel per-pixel map -> per-line pixel
-  strip (rows [i*p, (i+1)*p)) -> dilated residual Conv1d reader shared over columns -> 3 frames/column -> CTC.
-  Channels 0-2 get an auxiliary MSE loss (weight 10) to the clean page pixels of the *training* pages; channels 3-7
-  are free and enter through a learned gate initialised to 0. AdamW (fused) lr 2e-3, OneCycle, 3000 steps,
+  (768->1024) -> GELU -> 1x1 conv] + 1x1 linear skip -> unpatchify to a 3-channel per-pixel map (a reconstructed
+  page) -> per-line pixel strip (rows [i*p, (i+1)*p)) -> dilated residual Conv1d reader shared over columns ->
+  3 frames/column -> CTC. The map gets an auxiliary MSE loss (weight 10) to the clean page pixels of the
+  *training* pages, so the reader only ever sees what the tokens let the probe redraw as an image. AdamW (fused) lr 2e-3, OneCycle, 3000 steps,
   32 lines/step from 200 train pages, bf16 autocast. The probe can only lose information (the pixel loss uses
   training pages only, never test pages), so its CER is an upper bound on what the frozen tokens destroy.
   Identity runs give each encoding's ceiling under the same probe.
@@ -34,8 +34,13 @@ The CRNN results so far (Phase 2, learned_glyphs) read pixels directly, with no 
   2. A token-resolution probe (per-dy input projections, per-token heads emitting 16 columns) learned fast but
      memorised the 200 train pages: identity/latin_p8 train loss 0.006, test CER 13.7% (one aborted grid row,
      kept in results/aborted_v2/).
-  3. Final probe above. Debug runs at 1500 steps: identity/col_b1 1.5% test CER, identity/latin_p8 2.3% at
+  3. Probe 3 (= final probe + 5 gated free channels). Debug runs at 1500 steps: identity/col_b1 1.5% test CER, identity/latin_p8 2.3% at
      1000 steps (with aux weight 1 and no gate: 60%; weight 1 + gate: 25%); 1000 train pages did not help.
+  4. Probe 3 had 5 extra "free" feature channels (gated, gate initialised at 0). In the first grid attempt
+     (7 identity/clean rows, kept in results/aborted_c8/) latin_p10 memorised its training pages (train CTC 0.07,
+     test CER 77%; p8 0.13%, p6 0.17%). Same run with seed 1: 1.5% at 1000 steps; without free channels:
+     0.26% at 1000 steps. The free channels are a memorisation path, so the grid was restarted without them
+     (final probe above). Decided on identity runs only, before any SigLIP grid row existed.
   Pilot rows in results/pilot are from probe 1 and are not used.
 * Metric: CER on held-out pages vs **chars per vision token** = 256 / px²/char (text tokens ≈ 4 chars/token).
   C@3% = chars per token at which CER reaches 3% (from `vbpe.analysis.p_at` on px²/char).
