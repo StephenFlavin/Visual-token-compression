@@ -4,19 +4,19 @@
   "e1",
   "--modes",
   "learned",
-  "--n-tokens-list",
-  "300",
   "--run-name",
   "e1long",
   "--steps",
   "10500",
+  "--n-tokens-list",
+  "300",
   "--heights",
-  "4"
+  "3"
  ],
  "configs": [
   {
    "n_tokens": 300,
-   "height_px": 4,
+   "height_px": 3,
    "char_w": null,
    "token_w": null,
    "learn_glyphs": true,

@@ -104,8 +104,23 @@ Interpretation so far:
    advantage comes from grey-level/sub-pixel coding. The plan flagged this as likely channel exploitation, since a VLM
    image encoder or real capture may not preserve it.
    Whole-pixel glyphs are, however, more robust on held-out degradations (6% vs 11%).
-3. **Tokens (the Visual-BPE part) do not help:** at 3% CER, learned N=0 needs fewer px² than learned N=300 (S2 ≥ 1).
-   The gain that exists is a "better low-res font" effect, not a "more symbols" effect.
+3. **Tokens need more training, and at convergence they DO help.** At 3.5k steps learned N=300 looked no better than
+   N=0, but at 10.5k steps it reaches 0.60% CER at 5.88 px²/char (h4). Learned N=0 needs 8.0 px²/char for 0.57%.
+   Converged Latin reaches 4.51% at 5.5 and 1.73% at 7.5. So learned N=300 P@3% is below 5.9, against Latin's ≈6.3.
+4. **Bridge (Phase-2 PIL pipeline, 3.5k steps):** N=300 h4 gets 0.80% at 5.88 px²/char; N=0 h4 gets 0.25% at 8.0;
+   whole-pixel N=0 h5 gets 1.42% at 10.0. For comparison, latin at 3.5k steps gets 6.34% at 7.5 and 2.54% at 9.8.
 
-Pending: bridge for h4 banks and the whole-pixel bank; 10.5k-step learned runs (h3, h4) for a converged comparison
-with converged Latin.
+Converged results so far (10.5k steps):
+
+| bank | h | px²/char | CER |
+|---|---|---|---|
+| learned N=300 | 4 | 5.88 | 0.60% |
+| learned N=0 | 4 | 8.0 | 0.57% |
+| learned N=0 | 3 | 3.0 | 16.4% |
+| latin (Phase 2) | em3 | 5.54 | 4.51% |
+| latin (Phase 2) | em3.5 | 7.53 | 1.73% |
+
+**The open question is exploitation.** Whole-pixel glyphs (no sub-pixel/grey coding) lost most of the 3.5k-step gain. The
+converged whole-pixel N=300 runs (h4, h5) decide whether anything survives without grey-level codes.
+
+Pending (queued 06:35): converged whole-pixel N=300 h4/h5 and N=0 h5; converged N=300 h3; converged bridge of the N=300 h4 bank.
