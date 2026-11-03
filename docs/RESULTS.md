@@ -126,22 +126,28 @@ Converged results (10.5k steps). "joint" = glyphs and reader trained together th
 | latin (Phase 2) | em3 | – | 5.54 | 4.51% | – |
 | latin (Phase 2) | em3.5 | – | 7.53 | 1.73% | – |
 
-**Verdict so far:**
-1. **Unconstrained learned glyphs with 300 chain tokens clearly beat Latin** in the Phase-2 pipeline: 0.14% CER at
-   5.88 px²/char, where Latin has ~4% at the same budget. Their P@3% is roughly 5.3 (crude interpolation between
-   h3 and h4 joint points) against Latin's 6.3, i.e. ~16% fewer px². That does not yet clear the ≥30% GO bar;
-   the bridge h3 run (queued) pins the bridge P@3% down.
-2. **Whole-pixel glyphs do not beat Latin.** N=300 whole-pixel reaches 1.80% at 7.35 vs Latin's 1.73% at 7.53
-   (a tie), and P@3% ≈ 7.0 (worse than Latin's 6.3). So the win depends on grey-level/sub-pixel coding: the
-   glyphs use intermediate grey values after area downsampling as extra signal. Phase-2 Latin is also
-   anti-aliased (supersample 4), so the comparison is fair *within this pipeline*, but a VLM image encoder,
-   JPEG or a screen capture may not preserve that signal. Held-out degradations already hurt the
-   unconstrained banks far more (35% vs 22% at h4, N=300).
-3. Tokens help at convergence in both variants (whole-pixel N=300 h5 1.80% @7.35 vs N=0 h5 1.03% @10.0).
+**Bridge results (08:50, unchanged Phase-2 pipeline, fresh reader, 10.5k steps). These supersede the joint-only verdict
+written at 08:30, which said whole-pixel glyphs only tie Latin:**
 
-Interim conclusion: the "learned glyph alphabet" gain is real in this CRNN pipeline but small (~15%) and mostly
-from exploiting grey levels; with whole-pixel glyphs it disappears. This is a NO-GO for GPU/VLM work unless
-round 6 shows a much larger bridge gain that survives the harsh channel.
+| bank | h | px²/char | bridge CER | (joint CER) |
+|---|---|---|---|---|
+| learned N=300 | 3 | 2.5 | 7.95% | 20.8% |
+| learned N=300 | 4 | 5.88 | 0.14% | 0.60% |
+| learned N=300, whole-pixel | 5 | 7.3 | 0.59% | 1.80% |
+| latin (Phase 2) | em3 / em3.5 / em4 | 5.54 / 7.53 / 9.84 | 4.51% / 1.73% / 0.58% | – |
+
+1. The bridge reader does much better than the jointly trained reader on the same frozen bank, because joint
+   training spends its steps chasing moving glyphs. The bridge is the apples-to-apples comparison with Phase 2.
+2. **Unconstrained learned N=300: bridge P@3% ≈ 4.3 px²/char** (log-x interpolation between 2.5 and 5.88) against Latin's
+   ≈ 6.3, i.e. **≈ 32% fewer px²**. That is just past the ≥30% GO bar, but the interpolation spans a wide gap, so
+   treat it as borderline.
+3. **Whole-pixel N=300 also beats Latin in the bridge:** 0.59% at 7.3 px²/char, where Latin needs ~9.8 px²/char for
+   0.58% (≈ 0.74×). So the advantage is not only grey-level coding. The joint-only numbers had understated it.
+   The whole-pixel h4 bridge (queued) gives its P@3%.
+4. Tokens help at convergence.
+
+Open checks before calling GO: harsh channel (running), E2 transfer (running), the whole-pixel bridge P@3%, and the
+untestable-here question of whether a VLM image encoder reads such glyphs at all.
 
 Pending (round 6, `results/queue_r6.txt`, ~45 min): bridge of N=300 h3 bank (em 2.5); bridge of whole-pixel N=300
 h5 bank; converged harsh channel joint, learned N=300 h5 vs fixed DejaVu N=0 h5; converged E2 transfer of the
