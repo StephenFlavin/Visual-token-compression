@@ -54,3 +54,7 @@ python3 encoder_probe/experiments/run_probe.py --encoding col_b1 --encoder ident
 python3 encoder_probe/experiments/run_probe.py --encoding col_b2 --encoder identity --cond clean --steps 3000 --run-name main
 python3 encoder_probe/experiments/run_probe.py --encoding col_b3 --encoder identity --cond clean --steps 3000 --run-name main
 python3 encoder_probe/experiments/run_probe.py --encoding col_b4 --encoder identity --cond clean --steps 3000 --run-name main
+python3 encoder_probe/experiments/run_probe.py --encoding latin_p8 --encoder siglip --cond clean --steps 3000 --train-pages 1000 --run-name sens_tp1000
+python3 encoder_probe/experiments/run_probe.py --encoding latin_p10 --encoder siglip --cond clean --steps 3000 --train-pages 1000 --run-name sens_tp1000
+python3 encoder_probe/experiments/run_probe.py --encoding col_b2 --encoder siglip --cond clean --steps 3000 --train-pages 1000 --run-name sens_tp1000
+python3 encoder_probe/experiments/run_probe.py --encoding col_b4 --encoder siglip --cond clean --steps 3000 --train-pages 1000 --run-name sens_tp1000
