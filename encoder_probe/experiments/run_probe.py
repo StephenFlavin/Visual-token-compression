@@ -72,6 +72,7 @@ def main(argv=None) -> int:
     ap.add_argument("--lr", type=float, default=2e-3)
     ap.add_argument("--recon-weight", type=float, default=10.0, help="aux MSE weight (feature ch 0-2 -> clean page)")
     ap.add_argument("--free-channels", type=int, default=0, help="gated feature channels besides the 3 pixel ones")
+    ap.add_argument("--token-mlp", type=int, default=0, help="capacity control: residual token MLP blocks")
     ap.add_argument("--eval-every", type=int, default=500)
     ap.add_argument("--threads", type=int, default=1)
     ap.add_argument("--seed", type=int, default=0)
@@ -122,7 +123,7 @@ def main(argv=None) -> int:
     ppc = H * W * len(te) / max(1, chars)
     print(f"[probe] {key} pitch={enc.pitch} lines/page={enc.n_lines} classes={len(classes)} "
           f"px2/char={ppc:.2f} chars/token={256 / ppc:.1f} feat_time={t_feat:.0f}s", flush=True)
-    probe = Probe(enc.pitch, len(classes), c=3 + a.free_channels)
+    probe = Probe(enc.pitch, len(classes), c=3 + a.free_channels, token_mlp=a.token_mlp)
     opt = torch.optim.AdamW(probe.parameters(), lr=a.lr, weight_decay=1e-4, fused=True)
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=a.lr, total_steps=a.steps, pct_start=0.05)
     curve = []
@@ -154,7 +155,7 @@ def main(argv=None) -> int:
     cer, samples = evaluate(probe, tok_te, te, enc, classes, bf16=not a.no_bf16)
     row = {**key, "phase": "probe", "scheme": f"{enc.family}@{a.encoder}/{a.cond}", "family": enc.family,
            "pitch": enc.pitch, "px_per_char": ppc, "budget": round(ppc, 3), "chars_per_token": 256 / ppc,
-           "cer": cer, "score_v": 2, "bf16": not a.no_bf16, "recon_weight": a.recon_weight, "free_channels": a.free_channels, "lr": a.lr, "n_test_chars": chars, "curve": curve, "train_time_s": time.time() - t0,
+           "cer": cer, "score_v": 2, "bf16": not a.no_bf16, "recon_weight": a.recon_weight, "free_channels": a.free_channels, "token_mlp": a.token_mlp, "train_pages": a.train_pages, "lr": a.lr, "n_test_chars": chars, "curve": curve, "train_time_s": time.time() - t0,
            "samples": samples}
     print(f"[probe] TEST {key} cer={cer:.4f} px2/char={ppc:.2f} chars/token={256 / ppc:.1f}", flush=True)
     for r, h in samples[:2]:

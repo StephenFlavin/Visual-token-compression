@@ -63,3 +63,15 @@ The CRNN results so far (Phase 2, learned_glyphs) read pixels directly, with no 
   siglip/jpeg75. Otherwise constrain to whole pixels.
 * Caveat for both: a probe trained on frozen tokens is not an LLM reading them. A positive result means "the information
   survives the encoder", not "a VLM will read it".
+
+## Post-hoc positive controls (added 2026-11-03 19:50, after the siglip/clean rows; sanity checks, not retuning)
+Every siglip/clean row of the grid was 58-75% CER (near the unigram floor), including latin_p10 at 5.5 chars/token,
+and the siglip latin runs overfit (latin_p8: train CTC 0.13, test 58%). That cannot separate "SigLIP's last layer
+destroys the detail" from "this probe cannot decode SigLIP features". Controls (results/controls*/), queued ahead
+of the remaining grid rows; siglip/jpeg75 is deferred until they are read:
+1. siglip/clean latin at large pitch: latin_p16, latin_p24 (>= 1 line per patch row).
+2. Intermediate layer: `siglip_l6` (output of layer 6 of 12, no final layernorm) for latin_p8/p10/p16, col_b2/b4.
+3. Probe capacity on siglip/clean latin_p10 only: 2 residual token-MLP blocks before the grid map (`--token-mlp 2`),
+   and 1000 instead of 200 training pages.
+Rule: if none of these gets latin below ~10% CER, the probe/encoder pair is reported as uninformative, not as a
+verdict on colour. If one does, the colour, latin and lg rows are rerun under that setting with the identical probe.

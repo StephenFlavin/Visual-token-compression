@@ -51,9 +51,12 @@ class ResBlock(nn.Module):
 
 class Probe(nn.Module):
     def __init__(self, pitch: int, n_classes: int, d: int = 768, c: int = 3, hid: int = 1024,
-                 w: int = 128, expand: int = 3, dils=(1, 2, 4, 8)):
+                 w: int = 128, expand: int = 3, dils=(1, 2, 4, 8), token_mlp: int = 0):
         super().__init__()
         self.pitch, self.c, self.expand, self.n_out = pitch, c, expand, n_classes + 1
+        # optional capacity control: residual per-token MLP blocks before the grid map (grid uses 0)
+        self.tmlp = nn.ModuleList([nn.Sequential(nn.Conv2d(d, 2 * d, 1), nn.GELU(), nn.Conv2d(2 * d, d, 1))
+                                   for _ in range(token_mlp)])
         self.grid = nn.Sequential(nn.Conv2d(d, hid, 3, padding=1), nn.GELU(),
                                   nn.Conv2d(hid, PATCH * PATCH * c, 1))
         self.skip = nn.Conv2d(d, PATCH * PATCH * c, 1)
@@ -66,6 +69,8 @@ class Probe(nn.Module):
         """(B, 196, d) tokens -> (B, c, 224, 224) feature map; channels 0-2 are trained to be the page."""
         B = tok.shape[0]
         g = tok.transpose(1, 2).reshape(B, -1, GRID, GRID)
+        for blk in self.tmlp:
+            g = g + blk(g)
         f = unpatchify(self.grid(g) + self.skip(g), self.c)
         # channels 0-2 are the pixel reconstruction; the free channels enter through a learned gate that
         # starts at 0 (open, their untrained noise swamped the reconstruction and stalled the reader)

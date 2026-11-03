@@ -2,6 +2,7 @@
 
   identity  raw 16x16x3 pixel patches (768 values) = the ceiling: no information lost
   siglip    google/siglip-base-patch16-224, last_hidden_state (the SigLIP family feeds PaliGemma-style VLMs)
+  siglip_l<k>  same model, output of transformer layer k (1..12) without the final layernorm (control)
   clip      openai/clip-vit-base-patch16, penultimate layer, CLS dropped (LLaVA convention)
 """
 from __future__ import annotations
@@ -41,7 +42,8 @@ class Encoder:
     def __init__(self, name: str):
         self.name = name
         self.model = None
-        if name == "siglip":
+        self.layer = int(name[len("siglip_l"):]) if name.startswith("siglip_l") else None
+        if name == "siglip" or self.layer is not None:
             from transformers import SiglipVisionModel
             self.model = SiglipVisionModel.from_pretrained("google/siglip-base-patch16-224").eval()
             self.mean, self.std = np.array([0.5] * 3), np.array([0.5] * 3)
@@ -62,7 +64,9 @@ class Encoder:
         for i in range(0, len(x), batch):
             xb = (x[i:i + batch] - self.mean) / self.std
             t = torch.from_numpy(xb.astype(np.float32)).permute(0, 3, 1, 2).contiguous()
-            if self.name == "siglip":
+            if self.layer is not None:
+                h = self.model(pixel_values=t, output_hidden_states=True).hidden_states[self.layer]
+            elif self.name == "siglip":
                 h = self.model(pixel_values=t).last_hidden_state
             else:
                 h = self.model(pixel_values=t, output_hidden_states=True).hidden_states[-2][:, 1:]
