@@ -9,3 +9,8 @@
 [latin_em8] step 2000 loss 0.017 val_cer 0.0019  (751.5s)
 [latin_em8] step 2250 loss 0.016 val_cer 0.0017  (848.7s)
 [latin_em8] step 2500 loss 0.013 val_cer 0.0018  (946.0s)
+[latin_em8] step 2750 loss 0.011 val_cer 0.0012  (1043.1s)
+[latin_em8] step 3000 loss 0.010 val_cer 0.0010  (1141.0s)
+[latin_em8] step 3250 loss 0.007 val_cer 0.0008  (1240.0s)
+[latin_em8] step 3500 loss 0.007 val_cer 0.0010  (1335.6s)
+[latin_em8] TEST em=8 cer=0.0008 symbol_cer=0.0008 px/char=39.4 best_step=3250 time=1336s

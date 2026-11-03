@@ -1,13 +1,7 @@
-# Round 2b (02:45): re-run latin em4/5/8 — their old test/val caches lacked per-line heights (1-row mismatch; wrecked em4)
-python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes latin --ems 5
-python3 experiments/phase2_train.py --steps 3500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_main --schemes latin --ems 4
-python3 experiments/phase2_train.py --steps 3500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_main --schemes latin --ems 5
-python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes latin --ems 4
-python3 experiments/phase2_train.py --steps 3500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_main --schemes latin --ems 8
-# Round 2 remainder (first 4 lines already running: latin_condensed 5 / subst300 6 / subst1000 6 / latin_condensed 4.5, phase2_long)
-python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes subst300 --ems 5
-python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes subst1000 --ems 5
-python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes latin --ems 4.5
+# Round 2c (03:50): latin em4 (fixed cache) reaches 0.58% at 9.8 px2/char -> extend the Latin frontier downwards
+python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes latin --ems 3.5
+python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes latin_condensed --ems 4
+# Learned glyphs (E1 h=5,6; E2 transfer of pilot banks; harsh-channel training)
 python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1 --heights 6 --modes learned --n-tokens-list 300
 python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1 --heights 6 --modes learned --n-tokens-list 0
 python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1 --heights 6 --modes fixed --n-tokens-list 0
