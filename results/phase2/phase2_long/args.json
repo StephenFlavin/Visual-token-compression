@@ -1,9 +1,9 @@
 {
  "schemes": [
-  "latin"
+  "latin_condensed"
  ],
  "ems": [
-  4.0
+  4.5
  ],
  "mixed_ems": null,
  "steps": 10500,

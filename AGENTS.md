@@ -66,6 +66,7 @@ Claude responses are cached in `results/cache/claude/` (keyed on model+prompt+im
 - A 4-px column stride was a bottleneck (latin em8: 2.35% vs 0.19% CER with 2-px columns). Keep 2-px columns.
 - CTC frames: each column expanded E times so T ≥ 2L+1 (quad cells emit 2–4 labels per cell).
 - **Mixed-em training (one model across ems) learns far slower per step** than per-em models (latin em7 18% vs ~2% at 1500 steps) — not a way to save compute. Use per-em runs.
+- **Render caches written before per-line `heights.npy` existed load at the padded max height** (1 row taller than fresh train batches). That silently wrecked latin em4 (62% CER; 3.8% on fresh renders with the same checkpoint). `build_lineset` now treats such caches as misses. If a run has low train loss but terrible val CER, suspect train/val geometry mismatch first.
 - GroupNorm worse than BatchNorm. Substitution (1000+ classes) and quadrant models learn much slower than Latin: check `curves/` for convergence before trusting a crossing; re-run critical ems with more steps if still improving.
 
 **Analysis**

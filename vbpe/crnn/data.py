@@ -299,7 +299,9 @@ def build_lineset(scheme: str, em, split: str, n: int, *, skip: int = 0, seed: i
     text_hash = hashlib.sha1("\n".join(lines).encode()).hexdigest()[:12]
     key = _cache_key(scheme, em, tag, n, skip, seed, train, rp, f"{corpus}:{text_hash}")
     d = cache_dir / f"{scheme}_{_em_name(em)}_{tag}_{n}_{key}" if cache_dir else None
-    if d is not None and (d / "meta.json").exists():
+    # caches written before per-line heights were stored load at the padded max height, which
+    # differs from fresh (cropped) train batches by a row and silently wrecked latin em4 -> re-render
+    if d is not None and (d / "meta.json").exists() and (d / "heights.npy").exists():
         return LineSet.load(d)
     t0 = time.time()
     chunk = max(16, math.ceil(len(lines) / (workers * 8)))
