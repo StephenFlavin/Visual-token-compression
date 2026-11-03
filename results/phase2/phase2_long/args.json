@@ -1,0 +1,27 @@
+{
+ "schemes": [
+  "subst1000"
+ ],
+ "ems": [
+  8.0
+ ],
+ "mixed_ems": null,
+ "steps": 10500,
+ "batch": 32,
+ "lr": 0.002,
+ "eval_every": null,
+ "threads": 1,
+ "parallel": 1,
+ "render_workers": 1,
+ "n_train": null,
+ "n_val": 300,
+ "n_test": 1000,
+ "seed": 0,
+ "supersample": 4,
+ "hidden": null,
+ "norm": null,
+ "run_name": "phase2_long",
+ "smoke": false,
+ "no_resume": false,
+ "prerender_only": false
+}
