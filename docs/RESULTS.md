@@ -1,7 +1,7 @@
 # Visual BPE: results so far (living document)
 
-Status: **2026-11-03 10:20 UTC.** Phase 2 (K3) is decided. Learned glyphs: converged bridge meets the GO bar (see the verdict at the end);
-round 7 running from `results/queue_r7.txt`.
+Status: **2026-11-03 12:10 UTC.** Phase 2 (K3) is decided. Learned glyphs: borderline GO (passes at 1% CER, borderline at 3%; see the verdict at the end);
+round 8 running from `results/queue_r8.txt`.
 
 Metric throughout: **px²/char** = canvas area / source characters. **P@x** = px²/char at which CER
 first reaches x (isotonic fit, log-x interpolation). Lower is better.
@@ -137,25 +137,34 @@ comparison with Phase 2. The jointly trained reader lags far behind, because it 
 | learned N=300, whole-pixel | 4 | 5.9 | 2.08% | 6.75% |
 | learned N=300, whole-pixel | 5 | 7.3 | 0.59% | 1.80% |
 
+Round 7 added the h3 bridge point for the whole-pixel bank and h3 points for E2 transfer and the harsh channel at h7.
+
+| bank / check | h | px²/char | CER |
+|---|---|---|---|
+| whole-pixel N=300, bridge | 3 | 2.5 | 33.4% |
+| learned N=300, E2 transfer | 3 / 4 | 2.52 / 5.88 | 16.4% / 0.29% |
+| learned N=300, harsh joint | 7 | 15.4 | **3.45%** (held-out 4.4%) |
+| fixed DejaVu N=0, harsh joint | 7 | 20.7 | 42.8% (held-out 45.5%) |
+
 P@x from `vbpe.analysis.p_at` (isotonic + log-x interpolation), against converged Phase-2 Latin (DejaVu):
 
 | | P@3% | P@1% | ratio vs Latin (3% / 1%) |
 |---|---|---|---|
 | latin (Phase 2) | 6.54 | 8.92 | 1 / 1 |
 | latin_condensed | 8.32 | 17.1 | 1.27 / 1.92 |
-| learned N=300, bridge | 4.31 | 5.35 | **0.66 / 0.60** |
-| learned N=300 whole-pixel, bridge | ≤5.9 (below lowest point) | 6.91 | ≤0.90 / **0.77** |
+| learned N=300, bridge (E3) | 4.31 | 5.35 | **0.66 / 0.60** |
+| learned N=300, transfer (E2) | 5.10 | 5.66 | 0.78 / **0.64** |
+| learned N=300 whole-pixel, bridge | 5.73 | 6.91 | 0.88 / 0.78 |
 
-Other checks:
-* **E2 transfer** (fresh reader through our own channel, N=300 h4 bank): 0.29% at 5.88 (joint 0.60%).
-* **Harsh channel, converged, h5:** learned N=300 39.1% CER at 7.35 px²/char against fixed DejaVu 67.9% at 10.8. Both are poor
-  at h5, but learning helps more under harsh degradation, not less.
+E0 calibration showed that fixed DejaVu through our `default` channel reproduces Phase-2 Latin P@3% (1.01×), so E2 ratios
+are comparable with the Phase-2 baseline.
 
 **Against the pre-registered GO rule** (≥30% fewer px²/char than best fixed Latin in transfer and bridge, gain survives harsh):
-* Unconstrained learned N=300: **34% fewer at 3% CER, 40% fewer at 1%** in the bridge. The gain survives harsh. → **meets GO** on this
-  runner. Caveat: part of the gain is grey-level coding that a VLM encoder or JPEG may not preserve.
-* Whole-pixel N=300: 23% fewer at 1%, ≥10% fewer at 3% (h3 point pending). This is a real but smaller "better low-res font plus
-  tokens" effect.
+* Unconstrained learned N=300: bridge 34%/40% fewer (3%/1% CER); transfer 22%/36% fewer. **It passes at 1% CER and is borderline at 3%.**
+  Every ratio interpolates across a wide gap (2.5 → 5.9 px²/char), so round 8 adds intermediate budgets.
+* **Harsh channel: the gain survives and grows.** At h7 under harsh degradation, learned N=300 reads at 3.45% CER (15.4 px²/char)
+  while fixed DejaVu is unusable (42.8% at 20.7).
+* Whole-pixel N=300: 12%/22% fewer. That is a real but smaller effect, free of grey-level coding.
 * What this runner cannot test: whether a pretrained VLM image encoder reads such glyphs. That is the GPU follow-up.
 
-Pending (round 7, `results/queue_r7.txt`, ~75 min): whole-pixel N=300 h3 (joint, then bridge) for its P@3%; E2 transfer of the N=300 h3 bank; converged harsh channel at h7 (learned N=300 vs fixed DejaVu).
+Pending (round 8, `results/queue_r8.txt`, ~60 min): unconstrained N=300 banks at intermediate budgets (h3 and h4 with cell widths 2/3), each scored by bridge and E2 transfer.
