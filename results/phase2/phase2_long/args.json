@@ -1,9 +1,9 @@
 {
  "schemes": [
-  "subst1000"
+  "subst300"
  ],
  "ems": [
-  8.0
+  7.0
  ],
  "mixed_ems": null,
  "steps": 10500,
