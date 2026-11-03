@@ -139,11 +139,14 @@ Changes, all decided before any non-smoke run and none tuned on results:
 ## Run order, queue and cost
 `results/queue_probe_c.txt` (one command per line, logs in `results/queue_logs/probe_c/`, 94 lines), started by a
 waiter only after round 1's queue (`results/queue_probe_b.txt`) has exited:
-1. `build_tokens2.py --encoders qwen25vl deepencoder --conds clean jpeg75`: one process, holds the global VLM lock
-   (`encoder_probe/cache/tokens/.vlm.lock`), writes caches in queue order: Qwen clean (15), Qwen jpeg75 (15),
-   DeepEncoder clean (16), DeepEncoder jpeg75 (16).
-2. identity28/clean x 15 -> qwen25vl/clean x 15 -> qwen25vl/jpeg75 x 15 -> identity32/clean x 16 ->
-   deepencoder/clean x 16 -> deepencoder/jpeg75 x 16, each block in the encoding order of the table.
+1. `build_tokens2.py --encoders deepencoder qwen25vl --conds clean jpeg75`: one process, holds the global VLM lock
+   (`encoder_probe/cache/tokens/.vlm.lock`), writes caches in queue order: DeepEncoder clean (16), DeepEncoder
+   jpeg75 (16), Qwen clean (15), Qwen jpeg75 (15).
+2. identity32/clean anchors (latin_p16, latin_p8, col_b2, lg_free_h4) -> deepencoder/clean x 16 ->
+   deepencoder/jpeg75 x 16 -> remaining identity32/clean x 12 -> identity28/clean x 15 -> qwen25vl/clean x 15 ->
+   qwen25vl/jpeg75 x 15.
+   **Reordered 2026-11-03, before round 2 started:** DeepSeek-OCR's encoder is the primary target (user), so its
+   geometry runs first. The 4 identity32 anchors come first so a probe failure at this geometry shows within ~1.5 h.
 * A probe job whose cache is not there yet waits for it while the builder holds the lock. If no builder is alive
   (crash), the job takes the lock and builds its own cache. Only the lock holder ever loads a VLM, so no two VLM
   copies are ever in memory.
@@ -154,8 +157,8 @@ waiter only after round 1's queue (`results/queue_probe_b.txt`) has exited:
   geometry) = 91.5 core-h, plus about 9 h of builder (6.3 h Qwen + 1.8 h DeepEncoder + page rendering) on one
   slot. The builder keeps ahead of the probe jobs (Qwen clean caches are done after about 3.2 h, while the 15
   identity28 jobs take about 5.3 h on the other 3 slots), so slots should never idle. **Wall time is about 25 h
-  after round 1 ends**, with milestones of about 10 h (Qwen clean complete), 13.5 h (Qwen jpeg75) and 25 h
-  (DeepEncoder).
+  after round 1 ends.** After the reorder, the milestones are roughly 6 h (DeepEncoder clean complete), 10 h
+  (DeepEncoder jpeg75), about 14 h (all identity32 ceilings), and 25 h (Qwen).
 * **Disk**: weights 2.1 GB (encoder_probe/cache/weights/), token caches about 6.8 GB (Qwen: 30 x 226 MB) + 1.1 GB
   (DeepEncoder), data/train_r2.txt 64 MB. **RAM**: about 2 GB per probe job, plus up to 3 GB for the builder.
 
