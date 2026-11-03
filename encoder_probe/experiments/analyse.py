@@ -1,6 +1,6 @@
 """Summarise encoder-probe rows: CER tables, C@3% / C@1% (chars per vision token), ceiling survival.
 
-    python3 encoder_probe/experiments/analyse.py [encoder_probe/results/main/runs.jsonl] [--json out.json]
+    python3 encoder_probe/experiments/analyse.py encoder_probe/results/{main,controls}/runs.jsonl [--json out.json]
 
 C@x = 256 / P@x, with P@x from vbpe.analysis.p_at on (budget = px^2/char, CER) per family curve.
 '<' marks left-censored values (already below x at the densest encoding in the family: the true C@x is
@@ -18,8 +18,8 @@ sys.path.insert(0, str(ROOT))
 from vbpe.analysis import CurveTable, crossing, p_at, usable_rows  # noqa: E402
 
 FAMILIES = ["latin", "lg_free", "lg_pb", "colour"]
-SETTINGS = [("identity", "clean"), ("siglip", "clean"), ("siglip", "jpeg75"), ("identity", "jpeg75"),
-            ("clip", "clean"), ("clip", "jpeg75")]
+SETTINGS = [("identity", "clean"), ("siglip", "clean"), ("siglip_l6", "clean"), ("siglip_l6", "jpeg75"),
+            ("identity", "jpeg75"), ("siglip", "jpeg75"), ("clip", "clean"), ("clip", "jpeg75")]
 
 
 def c_at(rows, scheme, thr):
@@ -42,7 +42,8 @@ def fmt_c(v, cens):
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("runs", nargs="*", default=[str(ROOT / "encoder_probe/results/main/runs.jsonl")])
+    ap.add_argument("runs", nargs="*", default=[str(ROOT / f"encoder_probe/results/{d}/runs.jsonl")
+                                                 for d in ("main", "controls")])
     ap.add_argument("--json")
     a = ap.parse_args(argv)
     rows = []
@@ -73,7 +74,7 @@ def main(argv=None) -> int:
                 out["cer"][f"{e}@{s[0]}/{s[1]}"] = r["cer"]
         print(f"| {e} | {x:.2f} | {256 / x:.1f} | " + " | ".join(cells) + " |")
 
-    for thr in (0.03, 0.01):
+    for thr in (0.10, 0.03, 0.01):
         print(f"\n## C@{100 * thr:g}% (chars per vision token; text tokens ≈ 4 chars/token)\n")
         print("| family | " + " | ".join(f"{e}/{c}" for e, c in settings) + " |")
         print("|---|" + "---:|" * len(settings))
