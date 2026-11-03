@@ -7,10 +7,34 @@ python3 encoder_probe/experiments/run_probe.py --encoding col_b2 --encoder sigli
 python3 encoder_probe/experiments/run_probe.py --encoding col_b4 --encoder siglip_l6 --cond clean --steps 3000 --run-name controls
 python3 encoder_probe/experiments/run_probe.py --encoding latin_p10 --encoder siglip --cond clean --steps 3000 --token-mlp 2 --run-name controls_tmlp2
 python3 encoder_probe/experiments/run_probe.py --encoding latin_p10 --encoder siglip --cond clean --steps 3000 --train-pages 1000 --run-name controls_tp1000
+python3 encoder_probe/experiments/run_probe.py --encoding latin_p4 --encoder siglip_l6 --cond clean --steps 3000 --run-name controls
+python3 encoder_probe/experiments/run_probe.py --encoding latin_p5 --encoder siglip_l6 --cond clean --steps 3000 --run-name controls
+python3 encoder_probe/experiments/run_probe.py --encoding latin_p6 --encoder siglip_l6 --cond clean --steps 3000 --run-name controls
+python3 encoder_probe/experiments/run_probe.py --encoding latin_p24 --encoder siglip_l6 --cond clean --steps 3000 --run-name controls
+python3 encoder_probe/experiments/run_probe.py --encoding col_b1 --encoder siglip_l6 --cond clean --steps 3000 --run-name controls
+python3 encoder_probe/experiments/run_probe.py --encoding col_b3 --encoder siglip_l6 --cond clean --steps 3000 --run-name controls
+python3 encoder_probe/experiments/run_probe.py --encoding lg_free_w23_h3 --encoder siglip_l6 --cond clean --steps 3000 --run-name controls
+python3 encoder_probe/experiments/run_probe.py --encoding lg_free_h4 --encoder siglip_l6 --cond clean --steps 3000 --run-name controls
+python3 encoder_probe/experiments/run_probe.py --encoding lg_pb_h4 --encoder siglip_l6 --cond clean --steps 3000 --run-name controls
+python3 encoder_probe/experiments/run_probe.py --encoding lg_pb_h5 --encoder siglip_l6 --cond clean --steps 3000 --run-name controls
 python3 encoder_probe/experiments/run_probe.py --encoding col_b1 --encoder identity --cond clean --steps 3000 --run-name main
 python3 encoder_probe/experiments/run_probe.py --encoding col_b2 --encoder identity --cond clean --steps 3000 --run-name main
 python3 encoder_probe/experiments/run_probe.py --encoding col_b3 --encoder identity --cond clean --steps 3000 --run-name main
 python3 encoder_probe/experiments/run_probe.py --encoding col_b4 --encoder identity --cond clean --steps 3000 --run-name main
+python3 encoder_probe/experiments/run_probe.py --encoding latin_p8 --encoder siglip_l6 --cond jpeg75 --steps 3000 --run-name controls
+python3 encoder_probe/experiments/run_probe.py --encoding latin_p10 --encoder siglip_l6 --cond jpeg75 --steps 3000 --run-name controls
+python3 encoder_probe/experiments/run_probe.py --encoding latin_p16 --encoder siglip_l6 --cond jpeg75 --steps 3000 --run-name controls
+python3 encoder_probe/experiments/run_probe.py --encoding latin_p24 --encoder siglip_l6 --cond jpeg75 --steps 3000 --run-name controls
+python3 encoder_probe/experiments/run_probe.py --encoding col_b1 --encoder siglip_l6 --cond jpeg75 --steps 3000 --run-name controls
+python3 encoder_probe/experiments/run_probe.py --encoding col_b2 --encoder siglip_l6 --cond jpeg75 --steps 3000 --run-name controls
+python3 encoder_probe/experiments/run_probe.py --encoding col_b3 --encoder siglip_l6 --cond jpeg75 --steps 3000 --run-name controls
+python3 encoder_probe/experiments/run_probe.py --encoding col_b4 --encoder siglip_l6 --cond jpeg75 --steps 3000 --run-name controls
+python3 encoder_probe/experiments/run_probe.py --encoding lg_free_w23_h3 --encoder siglip_l6 --cond jpeg75 --steps 3000 --run-name controls
+python3 encoder_probe/experiments/run_probe.py --encoding lg_free_h4 --encoder siglip_l6 --cond jpeg75 --steps 3000 --run-name controls
+python3 encoder_probe/experiments/run_probe.py --encoding lg_pb_h4 --encoder siglip_l6 --cond jpeg75 --steps 3000 --run-name controls
+python3 encoder_probe/experiments/run_probe.py --encoding lg_pb_h5 --encoder siglip_l6 --cond jpeg75 --steps 3000 --run-name controls
+python3 encoder_probe/experiments/run_probe.py --encoding latin_p16 --encoder identity --cond clean --steps 3000 --run-name controls
+python3 encoder_probe/experiments/run_probe.py --encoding latin_p24 --encoder identity --cond clean --steps 3000 --run-name controls
 python3 encoder_probe/experiments/run_probe.py --encoding latin_p4 --encoder identity --cond jpeg75 --steps 3000 --run-name main
 python3 encoder_probe/experiments/run_probe.py --encoding latin_p5 --encoder identity --cond jpeg75 --steps 3000 --run-name main
 python3 encoder_probe/experiments/run_probe.py --encoding latin_p6 --encoder identity --cond jpeg75 --steps 3000 --run-name main

@@ -75,3 +75,7 @@ of the remaining grid rows; siglip/jpeg75 is deferred until they are read:
    and 1000 instead of 200 training pages.
 Rule: if none of these gets latin below ~10% CER, the probe/encoder pair is reported as uninformative, not as a
 verdict on colour. If one does, the colour, latin and lg rows are rerun under that setting with the identical probe.
+Control outcome (20:30): siglip_l6/clean latin_p16 = 4.9% CER (the only control below 10%); siglip/clean latin_p16
+26.8%, p24 39.5% (overfitting: train CTC 0.002); siglip_l6 latin_p8 26.4%, p10 37.3%. Following the rule, the full
+set of encodings (latin p4-p24, colour, lg) is run through `siglip_l6` clean and jpeg75 with the identical probe
+(results/controls/). siglip (last layer)/jpeg75 is dropped: siglip/clean is already at the floor for every encoding.
