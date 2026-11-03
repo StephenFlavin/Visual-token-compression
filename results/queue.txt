@@ -16,3 +16,8 @@ python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1 --heig
 # Round 2d: curve completeness (verdict already decided)
 python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes latin --ems 3
 python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes subst300 --ems 4.5
+# Round 3 (04:40): learned-bank frontier with narrower cells (default char cell 0.45h is wider than proportional Latin)
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1w --modes learned --heights 6 --n-tokens-list 0 --char-w 2 --scheme-suffix _cw2
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1w --modes learned --heights 5 --n-tokens-list 0 --char-w 2 --scheme-suffix _cw2
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1w --modes learned --heights 4 --n-tokens-list 300
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1w --modes learned --heights 5 --n-tokens-list 300 --char-w 2 --token-w 4 --scheme-suffix _cw2tw4
