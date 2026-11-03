@@ -1,5 +1,8 @@
 # Learned glyph alphabet (end-to-end) — plan
 
+**Outcome (2026-11-03): qualified GO**, see `RESULTS.md` (bridge 0.57× Latin px²/char at 3% CER; transfer 0.74×; survives harsh;
+grey-level coding and held-out brittleness are the caveats).
+
 Hand-designed Visual BPE (CJK proxy glyphs, quadrant packing) looks weak (see ../PLAN.md, ../AGENTS.md,
 ../docs/prior-art.md). The remaining credible version of the idea: **learn the glyphs themselves**,
 jointly with a reader, so each symbol (letter or frequent chain) gets a shape optimised to survive
