@@ -67,18 +67,45 @@ render cache. That cache was written before per-line heights were stored, so its
 than the training batches. The same checkpoint scores 3.8% on fresh renders. Affected rows are in
 `runs_stale_cache.jsonl` and were re-run. Plain DejaVu Latin is the best scheme once this is fixed.
 
-## Learned glyph alphabet (learned_glyphs/)
+## Learned glyph alphabet (learned_glyphs/), status 2026-11-03 06:00 UTC
 
-* E0 calibration: fixed DejaVu glyphs through the `default` channel reproduce Phase-2 latin P@3% (1.01×).
-* Pilot at h=7 px (3.5k steps, joint training, default channel):
+E0 calibration: fixed DejaVu glyphs through the `default` channel reproduce Phase-2 latin P@3% (1.01×).
 
-  | bank | px²/char | CER |
-  |---|---|---|
-  | fixed DejaVu, N=0 | 20.7 | 0.81% |
-  | learned, N=0 | 21.0 | 0.19% |
-  | learned, N=300 tokens | 15.4 | 0.27% |
+Joint training (glyphs + reader, 3.5k steps, default channel). "held-out" = the same model tested on
+unseen degradations (real JPEG, unseen resize filter):
 
-  The learned glyphs are blob-like grey-level codes, not letterforms (`learned_glyphs/results/lg_pilot/atlas/`).
-  This is exactly the "channel exploitation" risk the plan guards against. The pilot proves nothing until it passes
-  E2 (fresh reader on the frozen bank) and harsh-channel training. Lower heights (h=5, 6), transfer and harsh-channel
-  runs are queued.
+| bank | line h (px) | px²/char | CER | held-out CER |
+|---|---|---|---|---|
+| fixed DejaVu, N=0 | 5 | 10.8 | 6.65% | 54% |
+| learned, N=0 | 5 | 10.0 | 0.65% | 11% |
+| learned, N=0 | 4 | 8.0 | 1.26% | 20% |
+| learned, N=0 | 3 | 3.0* | 26.7% | 62% |
+| learned, N=300 | 5 | 7.35 | 3.46% | 30% |
+| learned, N=300 | 4 | 5.9 | 4.17% | 46% |
+| learned, N=0, whole-pixel (`--pixel-block`) | 5 | 10.0 | 3.08% | 6% |
+| learned, N=0, whole-pixel | 4 | 8.0 | 7.01% | 13% |
+| learned, N=300, whole-pixel | 5 | 7.35 | 8.31% | 20% |
+
+*h=3 cells are 1 px wide.
+
+Reference (Phase 2, PIL rendering): latin at 3.5k steps reaches 2.54% at 9.8 px²/char. Converged, it reaches 1.73% at 7.5 and 4.51% at 5.5 (P@3% ≈ 6.3).
+
+Checks:
+* **Transfer (E2):** fresh readers on the frozen pilot banks (h=7) reach 0.04% (N=0) and 0.30% (N=300), so the glyphs are
+  intrinsically legible in this channel.
+* **Harsh channel (h=7):** learned N=300 reaches 12.0% CER against 48.5% for fixed DejaVu, so learning helps more, not less.
+* **Bridge (E3, unchanged Phase-2 PIL pipeline, 3.5k steps):** learned N=0 h5 gets 0.12% at 10.0 px²/char; N=300 h5 gets 0.64% at 7.35;
+  N=300 h6 gets 0.18% at 12.6. That beats converged Latin at a similar budget (1.73% at 7.5).
+
+Interpretation so far:
+1. **The learned glyphs are grey-level pixel codes, not letterforms.** Sub-pixel structure becomes grey levels after
+   area downsampling (see `learned_glyphs/results/*/atlas/`).
+2. **Forcing whole-pixel glyphs removes most of the gain** (h5: 0.65% → 3.08%, about Latin level). So most of the
+   advantage comes from grey-level/sub-pixel coding. The plan flagged this as likely channel exploitation, since a VLM
+   image encoder or real capture may not preserve it.
+   Whole-pixel glyphs are, however, more robust on held-out degradations (6% vs 11%).
+3. **Tokens (the Visual-BPE part) do not help:** at 3% CER, learned N=0 needs fewer px² than learned N=300 (S2 ≥ 1).
+   The gain that exists is a "better low-res font" effect, not a "more symbols" effect.
+
+Pending: bridge for h4 banks and the whole-pixel bank; 10.5k-step learned runs (h3, h4) for a converged comparison
+with converged Latin.
