@@ -84,7 +84,7 @@ Claude responses are cached in `results/cache/claude/` (keyed on model+prompt+im
 - Observed 2026-11-03: a container *restart* (not reclaim) kills all processes but keeps the disk (data/, fonts, caches, pip packages). Recovery = restart `phase2_driver.py`, `job_queue.py ... --after-phase2`, `autosave_results.sh` with nohup; nothing else needed.
 
 **Git**
-- Never `pkill -f <name>` from a shell whose own command line contains <name> (it kills itself). A stop hook demands a clean tree. Live Phase-2 logs/curves are git-ignored while runs are going (see .gitignore); force-add them (`git add -f`) when a grid finishes. Other long jobs: snapshot-commit (`WIP:`) and push.
+- Never `pkill -f <name>` from a shell whose own command line contains <name> (it kills itself); likewise a `while pgrep -f <name>` wait loop matches itself and never exits. Use a bracket pattern, e.g. `pgrep -f "[j]ob_queue.py"`. A stop hook demands a clean tree. Live Phase-2 logs/curves are git-ignored while runs are going (see .gitignore); force-add them (`git add -f`) when a grid finishes. Other long jobs: snapshot-commit (`WIP:`) and push.
 
 ## Findings so far (details in results/*/summary.md)
 - K1 (analytic): N=1000 substitution saves 32% line width vs condensed Latin at equal em → only ~1.19x larger em on a fixed page.
