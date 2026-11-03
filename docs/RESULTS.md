@@ -1,7 +1,7 @@
 # Visual BPE: results so far (living document)
 
-Status: **2026-11-03 12:10 UTC.** Phase 2 (K3) is decided. Learned glyphs: borderline GO (passes at 1% CER, borderline at 3%; see the verdict at the end);
-round 8 running from `results/queue_r8.txt`.
+Status: **2026-11-03 13:10 UTC.** Phase 2 (K3) is decided. Learned glyphs: **qualified GO** (bridge 0.57×, transfer 0.74×/0.63× Latin; see the
+verdict at the end). All planned rounds done.
 
 Metric throughout: **px²/char** = canvas area / source characters. **P@x** = px²/char at which CER
 first reaches x (isotonic fit, log-x interpolation). Lower is better.
@@ -146,25 +146,42 @@ Round 7 added the h3 bridge point for the whole-pixel bank and h3 points for E2 
 | learned N=300, harsh joint | 7 | 15.4 | **3.45%** (held-out 4.4%) |
 | fixed DejaVu N=0, harsh joint | 7 | 20.7 | 42.8% (held-out 45.5%) |
 
-P@x from `vbpe.analysis.p_at` (isotonic + log-x interpolation), against converged Phase-2 Latin (DejaVu):
+Round 8 (13:05) added intermediate budgets: N=300 banks with narrower cells (char 2 px, token 3 px) at h3 and h4.
+
+| N=300 bank | px²/char | bridge CER | E2 transfer CER | joint CER | joint held-out CER |
+|---|---|---|---|---|---|
+| h3, default widths | 2.52 | 7.95% | 16.4% | 20.8% | 65% |
+| h3, widths 2/3 | 4.09 | 1.92% | 4.79% | 8.71% | 68% |
+| h4, widths 2/3 | 5.45 | 0.73% | 1.72% | 3.34% | 55% |
+| h4, default widths | 5.88 | 0.14% | 0.29% | 0.60% | 35% |
+
+**Final P@x on this runner** (`vbpe.analysis.p_at`, isotonic + log-x interpolation; rows keyed by px²/char, see the note below),
+against converged Phase-2 Latin (DejaVu):
 
 | | P@3% | P@1% | ratio vs Latin (3% / 1%) |
 |---|---|---|---|
 | latin (Phase 2) | 6.54 | 8.92 | 1 / 1 |
 | latin_condensed | 8.32 | 17.1 | 1.27 / 1.92 |
-| learned N=300, bridge (E3) | 4.31 | 5.35 | **0.66 / 0.60** |
-| learned N=300, transfer (E2) | 5.10 | 5.66 | 0.78 / **0.64** |
-| learned N=300 whole-pixel, bridge | 5.73 | 6.91 | 0.88 / 0.78 |
+| learned N=300, bridge (E3) | 3.75 | 5.10 | **0.57 / 0.57** |
+| learned N=300, transfer (E2) | 4.83 | 5.66 | 0.74 / **0.63** |
+| learned N=300 whole-pixel, bridge | 5.73 | 6.91 | 0.88 / 0.77 |
 
-E0 calibration showed that fixed DejaVu through our `default` channel reproduces Phase-2 Latin P@3% (1.01×), so E2 ratios
-are comparable with the Phase-2 baseline.
+E0 calibration showed that fixed DejaVu through our `default` channel reproduces Phase-2 Latin P@3% (1.01×), so E2 ratios are
+comparable with the Phase-2 baseline. Note: `vbpe.analysis` groups rows by `em`. The width-2/3 banks share an em with the
+default-width banks, so set `budget = px_per_char` on learned-glyph rows before calling `p_at`, or the two get pooled.
 
-**Against the pre-registered GO rule** (≥30% fewer px²/char than best fixed Latin in transfer and bridge, gain survives harsh):
-* Unconstrained learned N=300: bridge 34%/40% fewer (3%/1% CER); transfer 22%/36% fewer. **It passes at 1% CER and is borderline at 3%.**
-  Every ratio interpolates across a wide gap (2.5 → 5.9 px²/char), so round 8 adds intermediate budgets.
-* **Harsh channel: the gain survives and grows.** At h7 under harsh degradation, learned N=300 reads at 3.45% CER (15.4 px²/char)
-  while fixed DejaVu is unusable (42.8% at 20.7).
-* Whole-pixel N=300: 12%/22% fewer. That is a real but smaller effect, free of grey-level coding.
-* What this runner cannot test: whether a pretrained VLM image encoder reads such glyphs. That is the GPU follow-up.
+**Verdict against the pre-registered GO rule** (≥30% fewer px²/char than best fixed Latin in transfer AND bridge; gain survives harsh):
+* **Bridge (unchanged Phase-2 pipeline): 43% fewer px²** at both 3% and 1% CER. Pass.
+* **E2 transfer: 26% fewer at 3% CER (just short), 37% fewer at 1%.** Borderline.
+* **Harsh channel: the gain survives and grows.** At h7, learned N=300 gets 3.45% CER at 15.4 px²/char; fixed DejaVu gets 42.8% at 20.7.
+* **Whole-pixel N=300 (no grey-level coding): 12% / 23% fewer.** A real but smaller effect.
+* **Caveat, held-out degradations:** the jointly trained models fail badly on unseen degradations (real PIL JPEG, an unseen
+  resize filter). The tighter banks get 55–68% CER there, so the densest codes are brittle outside their training channel.
+  Whole-pixel banks hold up better (12–22%).
+* Untestable here: whether a pretrained VLM image encoder reads such glyphs.
 
-Pending (round 8, `results/queue_r8.txt`, ~60 min): unconstrained N=300 banks at intermediate budgets (h3 and h4 with cell widths 2/3), each scored by bridge and E2 transfer.
+**Bottom line:** a learned glyph alphabet with ~300 chain tokens beats hand-designed typography by ~25–45% px²/char for a
+trained CRNN reader. Most of that edge is real legibility rather than reader co-adaptation, because it holds with a fresh
+reader. Part of it relies on grey-level coding, and the densest banks are brittle on unseen degradations. This is a
+**qualified GO** for a GPU follow-up, which would train with real JPEG/resampling in the channel and test with a VLM encoder.
+Hand-designed Visual BPE (CJK proxies, quadrant packing) stays killed (K3).
