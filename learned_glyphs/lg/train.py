@@ -133,6 +133,7 @@ class JointConfig:
     hard_from: float = 0.6                # fraction of steps after which glyphs are binarised (ST)
     # anti-degeneracy (learned banks)
     guard_ss: int = 1
+    pixel_block: bool = False             # learned glyphs = whole output pixels (logits tied per ss x ss block)
     min_feature_weight: float = 1.0
     coverage_weight: float = 1.0
     coverage_lo: float = 0.10
@@ -242,6 +243,8 @@ def build_bank(cfg: JointConfig, alphabet: Alphabet):
                       seed=cfg.seed)
         if bank_has_guard(GlyphBank):
             kw["guard_ss"] = int(cfg.guard_ss)
+        if cfg.pixel_block:
+            kw["pixel_block"] = True
         return GlyphBank(len(alphabet), cfg.height_px, widths, ss=cfg.ss, init=cfg.init,
                          learnable=True, **kw)
     return GlyphBank.from_font(alphabet.symbols, str(font), cfg.height_px, ss=cfg.ss,

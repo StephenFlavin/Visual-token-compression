@@ -137,6 +137,9 @@ def min_feature_penalty(ink: torch.Tensor, ss: int = 4, mask: torch.Tensor | Non
     """
     x = ink.unsqueeze(1) if ink.dim() == 3 else ink
     k = int(ss)
+    if k <= 1:                          # ss=1: every feature is >= 1 output pixel by construction
+        z = x.sum((1, 2, 3)) * 0.0
+        return z if reduction == "none" else z.sum()
     r = 2 * (k - 1)                     # cells sit on background: extend with zeros, crop after
     xp = F.pad(x, (r, r, r, r))
     opened = _dilate(_erode(xp, k), k)[..., r:-r, r:-r]
@@ -190,8 +193,12 @@ class GlyphBank(nn.Module):
                  symbols: Sequence[str] | None = None, font_path=config.LATIN_FONT,
                  cjk_map: dict | None = None, em: float | None = None,
                  init_std: float = 0.5, init_bias: float = 0.0, seed: int = 0,
-                 fixed_ink: torch.Tensor | None = None, guard_ss=None):
+                 fixed_ink: torch.Tensor | None = None, guard_ss=None, pixel_block: bool = False):
         super().__init__()
+        # pixel_block: glyph logits are tied within each ss x ss block (one value per OUTPUT pixel),
+        # so learned glyphs are whole-pixel bitmaps by construction (no sub-pixel detail), while the
+        # channel still places them at random sub-pixel phase.
+        self.pixel_block = bool(pixel_block) and int(ss) > 1
         self.n_symbols, self.height_px, self.ss = int(n_symbols), int(height_px), int(ss)
         self.height_ss = self.height_px * self.ss
         self.em = em_for_height(self.height_px) if em is None else float(em)
@@ -254,7 +261,12 @@ class GlyphBank(nn.Module):
     def forward(self, tau: float = 1.0, hard: bool = False) -> torch.Tensor:
         if self.fixed_ink is not None:
             return self.fixed_ink
-        p = torch.sigmoid(self.logits / tau)
+        z = self.logits
+        if self.pixel_block:
+            k = self.ss
+            z = F.avg_pool2d(z.unsqueeze(1), k, ceil_mode=True).squeeze(1)
+            z = z.repeat_interleave(k, 1).repeat_interleave(k, 2)[:, :self.height_ss, :self.max_width_ss]
+        p = torch.sigmoid(z / tau)
         if hard:
             p = p + ((p > 0.5).to(p.dtype) - p).detach()
         return p * self.mask
@@ -356,7 +368,7 @@ class GlyphBank(nn.Module):
             d = {"symbols": self.symbols, "widths_ss": self.widths_ss.cpu(), "ss": self.ss,
                  "height_px": self.height_px, "em": self.em, "init": self.init,
                  "learnable": self.learnable, "ink": self.forward().detach().cpu(),
-                 "guard_ss": list(self.guard_ss),
+                 "guard_ss": list(self.guard_ss), "pixel_block": self.pixel_block,
                  "logits": None if self.logits is None else self.logits.detach().cpu()}
         torch.save(d, path)
 
@@ -373,7 +385,7 @@ class GlyphBank(nn.Module):
         lr = d.get("learnable", True) if learnable is None else learnable
         bank = cls(n, d["height_px"], ss=d["ss"], widths_ss=d["widths_ss"], symbols=d["symbols"],
                    em=d["em"], init="random", learnable=lr, init_std=0.0,
-                   guard_ss=tuple(d.get("guard_ss", (1, 1))))
+                   guard_ss=tuple(d.get("guard_ss", (1, 1))), pixel_block=d.get("pixel_block", False))
         with torch.no_grad():
             bank.logits.copy_(d["logits"])
         bank.init = d.get("init", "random")

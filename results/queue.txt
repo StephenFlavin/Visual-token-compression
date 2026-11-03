@@ -18,6 +18,15 @@ python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --ren
 python3 experiments/phase2_train.py --steps 10500 --parallel 1 --threads 1 --render-workers 1 --run-name phase2_long --schemes subst300 --ems 4.5
 # Round 3 (04:40): learned-bank frontier with narrower cells (default char cell 0.45h is wider than proportional Latin)
 python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1w --modes learned --heights 6 --n-tokens-list 0 --char-w 2 --scheme-suffix _cw2
-python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1w --modes learned --heights 5 --n-tokens-list 0 --char-w 2 --scheme-suffix _cw2
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1w --modes learned --heights 4 --n-tokens-list 0
 python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1w --modes learned --heights 4 --n-tokens-list 300
 python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1w --modes learned --heights 5 --n-tokens-list 300 --char-w 2 --token-w 4 --scheme-suffix _cw2tw4
+# Round 3b: E3 bridge (bank rendered as a bitmap font through the unchanged Phase-2 PIL pipeline), native em = h/1.2, 3.5k steps (compare phase2_main latin em4: 2.54% @ 9.84)
+python3 learned_glyphs/experiments/transfer_eval.py --bridge --run-name e3_bridge --parallel 1 --steps 3500 --banks learned_glyphs/results/e1/banks/lg_learned_n0_h5.pt --ems 4.1667
+python3 learned_glyphs/experiments/transfer_eval.py --bridge --run-name e3_bridge --parallel 1 --steps 3500 --banks learned_glyphs/results/e1/banks/lg_learned_n300_h5.pt --ems 4.1667
+python3 learned_glyphs/experiments/transfer_eval.py --bridge --run-name e3_bridge --parallel 1 --steps 3500 --banks learned_glyphs/results/e1/banks/lg_learned_n300_h6.pt --ems 5
+# Round 3c (05:20): whole-pixel glyphs (pixel_block: logits tied per output pixel, still random sub-pixel phase) - rules out sub-pixel/salt codes seen in e1 atlases
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1pb --modes learned --pixel-block --guard-ss 0 --scheme-suffix _pb --heights 5 --n-tokens-list 0
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1pb --modes learned --pixel-block --guard-ss 0 --scheme-suffix _pb --heights 5 --n-tokens-list 300
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1pb --modes learned --pixel-block --guard-ss 0 --scheme-suffix _pb --heights 4 --n-tokens-list 0
+python3 learned_glyphs/experiments/train_joint.py --grid e1 --run-name e1pb --modes learned --pixel-block --guard-ss 0 --scheme-suffix _pb --heights 6 --n-tokens-list 300
