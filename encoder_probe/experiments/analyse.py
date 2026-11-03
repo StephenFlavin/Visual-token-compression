@@ -48,8 +48,14 @@ def main(argv=None) -> int:
     rows = []
     for p in a.runs:
         rows += [json.loads(l) for l in Path(p).read_text().splitlines() if l.strip()]
-    rows = usable_rows(rows)
-    by = {(r["encoding"], r["encoder"], r["cond"]): r for r in rows}
+    best = {}
+    for r in usable_rows(rows):   # later rows win; a colour row scored before the strip fix never wins
+        k = (r["encoding"], r["encoder"], r["cond"])
+        if k in best and best[k].get("score_v", 1) > r.get("score_v", 1):
+            continue
+        best[k] = r
+    rows = list(best.values())
+    by = best
     settings = [s for s in SETTINGS if any((r["encoder"], r["cond"]) == s for r in rows)]
     encs = sorted({r["encoding"] for r in rows}, key=lambda e: (FAMILIES.index(by_fam(rows, e)), -ppc(rows, e)))
 
