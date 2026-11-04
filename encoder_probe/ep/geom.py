@@ -17,12 +17,12 @@ out and silently restarted at the first page):
 """
 from __future__ import annotations
 
-import fcntl
 import os
 from pathlib import Path
 
 import numpy as np
 
+from encoder_probe.ep import flock
 from encoder_probe.ep import pages as P1
 from encoder_probe.ep import rgb_overlay as R1
 from encoder_probe.ep.pages import LG_BANKS, LP, PRINTABLE, ROOT, Encoding, Page, clean_text
@@ -192,7 +192,7 @@ def get_encoding_s(name: str, S: int) -> Encoding:
 def _locked_build_train_r2(path: Path, cap: int) -> None:
     """data/train_r2.txt: WikiText-103 train cleaned exactly like data/train.txt, with a larger cap."""
     lock = open(path.with_suffix(".lock"), "w")
-    fcntl.flock(lock, fcntl.LOCK_EX)
+    flock.lock(lock)
     try:
         if path.exists():
             return
@@ -210,7 +210,7 @@ def _locked_build_train_r2(path: Path, cap: int) -> None:
                     break
         os.replace(tmp, path)
     finally:
-        fcntl.flock(lock, fcntl.LOCK_UN)
+        flock.unlock(lock)
         lock.close()
 
 

@@ -3,7 +3,7 @@
     encoder_probe/cache/tokens/<encoder>/<cond>/<encoding>_tr<n>_te<m>.pt
         {"train": bf16 (n, G*G, d), "test": bf16 (m', G*G, d), "digest_train", "digest_test", ...}
 
-Only the holder of one global lock (cache/tokens/.vlm.lock, fcntl, released by the kernel if the holder dies)
+Only the holder of one global lock (cache/tokens/.vlm.lock, ep/flock.py, released by the kernel if the holder dies)
 ever loads a VLM encoder, so two encoders are never in memory at once:
   * the builder (experiments/build_tokens2.py) holds it for its whole run and writes caches in queue order;
   * a probe job whose cache is missing polls: when the lock is free (no builder alive) it takes the lock and
@@ -17,7 +17,6 @@ so that jobs sharing an (encoding, page size, page counts) render them once (ren
 """
 from __future__ import annotations
 
-import fcntl
 import os
 import pickle
 import time
@@ -26,6 +25,7 @@ from pathlib import Path
 import numpy as np
 import torch
 
+from encoder_probe.ep import flock
 from encoder_probe.ep.encoders import degrade
 from encoder_probe.ep.geom import get_encoding_s, make_pages_s, pages_digest
 
@@ -96,17 +96,13 @@ class VLMLock:
         self.f = open(LOCK, "a")
 
     def try_acquire(self) -> bool:
-        try:
-            fcntl.flock(self.f, fcntl.LOCK_EX | fcntl.LOCK_NB)
-            return True
-        except BlockingIOError:
-            return False
+        return flock.try_lock(self.f)
 
     def acquire(self) -> None:
-        fcntl.flock(self.f, fcntl.LOCK_EX)
+        flock.lock(self.f)
 
     def release(self) -> None:
-        fcntl.flock(self.f, fcntl.LOCK_UN)
+        flock.unlock(self.f)
         self.f.close()
 
 
