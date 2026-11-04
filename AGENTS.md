@@ -83,6 +83,7 @@ Claude responses are cached in `results/cache/claude/` (keyed on model+prompt+im
 - After a container reclaim, git-ignored state is gone (data/, fonts, render caches, checkpoints, Claude cache): redo the setup block first. `scripts/autosave_results.sh 600` (run with nohup) commits+pushes `runs.jsonl` every 10 min so finished rows survive.
 
 - Observed 2026-11-03: a container *restart* (not reclaim) kills all processes but keeps the disk (data/, fonts, caches, pip packages). Recovery = restart `phase2_driver.py`, `job_queue.py ... --after-phase2`, `autosave_results.sh` with nohup; nothing else needed.
+- **Observed 2026-11-04: the container is suspended soon after the session goes idle** (no turn and no running subagent). nohup'd jobs die ~5-15 min after the last turn, and the next wake shows `uptime` 0 min. Memory was ruled out (logged at under 7 GB). Long unattended runs need something that keeps the session active: a background subagent that waits on the queue with run_in_background Bash loops and re-arms. Round 1 survived 10 h only because its subagent was running.
 
 **Frozen-encoder probe (encoder_probe/)**
 - CTC alone cannot bootstrap a learned token->pixel map (unigram-level CER for 1500 steps even on raw-pixel tokens). The fix is an auxiliary MSE loss (x10) from the map to the clean training page. Two things memorise the 200 training pages: per-token output heads (13.7% test CER at identity/latin_p8, train loss 0.006) and extra "free" feature channels (identity/latin_p10 77%). Check val CER, not train loss.
