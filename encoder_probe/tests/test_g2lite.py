@@ -186,3 +186,35 @@ def test_print_queue_order():
     assert lines[3].endswith("--threads 1") and "--arm trained --encoding rgb3_lg_pb_h5" in lines[3]
     assert [tuple(l.split("--arm ")[1].split(" --encoding ")) for l in lines[3:]] == [
         (arm, f"{e} --steps 3000 --train-pages 500 --run-name g2lite --threads 1") for arm, e in ORDER]
+
+
+def test_build_only_and_run_lock(tmp_path):
+    from encoder_probe.ep import flock
+    from run_g2lite import LeanVision, main
+    cache = tmp_path / "cache"
+    args = ["--tiny", "--train-pages", "3", "--test-pages", "4", "--encoding", "latin_p24",
+            "--cache-root", str(cache), "--poll", "0.01"]
+    assert main(["--build-only", *args]) == 0
+    hp = cache / "tokens" / "qwen25vl_h6" / "clean" / "latin_p24_tr3_te4.pt"
+    assert hp.exists() and (cache / "tokens" / "qwen25vl" / "clean" / "latin_p24_tr3_te4.pt").exists()
+    assert main(["--build-only", *args]) == 0                              # ready: nothing to do
+    # a run whose lock is held elsewhere is skipped (no row, no work)
+    ck = cache / "ckpt" / "g2lite__r__frozen__latin_p24__4__tp3__s0.lock"
+    ck.parent.mkdir(parents=True, exist_ok=True)
+    f = open(ck, "a")
+    assert flock.try_lock(f)
+    assert main(["--arm", "frozen", *args, "--steps", "4", "--run-name", "r", "--out-root", str(tmp_path / "res")]) == 0
+    assert not (tmp_path / "res" / "r" / "runs.jsonl").exists()
+    flock.unlock(f)
+
+    class Inner:
+        compute = "x"
+
+        def __call__(self, imgs, **kw):
+            return imgs.sum()
+    last = np.ones((2, 4, 4, 3), np.uint8)
+    lv = LeanVision(Inner(), last)
+    lv(np.zeros_like(last))
+    assert lv.inner is not None and lv.compute == "x"
+    lv(last.copy())
+    assert lv.inner is None

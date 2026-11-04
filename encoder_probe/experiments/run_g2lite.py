@@ -38,6 +38,7 @@ import torch.nn.functional as F
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "encoder_probe" / "experiments"))
+from encoder_probe.ep import flock  # noqa: E402
 from encoder_probe.ep import token_cache as TC  # noqa: E402
 from encoder_probe.ep.g2lite import ARMS, Front, G2Reader, load_merger, trainable_names, window_reverse  # noqa: E402
 from encoder_probe.ep.geom import pages_digest  # noqa: E402
@@ -100,6 +101,62 @@ def get_hidden(a, enc_name, tr, te, split, vision_fn, log=print):
     return dh, dt, waited
 
 
+def towers(a):
+    """-> (split block, window size, ViT factory, pretrained-merger factory) for the real or the tiny tower."""
+    if a.tiny:
+        from encoder_probe.ep import qwen_ft
+        tower = qwen_ft.load_model(torch.device("cpu"), tiny=True)[0].model.visual.eval()
+        return (len(tower.blocks), tower.window_size, lambda: TinyVision(tower),
+                lambda: copy.deepcopy(tower.merger).float())
+
+    def vision_fn():
+        from encoder_probe.ep.vlm_encoders import QwenVision
+        return QwenVision()
+    return 32, 112, vision_fn, lambda: load_merger(WEIGHTS / "qwen25vl3b_visual.safetensors")
+
+
+class LeanVision:
+    """Wraps a vision tower for token_cache.build: drops the tower right after it has encoded ``last`` (the final
+    missing chunk), so the build's final concatenation does not run next to ~2.7 GB of fp32 ViT weights."""
+
+    def __init__(self, inner, last: np.ndarray | None):
+        self.inner, self.last, self.compute = inner, last, getattr(inner, "compute", None)
+
+    def __call__(self, imgs, **kw):
+        r = self.inner(imgs, **kw)
+        if self.last is not None and imgs.shape == self.last.shape and np.array_equal(imgs, self.last):
+            self.inner = None
+            gc.collect()
+        return r
+
+
+def build_only(a) -> int:
+    """Build the (tokens + hidden-state) caches of one encoding with the label strings dropped first."""
+    cache_root = Path(a.cache_root)
+    TC.CACHE, TC.PAGES = cache_root / "tokens", cache_root / "pages"
+    torch.set_num_threads(a.threads)
+    torch.set_flush_denormal(True)
+    split, _, vision_fn, _ = towers(a)
+    hp = TC.cache_path(TC.hidden_encoder("qwen25vl", split), "clean", a.encoding, a.train_pages, a.test_pages)
+    tp = TC.cache_path("qwen25vl", "clean", a.encoding, a.train_pages, a.test_pages)
+    t0 = time.time()
+    while not (hp.exists() and tp.exists()) and TC.build_locked(tp):
+        time.sleep(a.poll)
+    if hp.exists() and tp.exists():
+        print(f"[g2] cache ready: {hp.name} (waited {time.time() - t0:.0f}s)", flush=True)
+        return 0
+    _, tr, te = TC.split_pages(a.encoding, S, a.train_pages, a.test_pages, cache=True)
+    for p in tr + te:   # the build only needs the images (digests); labels of dense codes are ~1.5 GB
+        p.labels = p.refs = None
+    gc.collect()
+    # chunks are extracted in order (train, then test), so the test chunk is the last one still to do
+    last = np.stack([TC.degrade(p.img, "clean") for p in te])
+    TC.build(LeanVision(vision_fn(), last), "qwen25vl", a.encoding, "clean", S, a.train_pages, a.test_pages,
+             tr, te, split=split)
+    print(f"[g2] built {hp.name} ({time.time() - t0:.0f}s)", flush=True)
+    return 0
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--arm", choices=ARMS)
@@ -123,12 +180,17 @@ def main(argv=None) -> int:
     ap.add_argument("--poll", type=float, default=30.0)
     ap.add_argument("--print-queue", action="store_true")
     ap.add_argument("--tiny", action="store_true", help="tiny random-init tower (tests)")
+    ap.add_argument("--build-only", action="store_true",
+                    help="build the encoding's hidden-state cache (lean: no label strings, ViT freed before the "
+                         "final concatenation) and exit; waits instead if another builder holds the cache")
     ap.add_argument("--out-root", default=str(ROOT / "encoder_probe" / "results"))
     ap.add_argument("--cache-root", default=str(ROOT / "encoder_probe" / "cache"))
     a = ap.parse_args(argv)
     if a.print_queue:
         print_queue(a)
         return 0
+    if a.build_only:
+        return build_only(a)
     assert a.arm and a.encoding, "--arm and --encoding are required"
     bf16 = a.bf16 == "on" or (a.bf16 == "auto" and cpu_has_bf16())
     torch.set_num_threads(a.threads)
@@ -146,19 +208,14 @@ def main(argv=None) -> int:
             if l.strip() and all(json.loads(l).get(k) == v for k, v in key.items()):
                 print(f"[g2] skip, done: {key}")
                 return 0
+    ck = cache_root / "ckpt" / f"g2lite__{a.run_name}__{a.arm}__{a.encoding}__{a.steps}__tp{a.train_pages}__s{a.seed}.pt"
+    ck.parent.mkdir(parents=True, exist_ok=True)
+    run_lock = open(ck.with_suffix(".lock"), "a")   # held for the process lifetime (released by the kernel)
+    if not flock.try_lock(run_lock):
+        print(f"[g2] skip, running in another process: {key}")
+        return 0
     t0 = time.time()
-    if a.tiny:
-        from encoder_probe.ep import qwen_ft
-        tower = qwen_ft.load_model(torch.device("cpu"), tiny=True)[0].model.visual.eval()
-        split, window = len(tower.blocks), tower.window_size
-        vision_fn = lambda: TinyVision(tower)  # noqa: E731
-        merger_fn = lambda: copy.deepcopy(tower.merger).float()  # noqa: E731
-    else:
-        split, window = 32, 112
-        def vision_fn():
-            from encoder_probe.ep.vlm_encoders import QwenVision
-            return QwenVision()
-        merger_fn = lambda: load_merger(WEIGHTS / "qwen25vl3b_visual.safetensors")  # noqa: E731
+    split, window, vision_fn, merger_fn = towers(a)
     enc, tr, te = TC.split_pages(a.encoding, S, a.train_pages, a.test_pages, cache=True)
     t_pages = time.time() - t0
     dh, dt, waited = get_hidden(a, a.encoding, tr, te, split, vision_fn)
@@ -213,7 +270,6 @@ def main(argv=None) -> int:
     opt = torch.optim.AdamW(params, lr=a.lr, weight_decay=1e-4, fused=True)
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=a.lr, total_steps=a.steps, pct_start=0.05)
     curve, train_curve, ctcs, start, t_prev = [], [], [], 1, 0.0
-    ck = cache_root / "ckpt" / f"g2lite__{a.run_name}__{a.arm}__{a.encoding}__{a.steps}__tp{a.train_pages}__s{a.seed}.pt"
     if a.ckpt_every and ck.exists():
         st = torch.load(ck, map_location="cpu", weights_only=False)
         model.load_state_dict(st["model"]), opt.load_state_dict(st["opt"]), sched.load_state_dict(st["sched"])
