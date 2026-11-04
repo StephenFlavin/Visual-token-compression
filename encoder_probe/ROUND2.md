@@ -162,6 +162,11 @@ waiter only after round 1's queue (`results/queue_probe_b.txt`) has exited:
    of fp32 denormals in the backward pass. `torch.set_flush_denormal(True)` in run_probe2/run_probe: 3.1 s/step on the
    real resumed latin_p16 job. Queue restarted as probe_c6 with the 6 key deepencoder/clean runs first, then the
    3 identity32 anchors (resume from checkpoints), then the jpeg75 token build, then the rest.
+   **~13:10: cloud queue trimmed; the rest moves to the user's RTX 3090 ([docs/LOCAL_GPU.md](../docs/LOCAL_GPU.md)).**
+   All 200-page deepencoder rows sit near the floor (latin_p32 89% with train CTC 0.04 = memorisation), so the probe
+   is data-limited. The cloud finishes only the claimed jobs: rgb3_p8 and latin_p8 (200 pages) and latin_p32 with 1000
+   (`round2_tp`) and 2000 (`round2_tp2000`) train pages, ~18:00 UTC; it is a CPU cross-check for the GPU sweep.
+   The untrimmed queue is kept in results/queue_probe_c_full_backup.txt.
    **Reordered 2026-11-03, before round 2 started:** DeepSeek-OCR's encoder is the primary target (user), so its
    geometry runs first. The 4 identity32 anchors come first so a probe failure at this geometry shows within ~1.5 h.
 * A probe job whose cache is not there yet waits for it while the builder holds the lock. If no builder is alive
