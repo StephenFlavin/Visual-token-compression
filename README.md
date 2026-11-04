@@ -82,7 +82,7 @@ through an OCR-grade VLM encoder, is queued. → [encoder_probe/RGB_OVERLAY.md](
 | **RGB overlay** | not yet measured (geometry: 3× mono, 2.6× plain) | – | ⏳ queued |
 | Hand-picked Chinese glyphs (trained reader) | best: 2.26% CER at 8.9 px²/char | **≥1.18× the pixels (worse)** | ❌ killed |
 | Hangul-style 2×2 letter packing | ~2% CER at 26 px²/char | ≥3× worse | ❌ killed |
-| *Reference:* Claude reading plain English | 3% CER at 29.4 px²/char | ≈37 vision tokens per 1k chars (6.7× text tokens) | baseline |
+| *Reference:* Claude reading plain English | 3% CER at 29.4 px²/char | ≈37 vision tokens per 1k chars vs ≈250 text tokens (6.7× fewer, at 3% error) | baseline |
 
 Notes:
 * "Trained reader" means a small CRNN trained from scratch on each rendering until it converged (10.5k steps),
