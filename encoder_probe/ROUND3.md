@@ -10,9 +10,12 @@ through DeepEncoder (19%). A frozen probe cannot say whether a VLM can *learn* t
 practical: fit more document per GB of KV cache in a long-context LLM, measured locally on the RTX 3090.
 
 **Key fact.** KV cache grows with context positions, and a vision token is one position like a text token. Saving =
-chars per position. Qwen2.5-VL-3B (36 layers, 2 KV heads x 128, bf16; verify from the config) costs about 36 KB
-of KV per position: 1M chars as text (~4 chars/token) ~ 250k positions ~ 9.2 GB; as Latin images at ~40 chars/token
-~ 0.9 GB; as a code at 100 chars/token ~ 0.37 GB.
+chars per position. Qwen2.5-VL-3B (36 layers, 2 KV heads x 128, bf16) costs 36 x 2 x 2 x 128 x 2 B = 36,864 B
+(36 KiB) of KV per position. **Verified 2026-11-04** from config.json at the pinned revision 66285546 (= hub `main`):
+num_hidden_layers 36, num_key_value_heads 2, hidden_size 2048 / 16 heads = head_dim 128, max_position_embeddings
+128000, rope_theta 1e6, M-RoPE sections [16, 24, 24], tied embeddings; the CPU tests check the cache-tensor bytes
+against this formula. 1M chars as text (4.33 chars/token measured with the Qwen tokenizer on held-out WikiText)
+~ 231k positions ~ 8.5 GB; as Latin images at ~40 chars/token ~ 0.9 GB; as a code at 100 chars/token ~ 0.37 GB.
 
 **The trap.** The saving is real only if the model answers from the image tokens directly. If it transcribes the
 page back to text first, the output tokens refill the KV cache. The benchmark is therefore QA over encoded context,
@@ -64,6 +67,23 @@ rgb3_p8 as the fine-tuning test, since fine-tuning is the point).
     Identity28 ceilings (200 pages, 3000 steps, `round3_cpu_tp200`): pending.
 * Metric: CER of generated transcriptions on held-out test pages (WikiText test/val, as rounds 1-2), clean and jpeg75;
   cloze accuracy.
+* **Code: built 2026-11-04, CPU-tested on a tiny random-init model, never run on a GPU or with the real weights.**
+  `experiments/finetune_qwen.py` (shared code: `ep/qwen_ft.py` model/LoRA/inputs/KV, `ep/r3_tasks.py` prompts and
+  answers; tests `tests/test_round3.py`). As planned: LoRA r=16 (alpha 32, dropout 0.05) on q/k/v/o/gate/up/down of
+  all 36 LLM layers (29.9M params), merger + last 4 vision blocks unfrozen (115.5M), trainables fp32, bf16 weights +
+  autocast, gradient checkpointing; 448-px pages from `split_pages` (any registered encoding, `rgb3_lg_*`
+  included); answers are the decoded characters; loss on answer tokens only; defaults 5000 steps, batch 4,
+  1000 train / 16 test pages, lr 2e-4 (LoRA) / 2e-5 (vision), 5% warm-up + cosine. Rows: `results/round3_ft/`, one
+  per eval cond, with `fair` / `fair_hash` (the fairness-guard settings; compare hashes across arms).
+  **Deviation: "full transcription" is windowed.** A whole dense page is 7k (latin_p8) to 82k (rgb3_lg_pb_h5) chars,
+  i.e. 2k-19k answer tokens, so a page that holds more than `--max-target-chars` (default 2000, the same for every
+  arm) is transcribed as a window of whole lines ("Transcribe lines a-b of the n lines on this page."); pages that
+  fit (latin_p24) get the whole page. Eval = greedy generation of 4 evenly spaced windows per test page (all
+  windows of a short page), CER = edit distance / ref chars with rounds 1-2's per-line `clean_hyp`. Whole-page
+  targets for every arm: `--max-target-chars 100000` (long sequences; VRAM untested).
+  Checked without the 7.5 GB weights: the hand-built Qwen2.5-VL chat template + 256 `<|image_pad|>` per page equals
+  the checkpoint's own chat template and processor expansion token for token (real tokenizer, 2026-11-04), and the
+  hub's old key layout (`model.layers.*`, `visual.*`, tied head) loads into transformers 5.22.1 bit for bit (test).
 
 ### R3-2: long-context benchmark (the goal)
 * Documents: concatenated held-out WikiText, 10k-1M chars. Inputs: (a) plain text tokens, (b) Latin page images,
@@ -74,6 +94,17 @@ rgb3_p8 as the fine-tuning test, since fine-tuning is the point).
   GPU memory, prefill time. Native window 32k positions (= 1.2 GB KV); go beyond only with the model's long-context
   setting, noted in rows.
 * Output: accuracy vs KV-cache-GB curves for (a)/(b)/(c). Rows to `encoder_probe/results/round3_*/runs.jsonl`.
+* **Code: built 2026-11-04, CPU-tested on a tiny random-init model, never run on a GPU.**
+  `experiments/longctx_bench.py`. Inputs `text` or any page encoding (the document rendered onto consecutive
+  448-px pages, 256 positions each); base model or `--adapter` (a finetune_qwen.py result, LoRA merged). Needle =
+  'The secret number of <name> is <6 digits>.' at `--depths`; cloze = the word after a 6-word context unique in the
+  document; answers <= 12 tokens, greedy. Per item: correct, positions (= KV entries), M-RoPE span, KV bytes summed
+  over the cache tensors after prefill (= the analytic formula, tested), peak GPU memory, vision and LLM prefill
+  time. One row per (input, length, task). Inputs above `--max-positions` (default 32768 KV entries) get a row with
+  `skipped: true` and the reason; `--rope-scaling` (e.g. YaRN) is recorded in every row. Note: with M-RoPE a
+  448-px page advances the rope position by only 16 while using 256 KV entries, so the 32k limit is applied to KV
+  entries (the memory axis), not to rope positions (`rope_span` is in the rows). At the default limit, text fits
+  up to ~140k chars, latin_p8 pages up to ~0.9M chars, latin_p5 and denser codes the full 1M.
 
 ## Pre-registered predictions (before any round-3 run)
 1. R3-0: Qwen preserves more than DeepEncoder: Latin C@3% through qwen25vl/clean >= 15 chars/token (ROUND2 (a)),
@@ -96,7 +127,9 @@ rgb3_p8 as the fine-tuning test, since fine-tuning is the point).
   `PYTHONUTF8=1 EP_PAGE_CACHE=1 EP_TRAIN_R2_CAP=400000000`, queue lines use `python`, not `python3`.
 * At most 3 GPU jobs (2 for Qwen-token jobs): Windows pages VRAM instead of OOM and jobs stall silently. Watch for
   checkpoints not updating. Keep `--ckpt-every`.
-* New code needed: R3-1 trainer (`encoder_probe/experiments/finetune_qwen.py`, transformers + peft) and R3-2 benchmark
-  (`encoder_probe/experiments/longctx_bench.py`). Weights: full Qwen2.5-VL-3B (~7.5 GB), not just the vision tensors.
+* Code built (2026-11-04, CPU-tested only): R3-1 trainer (`encoder_probe/experiments/finetune_qwen.py`,
+  transformers + peft) and R3-2 benchmark (`encoder_probe/experiments/longctx_bench.py`). Weights: full
+  Qwen2.5-VL-3B (~7.5 GB, into the Hugging Face cache), not just the vision tensors. Commands, in order, with VRAM
+  estimates: docs/LOCAL_GPU.md, "Round 3 on the 3090".
 * Estimates (not measured): R3-0 ~2 h; R3-1 smoke 30 min, full arms 2-4 h each; R3-2 harness ~1 day of coding,
   runs ~1-2 h per configuration.

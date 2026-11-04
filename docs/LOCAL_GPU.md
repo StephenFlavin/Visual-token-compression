@@ -205,3 +205,124 @@ git add -f results/queue_logs/gpu_p0 results/queue_logs/gpu_p1   # optional, git
 git commit -m "Round 2 GPU: <what ran>"
 git pull --rebase origin claude/validation-harness && git push origin claude/validation-harness
 ```
+
+## 8. Round 3 on the 3090 (encoder_probe/ROUND3.md)
+
+**Status: the R3-1/R3-2 code is built and CPU-tested on a tiny random-init Qwen2.5-VL only. Nothing below has run
+on a GPU or with the real weights yet. Every time and VRAM figure is an estimate.** Run the smokes first.
+
+### Setup (Windows, Git Bash, the round-2 venv)
+```bash
+cd /c/git/visual-bpe-run && . .venv/env.sh            # PYTHONUTF8=1 EP_PAGE_CACHE=1 EP_TRAIN_R2_CAP=400000000, venv on PATH
+git pull --rebase origin claude/validation-harness
+pip install "peft>=0.17"                               # now in requirements.txt (runner tested 0.21.2); pulls accelerate
+python -m pytest -q encoder_probe/tests/test_round3.py # ~1 min on the CPU, no download (tiny model)
+# full Qwen2.5-VL-3B-Instruct weights, ~7.5 GB, into the Hugging Face cache (HF_HOME or ~/.cache/huggingface),
+# pinned revision; fetch once before queueing so two jobs never download at the same time:
+python -c "import torch; from encoder_probe.ep.qwen_ft import load_model; m, t = load_model(torch.device('cuda')); print(sum(p.numel() for p in m.parameters()))"
+```
+Expect 3754622976 parameters (counted on the meta device from the config). No torchvision and no HF processor
+are needed: inputs are built by `ep/qwen_ft.py` (checked equal to the checkpoint's chat template and image-token
+expansion). Windows: use `python`, not `python3`, in queue lines; keep `PYTHONUTF8=1`; file locks go through
+`ep/flock.py` (msvcrt), as in round 2.
+
+### GPU job limits
+* **At most 2 Qwen jobs at once** (R3-0 probe jobs with Qwen tokens), and **one `finetune_qwen.py` or
+  `longctx_bench.py` job at a time, alone on the GPU**, until `nvidia-smi` shows headroom. Windows pages GPU memory
+  to host RAM instead of failing with OOM: jobs then stall silently (round 2: 20 min with 5 jobs). Watch log
+  progress and checkpoint mtimes.
+* VRAM estimates (not measured): finetune, batch 4, windows of <= 2000 chars (~800-token sequences): bf16 weights
+  7.5 GB + fp32 trainables, grads and AdamW for 145.5M params 2.3 GB + checkpointed activations 2-4 GB = **~12-15 GB**.
+  If it pages, use `--micro-batch 2` (same effective batch). longctx_bench at 32k positions: weights 7.5 GB + KV
+  1.2 GB + prefill activations 2-3 GB = **~11-13 GB**; text input at 32k is the peak (LM-head logits are computed for
+  the last position only).
+* Disk: a finetune resume checkpoint is ~1.75 GB (trainables + AdamW, `encoder_probe/cache/ckpt/r3ft__*.pt`, deleted
+  when the job ends); the kept adapter is ~0.6 GB (`encoder_probe/cache/r3_adapters/<run>__<encoding>__<steps>.pt`).
+
+### Smokes (run first, one at a time)
+```bash
+# R3-0: the qwen25vl CUDA path has never run (it builds a 20-page token cache under the VLM lock)
+python encoder_probe/experiments/run_probe2.py --device cuda --encoding latin_p16 --encoder qwen25vl --cond clean \
+    --train-pages 20 --test-pages 4 --steps 200 --eval-every 100 --run-name round3_qwen_smoke
+# R3-1: 500 steps, 100 train / 4 test pages; check the loss falls, val_loss falls, generation returns text
+python encoder_probe/experiments/finetune_qwen.py --encoding latin_p8 --smoke          # -> results/round3_ft_smoke/
+# R3-2: base model, 10k-char documents (text ~2.4k positions, latin_p8 2 pages)
+python encoder_probe/experiments/longctx_bench.py --inputs text latin_p8 --lengths 10000 --tasks needle cloze \
+    --depths 0 0.5 1 --n-cloze 2 --run-name round3_lc_smoke
+```
+Each should take minutes (estimate). The finetune log prints `device=cuda bf16=True trainable={...}` and s/step;
+the bench prints positions, KV MB and prefill seconds per item. If anything fails here, fix it before queueing.
+
+### R3-0: frozen Qwen probe (run names `round3_qwen_tp1000`, ceilings `round3_qwen_tp200`)
+```bash
+ENCS="latin_p5 latin_p6 latin_p8 latin_p10 latin_p16 latin_p24 mono_p6 mono_p8 col_b2 col_b4 rgb3_p6 rgb3_p8 lg_free_h4 lg_pb_h5"
+for e in $ENCS; do   # CPU queue: pre-render pages (identity28 and qwen25vl share the 448-px page cache)
+  echo "python encoder_probe/experiments/run_probe2.py --pages-only --encoding $e --encoder qwen25vl --train-pages 1000"
+  echo "python encoder_probe/experiments/run_probe2.py --pages-only --encoding $e --encoder qwen25vl --train-pages 200"
+done > results/queue_cpu_r3_0.txt
+{ echo "python encoder_probe/experiments/build_tokens2.py --encoders qwen25vl --conds clean jpeg75 --train-pages 1000 --encodings $ENCS"
+  for e in $ENCS; do
+    echo "python encoder_probe/experiments/run_probe2.py --encoding $e --encoder identity28 --cond clean --steps 10000 --run-name round3_qwen_tp200"
+  done
+  for c in clean jpeg75; do for e in $ENCS; do
+    echo "python encoder_probe/experiments/run_probe2.py --encoding $e --encoder qwen25vl --cond $c --steps 10000 --train-pages 1000 --run-name round3_qwen_tp1000"
+  done; done; } > results/queue_gpu_r3_0.txt
+nohup python scripts/job_queue.py results/queue_cpu_r3_0.txt --cores 8 --log-dir results/queue_logs/cpu_r3_0 > results/queue_cpu_r3_0.log 2>&1 &
+nohup python scripts/job_queue.py results/queue_gpu_r3_0.txt --cores 2 --log-dir results/queue_logs/gpu_r3_0 > results/queue_gpu_r3_0.log 2>&1 &
+python encoder_probe/experiments/analyse2.py encoder_probe/results/round3_qwen_tp1000/runs.jsonl encoder_probe/results/round3_qwen_tp200/runs.jsonl
+```
+* `--cores 2`: Qwen token jobs. The builder holds the VLM lock; probe jobs whose cache is missing wait for it.
+  Qwen tokens are 256 x 2048 bf16 per page (~1 MB): 1000 pages ~1 GB per (encoding, cond) cache, ~30 GB for the
+  grid on disk.
+* To see the moonshot codes frozen too, add `rgb3_lg_pb_h5 rgb3_lg_free_h4` to ENCS (their identity28 ceilings run
+  on the cloud runner, `round3_cpu_tp200`; the 1185-class probe is ~2x slower per step).
+* Decision (ROUND3.md): pick the 1-2 best dense codes by chars/token at 10% CER; if none survives, still take
+  col_b4 and rgb3_p8.
+
+### R3-1: fine-tuning arms (run name `round3_ft`; smokes `round3_ft_smoke`)
+```bash
+ARMS="latin_p5 latin_p8 col_b4 rgb3_p8 rgb3_lg_pb_h5 rgb3_lg_free_h4"   # replace col_b4 rgb3_p8 by the R3-0 picks
+for e in $ARMS; do echo "python encoder_probe/experiments/run_probe2.py --pages-only --encoding $e --encoder qwen25vl --train-pages 1000"; done > results/queue_cpu_r3_1.txt
+for e in $ARMS; do echo "python encoder_probe/experiments/finetune_qwen.py --encoding $e --smoke"; done > results/queue_gpu_r3_1.txt
+for e in $ARMS; do echo "python encoder_probe/experiments/finetune_qwen.py --encoding $e --steps 5000 --run-name round3_ft"; done >> results/queue_gpu_r3_1.txt
+nohup python scripts/job_queue.py results/queue_cpu_r3_1.txt --cores 8 --log-dir results/queue_logs/cpu_r3_1 > results/queue_cpu_r3_1.log 2>&1 &
+nohup python scripts/job_queue.py results/queue_gpu_r3_1.txt --cores 1 --log-dir results/queue_logs/gpu_r3_1 > results/queue_gpu_r3_1.log 2>&1 &
+```
+* **Fairness guard:** never change a flag for one arm only. Every row stores `fair` and `fair_hash` (steps, batch,
+  lrs, LoRA config, unfrozen layers, pages, task mix, window size, eval settings); all `round3_ft` rows must share
+  one `fair_hash`. Changing a setting = a new run name for every arm.
+* The pages-only lines fill the cache key `(encoding, 448, 1000, 16)` that the 5000-step runs read (the
+  `rgb3_lg_*` pages need ~82M train chars for 1000 pages, hence `EP_TRAIN_R2_CAP=400000000`). Smokes use 100/4
+  pages and render their own (~1-3 min).
+* Rows: `encoder_probe/results/round3_ft/runs.jsonl`, one per eval cond (clean, jpeg75): `cer`, `cloze_acc`,
+  `mc_acc`, `chars_per_token`, `curve` [(step, train-loss EMA, val loss)], `s_per_step`, `peak_gpu_bytes`. Resume:
+  restart the queue with a new `--log-dir`; a job continues from its last `--ckpt-every` (250) checkpoint, exactly.
+* Estimate (not measured): 5000 steps at ~1.5-3 s/step = 2-4 h per arm plus ~5-10 min of eval, ~12-25 h for 6
+  arms. Run the two Latin arms and one code first if time is short; prediction 2 needs the best Latin at 3%.
+
+### R3-2: long-context benchmark (run names `round3_lc_base`, `round3_lc_ft`)
+```bash
+LENS="10000 30000 100000 300000 1000000"
+A=encoder_probe/cache/r3_adapters
+{ echo "python encoder_probe/experiments/longctx_bench.py --inputs text latin_p8 --lengths $LENS --run-name round3_lc_base"
+  for e in latin_p8 col_b4 rgb3_lg_pb_h5; do   # each fine-tuned model reads its own encoding; text as the reference
+    echo "python encoder_probe/experiments/longctx_bench.py --inputs text $e --lengths $LENS --adapter $A/round3_ft__${e}__5000.pt --run-name round3_lc_ft"
+  done; } > results/queue_gpu_r3_2.txt
+nohup python scripts/job_queue.py results/queue_gpu_r3_2.txt --cores 1 --log-dir results/queue_logs/gpu_r3_2 > results/queue_gpu_r3_2.log 2>&1 &
+```
+* Default tasks: needle at depths 0/0.25/0.5/0.75/1 and 5 cloze questions per document (one prefill each). Inputs
+  over 32768 KV entries are written as `skipped: true` rows (text beyond ~140k chars, latin_p8 at 1M). Rows hold
+  `acc`, `positions`, `kv_bytes` (from the cache tensors; = 36,864 B x positions in bf16), `peak_gpu_bytes`,
+  `prefill_s`, `vision_s`, `chars_per_position`, and the per-item answers.
+* Beyond 32k (optional, record it): `--rope-scaling '{"rope_type":"yarn","factor":4.0,"original_max_position_embeddings":32768}' --max-positions 131072`
+  with its own run name. Untested with M-RoPE on the real model; the KV at 128k is ~4.8 GB plus larger prefill
+  activations: check VRAM on a single length first.
+* Estimate (not measured): a 32k-position prefill ~5-20 s on the 3090, so ~1-2 h per command line above.
+
+### Sending results back
+```bash
+git add encoder_probe/results/round3_qwen_tp*/runs.jsonl encoder_probe/results/round3_ft*/runs.jsonl encoder_probe/results/round3_lc_*/runs.jsonl
+git add -f results/queue_logs/gpu_r3_0 results/queue_logs/gpu_r3_1 results/queue_logs/gpu_r3_2   # optional
+git commit -m "Round 3 GPU: <what ran>"
+git pull --rebase origin claude/validation-harness && git push origin claude/validation-harness
+```
