@@ -66,3 +66,4 @@
 [q1] latin_p16      b28         R2 0.2203 inkMCC 0.077 0.077 0.077 inkF1 0.027 0.027 0.027 (chance 0.251) alpha 0.001
 [q1] latin_p16      final       R2 0.1737 inkMCC 0.041 0.041 0.041 inkF1 0.009 0.009 0.009 (chance 0.251) alpha 0.0001
 [q1] latin_p16      merger      R2 0.1569 inkMCC 0.058 0.058 0.058 inkF1 0.024 0.024 0.024 (chance 0.251) alpha 0.1
+[q1] deep loaded (83s)
