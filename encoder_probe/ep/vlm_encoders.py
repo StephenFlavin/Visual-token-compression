@@ -132,19 +132,31 @@ class QwenVision:
         self.out_dim = vc.out_hidden_size
 
     @torch.no_grad()
-    def __call__(self, imgs: np.ndarray, batch: int | None = None) -> torch.Tensor:
+    def __call__(self, imgs: np.ndarray, batch: int | None = None, split: int | None = None):
+        """-> merger tokens (B, n, 2048) bf16; with ``split`` = k also the hidden states entering block k
+        (R3-0b, ep/qwen_split.py): {"tok": (B, n, 2048), "h<k>": (B, (S/14)^2, 1280) window order}, both bf16.
+        The tokens are computed from the fp32 states, so they equal the unsplit path exactly."""
         batch = batch or (8 if self.device.type == "cuda" else 2)
         S = imgs.shape[1]
         n = (S // 28) ** 2
-        out = []
+        out, hid = [], []
         for i in range(0, len(imgs), batch):
             xb = imgs[i:i + batch]
             pv = torch.from_numpy(qwen_pixel_values(xb)).to(self.device)
             thw = torch.tensor([[1, S // 14, S // 14]] * len(xb), device=self.device)
-            o = self.model(hidden_states=pv, grid_thw=thw).pooler_output            # (len*n, 2048)
+            if split is None:
+                o = self.model(hidden_states=pv, grid_thw=thw).pooler_output            # (len*n, 2048)
+            else:
+                from encoder_probe.ep import qwen_split
+                meta = qwen_split.vit_meta(self.model, thw)
+                h = qwen_split.head(self.model, pv.to(self.dtype), thw, split, meta)
+                o = qwen_split.tail(self.model, h, thw, split, meta)
+                hid.append(h.reshape(len(xb), (S // 14) ** 2, -1).to(torch.bfloat16).cpu())
             assert o.shape == (len(xb) * n, self.out_dim), o.shape
             out.append(o.reshape(len(xb), n, self.out_dim).to(torch.bfloat16).cpu())
-        return torch.cat(out)
+        if split is None:
+            return torch.cat(out)
+        return {"tok": torch.cat(out), f"h{split}": torch.cat(hid)}
 
 
 class DeepEncoderVision:
