@@ -36,6 +36,26 @@ never run). Qwen tokens are 256 x 2048 per page: run 2 GPU jobs at a time, not 3
 for Qwen. Picks the dense codes for R3-1 (best 1-2 by chars/token at 10% CER; if none survive, still take col_b4 and
 rgb3_p8 as the fine-tuning test, since fine-tuning is the point).
 
+**Q1 (2026-11-04, cloud CPU, quick test): layer-wise linear readout of frozen Qwen ViT features.**
+`experiments/quick_linear_readout.py`; table: `results/quick_q1/summary.md`, rows `results/quick_q1/rows.jsonl`,
+panel `docs/img/q1_readout_rgb3_lg_pb_h5.png` (one test page, readout per layer, R/G/B crops). Closed-form ridge
+from each feature to the clean pixels it covers. 64 train pages (lambda chosen on 16 of them), 16 held-out test
+pages, 448 px. Hidden states are put back in raster order: the merger rebuilt from them equals pooler_output exactly,
+and the patch-embed readout gives R^2 = 1. Ink MCC (0 = chance) by depth, b8 / b16 / b24 / b28 / final / merger:
+rgb3_lg_pb_h5 (322 chars/token) 0.86 / 0.79 / 0.64 / 0.56 / 0.47 / 0.29; rgb3_lg_free_h4 (406) 0.57 / 0.43 / 0.22
+/ 0.16 / 0.08 / 0.00; lg_pb_h5 (107) 1.00 / 1.00 / 0.91 / 0.81 / 0.65 / 0.30; rgb3_p8 (73) 0.63 / 0.48 / 0.19 /
+0.07 / 0.05 / 0.10; latin_p8 (28) 0.89 / 0.67 / 0.18 / 0.02 / 0.02 / 0.03; latin_p16 (6.8) 0.94 / 0.85 / 0.39 /
+0.08 / 0.04 / 0.06. DeepEncoder calibration: latin_p8 0.00, rgb3_lg_pb_h5 0.29.
+What it shows:
+* The Latin controls lose their linear pixel readout by b24-b28, yet Qwen reads Latin. **A linear readout is a lower
+  bound**, and a low deep-layer value is not evidence of loss.
+* The whole-pixel binary codes (lg_pb_h5, rgb3_lg_pb_h5) stay pixel-like through b28. They drop mostly in blocks
+  28-31 and the merger, down to the ~0.29 coarse-density level that DeepEncoder also gives. R3-1 unfreezes exactly
+  that part, so this is a weak good sign for R3-1 on rgb3_lg_pb_h5.
+* The grey-level moonshot rgb3_lg_free_h4 and rgb3_p8 already fade by b8-b16, as Latin does. A linear readout
+  cannot tell re-coding from destruction there. If it is destruction, only stage B (full ViT) could help them.
+* Not a readability result: a frozen or tuned probe (R3-0 / R3-0b) is still needed.
+
 ### R3-1: teach Qwen to read (fine-tuning smoke, then runs)
 * LoRA (r=16) on the LLM's attention+MLP; unfreeze the patch merger and the last 4 vision blocks; everything else
   frozen. bf16, gradient checkpointing, single 448 px pages (256 vision tokens + prompt + answer, short sequences).

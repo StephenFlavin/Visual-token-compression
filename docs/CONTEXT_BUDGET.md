@@ -55,6 +55,11 @@ Notes:
 | rgb3_lg_pb_h5 | partial: 15.2% at step 500/3000 (identity28) | not run | not run | not run |
 | rgb3_lg_free_h4 | partial: 37.0% at step 500/3000 | not run | not run | not run |
 
+Q1 (2026-11-04, linear pixel readout of frozen Qwen ViT layers, encoder_probe/results/quick_q1/summary.md):
+ink MCC at b28 / merger: rgb3_lg_pb_h5 0.56 / 0.29, lg_pb_h5 0.81 / 0.30, rgb3_lg_free_h4 0.16 / 0.00, rgb3_p8
+0.07 / 0.10, latin_p8 0.02 / 0.03. Latin also fails this linear test and is still read by Qwen, so it is a lower bound,
+not a readability result.
+
 A row counts as a real context gain only when R3-2 shows QA accuracy within the ROUND3.md margins at the stated cpt.
 Until then the Potential table is a ceiling, not a result.
 
