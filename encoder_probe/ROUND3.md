@@ -48,6 +48,20 @@ rgb3_p8 as the fine-tuning test, since fine-tuning is the point).
   round-2 guard: < 10% CER, else the combined page itself is unreadable). It goes into R3-1 even if R3-0 shows the
   overlay at the floor frozen, since fine-tuning is the test; if it fails, fall back to the best single code.
   Smoke: 500 steps per arm (~minutes) to check the loop, loss falls, generation works. Then ~5k steps per arm.
+  * **Moonshot encodings (built 2026-11-04).** `rgb3_lg_pb_h5`, `rgb3_lg_free_h4` (any `rgb3_<LG_BANKS key>`):
+    `ep/rgb_overlay.py::RGB3BankEncoding`, resolved by `get_encoding` (224) and `get_encoding_s` (448/512), so
+    `run_probe2.py --encoding rgb3_lg_pb_h5` works. Each channel is the bank's own word-wrapped layout at its native
+    pitch (2 px chars, 4 px dictionary tokens); consecutive wrapped lines go R, G, B. Classes: channel-tagged bank
+    labels (3 x 395 = 1185); labels interleaved by glyph centre x (= rgb3's R[k], G[k], B[k] for equal advances);
+    decode routes by tag. Strips: `docs/img/rgb3_lg_{pb_h5,free_h4}_strip.png` (page, then R, G, B; 4x).
+    Tests: `encoder_probe/tests/test_rgb3_lg.py`.
+    Density at S=448 (16x16 tokens of 28 px): 320 / 403 chars per token (2.98x the single banks' 107 / 136).
+    CTC budget: T = 3S frames per line; a full-width line could hold S/2 2-px glyphs per stream, L = 3S/2, and
+    2L+1 = 3S+1 misses by one frame, so lines wrap at S-1 px (worst case 223 glyphs/stream at 448, L <= 669,
+    1339 <= 1344; at 512: 255, 1531 <= 1536). Real lines peak at ~600-620 labels (2L+1 ~ 1240), so the 1 px
+    costs ~0.2% density. Cost: the 1185-class head and L ~ 600 make a CPU probe step ~7.5 s at 1 thread (~2x
+    lg_pb_h5's 4 s), i.e. ~6.5 h per 3000-step run.
+    Identity28 ceilings (200 pages, 3000 steps, `round3_cpu_tp200`): pending.
 * Metric: CER of generated transcriptions on held-out test pages (WikiText test/val, as rounds 1-2), clean and jpeg75;
   cloze accuracy.
 
