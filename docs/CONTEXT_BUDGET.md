@@ -41,6 +41,10 @@ Notes:
 * Dense codes have no language prior, so a single misread glyph can corrupt a name or number. Exact-recall tasks
   (needle) are the hard test, not the gist.
 
+**Baseline note (user, 2026-11-04):** compare codes against Latin pushed equally far, not Glyph's ~15. Latin's raw-pixel
+ceiling at Qwen-equivalent density is ~51 (p6) to ~72 (p5) chars/token, and DeepSeek-OCR's trained encoder reaches ~45, so the
+1.5x bar may land at ~25-70+. G2/G3 sweep Latin up to ~100.
+
 **Literature calibration (docs/research/2026-11-04_rgb3_lg_go_no_go_report.md):** plausible go ~30-60 chars/token
 (already ~1.3M chars in Qwen's 32k window, ~9x text), stretch 60-120, 322-405 implausible at LoRA-3B scale.
 
