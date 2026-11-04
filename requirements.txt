@@ -6,5 +6,6 @@ datasets>=3
 matplotlib>=3.9
 # CPU torch for Phase 2:  pip install --index-url https://download.pytorch.org/whl/cpu torch
 torch>=2.5
+peft>=0.17  # round-3 LoRA fine-tuning (encoder_probe/experiments/finetune_qwen.py); needs transformers (runner: 5.22.1)
 pytest
 rapidocr-onnxruntime  # Phase 1b reader
