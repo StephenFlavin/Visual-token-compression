@@ -12,3 +12,14 @@
 [q1] rgb3_lg_pb_h5  merger      R2 0.0192 inkMCC 0.292 0.293 0.292 inkF1 0.624 0.624 0.624 (chance 0.634) alpha 1
 [q1] panel /home/user/visual-bpe/docs/img/q1_readout_rgb3_lg_pb_h5.png
 [q1] rgb3_lg_free_h4 S=448: pages 112s
+[q1] rgb3_lg_free_h4 train features done (467s)
+[q1] rgb3_lg_free_h4 test features done (580s)
+[q1] rgb3_lg_free_h4 raw         R2 1.0000 inkMCC 1.000 1.000 1.000 inkF1 1.000 1.000 1.000 (chance 0.326) alpha 1e-07
+[q1] rgb3_lg_free_h4 embed       R2 1.0000 inkMCC 1.000 1.000 1.000 inkF1 1.000 1.000 1.000 (chance 0.326) alpha 1e-07
+[q1] rgb3_lg_free_h4 b8          R2 0.6404 inkMCC 0.608 0.547 0.559 inkF1 0.676 0.620 0.629 (chance 0.326) alpha 0.001
+[q1] rgb3_lg_free_h4 b16         R2 0.4581 inkMCC 0.460 0.430 0.411 inkF1 0.527 0.495 0.472 (chance 0.326) alpha 0.001
+[q1] rgb3_lg_free_h4 b24         R2 0.2296 inkMCC 0.231 0.226 0.198 inkF1 0.221 0.218 0.175 (chance 0.326) alpha 0.0001
+[q1] rgb3_lg_free_h4 b28         R2 0.1613 inkMCC 0.167 0.167 0.142 inkF1 0.145 0.145 0.111 (chance 0.326) alpha 0.0001
+[q1] rgb3_lg_free_h4 final       R2 0.0909 inkMCC 0.088 0.090 0.074 inkF1 0.054 0.055 0.039 (chance 0.326) alpha 1e-05
+[q1] rgb3_lg_free_h4 merger      R2 0.0085 inkMCC 0.001 0.001 -0.001 inkF1 0.000 0.000 0.000 (chance 0.326) alpha 1
+[q1] latin_p8 S=448: pages 43s
