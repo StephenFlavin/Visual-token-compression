@@ -37,7 +37,8 @@ sys.path.insert(0, str(ROOT))
 from encoder_probe.ep.geom import get_encoding_s, make_pages_s  # noqa: E402
 
 OUT = ROOT / "encoder_probe" / "results" / "quick_q1"
-ENCODINGS = ["latin_p16", "latin_p8", "col_b4", "rgb3_p8", "lg_pb_h5", "rgb3_lg_pb_h5"]
+# moonshot codes first (the subject), then the reference codes
+ENCODINGS = ["rgb3_lg_pb_h5", "rgb3_lg_free_h4", "latin_p8", "lg_pb_h5", "rgb3_p8", "latin_p16", "col_b4"]
 QWEN_LAYERS = ["raw", "embed", "b8", "b16", "b24", "b28", "final", "merger"]
 ALPHAS = [10.0 ** e for e in range(-7, 2)]
 N_FIT, N_TRAIN, N_TEST = 48, 64, 16
@@ -211,18 +212,25 @@ def run_encoding(model, encoding: str, S: int, P_of: dict, log=print) -> list[di
     return rows, recs
 
 
-def panel(encoding: str, recs: dict, names: list[str]) -> Path:
+def panel(encoding: str, recs: dict, names: list[str], crop: int = 192, zoom: int = 2) -> Path:
+    """One test page: rows = original, then the linear readout from each feature; columns = the full RGB page
+    (scaled to the crop size) and a zoomed top-left crop of the R, G and B channels (each rgb3 channel is its own
+    text stream)."""
     from PIL import Image, ImageDraw
     ims = [("original", recs["original"])] + [(n, recs[n]) for n in names if n in recs]
-    S = ims[0][1].shape[0]
-    cols = 4
-    rows = (len(ims) + cols - 1) // cols
-    canvas = Image.new("RGB", (cols * (S + 8), rows * (S + 24)), "white")
+    cw = crop * zoom
+    lab = 150
+    canvas = Image.new("RGB", (lab + 4 * (cw + 6), len(ims) * (cw + 6) + 24), "white")
     d = ImageDraw.Draw(canvas)
+    for j, t in enumerate(["page (RGB, scaled)", f"R crop {crop}px x{zoom}", f"G crop x{zoom}", f"B crop x{zoom}"]):
+        d.text((lab + j * (cw + 6) + 4, 6), t, fill="black")
     for k, (n, im) in enumerate(ims):
-        x, y = (k % cols) * (S + 8), (k // cols) * (S + 24)
-        canvas.paste(Image.fromarray(im), (x, y + 20))
-        d.text((x + 4, y + 4), n if n == "original" else f"linear readout from {n}", fill="black")
+        y = 24 + k * (cw + 6)
+        d.text((4, y + cw // 2), n if n == "original" else f"readout: {n}", fill="black")
+        canvas.paste(Image.fromarray(im).resize((cw, cw), Image.Resampling.LANCZOS), (lab, y))
+        for c in range(3):
+            ch = Image.fromarray(im[:crop, :crop, c]).resize((cw, cw), Image.Resampling.NEAREST)
+            canvas.paste(ch.convert("RGB"), (lab + (c + 1) * (cw + 6), y))
     path = ROOT / "docs" / "img" / f"q1_readout_{encoding}.png"
     canvas.save(path)
     return path
@@ -281,7 +289,7 @@ def main(argv=None) -> int:
     ap.add_argument("--encodings", nargs="+", default=ENCODINGS)
     ap.add_argument("--deep-encodings", nargs="*", default=["latin_p8", "rgb3_lg_pb_h5"])
     ap.add_argument("--threads", type=int, default=2)
-    ap.add_argument("--panels", nargs="*", default=["latin_p8", "rgb3_lg_pb_h5"])
+    ap.add_argument("--panels", nargs="*", default=["rgb3_lg_pb_h5"])
     ap.add_argument("--summarize", action="store_true")
     a = ap.parse_args(argv)
     if a.summarize:
