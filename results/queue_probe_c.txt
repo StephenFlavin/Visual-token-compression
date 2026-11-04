@@ -1,13 +1,13 @@
-python3 encoder_probe/experiments/build_tokens2.py --encoders deepencoder --conds clean jpeg75
-python3 encoder_probe/experiments/run_probe2.py --encoding latin_p16 --encoder identity32 --cond clean --steps 3000 --run-name round2
-python3 encoder_probe/experiments/run_probe2.py --encoding latin_p8 --encoder identity32 --cond clean --steps 3000 --run-name round2
-python3 encoder_probe/experiments/run_probe2.py --encoding col_b2 --encoder identity32 --cond clean --steps 3000 --run-name round2
 python3 encoder_probe/experiments/run_probe2.py --encoding latin_p16 --encoder deepencoder --cond clean --steps 3000 --run-name round2
 python3 encoder_probe/experiments/run_probe2.py --encoding col_b4 --encoder deepencoder --cond clean --steps 3000 --run-name round2
 python3 encoder_probe/experiments/run_probe2.py --encoding lg_pb_h5 --encoder deepencoder --cond clean --steps 3000 --run-name round2
 python3 encoder_probe/experiments/run_probe2.py --encoding lg_free_h4 --encoder deepencoder --cond clean --steps 3000 --run-name round2
 python3 encoder_probe/experiments/run_probe2.py --encoding rgb3_p8 --encoder deepencoder --cond clean --steps 3000 --run-name round2
 python3 encoder_probe/experiments/run_probe2.py --encoding latin_p8 --encoder deepencoder --cond clean --steps 3000 --run-name round2
+python3 encoder_probe/experiments/run_probe2.py --encoding latin_p16 --encoder identity32 --cond clean --steps 3000 --run-name round2
+python3 encoder_probe/experiments/run_probe2.py --encoding latin_p8 --encoder identity32 --cond clean --steps 3000 --run-name round2
+python3 encoder_probe/experiments/run_probe2.py --encoding col_b2 --encoder identity32 --cond clean --steps 3000 --run-name round2
+python3 encoder_probe/experiments/build_tokens2.py --encoders deepencoder --conds clean jpeg75
 python3 encoder_probe/experiments/run_probe2.py --encoding lg_free_h4 --encoder identity32 --cond clean --steps 3000 --run-name round2
 python3 encoder_probe/experiments/run_probe2.py --encoding latin_p5 --encoder deepencoder --cond clean --steps 3000 --run-name round2
 python3 encoder_probe/experiments/run_probe2.py --encoding latin_p6 --encoder deepencoder --cond clean --steps 3000 --run-name round2

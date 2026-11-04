@@ -74,6 +74,8 @@ def main(argv=None) -> int:
     if a.bf16 == "off" or (a.bf16 == "auto" and not cpu_has_bf16()):
         a.no_bf16 = True
     torch.set_num_threads(a.threads)
+    # flush denormals: in fp32 on CPU they made latin probe steps 5.5x slower (17 -> 3.1 s/step, 2026-11-04)
+    torch.set_flush_denormal(True)
     torch.manual_seed(a.seed)
     rng = np.random.default_rng(a.seed)
     out = ROOT / "encoder_probe" / "results" / a.run_name

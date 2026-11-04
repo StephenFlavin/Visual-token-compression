@@ -155,6 +155,10 @@ waiter only after round 1's queue (`results/queue_probe_b.txt`) has exited:
    bf16, the other jpeg75 caches fp32. Check on 2 latin_p8 test pages: fp32 vs cached bf16 tokens differ by 3.5%
    (relative L2), a fresh bf16 run vs the same cache by 4.7%, so the switch adds no more noise than bf16 itself.
    Rows record the probe's precision in `bf16`; the 3 identity32 anchors resumed from bf16 checkpoints in fp32.
+   **~09:20: denormals.** fp32 alone was not enough: the latin anchors still ran at ~17 s/step (col_b2 4.3) because
+   of fp32 denormals in the backward pass. `torch.set_flush_denormal(True)` in run_probe2/run_probe: 3.1 s/step on the
+   real resumed latin_p16 job. Queue restarted as probe_c6 with the 6 key deepencoder/clean runs first, then the
+   3 identity32 anchors (resume from checkpoints), then the jpeg75 token build, then the rest.
    **Reordered 2026-11-03, before round 2 started:** DeepSeek-OCR's encoder is the primary target (user), so its
    geometry runs first. The 4 identity32 anchors come first so a probe failure at this geometry shows within ~1.5 h.
 * A probe job whose cache is not there yet waits for it while the builder holds the lock. If no builder is alive
