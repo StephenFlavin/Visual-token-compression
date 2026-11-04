@@ -6,8 +6,17 @@ Vision-language models can read text from images, and an image costs a fixed num
 area (for Claude, about one token per 28×28 px). If text could be drawn more densely and still read back
 correctly, a long document would cost fewer tokens as an image than as plain text.
 
+**What it's for.** A model can only hold a fixed number of tokens at once (its context window), and memory and cost
+grow with every token. If a page image carries more characters per token than text does, the same model holds more
+document: Qwen2.5-VL-3B's 32k window fits ~142k characters as text, or ~1-2M at 30-60 characters per vision token.
+Numbers per encoding: [docs/CONTEXT_BUDGET.md](docs/CONTEXT_BUDGET.md).
+
 This repo tests three ways of packing text more densely. Each was tried against plain text with readers that
 were *trained* on the rendering, so neither side gets an unfair advantage.
+
+> **Where it stands (2026-11-04).** All three codes hold far more text per pixel than plain text *if the reader sees
+> the raw pixels*. Through **frozen** vision encoders (SigLIP, DeepSeek-OCR's) every dense code is lost. The open
+> question, now being tested, is whether a VLM can be *trained* to read them.
 
 > **How to read the numbers.** **px²/char** is image area per source character (lower is better). **Chars per
 > vision token** is how many characters one image token carries (higher is better; a normal text token holds
@@ -36,7 +45,9 @@ a Chinese character needs a larger font to stay legible, which cancels the width
 plain text at equal accuracy).
 
 **Result:** learned glyphs need **0.57×** the pixels of plain text for the same accuracy, so about 1.75× more
-text fits per image (whole-pixel version: 0.77–0.88×). → [learned_glyphs/RESULTS.md](learned_glyphs/RESULTS.md)
+text fits per image (whole-pixel version: 0.77–0.88×). Through **frozen** vision encoders the glyphs don't survive
+(SigLIP layer 6: 53–55% CER; DeepSeek-OCR's encoder: 82%), though whole-pixel glyphs hold up better than grey-level
+ones. → [learned_glyphs/RESULTS.md](learned_glyphs/RESULTS.md)
 
 ## 2. Colour pixels: one coloured block per character
 
@@ -51,8 +62,8 @@ pixel per character) would use 90% less.
 
 **Result:** a reader that sees the raw pixels decodes this almost perfectly (1×1 blocks: 0.06% CER, 256 chars per
 token, 7.5× plain text), and 2×2 blocks still survive JPEG compression (3× plain text). But once the image passes
-through a pretrained vision encoder (SigLIP, as used in VLMs), the colour code is gone: the error rate never drops
-below 62%. → [encoder_probe/RESULTS.md](encoder_probe/RESULTS.md)
+through a frozen pretrained vision encoder, the colour code is gone: SigLIP never gets below 62% CER, and
+DeepSeek-OCR's OCR-trained encoder 71–73%. → [encoder_probe/RESULTS.md](encoder_probe/RESULTS.md)
 
 ## 3. RGB overlay: three lines in one, one per colour channel
 
@@ -64,8 +75,10 @@ position, and one line of pixels carries three lines of text.
 Each line only darkens its own channel, so nothing is painted over: each colour channel on its own still holds
 one clean line. The overlay holds **exactly 3× the text** of a single monospace line (about 2.6× ordinary text).
 
-**Result:** built and smoke-tested only (a 300-step test run already decodes recognisable text). The real test,
-through an OCR-grade VLM encoder, is queued. → [encoder_probe/RGB_OVERLAY.md](encoder_probe/RGB_OVERLAY.md)
+**Result:** with raw pixels the overlay reads almost perfectly (0.01% CER at 677 chars per DeepSeek-OCR token), but
+through DeepSeek-OCR's frozen encoder it is lost (83.5% CER). Inside Qwen2.5-VL's vision encoder the plain-font overlay
+fades by the middle layers, while an overlay of learned glyphs is still partly recoverable at the encoder output and
+loses much of the rest at the final merger step, which is why the next tests train that step. → [encoder_probe/RESULTS.md](encoder_probe/RESULTS.md)
 
 ---
 
@@ -76,12 +89,15 @@ through an OCR-grade VLM encoder, is queued. → [encoder_probe/RGB_OVERLAY.md](
 | **Learned glyphs** (300 chunks, trained reader) | 3% CER at 3.75 px²/char (plain: 6.54) | **0.57× the pixels** (1.75× text per pixel) | ✅ **qualified go** |
 | ↳ whole-pixel glyphs (survive encoders better) | 3% CER at 5.73 px²/char | 0.88× (0.77× at 1% CER) | ✅ use these |
 | ↳ under heavy blur, noise and JPEG | 3.5% CER vs plain text 43% at the same size | lead grows | ✅ |
+| ↳ through frozen VLM encoders | SigLIP layer 6: 53%; DeepSeek-OCR: 82% CER | – | ❌ frozen; ⏳ trained |
 | **Colour blocks**, raw pixels | 1×1 blocks: 0.06% CER at 256 chars/token | **7.5×** chars per token | ✅ ceiling only |
 | ↳ through JPEG (q75) | 2×2 blocks: 3% CER at 71 chars/token | 3× | ✅ ceiling only |
-| ↳ through a frozen VLM encoder (SigLIP) | never below 62% CER | – | ❌ dead for frozen encoders |
-| **RGB overlay** | not yet measured (geometry: 3× mono, 2.6× plain) | – | ⏳ queued |
+| ↳ through frozen VLM encoders | SigLIP ≥62%; DeepSeek-OCR 71–73% CER | – | ❌ frozen |
+| **RGB overlay**, raw pixels | 0.01% CER at 677 chars per DeepSeek-OCR token | 3× mono line | ✅ ceiling only |
+| ↳ through a frozen VLM encoder | DeepSeek-OCR: 83.5% CER | – | ❌ frozen; ⏳ trained |
 | Hand-picked Chinese glyphs (trained reader) | best: 2.26% CER at 8.9 px²/char | **≥1.18× the pixels (worse)** | ❌ killed |
 | Hangul-style 2×2 letter packing | ~2% CER at 26 px²/char | ≥3× worse | ❌ killed |
+| *Reference:* plain text through DeepSeek-OCR's frozen encoder | 15–19% CER at 8.5 chars/token; denser Latin unreadable | ~2× text tokens | baseline |
 | *Reference:* Claude reading plain English | 3% CER at 29.4 px²/char | ≈37 vision tokens per 1k chars vs ≈250 text tokens (6.7× fewer, at 3% error) | baseline |
 
 Notes:
@@ -89,27 +105,34 @@ Notes:
   so every scheme is read equally well.
 * Claude can only score natural text. Its safety classifiers refuse glyph-substituted or scrambled pages, so the
   dense schemes are scored with trained readers or the probe, never with Claude.
-* SigLIP numbers come from a small probe trained on frozen encoder outputs. They are upper bounds on what the
-  encoder destroys, not what an LLM would read. Plain text through the same probe reaches only 4.9% CER, and only
-  at 2 chars per token.
+* Encoder numbers come from a small probe trained on frozen encoder outputs. They are upper bounds on what the
+  encoder destroys, not what an LLM would read: the probe is data-limited (plain text through DeepSeek-OCR's encoder
+  went from 85% to 15% CER as training pages grew from 200 to 5000), and DeepSeek-OCR's own decoder does far
+  better on plain text. Only same-probe comparisons between codes carry the conclusions.
 * Full write-ups: [docs/RESULTS.md](docs/RESULTS.md) (all phases), [PLAN.md](PLAN.md) (pre-registered predictions
   and kill criteria).
 
 ## Still to test
 
-1. **DeepSeek-OCR's encoder (round 2, queued, not started).** SigLIP is a caption encoder with no OCR training.
-   The real question is whether an encoder built for reading text keeps dense codes. 49 queued jobs (~12-14 h on 4
-   CPUs) push plain text, learned glyphs (grey-level and whole-pixel), colour blocks and the RGB overlay through
-   DeepSeek-OCR's DeepEncoder, clean and with JPEG. → [encoder_probe/ROUND2.md](encoder_probe/ROUND2.md)
-2. **RGB overlay, first real numbers.** These come from round 2 (its decision rule: worth pursuing only if it
-   beats plain text by ≥2× through a real encoder with JPEG). The standalone 48-run SigLIP grid is written but not queued.
-3. **Hardening the learned glyphs.** The densest alphabets break on degradations they never saw in training
-   (55–68% CER on real JPEG and an unseen resize filter). Next: train with real JPEG and resampling, and try 1000
-   chunks instead of 300 (GPU).
-4. **End to end with a real VLM (GPU).** Fine-tune a small VLM on pages of learned glyphs vs plain text at equal
-   vision-token budgets. This is the only test that answers "does the LLM actually read it?"
-5. **More layers per pixel** (`rgb6`: two intensity levels per channel, six texts per line). Only worth trying
-   if the RGB overlay keeps most of its 3× through a real encoder. → [docs/IDEAS.md](docs/IDEAS.md)
+The frozen-encoder tests are done. Round 3 asks whether a VLM can be **trained** to read dense codes, and whether
+that actually fits more document into its memory. → [encoder_probe/ROUND3.md](encoder_probe/ROUND3.md)
+
+1. **G2-lite: train the merger (CPU, built, not run yet).** Keep Qwen2.5-VL's vision encoder frozen but train its
+   final merger step, for plain text (~28 chars/token), whole-pixel learned glyphs (~107) and the moonshot below
+   (322). This tests whether the merger is the wall the earlier probe suggested.
+2. **Teach Qwen2.5-VL-3B to read (GPU, local RTX 3090).** LoRA fine-tuning, then deeper training if needed, on a
+   density sweep of codes. Plain text is pushed to ~100 chars/token as the baseline. A code counts only if it
+   reaches ≥1.5× the densest plain text at under 3% CER.
+3. **Long-context benchmark: the real goal.** Ask questions about documents held as dense images versus as text,
+   at equal memory (KV cache). The model must answer from the image tokens directly; transcribing back to text
+   would refill the memory. Compare against a text-side compressor too.
+4. **The moonshot: RGB overlay of learned glyphs** (`rgb3_lg`, 322–405 chars per token). Published results put the
+   plausible range at ~30–90 chars per token, so this is a long shot.
+   → [literature report](docs/research/2026-11-04_rgb3_lg_go_no_go_report.md)
+5. **Smaller follow-ups:** a braille-style fixed dot code as a control for the learned glyphs, and hardening the
+   glyphs against real JPEG and resizing. → [docs/IDEAS.md](docs/IDEAS.md)
+
+Ruled out by the frozen-encoder results: the `rgb6` six-layer overlay and the standalone RGB overlay grid on SigLIP.
 
 ---
 
@@ -120,8 +143,8 @@ Notes:
 | `vbpe/` | layout engine, rendering schemes (Latin, Chinese substitution, quadrant), CRNN reader, Claude eval, analysis |
 | `experiments/` | Phase 1 (Claude), 1b (PP-OCR zero-shot) and 2 (trained CRNN) drivers |
 | `learned_glyphs/` | learned glyph alphabet sub-project (plan, code, results, saved glyph banks) |
-| `encoder_probe/` | frozen-encoder probe: colour blocks, RGB overlay, glyphs through SigLIP and DeepEncoder |
-| `docs/` | results, prior art, idea backlog, README figures |
+| `encoder_probe/` | encoder probe (rounds 1-2: frozen SigLIP and DeepEncoder) and round 3 (training Qwen2.5-VL to read codes) |
+| `docs/` | results, context budget, literature report, GPU runbook, idea backlog, README figures |
 | `scripts/` | data building, fonts, job queue, `make_readme_figures.py` |
 
 **Setup and how to run everything:** [AGENTS.md](AGENTS.md). Quick start:
