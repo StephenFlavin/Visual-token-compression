@@ -131,6 +131,32 @@ def latin_panel(d, x, y, z, highlights=None, font_path=DEJAVU):
     return max(f.getlength(t) for t in HAIKU)
 
 
+GOOD = (22, 163, 74)
+
+
+def reads_as_label(d, x, y, sub=""):
+    d.ellipse([x, y, x + 34, y + 34], fill=GOOD)
+    d.line([(x + 9, y + 18), (x + 15, y + 24), (x + 26, y + 11)], fill=(255, 255, 255), width=4)
+    f = ui(28, "SemiBold")
+    d.text((x + 48, y + 17), "Reads back as", font=f, fill=INK, anchor="lm")
+    if sub:
+        d.text((x + 58 + d.textlength("Reads back as", font=f), y + 17), sub, font=ui(26), fill=MUTED, anchor="lm")
+
+
+def reads_as(d, x, y, highlights=None):
+    """The decoded haiku under an AFTER panel (optionally with the chunk tints). Returns the bottom y."""
+    reads_as_label(d, x, y)
+    f = ImageFont.truetype(DEJAVU, 32)
+    lh = 46
+    for i, t in enumerate(HAIKU):
+        top = y + 50 + i * lh
+        for s0, e, tint in (highlights or [[]] * 3)[i]:
+            x0, x1 = x + f.getlength(t[:s0]), x + f.getlength(t[:e])
+            d.rounded_rectangle([x0 + 1, top + 2, x1 - 1, top + lh - 4], radius=8, fill=tint)
+        d.text((x, top + 34), t, font=f, fill=INK, anchor="ls")
+    return y + 50 + 3 * lh
+
+
 # --------------------------------------------------------------------------- figure 1: learned glyphs
 def fig_glyphs():
     bank = torch.load(BANK, map_location="cpu", weights_only=False)
@@ -199,8 +225,9 @@ def fig_glyphs():
     d.text((rx, yc), "each coloured cell is ONE glyph for a whole chunk",
            font=ui(24), fill=MUTED, anchor="lt")
     d.text((lx, yc), "coloured = chunks from the 300-entry dictionary", font=ui(24), fill=MUTED, anchor="lt")
+    ye = reads_as(d, rx, yc + 60, hl)
 
-    yb = yc + 80
+    yb = ye + 70
     d.line([lx, yb - 24, W - 70, yb - 24], fill=FAINT, width=2)
     y = bars(d, lx, yb, 1120, [
         (f"Plain: {n_chars} chars", latin_w, BEFORE, ""),
@@ -241,11 +268,12 @@ def fig_colour():
     yc = y0 + 3 * row_h + 10
     d.text((rx, yc), "95 colours (5 levels per channel), letters shown only as a key",
            font=ui(24), fill=MUTED, anchor="lt")
+    ye = reads_as(d, rx, yc + 60)
 
     n_chars = sum(len(t) for t in HAIKU)
     f = ImageFont.truetype(DEJAVU, 400)
     latin_area = sum(f.getlength(t) / 400 * EM for t in HAIKU) * PITCH
-    yb = yc + 80
+    yb = ye + 70
     d.line([lx, yb - 24, W - 70, yb - 24], fill=FAINT, width=2)
     y = bars(d, lx, yb, 1120, [
         ("Plain text", latin_area, BEFORE, ""),
@@ -311,8 +339,9 @@ def fig_rgb():
     # channel split: each channel alone gives one clean line back
     ys = y0 + 3 * (pitch + 14) + 40
     d.line([lx, ys - 20, W - 70, ys - 20], fill=FAINT, width=2)
-    d.text((lx, ys + 10), "Split the colour channels", font=ui(30, "SemiBold"), fill=INK, anchor="lt")
-    d.text((lx, ys + 52), "and each line comes back on its own:", font=ui(28), fill=MUTED, anchor="lt")
+    reads_as_label(d, lx, ys + 4)
+    d.text((lx + 48, ys + 52), "split the colour channels and", font=ui(26), fill=MUTED, anchor="lt")
+    d.text((lx + 48, ys + 88), "each line comes back on its own", font=ui(26), fill=MUTED, anchor="lt")
     arr = np.asarray(comp)
     sx, sw = 620, int(comp.width * 0.6)
     for c, (tag, col) in enumerate(chips):
