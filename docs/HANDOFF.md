@@ -25,6 +25,8 @@ The cloud runner is idle; nothing runs there. Everything below is on `claude/val
 4. R3-0 (frozen Qwen probe grid) -> pick codes; R3-1 fine-tuning arms (latin_p5, latin_p8, R3-0 picks, both
    `rgb3_lg_*`; all `round3_ft` rows must share one `fair_hash`); R3-2 long-context benchmark. Decision rules and
    predictions: ROUND3.md.
+   After each step, update the Evidence table in docs/CONTEXT_BUDGET.md (context/KV/compute per encoding vs
+   the default model; user's demo goal).
 5. Write up in encoder_probe/RESULTS.md (round-3 section), AGENTS.md findings bullet, docs/RESULTS.md. Commit the
    `round3_*` runs.jsonl and push (git pull --rebase first).
 
