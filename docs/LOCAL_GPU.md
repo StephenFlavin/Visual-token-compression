@@ -40,7 +40,7 @@ python3 -c "import torch; print(torch.cuda.is_available(), torch.cuda.get_device
 * `run_probe2.py` (round 2), `run_probe.py` (round 1) and `build_tokens2.py` take `--device`. On CUDA the probe and
   test tokens go to the GPU. Train tokens and uint8 pixels also go there if they fit in `--gpu-data-gb` (default
   4 GB per job), else each batch is copied over. The probe uses bf16 autocast, and the numpy batch sampling is
-  identical. VLM encoders run in bf16 (their checkpoint dtype) with larger batches; SigLIP (round 1) stays fp32.
+  identical. VLM encoders run in fp32 on CUDA (TF32 off; bf16 on the 3090 gave corr 0.9974 vs CPU fp32) with larger batches; SigLIP (round 1) stays fp32.
 * Rows record `device` and `enc_compute` (the device/dtype that made the token cache). The skip key is unchanged:
   (encoding, encoder, cond, steps). **Use one `--run-name` per `--train-pages` value.** Checkpoints are per page count.
 * Resume works across devices: checkpoints load with `map_location="cpu"`, the CUDA RNG state is saved too.
@@ -59,7 +59,7 @@ python3 encoder_probe/experiments/run_probe2.py --device cuda --encoding latin_p
     --cond clean --train-pages 20 --test-pages 4 --steps 200 --eval-every 100 --run-name round2_smoke_gpu
 python3 encoder_probe/experiments/run_probe2.py --device cuda --encoding latin_p16 --encoder identity32 \
     --cond clean --train-pages 20 --test-pages 4 --steps 200 --eval-every 100 --run-name round2_smoke_gpu
-# DeepEncoder on CUDA (bf16) vs CPU (fp32) on 2 pages: expect corr >= 0.999 (ROUND2.md measured 0.99985)
+# DeepEncoder on CUDA vs CPU (both fp32) on 2 pages: expect corr >= 0.9999 (measured 0.999998 on the 3090)
 python3 -c "
 import numpy as np, torch
 from encoder_probe.ep.token_cache import split_pages

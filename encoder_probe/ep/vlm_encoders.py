@@ -10,8 +10,8 @@
                                       LLM's image tokens: SAM-B + 16x conv compressor + CLIP-L + linear projector)
 
 Weights: only the vision tensors are fetched from each checkpoint (HTTP range requests, ep/hf_partial.py) into
-encoder_probe/cache/weights/. Both models run in bf16 (their checkpoint dtype) on CUDA and on CPUs with native bf16,
-else in fp32 (compute_dtype). On CUDA they use larger batches; tokens are always returned on the CPU as bf16.
+encoder_probe/cache/weights/. Both models run in fp32 on CUDA, in bf16 (their checkpoint dtype) on CPUs with native
+bf16, else in fp32 (compute_dtype). On CUDA they use larger batches; tokens are always returned on the CPU as bf16.
 """
 from __future__ import annotations
 
@@ -58,8 +58,15 @@ COMPUTE_DTYPE = torch.bfloat16 if cpu_has_bf16() else torch.float32
 
 
 def compute_dtype(device: torch.device) -> torch.dtype:
-    """Encoder precision: bf16 (checkpoint dtype) on CUDA; on CPU bf16 only with native bf16, else fp32."""
-    return torch.bfloat16 if device.type == "cuda" else COMPUTE_DTYPE
+    """Encoder precision: fp32 on CUDA (TF32 off); on CPU bf16 only with native bf16, else fp32.
+
+    Measured on an RTX 3090 (DeepEncoder, 2 latin_p8 pages, vs CPU fp32): CUDA fp32 corr 0.999998 (rel L2 1e-4),
+    CUDA bf16 corr 0.9974 (rel L2 7.2%, vs 4.2% for CPU bf16). fp32 is lossless (weights are bf16 values) and cheap."""
+    if device.type == "cuda":
+        torch.backends.cuda.matmul.allow_tf32 = False
+        torch.backends.cudnn.allow_tf32 = False
+        return torch.float32
+    return COMPUTE_DTYPE
 
 
 def encodings_for(encoder: str) -> list[str]:
