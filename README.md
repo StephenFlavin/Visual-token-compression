@@ -18,19 +18,20 @@ were *trained* on the rendering, so neither side gets an unfair advantage.
 ## 1. Glyphs: one symbol for a frequent chunk of letters
 
 Byte-pair encoding (BPE) merges frequent letter sequences such as `the`, `ing` and ` of the ` into single
-tokens. *Visual* BPE does the same on the page: each of the 300 most useful chunks gets its own glyph, and
-every other letter stays as it is. So `something` becomes `s` + glyph(`ome`) + `th` + glyph(`ing`).
+tokens. *Visual* BPE does the same on the page: each of the 300 most useful chunks gets its own glyph, and the
+rest of the text is spelled letter by letter. So `something` becomes `s` + glyph(`ome`) + `th` + glyph(`ing`).
 
-![Plain text vs text with chunks drawn as single glyphs](docs/img/glyphs.png)
+![Plain text vs learned glyphs](docs/img/glyphs.png)
 
-The haiku goes from **66 characters to 32 symbols**, and its lines get **39% shorter** at the same font size.
+The haiku goes from **66 characters to 32 symbols**, and its lines get **36% shorter** at the same line height.
+The glyph shapes are **learned**: every symbol, single letters included, is a small whole-pixel bitmap (5 px
+tall) optimised together with a reader so that all of them are easy to tell apart at tiny sizes. The key under
+each cell shows what it stands for; the full alphabet is in the
+[glyph atlas](learned_glyphs/results/e1long/atlas/lg_learned_n300_pb_h5.png).
 
-There are two versions of the glyphs:
-* **Hand-picked (pictured): common Chinese characters as the chunk glyphs.** This **failed**. A Chinese
-  character has much more detail than a letter, so it needs a larger font to stay legible, which cancels the
-  width saved (≥1.18× the pixels of plain text at equal accuracy).
-* **Learned: the glyph shapes are optimised together with a reader.** Every symbol, single letters included,
-  becomes a small bitmap that is easy to tell apart at tiny sizes ([glyph atlas](learned_glyphs/results/e1long/atlas/lg_learned_n300_pb_h5.png)).
+An earlier version used common Chinese characters as the chunk glyphs and kept normal letters. That **failed**:
+a Chinese character needs a larger font to stay legible, which cancels the width saved (≥1.18× the pixels of
+plain text at equal accuracy).
 
 **Result:** learned glyphs need **0.57×** the pixels of plain text for the same accuracy, so about 1.75× more
 text fits per image (whole-pixel version: 0.77–0.88×). → [learned_glyphs/RESULTS.md](learned_glyphs/RESULTS.md)
