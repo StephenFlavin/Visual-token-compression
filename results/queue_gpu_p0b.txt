@@ -1,0 +1,6 @@
+python encoder_probe/experiments/run_probe2.py --encoding latin_p32 --encoder deepencoder --cond clean --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+python encoder_probe/experiments/run_probe2.py --encoding latin_p16 --encoder deepencoder --cond clean --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+python encoder_probe/experiments/run_probe2.py --encoding latin_p32 --encoder deepencoder --cond clean --steps 10000 --train-pages 3000 --run-name round2_gpu_tp3000
+python encoder_probe/experiments/run_probe2.py --encoding latin_p16 --encoder deepencoder --cond clean --steps 10000 --train-pages 3000 --run-name round2_gpu_tp3000
+python encoder_probe/experiments/run_probe2.py --encoding latin_p32 --encoder deepencoder --cond clean --steps 10000 --train-pages 5000 --run-name round2_gpu_tp5000
+python encoder_probe/experiments/run_probe2.py --encoding latin_p16 --encoder deepencoder --cond clean --steps 10000 --train-pages 5000 --run-name round2_gpu_tp5000

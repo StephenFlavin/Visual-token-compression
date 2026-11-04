@@ -1,0 +1,2 @@
+python encoder_probe/experiments/run_probe2.py --pages-only --encoding latin_p32 --encoder deepencoder --train-pages 3000
+python encoder_probe/experiments/run_probe2.py --pages-only --encoding latin_p16 --encoder deepencoder --train-pages 3000
