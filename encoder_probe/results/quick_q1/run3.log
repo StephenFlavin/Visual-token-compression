@@ -34,3 +34,13 @@
 [q1] latin_p8       final       R2 0.2394 inkMCC 0.023 0.023 0.023 inkF1 0.006 0.006 0.006 (chance 0.281) alpha 1e-05
 [q1] latin_p8       merger      R2 0.2510 inkMCC 0.034 0.034 0.034 inkF1 0.016 0.016 0.016 (chance 0.281) alpha 0.01
 [q1] lg_pb_h5 S=448: pages 26s
+[q1] lg_pb_h5 train features done (452s)
+[q1] lg_pb_h5 test features done (571s)
+[q1] lg_pb_h5       raw         R2 1.0000 inkMCC 1.000 1.000 1.000 inkF1 1.000 1.000 1.000 (chance 0.636) alpha 1e-07
+[q1] lg_pb_h5       embed       R2 1.0000 inkMCC 1.000 1.000 1.000 inkF1 1.000 1.000 1.000 (chance 0.636) alpha 1e-07
+[q1] lg_pb_h5       b8          R2 0.9831 inkMCC 1.000 1.000 1.000 inkF1 1.000 1.000 1.000 (chance 0.636) alpha 0.001
+[q1] lg_pb_h5       b16         R2 0.9463 inkMCC 0.999 0.999 0.999 inkF1 0.999 0.999 0.999 (chance 0.636) alpha 0.001
+[q1] lg_pb_h5       b24         R2 0.7633 inkMCC 0.914 0.914 0.914 inkF1 0.954 0.954 0.954 (chance 0.636) alpha 1e-05
+[q1] lg_pb_h5       b28         R2 0.6218 inkMCC 0.806 0.806 0.806 inkF1 0.896 0.896 0.896 (chance 0.636) alpha 0.0001
+[q1] lg_pb_h5       final       R2 0.4298 inkMCC 0.650 0.650 0.650 inkF1 0.811 0.811 0.811 (chance 0.636) alpha 1e-05
+[q1] lg_pb_h5       merger      R2 0.0328 inkMCC 0.295 0.295 0.295 inkF1 0.617 0.617 0.617 (chance 0.636) alpha 0.1
