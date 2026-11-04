@@ -25,6 +25,7 @@ from __future__ import annotations
 import argparse
 import collections
 import copy
+import gc
 import json
 import sys
 import time
@@ -194,6 +195,9 @@ def main(argv=None) -> int:
     classes = enc.classes
     cidx = {ch: i + 1 for i, ch in enumerate(classes)}
     tgt = [[torch.tensor([cidx[x] for x in lab], dtype=torch.long) for lab in p.labels] for p in tr]
+    for p in tr:   # the label strings of 500 dense pages hold ~1.5 GB (rgb3_lg: ~560 two-char labels per line)
+        p.labels = p.refs = None
+    gc.collect()
     chars = sum(p.n_chars for p in te)
     ppc = S * S * len(te) / max(1, chars)
     cpt = chars / (len(te) * G * G)
