@@ -44,3 +44,14 @@
 [q1] lg_pb_h5       b28         R2 0.6218 inkMCC 0.806 0.806 0.806 inkF1 0.896 0.896 0.896 (chance 0.636) alpha 0.0001
 [q1] lg_pb_h5       final       R2 0.4298 inkMCC 0.650 0.650 0.650 inkF1 0.811 0.811 0.811 (chance 0.636) alpha 1e-05
 [q1] lg_pb_h5       merger      R2 0.0328 inkMCC 0.295 0.295 0.295 inkF1 0.617 0.617 0.617 (chance 0.636) alpha 0.1
+[q1] rgb3_p8 S=448: pages 71s
+[q1] rgb3_p8 train features done (449s)
+[q1] rgb3_p8 test features done (555s)
+[q1] rgb3_p8        raw         R2 1.0000 inkMCC 0.998 0.998 0.998 inkF1 0.998 0.998 0.998 (chance 0.258) alpha 1e-07
+[q1] rgb3_p8        embed       R2 1.0000 inkMCC 0.997 0.997 0.997 inkF1 0.998 0.998 0.998 (chance 0.258) alpha 1e-07
+[q1] rgb3_p8        b8          R2 0.7993 inkMCC 0.652 0.643 0.614 inkF1 0.664 0.656 0.622 (chance 0.258) alpha 0.001
+[q1] rgb3_p8        b16         R2 0.6653 inkMCC 0.483 0.497 0.448 inkF1 0.463 0.482 0.418 (chance 0.258) alpha 0.001
+[q1] rgb3_p8        b24         R2 0.4486 inkMCC 0.190 0.219 0.168 inkF1 0.109 0.140 0.088 (chance 0.258) alpha 1e-05
+[q1] rgb3_p8        b28         R2 0.3429 inkMCC 0.069 0.089 0.062 inkF1 0.020 0.030 0.016 (chance 0.258) alpha 0.0001
+[q1] rgb3_p8        final       R2 0.2922 inkMCC 0.043 0.055 0.037 inkF1 0.009 0.014 0.007 (chance 0.258) alpha 1e-05
+[q1] rgb3_p8        merger      R2 0.2786 inkMCC 0.095 0.101 0.093 inkF1 0.042 0.046 0.041 (chance 0.258) alpha 0.1
