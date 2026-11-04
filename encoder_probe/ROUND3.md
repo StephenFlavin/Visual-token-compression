@@ -245,6 +245,22 @@ steps, train_pages, seed). These choices are not fixed by the design:
 * So the runs go in the stated priority order. Whatever has not finished by morning stays as queue lines, for the
   3090 rerun or the next night. The design is unchanged.
 
+**Amendment (2026-11-04 ~21:50, before any G2-lite row; user): push the Latin baseline as far as the code.**
+Once the encoder and merger are trained, fine-tuned Latin need not stay at Glyph's ~15 chars/token:
+* its raw-pixel ceiling at Qwen-equivalent density is ~51 (p6, 0.25%) and ~72 (p5, 0.27%), from round-2 identity32
+  rows rescaled to 28 px tokens;
+* DeepSeek-OCR's trained encoder reaches ~45.
+So the 1.5x bar can move to ~25-70+. Comparing codes against latin_p8 (~28) alone would test against an under-pushed
+baseline.
+* **G2-lite:** add a Latin density sweep under the same arms. latin_p8 (~28) is kept, and latin_p5 (~72) is added,
+  plus latin_p6 (~51) if time allows. Exploratory: latin_p4 (~110), but only after its identity28 ceiling is < 3%.
+  Tonight's priority on CPU: moonshot trained > latin_p8 trained > latin_p5 trained > moonshot frozen; the rest goes
+  to the 3090.
+* **Comparative rule (added; the absolute moonshot rule above is unchanged):** a code passes only if its density at a
+  given CER is ≥ 1.5x the densest Latin that reaches the same CER under the same arm and budget. Latin is swept up to
+  ~100 chars/token in G2 and G3, so the code is compared against a pushed baseline.
+* **G3 / R3-1 arms:** Latin at p8, p6, p5 (and p4 if its ceiling passes), same recipe as every code.
+
 ### Moonshot levers (beyond the go/no-go; user: "shoot for the moon")
 Ways to push density past the literature's 30-90 chars/token, each testable on its own:
 1. **Grid-aligned pitch.** 4 or 7 px line pitch divides the 28 px token, plus the pixel-shift protocol.
