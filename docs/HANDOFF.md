@@ -30,9 +30,9 @@ open.
 * `test_rgb3_unsupported_pitch` fails on Windows only for that reason; it should pass on the runner.
 
 ## Open items
-1. **Cloud cross-check rows** `encoder_probe/results/round2_tp/` (1000 pages) and `round2_tp2000/` (2000 pages,
-   latin_p32 deepencoder/clean, CPU) were not on the branch when the local session ended. When they land, compare
-   with `round2_gpu_tp1000` (18.9% at 10k steps, 25.8% at 3k) as an approximate check (different renderer, 3k steps).
+1. **Cloud cross-check, 1000 pages: agrees.** `round2_tp/` (cloud CPU, fp32 probe, Linux renderer): latin_p32
+   deepencoder/clean 1000 pages 3k steps = 27.6% vs 25.8% local (GPU, bf16 probe, Windows renderer). Still pending:
+   `round2_tp2000/` (2000 pages); compare with local 3000-page 3k-step 25.3%.
 2. **Round 3** (encoder_probe/ROUND3.md): fine-tune Qwen2.5-VL-3B to read dense codes and benchmark KV-cache savings
    on long-context QA. Order: R3-0 frozen Qwen probe (code exists; CUDA path for qwen25vl never run) -> R3-1 LoRA
    fine-tune arms (Latin baseline, best single codes, and the moonshot RGB-overlay-of-learned-glyphs arm, not built
