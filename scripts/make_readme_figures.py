@@ -325,8 +325,14 @@ def mono_masks(z: float, ss: int = 1) -> list[np.ndarray]:
 
 
 def overlay(masks):
-    """rgb3 compositing: stream c darkens only channel c."""
+    """rgb3 compositing: stream c darkens only channel c (white page; R text shows as cyan ink)."""
     return np.stack([255 - m for m in masks], 2).astype(np.uint8)
+
+
+def overlay_light(masks):
+    """The same page inverted for display: stream c lights only channel c on black, so the R line is red.
+    Same information as ``overlay`` (255 - it)."""
+    return 255 - overlay(masks)
 
 
 def fig_rgb():
@@ -349,19 +355,19 @@ def fig_rgb():
     arrow(d, (lx + lw + rx) / 2 - 10, y0 + 1.5 * pitch)
 
     masks = mono_masks(z, ss=2)
-    comp = Image.fromarray(overlay(masks))
+    comp = Image.fromarray(overlay_light(masks))
     ytop = y0 + pitch + 14
     d.rectangle([rx - 1, ytop - 1, rx + comp.width, ytop + comp.height], outline=FAINT, width=2)
     img.paste(comp, (rx, ytop))
-    d.text((rx, ytop + comp.height + 18), "red-channel text shows as cyan ink, green as magenta, blue as yellow;",
-           font=ui(24), fill=MUTED, anchor="lt")
-    d.text((rx, ytop + comp.height + 50), "where all three overlap the pixel is black",
-           font=ui(24), fill=MUTED, anchor="lt")
+    for k, line in enumerate(["each line lights up only its own channel; overlaps mix like light",
+                              "(red + green = yellow, all three = white). Shown on black: the experiment",
+                              "uses the inverted, white-page version (identical information)"]):
+        d.text((rx, ytop + comp.height + 18 + 32 * k), line, font=ui(24), fill=MUTED, anchor="lt")
 
-    yb = ytop + comp.height + 140
+    yb = ytop + comp.height + 170
     d.line([lx, yb - 24, W - 70, yb - 24], fill=FAINT, width=2)
 
-    real3 = overlay(mono_masks(1, ss=4))
+    real3 = overlay_light(mono_masks(1, ss=4))
     real_mono = np.concatenate([255 - m for m in mono_masks(1, ss=4)], 0)
     n_chars = sum(len(t) for t in HAIKU)
     mono_area = real_mono.size
