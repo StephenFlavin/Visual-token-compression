@@ -153,16 +153,26 @@ class Ridge:
         return self.solve(XtX, XtY, lam).astype(np.float32), best[1]
 
 
-def ink_f1(truth: np.ndarray, rec: np.ndarray) -> list[float]:
-    """Per channel F1 of ink pixels (dark side of the channel's (paper + ink) / 2 midpoint)."""
-    f = []
+def ink_scores(truth: np.ndarray, rec: np.ndarray) -> dict:
+    """Per channel ink scores, ink = dark side of the channel's (paper + ink) / 2 midpoint on the true pages.
+
+    f1: F1 of ink pixels; its chance level is 2p / (1 + p) for ink fraction p (an all-ink guess), which is high for
+    dense codes (p ~ 0.45), so mcc (Matthews correlation of the ink masks, 0 = chance, 1 = exact) is the
+    comparable score across encodings."""
+    f1, mcc, p_true, p_pred = [], [], [], []
     for c in range(3):
         t, r = truth[..., c], rec[..., c]
         mid = (t.max() + t.min()) / 2
-        ti, ri = t < mid, r < mid
-        tp = np.sum(ti & ri)
-        f.append(float(2 * tp / max(1, ti.sum() + ri.sum())))
-    return f
+        ti, ri = (t < mid).ravel(), (r < mid).ravel()
+        tp = float(np.sum(ti & ri)); fp = float(np.sum(~ti & ri)); fn = float(np.sum(ti & ~ri))
+        tn = float(ti.size) - tp - fp - fn
+        f1.append(2 * tp / max(1.0, 2 * tp + fp + fn))
+        den = np.sqrt((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn))
+        mcc.append(float((tp * tn - fp * fn) / den) if den > 0 else 0.0)
+        p_true.append(float(ti.mean())); p_pred.append(float(ri.mean()))
+    return {"ink_f1": f1, "ink_f1_mean": float(np.mean(f1)), "ink_mcc": mcc, "ink_mcc_mean": float(np.mean(mcc)),
+            "ink_frac": p_true, "ink_frac_pred": p_pred,
+            "ink_f1_chance": [2 * p / (1 + p) for p in p_true]}
 
 
 def run_encoding(model, encoding: str, S: int, P_of: dict, log=print) -> list[dict]:
@@ -197,17 +207,18 @@ def run_encoding(model, encoding: str, S: int, P_of: dict, log=print) -> list[di
         sse = float(((rec - ytrue) ** 2).sum())
         Yt = patch_pixels((truth * 255).round().astype(np.uint8), P_of[name])
         sst = float(((Yt - Yt.mean(0)) ** 2).sum())
-        f1 = ink_f1(ytrue, rec)
+        sc = ink_scores(ytrue, rec)
         chars = sum(p.n_chars for p in te)
         rows.append({"encoding": encoding, "feature": name, "S": S, "P": P_of[name], "d": int(X.shape[1]),
-                     "targets": int(W.shape[1]), "r2": 1 - sse / sst, "ink_f1": f1, "ink_f1_mean": float(np.mean(f1)),
+                     "targets": int(W.shape[1]), "r2": 1 - sse / sst, **sc, "v": 2,
                      "alpha": alpha, "train_pages": len(tr), "test_pages": len(te), "fit_pages": N_FIT,
                      "chars_per_qwen_token": chars / (len(te) * (S // 28) ** 2) if S == 448 else None,
                      "chars_per_vlm_token": chars / (len(te) * (S // P_of[name]) ** 2),
                      "check_merger_vs_pooler_max_abs": getattr(model, "max_abs_check", None)})
         recs[name] = (rec[0] * 255).round().astype(np.uint8)
-        log(f"[q1] {encoding:14s} {name:11s} R2 {rows[-1]['r2']:.4f} inkF1 "
-            f"{' '.join(f'{v:.3f}' for v in f1)} alpha {alpha:g}", flush=True)
+        log(f"[q1] {encoding:14s} {name:11s} R2 {rows[-1]['r2']:.4f} inkMCC "
+            f"{' '.join(f'{v:.3f}' for v in sc['ink_mcc'])} inkF1 {' '.join(f'{v:.3f}' for v in sc['ink_f1'])} "
+            f"(chance {sc['ink_f1_chance'][0]:.3f}) alpha {alpha:g}", flush=True)
     recs["original"] = te[0].img
     return rows, recs
 
@@ -254,25 +265,35 @@ def summarize() -> Path:
         cpt = next(r["chars_per_qwen_token"] for k, r in last.items() if k[0] == e and k[2] == 448)
         L.append(f"| {e} | {cpt:.1f} | " + " | ".join(
             f"{last[(e, f, 448)]['r2']:.3f}" if (e, f, 448) in last else "-" for f in feats) + " |")
-    L += ["", "## Ink F1 (mean over R, G, B; rgb3 codes per channel R/G/B)", "",
-          "| encoding | " + " | ".join(feats) + " |", "|---|" + "---:|" * len(feats)]
-    for e in encs:
-        cells = []
-        for f in feats:
-            r = last.get((e, f, 448))
-            if r is None:
-                cells.append("-")
-            elif e.startswith("rgb3"):
-                cells.append("/".join(f"{v:.2f}" for v in r["ink_f1"]))
-            else:
-                cells.append(f"{r['ink_f1_mean']:.3f}")
-        L.append(f"| {e} | " + " | ".join(cells) + " |")
+    def table(title, key, chance=None):
+        out = ["", title, "", "| encoding | " + (f"{chance[0]} | " if chance else "") + " | ".join(feats) + " |",
+               "|---|" + ("---:|" if chance else "") + "---:|" * len(feats)]
+        for e in encs:
+            cells = []
+            for f in feats:
+                r = last.get((e, f, 448))
+                if r is None or key not in r:
+                    cells.append("-")
+                elif e.startswith("rgb3"):
+                    cells.append("/".join(f"{v:.2f}" for v in r[key]))
+                else:
+                    cells.append(f"{np.mean(r[key]):.3f}")
+            r0 = last.get((e, "raw", 448), {})
+            ch = (f"{np.mean(r0[chance[1]]):.3f} | " if chance and chance[1] in r0 else ("- | " if chance else ""))
+            out.append(f"| {e} | " + ch + " | ".join(cells) + " |")
+        return out
+    L += table("## Ink MCC (Matthews correlation of the ink masks; 0 = chance, 1 = exact; rgb3 codes R/G/B)",
+               "ink_mcc")
+    L += table("## Ink F1 (rgb3 codes R/G/B); chance = 2p/(1+p) for ink fraction p (an all-ink guess)", "ink_f1",
+               chance=("F1 chance", "ink_f1_chance"))
     de = [r for k, r in last.items() if k[1] == "deepencoder"]
     if de:
         L += ["", "## Calibration: DeepEncoder projector tokens (512-px pages, 64-px tokens, 1280-d -> 12288 pixels)",
-              "", "| encoding | chars/DeepEncoder token | R^2 | ink F1 (R/G/B) |", "|---|---:|---:|---|"]
+              "", "| encoding | chars/DeepEncoder token | R^2 | ink MCC (R/G/B) | ink F1 (R/G/B) |",
+              "|---|---:|---:|---|---|"]
         for r in de:
             L.append(f"| {r['encoding']} | {r['chars_per_vlm_token']:.1f} | {r['r2']:.3f} | "
+                     + "/".join(f"{v:.2f}" for v in r.get("ink_mcc", [])) + " | "
                      + "/".join(f"{v:.2f}" for v in r["ink_f1"]) + " |")
     chk = [r["check_merger_vs_pooler_max_abs"] for r in last.values() if r.get("check_merger_vs_pooler_max_abs")
            is not None and r["feature"] == "merger"]
@@ -302,7 +323,7 @@ def main(argv=None) -> int:
     done = set()
     if rows_path.exists():
         done = {(json.loads(l)["encoding"], json.loads(l)["S"], json.loads(l)["feature"] == "deepencoder")
-                for l in rows_path.read_text().splitlines() if l.strip()}
+                for l in rows_path.read_text().splitlines() if l.strip() and json.loads(l).get("v") == 2}
     pq = {n: 14 for n in QWEN_LAYERS}
     pq["merger"] = 28
     for vlm, encs, S, P_of in (("qwen", a.encodings, 448, pq), ("deep", a.deep_encodings, 512, {"deepencoder": 64})):
