@@ -40,6 +40,13 @@ rgb3_p8 as the fine-tuning test, since fine-tuning is the point).
   page: 60% full transcription, 40% questions about the page (cloze: "what word follows X", "which of these
   phrases appears", copy a span).
 * Arms at matched chars/token: Latin (the fair baseline: it gets the same fine-tuning budget) vs the R3-0 picks.
+* **Moonshot arm (user, 2026-11-04): first go throws everything at it.** Besides rgb3 and the learned glyph banks
+  on their own, add a combined code: an RGB overlay of learned-glyph layers (one glyph-bank text per channel, e.g.
+  `rgb3_lg_pb_h5` / `rgb3_lg_free_h4`; not built yet: extend `ep/rgb_overlay.py` to draw bank glyphs per channel,
+  with channel-tagged classes as rgb3). Nominal density = 3x the bank's: about 3 x 107 = 320 (lg_pb_h5) and
+  3 x 135 = 405 (lg_free_h4) chars per Qwen token, against latin_p5 at 72. Run its identity28 ceiling first (the
+  round-2 guard: < 10% CER, else the combined page itself is unreadable). It goes into R3-1 even if R3-0 shows the
+  overlay at the floor frozen, since fine-tuning is the test; if it fails, fall back to the best single code.
   Smoke: 500 steps per arm (~minutes) to check the loop, loss falls, generation works. Then ~5k steps per arm.
 * Metric: CER of generated transcriptions on held-out test pages (WikiText test/val, as rounds 1-2), clean and jpeg75;
   cloze accuracy.
