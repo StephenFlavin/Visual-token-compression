@@ -41,6 +41,9 @@ Notes:
 * Dense codes have no language prior, so a single misread glyph can corrupt a name or number. Exact-recall tasks
   (needle) are the hard test, not the gist.
 
+**Literature calibration (docs/research/2026-11-04_rgb3_lg_go_no_go_report.md):** plausible go ~30-60 chars/token
+(already ~1.3M chars in Qwen's 32k window, ~9x text), stretch 60-120, 322-405 implausible at LoRA-3B scale.
+
 ## Evidence (what is measured so far)
 
 | Input | Raw pixels (identity ceiling, probe) | Frozen encoder (probe) | Fine-tuned Qwen (R3-1) | Long-context QA (R3-2) |

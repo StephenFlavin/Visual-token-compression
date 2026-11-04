@@ -118,6 +118,41 @@ Latin gets the identical recipe, steps and data. Memory and time figures are est
   * Exact recall (needle accuracy) is reported separately from gist QA, because a dense code with no language prior
     fails first on exact strings.
 
+### Re-scope after the literature report (2026-11-04)
+Source: [docs/research/2026-11-04_rgb3_lg_go_no_go_report.md](../docs/research/2026-11-04_rgb3_lg_go_no_go_report.md)
+(external research task; several of its sources are recent preprints, verify before citing).
+* **Density sweep, not one extreme point.** Published go region: ~30-90 chars/token; the moonshot's 322-405 is ~7x past
+  the best trained optical result at high accuracy and ~2x past the best text-side compressor (C3 ~170 at 93%).
+  Capacity studies report an abrupt wall (unstable band ~2.2x wide), so sweep at ~2x spacing: about 15, 30, 60, 120,
+  240, 322 chars/token. Existing codes at Qwen geometry: latin_p8 ~28, rgb3_p8 ~73, lg_pb_h5 ~107, rgb3_lg_pb_h5 322.
+* **Gates (adopted):**
+  * G0: identity ceiling < 3% CER (go); > 10% kills that point.
+  * G1: nonlinear glyph-ID probe on frozen pre-merger ViT states, ≥ 97%.
+  * G2: train the merger (+ last 4 blocks) with a CTC head, LLM frozen, across the sweep. Kill rgb3_lg at 322/405 if it
+    is < 90% glyph accuracy at ≥ 120 chars/token.
+  * G3: the R3-1 transcription bar (≥ 1.5x fine-tuned Latin chars/token at < 3% CER).
+  * G4: needle within 3 points and cloze within 5 points of Latin images at ≤ 0.67x KV, AND within 5 points of a
+    text-side compressor (500xCompressor/ICAE-style LoRA on Qwen2.5-3B) at the same KV.
+  * G4b: the same QA with a transcribe-first prompt, reporting the use-vs-read gap.
+* **Grid alignment:** 5 px pitch does not divide the 28 px token grid. Add 4/7 px pitch variants and a pixel-shift
+  test (report: unstable-band errors come from patch misalignment).
+* **Negatives are reported as "not reachable at this budget"**, not "impossible".
+
+**Q1 result (layer-wise linear pixel readout, frozen Qwen2.5-VL ViT; ink MCC per channel, chance-corrected):**
+
+| Code (chars/token) | block 8 | block 24 | final | after merger |
+|---|---|---|---|---|
+| latin_p8 (~28) | 0.89 | 0.18 | 0.02 | 0.03 |
+| rgb3_p8 (~73) | ~0.64 | ~0.19 | ~0.05 | ~0.10 |
+| lg_pb_h5 (~107) | 1.00 | 0.91 | 0.65 | 0.30 |
+| rgb3_lg_pb_h5 (322) | ~0.85 | ~0.64 | ~0.47 | 0.29 |
+| rgb3_lg_free_h4 (405) | ~0.57 | ~0.22 | ~0.08 | ~0.00 |
+
+Reading: Latin's pixels stop being linearly decodable by block 24 even though Qwen reads Latin well, so this is not a
+readability score. The whole-pixel glyph codes stay pixel-like through the whole ViT, with no colour-channel collapse
+for rgb3_lg_pb_h5. Every code collapses linearly at the 2x2 merger, which points at the merger as the wall (G2). The
+grey-level free_h4 variant fades by block 24: drop it, consistent with rounds 1-2 (whole-pixel banks only).
+
 ### R3-2: long-context benchmark (the goal)
 * Documents: concatenated held-out WikiText, 10k-1M chars. Inputs: (a) plain text tokens, (b) Latin page images,
   (c) dense-code page images, all into the fine-tuned model (and (a), (b) into the base model as references).
