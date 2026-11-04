@@ -1,2 +1,12 @@
 [q1] qwen loaded (4s)
 [q1] latin_p16 S=448: pages 15s
+[q1] latin_p16 train features done (529s)
+[q1] latin_p16 test features done (664s)
+[q1] latin_p16      raw         R2 1.0000 inkF1 1.000 1.000 1.000 alpha 1e-07
+[q1] latin_p16      embed       R2 1.0000 inkF1 1.000 1.000 1.000 alpha 1e-07
+[q1] latin_p16      b8          R2 0.9694 inkF1 0.944 0.944 0.944 alpha 0.001
+[q1] latin_p16      b16         R2 0.8414 inkF1 0.870 0.870 0.870 alpha 0.001
+[q1] latin_p16      b24         R2 0.4204 inkF1 0.356 0.356 0.356 alpha 1e-05
+[q1] latin_p16      b28         R2 0.2203 inkF1 0.027 0.027 0.027 alpha 0.001
+[q1] latin_p16      final       R2 0.1737 inkF1 0.009 0.009 0.009 alpha 0.0001
+[q1] latin_p16      merger      R2 0.1569 inkF1 0.024 0.024 0.024 alpha 0.1
