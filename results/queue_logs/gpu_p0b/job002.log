@@ -1,0 +1,27 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding latin_p16 --encoder deepencoder --cond clean --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+[probe2] {'encoding': 'latin_p16', 'encoder': 'deepencoder', 'cond': 'clean', 'steps': 10000} S=512 P=64 G=8 pitch=16 lines/page=32 classes=95 test_pages=16 px2/char=113.84 chars/token=36.0 pages=1s wait=0s feat=5s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 3.331 rec 0.4562 val_cer 0.9948 (0.071 s/step, 42s)
+[probe2] step 1000 ctc 3.020 rec 0.3679 val_cer 0.8380 (0.066 s/step, 73s)
+[probe2] step 1500 ctc 2.909 rec 0.3783 val_cer 0.8022 (0.062 s/step, 99s)
+[probe2] step 2000 ctc 2.799 rec 0.3904 val_cer 0.7712 (0.056 s/step, 119s)
+[probe2] step 2500 ctc 2.835 rec 0.3836 val_cer 0.7860 (0.056 s/step, 146s)
+[probe2] step 3000 ctc 2.834 rec 0.3928 val_cer 0.7508 (0.058 s/step, 180s)
+[probe2] step 3500 ctc 2.828 rec 0.4259 val_cer 0.7566 (0.059 s/step, 215s)
+[probe2] step 4000 ctc 2.898 rec 0.4057 val_cer 0.7554 (0.061 s/step, 250s)
+[probe2] step 4500 ctc 2.895 rec 0.4287 val_cer 0.7437 (0.062 s/step, 285s)
+[probe2] step 5000 ctc 2.842 rec 0.3893 val_cer 0.7599 (0.062 s/step, 319s)
+[probe2] step 5500 ctc 2.861 rec 0.4184 val_cer 0.7472 (0.062 s/step, 347s)
+[probe2] step 6000 ctc 3.083 rec 0.4041 val_cer 0.7474 (0.061 s/step, 374s)
+[probe2] step 6500 ctc 2.781 rec 0.3390 val_cer 0.7396 (0.061 s/step, 401s)
+[probe2] step 7000 ctc 2.914 rec 0.3379 val_cer 0.7483 (0.060 s/step, 427s)
+[probe2] step 7500 ctc 2.773 rec 0.3207 val_cer 0.7450 (0.060 s/step, 454s)
+[probe2] step 8000 ctc 2.807 rec 0.3063 val_cer 0.7427 (0.059 s/step, 481s)
+[probe2] step 8500 ctc 2.838 rec 0.2935 val_cer 0.7410 (0.059 s/step, 507s)
+[probe2] step 9000 ctc 2.878 rec 0.2842 val_cer 0.7374 (0.059 s/step, 534s)
+[probe2] step 9500 ctc 2.779 rec 0.2689 val_cer 0.7422 (0.057 s/step, 551s)
+[probe2] step 10000 ctc 2.815 rec 0.2720 val_cer 0.7397 (0.057 s/step, 574s)
+[probe2] TEST {'encoding': 'latin_p16', 'encoder': 'deepencoder', 'cond': 'clean', 'steps': 10000} cer=0.7466 px2/char=113.84 chars/token=36.0
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a'
+   hyp: 'ee ee a a e e e e ee ee a a a'
+   ref: 'guest-starring role on the television series The Bill in 2000. This was'
+   hyp: 'ee a e e ee ae e e e e e e o a e e'

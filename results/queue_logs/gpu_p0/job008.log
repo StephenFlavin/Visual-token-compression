@@ -1,0 +1,15 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding latin_p16 --encoder deepencoder --cond clean --steps 3000 --train-pages 3000 --run-name round2_gpu_tp3000
+[cache] no builder holds the lock: building latin_p16_tr3000_te16.pt here
+[cache] wrote encoder_probe\cache\tokens\deepencoder\clean\latin_p16_tr3000_te16.pt train (3000, 64, 1280) test (16, 64, 1280) (184s, 0.06 s/page)
+[probe2] {'encoding': 'latin_p16', 'encoder': 'deepencoder', 'cond': 'clean', 'steps': 3000} S=512 P=64 G=8 pitch=16 lines/page=32 classes=95 test_pages=16 px2/char=113.84 chars/token=36.0 pages=3s wait=189s feat=199s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 3.112 rec 0.4541 val_cer 0.9616 (0.056 s/step, 228s)
+[probe2] step 1000 ctc 2.957 rec 0.3865 val_cer 0.8242 (0.063 s/step, 263s)
+[probe2] step 1500 ctc 2.846 rec 0.3647 val_cer 0.7689 (0.066 s/step, 299s)
+[probe2] step 2000 ctc 2.889 rec 0.3259 val_cer 0.7588 (0.067 s/step, 334s)
+[probe2] step 2500 ctc 2.819 rec 0.2898 val_cer 0.7430 (0.068 s/step, 369s)
+[probe2] step 3000 ctc 2.851 rec 0.2727 val_cer 0.7429 (0.068 s/step, 404s)
+[probe2] TEST {'encoding': 'latin_p16', 'encoder': 'deepencoder', 'cond': 'clean', 'steps': 3000} cer=0.7481 px2/char=113.84 chars/token=36.0
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a'
+   hyp: 'ee e e a o e ee e e e e a e e e'
+   ref: 'guest-starring role on the television series The Bill in 2000. This was'
+   hyp: 'eee o e ee o e e e ee e e e e e'

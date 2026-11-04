@@ -1,0 +1,15 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding latin_p32 --encoder deepencoder --cond clean --steps 3000 --train-pages 1000 --run-name round2_gpu_tp1000
+[cache] no builder holds the lock: building latin_p32_tr1000_te16.pt here
+[cache] wrote encoder_probe\cache\tokens\deepencoder\clean\latin_p32_tr1000_te16.pt train (1000, 64, 1280) test (16, 64, 1280) (49s, 0.05 s/page)
+[probe2] {'encoding': 'latin_p32', 'encoder': 'deepencoder', 'cond': 'clean', 'steps': 3000} S=512 P=64 G=8 pitch=32 lines/page=16 classes=95 test_pages=16 px2/char=483.16 chars/token=8.5 pages=43s wait=52s feat=97s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 3.248 rec 0.5878 val_cer 0.9860 (0.017 s/step, 106s)
+[probe2] step 1000 ctc 2.990 rec 0.4234 val_cer 0.9450 (0.017 s/step, 115s)
+[probe2] step 1500 ctc 1.415 rec 0.4738 val_cer 0.4193 (0.018 s/step, 124s)
+[probe2] step 2000 ctc 1.066 rec 0.4469 val_cer 0.3036 (0.018 s/step, 133s)
+[probe2] step 2500 ctc 0.286 rec 0.3486 val_cer 0.2705 (0.018 s/step, 142s)
+[probe2] step 3000 ctc 0.612 rec 0.3502 val_cer 0.2537 (0.018 s/step, 152s)
+[probe2] TEST {'encoding': 'latin_p32', 'encoder': 'deepencoder', 'cond': 'clean', 'steps': 3000} cer=0.2585 px2/char=483.16 chars/token=8.5
+   ref: 'Robert Boulter is an English film,'
+   hyp: 'Robet Bouer b i anglEngash film,'
+   ref: 'television and theatre actor. He had a'
+   hyp: 'telion and theare ar o had ha'

@@ -1,0 +1,27 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding latin_p32 --encoder deepencoder --cond clean --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+[probe2] {'encoding': 'latin_p32', 'encoder': 'deepencoder', 'cond': 'clean', 'steps': 10000} S=512 P=64 G=8 pitch=32 lines/page=16 classes=95 test_pages=16 px2/char=483.16 chars/token=8.5 pages=1s wait=0s feat=5s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 3.354 rec 1.0566 val_cer 1.0000 (0.071 s/step, 42s)
+[probe2] step 1000 ctc 3.055 rec 0.4065 val_cer 0.9846 (0.066 s/step, 73s)
+[probe2] step 1500 ctc 1.742 rec 0.5628 val_cer 0.4468 (0.062 s/step, 100s)
+[probe2] step 2000 ctc 1.154 rec 0.5391 val_cer 0.3885 (0.057 s/step, 120s)
+[probe2] step 2500 ctc 0.828 rec 0.5005 val_cer 0.3503 (0.056 s/step, 147s)
+[probe2] step 3000 ctc 0.882 rec 0.4854 val_cer 0.2971 (0.058 s/step, 182s)
+[probe2] step 3500 ctc 0.858 rec 0.4687 val_cer 0.3148 (0.060 s/step, 216s)
+[probe2] step 4000 ctc 0.908 rec 0.4505 val_cer 0.2915 (0.061 s/step, 251s)
+[probe2] step 4500 ctc 0.448 rec 0.4151 val_cer 0.2663 (0.062 s/step, 286s)
+[probe2] step 5000 ctc 0.638 rec 0.4360 val_cer 0.2537 (0.063 s/step, 320s)
+[probe2] step 5500 ctc 0.433 rec 0.4068 val_cer 0.2393 (0.062 s/step, 348s)
+[probe2] step 6000 ctc 0.418 rec 0.3970 val_cer 0.2253 (0.061 s/step, 374s)
+[probe2] step 6500 ctc 0.380 rec 0.3937 val_cer 0.2295 (0.061 s/step, 402s)
+[probe2] step 7000 ctc 0.332 rec 0.3801 val_cer 0.2253 (0.060 s/step, 428s)
+[probe2] step 7500 ctc 0.180 rec 0.3710 val_cer 0.2076 (0.060 s/step, 455s)
+[probe2] step 8000 ctc 0.184 rec 0.3548 val_cer 0.2015 (0.059 s/step, 482s)
+[probe2] step 8500 ctc 0.146 rec 0.3506 val_cer 0.1903 (0.059 s/step, 509s)
+[probe2] step 9000 ctc 0.045 rec 0.3252 val_cer 0.1968 (0.059 s/step, 535s)
+[probe2] step 9500 ctc 0.030 rec 0.3292 val_cer 0.1931 (0.057 s/step, 552s)
+[probe2] step 10000 ctc 0.036 rec 0.3313 val_cer 0.1940 (0.057 s/step, 575s)
+[probe2] TEST {'encoding': 'latin_p32', 'encoder': 'deepencoder', 'cond': 'clean', 'steps': 10000} cer=0.1891 px2/char=483.16 chars/token=8.5
+   ref: 'Robert Boulter is an English film,'
+   hyp: 'Robert Buulter an English film,'
+   ref: 'television and theatre actor. He had a'
+   hyp: 'televini and tteatre ctr. Had a'
