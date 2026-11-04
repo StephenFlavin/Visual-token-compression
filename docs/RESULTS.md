@@ -1,7 +1,8 @@
 # Visual BPE: results so far (living document)
 
 Status: **2026-11-03.** Phase 2 (K3) is decided (KILL). Learned glyphs: **qualified GO**, full report in
-`learned_glyphs/RESULTS.md`. Frozen-encoder probe (`encoder_probe/`): running.
+`learned_glyphs/RESULTS.md`. Frozen-encoder probe (`encoder_probe/`): round 1 (SigLIP) and round 2
+(DeepSeek-OCR's DeepEncoder) decided: colour pixels dead, learned glyphs whole-pixel.
 
 Metric throughout: **px²/char** = canvas area / source characters. **P@x** = px²/char at which CER
 first reaches x (isotonic fit, log-x interpolation). Lower is better.
@@ -102,3 +103,17 @@ change are in encoder_probe/RESULTS.md and PLAN.md.
 * Caveat: through SigLIP the probe overfits (1000 instead of 200 train pages: latin_p10 61% -> 43%), so these are
   upper bounds on the information lost, not what an LLM reading the tokens would get. VLMs that fine-tune the
   encoder are not covered.
+
+**Round 2: DeepSeek-OCR's DeepEncoder (OCR-trained, 512 px page, 64 tokens of 1280-d).** SigLIP has no OCR
+training, so round 2 repeats the probe on the encoder of an OCR-capable VLM at its own geometry (Qwen2.5-VL was
+dropped; details in encoder_probe/ROUND2.md and RESULTS.md). With raw pixels at the same geometry every encoding is
+below 3% CER (colour 1x1 blocks 2.9%, everything else <= 0.5%), so all DeepEncoder rows pass the informativeness
+guard. Through the encoder (1000 train pages, clean and JPEG q75) colour blocks (71-73%), rgb3 (83.5%) and both
+learned-glyph banks (lg_free_h4 82.2% vs lg_pb_h5 82.4%) sit at the floor at every density, while only latin_p32
+(8.5 chars per vision token, about 2x text tokens) is readable (19%, JPEG costs nothing); from 15.4 chars/token up
+Latin is at the floor too. No family reaches 10%, so both decision rules apply only in weaker form: colour and the
+RGB overlay are dead for DeepEncoder (it would need an encoder trained for them; P2/P3 gated off), and grey-level
+banks are not supported (0.2 points, both at the floor), so banks stay whole-pixel. Caveat: this probe is far
+weaker than DeepSeek-OCR's own decoder (~10x compression); latin_p32 still improves with data (85% -> 15% CER from
+200 to 5000 pages), so the absolute CERs overstate what the encoder loses; only the same-probe comparisons carry
+the decisions.
