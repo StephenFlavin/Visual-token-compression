@@ -59,3 +59,28 @@ in [encoder_probe/RGB_OVERLAY.md](../encoder_probe/RGB_OVERLAY.md). Only a 300-s
 classes, 6 interleaved labels per cell; check the CTC frame budget) and run it with the rgb3 grid conditions.
 
 **Status:** recorded; gated on the rgb3 result.
+
+## Braille-style fixed dot code (control for learned glyphs, 2026-11-04)
+
+**Observation (user):** the converged whole-pixel learned glyphs look like braille. They nearly are: single-char
+glyphs are 2x5 binary pixels (10 dots, vs braille's 2x4 cell) and chunk glyphs 4x5. Braille is designed to be told
+apart by a blurry low-resolution sensor (a fingertip); the bank is optimised to be told apart after blur, downsampling
+and noise, so it converges to the same kind of code: sparse, high-contrast dots on a tiny grid.
+
+**Question:** how much of the learned-glyph gain (whole-pixel bridge: 0.88x / 0.77x Latin's px²/char at 3% / 1% CER)
+comes from *learning*, and how much from just using a dense binary dot code on that grid? There is plenty of room:
+a 2x5 grid has 1,024 patterns for 95 chars, and a 4x5 grid has about 10^6 for 300 chunks.
+
+**Cheapest test (CPU, no new training code):** build fixed banks with the learned bank's geometry
+(h5, widths 2/4 px, `pixel_block`, N=300) and score them through the E3 bridge and E2 transfer exactly like
+`e1long` `lg_learned_n300_pb_h5`:
+* `GlyphBank.random_binary(..., density≈0.3)`: random dots, already built and unit-tested
+  (`tests/test_render.py`) but never run;
+* a designed max-distance code: choose the 395 patterns by greedy max-min Hamming distance, preferring isolated
+  dots (after a 1-px blur), i.e. a "braille" built for this channel.
+
+Read: if the designed code gets close to the learned bank, the gain is mostly "dense binary code" and learning is
+optional; if both fixed codes stay near DejaVu, the learned shapes matter. Also run the harsh channel, where the
+learned bank's lead was largest (h7: 3.5% vs DejaVu 43%).
+
+**Status:** recorded, not queued.
