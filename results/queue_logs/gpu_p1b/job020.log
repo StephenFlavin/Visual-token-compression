@@ -1,0 +1,17 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding lg_pb_h5 --encoder deepencoder --cond clean --steps 5000 --train-pages 1000 --run-name round2_gpu_tp1000
+[probe2] {'encoding': 'lg_pb_h5', 'encoder': 'deepencoder', 'cond': 'clean', 'steps': 5000} S=512 P=64 G=8 pitch=5 lines/page=102 classes=395 test_pages=16 px2/char=7.26 chars/token=564.1 pages=2s wait=0s feat=5s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 4.077 rec 0.9708 val_cer 0.9945 (0.059 s/step, 38s)
+[probe2] step 1000 ctc 3.940 rec 0.9743 val_cer 0.8814 (0.059 s/step, 67s)
+[probe2] step 1500 ctc 3.859 rec 0.9750 val_cer 0.8612 (0.055 s/step, 91s)
+[probe2] step 2000 ctc 4.015 rec 0.9664 val_cer 0.8493 (0.051 s/step, 111s)
+[probe2] step 2500 ctc 3.987 rec 0.9562 val_cer 0.8329 (0.052 s/step, 139s)
+[probe2] step 3000 ctc 3.875 rec 0.9471 val_cer 0.8379 (0.052 s/step, 166s)
+[probe2] step 3500 ctc 3.877 rec 0.9247 val_cer 0.8253 (0.053 s/step, 195s)
+[probe2] step 4000 ctc 3.862 rec 0.9010 val_cer 0.8292 (0.054 s/step, 224s)
+[probe2] step 4500 ctc 3.863 rec 0.8794 val_cer 0.8326 (0.055 s/step, 255s)
+[probe2] step 5000 ctc 3.877 rec 0.8842 val_cer 0.8310 (0.055 s/step, 284s)
+[probe2] TEST {'encoding': 'lg_pb_h5', 'encoder': 'deepencoder', 'cond': 'clean', 'steps': 5000} cer=0.8291 px2/char=7.26 chars/token=564.1
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   hyp: 'i a ai a a i a a a ai i a a a i a a a a a ai a a a i a a a a aa a i a i a a'
+   ref: 'Boulter landed a role as "Craig" in the episode "Teddy\'s Story" of the television series T'
+   hyp: 'i a ai a ii ai a a a a a ai i ai a a a a i a i a i a a ai a a a a a a a a ai a a'

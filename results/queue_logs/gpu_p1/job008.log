@@ -1,0 +1,13 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding col_b2 --encoder identity32 --cond clean --steps 3000 --run-name round2_gpu_tp200
+[probe2] {'encoding': 'col_b2', 'encoder': 'identity32', 'cond': 'clean', 'steps': 3000} S=512 P=32 G=16 pitch=2 lines/page=256 classes=95 test_pages=16 px2/char=4.00 chars/token=256.0 pages=0s wait=0s feat=5s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 1.072 rec 0.2570 val_cer 0.3187 (0.096 s/step, 56s)
+[probe2] step 1000 ctc 0.560 rec 0.1458 val_cer 0.1701 (0.084 s/step, 92s)
+[probe2] step 1500 ctc 0.277 rec 0.0957 val_cer 0.0986 (0.078 s/step, 124s)
+[probe2] step 2000 ctc 0.024 rec 0.0125 val_cer 0.0077 (0.077 s/step, 162s)
+[probe2] step 2500 ctc 0.002 rec 0.0006 val_cer 0.0003 (0.078 s/step, 203s)
+[probe2] step 3000 ctc 0.002 rec 0.0004 val_cer 0.0003 (0.078 s/step, 243s)
+[probe2] TEST {'encoding': 'col_b2', 'encoder': 'identity32', 'cond': 'clean', 'steps': 3000} cer=0.0002 px2/char=4.00 chars/token=256.0
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   hyp: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   ref: 'oyal Court Theatre. He had a guest role in the television series Judge John Deed in 2002. '
+   hyp: 'oyal Court Theatre. He had a guest role in the television series Judge John Deed in 2002. '

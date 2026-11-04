@@ -1,0 +1,17 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding lg_free_h4 --encoder deepencoder --cond clean --steps 5000 --train-pages 1000 --run-name round2_gpu_tp1000
+[probe2] {'encoding': 'lg_free_h4', 'encoder': 'deepencoder', 'cond': 'clean', 'steps': 5000} S=512 P=64 G=8 pitch=4 lines/page=128 classes=395 test_pages=16 px2/char=5.78 chars/token=708.1 pages=2s wait=0s feat=5s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 4.181 rec 0.5121 val_cer 0.9532 (0.059 s/step, 38s)
+[probe2] step 1000 ctc 3.959 rec 0.3124 val_cer 0.8465 (0.059 s/step, 68s)
+[probe2] step 1500 ctc 3.915 rec 0.3266 val_cer 0.8508 (0.059 s/step, 97s)
+[probe2] step 2000 ctc 3.885 rec 0.3218 val_cer 0.8312 (0.057 s/step, 122s)
+[probe2] step 2500 ctc 3.786 rec 0.3189 val_cer 0.8299 (0.053 s/step, 142s)
+[probe2] step 3000 ctc 3.891 rec 0.3094 val_cer 0.8277 (0.053 s/step, 167s)
+[probe2] step 3500 ctc 3.869 rec 0.2995 val_cer 0.8393 (0.054 s/step, 198s)
+[probe2] step 4000 ctc 3.913 rec 0.2819 val_cer 0.8352 (0.054 s/step, 224s)
+[probe2] step 4500 ctc 3.921 rec 0.2646 val_cer 0.8289 (0.052 s/step, 244s)
+[probe2] step 5000 ctc 3.812 rec 0.2578 val_cer 0.8293 (0.052 s/step, 270s)
+[probe2] TEST {'encoding': 'lg_free_h4', 'encoder': 'deepencoder', 'cond': 'clean', 'steps': 5000} cer=0.8277 px2/char=5.78 chars/token=708.1
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   hyp: 'ai a a a ai a a a a ai a a a a a a a a a a a a ai a i a a a a a a a a a a ii i'
+   ref: 'Boulter landed a role as "Craig" in the episode "Teddy\'s Story" of the television series T'
+   hyp: 'i a i a a a a a a a a a a a a a a a aa i a i a aa a a a a a a a i a a a i a'

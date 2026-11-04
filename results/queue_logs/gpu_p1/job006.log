@@ -1,0 +1,13 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding latin_p24 --encoder identity32 --cond clean --steps 3000 --run-name round2_gpu_tp200
+[probe2] {'encoding': 'latin_p24', 'encoder': 'identity32', 'cond': 'clean', 'steps': 3000} S=512 P=32 G=16 pitch=24 lines/page=21 classes=95 test_pages=16 px2/char=266.63 chars/token=3.8 pages=16s wait=0s feat=20s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 0.085 rec 0.1397 val_cer 0.0506 (0.089 s/step, 67s)
+[probe2] step 1000 ctc 0.123 rec 0.3050 val_cer 0.0341 (0.089 s/step, 111s)
+[probe2] step 1500 ctc 0.027 rec 0.1024 val_cer 0.0162 (0.089 s/step, 156s)
+[probe2] step 2000 ctc 0.018 rec 0.0602 val_cer 0.0092 (0.086 s/step, 195s)
+[probe2] step 2500 ctc 0.003 rec 0.0112 val_cer 0.0013 (0.086 s/step, 237s)
+[probe2] step 3000 ctc 0.001 rec 0.0034 val_cer 0.0010 (0.085 s/step, 279s)
+[probe2] TEST {'encoding': 'latin_p24', 'encoder': 'identity32', 'cond': 'clean', 'steps': 3000} cer=0.0009 px2/char=266.63 chars/token=3.8
+   ref: 'Robert Boulter is an English film, television and'
+   hyp: 'Robert oulter is an English film, television and'
+   ref: 'theatre actor. He had a guest-starring role on the'
+   hyp: 'theatre actor. He had a guest-starring role on the'

@@ -1,0 +1,27 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding latin_p5 --encoder deepencoder --cond jpeg75 --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+[probe2] {'encoding': 'latin_p5', 'encoder': 'deepencoder', 'cond': 'jpeg75', 'steps': 10000} S=512 P=64 G=8 pitch=5 lines/page=102 classes=95 test_pages=16 px2/char=10.93 chars/token=374.6 pages=0s wait=0s feat=3s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 2.980 rec 0.3263 val_cer 0.7574 (0.051 s/step, 31s)
+[probe2] step 1000 ctc 2.912 rec 0.3083 val_cer 0.7711 (0.049 s/step, 56s)
+[probe2] step 1500 ctc 2.838 rec 0.3151 val_cer 0.7598 (0.046 s/step, 75s)
+[probe2] step 2000 ctc 2.775 rec 0.2961 val_cer 0.7706 (0.038 s/step, 83s)
+[probe2] step 2500 ctc 2.820 rec 0.3054 val_cer 0.7730 (0.037 s/step, 98s)
+[probe2] step 3000 ctc 2.803 rec 0.2521 val_cer 0.7629 (0.037 s/step, 119s)
+[probe2] step 3500 ctc 2.822 rec 0.2312 val_cer 0.7599 (0.039 s/step, 144s)
+[probe2] step 4000 ctc 2.789 rec 0.2394 val_cer 0.7472 (0.041 s/step, 169s)
+[probe2] step 4500 ctc 2.774 rec 0.2334 val_cer 0.7500 (0.042 s/step, 194s)
+[probe2] step 5000 ctc 2.765 rec 0.2096 val_cer 0.7436 (0.043 s/step, 219s)
+[probe2] step 5500 ctc 2.805 rec 0.1866 val_cer 0.7380 (0.043 s/step, 245s)
+[probe2] step 6000 ctc 2.751 rec 0.1883 val_cer 0.7449 (0.044 s/step, 270s)
+[probe2] step 6500 ctc 2.839 rec 0.1835 val_cer 0.7356 (0.044 s/step, 295s)
+[probe2] step 7000 ctc 2.797 rec 0.1518 val_cer 0.7340 (0.044 s/step, 317s)
+[probe2] step 7500 ctc 2.708 rec 0.1318 val_cer 0.7271 (0.044 s/step, 335s)
+[probe2] step 8000 ctc 2.779 rec 0.1208 val_cer 0.7286 (0.043 s/step, 352s)
+[probe2] step 8500 ctc 2.772 rec 0.1011 val_cer 0.7353 (0.044 s/step, 378s)
+[probe2] step 9000 ctc 2.774 rec 0.0900 val_cer 0.7297 (0.044 s/step, 404s)
+[probe2] step 9500 ctc 2.753 rec 0.0799 val_cer 0.7286 (0.045 s/step, 430s)
+[probe2] step 10000 ctc 2.755 rec 0.0767 val_cer 0.7293 (0.045 s/step, 455s)
+[probe2] TEST {'encoding': 'latin_p5', 'encoder': 'deepencoder', 'cond': 'jpeg75', 'steps': 10000} cer=0.7285 px2/char=10.93 chars/token=374.6
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   hyp: 'ea e e e a e ae oe e ae o e o te a a oa ee a o e ae ae a e a a e a o e oe e a o e a ae'
+   ref: '2001 at the Royal Court Theatre. He had a guest role in the television series Judge John D'
+   hyp: 'e o e e o e a a a e a e a e ae e e e o a o e e o e e e o te e ae a e oa a ee ae a a e'

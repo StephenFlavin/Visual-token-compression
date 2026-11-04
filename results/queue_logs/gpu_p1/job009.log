@@ -1,0 +1,13 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding col_b4 --encoder identity32 --cond clean --steps 3000 --run-name round2_gpu_tp200
+[probe2] {'encoding': 'col_b4', 'encoder': 'identity32', 'cond': 'clean', 'steps': 3000} S=512 P=32 G=16 pitch=4 lines/page=128 classes=95 test_pages=16 px2/char=16.00 chars/token=64.0 pages=0s wait=0s feat=4s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 1.238 rec 0.5756 val_cer 0.3344 (0.061 s/step, 37s)
+[probe2] step 1000 ctc 0.689 rec 0.1803 val_cer 0.2269 (0.067 s/step, 73s)
+[probe2] step 1500 ctc 0.676 rec 0.2085 val_cer 0.2137 (0.069 s/step, 109s)
+[probe2] step 2000 ctc 0.355 rec 0.1120 val_cer 0.1034 (0.072 s/step, 150s)
+[probe2] step 2500 ctc 0.037 rec 0.0222 val_cer 0.0156 (0.073 s/step, 189s)
+[probe2] step 3000 ctc 0.011 rec 0.0056 val_cer 0.0035 (0.076 s/step, 235s)
+[probe2] TEST {'encoding': 'col_b4', 'encoder': 'identity32', 'cond': 'clean', 'steps': 3000} cer=0.0029 px2/char=16.00 chars/token=64.0
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   hyp: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   ref: 'in 2000. This was followed by a starring role in the play Herons written by Simon Stephens'
+   hyp: 'in 2000. This was followed by a starring role in the play Herons written by Simon Stephens'

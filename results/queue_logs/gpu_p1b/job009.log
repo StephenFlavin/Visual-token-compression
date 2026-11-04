@@ -1,0 +1,27 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding rgb3_p6 --encoder deepencoder --cond jpeg75 --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+[probe2] {'encoding': 'rgb3_p6', 'encoder': 'deepencoder', 'cond': 'jpeg75', 'steps': 10000} S=512 P=64 G=8 pitch=6 lines/page=85 classes=285 test_pages=16 px2/char=6.05 chars/token=677.3 pages=2s wait=1s feat=5s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 3.268 rec 0.3486 val_cer 0.8083 (0.089 s/step, 55s)
+[probe2] step 1000 ctc 3.208 rec 0.3926 val_cer 0.8125 (0.093 s/step, 103s)
+[probe2] step 1500 ctc 3.212 rec 0.3870 val_cer 0.8350 (0.099 s/step, 159s)
+[probe2] step 2000 ctc 3.189 rec 0.4238 val_cer 0.8324 (0.101 s/step, 213s)
+[probe2] step 2500 ctc 3.159 rec 0.4324 val_cer 0.8318 (0.103 s/step, 268s)
+[probe2] step 3000 ctc 3.168 rec 0.4492 val_cer 0.8310 (0.104 s/step, 322s)
+[probe2] step 3500 ctc 3.187 rec 0.4077 val_cer 0.8313 (0.102 s/step, 367s)
+[probe2] step 4000 ctc 3.239 rec 0.3337 val_cer 0.8322 (0.103 s/step, 421s)
+[probe2] step 4500 ctc 3.206 rec 0.3367 val_cer 0.8323 (0.103 s/step, 476s)
+[probe2] step 5000 ctc 3.197 rec 0.3232 val_cer 0.8316 (0.104 s/step, 530s)
+[probe2] step 5500 ctc 3.159 rec 0.2817 val_cer 0.8325 (0.104 s/step, 585s)
+[probe2] step 6000 ctc 3.176 rec 0.2946 val_cer 0.8333 (0.105 s/step, 639s)
+[probe2] step 6500 ctc 3.167 rec 0.2611 val_cer 0.8317 (0.105 s/step, 693s)
+[probe2] step 7000 ctc 3.163 rec 0.2451 val_cer 0.8337 (0.105 s/step, 747s)
+[probe2] step 7500 ctc 3.183 rec 0.2100 val_cer 0.8321 (0.105 s/step, 801s)
+[probe2] step 8000 ctc 3.173 rec 0.1979 val_cer 0.8316 (0.106 s/step, 855s)
+[probe2] step 8500 ctc 3.169 rec 0.1654 val_cer 0.8320 (0.105 s/step, 905s)
+[probe2] step 9000 ctc 3.209 rec 0.1524 val_cer 0.8321 (0.104 s/step, 943s)
+[probe2] step 9500 ctc 3.183 rec 0.1345 val_cer 0.8318 (0.103 s/step, 985s)
+[probe2] step 10000 ctc 3.195 rec 0.1334 val_cer 0.8324 (0.101 s/step, 1023s)
+[probe2] TEST {'encoding': 'rgb3_p6', 'encoder': 'deepencoder', 'cond': 'jpeg75', 'steps': 10000} cer=0.8354 px2/char=6.05 chars/token=677.3
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   hyp: '                                                                                          '
+   ref: 'cobi. He was cast in the 2005 theatre productions of the Philip Ridley play Mercury Fur, w'
+   hyp: '                                                                                          '

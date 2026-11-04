@@ -1,0 +1,8 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding col_b2 --encoder deepencoder --cond jpeg75 --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+[cache] no builder holds the lock: building col_b2_tr1000_te16.pt here
+[cache] wrote encoder_probe\cache\tokens\deepencoder\jpeg75\col_b2_tr1000_te16.pt train (1000, 64, 1280) test (16, 64, 1280) (74s, 0.07 s/page)
+[probe2] {'encoding': 'col_b2', 'encoder': 'deepencoder', 'cond': 'jpeg75', 'steps': 10000} S=512 P=64 G=8 pitch=2 lines/page=256 classes=95 test_pages=16 px2/char=4.00 chars/token=1024.0 pages=2s wait=77s feat=81s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 2.981 rec 0.5570 val_cer 0.7526 (0.054 s/step, 113s)
+[probe2] step 1000 ctc 2.878 rec 0.5327 val_cer 0.7314 (0.062 s/step, 148s)
+[probe2] step 1500 ctc 2.829 rec 0.5488 val_cer 0.7259 (0.066 s/step, 184s)
+[probe2] step 2000 ctc 2.807 rec 0.5532 val_cer 0.7216 (0.066 s/step, 217s)

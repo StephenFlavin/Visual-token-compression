@@ -1,0 +1,13 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding latin_p16 --encoder identity32 --cond clean --steps 3000 --run-name round2_gpu_tp200
+[probe2] {'encoding': 'latin_p16', 'encoder': 'identity32', 'cond': 'clean', 'steps': 3000} S=512 P=32 G=16 pitch=16 lines/page=32 classes=95 test_pages=16 px2/char=113.84 chars/token=9.0 pages=0s wait=0s feat=4s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 3.181 rec 0.5658 val_cer 0.9505 (0.022 s/step, 17s)
+[probe2] step 1000 ctc 3.013 rec 0.5049 val_cer 0.9153 (0.021 s/step, 27s)
+[probe2] step 1500 ctc 0.061 rec 0.1014 val_cer 0.0346 (0.021 s/step, 38s)
+[probe2] step 2000 ctc 0.004 rec 0.0073 val_cer 0.0005 (0.021 s/step, 48s)
+[probe2] step 2500 ctc 0.000 rec 0.0005 val_cer 0.0004 (0.023 s/step, 63s)
+[probe2] step 3000 ctc 0.001 rec 0.0005 val_cer 0.0004 (0.027 s/step, 86s)
+[probe2] TEST {'encoding': 'latin_p16', 'encoder': 'identity32', 'cond': 'clean', 'steps': 3000} cer=0.0006 px2/char=113.84 chars/token=9.0
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a'
+   hyp: 'Robert Boulter is an English film, television and theatre actor. He had a'
+   ref: 'guest-starring role on the television series The Bill in 2000. This was'
+   hyp: 'guest-starring role on the television series The Bill in 2000. This was'

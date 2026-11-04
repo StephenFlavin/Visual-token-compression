@@ -1,0 +1,13 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding mono_p6 --encoder identity32 --cond clean --steps 3000 --run-name round2_gpu_tp200
+[probe2] {'encoding': 'mono_p6', 'encoder': 'identity32', 'cond': 'clean', 'steps': 3000} S=512 P=32 G=16 pitch=6 lines/page=85 classes=95 test_pages=16 px2/char=18.14 chars/token=56.4 pages=0s wait=0s feat=3s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 2.945 rec 0.7321 val_cer 0.7998 (0.094 s/step, 52s)
+[probe2] step 1000 ctc 0.207 rec 0.1303 val_cer 0.0537 (0.087 s/step, 92s)
+[probe2] step 1500 ctc 0.008 rec 0.0103 val_cer 0.0055 (0.089 s/step, 139s)
+[probe2] step 2000 ctc 0.001 rec 0.0009 val_cer 0.0020 (0.088 s/step, 180s)
+[probe2] step 2500 ctc 0.000 rec 0.0005 val_cer 0.0020 (0.088 s/step, 225s)
+[probe2] step 3000 ctc 0.000 rec 0.0004 val_cer 0.0019 (0.085 s/step, 259s)
+[probe2] TEST {'encoding': 'mono_p6', 'encoder': 'identity32', 'cond': 'clean', 'steps': 3000} cer=0.0020 px2/char=18.14 chars/token=56.4
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   hyp: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   ref: 'ole in the play Herons written by Simon Stephens, which was performed in 2001 at the Royal'
+   hyp: 'ole in the play Herons written by Simon Stephens, which was performed in 2001 at the Royal'

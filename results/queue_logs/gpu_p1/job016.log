@@ -1,0 +1,13 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding col_b1 --encoder identity32 --cond clean --steps 3000 --run-name round2_gpu_tp200
+[probe2] {'encoding': 'col_b1', 'encoder': 'identity32', 'cond': 'clean', 'steps': 3000} S=512 P=32 G=16 pitch=1 lines/page=512 classes=95 test_pages=7 px2/char=1.00 chars/token=1024.0 pages=1s wait=0s feat=4s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 1.787 rec 0.4054 val_cer 0.4969 (0.099 s/step, 58s)
+[probe2] step 1000 ctc 0.984 rec 0.2742 val_cer 0.3087 (0.088 s/step, 97s)
+[probe2] step 1500 ctc 0.634 rec 0.2099 val_cer 0.2375 (0.083 s/step, 133s)
+[probe2] step 2000 ctc 0.369 rec 0.1318 val_cer 0.1267 (0.071 s/step, 152s)
+[probe2] step 2500 ctc 0.116 rec 0.0572 val_cer 0.0463 (0.070 s/step, 185s)
+[probe2] step 3000 ctc 0.081 rec 0.0437 val_cer 0.0302 (0.070 s/step, 220s)
+[probe2] TEST {'encoding': 'col_b1', 'encoder': 'identity32', 'cond': 'clean', 'steps': 3000} cer=0.0291 px2/char=1.00 chars/token=1024.0
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   hyp: 'aobert Boulter is an English film, television and theatre acton. He had a guuest-starring '
+   ref: 'bi. He was cast in the 2005 theatre productions of the Philip Ridley play Mercury Fur, whi'
+   hyp: 'ti. He was nast in the 2005 theatne productions of the Philip Ridley play Mencury dur, whi'

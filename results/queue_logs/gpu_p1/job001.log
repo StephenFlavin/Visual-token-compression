@@ -1,0 +1,13 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding latin_p5 --encoder identity32 --cond clean --steps 3000 --run-name round2_gpu_tp200
+[probe2] {'encoding': 'latin_p5', 'encoder': 'identity32', 'cond': 'clean', 'steps': 3000} S=512 P=32 G=16 pitch=5 lines/page=102 classes=95 test_pages=16 px2/char=10.93 chars/token=93.6 pages=122s wait=0s feat=126s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 2.955 rec 0.5667 val_cer 0.8502 (0.095 s/step, 176s)
+[probe2] step 1000 ctc 1.963 rec 0.2644 val_cer 0.6063 (0.094 s/step, 222s)
+[probe2] step 1500 ctc 0.415 rec 0.1161 val_cer 0.1445 (0.093 s/step, 268s)
+[probe2] step 2000 ctc 0.104 rec 0.0325 val_cer 0.0435 (0.089 s/step, 306s)
+[probe2] step 2500 ctc 0.009 rec 0.0049 val_cer 0.0028 (0.090 s/step, 353s)
+[probe2] step 3000 ctc 0.009 rec 0.0036 val_cer 0.0022 (0.087 s/step, 389s)
+[probe2] TEST {'encoding': 'latin_p5', 'encoder': 'identity32', 'cond': 'clean', 'steps': 3000} cer=0.0027 px2/char=10.93 chars/token=93.6
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   hyp: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   ref: '2001 at the Royal Court Theatre. He had a guest role in the television series Judge John D'
+   hyp: '2001 at the Royal Court Theatre. He had a guest role in the television series Judge John D'

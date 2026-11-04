@@ -1,0 +1,17 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding col_b4 --encoder deepencoder --cond clean --steps 5000 --train-pages 1000 --run-name round2_gpu_tp1000
+[probe2] {'encoding': 'col_b4', 'encoder': 'deepencoder', 'cond': 'clean', 'steps': 5000} S=512 P=64 G=8 pitch=4 lines/page=128 classes=95 test_pages=16 px2/char=16.00 chars/token=256.0 pages=0s wait=0s feat=3s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 3.130 rec 0.6333 val_cer 0.8289 (0.047 s/step, 29s)
+[probe2] step 1000 ctc 2.868 rec 0.5302 val_cer 0.7354 (0.046 s/step, 52s)
+[probe2] step 1500 ctc 2.880 rec 0.5465 val_cer 0.7290 (0.047 s/step, 76s)
+[probe2] step 2000 ctc 2.782 rec 0.5483 val_cer 0.7298 (0.047 s/step, 99s)
+[probe2] step 2500 ctc 2.771 rec 0.5344 val_cer 0.7251 (0.047 s/step, 123s)
+[probe2] step 3000 ctc 2.831 rec 0.5205 val_cer 0.7335 (0.047 s/step, 146s)
+[probe2] step 3500 ctc 2.948 rec 0.4936 val_cer 0.7248 (0.047 s/step, 170s)
+[probe2] step 4000 ctc 2.853 rec 0.4645 val_cer 0.7233 (0.047 s/step, 192s)
+[probe2] step 4500 ctc 2.816 rec 0.4347 val_cer 0.7242 (0.046 s/step, 214s)
+[probe2] step 5000 ctc 2.849 rec 0.4232 val_cer 0.7238 (0.045 s/step, 231s)
+[probe2] TEST {'encoding': 'col_b4', 'encoder': 'deepencoder', 'cond': 'clean', 'steps': 5000} cer=0.7257 px2/char=16.00 chars/token=256.0
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   hyp: ' a e ee e o e ee a e ee ea e e a ee o e e a e o e e e e '
+   ref: 'in 2000. This was followed by a starring role in the play Herons written by Simon Stephens'
+   hyp: ' e e o e ee e o e o e e e e e e e e ee o a ee ee a a e e ee oe'

@@ -1,0 +1,27 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding lg_free_h4 --encoder deepencoder --cond jpeg75 --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+[probe2] {'encoding': 'lg_free_h4', 'encoder': 'deepencoder', 'cond': 'jpeg75', 'steps': 10000} S=512 P=64 G=8 pitch=4 lines/page=128 classes=395 test_pages=16 px2/char=5.78 chars/token=708.1 pages=2s wait=0s feat=5s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 4.173 rec 0.7771 val_cer 0.9815 (0.079 s/step, 49s)
+[probe2] step 1000 ctc 3.974 rec 0.3122 val_cer 0.9090 (0.081 s/step, 91s)
+[probe2] step 1500 ctc 3.931 rec 0.3276 val_cer 0.8585 (0.083 s/step, 133s)
+[probe2] step 2000 ctc 3.901 rec 0.3278 val_cer 0.8394 (0.082 s/step, 173s)
+[probe2] step 2500 ctc 3.799 rec 0.3412 val_cer 0.8343 (0.082 s/step, 215s)
+[probe2] step 3000 ctc 3.905 rec 0.3452 val_cer 0.8377 (0.082 s/step, 256s)
+[probe2] step 3500 ctc 3.867 rec 0.3446 val_cer 0.8241 (0.082 s/step, 296s)
+[probe2] step 4000 ctc 3.928 rec 0.3545 val_cer 0.8270 (0.079 s/step, 325s)
+[probe2] step 4500 ctc 3.931 rec 0.3421 val_cer 0.8217 (0.080 s/step, 368s)
+[probe2] step 5000 ctc 3.833 rec 0.3330 val_cer 0.8217 (0.080 s/step, 412s)
+[probe2] step 5500 ctc 3.944 rec 0.3290 val_cer 0.8209 (0.081 s/step, 455s)
+[probe2] step 6000 ctc 3.829 rec 0.3218 val_cer 0.8203 (0.082 s/step, 499s)
+[probe2] step 6500 ctc 3.916 rec 0.3108 val_cer 0.8179 (0.082 s/step, 542s)
+[probe2] step 7000 ctc 3.804 rec 0.3058 val_cer 0.8205 (0.082 s/step, 585s)
+[probe2] step 7500 ctc 3.889 rec 0.2938 val_cer 0.8240 (0.082 s/step, 628s)
+[probe2] step 8000 ctc 3.831 rec 0.2837 val_cer 0.8266 (0.083 s/step, 671s)
+[probe2] step 8500 ctc 3.796 rec 0.2727 val_cer 0.8243 (0.083 s/step, 716s)
+[probe2] step 9000 ctc 3.894 rec 0.2648 val_cer 0.8273 (0.083 s/step, 758s)
+[probe2] step 9500 ctc 3.790 rec 0.2597 val_cer 0.8243 (0.083 s/step, 802s)
+[probe2] step 10000 ctc 3.829 rec 0.2550 val_cer 0.8244 (0.084 s/step, 845s)
+[probe2] TEST {'encoding': 'lg_free_h4', 'encoder': 'deepencoder', 'cond': 'jpeg75', 'steps': 10000} cer=0.8223 px2/char=5.78 chars/token=708.1
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   hyp: 'i aa a a a a a i a a i i ae a a a ie a i a i a a a i iia a a a a a a a'
+   ref: 'Boulter landed a role as "Craig" in the episode "Teddy\'s Story" of the television series T'
+   hyp: 'i a a a a a a i a a a i ai a i a a i a aa a i a ie ae a e i e a ae a a ae a a'

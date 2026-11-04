@@ -1,0 +1,5 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding latin_p16 --encoder deepencoder --cond jpeg75 --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+[cache] waiting for encoder_probe\cache\tokens\deepencoder\jpeg75\latin_p16_tr1000_te16.pt (0s)
+[cache] no builder holds the lock: building latin_p16_tr1000_te16.pt here
+[cache] wrote encoder_probe\cache\tokens\deepencoder\jpeg75\latin_p16_tr1000_te16.pt train (1000, 64, 1280) test (16, 64, 1280) (98s, 0.10 s/page)
+[probe2] {'encoding': 'latin_p16', 'encoder': 'deepencoder', 'cond': 'jpeg75', 'steps': 10000} S=512 P=64 G=8 pitch=16 lines/page=32 classes=95 test_pages=16 px2/char=113.84 chars/token=36.0 pages=0s wait=341s feat=343s bf16=True device=cuda train-data-on-gpu=True

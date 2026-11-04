@@ -1,0 +1,27 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding rgb3_p8 --encoder deepencoder --cond jpeg75 --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+[probe2] {'encoding': 'rgb3_p8', 'encoder': 'deepencoder', 'cond': 'jpeg75', 'steps': 10000} S=512 P=64 G=8 pitch=8 lines/page=64 classes=285 test_pages=16 px2/char=10.67 chars/token=384.0 pages=1s wait=0s feat=4s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 3.460 rec 0.3367 val_cer 0.8032 (0.085 s/step, 50s)
+[probe2] step 1000 ctc 3.230 rec 0.3013 val_cer 0.8300 (0.084 s/step, 92s)
+[probe2] step 1500 ctc 3.270 rec 0.3227 val_cer 0.8297 (0.084 s/step, 134s)
+[probe2] step 2000 ctc 3.240 rec 0.3117 val_cer 0.8306 (0.084 s/step, 175s)
+[probe2] step 2500 ctc 3.246 rec 0.3493 val_cer 0.8327 (0.084 s/step, 217s)
+[probe2] step 3000 ctc 3.248 rec 0.3473 val_cer 0.8321 (0.084 s/step, 259s)
+[probe2] step 3500 ctc 3.212 rec 0.3728 val_cer 0.8298 (0.084 s/step, 300s)
+[probe2] step 4000 ctc 3.223 rec 0.4213 val_cer 0.8349 (0.083 s/step, 341s)
+[probe2] step 4500 ctc 3.199 rec 0.2884 val_cer 0.8334 (0.083 s/step, 384s)
+[probe2] step 5000 ctc 3.193 rec 0.2843 val_cer 0.8311 (0.083 s/step, 424s)
+[probe2] step 5500 ctc 3.204 rec 0.2662 val_cer 0.8304 (0.083 s/step, 466s)
+[probe2] step 6000 ctc 3.215 rec 0.2481 val_cer 0.8308 (0.083 s/step, 507s)
+[probe2] step 6500 ctc 3.230 rec 0.2328 val_cer 0.8299 (0.083 s/step, 544s)
+[probe2] step 7000 ctc 3.206 rec 0.1991 val_cer 0.8306 (0.082 s/step, 584s)
+[probe2] step 7500 ctc 3.196 rec 0.1949 val_cer 0.8310 (0.083 s/step, 627s)
+[probe2] step 8000 ctc 3.188 rec 0.1628 val_cer 0.8304 (0.084 s/step, 679s)
+[probe2] step 8500 ctc 3.180 rec 0.1478 val_cer 0.8312 (0.085 s/step, 732s)
+[probe2] step 9000 ctc 3.190 rec 0.1397 val_cer 0.8313 (0.086 s/step, 784s)
+[probe2] step 9500 ctc 3.141 rec 0.1309 val_cer 0.8306 (0.087 s/step, 837s)
+[probe2] step 10000 ctc 3.104 rec 0.1279 val_cer 0.8309 (0.088 s/step, 889s)
+[probe2] TEST {'encoding': 'rgb3_p8', 'encoder': 'deepencoder', 'cond': 'jpeg75', 'steps': 10000} cer=0.8356 px2/char=10.67 chars/token=384.0
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   hyp: '                                                                                          '
+   ref: 'g" in the episode "Teddy\'s Story" of the television series The Long Firm; he starred along'
+   hyp: '                                                                                          '

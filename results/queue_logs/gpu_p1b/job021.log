@@ -1,0 +1,17 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding rgb3_p6 --encoder deepencoder --cond clean --steps 5000 --train-pages 1000 --run-name round2_gpu_tp1000
+[probe2] {'encoding': 'rgb3_p6', 'encoder': 'deepencoder', 'cond': 'clean', 'steps': 5000} S=512 P=64 G=8 pitch=6 lines/page=85 classes=285 test_pages=16 px2/char=6.05 chars/token=677.3 pages=2s wait=0s feat=5s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 3.249 rec 0.3264 val_cer 0.8304 (0.057 s/step, 39s)
+[probe2] step 1000 ctc 3.209 rec 0.4249 val_cer 0.8195 (0.056 s/step, 67s)
+[probe2] step 1500 ctc 3.216 rec 0.4155 val_cer 0.8307 (0.058 s/step, 98s)
+[probe2] step 2000 ctc 3.196 rec 0.3497 val_cer 0.8309 (0.059 s/step, 128s)
+[probe2] step 2500 ctc 3.162 rec 0.3132 val_cer 0.8324 (0.059 s/step, 159s)
+[probe2] step 3000 ctc 3.170 rec 0.2733 val_cer 0.8331 (0.059 s/step, 188s)
+[probe2] step 3500 ctc 3.170 rec 0.2108 val_cer 0.8315 (0.057 s/step, 209s)
+[probe2] step 4000 ctc 3.230 rec 0.1775 val_cer 0.8318 (0.057 s/step, 238s)
+[probe2] step 4500 ctc 3.207 rec 0.1431 val_cer 0.8319 (0.057 s/step, 267s)
+[probe2] step 5000 ctc 3.194 rec 0.1303 val_cer 0.8323 (0.056 s/step, 289s)
+[probe2] TEST {'encoding': 'rgb3_p6', 'encoder': 'deepencoder', 'cond': 'clean', 'steps': 5000} cer=0.8356 px2/char=6.05 chars/token=677.3
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   hyp: '                                                                                          '
+   ref: 'cobi. He was cast in the 2005 theatre productions of the Philip Ridley play Mercury Fur, w'
+   hyp: '                                                                                          '

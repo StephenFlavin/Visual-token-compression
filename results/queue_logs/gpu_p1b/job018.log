@@ -1,0 +1,17 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding col_b2 --encoder deepencoder --cond clean --steps 5000 --train-pages 1000 --run-name round2_gpu_tp1000
+[probe2] {'encoding': 'col_b2', 'encoder': 'deepencoder', 'cond': 'clean', 'steps': 5000} S=512 P=64 G=8 pitch=2 lines/page=256 classes=95 test_pages=16 px2/char=4.00 chars/token=1024.0 pages=1s wait=0s feat=3s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 2.924 rec 0.6004 val_cer 0.7477 (0.034 s/step, 27s)
+[probe2] step 1000 ctc 2.872 rec 0.5364 val_cer 0.7295 (0.041 s/step, 51s)
+[probe2] step 1500 ctc 2.832 rec 0.5341 val_cer 0.7274 (0.044 s/step, 76s)
+[probe2] step 2000 ctc 2.800 rec 0.5322 val_cer 0.7249 (0.046 s/step, 101s)
+[probe2] step 2500 ctc 2.780 rec 0.5274 val_cer 0.7268 (0.047 s/step, 126s)
+[probe2] step 3000 ctc 2.808 rec 0.5058 val_cer 0.7169 (0.045 s/step, 146s)
+[probe2] step 3500 ctc 2.718 rec 0.4811 val_cer 0.7186 (0.044 s/step, 163s)
+[probe2] step 4000 ctc 2.777 rec 0.4549 val_cer 0.7173 (0.044 s/step, 186s)
+[probe2] step 4500 ctc 2.750 rec 0.4269 val_cer 0.7173 (0.045 s/step, 212s)
+[probe2] step 5000 ctc 2.795 rec 0.4241 val_cer 0.7179 (0.046 s/step, 237s)
+[probe2] TEST {'encoding': 'col_b2', 'encoder': 'deepencoder', 'cond': 'clean', 'steps': 5000} cer=0.7168 px2/char=4.00 chars/token=1024.0
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   hyp: ' a e a an e ee ae o e e a e oe oe on e e e o e e o e e an e ae oe ae ae ae ae ee ae an ee '
+   ref: 'oyal Court Theatre. He had a guest role in the television series Judge John Deed in 2002. '
+   hyp: 'ea oa e e ae o a o e a on e e a ee e a a o a e e a e e a a ea e e a a e ee o ee e a a e a '

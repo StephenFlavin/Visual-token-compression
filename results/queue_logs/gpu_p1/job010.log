@@ -1,0 +1,13 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding lg_free_h4 --encoder identity32 --cond clean --steps 3000 --run-name round2_gpu_tp200
+[probe2] {'encoding': 'lg_free_h4', 'encoder': 'identity32', 'cond': 'clean', 'steps': 3000} S=512 P=32 G=16 pitch=4 lines/page=128 classes=395 test_pages=16 px2/char=5.78 chars/token=177.0 pages=86s wait=0s feat=89s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 1.762 rec 0.4489 val_cer 0.4653 (0.096 s/step, 139s)
+[probe2] step 1000 ctc 0.622 rec 0.1799 val_cer 0.1761 (0.097 s/step, 188s)
+[probe2] step 1500 ctc 0.299 rec 0.1152 val_cer 0.0998 (0.099 s/step, 239s)
+[probe2] step 2000 ctc 0.095 rec 0.0468 val_cer 0.0263 (0.101 s/step, 293s)
+[probe2] step 2500 ctc 0.004 rec 0.0071 val_cer 0.0014 (0.100 s/step, 342s)
+[probe2] step 3000 ctc 0.005 rec 0.0036 val_cer 0.0005 (0.102 s/step, 397s)
+[probe2] TEST {'encoding': 'lg_free_h4', 'encoder': 'identity32', 'cond': 'clean', 'steps': 3000} cer=0.0005 px2/char=5.78 chars/token=177.0
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   hyp: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   ref: 'Boulter landed a role as "Craig" in the episode "Teddy\'s Story" of the television series T'
+   hyp: 'Boulter landed a role as "Craig" in the episode "Teddy\'s Story" of the television series T'

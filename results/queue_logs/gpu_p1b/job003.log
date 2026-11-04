@@ -1,0 +1,28 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding latin_p16 --encoder deepencoder --cond jpeg75 --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+[probe2] {'encoding': 'latin_p16', 'encoder': 'deepencoder', 'cond': 'jpeg75', 'steps': 10000} S=512 P=64 G=8 pitch=16 lines/page=32 classes=95 test_pages=16 px2/char=113.84 chars/token=36.0 pages=0s wait=0s feat=4s bf16=True device=cuda train-data-on-gpu=True
+[probe2] resumed from step 200 (round2_gpu_tp1000__latin_p16__deepencoder__jpeg75__10000__tp1000.pt)
+[probe2] step 500 ctc 3.148 rec 0.4142 val_cer 1.0000 (0.063 s/step, 24s)
+[probe2] step 1000 ctc 3.001 rec 0.3689 val_cer 0.8512 (0.066 s/step, 59s)
+[probe2] step 1500 ctc 2.919 rec 0.3897 val_cer 0.7883 (0.067 s/step, 94s)
+[probe2] step 2000 ctc 2.768 rec 0.3970 val_cer 0.7718 (0.066 s/step, 124s)
+[probe2] step 2500 ctc 2.841 rec 0.3892 val_cer 0.7708 (0.066 s/step, 159s)
+[probe2] step 3000 ctc 2.831 rec 0.3985 val_cer 0.7521 (0.067 s/step, 192s)
+[probe2] step 3500 ctc 2.839 rec 0.4198 val_cer 0.7627 (0.066 s/step, 224s)
+[probe2] step 4000 ctc 2.913 rec 0.4002 val_cer 0.7540 (0.066 s/step, 258s)
+[probe2] step 4500 ctc 2.906 rec 0.4679 val_cer 0.7451 (0.065 s/step, 285s)
+[probe2] step 5000 ctc 2.857 rec 0.3997 val_cer 0.7594 (0.065 s/step, 316s)
+[probe2] step 5500 ctc 2.858 rec 0.4075 val_cer 0.7614 (0.065 s/step, 350s)
+[probe2] step 6000 ctc 3.091 rec 0.3762 val_cer 0.7475 (0.065 s/step, 384s)
+[probe2] step 6500 ctc 2.782 rec 0.3452 val_cer 0.7428 (0.064 s/step, 407s)
+[probe2] step 7000 ctc 2.933 rec 0.3318 val_cer 0.7557 (0.064 s/step, 440s)
+[probe2] step 7500 ctc 2.765 rec 0.3150 val_cer 0.7434 (0.064 s/step, 476s)
+[probe2] step 8000 ctc 2.827 rec 0.3038 val_cer 0.7497 (0.064 s/step, 508s)
+[probe2] step 8500 ctc 2.847 rec 0.2886 val_cer 0.7428 (0.065 s/step, 543s)
+[probe2] step 9000 ctc 2.892 rec 0.2793 val_cer 0.7367 (0.065 s/step, 578s)
+[probe2] step 9500 ctc 2.778 rec 0.2663 val_cer 0.7428 (0.065 s/step, 611s)
+[probe2] step 10000 ctc 2.815 rec 0.2701 val_cer 0.7438 (0.065 s/step, 646s)
+[probe2] TEST {'encoding': 'latin_p16', 'encoder': 'deepencoder', 'cond': 'jpeg75', 'steps': 10000} cer=0.7471 px2/char=113.84 chars/token=36.0
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a'
+   hyp: 'ee e oa a e e a ee e a o e ee'
+   ref: 'guest-starring role on the television series The Bill in 2000. This was'
+   hyp: 'ee a ae ee a e eee a'

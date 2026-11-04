@@ -1,0 +1,29 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding rgb3_p8 --encoder deepencoder --cond clean --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+[cache] waiting for encoder_probe\cache\tokens\deepencoder\clean\rgb3_p8_tr1000_te16.pt (0s)
+[cache] waiting for encoder_probe\cache\tokens\deepencoder\clean\rgb3_p8_tr1000_te16.pt (600s)
+[probe2] {'encoding': 'rgb3_p8', 'encoder': 'deepencoder', 'cond': 'clean', 'steps': 10000} S=512 P=64 G=8 pitch=8 lines/page=64 classes=285 test_pages=16 px2/char=10.67 chars/token=384.0 pages=2s wait=1021s feat=1025s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 3.380 rec 0.3255 val_cer 0.8172 (0.105 s/step, 1082s)
+[probe2] step 1000 ctc 3.227 rec 0.4119 val_cer 0.8311 (0.103 s/step, 1133s)
+[probe2] step 1500 ctc 3.267 rec 0.3278 val_cer 0.8303 (0.104 s/step, 1185s)
+[probe2] step 2000 ctc 3.238 rec 0.3314 val_cer 0.8301 (0.104 s/step, 1237s)
+[probe2] step 2500 ctc 3.227 rec 1.6208 val_cer 0.8318 (0.104 s/step, 1290s)
+[probe2] step 3000 ctc 3.269 rec 0.4182 val_cer 0.8297 (0.101 s/step, 1332s)
+[probe2] step 3500 ctc 3.213 rec 0.3364 val_cer 0.8301 (0.101 s/step, 1383s)
+[probe2] step 4000 ctc 3.236 rec 0.3976 val_cer 0.8314 (0.101 s/step, 1434s)
+[probe2] step 4500 ctc 3.203 rec 0.2898 val_cer 0.8300 (0.101 s/step, 1485s)
+[probe2] step 5000 ctc 3.195 rec 0.2773 val_cer 0.8306 (0.101 s/step, 1536s)
+[probe2] step 5500 ctc 3.212 rec 0.2658 val_cer 0.8315 (0.102 s/step, 1588s)
+[probe2] step 6000 ctc 3.220 rec 0.2465 val_cer 0.8311 (0.102 s/step, 1639s)
+[probe2] step 6500 ctc 3.229 rec 0.2389 val_cer 0.8318 (0.102 s/step, 1690s)
+[probe2] step 7000 ctc 3.209 rec 0.2160 val_cer 0.8315 (0.102 s/step, 1741s)
+[probe2] step 7500 ctc 3.192 rec 0.1862 val_cer 0.8311 (0.102 s/step, 1793s)
+[probe2] step 8000 ctc 3.193 rec 0.1683 val_cer 0.8301 (0.102 s/step, 1844s)
+[probe2] step 8500 ctc 3.192 rec 0.1529 val_cer 0.8305 (0.100 s/step, 1882s)
+[probe2] step 9000 ctc 3.184 rec 0.1399 val_cer 0.8306 (0.099 s/step, 1918s)
+[probe2] step 9500 ctc 3.147 rec 0.1331 val_cer 0.8308 (0.097 s/step, 1955s)
+[probe2] step 10000 ctc 3.112 rec 0.1299 val_cer 0.8312 (0.096 s/step, 1989s)
+[probe2] TEST {'encoding': 'rgb3_p8', 'encoder': 'deepencoder', 'cond': 'clean', 'steps': 10000} cer=0.8358 px2/char=10.67 chars/token=384.0
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   hyp: '                                                                                          '
+   ref: 'g" in the episode "Teddy\'s Story" of the television series The Long Firm; he starred along'
+   hyp: '                                                                                          '

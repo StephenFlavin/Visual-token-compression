@@ -1,0 +1,13 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding latin_p24 --encoder deepencoder --cond jpeg75 --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+[cache] waiting for encoder_probe\cache\tokens\deepencoder\jpeg75\latin_p24_tr1000_te16.pt (0s)
+[cache] no builder holds the lock: building latin_p24_tr1000_te16.pt here
+[cache] wrote encoder_probe\cache\tokens\deepencoder\jpeg75\latin_p24_tr1000_te16.pt train (1000, 64, 1280) test (16, 64, 1280) (73s, 0.07 s/page)
+[probe2] {'encoding': 'latin_p24', 'encoder': 'deepencoder', 'cond': 'jpeg75', 'steps': 10000} S=512 P=64 G=8 pitch=24 lines/page=21 classes=95 test_pages=16 px2/char=266.63 chars/token=15.4 pages=1s wait=166s feat=169s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 3.368 rec 1.7971 val_cer 0.9890 (0.031 s/step, 184s)
+[probe2] step 1000 ctc 3.358 rec 1.7282 val_cer 0.9982 (0.040 s/step, 209s)
+[probe2] step 1500 ctc 3.087 rec 0.9475 val_cer 0.9797 (0.045 s/step, 236s)
+[probe2] step 2000 ctc 3.137 rec 0.7319 val_cer 0.8470 (0.046 s/step, 261s)
+[probe2] step 2500 ctc 2.982 rec 0.4747 val_cer 0.7749 (0.045 s/step, 282s)
+[probe2] step 3000 ctc 2.991 rec 0.5049 val_cer 0.8065 (0.049 s/step, 315s)
+[probe2] step 3500 ctc 2.956 rec 0.4764 val_cer 0.7713 (0.052 s/step, 350s)
+[probe2] step 4000 ctc 3.022 rec 0.4674 val_cer 0.7723 (0.054 s/step, 383s)

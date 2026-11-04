@@ -1,0 +1,16 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding latin_p32 --encoder deepencoder --cond jpeg75 --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+[probe2] {'encoding': 'latin_p32', 'encoder': 'deepencoder', 'cond': 'jpeg75', 'steps': 10000} S=512 P=64 G=8 pitch=32 lines/page=16 classes=95 test_pages=16 px2/char=483.16 chars/token=8.5 pages=0s wait=0s feat=4s bf16=True device=cuda train-data-on-gpu=True
+[probe2] resumed from step 6200 (round2_gpu_tp1000__latin_p32__deepencoder__jpeg75__10000__tp1000.pt)
+[probe2] step 6500 ctc 0.318 rec 0.3930 val_cer 0.2071 (0.052 s/step, 24s)
+[probe2] step 7000 ctc 0.292 rec 0.3805 val_cer 0.2052 (0.053 s/step, 58s)
+[probe2] step 7500 ctc 0.196 rec 0.3700 val_cer 0.2010 (0.054 s/step, 93s)
+[probe2] step 8000 ctc 0.206 rec 0.3535 val_cer 0.1931 (0.054 s/step, 123s)
+[probe2] step 8500 ctc 0.127 rec 0.3489 val_cer 0.1810 (0.055 s/step, 158s)
+[probe2] step 9000 ctc 0.046 rec 0.3228 val_cer 0.1833 (0.056 s/step, 192s)
+[probe2] step 9500 ctc 0.027 rec 0.3277 val_cer 0.1870 (0.056 s/step, 224s)
+[probe2] step 10000 ctc 0.026 rec 0.3283 val_cer 0.1861 (0.057 s/step, 258s)
+[probe2] TEST {'encoding': 'latin_p32', 'encoder': 'deepencoder', 'cond': 'jpeg75', 'steps': 10000} cer=0.1913 px2/char=483.16 chars/token=8.5
+   ref: 'Robert Boulter is an English film,'
+   hyp: 'Robert Boulter as entlich film,'
+   ref: 'television and theatre actor. He had a'
+   hyp: 'televi an hearee attor. He as'

@@ -1,0 +1,27 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding latin_p6 --encoder deepencoder --cond jpeg75 --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+[probe2] {'encoding': 'latin_p6', 'encoder': 'deepencoder', 'cond': 'jpeg75', 'steps': 10000} S=512 P=64 G=8 pitch=6 lines/page=85 classes=95 test_pages=16 px2/char=15.50 chars/token=264.3 pages=0s wait=0s feat=3s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 3.257 rec 0.4369 val_cer 0.9135 (0.050 s/step, 31s)
+[probe2] step 1000 ctc 2.860 rec 0.2838 val_cer 0.8027 (0.049 s/step, 55s)
+[probe2] step 1500 ctc 2.881 rec 0.2336 val_cer 0.7233 (0.049 s/step, 80s)
+[probe2] step 2000 ctc 2.785 rec 0.2246 val_cer 0.7571 (0.049 s/step, 104s)
+[probe2] step 2500 ctc 2.803 rec 0.2503 val_cer 0.7463 (0.049 s/step, 129s)
+[probe2] step 3000 ctc 2.765 rec 0.2350 val_cer 0.7326 (0.049 s/step, 153s)
+[probe2] step 3500 ctc 2.829 rec 0.2418 val_cer 0.7357 (0.049 s/step, 178s)
+[probe2] step 4000 ctc 2.754 rec 0.2457 val_cer 0.7301 (0.049 s/step, 203s)
+[probe2] step 4500 ctc 2.843 rec 0.2422 val_cer 0.7204 (0.049 s/step, 228s)
+[probe2] step 5000 ctc 2.769 rec 0.2384 val_cer 0.7268 (0.049 s/step, 253s)
+[probe2] step 5500 ctc 2.705 rec 0.2378 val_cer 0.7248 (0.049 s/step, 277s)
+[probe2] step 6000 ctc 2.729 rec 0.2164 val_cer 0.7279 (0.049 s/step, 302s)
+[probe2] step 6500 ctc 2.779 rec 0.1947 val_cer 0.7330 (0.049 s/step, 326s)
+[probe2] step 7000 ctc 2.751 rec 0.1805 val_cer 0.7281 (0.049 s/step, 351s)
+[probe2] step 7500 ctc 2.759 rec 0.1655 val_cer 0.7259 (0.049 s/step, 375s)
+[probe2] step 8000 ctc 2.791 rec 0.1513 val_cer 0.7264 (0.048 s/step, 390s)
+[probe2] step 8500 ctc 2.762 rec 0.1365 val_cer 0.7284 (0.047 s/step, 406s)
+[probe2] step 9000 ctc 2.693 rec 0.1236 val_cer 0.7266 (0.047 s/step, 429s)
+[probe2] step 9500 ctc 2.800 rec 0.1163 val_cer 0.7275 (0.047 s/step, 454s)
+[probe2] step 10000 ctc 2.740 rec 0.1139 val_cer 0.7287 (0.047 s/step, 474s)
+[probe2] TEST {'encoding': 'latin_p6', 'encoder': 'deepencoder', 'cond': 'jpeg75', 'steps': 10000} cer=0.7293 px2/char=15.50 chars/token=264.3
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   hyp: 'a a e an e ee e a e e ae oe e e a e ae ae ee a a ae oe e a e ae a e e ee a a e e e a e e'
+   ref: 'Stephens, which was performed in 2001 at the Royal Court Theatre. He had a guest role in t'
+   hyp: 'e ae a e a e ee a e a e o e a e a e e ae ee e a e e ee a e e o e e e a e e'

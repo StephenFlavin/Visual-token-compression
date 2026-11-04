@@ -1,0 +1,3 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding col_b4 --encoder deepencoder --cond jpeg75 --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+[cache] waiting for encoder_probe\cache\tokens\deepencoder\jpeg75\col_b4_tr1000_te16.pt (0s)
+[cache] no builder holds the lock: building col_b4_tr1000_te16.pt here

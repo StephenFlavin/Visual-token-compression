@@ -1,0 +1,13 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding latin_p6 --encoder identity32 --cond clean --steps 3000 --run-name round2_gpu_tp200
+[probe2] {'encoding': 'latin_p6', 'encoder': 'identity32', 'cond': 'clean', 'steps': 3000} S=512 P=32 G=16 pitch=6 lines/page=85 classes=95 test_pages=16 px2/char=15.50 chars/token=66.1 pages=94s wait=0s feat=98s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 3.009 rec 1.0267 val_cer 0.8685 (0.064 s/step, 132s)
+[probe2] step 1000 ctc 2.415 rec 0.4773 val_cer 0.6874 (0.079 s/step, 179s)
+[probe2] step 1500 ctc 0.101 rec 0.0482 val_cer 0.0448 (0.085 s/step, 227s)
+[probe2] step 2000 ctc 0.015 rec 0.0061 val_cer 0.0085 (0.087 s/step, 274s)
+[probe2] step 2500 ctc 0.002 rec 0.0010 val_cer 0.0059 (0.086 s/step, 314s)
+[probe2] step 3000 ctc 0.003 rec 0.0007 val_cer 0.0057 (0.087 s/step, 361s)
+[probe2] TEST {'encoding': 'latin_p6', 'encoder': 'identity32', 'cond': 'clean', 'steps': 3000} cer=0.0025 px2/char=15.50 chars/token=66.1
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   hyp: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   ref: 'Stephens, which was performed in 2001 at the Royal Court Theatre. He had a guest role in t'
+   hyp: 'Stephens, which was performed in 2001 at the Royal Court Theatre. He had a guest role in t'

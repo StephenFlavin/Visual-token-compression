@@ -1,0 +1,13 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding rgb3_p8 --encoder identity32 --cond clean --steps 3000 --run-name round2_gpu_tp200
+[probe2] {'encoding': 'rgb3_p8', 'encoder': 'identity32', 'cond': 'clean', 'steps': 3000} S=512 P=32 G=16 pitch=8 lines/page=64 classes=285 test_pages=16 px2/char=10.67 chars/token=96.0 pages=0s wait=0s feat=4s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 3.117 rec 0.4196 val_cer 0.7425 (0.109 s/step, 60s)
+[probe2] step 1000 ctc 0.376 rec 0.2927 val_cer 0.1134 (0.102 s/step, 107s)
+[probe2] step 1500 ctc 0.108 rec 0.2454 val_cer 0.0394 (0.101 s/step, 157s)
+[probe2] step 2000 ctc 0.040 rec 0.1434 val_cer 0.0125 (0.102 s/step, 209s)
+[probe2] step 2500 ctc 0.013 rec 0.0622 val_cer 0.0056 (0.101 s/step, 259s)
+[probe2] step 3000 ctc 0.007 rec 0.0334 val_cer 0.0044 (0.101 s/step, 310s)
+[probe2] TEST {'encoding': 'rgb3_p8', 'encoder': 'identity32', 'cond': 'clean', 'steps': 3000} cer=0.0042 px2/char=10.67 chars/token=96.0
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   hyp: 'Robert Boulteris an English film, television and theatre actor. He had a guest-starring ro'
+   ref: 'g" in the episode "Teddy\'s Story" of the television series The Long Firm; he starred along'
+   hyp: 'g" in the episode "Teddy\'s Story" of the teleision series The Long Firm, he starred alongs'

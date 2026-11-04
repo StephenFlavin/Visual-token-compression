@@ -1,0 +1,24 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding col_b2 --encoder deepencoder --cond jpeg75 --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+[probe2] {'encoding': 'col_b2', 'encoder': 'deepencoder', 'cond': 'jpeg75', 'steps': 10000} S=512 P=64 G=8 pitch=2 lines/page=256 classes=95 test_pages=16 px2/char=4.00 chars/token=1024.0 pages=1s wait=0s feat=4s bf16=True device=cuda train-data-on-gpu=True
+[probe2] resumed from step 2000 (round2_gpu_tp1000__col_b2__deepencoder__jpeg75__10000__tp1000.pt)
+[probe2] step 2500 ctc 2.780 rec 0.5566 val_cer 0.7216 (0.067 s/step, 46s)
+[probe2] step 3000 ctc 2.810 rec 0.5570 val_cer 0.7160 (0.067 s/step, 81s)
+[probe2] step 3500 ctc 2.723 rec 0.5664 val_cer 0.7194 (0.067 s/step, 114s)
+[probe2] step 4000 ctc 2.782 rec 0.5708 val_cer 0.7189 (0.068 s/step, 149s)
+[probe2] step 4500 ctc 2.760 rec 0.5426 val_cer 0.7185 (0.068 s/step, 184s)
+[probe2] step 5000 ctc 2.793 rec 0.5512 val_cer 0.7176 (0.068 s/step, 218s)
+[probe2] step 5500 ctc 2.713 rec 0.5202 val_cer 0.7217 (0.068 s/step, 251s)
+[probe2] step 6000 ctc 2.725 rec 0.5107 val_cer 0.7177 (0.067 s/step, 282s)
+[probe2] step 6500 ctc 2.793 rec 0.4960 val_cer 0.7167 (0.067 s/step, 316s)
+[probe2] step 7000 ctc 2.790 rec 0.4854 val_cer 0.7211 (0.068 s/step, 353s)
+[probe2] step 7500 ctc 2.769 rec 0.4683 val_cer 0.7205 (0.068 s/step, 390s)
+[probe2] step 8000 ctc 2.790 rec 0.4569 val_cer 0.7171 (0.068 s/step, 424s)
+[probe2] step 8500 ctc 2.781 rec 0.4422 val_cer 0.7165 (0.068 s/step, 461s)
+[probe2] step 9000 ctc 2.768 rec 0.4324 val_cer 0.7172 (0.069 s/step, 497s)
+[probe2] step 9500 ctc 2.729 rec 0.4198 val_cer 0.7163 (0.069 s/step, 533s)
+[probe2] step 10000 ctc 2.849 rec 0.4200 val_cer 0.7157 (0.069 s/step, 564s)
+[probe2] TEST {'encoding': 'col_b2', 'encoder': 'deepencoder', 'cond': 'jpeg75', 'steps': 10000} cer=0.7149 px2/char=4.00 chars/token=1024.0
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   hyp: ' e on e a e a e a e o e ee a e ee o e i a a e o e a o e ae ee a a ae oe a e eee e e a e ea'
+   ref: 'oyal Court Theatre. He had a guest role in the television series Judge John Deed in 2002. '
+   hyp: ' a ee a a ean ee e e on e e e o o e a e a ea e ee a ee o e a aan e e an eee a ae ee on e a'

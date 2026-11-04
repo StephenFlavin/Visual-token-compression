@@ -1,0 +1,27 @@
+$ python encoder_probe/experiments/run_probe2.py --encoding latin_p8 --encoder deepencoder --cond jpeg75 --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+[probe2] {'encoding': 'latin_p8', 'encoder': 'deepencoder', 'cond': 'jpeg75', 'steps': 10000} S=512 P=64 G=8 pitch=8 lines/page=64 classes=95 test_pages=16 px2/char=28.57 chars/token=143.4 pages=0s wait=0s feat=3s bf16=True device=cuda train-data-on-gpu=True
+[probe2] step 500 ctc 3.095 rec 0.4434 val_cer 0.8699 (0.046 s/step, 28s)
+[probe2] step 1000 ctc 2.867 rec 0.4324 val_cer 0.8163 (0.047 s/step, 52s)
+[probe2] step 1500 ctc 2.880 rec 0.4412 val_cer 0.7667 (0.047 s/step, 75s)
+[probe2] step 2000 ctc 2.955 rec 0.4238 val_cer 0.7526 (0.047 s/step, 99s)
+[probe2] step 2500 ctc 2.835 rec 0.3679 val_cer 0.7673 (0.047 s/step, 123s)
+[probe2] step 3000 ctc 2.863 rec 0.3866 val_cer 0.7389 (0.047 s/step, 146s)
+[probe2] step 3500 ctc 2.825 rec 0.3842 val_cer 0.7427 (0.047 s/step, 170s)
+[probe2] step 4000 ctc 2.891 rec 0.3496 val_cer 0.7469 (0.047 s/step, 193s)
+[probe2] step 4500 ctc 2.862 rec 0.2913 val_cer 0.7447 (0.047 s/step, 218s)
+[probe2] step 5000 ctc 2.867 rec 0.2645 val_cer 0.7372 (0.047 s/step, 242s)
+[probe2] step 5500 ctc 2.868 rec 0.2596 val_cer 0.7328 (0.047 s/step, 266s)
+[probe2] step 6000 ctc 2.810 rec 0.2571 val_cer 0.7342 (0.047 s/step, 289s)
+[probe2] step 6500 ctc 2.781 rec 0.2273 val_cer 0.7331 (0.047 s/step, 313s)
+[probe2] step 7000 ctc 2.869 rec 0.2239 val_cer 0.7387 (0.047 s/step, 337s)
+[probe2] step 7500 ctc 2.789 rec 0.2020 val_cer 0.7330 (0.047 s/step, 361s)
+[probe2] step 8000 ctc 2.803 rec 0.1869 val_cer 0.7427 (0.047 s/step, 380s)
+[probe2] step 8500 ctc 2.801 rec 0.1749 val_cer 0.7440 (0.046 s/step, 397s)
+[probe2] step 9000 ctc 2.804 rec 0.1644 val_cer 0.7394 (0.046 s/step, 416s)
+[probe2] step 9500 ctc 2.860 rec 0.1580 val_cer 0.7395 (0.046 s/step, 441s)
+[probe2] step 10000 ctc 2.744 rec 0.1549 val_cer 0.7423 (0.046 s/step, 465s)
+[probe2] TEST {'encoding': 'latin_p8', 'encoder': 'deepencoder', 'cond': 'jpeg75', 'steps': 10000} cer=0.7408 px2/char=28.57 chars/token=143.4
+   ref: 'Robert Boulter is an English film, television and theatre actor. He had a guest-starring r'
+   hyp: 'e a a a a ea e aea a ae ae oe a a a a oa e a a a a e aa aa'
+   ref: 'followed by a starring role in the play Herons written by Simon Stephens, which was perfor'
+   hyp: 'a a ae a e a ee a a a a a a a e e a a ae a a a a a a a a a'
