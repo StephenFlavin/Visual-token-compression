@@ -194,6 +194,7 @@ def main(argv=None) -> int:
     flats_tr = [T.flat_text(enc, p) for p in tr]
     flats_te = [T.flat_text(enc, p) for p in te]
     t_pages = time.time() - t0
+    torch.manual_seed(a.seed)   # LoRA init draws from the global RNG: identical across arms and restarts
     model, tok = Q.load_model(dev, tiny=a.tiny, seed=a.seed)
     pm = Q.make_trainable(model, a.lora_r, a.lora_alpha, a.lora_dropout, a.vision_blocks, a.train_merger)
     if a.grad_ckpt:

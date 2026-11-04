@@ -84,9 +84,11 @@ class HFTok:
 # ------------------------------------------------------------------------------------------------- models
 
 def tiny_config(tok, layers: int = 2, hidden: int = 64, heads: int = 4, kv_heads: int = 2, vision_depth: int = 6,
-                max_positions: int = 32768):
+                max_positions: int = 32768, init_std: float = 0.3):
     """A shrunken Qwen2.5-VL config with the real architecture (window + full-attention vision blocks, 2x2
-    merger, M-RoPE, GQA) for CPU tests."""
+    merger, M-RoPE, GQA) for CPU tests. The LLM init std is large (0.3, real init 0.02) so that the frozen tied
+    embedding / LM head can express peaked next-token distributions after the final RMSNorm: with 0.02 a
+    64-d model's logits stay within about +-1 and the loss cannot fall far below ln(vocab)."""
     from transformers import Qwen2_5_VLConfig
     head_dim = hidden // heads
     sec = [head_dim // 2 - 2 * (head_dim // 2 * 3 // 8), head_dim // 2 * 3 // 8, head_dim // 2 * 3 // 8]
@@ -94,7 +96,7 @@ def tiny_config(tok, layers: int = 2, hidden: int = 64, heads: int = 4, kv_heads
         text_config=dict(vocab_size=tok.vocab_size, hidden_size=hidden, intermediate_size=2 * hidden,
                          num_hidden_layers=layers, num_attention_heads=heads, num_key_value_heads=kv_heads,
                          max_position_embeddings=max_positions, rms_norm_eps=1e-6, bos_token_id=tok.eos,
-                         eos_token_id=tok.im_end, pad_token_id=tok.pad,
+                         eos_token_id=tok.im_end, pad_token_id=tok.pad, initializer_range=init_std,
                          rope_parameters={"rope_type": "default", "rope_theta": 1e6, "mrope_section": sec}),
         vision_config=dict(depth=vision_depth, hidden_size=32, intermediate_size=64, num_heads=2,
                            out_hidden_size=hidden, patch_size=PATCH, spatial_merge_size=MERGE,
@@ -133,8 +135,10 @@ def load_model(device: torch.device, tiny: bool = False, rope_scaling: dict | No
     return model.to(device), tok
 
 
-def text_cfg(model):
-    return model.config.text_config
+def text_cfg(obj):
+    """Text config of a model, a peft model or a Qwen2_5_VLConfig."""
+    cfg = getattr(obj, "config", obj)
+    return getattr(cfg, "text_config", cfg)
 
 
 def rope_info(model) -> dict:
@@ -303,6 +307,7 @@ def kv_bytes(cache) -> tuple[int, int]:
 
 
 def kv_bytes_analytic(model, positions: int, bytes_per: int | None = None) -> int:
+    """layers x 2 (K, V) x kv_heads x head_dim x positions x bytes; ``model`` may be a config (give bytes_per)."""
     t = text_cfg(model)
     hd = getattr(t, "head_dim", None) or t.hidden_size // t.num_attention_heads
     if bytes_per is None:
