@@ -23,7 +23,6 @@ checkpoints every --ckpt-every steps under encoder_probe/cache/ckpt/ (exact resu
 from __future__ import annotations
 
 import argparse
-import collections
 import copy
 import gc
 import json
@@ -47,19 +46,23 @@ from encoder_probe.ep.vlm_encoders import WEIGHTS, cpu_has_bf16  # noqa: E402
 from run_probe import evaluate  # noqa: E402
 
 S, P, G = 448, 28, 16
-CODES = ["rgb3_lg_pb_h5", "latin_p8", "lg_pb_h5"]
-# pre-registered run order (ROUND3.md, G2-lite): the first six, then the rest if time is left
-ORDER = [("trained", "rgb3_lg_pb_h5"), ("trained", "latin_p8"), ("frozen", "rgb3_lg_pb_h5"),
-         ("direct", "rgb3_lg_pb_h5"), ("trained", "lg_pb_h5"), ("frozen", "latin_p8"),
-         ("frozen", "lg_pb_h5"), ("direct", "lg_pb_h5"), ("direct", "latin_p8")]
+CODES = ["rgb3_lg_pb_h5", "latin_p8", "lg_pb_h5", "latin_p5", "latin_p6"]
+# run order: the pre-registered six with the amendment's Latin sweep (ROUND3.md, 2026-11-04 ~21:50): moonshot
+# trained > latin_p8 trained > latin_p5 trained > moonshot frozen > latin_p6 trained > the rest
+ORDER = [("trained", "rgb3_lg_pb_h5"), ("trained", "latin_p8"), ("trained", "latin_p5"), ("frozen", "rgb3_lg_pb_h5"),
+         ("trained", "latin_p6"), ("direct", "rgb3_lg_pb_h5"), ("trained", "lg_pb_h5"), ("frozen", "latin_p8"),
+         ("frozen", "latin_p5"), ("frozen", "lg_pb_h5"), ("direct", "lg_pb_h5"), ("direct", "latin_p8"),
+         ("direct", "latin_p5"), ("frozen", "latin_p6"), ("direct", "latin_p6")]
 
 
 def print_queue(a) -> None:
-    for e in CODES:
-        print(f"EP_PAGE_CACHE=1 EP_BUILD_CHUNK=25 python3 encoder_probe/experiments/build_tokens2.py --encoders "
-              f"qwen25vl --conds clean --encodings {e} --train-pages {a.train_pages} --test-pages {a.test_pages} "
-              f"--split 32 --no-global-lock --threads 1")
+    """Each cache build (lean, --build-only) goes right before the first run that needs it."""
+    built = set()
     for arm, e in ORDER:
+        if e not in built:
+            built.add(e)
+            print(f"python3 encoder_probe/experiments/run_g2lite.py --build-only --encoding {e} "
+                  f"--train-pages {a.train_pages} --test-pages {a.test_pages} --threads 1")
         print(f"python3 encoder_probe/experiments/run_g2lite.py --arm {arm} --encoding {e} --steps {a.steps} "
               f"--train-pages {a.train_pages} --run-name {a.run_name} --threads 1")
 

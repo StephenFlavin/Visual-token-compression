@@ -177,15 +177,20 @@ def test_resume_is_exact_and_row_schema(tmp_path):
 def test_print_queue_order():
     import contextlib
     import io
-    from run_g2lite import ORDER, main
+    from run_g2lite import CODES, ORDER, main
     buf = io.StringIO()
     with contextlib.redirect_stdout(buf):
         main(["--print-queue"])
     lines = buf.getvalue().splitlines()
-    assert len(lines) == 3 + 9 and all("--split 32" in l and "--train-pages 500" in l for l in lines[:3])
-    assert lines[3].endswith("--threads 1") and "--arm trained --encoding rgb3_lg_pb_h5" in lines[3]
-    assert [tuple(l.split("--arm ")[1].split(" --encoding ")) for l in lines[3:]] == [
-        (arm, f"{e} --steps 3000 --train-pages 500 --run-name g2lite --threads 1") for arm, e in ORDER]
+    runs = [l for l in lines if "--arm " in l]
+    assert len(lines) == len(ORDER) + len(CODES) and all(l.endswith("--threads 1") for l in lines)
+    assert [tuple(l.split("--arm ")[1].split(" --steps")[0].split(" --encoding ")) for l in runs] == ORDER
+    assert ORDER[:4] == [("trained", "rgb3_lg_pb_h5"), ("trained", "latin_p8"), ("trained", "latin_p5"),
+                         ("frozen", "rgb3_lg_pb_h5")]
+    for i, l in enumerate(lines):                 # each cache is built right before its first run
+        if "--build-only" in l:
+            e = l.split("--encoding ")[1].split()[0]
+            assert f"--encoding {e} " in lines[i + 1] and not any(f"--encoding {e} " in x for x in lines[:i])
 
 
 def test_build_only_and_run_lock(tmp_path):
