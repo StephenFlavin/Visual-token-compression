@@ -1,0 +1,8 @@
+python encoder_probe/experiments/run_probe2.py --encoding rgb3_p8 --encoder deepencoder --cond clean --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+python encoder_probe/experiments/run_probe2.py --encoding rgb3_p6 --encoder deepencoder --cond clean --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+python encoder_probe/experiments/run_probe2.py --encoding mono_p8 --encoder deepencoder --cond clean --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+python encoder_probe/experiments/run_probe2.py --encoding mono_p6 --encoder deepencoder --cond clean --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+python encoder_probe/experiments/run_probe2.py --encoding latin_p10 --encoder deepencoder --cond clean --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+python encoder_probe/experiments/run_probe2.py --encoding latin_p8 --encoder deepencoder --cond clean --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+python encoder_probe/experiments/run_probe2.py --encoding latin_p6 --encoder deepencoder --cond clean --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
+python encoder_probe/experiments/run_probe2.py --encoding latin_p5 --encoder deepencoder --cond clean --steps 10000 --train-pages 1000 --run-name round2_gpu_tp1000
