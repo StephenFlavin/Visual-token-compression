@@ -164,7 +164,7 @@ def fig_glyphs():
         a = ink[i][:, : int(wss[i])]
         return a.reshape(PITCH, ss, w, ss).mean((1, 3)) > 0.5
 
-    img, d = new_card(1400)
+    img, d = new_card(1900)
     lx, rx, ty = 70, 1240, 70
     panel_title(d, lx, ty, "BEFORE", "Plain text", BEFORE)
     panel_title(d, rx, ty, "AFTER", "Learned glyphs", AFTER)
@@ -220,7 +220,17 @@ def fig_glyphs():
     d.text((rx, yc), "coloured = ONE glyph for a whole chunk;", font=ui(24), fill=MUTED, anchor="lt")
     d.text((rx, yc + 32), "grey = one glyph per letter (also learned)", font=ui(24), fill=MUTED, anchor="lt")
 
-    yb = yc + 110
+    # the same glyph text with no key, tints or gaps, at the same scale as the plain text
+    yk = yc + 100
+    d.text((rx, yk), "Without the key (same scale as the plain text):", font=ui(26, "SemiBold"), fill=INK, anchor="lt")
+    d.text((lx, yk), "Plain text at the same scale:", font=ui(26, "SemiBold"), fill=INK, anchor="lt")
+    yk += 50
+    for li, t in enumerate(HAIKU):
+        d.text((lx, yk + li * pitch + 0.9 * EM * z), t, font=f, fill=INK, anchor="ls")
+    for r, c in zip(*np.nonzero(real < 128)):
+        px, py = rx + c * z, yk + r * z
+        d.rounded_rectangle([px + 1, py + 1, px + z - 1, py + z - 1], radius=3, fill=INK)
+    yb = yk + PITCH * 3 * z + 70
     d.line([lx, yb - 24, W - 70, yb - 24], fill=FAINT, width=2)
     y = bars(d, lx, yb, 1120, [
         (f"Plain: {n_chars} chars", latin_w, BEFORE, ""),

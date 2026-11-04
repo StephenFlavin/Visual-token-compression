@@ -24,10 +24,12 @@ rest of the text is spelled letter by letter. So `something` becomes `s` + glyph
 ![Plain text vs learned glyphs](docs/img/glyphs.png)
 
 The haiku goes from **66 characters to 32 symbols**, and its lines get **36% shorter** at the same line height.
-The glyph shapes are **learned**: every symbol, single letters included, is a small whole-pixel bitmap (5 px
-tall) optimised together with a reader so that all of them are easy to tell apart at tiny sizes. The key under
-each cell shows what it stands for; the full alphabet is in the
-[glyph atlas](learned_glyphs/results/e1long/atlas/lg_learned_n300_pb_h5.png).
+Every symbol gets a learned glyph, not just the chunks: the 95 single characters are redrawn too (grey cells),
+as 5-px bitmaps optimised with a reader to stay legible at tiny sizes. The saving comes from both:
+* **better letter shapes:** learned single letters alone already beat a normal font (~0.8× the pixels);
+* **chunk glyphs:** several characters per symbol saves another ~26% on top (0.74×).
+
+The full alphabet is in the [glyph atlas](learned_glyphs/results/e1long/atlas/lg_learned_n300_pb_h5.png).
 
 An earlier version used common Chinese characters as the chunk glyphs and kept normal letters. That **failed**:
 a Chinese character needs a larger font to stay legible, which cancels the width saved (≥1.18× the pixels of
