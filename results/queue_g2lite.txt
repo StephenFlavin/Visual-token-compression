@@ -2,6 +2,7 @@ EP_PAGE_CACHE=1 EP_BUILD_CHUNK=25 python3 encoder_probe/experiments/build_tokens
 EP_PAGE_CACHE=1 EP_BUILD_CHUNK=25 python3 encoder_probe/experiments/build_tokens2.py --encoders qwen25vl --conds clean --encodings latin_p8 --train-pages 500 --test-pages 16 --split 32 --no-global-lock --threads 1
 EP_PAGE_CACHE=1 EP_BUILD_CHUNK=25 python3 encoder_probe/experiments/build_tokens2.py --encoders qwen25vl --conds clean --encodings lg_pb_h5 --train-pages 500 --test-pages 16 --split 32 --no-global-lock --threads 1
 python3 encoder_probe/experiments/run_g2lite.py --build-only --encoding rgb3_lg_pb_h5 --train-pages 500 --test-pages 16 --threads 1
+python3 encoder_probe/experiments/run_g2lite.py --build-only --encoding rgb3_lg_pb_h5 --train-pages 500 --test-pages 16 --threads 1 --chunk 25
 python3 encoder_probe/experiments/run_g2lite.py --arm trained --encoding rgb3_lg_pb_h5 --steps 3000 --train-pages 500 --run-name g2lite --threads 1
 python3 encoder_probe/experiments/run_g2lite.py --arm trained --encoding latin_p8 --steps 3000 --train-pages 500 --run-name g2lite --threads 1
 python3 encoder_probe/experiments/run_g2lite.py --build-only --encoding latin_p5 --train-pages 500 --test-pages 16 --threads 1

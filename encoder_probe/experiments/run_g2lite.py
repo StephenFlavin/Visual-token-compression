@@ -155,7 +155,7 @@ def build_only(a) -> int:
     # chunks are extracted in order (train, then test), so the test chunk is the last one still to do
     last = np.stack([TC.degrade(p.img, "clean") for p in te])
     TC.build(LeanVision(vision_fn(), last), "qwen25vl", a.encoding, "clean", S, a.train_pages, a.test_pages,
-             tr, te, split=split)
+             tr, te, split=split, chunk=a.chunk)
     print(f"[g2] built {hp.name} ({time.time() - t0:.0f}s)", flush=True)
     return 0
 
@@ -186,6 +186,8 @@ def main(argv=None) -> int:
     ap.add_argument("--build-only", action="store_true",
                     help="build the encoding's hidden-state cache (lean: no label strings, ViT freed before the "
                          "final concatenation) and exit; waits instead if another builder holds the cache")
+    ap.add_argument("--chunk", type=int, default=25, help="--build-only: pages per resumable chunk (keep it fixed: "
+                    "a chunk is reused only if its first page and page digest match)")
     ap.add_argument("--out-root", default=str(ROOT / "encoder_probe" / "results"))
     ap.add_argument("--cache-root", default=str(ROOT / "encoder_probe" / "cache"))
     a = ap.parse_args(argv)
