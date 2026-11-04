@@ -17,7 +17,7 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-TICKS = os.sysconf("SC_CLK_TCK")
+TICKS = os.sysconf("SC_CLK_TCK") if hasattr(os, "sysconf") else 100   # no /proc on Windows: see _train_pids
 
 # Full Phase-2 grid. Finished (scheme, em) rows are skipped by phase2_train, so re-running this
 # driver after a crash/reclaim resumes the grid (in-flight runs restart from step 0).
@@ -36,6 +36,8 @@ def _cpu_ticks(pid: int) -> int | None:
 
 def _train_pids(exclude: set[int]) -> list[int]:
     out = []
+    if not Path("/proc").is_dir():   # Windows: no Phase-2 processes to subtract
+        return out
     for d in Path("/proc").iterdir():
         if not d.name.isdigit() or int(d.name) in exclude:
             continue
