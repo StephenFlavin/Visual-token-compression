@@ -32,7 +32,7 @@ sys.path.insert(0, str(ROOT / "encoder_probe" / "experiments"))
 from encoder_probe.ep.encoders import degrade, resolve_device  # noqa: E402
 from encoder_probe.ep.geom import pages_digest  # noqa: E402
 from encoder_probe.ep.probe_grid import GridProbe  # noqa: E402
-from encoder_probe.ep.token_cache import get_tokens, split_pages  # noqa: E402
+from encoder_probe.ep.token_cache import get_tokens, page_cache_path, split_pages  # noqa: E402
 from encoder_probe.ep.vlm_encoders import DIMS, GEOMS, cpu_has_bf16, encodings_for, geometry, patchify_s  # noqa: E402
 from run_probe import evaluate  # noqa: E402  (round-1 evaluation, unchanged; works for any probe with features/read)
 
@@ -82,6 +82,9 @@ def main(argv=None) -> int:
         return 0
     if a.pages_only:
         S, _, _ = geometry(a.encoder)
+        if page_cache_path(a.encoding, S, a.train_pages, a.test_pages).exists():
+            print(f"[probe2] pages already cached: {a.encoding} S={S} tr{a.train_pages} te{a.test_pages}")
+            return 0
         t0 = time.time()
         _, tr, te = split_pages(a.encoding, S, a.train_pages, a.test_pages, cache=True)
         print(f"[probe2] pages cached: {a.encoding} S={S} train={len(tr)} test={len(te)} ({time.time() - t0:.0f}s)")
@@ -131,6 +134,8 @@ def main(argv=None) -> int:
         on_gpu = (tok_tr.numel() * tok_tr.element_size() + pix_tr.numel()) / 1e9 <= a.gpu_data_gb
         if on_gpu:
             tok_tr, pix_tr = tok_tr.to(dev), pix_tr.to(dev)
+        for pg in tr:   # train images now live in pix_tr: frees ~0.8 MB/page of host RAM for big --train-pages
+            pg.img = None
     t_feat = time.time() - t0
     classes = enc.classes
     cidx = {c: i + 1 for i, c in enumerate(classes)}

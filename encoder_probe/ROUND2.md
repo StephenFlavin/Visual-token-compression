@@ -137,6 +137,9 @@ Changes, all decided before any non-smoke run and none tuned on results:
   information survives the encoder", not "the VLM will read it".
 
 ## Run order, queue and cost
+**Local GPU runbook (RTX 3090): [docs/LOCAL_GPU.md](../docs/LOCAL_GPU.md)** (`--device`, page cache, the prioritised
+P0-P3 list with commands, decision rules, analysis with `experiments/analyse2.py`).
+
 `results/queue_probe_c.txt` (one command per line, logs in `results/queue_logs/probe_c/`, 94 lines), started by a
 waiter only after round 1's queue (`results/queue_probe_b.txt`) has exited:
 1. `build_tokens2.py --encoders deepencoder qwen25vl --conds clean jpeg75`: one process, holds the global VLM lock
@@ -187,4 +190,4 @@ the probe at both geometries, scoring and row writing end to end. They are not u
 `ep/geom.py` (sized pages, text supply), `ep/vlm_encoders.py` (encoders, geometry table, Qwen pixel layout),
 `ep/deepencoder.py` (vendored DeepEncoder), `ep/hf_partial.py` (range-request tensor fetch), `ep/probe_grid.py`
 (GridProbe), `ep/token_cache.py` (cache + lock), `experiments/build_tokens2.py`, `experiments/run_probe2.py`
-(`--print-queue` writes the queue), `experiments/wait_then_launch.sh` (waiter), `tests/test_round2.py`.
+(`--print-queue` writes the queue), `experiments/wait_then_launch.sh` (waiter), `experiments/analyse2.py` (round-2 tables), `tests/test_round2.py`.

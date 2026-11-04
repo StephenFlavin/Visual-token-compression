@@ -43,10 +43,14 @@ def page_cache_on() -> bool:
     return os.environ.get("EP_PAGE_CACHE", "") not in ("", "0")
 
 
+def page_cache_path(encoding: str, S: int, n_train: int, n_test: int) -> Path:
+    return PAGES / f"{encoding}_S{S}_tr{n_train}_te{n_test}.pkl"
+
+
 def split_pages(encoding: str, S: int, n_train: int, n_test: int, cache: bool | None = None):
     enc = get_encoding_s(encoding, S)
     cache = page_cache_on() if cache is None else cache
-    path = PAGES / f"{encoding}_S{S}_tr{n_train}_te{n_test}.pkl"
+    path = page_cache_path(encoding, S, n_train, n_test)
     if cache and path.exists():
         with open(path, "rb") as f:
             tr, te = pickle.load(f)
