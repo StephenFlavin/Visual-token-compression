@@ -71,7 +71,7 @@ class QwenViTTail(nn.Module):
     (window order) -> (B, n_tok, out_dim) merger tokens (row-major), the LLM's image tokens.
 
     Holds references to the tower's own block / merger modules (so their forward code is the model's) plus the
-    small helpers ``tail`` needs; the frozen head is not kept."""
+    small helpers ``tail`` needs; no reference to the tower itself, so its frozen head can be freed."""
 
     def __init__(self, tower, k: int, S: int):
         super().__init__()
@@ -83,9 +83,12 @@ class QwenViTTail(nn.Module):
         self.spatial_merge_size, self.window_size = tower.spatial_merge_size, tower.window_size
         self.patch_size, self.spatial_merge_unit = tower.patch_size, tower.spatial_merge_unit
         self.full = [i - k for i in tower.fullatt_block_indexes if i >= k]
-        self.permute_input_for_window_attn = tower.permute_input_for_window_attn
+        self._permute = type(tower).permute_input_for_window_attn   # the model's own (unbound) code, no tower ref
         self.g = S // self.patch_size
         self._meta: dict[int, dict] = {}
+
+    def permute_input_for_window_attn(self, t, window_index, seq_len):
+        return self._permute(self, t, window_index, seq_len=seq_len)
 
     def meta(self, B: int, device) -> dict:
         if B not in self._meta:
