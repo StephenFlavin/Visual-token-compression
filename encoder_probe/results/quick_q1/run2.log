@@ -1,3 +1,14 @@
 [q1] qwen loaded (4s)
 [q1] rgb3_lg_pb_h5 S=448: pages 84s
 [q1] rgb3_lg_pb_h5 train features done (527s)
+[q1] rgb3_lg_pb_h5 test features done (647s)
+[q1] rgb3_lg_pb_h5  raw         R2 1.0000 inkF1 1.000 1.000 1.000 alpha 1e-07
+[q1] rgb3_lg_pb_h5  embed       R2 1.0000 inkF1 1.000 1.000 1.000 alpha 1e-07
+[q1] rgb3_lg_pb_h5  b8          R2 0.6914 inkF1 0.938 0.913 0.912 alpha 0.001
+[q1] rgb3_lg_pb_h5  b16         R2 0.6064 inkF1 0.902 0.879 0.872 alpha 0.01
+[q1] rgb3_lg_pb_h5  b24         R2 0.4250 inkF1 0.816 0.804 0.789 alpha 0.0001
+[q1] rgb3_lg_pb_h5  b28         R2 0.3425 inkF1 0.774 0.768 0.750 alpha 0.0001
+[q1] rgb3_lg_pb_h5  final       R2 0.2296 inkF1 0.717 0.715 0.697 alpha 1e-05
+[q1] rgb3_lg_pb_h5  merger      R2 0.0192 inkF1 0.624 0.624 0.624 alpha 1
+[q1] panel /home/user/visual-bpe/docs/img/q1_readout_rgb3_lg_pb_h5.png
+[q1] rgb3_lg_free_h4 S=448: pages 102s
