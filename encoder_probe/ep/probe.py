@@ -84,7 +84,7 @@ class Probe(nn.Module):
     def read(self, feat: torch.Tensor, page_idx: torch.Tensor, line_idx: torch.Tensor) -> torch.Tensor:
         """feat (B,c,224,224); (page, line) index pairs -> log-probs (T=224*E, N, n_out) for CTC."""
         p = self.pitch
-        rows = line_idx[:, None] * p + torch.arange(p)[None]                      # (N, p)
+        rows = line_idx[:, None] * p + torch.arange(p, device=line_idx.device)[None]                      # (N, p)
         strips = feat[page_idx[:, None], :, rows]                                 # (N, p, c, 224)
         x = strips.permute(0, 2, 1, 3).reshape(len(line_idx), self.c * p, W)
         y = self.out(self.blocks(self.inp(x)))                                    # (N, E*n_out, 224)

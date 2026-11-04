@@ -60,8 +60,8 @@ def _rel_pos(q: int, k: int, rel: torch.Tensor) -> torch.Tensor:
     if rel.shape[0] != d:
         rel = F.interpolate(rel.float().reshape(1, rel.shape[0], -1).permute(0, 2, 1), size=d,
                             mode="linear").to(rel.dtype).reshape(-1, d).permute(1, 0)
-    qc = torch.arange(q)[:, None] * max(k / q, 1.0)
-    kc = torch.arange(k)[None, :] * max(q / k, 1.0)
+    qc = torch.arange(q, device=rel.device)[:, None] * max(k / q, 1.0)
+    kc = torch.arange(k, device=rel.device)[None, :] * max(q / k, 1.0)
     return rel[((qc - kc) + (k - 1) * max(q / k, 1.0)).long()]
 
 

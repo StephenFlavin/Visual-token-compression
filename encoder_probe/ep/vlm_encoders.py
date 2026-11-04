@@ -10,7 +10,8 @@
                                       LLM's image tokens: SAM-B + 16x conv compressor + CLIP-L + linear projector)
 
 Weights: only the vision tensors are fetched from each checkpoint (HTTP range requests, ep/hf_partial.py) into
-encoder_probe/cache/weights/. Both models run in bf16 (their checkpoint dtype) on CPUs with native bf16, else in fp32 (COMPUTE_DTYPE).
+encoder_probe/cache/weights/. Both models run in bf16 (their checkpoint dtype) on CUDA and on CPUs with native bf16,
+else in fp32 (compute_dtype). On CUDA they use larger batches; tokens are always returned on the CPU as bf16.
 """
 from __future__ import annotations
 
@@ -55,6 +56,12 @@ def cpu_has_bf16() -> bool:
 
 COMPUTE_DTYPE = torch.bfloat16 if cpu_has_bf16() else torch.float32
 
+
+def compute_dtype(device: torch.device) -> torch.dtype:
+    """Encoder precision: bf16 (checkpoint dtype) on CUDA; on CPU bf16 only with native bf16, else fp32."""
+    return torch.bfloat16 if device.type == "cuda" else COMPUTE_DTYPE
+
+
 def encodings_for(encoder: str) -> list[str]:
     return ENCODINGS + ANCHORS[GEOMS[encoder][0]]
 
@@ -93,7 +100,7 @@ def qwen_pixel_values(imgs: np.ndarray, patch: int = 14, merge: int = 2, tp: int
 class QwenVision:
     """Qwen2.5-VL-3B vision tower; returns the patch-merger output (B, (S/28)^2, 2048)."""
 
-    def __init__(self):
+    def __init__(self, device: str | torch.device = "cpu"):
         from huggingface_hub import hf_hub_download
         from safetensors.torch import load_file
         from transformers.models.qwen2_5_vl.configuration_qwen2_5_vl import Qwen2_5_VLVisionConfig
@@ -111,28 +118,32 @@ class QwenVision:
         sd = {k[len("visual."):]: v for k, v in load_file(str(path)).items()}
         m.load_state_dict(sd, strict=True, assign=True)
         m.rotary_pos_emb = Qwen2_5_VLVisionRotaryEmbedding(vc)                  # non-persistent buffers
-        self.model = m.to(COMPUTE_DTYPE).eval()   # weights are bf16 values: fp32 is lossless
+        self.device = torch.device(device)
+        self.dtype = compute_dtype(self.device)
+        self.compute = f"{self.device.type}/{str(self.dtype).split('.')[-1]}"
+        self.model = m.to(self.device, self.dtype).eval()   # weights are bf16 values: fp32 is lossless
         self.out_dim = vc.out_hidden_size
 
     @torch.no_grad()
-    def __call__(self, imgs: np.ndarray, batch: int = 2) -> torch.Tensor:
+    def __call__(self, imgs: np.ndarray, batch: int | None = None) -> torch.Tensor:
+        batch = batch or (8 if self.device.type == "cuda" else 2)
         S = imgs.shape[1]
         n = (S // 28) ** 2
         out = []
         for i in range(0, len(imgs), batch):
             xb = imgs[i:i + batch]
-            pv = torch.from_numpy(qwen_pixel_values(xb))
-            thw = torch.tensor([[1, S // 14, S // 14]] * len(xb))
+            pv = torch.from_numpy(qwen_pixel_values(xb)).to(self.device)
+            thw = torch.tensor([[1, S // 14, S // 14]] * len(xb), device=self.device)
             o = self.model(hidden_states=pv, grid_thw=thw).pooler_output            # (len*n, 2048)
             assert o.shape == (len(xb) * n, self.out_dim), o.shape
-            out.append(o.reshape(len(xb), n, self.out_dim).to(torch.bfloat16))
+            out.append(o.reshape(len(xb), n, self.out_dim).to(torch.bfloat16).cpu())
         return torch.cat(out)
 
 
 class DeepEncoderVision:
     """DeepSeek-OCR DeepEncoder (Tiny mode at S = 512); returns projector tokens (B, (S/64)^2, 1280)."""
 
-    def __init__(self, stage: str = "projector"):
+    def __init__(self, stage: str = "projector", device: str | torch.device = "cpu"):
         from safetensors.torch import load_file
         from encoder_probe.ep.deepencoder import DeepEncoderModel
         from encoder_probe.ep.hf_partial import fetch_tensors
@@ -145,25 +156,29 @@ class DeepEncoderVision:
             m = DeepEncoderModel()
         m.load_state_dict(load_file(str(path)), strict=True, assign=True)
         m.vision_model.embeddings.position_ids = torch.arange(257)[None]
-        self.model = m.to(COMPUTE_DTYPE).eval()   # weights are bf16 values: fp32 is lossless
+        self.device = torch.device(device)
+        self.dtype = compute_dtype(self.device)
+        self.compute = f"{self.device.type}/{str(self.dtype).split('.')[-1]}"
+        self.model = m.to(self.device, self.dtype).eval()   # weights are bf16 values: fp32 is lossless
         self.stage = stage
         self.out_dim = 1024 if stage == "sam" else 1280
 
     @torch.no_grad()
-    def __call__(self, imgs: np.ndarray, batch: int = 4) -> torch.Tensor:
+    def __call__(self, imgs: np.ndarray, batch: int | None = None) -> torch.Tensor:
+        batch = batch or (16 if self.device.type == "cuda" else 4)
         out = []
         for i in range(0, len(imgs), batch):
             x = (imgs[i:i + batch].astype(np.float32) / 255.0 - 0.5) / 0.5
-            t = torch.from_numpy(x).permute(0, 3, 1, 2).contiguous().to(next(self.model.parameters()).dtype)
+            t = torch.from_numpy(x).permute(0, 3, 1, 2).contiguous().to(self.device, self.dtype)
             o = self.model(t, stage=self.stage)
             assert o.shape == (len(x), (imgs.shape[1] // 64) ** 2, self.out_dim), o.shape
-            out.append(o.to(torch.bfloat16))
+            out.append(o.to(torch.bfloat16).cpu())
         return torch.cat(out)
 
 
-def load_vlm(name: str):
+def load_vlm(name: str, device: str | torch.device = "cpu"):
     if name == "qwen25vl":
-        return QwenVision()
+        return QwenVision(device=device)
     if name == "deepencoder":
-        return DeepEncoderVision()
+        return DeepEncoderVision(device=device)
     raise KeyError(name)

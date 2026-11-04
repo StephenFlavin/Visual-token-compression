@@ -47,7 +47,7 @@ class GridProbe(nn.Module):
     def read(self, feat: torch.Tensor, page_idx: torch.Tensor, line_idx: torch.Tensor) -> torch.Tensor:
         """feat (B,3,S,S); (page, line) pairs -> log-probs (T = S*E, N, n_out)."""
         p, S = self.pitch, self.S
-        rows = line_idx[:, None] * p + torch.arange(p)[None]
+        rows = line_idx[:, None] * p + torch.arange(p, device=line_idx.device)[None]
         strips = feat[page_idx[:, None], :, rows]                                 # (N, p, 3, S)
         x = strips.permute(0, 2, 1, 3).reshape(len(line_idx), 3 * p, S)
         y = self.out(self.blocks(self.inp(x)))

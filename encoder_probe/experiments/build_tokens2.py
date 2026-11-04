@@ -4,7 +4,8 @@
 
 One process, one encoder in memory at a time, holding the global VLM lock for its whole run (see
 ep/token_cache.py). Order: for each encoder, all encodings clean, then all jpeg75 (the probe queue's order).
-Existing caches are skipped, so it is resumable.
+Existing caches are skipped, so it is resumable. --device auto (default) = cuda if available (bf16, larger
+batches), else CPU. With EP_PAGE_CACHE=1 the rendered pages are cached for the probe jobs (ep/token_cache.py).
 """
 from __future__ import annotations
 
@@ -18,6 +19,7 @@ import torch
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
+from encoder_probe.ep.encoders import resolve_device  # noqa: E402
 from encoder_probe.ep.token_cache import VLMLock, build, cache_path, split_pages  # noqa: E402
 from encoder_probe.ep.vlm_encoders import GEOMS, encodings_for, load_vlm  # noqa: E402
 
@@ -30,7 +32,9 @@ def main(argv=None) -> int:
     ap.add_argument("--train-pages", type=int, default=200)
     ap.add_argument("--test-pages", type=int, default=16)
     ap.add_argument("--threads", type=int, default=1)
+    ap.add_argument("--device", choices=["auto", "cpu", "cuda"], default="auto", help="auto = cuda if available")
     a = ap.parse_args(argv)
+    dev = resolve_device(a.device)
     torch.set_num_threads(a.threads)
     lk = VLMLock()
     t0 = time.time()
@@ -44,13 +48,16 @@ def main(argv=None) -> int:
                 continue
             S, _ = GEOMS[name]
             t1 = time.time()
-            model = load_vlm(name)
-            print(f"[build] {name} loaded ({time.time() - t1:.0f}s); {len(todo)} caches to build", flush=True)
+            model = load_vlm(name, device=dev)
+            print(f"[build] {name} loaded on {dev.type} ({time.time() - t1:.0f}s); {len(todo)} caches to build",
+                  flush=True)
             for cond, enc in todo:
                 _, tr, te = split_pages(enc, S, a.train_pages, a.test_pages)
                 build(model, name, enc, cond, S, a.train_pages, a.test_pages, tr, te)
             del model
             gc.collect()
+            if dev.type == "cuda":
+                torch.cuda.empty_cache()
     finally:
         lk.release()
     print(f"[build] all done ({time.time() - t0:.0f}s)", flush=True)

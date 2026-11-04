@@ -4,6 +4,7 @@
     python3 encoder_probe/experiments/run_probe.py --print-grid   # one command per line, for the job queue
 
 Rows go to encoder_probe/results/<run>/runs.jsonl (existing (encoding, encoder, cond, steps) rows are skipped).
+--device auto (default) = cuda if available (probe, tokens and SigLIP on the GPU; SigLIP stays fp32), else CPU.
 """
 from __future__ import annotations
 
@@ -19,7 +20,7 @@ import torch.nn.functional as F
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
-from encoder_probe.ep.encoders import Encoder, degrade  # noqa: E402
+from encoder_probe.ep.encoders import Encoder, degrade, resolve_device  # noqa: E402
 from encoder_probe.ep.pages import H, W, get_encoding, make_pages  # noqa: E402
 from encoder_probe.ep.probe import Probe, edit_distance, greedy  # noqa: E402
 
@@ -29,7 +30,9 @@ GRID_ENCODINGS = ["latin_p4", "latin_p5", "latin_p6", "latin_p8", "latin_p10",
 GRID_RUNS = [("identity", "clean"), ("siglip", "clean"), ("siglip", "jpeg75"), ("identity", "jpeg75")]
 
 
-def evaluate(probe, tok, pages, enc, classes, max_pages=None, batch_pages=2, bf16=True):
+def evaluate(probe, tok, pages, enc, classes, max_pages=None, batch_pages=2, bf16=True, device=None):
+    """CER on ``pages``; runs on ``device`` (default: the probe's device; ``tok`` may live anywhere)."""
+    dev = next(probe.parameters()).device if device is None else torch.device(device)
     probe.eval()
     errs = n = 0
     samples = []
@@ -37,8 +40,8 @@ def evaluate(probe, tok, pages, enc, classes, max_pages=None, batch_pages=2, bf1
     with torch.no_grad():
         for s in range(0, len(idx), batch_pages):
             pb = idx[s:s + batch_pages]
-            with torch.autocast("cpu", dtype=torch.bfloat16, enabled=bf16):
-                feat = probe.features(tok[pb])
+            with torch.autocast(dev.type, dtype=torch.bfloat16, enabled=bf16):
+                feat = probe.features(tok[pb].to(dev))
             pi, li, refs = [], [], []
             for k, p in enumerate(pb):
                 for i, r in enumerate(pages[p].refs):
@@ -46,8 +49,8 @@ def evaluate(probe, tok, pages, enc, classes, max_pages=None, batch_pages=2, bf1
                         pi.append(k), li.append(i), refs.append(r)
             if not pi:
                 continue
-            with torch.autocast("cpu", dtype=torch.bfloat16, enabled=bf16):
-                lp = probe.read(feat, torch.tensor(pi), torch.tensor(li))
+            with torch.autocast(dev.type, dtype=torch.bfloat16, enabled=bf16):
+                lp = probe.read(feat, torch.tensor(pi, device=dev), torch.tensor(li, device=dev))
             dec = greedy(lp.float())
             for d, r in zip(dec, refs):
                 hyp = enc.clean_hyp(enc.decode("".join(classes[j - 1] for j in d)))
@@ -79,6 +82,7 @@ def main(argv=None) -> int:
     ap.add_argument("--no-bf16", action="store_true", help="disable bf16 autocast for the probe (AMX: ~1.6x faster)")
     ap.add_argument("--run-name", default="main")
     ap.add_argument("--print-grid", action="store_true")
+    ap.add_argument("--device", choices=["auto", "cpu", "cuda"], default="auto", help="auto = cuda if available")
     a = ap.parse_args(argv)
     if a.print_grid:
         for e, c in GRID_RUNS:
@@ -86,6 +90,7 @@ def main(argv=None) -> int:
                 print(f"python3 encoder_probe/experiments/run_probe.py --encoding {name} --encoder {e} "
                       f"--cond {c} --steps {a.steps} --run-name {a.run_name}")
         return 0
+    dev = resolve_device(a.device)
     torch.set_num_threads(a.threads)
     # flush denormals: in fp32 on CPU they made latin probe steps 5.5x slower (17 -> 3.1 s/step, 2026-11-04)
     torch.set_flush_denormal(True)
@@ -107,7 +112,7 @@ def main(argv=None) -> int:
     enc = get_encoding(a.encoding)
     tr = make_pages(enc, "train", a.train_pages)
     te = make_pages(enc, "test", a.test_pages)
-    model = Encoder(a.encoder)
+    model = Encoder(a.encoder, device=dev)
     def toks(pages):
         imgs = np.stack([degrade(p.img, a.cond) for p in pages])
         return torch.from_numpy(model(imgs))
@@ -116,6 +121,7 @@ def main(argv=None) -> int:
     mu = tok_tr.mean((0, 1), keepdim=True)
     sd = tok_tr.std((0, 1), keepdim=True).clamp_min(1e-3)
     tok_tr, tok_te = (tok_tr - mu) / sd, (tok_te - mu) / sd
+    tok_tr, tok_te, pix_tr = tok_tr.to(dev), tok_te.to(dev), pix_tr.to(dev)   # no-ops on the CPU (224 px: small)
     del model
     t_feat = time.time() - t0
     classes = enc.classes
@@ -125,7 +131,7 @@ def main(argv=None) -> int:
     ppc = H * W * len(te) / max(1, chars)
     print(f"[probe] {key} pitch={enc.pitch} lines/page={enc.n_lines} classes={len(classes)} "
           f"px2/char={ppc:.2f} chars/token={256 / ppc:.1f} feat_time={t_feat:.0f}s", flush=True)
-    probe = Probe(enc.pitch, len(classes), c=3 + a.free_channels, token_mlp=a.token_mlp)
+    probe = Probe(enc.pitch, len(classes), c=3 + a.free_channels, token_mlp=a.token_mlp).to(dev)
     opt = torch.optim.AdamW(probe.parameters(), lr=a.lr, weight_decay=1e-4, fused=True)
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=a.lr, total_steps=a.steps, pct_start=0.05)
     curve = []
@@ -136,14 +142,15 @@ def main(argv=None) -> int:
             ok = [i for i, t in enumerate(tgt[p]) if len(t)]
             for i in rng.choice(ok, min(a.lines_per_page, len(ok)), replace=False):
                 pi.append(k), li.append(int(i)), ys.append(tgt[p][i])
-        with torch.autocast("cpu", dtype=torch.bfloat16, enabled=not a.no_bf16):
-            feat = probe.features(tok_tr[pb])
-            logp = probe.read(feat, torch.tensor(pi), torch.tensor(li))
+        ix = torch.as_tensor(pb, device=dev)
+        with torch.autocast(dev.type, dtype=torch.bfloat16, enabled=not a.no_bf16):
+            feat = probe.features(tok_tr[ix])
+            logp = probe.read(feat, torch.tensor(pi, device=dev), torch.tensor(li, device=dev))
         logp = logp.float()
         T = logp.shape[0]
-        ctc = F.ctc_loss(logp, torch.cat(ys), torch.full((len(ys),), T, dtype=torch.long),
+        ctc = F.ctc_loss(logp, torch.cat(ys).to(dev), torch.full((len(ys),), T, dtype=torch.long),
                          torch.tensor([len(y) for y in ys]), blank=0, zero_infinity=True)
-        rec = probe.recon_loss(feat, pix_tr[pb].float() / 127.5 - 1)
+        rec = probe.recon_loss(feat, pix_tr[ix].float() / 127.5 - 1)
         loss = ctc + a.recon_weight * rec
         opt.zero_grad()
         loss.backward()
@@ -151,13 +158,13 @@ def main(argv=None) -> int:
         opt.step()
         sched.step()
         if step % a.eval_every == 0 or step == a.steps:
-            c, _ = evaluate(probe, tok_te, te, enc, classes, max_pages=4, bf16=not a.no_bf16)
+            c, _ = evaluate(probe, tok_te, te, enc, classes, max_pages=4, bf16=not a.no_bf16, device=dev)
             curve.append((step, round(c, 5)))
             print(f"[probe] step {step} ctc {ctc.item():.3f} rec {rec.item():.4f} val_cer {c:.4f} ({time.time() - t0:.0f}s)", flush=True)
-    cer, samples = evaluate(probe, tok_te, te, enc, classes, bf16=not a.no_bf16)
+    cer, samples = evaluate(probe, tok_te, te, enc, classes, bf16=not a.no_bf16, device=dev)
     row = {**key, "phase": "probe", "scheme": f"{enc.family}@{a.encoder}/{a.cond}", "family": enc.family,
            "pitch": enc.pitch, "px_per_char": ppc, "budget": round(ppc, 3), "chars_per_token": 256 / ppc,
-           "cer": cer, "score_v": 2, "bf16": not a.no_bf16, "recon_weight": a.recon_weight, "free_channels": a.free_channels, "token_mlp": a.token_mlp, "train_pages": a.train_pages, "lr": a.lr, "n_test_chars": chars, "curve": curve, "train_time_s": time.time() - t0,
+           "cer": cer, "score_v": 2, "bf16": not a.no_bf16, "device": dev.type, "recon_weight": a.recon_weight, "free_channels": a.free_channels, "token_mlp": a.token_mlp, "train_pages": a.train_pages, "lr": a.lr, "n_test_chars": chars, "curve": curve, "train_time_s": time.time() - t0,
            "samples": samples}
     print(f"[probe] TEST {key} cer={cer:.4f} px2/char={ppc:.2f} chars/token={256 / ppc:.1f}", flush=True)
     for r, h in samples[:2]:

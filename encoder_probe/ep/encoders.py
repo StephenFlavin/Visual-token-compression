@@ -16,6 +16,15 @@ from PIL import Image
 GRID = 14
 
 
+def resolve_device(name: str = "auto") -> torch.device:
+    """--device value -> torch.device: auto = cuda if available, else cpu (the CPU path is the default)."""
+    if name == "auto":
+        name = "cuda" if torch.cuda.is_available() else "cpu"
+    if name == "cuda" and not torch.cuda.is_available():
+        raise SystemExit("--device cuda, but torch.cuda.is_available() is False (CPU-only torch wheel?)")
+    return torch.device(name)
+
+
 def degrade(img: np.ndarray, cond: str) -> np.ndarray:
     if cond == "clean":
         return img
@@ -39,8 +48,9 @@ def patchify(x: np.ndarray) -> np.ndarray:
 
 
 class Encoder:
-    def __init__(self, name: str):
+    def __init__(self, name: str, device: str | torch.device = "cpu"):
         self.name = name
+        self.device = torch.device(device)
         self.model = None
         self.layer = int(name[len("siglip_l"):]) if name.startswith("siglip_l") else None
         if name == "siglip" or self.layer is not None:
@@ -54,21 +64,24 @@ class Encoder:
             self.std = np.array([0.26862954, 0.26130258, 0.27577711])
         elif name != "identity":
             raise KeyError(name)
+        if self.model is not None and self.device.type != "cpu":
+            self.model = self.model.to(self.device)   # stays fp32, as the round-1 rows
 
     @torch.no_grad()
-    def __call__(self, imgs: np.ndarray, batch: int = 8) -> np.ndarray:
+    def __call__(self, imgs: np.ndarray, batch: int | None = None) -> np.ndarray:
+        batch = batch or (64 if self.device.type == "cuda" else 8)
         x = imgs.astype(np.float32) / 255.0
         if self.model is None:
             return patchify(x).astype(np.float32)
         out = []
         for i in range(0, len(x), batch):
             xb = (x[i:i + batch] - self.mean) / self.std
-            t = torch.from_numpy(xb.astype(np.float32)).permute(0, 3, 1, 2).contiguous()
+            t = torch.from_numpy(xb.astype(np.float32)).permute(0, 3, 1, 2).contiguous().to(self.device)
             if self.layer is not None:
                 h = self.model(pixel_values=t, output_hidden_states=True).hidden_states[self.layer]
             elif self.name == "siglip":
                 h = self.model(pixel_values=t).last_hidden_state
             else:
                 h = self.model(pixel_values=t, output_hidden_states=True).hidden_states[-2][:, 1:]
-            out.append(h.float().numpy())
+            out.append(h.float().cpu().numpy())
         return np.concatenate(out)

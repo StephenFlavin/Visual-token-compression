@@ -30,7 +30,9 @@ from vbpe import config
 from vbpe.layout import _draw_lines, glyph_advance, wrap
 from vbpe.metrics import normalize
 
-TRAIN_R2_CAP = 64_000_000
+# EP_TRAIN_R2_CAP raises the cap for a fresh build (same prefix, so existing pages are unchanged); needed for
+# > ~1000 train pages of the densest encodings (see docs/LOCAL_GPU.md)
+TRAIN_R2_CAP = int(os.environ.get("EP_TRAIN_R2_CAP", 64_000_000))
 MIN_TEST_PAGES = 4
 
 

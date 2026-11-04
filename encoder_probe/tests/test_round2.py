@@ -175,7 +175,7 @@ def test_cache_self_builds_when_no_builder(tmp_cache, monkeypatch):
     from encoder_probe.ep import vlm_encoders
     tr, te = _pages()
     fake = FakeVLM()
-    monkeypatch.setattr(vlm_encoders, "load_vlm", lambda name: fake)
+    monkeypatch.setattr(vlm_encoders, "load_vlm", lambda name, device="cpu": fake)
     d, _ = token_cache.get_tokens("deepencoder", "col_b4", "jpeg75", 448, 3, 2, tr, te, poll=0.01,
                                   log=lambda *a, **k: None)
     assert fake.calls == 2 and token_cache.cache_path("deepencoder", "jpeg75", "col_b4", 3, 2).exists()
