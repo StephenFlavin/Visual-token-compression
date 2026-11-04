@@ -333,3 +333,45 @@ def test_longctx_rows_skip_and_rope_setting(tmp_path):
     # at equal document length the dense code needs far fewer positions than Latin pages and text
     assert byk[("col_b4", 3000, "needle")]["positions"] < byk[("latin_p24", 3000, "needle")]["positions"]
     assert byk[("latin_p24", 600, "needle")]["positions"] < byk[("text", 600, "needle")]["positions"]
+
+
+def test_hub_checkpoint_key_layout_loads(tmp_path):
+    """The hub checkpoint uses the old key layout (model.layers.*, visual.*, no lm_head: tied). Saved that way, a
+    model must load through from_pretrained into transformers 5's layout bit for bit (the real 7.5 GB load path)."""
+    from safetensors.torch import save_file
+    from transformers import Qwen2_5_VLForConditionalGeneration
+    m, _ = Q.load_model(CPU, tiny=True)
+    sd = m.state_dict()
+    old = {k.replace("model.language_model.", "model.").replace("model.visual.", "visual."): v.to(torch.bfloat16)
+           for k, v in sd.items() if k != "lm_head.weight"}
+    assert any(k.startswith("model.layers.") for k in old) and any(k.startswith("visual.blocks.") for k in old)
+    save_file(old, str(tmp_path / "model.safetensors"), metadata={"format": "pt"})
+    m.config.save_pretrained(tmp_path)
+    m2 = Qwen2_5_VLForConditionalGeneration.from_pretrained(tmp_path, dtype=torch.bfloat16, attn_implementation="sdpa")
+    sd2 = m2.state_dict()
+    assert sd.keys() == sd2.keys() and all(torch.equal(sd[k].to(torch.bfloat16), sd2[k]) for k in sd)
+    assert m2.lm_head.weight.data_ptr() == m2.model.language_model.embed_tokens.weight.data_ptr()
+
+
+def test_bf16_weights_fp32_trainables_autocast_path():
+    """The CUDA recipe (bf16 frozen weights, fp32 trainables, bf16 autocast) on the CPU: no dtype errors, finite
+    loss, grads on every trainable tensor, generation and the cached decode run."""
+    from longctx_bench import answer
+    model, tok = Q.load_model(CPU, tiny=True)
+    pm = Q.make_trainable(model.to(torch.bfloat16))
+    assert {p.dtype for p in pm.parameters() if p.requires_grad} == {torch.float32}
+    assert {p.dtype for p in pm.parameters() if not p.requires_grad} == {torch.bfloat16}
+    Q.hf_model(pm).gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
+    img = make_pages_s(get_encoding_s("col_b4", 448), "test", 1)[0].img
+    b = Q.collate([{"imgs": [img], "prompt": "Transcribe.", "answer": "abc def"}], tok, CPU)
+    pm.train()
+    with torch.autocast("cpu", dtype=torch.bfloat16):
+        loss, _ = Q.lm_loss(pm, b)
+    loss.backward()
+    assert torch.isfinite(loss) and all(p.grad is not None and p.grad.dtype == torch.float32
+                                        for p in pm.parameters() if p.requires_grad)
+    pm.eval()
+    assert isinstance(Q.generate(pm, tok, [{"imgs": [img], "prompt": "Q?"}], CPU, 3, autocast=True)[0], str)
+    merged = pm.merge_and_unload().to(torch.bfloat16).eval()
+    r = answer(merged, tok, {"imgs": [img], "prompt": "Q?"}, CPU, 3)
+    assert r["kv_bytes"] == r["kv_bytes_analytic"] == 2 * 2 * 2 * 16 * 2 * r["positions"]   # bf16 cache

@@ -73,7 +73,7 @@ def parse(argv=None):
     ap.add_argument("--train-pages", type=int, default=1000)
     ap.add_argument("--test-pages", type=int, default=16)
     ap.add_argument("--task-mix", type=float, default=0.6, help="share of transcription samples")
-    ap.add_argument("--max-target-chars", type=int, default=1500,
+    ap.add_argument("--max-target-chars", type=int, default=2000,
                     help="transcription windows hold at most this many target chars (same for every arm)")
     ap.add_argument("--train-conds", nargs="+", default=["clean"], help="degradations sampled per train sample")
     ap.add_argument("--eval-conds", nargs="+", default=["clean", "jpeg75"])
