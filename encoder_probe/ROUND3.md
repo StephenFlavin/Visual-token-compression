@@ -64,7 +64,15 @@ rgb3_p8 as the fine-tuning test, since fine-tuning is the point).
     1339 <= 1344; at 512: 255, 1531 <= 1536). Real lines peak at ~600-620 labels (2L+1 ~ 1240), so the 1 px
     costs ~0.2% density. Cost: the 1185-class head and L ~ 600 make a CPU probe step ~7.5 s at 1 thread (~2x
     lg_pb_h5's 4 s), i.e. ~6.5 h per 3000-step run.
-    Identity28 ceilings (200 pages, 3000 steps, `round3_cpu_tp200`): pending.
+    Identity28 ceilings, PARTIAL (cloud CPU, 200 train pages, `round3_cpu_tp200`, stopped 2026-11-04 at step ~650
+    of 3000 so the user can run them locally on the 3090): val CER (4 test pages) at step 500: `rgb3_lg_pb_h5`
+    clean 15.2% (321.6 chars/token, train CTC 0.25), `rgb3_lg_free_h4` clean 37.0% (405.5 chars/token, train CTC
+    1.15); 7.8 s/step at 1 CPU thread (fp32, no native bf16); jpeg75 not started. Both still falling: these are
+    not ceilings yet and say nothing about the < 10% guard. **The full ceilings (identity28 clean + jpeg75, 3000
+    steps) are to be run locally**; the cloud resume checkpoints were deleted (Windows renders differ, so they
+    would not resume onto the same pages). For comparison, identity32 ceilings (round2_gpu_tp200, 3000 steps):
+    rgb3_p6 0.01% (169 chars/32-px token), rgb3_p8 0.42% (96), lg_pb_h5 0.52% (141), lg_free_h4 0.05% (177); no
+    identity28 rows exist yet for rgb3_p*/lg_*.
 * Metric: CER of generated transcriptions on held-out test pages (WikiText test/val, as rounds 1-2), clean and jpeg75;
   cloze accuracy.
 * **Code: built 2026-11-04, CPU-tested on a tiny random-init model, never run on a GPU or with the real weights.**
