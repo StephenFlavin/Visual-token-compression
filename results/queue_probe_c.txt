@@ -5,6 +5,8 @@ python3 encoder_probe/experiments/run_probe2.py --encoding lg_free_h4 --encoder 
 python3 encoder_probe/experiments/run_probe2.py --encoding latin_p32 --encoder deepencoder --cond clean --steps 3000 --run-name round2
 python3 encoder_probe/experiments/run_probe2.py --encoding latin_p24 --encoder deepencoder --cond clean --steps 3000 --run-name round2
 python3 encoder_probe/experiments/run_probe2.py --encoding rgb3_p8 --encoder deepencoder --cond clean --steps 3000 --run-name round2
+python3 encoder_probe/experiments/run_probe2.py --encoding latin_p32 --encoder deepencoder --cond clean --steps 3000 --train-pages 1000 --run-name round2_tp
+python3 encoder_probe/experiments/run_probe2.py --encoding latin_p32 --encoder deepencoder --cond clean --steps 3000 --train-pages 2000 --run-name round2_tp
 python3 encoder_probe/experiments/run_probe2.py --encoding latin_p8 --encoder deepencoder --cond clean --steps 3000 --run-name round2
 python3 encoder_probe/experiments/run_probe2.py --encoding latin_p16 --encoder identity32 --cond clean --steps 3000 --run-name round2
 python3 encoder_probe/experiments/run_probe2.py --encoding latin_p8 --encoder identity32 --cond clean --steps 3000 --run-name round2
