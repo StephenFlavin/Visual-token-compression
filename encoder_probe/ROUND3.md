@@ -209,6 +209,42 @@ glyph error):
 * The probe is data-limited at 500 pages (round 2: Latin through DeepEncoder 85% -> 15% from 200 to 5000 pages).
   Only same-budget comparisons between arms carry weight; absolute levels are upper bounds on the loss.
 
+**Implementation note (2026-11-04, before the first row).** The design above is implemented as written:
+`ep/g2lite.py`, `experiments/run_g2lite.py`, tests in `tests/test_g2lite.py`. The cache is `qwen25vl_h32`, built
+with `build_tokens2.py --split 32` in chunks of 25 pages. The queue is `results/queue_g2lite.txt` (print it with
+`run_g2lite.py --print-queue`). Rows go to `encoder_probe/results/g2lite/runs.jsonl`, keyed by (encoding, arm,
+steps, train_pages, seed). These choices are not fixed by the design:
+* **Standardisation.**
+  * frozen and trained: per-dim mean/std of the *pretrained* merger output on the train pages, as run_probe2 does
+    with its tokens. In the trained arm this is a fixed affine map after the trained merger.
+  * direct: per-dim mean/std of the 5120-d concatenated states.
+* **Optimiser.**
+  * The trained arm's merger (RMSNorm weight and both MLP layers, 36.7M parameters) is in the same AdamW group,
+    with the same LR 2e-3 and OneCycle schedule.
+  * The grad-norm clip of 5 covers all trainable parameters.
+  * The probe is re-seeded right before it is built, so every arm starts from the same probe init. direct differs
+    only in its first layer's input width.
+* **Frozen arm.** Its merger output is computed once from the cached states. The merger has no dropout, so this is
+  the same as running it every step.
+* **Check on real weights.** The pretrained merger on the cached bf16 states vs the model's own tokens (pooler
+  output from fp32 states): rel L2 0.22%, corr 0.999997. Each row stores this as `merger_check`.
+
+**Feasibility (measured 2026-11-04): the full set does not fit one night on this runner.**
+* Cost at 1 thread, fp32:
+  * ViT cache: 13.7 s/page, so about 2 core-hours per code.
+  * Probe steps (profiled, s/step):
+
+    | Code | frozen | trained | direct |
+    |---|---|---|---|
+    | rgb3_lg_pb_h5 | 7.8 | 9.2 | 9.9 |
+    | latin_p8 | 2.6 | 3.7 | 4.0 |
+    | lg_pb_h5 | 3.7 | 4.9 | 4.9 |
+
+  * The moonshot's CTC over about 560 labels per line and its 1185-class reader dominate.
+* The 9 runs total about 42 core-hours, plus about 6 for the caches. The night offers about 24 on 2-3 cores.
+* So the runs go in the stated priority order. Whatever has not finished by morning stays as queue lines, for the
+  3090 rerun or the next night. The design is unchanged.
+
 ### Moonshot levers (beyond the go/no-go; user: "shoot for the moon")
 Ways to push density past the literature's 30-90 chars/token, each testable on its own:
 1. **Grid-aligned pitch.** 4 or 7 px line pitch divides the 28 px token, plus the pixel-shift protocol.
