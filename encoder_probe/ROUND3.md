@@ -93,6 +93,31 @@ rgb3_p8 as the fine-tuning test, since fine-tuning is the point).
   the checkpoint's own chat template and processor expansion token for token (real tokenizer, 2026-11-04), and the
   hub's old key layout (`model.layers.*`, `visual.*`, tied head) loads into transformers 5.22.1 bit for bit (test).
 
+### R3-1b: deeper training if LoRA is not enough (added 2026-11-04, user: "LoRA first, then proper training")
+Staged so each step is only run when the one before shows a reason to. The fairness guard holds at every stage:
+Latin gets the identical recipe, steps and data. Memory and time figures are estimates for the 3090.
+* **Gate G0 (before any fine-tuning):** the code's identity28 ceiling is < 10% CER. If the raw page is unreadable, no
+  amount of model training helps; drop that code.
+* **Stage A = R3-1 as above** (LoRA r=16 + merger + last 4 ViT blocks, 5k steps). Go to stage B for a code only if
+  its held-out CER is still falling at 5k, or it plateaus well above its ceiling while Latin converges.
+* **Stage B, vision-first training (standard VLM recipe):**
+  * B1: the full ViT (~0.67B) + merger trained on transcription only, LLM frozen. AdamW state for 0.67B is about
+    11 GB; fits with gradient checkpointing at batch 1.
+  * B2: freeze the ViT, LoRA r=64 on the LLM for the QA mix.
+  * Curriculum for the dense codes: start at the next-densest code that reads (e.g. rgb3_p8 or lg_pb_h5), then
+    switch to the moonshot page. 20-50k steps. Same budget for Latin.
+* **Stage C, beyond the 3090 (only after a positive stage-B result):** full fine-tune of the 3B LLM (about 60 GB with
+  AdamW: rented A100/H100, user's call), a larger Qwen VL, or continued pretraining on long rendered documents
+  (Glyph-style).
+* **What would make a moonshot result credible (all required before calling it):**
+  * Held-out text only (WikiText test/val), and needle facts never seen in training: random names, numbers, IDs.
+  * Answers come straight from the image tokens, with no transcription in the output (KV trap above).
+  * Same-recipe Latin baseline next to it, and compute/char measured (ViT + LLM prefill time on the 3090), not only
+    the estimate in docs/CONTEXT_BUDGET.md.
+  * The result repeats with a second seed.
+  * Exact recall (needle accuracy) is reported separately from gist QA, because a dense code with no language prior
+    fails first on exact strings.
+
 ### R3-2: long-context benchmark (the goal)
 * Documents: concatenated held-out WikiText, 10k-1M chars. Inputs: (a) plain text tokens, (b) Latin page images,
   (c) dense-code page images, all into the fine-tuned model (and (a), (b) into the base model as references).
