@@ -148,6 +148,13 @@ waiter only after round 1's queue (`results/queue_probe_b.txt`) has exited:
    **2026-11-04: Qwen dropped (user decision; DeepSeek-OCR is the target).** The identity28 and qwen25vl blocks were
    removed from the queue before any of their jobs ran. Probe jobs now save a resume checkpoint every 200 steps
    (`--ckpt-every`; the container restarts when the session resumes, see AGENTS.md).
+   **2026-11-04 ~08:40: precision switched to fp32 on this host.** After the 06:17 restart the new host had no native
+   bf16 (no AMX/AVX512-BF16), so emulated bf16 ran 4-10x slower (probe 1.8 -> 8.4 s/step, DeepEncoder 1 -> 10 s/page).
+   Encoders and probe autocast now pick bf16 only on CPUs with native bf16 (`vlm_encoders.cpu_has_bf16`,
+   `run_probe2.py --bf16 auto`). Mixed precision across caches: deepencoder/clean x 15 and jpeg75 latin_p5/6/8/10 are
+   bf16, the other jpeg75 caches fp32. Check on 2 latin_p8 test pages: fp32 vs cached bf16 tokens differ by 3.5%
+   (relative L2), a fresh bf16 run vs the same cache by 4.7%, so the switch adds no more noise than bf16 itself.
+   Rows record the probe's precision in `bf16`; the 3 identity32 anchors resumed from bf16 checkpoints in fp32.
    **Reordered 2026-11-03, before round 2 started:** DeepSeek-OCR's encoder is the primary target (user), so its
    geometry runs first. The 4 identity32 anchors come first so a probe failure at this geometry shows within ~1.5 h.
 * A probe job whose cache is not there yet waits for it while the builder holds the lock. If no builder is alive

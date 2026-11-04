@@ -29,7 +29,7 @@ from encoder_probe.ep.encoders import degrade  # noqa: E402
 from encoder_probe.ep.geom import pages_digest  # noqa: E402
 from encoder_probe.ep.probe_grid import GridProbe  # noqa: E402
 from encoder_probe.ep.token_cache import get_tokens, split_pages  # noqa: E402
-from encoder_probe.ep.vlm_encoders import DIMS, GEOMS, encodings_for, geometry, patchify_s  # noqa: E402
+from encoder_probe.ep.vlm_encoders import DIMS, GEOMS, cpu_has_bf16, encodings_for, geometry, patchify_s  # noqa: E402
 from run_probe import evaluate  # noqa: E402  (round-1 evaluation, unchanged; works for any probe with features/read)
 
 QUEUE_BLOCKS = [("identity28", "clean"), ("qwen25vl", "clean"), ("qwen25vl", "jpeg75"),
@@ -61,7 +61,9 @@ def main(argv=None) -> int:
     ap.add_argument("--eval-every", type=int, default=500)
     ap.add_argument("--threads", type=int, default=1)
     ap.add_argument("--seed", type=int, default=0)
-    ap.add_argument("--no-bf16", action="store_true")
+    ap.add_argument("--no-bf16", action="store_true", help="same as --bf16 off")
+    ap.add_argument("--bf16", choices=["auto", "on", "off"], default="auto",
+                    help="bf16 autocast for the probe; auto = on only if the CPU has native bf16 (AMX/AVX512-BF16)")
     ap.add_argument("--run-name", default="round2")
     ap.add_argument("--print-queue", action="store_true")
     ap.add_argument("--ckpt-every", type=int, default=200, help="resume checkpoint interval (0 = off)")
@@ -69,6 +71,8 @@ def main(argv=None) -> int:
     if a.print_queue:
         print_queue(a.steps, a.run_name)
         return 0
+    if a.bf16 == "off" or (a.bf16 == "auto" and not cpu_has_bf16()):
+        a.no_bf16 = True
     torch.set_num_threads(a.threads)
     torch.manual_seed(a.seed)
     rng = np.random.default_rng(a.seed)
@@ -109,7 +113,7 @@ def main(argv=None) -> int:
     cpt = chars / (len(te) * G * G)
     print(f"[probe2] {key} S={S} P={P} G={G} pitch={enc.pitch} lines/page={enc.n_lines} classes={len(classes)} "
           f"test_pages={len(te)} px2/char={ppc:.2f} chars/token={cpt:.1f} pages={t_pages:.0f}s "
-          f"wait={waited:.0f}s feat={t_feat:.0f}s", flush=True)
+          f"wait={waited:.0f}s feat={t_feat:.0f}s bf16={not a.no_bf16}", flush=True)
     probe = GridProbe(enc.pitch, len(classes), d=DIMS[a.encoder], G=G, P=P)
     opt = torch.optim.AdamW(probe.parameters(), lr=a.lr, weight_decay=1e-4, fused=True)
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=a.lr, total_steps=a.steps, pct_start=0.05)

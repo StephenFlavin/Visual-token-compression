@@ -10,7 +10,7 @@
                                       LLM's image tokens: SAM-B + 16x conv compressor + CLIP-L + linear projector)
 
 Weights: only the vision tensors are fetched from each checkpoint (HTTP range requests, ep/hf_partial.py) into
-encoder_probe/cache/weights/. Both models run in bf16 (their checkpoint dtype).
+encoder_probe/cache/weights/. Both models run in bf16 (their checkpoint dtype) on CPUs with native bf16, else in fp32 (COMPUTE_DTYPE).
 """
 from __future__ import annotations
 
@@ -41,6 +41,19 @@ ENCODINGS = ["latin_p5", "latin_p6", "latin_p8", "latin_p10", "latin_p16", "col_
              "lg_free_h4", "lg_pb_h5", "rgb3_p6", "rgb3_p8", "mono_p6", "mono_p8"]
 ANCHORS = {448: ["latin_p24"], 512: ["latin_p24", "latin_p32"]}
 
+
+
+def cpu_has_bf16() -> bool:
+    """True if this CPU computes bf16 natively (AMX or AVX512-BF16). Without it, torch emulates bf16 and runs
+    ~3-10x slower than fp32 (observed 2026-11-04 after a host change), so callers fall back to fp32."""
+    try:
+        flags = Path("/proc/cpuinfo").read_text().split("flags", 2)[1].split("\n", 1)[0].split()
+    except (OSError, IndexError):
+        return False
+    return "amx_bf16" in flags or "avx512_bf16" in flags
+
+
+COMPUTE_DTYPE = torch.bfloat16 if cpu_has_bf16() else torch.float32
 
 def encodings_for(encoder: str) -> list[str]:
     return ENCODINGS + ANCHORS[GEOMS[encoder][0]]
@@ -98,7 +111,7 @@ class QwenVision:
         sd = {k[len("visual."):]: v for k, v in load_file(str(path)).items()}
         m.load_state_dict(sd, strict=True, assign=True)
         m.rotary_pos_emb = Qwen2_5_VLVisionRotaryEmbedding(vc)                  # non-persistent buffers
-        self.model = m.to(torch.bfloat16).eval()
+        self.model = m.to(COMPUTE_DTYPE).eval()   # weights are bf16 values: fp32 is lossless
         self.out_dim = vc.out_hidden_size
 
     @torch.no_grad()
@@ -132,7 +145,7 @@ class DeepEncoderVision:
             m = DeepEncoderModel()
         m.load_state_dict(load_file(str(path)), strict=True, assign=True)
         m.vision_model.embeddings.position_ids = torch.arange(257)[None]
-        self.model = m.to(torch.bfloat16).eval()
+        self.model = m.to(COMPUTE_DTYPE).eval()   # weights are bf16 values: fp32 is lossless
         self.stage = stage
         self.out_dim = 1024 if stage == "sam" else 1280
 
