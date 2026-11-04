@@ -1,11 +1,11 @@
 """Draw the three README demo figures (docs/img/*.png) for one short haiku.
 
-1. glyphs.png   plain text vs the learned whole-pixel glyph alphabet (N=300 chunks)
+1. glyphs.png   plain text vs Visual BPE substitution: frequent chunks become one glyph (subst300)
 2. colour.png   plain text vs one coloured 2x2-pixel block per character (encoder_probe col_b2)
 3. rgb.png      three lines of text vs the same three lines overlaid in the R, G and B channels (rgb3)
 
 Every picture is drawn at one zoom factor per figure, so widths and areas compare honestly; each figure
-also shows the real 1:1 pixels ("actual size"). Needs torch (to read the bank) and the fonts from
+also shows the real 1:1 pixels ("actual size"). Needs the fonts from
 scripts/fetch_fonts.sh (Inter is optional: labels fall back to DejaVu Sans).
 
     python3 scripts/make_readme_figures.py
@@ -16,18 +16,14 @@ import sys
 from pathlib import Path
 
 import numpy as np
-import torch
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
-sys.path.insert(0, str(ROOT / "learned_glyphs"))
 
 from encoder_probe.ep.pages import PRINTABLE, palette  # noqa: E402
-from lg.alphabet import Alphabet  # noqa: E402
 
 OUT = ROOT / "docs" / "img"
-BANK = ROOT / "learned_glyphs/results/e1long/banks/lg_learned_n300_pb_h5.pt"
 HAIKU = ["the light of the moon", "is falling on the water", "and the night is still"]
 
 DEJAVU = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
@@ -131,103 +127,78 @@ def latin_panel(d, x, y, z, highlights=None, font_path=DEJAVU):
     return max(f.getlength(t) for t in HAIKU)
 
 
-GOOD = (22, 163, 74)
+
+# --------------------------------------------------------------------------- figure 1: chunk glyphs
+def units_mask(units, em: float, height: int, top_baseline: float) -> tuple[Image.Image, float]:
+    """Draw one line of scheme units (black on white, 'L') and return it with its width."""
+    wpx = sum(u.advance(em) for u in units)
+    m = Image.new("L", (int(wpx) + 4, height), 255)
+    g, x = ImageDraw.Draw(m), 0.0
+    for u in units:
+        u.draw(g, x, top_baseline, em)
+        x += u.advance(em)
+    return m, wpx
 
 
-def reads_as_label(d, x, y, sub=""):
-    d.ellipse([x, y, x + 34, y + 34], fill=GOOD)
-    d.line([(x + 9, y + 18), (x + 15, y + 24), (x + 26, y + 11)], fill=(255, 255, 255), width=4)
-    f = ui(28, "SemiBold")
-    d.text((x + 48, y + 17), "Reads back as", font=f, fill=INK, anchor="lm")
-    if sub:
-        d.text((x + 58 + d.textlength("Reads back as", font=f), y + 17), sub, font=ui(26), fill=MUTED, anchor="lm")
-
-
-def reads_as(d, x, y, highlights=None):
-    """The decoded haiku under an AFTER panel (optionally with the chunk tints). Returns the bottom y."""
-    reads_as_label(d, x, y)
-    f = ImageFont.truetype(DEJAVU, 32)
-    lh = 46
-    for i, t in enumerate(HAIKU):
-        top = y + 50 + i * lh
-        for s0, e, tint in (highlights or [[]] * 3)[i]:
-            x0, x1 = x + f.getlength(t[:s0]), x + f.getlength(t[:e])
-            d.rounded_rectangle([x0 + 1, top + 2, x1 - 1, top + lh - 4], radius=8, fill=tint)
-        d.text((x, top + 34), t, font=f, fill=INK, anchor="ls")
-    return y + 50 + 3 * lh
-
-
-# --------------------------------------------------------------------------- figure 1: learned glyphs
 def fig_glyphs():
-    bank = torch.load(BANK, map_location="cpu", weights_only=False)
-    syms, ink, wss, ss = bank["symbols"], bank["ink"].numpy(), bank["widths_ss"].numpy(), bank["ss"]
-    alpha = Alphabet(syms[95:])
+    """Visual BPE as in vbpe.schemes.substitution: frequent chunks -> one glyph, other letters unchanged.
+    Same font (DejaVu Sans) for leftover letters on both sides, so only the substitution differs."""
+    from vbpe.schemes.substitution import CJKUnit, SubstitutionScheme
+    scheme = SubstitutionScheme(300, leftover_font=DEJAVU)
     z = 20
-    # segment, assign one tint per distinct chunk
-    segs, tint_of = [], {}
-    for t in HAIKU:
-        ids = alpha.encode(t)
-        segs.append(ids)
-        for i in ids:
-            if alpha.is_token(i) and i not in tint_of:
-                tint_of[i] = TINTS[len(tint_of) % len(TINTS)]
-    hl = []
-    for t, ids in zip(HAIKU, segs):
+    em, pitch = EM * z, PITCH * z
+    enc = [scheme.encode(t) for t in HAIKU]
+    tint_of, hl = {}, []
+    for t, units in zip(HAIKU, enc):
         pos, row = 0, []
-        for i in ids:
-            n = len(syms[i])
-            if i in tint_of:
-                row.append((pos, pos + n, tint_of[i]))
+        for u in units:
+            n = len(u.source)
+            if isinstance(u, CJKUnit):
+                tint_of.setdefault(u.char, TINTS[len(tint_of) % len(TINTS)])
+                row.append((pos, pos + n, tint_of[u.char]))
             pos += n
         hl.append(row)
-
-    def cell_px(i):          # whole-pixel bitmap (5 x w) of symbol i, 1 = ink
-        w = int(wss[i]) // ss
-        a = ink[i][:, : int(wss[i])]
-        return a.reshape(PITCH, ss, w, ss).mean((1, 3)) > 0.5
 
     img, d = new_card(1160)
     lx, rx, ty = 70, 1230, 70
     panel_title(d, lx, ty, "BEFORE", "Plain text", BEFORE)
-    panel_title(d, rx, ty, "AFTER", "Learned glyphs", AFTER)
+    panel_title(d, rx, ty, "AFTER", "Chunks become one glyph", AFTER)
     y0 = ty + 110
     lw = latin_panel(d, lx, y0, z, hl)
-    arrow(d, (lx + lw + rx) / 2 - 10, y0 + 1.5 * PITCH * z)
+    arrow(d, (lx + lw + rx) / 2 - 10, y0 + 1.5 * pitch)
 
-    pitch = PITCH * z
-    real = np.full((PITCH * 3, 40), 255, np.uint8)
     glyph_w = []
-    for li, ids in enumerate(segs):
-        x, top, k = rx, y0 + li * pitch, 0
-        row_real = []
-        for i in ids:
-            bm = cell_px(i)
-            w = bm.shape[1]
-            bg = tint_of.get(i) or (CELL_A if k % 2 == 0 else CELL_B)
-            k += i not in tint_of
-            d.rounded_rectangle([x + 2, top + 2, x + w * z - 3, top + pitch - 3], radius=6, fill=bg)
-            for r, c in zip(*np.nonzero(bm)):
-                px, py = x + c * z, top + r * z
-                d.rounded_rectangle([px + 2, py + 2, px + z - 2, py + z - 2], radius=3, fill=INK)
-            x += w * z
-            row_real.append(np.where(bm, 0, 255).astype(np.uint8))
-        glyph_w.append((x - rx) / z)
-        line = np.concatenate(row_real, 1)
-        real[li * PITCH:(li + 1) * PITCH, : line.shape[1]] = line
+    for li, units in enumerate(enc):
+        top = y0 + li * pitch
+        x = rx
+        for u in units:                       # tint behind each glyph, matching the BEFORE highlight
+            a = u.advance(em)
+            if isinstance(u, CJKUnit):
+                d.rounded_rectangle([x + 1, top + 8, x + a - 1, top + pitch - 8], radius=14, fill=tint_of[u.char])
+            x += a
+        m, wpx = units_mask(units, em, pitch, 0.9 * em)
+        img.paste(INK, (rx, top), Image.eval(m, lambda v: 255 - v))
+        glyph_w.append(wpx / z)
+    yc = y0 + 3 * pitch + 24
+    d.text((lx, yc), "coloured = frequent chunks (from a 300-entry dictionary)", font=ui(24), fill=MUTED, anchor="lt")
+    d.text((rx, yc), "each chunk is drawn as ONE symbol; other letters stay", font=ui(24), fill=MUTED, anchor="lt")
+
+    # real 5-px renders (4x supersampled, box-downsampled, as in the experiments)
+    ss = 4
+    reals = []
+    for units in enc:
+        m, _ = units_mask(units, EM * ss, PITCH * ss, 0.9 * EM * ss)
+        reals.append(np.asarray(m.resize((m.width // ss, PITCH), Image.BOX)))
+    real = np.full((PITCH * 3, max(r.shape[1] for r in reals)), 255, np.uint8)
+    for i, r in enumerate(reals):
+        real[i * PITCH:(i + 1) * PITCH, : r.shape[1]] = r
 
     n_chars = sum(len(t) for t in HAIKU)
-    n_syms = sum(len(s) for s in segs)
+    n_syms = sum(len(u) for u in enc)
     f = ImageFont.truetype(DEJAVU, 400)
     latin_w = sum(f.getlength(t) / 400 * EM for t in HAIKU)
     gw = sum(glyph_w)
-    # caption under the glyph panel
-    yc = y0 + 3 * pitch + 24
-    d.text((rx, yc), "each coloured cell is ONE glyph for a whole chunk",
-           font=ui(24), fill=MUTED, anchor="lt")
-    d.text((lx, yc), "coloured = chunks from the 300-entry dictionary", font=ui(24), fill=MUTED, anchor="lt")
-    ye = reads_as(d, rx, yc + 60, hl)
-
-    yb = ye + 70
+    yb = yc + 80
     d.line([lx, yb - 24, W - 70, yb - 24], fill=FAINT, width=2)
     y = bars(d, lx, yb, 1120, [
         (f"Plain: {n_chars} chars", latin_w, BEFORE, ""),
@@ -268,7 +239,27 @@ def fig_colour():
     yc = y0 + 3 * row_h + 10
     d.text((rx, yc), "95 colours (5 levels per channel), letters shown only as a key",
            font=ui(24), fill=MUTED, anchor="lt")
-    ye = reads_as(d, rx, yc + 60)
+    # compressed output: the whole haiku as one block of 2x2-px cells
+    text = " ".join(HAIKU)
+    cols = 17                        # 68 = 17 x 4, a full rectangle
+    rows = -(-len(text) // cols)
+    block = np.full((rows * b, cols * b, 3), 255, np.uint8)
+    for k, ch in enumerate(text):
+        r, c = divmod(k, cols)
+        block[r * b:(r + 1) * b, c * b:(c + 1) * b] = pal[idx[ch]]
+    yo = yc + 60
+    d.text((rx, yo), "Compressed output: the whole haiku in one block", font=ui(28, "SemiBold"), fill=INK, anchor="lt")
+    zoom = 12
+    big = Image.fromarray(block).resize((block.shape[1] * zoom, block.shape[0] * zoom), Image.NEAREST)
+    img.paste(big, (rx, yo + 50))
+    d.rectangle([rx - 1, yo + 49, rx + big.width, yo + 50 + big.height], outline=FAINT, width=2)
+    tx = rx + big.width + 50
+    d.text((tx, yo + 60), f"{block.shape[1]} \u00d7 {block.shape[0]} pixels", font=ui(40, "Bold"), fill=AFTER, anchor="lt")
+    d.text((tx, yo + 116), f"{len(text)} characters incl. spaces (shown {zoom // 2}\u00d7)", font=ui(26), fill=MUTED, anchor="lt")
+    d.text((tx, yo + 166), "actual size:", font=ui(24), fill=MUTED, anchor="lt")
+    act = Image.fromarray(block).resize((block.shape[1] * 2, block.shape[0] * 2), Image.NEAREST)
+    img.paste(act, (tx + 150, yo + 166))
+    ye = yo + 50 + max(big.height, 170)
 
     n_chars = sum(len(t) for t in HAIKU)
     f = ImageFont.truetype(DEJAVU, 400)
@@ -279,7 +270,6 @@ def fig_colour():
         ("Plain text", latin_area, BEFORE, ""),
         ("2×2 colour blocks", n_chars * b * b, AFTER, f"  {n_chars * b * b / latin_area - 1:+.0%}"),
     ], "px²")
-    actual_size(img, d, 1300, yb - 6, [(latin_real(HAIKU), "plain"), (real, "colour")])
     img = img.crop((0, 0, W, y + 70))
     d = ImageDraw.Draw(img)
     d.rounded_rectangle([0, 0, W - 1, img.height - 1], radius=36, outline=FAINT, width=3)
@@ -336,22 +326,7 @@ def fig_rgb():
     d.text((rx, ytop + comp.height + 50), "where all three overlap the pixel is black",
            font=ui(24), fill=MUTED, anchor="lt")
 
-    # channel split: each channel alone gives one clean line back
-    ys = y0 + 3 * (pitch + 14) + 40
-    d.line([lx, ys - 20, W - 70, ys - 20], fill=FAINT, width=2)
-    reads_as_label(d, lx, ys + 4)
-    d.text((lx + 48, ys + 52), "split the colour channels and", font=ui(26), fill=MUTED, anchor="lt")
-    d.text((lx + 48, ys + 88), "each line comes back on its own", font=ui(26), fill=MUTED, anchor="lt")
-    arr = np.asarray(comp)
-    sx, sw = 620, int(comp.width * 0.6)
-    for c, (tag, col) in enumerate(chips):
-        ch = Image.fromarray(arr[:, :, c]).convert("RGB")
-        ch = ch.resize((sw, int(ch.height * 0.6)), Image.LANCZOS)
-        yy = ys + c * (ch.height + 10)
-        d.rounded_rectangle([sx, yy + 6, sx + 36, yy + ch.height - 6], radius=8, fill=col)
-        d.text((sx + 18, yy + ch.height / 2), tag, font=ui(22, "Bold"), fill=(255, 255, 255), anchor="mm")
-        img.paste(ch, (sx + 50, yy))
-    yb = ys + 3 * (ch.height + 10) + 50
+    yb = ytop + comp.height + 140
     d.line([lx, yb - 24, W - 70, yb - 24], fill=FAINT, width=2)
 
     real3 = overlay(mono_masks(1, ss=4))

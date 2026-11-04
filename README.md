@@ -18,16 +18,19 @@ were *trained* on the rendering, so neither side gets an unfair advantage.
 ## 1. Glyphs: one symbol for a frequent chunk of letters
 
 Byte-pair encoding (BPE) merges frequent letter sequences such as `the`, `ing` and ` of the ` into single
-tokens. *Visual* BPE does the same on the page: each of the 300 most useful chunks gets its own glyph, so a line
-needs fewer symbols.
+tokens. *Visual* BPE does the same on the page: each of the 300 most useful chunks gets its own glyph, and
+every other letter stays as it is. So `something` becomes `s` + glyph(`ome`) + `th` + glyph(`ing`).
 
-![Plain text vs learned glyphs](docs/img/glyphs.png)
+![Plain text vs text with chunks drawn as single glyphs](docs/img/glyphs.png)
 
-The haiku goes from **66 characters to 32 symbols**, and its lines get **36% shorter** at the same line height.
-The glyph shapes were **learned**: a small alphabet of whole-pixel bitmaps (5 px tall) was optimised together
-with a reader, so every glyph is easy to tell apart at tiny sizes. The first attempt used hand-picked Chinese
-characters as glyphs instead. That **failed**: a Chinese character needs a larger font to stay legible, which
-cancels the width saved.
+The haiku goes from **66 characters to 32 symbols**, and its lines get **39% shorter** at the same font size.
+
+There are two versions of the glyphs:
+* **Hand-picked (pictured): common Chinese characters as the chunk glyphs.** This **failed**. A Chinese
+  character has much more detail than a letter, so it needs a larger font to stay legible, which cancels the
+  width saved (≥1.18× the pixels of plain text at equal accuracy).
+* **Learned: the glyph shapes are optimised together with a reader.** Every symbol, single letters included,
+  becomes a small bitmap that is easy to tell apart at tiny sizes ([glyph atlas](learned_glyphs/results/e1long/atlas/lg_learned_n300_pb_h5.png)).
 
 **Result:** learned glyphs need **0.57×** the pixels of plain text for the same accuracy, so about 1.75× more
 text fits per image (whole-pixel version: 0.77–0.88×). → [learned_glyphs/RESULTS.md](learned_glyphs/RESULTS.md)
@@ -39,7 +42,8 @@ solid block per character.
 
 ![Plain text vs one colour block per character](docs/img/colour.png)
 
-A 2×2-pixel block per character uses **60% less area** than the haiku in a 5-px font. A 1×1 block (a single
+A 2×2-pixel block per character uses **60% less area** than the haiku in a 5-px font: the whole haiku fits in
+a 34×8-pixel block. A 1×1 block (a single
 pixel per character) would use 90% less.
 
 **Result:** a reader that sees the raw pixels decodes this almost perfectly (1×1 blocks: 0.06% CER, 256 chars per
@@ -54,8 +58,8 @@ position, and one line of pixels carries three lines of text.
 
 ![Three lines of text vs RGB overlay](docs/img/rgb.png)
 
-Each line only darkens its own channel, so nothing is painted over: splitting the channels gives every line back
-cleanly. The overlay holds **exactly 3× the text** of a single monospace line (about 2.6× ordinary text).
+Each line only darkens its own channel, so nothing is painted over: each colour channel on its own still holds
+one clean line. The overlay holds **exactly 3× the text** of a single monospace line (about 2.6× ordinary text).
 
 **Result:** built and smoke-tested only (a 300-step test run already decodes recognisable text). The real test,
 through an OCR-grade VLM encoder, is queued. → [encoder_probe/RGB_OVERLAY.md](encoder_probe/RGB_OVERLAY.md)
