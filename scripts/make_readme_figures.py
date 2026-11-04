@@ -287,11 +287,8 @@ def fig_colour():
     d.rectangle([rx - 1, yo + 49, rx + big.width, yo + 50 + big.height], outline=FAINT, width=2)
     tx = rx + big.width + 50
     d.text((tx, yo + 60), f"{block.shape[1]} \u00d7 {block.shape[0]} pixels", font=ui(40, "Bold"), fill=AFTER, anchor="lt")
-    d.text((tx, yo + 116), f"{len(text)} characters incl. spaces (shown {zoom // 2}\u00d7)", font=ui(26), fill=MUTED, anchor="lt")
-    d.text((tx, yo + 166), "actual size:", font=ui(24), fill=MUTED, anchor="lt")
-    act = Image.fromarray(block).resize((block.shape[1] * 2, block.shape[0] * 2), Image.NEAREST)
-    img.paste(act, (tx + 150, yo + 166))
-    ye = yo + 50 + max(big.height, 170)
+    d.text((tx, yo + 116), f"{len(text)} chars incl. spaces, shown {zoom // 2}\u00d7", font=ui(26), fill=MUTED, anchor="lt")
+    ye = yo + 50 + max(big.height, 150)
 
     n_chars = sum(len(t) for t in HAIKU)
     f = ImageFont.truetype(DEJAVU, 400)
@@ -302,6 +299,7 @@ def fig_colour():
         ("Plain text", latin_area, BEFORE, ""),
         ("2×2 colour blocks", n_chars * b * b, AFTER, f"  {n_chars * b * b / latin_area - 1:+.0%}"),
     ], "px²")
+    actual_size(img, d, 1300, yb - 6, [(latin_real(HAIKU), "plain"), (block, "colour")])
     img = img.crop((0, 0, W, y + 70))
     d = ImageDraw.Draw(img)
     d.rounded_rectangle([0, 0, W - 1, img.height - 1], radius=36, outline=FAINT, width=3)
