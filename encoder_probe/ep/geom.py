@@ -179,6 +179,8 @@ def get_encoding_s(name: str, S: int) -> Encoding:
         return SizedRGB3(int(name[len("rgb3_p"):]), S)
     if name.startswith("rgb3a_p"):
         return SizedRGB3(int(name[len("rgb3a_p"):]), S, tagged=False)
+    if name.startswith("rgb3_lg_"):   # round-3 moonshot: RGB overlay of learned-glyph streams (any S)
+        return R1.RGB3BankEncoding(name[len("rgb3_"):], S)
     if name in LG_BANKS:
         from learned_glyphs.lg.scheme import LearnedGlyphScheme, label_of
         sc = LearnedGlyphScheme(ROOT / LG_BANKS[name], name=name)

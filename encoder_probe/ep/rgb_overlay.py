@@ -27,8 +27,23 @@ Families
                  alpha = glyph coverage), so overlaps hide earlier words. Labels/ref = the line's words in source
                  order joined by spaces, so CTC must emit 2-3 spatially overlapping words in sequence.
 
-Frame budget: the probe emits T = 224*3 frames per line. CTC needs at most T >= 2L+1 (worst case: every label
-repeated); rgb3 has L = 3*n_cells, which rules out p <= 3 (p3: 2*444+1 = 889 > 672; p4: 667 passes).
+  rgb3_<bank>    (round 3 moonshot, e.g. rgb3_lg_pb_h5, rgb3_lg_free_h4; any key of pages.LG_BANKS) rgb3 with a
+                 learned glyph bank instead of the mono font: the bank's own text layout (SchemeEncoding: word
+                 wrap, variable advances: 2 px chars, 4 px dictionary tokens) per channel, at its native pitch.
+                 Consecutive wrapped lines go R, G, B: page line i shows wrapped lines 3i, 3i+1, 3i+2 in channels
+                 R, G, B (channel c of the page is exactly the bank page of its lines). Classes are channel-tagged
+                 bank labels ("R"+PUA, ...: 3 x 395); labels are interleaved by glyph centre x (ties R, G, B),
+                 which reduces to rgb3's R[k], G[k], B[k] for equal advances. decode routes labels by tag, decodes
+                 each stream with the bank, and joins the streams with a space; ref = the three lines' refs
+                 joined the same way (= the normalised source span, since lines only break at whitespace).
+                 Any page side S (``S`` argument; geom.get_encoding_s passes 448/512).
+
+Frame budget: the probe emits T = S*3 frames per line (S = 224 in round 1). CTC needs at most T >= 2L+1 (worst
+case: every label repeated); rgb3 has L = 3*n_cells, which rules out p <= 3 (p3: 2*444+1 = 889 > 672; p4: 667
+passes). rgb3_<bank>: the narrowest bank glyph is 2 px, so a full-width line can hold S/2 glyphs per stream and
+L = 3S/2 labels: 2L+1 = 3S+1 misses the budget by ONE frame. Lines therefore wrap at S-1 px (the widest line
+width whose worst case fits: S=448 -> <= 223 glyphs/stream, L <= 669, 1339 <= 1344 frames); every rendered line
+is checked as well. Real lines hold <= ~205 glyphs per stream, so the 1 px costs nothing in practice.
 """
 from __future__ import annotations
 
@@ -38,9 +53,9 @@ from functools import lru_cache
 import numpy as np
 from PIL import Image, ImageDraw
 
-from encoder_probe.ep.pages import H, LP, PRINTABLE, W, Encoding, Page
+from encoder_probe.ep.pages import H, LG_BANKS, LP, PRINTABLE, ROOT, W, Encoding, Page
 from vbpe import config
-from vbpe.layout import _draw_lines, get_font, glyph_advance
+from vbpe.layout import _draw_lines, get_font, glyph_advance, wrap
 from vbpe.metrics import normalize
 from vbpe.schemes.latin import LatinScheme
 
@@ -49,9 +64,9 @@ T_FRAMES = W * EXPAND         # CTC frames per line
 TAGS = "RGB"
 
 
-def ctc_ok(n_labels: int) -> bool:
-    """Conservative CTC feasibility: T >= 2L+1."""
-    return 2 * n_labels + 1 <= T_FRAMES
+def ctc_ok(n_labels: int, S: int = W) -> bool:
+    """Conservative CTC feasibility: T >= 2L+1, T = S*EXPAND frames per line (S = page side)."""
+    return 2 * n_labels + 1 <= S * EXPAND
 
 
 @lru_cache(maxsize=None)
@@ -155,6 +170,93 @@ class RGB3Encoding(Encoding):
         return Page(img, labs, refs), p - pos
 
 
+class RGB3BankEncoding(Encoding):
+    """rgb3_<bank>: three independent learned-glyph streams per line (one per channel), x-interleaved CTC labels."""
+
+    def __init__(self, bank: str, S: int = W):
+        from learned_glyphs.lg.scheme import LearnedGlyphScheme, label_of
+        if bank not in LG_BANKS:
+            raise KeyError(f"rgb3_{bank}")
+        sc = LearnedGlyphScheme(ROOT / LG_BANKS[bank], name=bank)
+        n_sym = len(sc.symbols)
+        fam = "rgb3_lg_pb" if "_pb_" in bank else "rgb3_lg_free"
+        super().__init__(f"rgb3_{bank}", fam, int(round(sc.height_px)),
+                         [t + label_of(i) for t in TAGS for i in range(n_sym)])
+        self.S, self.bank, self.scheme = S, bank, sc
+        self.em = self.pitch / LP.line_spacing
+        s = LP.supersample
+        self.min_adv_ss = min(sc.adv_em) * self.em * s           # narrowest glyph advance, drawing px
+        if self.min_adv_ss <= 0:
+            raise ValueError(f"{self.name}: bank has a zero-width glyph, no CTC bound")
+        # widest line (whole px) whose worst case (all narrowest glyphs) passes 2L+1 <= T with L = 3 per glyph
+        for w in range(S, 0, -1):
+            n = int(w * s / self.min_adv_ss + 1e-9)
+            if ctc_ok(3 * n, S):
+                break
+        else:  # pragma: no cover
+            raise ValueError(f"{self.name}@{S}: no line width fits the CTC budget")
+        self.line_px, self.max_glyphs = w, n
+
+    @property
+    def n_lines(self) -> int:
+        return self.S // self.pitch
+
+    @property
+    def page_chars_max(self) -> int:
+        # 3 streams; >= 1 px of line width per source char for every bank (cf. geom.SizedScheme)
+        return int(3 * self.n_lines * self.S * 1.5) + 200
+
+    def decode(self, labels: str) -> str:
+        streams = ["", "", ""]
+        for i in range(0, len(labels) - 1, 2):                    # every class is 2 chars: tag + bank label
+            streams[TAGS.index(labels[i])] += labels[i + 1]
+        return " ".join(self.scheme.decode(st) for st in streams)
+
+    def layout(self, text: str, pos: int):
+        """-> (per-channel line lists [3][n_lines] of units (trailing spaces stripped), consumed chars)."""
+        s = LP.supersample
+        units = self.scheme.encode(text[pos:pos + self.page_chars_max])
+        lines = (wrap(units, self.em * s, self.line_px * s) or [])[: 3 * self.n_lines]
+        consumed = sum(len(u.source) for ln in lines for u in ln)
+        assert consumed < self.page_chars_max - 100, "render window too small"
+        out = []
+        for ln in lines:
+            while ln and ln[-1].is_space:
+                ln = ln[:-1]
+            out.append(ln)
+        per_ch = [out[c::3] for c in range(3)]
+        return per_ch, consumed
+
+    def line_labels(self, chan_lines) -> tuple[str, ...]:
+        """Tagged labels of one page line, ordered by glyph centre x, ties R, G, B."""
+        sem = self.em * LP.supersample
+        items = []
+        for c, ln in enumerate(chan_lines):
+            x = 0.0
+            for u in ln:
+                a = u.advance(sem)
+                items.extend((x + a / 2, c, TAGS[c] + lab) for lab in u.labels)
+                x += a
+        items.sort(key=lambda t: (round(t[0], 6), t[1]))
+        return tuple(t[2] for t in items)
+
+    def render(self, text: str, pos: int) -> tuple[Page, int]:
+        per_ch, consumed = self.layout(text, pos)
+        labs, refs = [], []
+        for i in range(self.n_lines):
+            cl = [per_ch[c][i] if i < len(per_ch[c]) else [] for c in range(3)]
+            if max(len(ln) for ln in cl) > self.max_glyphs:
+                raise AssertionError(f"{self.name}: line {i} exceeds {self.max_glyphs} glyphs/stream")
+            lab = self.line_labels(cl)
+            if not ctc_ok(len(lab), self.S):
+                raise AssertionError(f"{self.name}: line {i} has {len(lab)} labels, over the CTC budget")
+            labs.append(lab)
+            refs.append(normalize(" ".join(normalize("".join(u.source for u in ln)) for ln in cl)))
+        img = np.stack([np.asarray(_draw_lines([list(ln) for ln in per_ch[c]], self.em, (self.S, self.S), LP,
+                                               LP.supersample), dtype=np.uint8) for c in range(3)], 2)
+        return Page(img, labs, refs), consumed
+
+
 PAINT = np.array([[255, 0, 0], [0, 255, 0], [0, 0, 255]], dtype=np.float32)
 
 
@@ -248,6 +350,8 @@ def get_rgb_encoding(name: str) -> Encoding:
         return RGB3Encoding(int(name[len("rgb3_p"):]), tagged=True)
     if name.startswith("rgb3a_p"):
         return RGB3Encoding(int(name[len("rgb3a_p"):]), tagged=False)
+    if name.startswith("rgb3_lg_"):
+        return RGB3BankEncoding(name[len("rgb3_"):])
     m = _RGBW.match(name)
     if m:
         return RGBWordEncoding(int(m.group(1)), m.group(2) or "chan", float(m.group(3) or 1))
