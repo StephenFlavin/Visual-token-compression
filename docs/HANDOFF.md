@@ -33,6 +33,9 @@ open.
 1. **Cloud cross-check, 1000 pages: agrees.** `round2_tp/` (cloud CPU, fp32 probe, Linux renderer): latin_p32
    deepencoder/clean 1000 pages 3k steps = 27.6% vs 25.8% local (GPU, bf16 probe, Windows renderer). Still pending:
    `round2_tp2000/` (2000 pages); compare with local 3000-page 3k-step 25.3%.
+   **Closed 2026-11-04 ~17:20: agrees.** Cloud 2000 pages, 3k steps = 24.9% (train CTC 0.59; curve 36.0% -> 25.6% ->
+   23.5% at steps 2000/2500/3000). Cloud CPU rows: 89.0% (200) -> 27.6% (1000) -> 24.9% (2000); local GPU 3k-step: 25.8%
+   (1000), 25.3% (3000). Cloud queue is now empty.
 2. **Round 3** (encoder_probe/ROUND3.md): fine-tune Qwen2.5-VL-3B to read dense codes and benchmark KV-cache savings
    on long-context QA. Order: R3-0 frozen Qwen probe (code exists; CUDA path for qwen25vl never run) -> R3-1 LoRA
    fine-tune arms (Latin baseline, best single codes, and the moonshot RGB-overlay-of-learned-glyphs arm, not built
