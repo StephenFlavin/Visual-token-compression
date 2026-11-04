@@ -1,3 +1,14 @@
 [q1] qwen loaded (4s)
 [q1] rgb3_lg_pb_h5 S=448: pages 81s
 [q1] rgb3_lg_pb_h5 train features done (523s)
+[q1] rgb3_lg_pb_h5 test features done (655s)
+[q1] rgb3_lg_pb_h5  raw         R2 1.0000 inkMCC 1.000 1.000 1.000 inkF1 1.000 1.000 1.000 (chance 0.634) alpha 1e-07
+[q1] rgb3_lg_pb_h5  embed       R2 1.0000 inkMCC 1.000 1.000 1.000 inkF1 1.000 1.000 1.000 (chance 0.634) alpha 1e-07
+[q1] rgb3_lg_pb_h5  b8          R2 0.6914 inkMCC 0.885 0.838 0.836 inkF1 0.938 0.913 0.912 (chance 0.634) alpha 0.001
+[q1] rgb3_lg_pb_h5  b16         R2 0.6064 inkMCC 0.818 0.775 0.763 inkF1 0.902 0.879 0.872 (chance 0.634) alpha 0.01
+[q1] rgb3_lg_pb_h5  b24         R2 0.4250 inkMCC 0.660 0.640 0.611 inkF1 0.816 0.804 0.789 (chance 0.634) alpha 0.0001
+[q1] rgb3_lg_pb_h5  b28         R2 0.3425 inkMCC 0.585 0.574 0.542 inkF1 0.774 0.768 0.750 (chance 0.634) alpha 0.0001
+[q1] rgb3_lg_pb_h5  final       R2 0.2296 inkMCC 0.483 0.479 0.449 inkF1 0.717 0.715 0.697 (chance 0.634) alpha 1e-05
+[q1] rgb3_lg_pb_h5  merger      R2 0.0192 inkMCC 0.292 0.293 0.292 inkF1 0.624 0.624 0.624 (chance 0.634) alpha 1
+[q1] panel /home/user/visual-bpe/docs/img/q1_readout_rgb3_lg_pb_h5.png
+[q1] rgb3_lg_free_h4 S=448: pages 112s
