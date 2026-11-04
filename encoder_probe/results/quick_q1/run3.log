@@ -56,3 +56,13 @@
 [q1] rgb3_p8        final       R2 0.2922 inkMCC 0.043 0.055 0.037 inkF1 0.009 0.014 0.007 (chance 0.258) alpha 1e-05
 [q1] rgb3_p8        merger      R2 0.2786 inkMCC 0.095 0.101 0.093 inkF1 0.042 0.046 0.041 (chance 0.258) alpha 0.1
 [q1] latin_p16 S=448: pages 14s
+[q1] latin_p16 train features done (424s)
+[q1] latin_p16 test features done (526s)
+[q1] latin_p16      raw         R2 1.0000 inkMCC 1.000 1.000 1.000 inkF1 1.000 1.000 1.000 (chance 0.251) alpha 1e-07
+[q1] latin_p16      embed       R2 1.0000 inkMCC 1.000 1.000 1.000 inkF1 1.000 1.000 1.000 (chance 0.251) alpha 1e-07
+[q1] latin_p16      b8          R2 0.9694 inkMCC 0.935 0.935 0.935 inkF1 0.944 0.944 0.944 (chance 0.251) alpha 0.001
+[q1] latin_p16      b16         R2 0.8414 inkMCC 0.851 0.851 0.851 inkF1 0.870 0.870 0.870 (chance 0.251) alpha 0.001
+[q1] latin_p16      b24         R2 0.4204 inkMCC 0.387 0.387 0.387 inkF1 0.356 0.356 0.356 (chance 0.251) alpha 1e-05
+[q1] latin_p16      b28         R2 0.2203 inkMCC 0.077 0.077 0.077 inkF1 0.027 0.027 0.027 (chance 0.251) alpha 0.001
+[q1] latin_p16      final       R2 0.1737 inkMCC 0.041 0.041 0.041 inkF1 0.009 0.009 0.009 (chance 0.251) alpha 0.0001
+[q1] latin_p16      merger      R2 0.1569 inkMCC 0.058 0.058 0.058 inkF1 0.024 0.024 0.024 (chance 0.251) alpha 0.1

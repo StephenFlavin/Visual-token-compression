@@ -153,6 +153,56 @@ readability score. The whole-pixel glyph codes stay pixel-like through the whole
 for rgb3_lg_pb_h5. Every code collapses linearly at the 2x2 merger, which points at the merger as the wall (G2). The
 grey-level free_h4 variant fades by block 24: drop it, consistent with rounds 1-2 (whole-pixel banks only).
 
+### G2-lite: does a trained merger let dense codes through? (pre-registered 2026-11-04, before any run)
+CPU version of the report's gate G2. Runs overnight on the 4-CPU runner; repeat on the 3090 at more pages/steps.
+
+**Design.**
+* Qwen2.5-VL-3B ViT frozen through all 32 blocks. Cache the final-block hidden states before the merger: 1024
+  patches x 1280 per 448 px page, bf16, resumable. Use ep/qwen_split.py and Q1's code, which verified the window
+  and raster ordering.
+* Three arms per code, all with the same GridProbe reader, the round-2 recipe (CTC + aux MSE x10), 3000 steps,
+  500 train / 16 held-out test pages:
+  * **frozen**: pretrained merger frozen + probe. This is R3-0 at this budget, the control.
+  * **trained**: merger initialised from pretrained and trained + probe. This is G2.
+  * **direct**: probe on the four concatenated pre-merger patch states (5120-d per token, no merger). It is the
+    nonlinear upper bound of what the frozen ViT output carries (the report's G1, at token level).
+* Codes (chars per Qwen token): latin_p8 (~28), lg_pb_h5 (~107), rgb3_lg_pb_h5 (322, the moonshot). free_h4
+  is dropped (Q1).
+* Run order (CPU budget): moonshot trained, latin_p8 trained, moonshot frozen, moonshot direct, lg_pb_h5 trained,
+  latin_p8 frozen; then lg_pb_h5 frozen/direct and latin_p8 direct if time is left.
+* Quote the row's `cer` on the 16 test pages, with chars/token, the curve and the train CTC.
+
+**Predictions (my priors, before running).**
+1. trained beats frozen by ≥ 20 CER points for both glyph codes, and by less for latin_p8.
+2. direct ≤ trained + 2 points: the merger can only lose information. A bigger gap means the merger's 2048-d output
+   is the wall.
+3. latin_p8 trained < 5%. The moonshot trained does not reach < 10% at this budget (literature prior: 322 is ~7x
+   past the best trained optical result). lg_pb_h5 at 107 is a coin flip.
+
+**Decision rule** for the moonshot at 322 (≥ 120 chars/token, so the report's kill rule applies; CER stands in for
+glyph error):
+* trained < 10% CER: strong signal. The moonshot becomes a main R3-1 arm, and the 3090 rerun is at 1000+ pages.
+* trained 10-30% and still falling: undecided. Rerun longer on the 3090 before judging.
+* trained > 30% and direct > 30%: the ViT output is the wall. Next comes stage B (train the ViT) or a lower-density
+  sweep point.
+* direct good, trained and frozen bad: the merger's capacity is the wall. Next comes a merger redesign (levers below).
+* The probe is data-limited at 500 pages (round 2: Latin through DeepEncoder 85% -> 15% from 200 to 5000 pages).
+  Only same-budget comparisons between arms carry weight; absolute levels are upper bounds on the loss.
+
+### Moonshot levers (beyond the go/no-go; user: "shoot for the moon")
+Ways to push density past the literature's 30-90 chars/token, each testable on its own:
+1. **Grid-aligned pitch.** 4 or 7 px line pitch divides the 28 px token, plus the pixel-shift protocol.
+2. **Merger redesign.**
+   * A wider projector output.
+   * A 1x2 merge instead of 2x2: twice the positions, 161 chars/token for the moonshot.
+   * A trained conv compressor like DeepSeek-OCR's.
+   This trades positions for capacity per position.
+3. **Redundancy inside the code.** Error-correcting bits or repeated glyph streams cost raw density for exact recall,
+   and help most where needle tests fail.
+4. **Per-page colour calibration palette** (JAB Code style) for the rgb3 channels.
+5. **Curriculum.** Train at an easy density first (rgb3_p8 / lg_pb_h5), then the moonshot.
+6. **Stage B / C.** Full ViT training, then larger models or continued pretraining (R3-1b).
+
 ### R3-2: long-context benchmark (the goal)
 * Documents: concatenated held-out WikiText, 10k-1M chars. Inputs: (a) plain text tokens, (b) Latin page images,
   (c) dense-code page images, all into the fine-tuned model (and (a), (b) into the base model as references).
