@@ -84,3 +84,21 @@ Full report: **`learned_glyphs/RESULTS.md`**. Summary (converged, 10.5k steps; b
 * Caveats: part of the gain is grey-level coding (whole-pixel banks win by only 12–23%); dense banks reach 55–68% CER on unseen
   degradations; no VLM encoder tested.
 * The round-by-round history (including interim conclusions later reversed) is in this file's git history and `results/queue*.txt`.
+
+## Frozen-encoder probe (encoder_probe/): colour pixels dead, learned glyphs whole-pixel
+Question: does a frozen pretrained vision encoder keep the fine pixel and colour detail that colour-pixel encoding
+and grey-level learned glyphs depend on? Each 224x224 page is encoded with SigLIP-B/16 (last layer, plus layer 6 as
+a post-hoc control) or with identity patches (the ceiling), clean or JPEG q75. An identical CTC probe (with an
+auxiliary pixel-reconstruction loss) then reads the text back from the 196 tokens. Details, tables and every probe
+change are in encoder_probe/RESULTS.md and PLAN.md.
+* Identity ceiling: colour 1x1 blocks 0.06% CER (256 chars/token); lg_free_h4 0.01% vs lg_pb_h4 2.6% at 5.9
+  px²/char; Latin C@3% = 34 chars/token. JPEG q75 without an encoder only breaks 1x1 colour (28.8%); 2x2+ colour
+  keeps C@3% = 71 chars/token (3x Latin).
+* Through SigLIP: colour never below 62% CER (all block sizes, both layers, clean and JPEG). For 1-3 px blocks even
+  the training loss stays at the unigram plateau. Last layer: every encoding 58-85%. Layer 6: Latin 4.9% only at
+  122 px²/char (2.1 chars/token, below text tokens), lg_pb 53-55% vs lg_free 76-85%.
+* Decision rules: colour >= 2x Latin through siglip/jpeg75 **fails** (colour never reaches 3% or 10%). Grey-level
+  banks only if they still beat whole-pixel ones through the encoder **fails**, so use whole-pixel banks.
+* Caveat: through SigLIP the probe overfits (1000 instead of 200 train pages: latin_p10 61% -> 43%), so these are
+  upper bounds on the information lost, not what an LLM reading the tokens would get. VLMs that fine-tune the
+  encoder are not covered.
