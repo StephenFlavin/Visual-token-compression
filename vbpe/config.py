@@ -7,6 +7,8 @@ DATA = ROOT / "data"          # downloaded / generated corpora (git-ignored)
 RESULTS = ROOT / "results"    # experiment outputs (images + caches git-ignored)
 
 DEJAVU = Path("/usr/share/fonts/truetype/dejavu")
+if not DEJAVU.exists():   # no system DejaVu (e.g. Windows): DejaVu 2.37 TTFs copied into assets/fonts
+    DEJAVU = FONTS
 LATIN_FONT = DEJAVU / "DejaVuSans.ttf"              # default Latin font (0.51 em/char)
 LATIN_MONO_FONT = DEJAVU / "DejaVuSansMono.ttf"     # 0.60 em/char
 CONDENSED_FONT = FONTS / "ArchivoNarrow.ttf"        # 0.37 em/char  (scripts/fetch_fonts.sh)
