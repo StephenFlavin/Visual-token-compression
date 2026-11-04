@@ -145,6 +145,9 @@ waiter only after round 1's queue (`results/queue_probe_b.txt`) has exited:
 2. identity32/clean anchors (latin_p16, latin_p8, col_b2, lg_free_h4) -> deepencoder/clean x 16 ->
    deepencoder/jpeg75 x 16 -> remaining identity32/clean x 12 -> identity28/clean x 15 -> qwen25vl/clean x 15 ->
    qwen25vl/jpeg75 x 15.
+   **2026-11-04: Qwen dropped (user decision; DeepSeek-OCR is the target).** The identity28 and qwen25vl blocks were
+   removed from the queue before any of their jobs ran. Probe jobs now save a resume checkpoint every 200 steps
+   (`--ckpt-every`; the container restarts when the session resumes, see AGENTS.md).
    **Reordered 2026-11-03, before round 2 started:** DeepSeek-OCR's encoder is the primary target (user), so its
    geometry runs first. The 4 identity32 anchors come first so a probe failure at this geometry shows within ~1.5 h.
 * A probe job whose cache is not there yet waits for it while the builder holds the lock. If no builder is alive

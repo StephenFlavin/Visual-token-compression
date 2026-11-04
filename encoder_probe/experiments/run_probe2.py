@@ -64,6 +64,7 @@ def main(argv=None) -> int:
     ap.add_argument("--no-bf16", action="store_true")
     ap.add_argument("--run-name", default="round2")
     ap.add_argument("--print-queue", action="store_true")
+    ap.add_argument("--ckpt-every", type=int, default=200, help="resume checkpoint interval (0 = off)")
     a = ap.parse_args(argv)
     if a.print_queue:
         print_queue(a.steps, a.run_name)
@@ -112,8 +113,18 @@ def main(argv=None) -> int:
     probe = GridProbe(enc.pitch, len(classes), d=DIMS[a.encoder], G=G, P=P)
     opt = torch.optim.AdamW(probe.parameters(), lr=a.lr, weight_decay=1e-4, fused=True)
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=a.lr, total_steps=a.steps, pct_start=0.05)
-    curve, t_train = [], time.time()
-    for step in range(1, a.steps + 1):
+    curve, t_train, start, t_prev = [], time.time(), 1, 0.0
+    # resume checkpoint: the container can restart at any time (AGENTS.md), so save training state
+    # every --ckpt-every steps and continue from it; deleted once the row is written
+    ck = ROOT / "encoder_probe" / "cache" / "ckpt" / f"{a.run_name}__{a.encoding}__{a.encoder}__{a.cond}__{a.steps}.pt"
+    if a.ckpt_every and ck.exists():
+        st = torch.load(ck, weights_only=False)
+        probe.load_state_dict(st["probe"]); opt.load_state_dict(st["opt"]); sched.load_state_dict(st["sched"])
+        rng.bit_generator.state = st["rng"]; torch.set_rng_state(st["torch_rng"])
+        curve, start, t_prev = st["curve"], st["step"] + 1, st["t_train"]
+        print(f"[probe2] resumed from step {st['step']} ({ck.name})", flush=True)
+    t_train -= t_prev
+    for step in range(start, a.steps + 1):
         pb = rng.choice(len(tr), a.batch_pages, replace=False)
         pi, li, ys = [], [], []
         for k, p in enumerate(pb):
@@ -139,6 +150,13 @@ def main(argv=None) -> int:
             curve.append((step, round(c, 5)))
             print(f"[probe2] step {step} ctc {ctc.item():.3f} rec {rec.item():.4f} val_cer {c:.4f} "
                   f"({(time.time() - t_train) / step:.3f} s/step, {time.time() - t0:.0f}s)", flush=True)
+        if a.ckpt_every and step % a.ckpt_every == 0 and step < a.steps:
+            ck.parent.mkdir(parents=True, exist_ok=True)
+            tmp = ck.with_suffix(".tmp")
+            torch.save({"probe": probe.state_dict(), "opt": opt.state_dict(), "sched": sched.state_dict(),
+                        "rng": rng.bit_generator.state, "torch_rng": torch.get_rng_state(), "curve": curve,
+                        "step": step, "t_train": time.time() - t_train}, tmp)
+            tmp.replace(ck)
     cer, samples = evaluate(probe, tok_te, te, enc, classes, bf16=not a.no_bf16)
     row = {**key, "phase": "probe", "round": 2, "scheme": f"{enc.family}@{a.encoder}/{a.cond}",
            "family": enc.family, "pitch": enc.pitch, "S": S, "P": P, "G": G, "n_tokens": G * G,
@@ -154,6 +172,7 @@ def main(argv=None) -> int:
         print(f"   ref: {r[:90]!r}\n   hyp: {h[:90]!r}")
     with open(rows, "a") as f:
         f.write(json.dumps(row) + "\n")
+    ck.unlink(missing_ok=True)
     return 0
 
 
