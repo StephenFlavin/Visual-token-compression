@@ -84,3 +84,43 @@ optional; if both fixed codes stay near DejaVu, the learned shapes matter. Also 
 learned bank's lead was largest (h7: 3.5% vs DejaVu 43%).
 
 **Status:** recorded, not queued.
+
+## If the moonshot fails: other avenues (user questions, 2026-11-04)
+
+**User's questions:**
+* "If this doesn't work out, are there more avenues worth a go? Write my own encoder? Be happy with what's already
+  promising and effective?"
+* Goal (user): show a local model on the RTX 3090 holding much more context than it can by default, without
+  shortcutting the research (it came from DeepSeek-V4.1-Flash's long context; context and compute numbers per encoding
+  are in [CONTEXT_BUDGET.md](CONTEXT_BUDGET.md)).
+
+**1. Bank what works (do regardless): fine-tuned Latin page images + 4-bit KV + YaRN.**
+* Latin page images, fine-tuned (Glyph replication on Qwen): prior art reports 3-4x; R3-1's Latin arm tests it.
+* Stack two standard, orthogonal methods:
+  * 4-bit KV cache: ~4x less KV memory per position.
+  * YaRN RoPE scaling: Qwen's 32k window toward ~128k positions.
+* Rough potential: default ~140k chars (32k positions x 4.3 chars/position) -> ~1.9M chars (128k positions x ~15
+  chars/position), ~13x, with ~1.2 GB of KV. Estimate only: YaRN past the trained length costs accuracy, and the
+  three have to be measured together.
+
+**2. Write our own encoder: two very different projects.**
+* **2a. Custom front-end for the codes** (= ROUND3.md R3-1b stage B): replace or train Qwen's patch stem and early
+  ViT blocks on the dense codes, LLM frozen + LoRA.
+  * The identity ceilings show the information is in the pixels (100-1000 chars/token at < 3% CER).
+  * Novel; fits the 3090.
+  * It is the honest last test of the dense-pixel idea.
+* **2b. Skip pixels: learned text-side compression** (gist tokens, ICAE, C3: text -> a few memory vectors).
+  * Strong in the literature (C3: 98% at 20x, ~93% at 40x; see prior-art.md), but a crowded field.
+  * Once the encoder is ours, rendering to pixels is a detour. The critiques in prior-art.md find text-side
+    compressors match or beat the vision path.
+  * Pixels only win if the model must stay an unmodified off-the-shelf VLM, or if the documents are already images
+    (scans, PDFs).
+
+**Decision ladder:**
+1. Always: Latin + 4-bit KV + YaRN (the demo).
+2. If the moonshot reads as raw pixels (G0) but not through Qwen (Q1/R3-0/R3-1): try 2a once.
+3. If 2a fails, the dense-pixel line is done. That is a publishable negative: dense codes carry 100-1000 chars/token
+   in raw pixels, but pretrained VLM encoders can't be taught to keep them. Move to 2b only knowing it's an
+   established field, not a new idea.
+
+**Status:** recorded; gated on G0 (moonshot identity28 ceilings), Q1 (layer-wise linear readout) and R3-1 on the 3090.
