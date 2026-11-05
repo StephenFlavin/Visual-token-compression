@@ -26,6 +26,36 @@ v5e-1 (needs a torch_xla port). Neither runs R3-1 as built, so **R3-1 waits for 
 section 8, or docs/GPU_RUNNER.md, which works unchanged on any Ampere+ GPU). The CPU G2-lite runs finish here,
 including the blind floors.
 
+**Prompt for the next GPU session** (the user's RTX 3090, or any Ampere+ GPU). Paste into Claude Code in the repo:
+```text
+Pull branch claude/validation-harness. Read AGENTS.md, the top section of docs/HANDOFF.md, and in
+encoder_probe/ROUND3.md: R3-1, R3-1b, both amendments and the G2-lite notes/results. Then the runbook for this
+machine: docs/LOCAL_GPU.md section 8 on the Windows RTX 3090 PC, otherwise docs/GPU_RUNNER.md (measure
+s/step and peak memory in the smoke, then size the runs).
+
+Goal: R3-1 (gate G3). LoRA fine-tune Qwen2.5-VL-3B so its own LLM reads each code.
+1. Setup, tests, then the smokes. The fine-tune and benchmark have never run on a GPU or with real weights:
+   fix small bugs minimally, keep the CPU tests green, commit each fix.
+2. Arms at identical settings (one run name, one fair_hash), 5000 steps each:
+   latin_p8, latin_p5, latin_p6 (the Latin baseline pushed toward ~100 chars/token, per amendment 1),
+   rgb3_lg_pb_h5 (moonshot), lg_pb_h5, rgb3_p8. Order: latin_p8, moonshot, latin_p5, then the rest.
+   Pre-render pages on the CPU first. Run long jobs with nohup and checkpoints; push rows often.
+3. Blind control: before the arms, add a --blind-images option to finetune_qwen.py (each page's image swapped
+   for another page's, text targets unchanged, fixed seed) and run it for latin_p8 and the moonshot at the same
+   settings. Report every CER next to its blind floor, with the substitution/insertion/deletion split and the
+   hypothesis/reference length ratio. A score near the blind floor means the model is not reading.
+4. Apply ROUND3.md: G3 asks whether the best code's density at < 3% CER is >= 1.5x the densest Latin reaching
+   the same CER under the same budget. Never choose anything on test-page CER.
+5. Run R3-2 (long-context benchmark) only for arms that pass G3; otherwise stop and report.
+
+Stop and ask me if the smokes can't be made to run, if fine-tuned Latin stays near its blind floor, or if a
+result would change the plan. Record any design change as a dated amendment in ROUND3.md before running it. At
+the end, write up round 3 (encoder_probe/RESULTS.md, docs/RESULTS.md, the AGENTS.md findings bullet,
+docs/CONTEXT_BUDGET.md evidence table) and give me a results table. No PRs, no Claude API calls, no model IDs
+in commits.
+```
+On the 3090, R3-1 is roughly 15-25 h in total (an estimate: 2-4 h per 5000-step arm), so run it overnight.
+
 **Open items, in priority order:**
 1. R3-1 short arms on a GPU: latin_p8, moonshot, latin_p5 at equal steps (GPU_RUNNER.md).
 2. G2-lite on a GPU at 1000+ pages. `run_g2lite.py` is CPU-only: port it with `--device`, or use `run_probe2.py
