@@ -350,6 +350,70 @@ Setup: latin_p16 frozen, 6.8 chars/token, 100 train / 16 test pages, 1000 steps 
   * The rows already running get theirs from their last checkpoint, resumed to step 3000 under another run name.
     Resume is exact.
 
+**G2-lite results (2026-11-05 ~08:40, CPU: 500 train / 16 test pages, 3000 steps, bf16 probe).**
+**Verdict, by the pre-registered decision rule:**
+* The moonshot (322 chars/token) has trained 84.6% > 30% and direct 71.9% > 30%.
+* That is the branch **"the ViT output is the wall at this budget"**. Next: stage B (train the ViT) or a lower-density
+  sweep point.
+* Not "trained < 10%", not "10-30% and falling", not "direct good, merger arms bad".
+
+Rows: `results/g2lite/runs.jsonl`. Op splits come from `results/g2lite_ops/` (exact resumes; their CER equals the
+original rows bit for bit). Floors come from `results/g2lite_blind/`. "correct" = (hyp length - sub - ins) / ref
+chars, the share of reference characters the alignment matches.
+
+| Code (chars/token) | frozen | trained (merger LR 1e-4) | direct | trained, LR 2e-3 (as registered) | blind floor |
+|---|---|---|---|---|---|
+| latin_p8 (28.1) | not run | 79.2%: del 74 / sub 5, len 0.26, **correct 21%**, CTC 2.79 | not run | 77.8% (collapsed merger), CTC 2.77 | not run |
+| lg_pb_h5 (~107) | not run | not run | not run | not run | not run |
+| rgb3_lg_pb_h5 (321.6) | 86.1%, CTC 4.55; 3 stored samples: del 83 / sub 2, len 0.17, correct ~15% | 84.6%: del 82 / sub 2, len 0.18, **correct 15%**, CTC 4.51 | 71.9%: del 46 / sub 25, len 0.55, **correct 29%**, CTC 3.31 | stopped at step 600 (99.8% at 500, collapsed) | 99.5% at 1500 steps: del 99, len 0.005, correct 1%, CTC 4.73 |
+| latin_p16 (6.8; 100 pages, 1000 steps, diagnostic) | 75.5% (run_probe2: 74.5%); 3 stored samples: len 0.31, correct ~27% | - | - | - | 87.3%: del 81 / sub 6, len 0.19, correct 13%, CTC 1.07 |
+
+* Val curves (steps 500-3000):
+  * moonshot frozen 99 96 93 90 89 86
+  * moonshot trained 100 95 91 88 87 85
+  * moonshot direct 76 75 75 74 73 72
+  * latin_p8 trained 86 87 80 81 80 79
+  * All were still falling slowly at 3000.
+* Precision: bf16 autocast throughout (`precision_segments`). Frozen resumed twice and trained once after container
+  restarts.
+
+**Pre-registered predictions:**
+1. trained beats frozen by >= 20 points for both glyph codes, by less for latin_p8: **FAIL**.
+   * Moonshot: 1.5 points (86.1 -> 84.6).
+   * lg_pb_h5 and latin_p8 frozen: not run.
+2. direct <= trained + 2: **FAIL**.
+   * direct is 12.7 points better than trained (71.9 vs 84.6).
+   * This hints that the merger loses information the ViT output still carries.
+3. latin_p8 trained < 5%: **FAIL** (79.2%; 77.8% as registered).
+   * Moonshot trained not < 10%: **PASS** (84.6%).
+   * lg_pb_h5: not run.
+
+**Post-hoc observations (not part of the decision rule):**
+* Direct reads more than the merger arms. It matches about 29% of reference characters vs 15% for trained and about
+  15% for frozen, and it emits 3x longer lines with far more substitutions.
+* Its train CTC (3.31) is the only one clearly below the moonshot's label-statistics level (about 4.5-4.7). So the
+  frozen ViT output carries more of the moonshot than the 2x2 merger passes on, but far from enough at this budget.
+* CER below the blind floor is **not comparable across codes**:
+  * The moonshot floor (99.5%) is an empty-output floor (length 0.005).
+  * The latin_p16 floor (87.3%) is a matched-length floor: blind latin learns to emit frequent letters and also
+    memorises its 100 training pages (train CTC 1.07).
+  * Lead with the op split and the correct-character share. The correct-character share of a blind probe that does
+    emit text is about 13%.
+  * On that scale the moonshot frozen and trained arms (about 15%) are barely above label statistics, and direct
+    (29%) is clearly above it.
+* Latin through Qwen is barely above its floor here:
+  * latin_p8 trained has correct 21% at unigram-level train CTC.
+  * latin_p16 frozen: 75.5% vs blind 87.3%.
+  * So **no comparative claim against Latin is made**. The comparative 1.5x rule (amendment 1) cannot be applied
+    with this probe.
+
+**Limitations:** 500 pages, 3000 steps, CPU. The probe is data-limited (round 2: Latin 85% -> 15% from 200 to 5000
+pages). GridProbe reads through a pixel reconstruction, which under-reads Latin. Only one seed was run. The lg_pb_h5
+arms, the latin_p5/p6 sweep, the latin_p8 frozen and direct arms, and a 3000-step blind floor were not run tonight:
+* the latin_p5 cache chunks are kept locally (the lg_pb_h5 cache was never built); all of these go to the 3090
+  rerun at 1000+ pages;
+* the queue lines are in `results/queue_g2lite.txt` (old order, do not re-run from line 1) and `--print-queue`.
+
 ### Moonshot levers (beyond the go/no-go; user: "shoot for the moon")
 Ways to push density past the literature's 30-90 chars/token, each testable on its own:
 1. **Grid-aligned pitch.** 4 or 7 px line pitch divides the 28 px token, plus the pixel-shift protocol.
