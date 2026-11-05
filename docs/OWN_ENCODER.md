@@ -188,3 +188,20 @@ Stop and ask me if the smoke fails, if the ratio-4 control misses 10% CER, or if
 Record design changes as dated amendments in docs/OWN_ENCODER.md before running them. No PRs, no Claude API
 calls, no model IDs in commits. Stop the pod (or tell me to) when finished: it bills by the hour.
 ```
+
+## Amendment 1 (2026-11-05, after the ratio-4 arm, before any rerun)
+* **Trigger:** the ratio-4 positive control missed 10% CER at 3000 steps: CER 74.8% (blind 79.0%), loss 1.64
+  (blind 2.48). Its val loss was still falling (1.81 → 1.76 → 1.73 over the last 500 steps), so the
+  pre-registered rule applies: rerun r = 4 and r = 16 longer before concluding anything.
+* **Change: 8000 steps instead of 12k**, because the pod has a 5 h budget. 12k would need ~6.2 h at the measured
+  0.93 s/step (r = 4) and ~0.82 (r = 16). Both arms get the same 8000 steps and the same recipe otherwise. The
+  cosine schedule spans the full 8000, so these are new runs, not a continuation of the 3000-step one.
+* **Checkpoints every 1000 steps instead of 250**, to save writes to the network volume. This does not change
+  the result: `--ckpt-every` is not a fair key.
+* **Speed options checked and rejected:**
+  * no gradient checkpointing: runs out of memory at r = 4 (24 GiB);
+  * two arms on the GPU at once: no gain, the GPU is already at 88-100% utilisation;
+  * SDPA attention is already on.
+* **Reading:** if r = 4 still misses 10% at 8000 steps with its loss still falling, the recipe is too slow for
+  this budget. That is not evidence against the ratio, and the next step would be a recipe amendment
+  (e.g. a higher LR for the slots and projector), not a conclusion.
