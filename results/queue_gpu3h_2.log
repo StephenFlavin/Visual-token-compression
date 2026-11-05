@@ -1,0 +1,17 @@
+[queue] start job001 (ext busy=0, running=1): python3 encoder_probe/experiments/finetune_qwen.py --encoding latin_p5 --steps 1000 --run-name round3_ft_gpu3h --blind-images
+[queue] done rc=0: python3 encoder_probe/experiments/finetune_qwen.py --encoding latin_p5 --steps 1000 --run-name round3_ft_gpu3h --blind-images
+[queue] start job002 (ext busy=0, running=1): python3 encoder_probe/experiments/finetune_qwen.py --encoding lg_pb_h5 --steps 1000 --run-name round3_ft_gpu3h --blind-images
+Traceback (most recent call last):
+  File "/workspace/projects/visual-bpe/scripts/job_queue.py", line 83, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/workspace/projects/visual-bpe/scripts/job_queue.py", line 49, in main
+    lines = [l.strip() for l in qpath.read_text().splitlines() if l.strip() and not l.lstrip().startswith("#")]
+                                ^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1029, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1015, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'results/queue_gpu3h_b.txt'
