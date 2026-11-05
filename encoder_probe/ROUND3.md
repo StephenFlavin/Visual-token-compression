@@ -268,6 +268,49 @@ baseline.
   ~100 chars/token in G2 and G3, so the code is compared against a pushed baseline.
 * **G3 / R3-1 arms:** Latin at p8, p6, p5 (and p4 if its ceiling passes), same recipe as every code.
 
+**Amendment 2 (2026-11-05 ~02:30, after the first trained row, before any amended row; approved by main): the
+trained arm uses merger LR 1e-4.** At the shared LR of 2e-3, AdamW plus OneCycle wrecks the pretrained merger. Its
+output collapses to near-identical tokens, so the trained arm as registered measures a broken merger, not merger
+capacity.
+* **Evidence.** Checkpoints of the as-registered runs, plus 500-step latin_p8 diagnostics (`results/g2lite_diag*`,
+  not pre-registered arms). Standardised output std uses the pretrained statistics (pretrained = 1.03). "Dead dims"
+  is the share of the 2048 dims with std < 0.05. Weight change is the relative norm change of mlp.0 / mlp.2.
+
+  | Run (step) | train CTC | output std | dead dims | token-pair cosine | weight change |
+  |---|---|---|---|---|---|
+  | pretrained merger | - | 1.03 | 0% | 0.10 | 0 / 0 |
+  | latin_p8 trained, LR 2e-3, 3000-step run (2200) | 2.84 | 0.11 | 76% | 0.91 | 1.01 / 0.69 |
+  | moonshot trained, LR 2e-3, 3000-step run (600) | 5.5 | 0.14 | 24% | 0.82 | 0.47 / 0.26 |
+  | latin_p8 trained, LR 2e-3, 500-step diag (400) | 2.98 | 0.15 | 11% | 0.81 | 0.67 / 0.41 |
+  | latin_p8 trained, merger LR 1e-4, 500-step diag (400) | 3.03 | 0.37 | 0% | 0.20 | 0.10 / 0.06 |
+  | latin_p8 frozen, 500-step diag (500) | 3.00 | (1.03) | - | (0.10) | - |
+
+* **Choice.** Merger LR 1e-4, picked on train CTC and the collapse statistics, never on test CER:
+  * It is the only setting that keeps the merger's output diverse (no dead dims, cosine 0.20).
+  * Its train CTC equals the frozen and 2e-3 runs at 500 steps. Every Latin arm is still at unigram level there
+    (about 2.9-3.0 nats/char), so no setting was "clearly too slow" and 3e-4 was not needed.
+* **Scope.**
+  * It applies to every trained arm (moonshot, latin_p8, latin_p5, latin_p6, lg_pb_h5) as `--merger-lr 1e-4`. Rows
+    carry `merger_lr` in their key.
+  * The probe LR (2e-3) and every other setting stay as pre-registered.
+  * The two as-registered trained rows are reported as such: latin_p8 trained, 77.8%, collapsed. moonshot trained was
+    stopped at step 600 (99.8% at step 500, collapsed); its checkpoint is kept in `cache/ckpt/old_collapsed/`.
+* **Precision.** The new host has native bf16, so all G2-lite probe runs restarted at 00:15 and run in bf16 autocast
+  from step 1 (`precision_segments` in each row). The ViT caches are fp32 on every host.
+
+**Limitation (2026-11-05): the probe favours pixel-like codes, so the Latin comparison is not fair here.**
+* GridProbe reads text only through a 3-channel reconstruction of the page (aux MSE), then a conv reader.
+* Q1 found that Latin pixels stop being linearly decodable in Qwen's states after block 24 (merger ink MCC 0.03).
+  The glyph codes stay pixel-like (lg_pb_h5 final 0.65).
+* So this probe under-reads codes that Qwen turns into non-pixel features, Latin above all. The reconstruction MSE at
+  step 500 shows it: 0.14-0.22 for latin_p8 here vs about 0.001 for identity28.
+* G2-lite's Latin numbers are lower bounds, and the comparative 1.5x-vs-Latin rule above cannot be applied fairly
+  with this probe. The fair Latin-vs-code comparison is G3 (the LLM itself as reader, on the 3090).
+* G2-lite still answers the absolute question: does glyph-code information get through the frozen or trained
+  merger, and does bypassing the merger (direct) change that?
+* A latin_p16 frozen sanity run (about 7 chars/token, 100 train pages) decides whether Latin arms stay in tonight's
+  CPU queue.
+
 ### Moonshot levers (beyond the go/no-go; user: "shoot for the moon")
 Ways to push density past the literature's 30-90 chars/token, each testable on its own:
 1. **Grid-aligned pitch.** 4 or 7 px line pitch divides the 28 px token, plus the pixel-shift protocol.
