@@ -1,0 +1,2 @@
+python3 encoder_probe/experiments/run_g2lite.py --arm frozen --encoding rgb3_lg_pb_h5 --steps 3000 --train-pages 500 --run-name g2lite --threads 1
+python3 encoder_probe/experiments/run_g2lite.py --arm trained --encoding rgb3_lg_pb_h5 --steps 3000 --train-pages 500 --run-name g2lite --threads 1 --merger-lr 1e-4
