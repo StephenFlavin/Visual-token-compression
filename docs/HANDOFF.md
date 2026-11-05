@@ -1,3 +1,61 @@
+# GPU runner session (2026-11-05, 10:59-13:59 UTC, 3 h, docs/GPU_RUNNER.md sections 0-5)
+
+**Hardware:** NVIDIA GeForce RTX 4090 24 GB (bf16 supported), 32 CPU cores, 124 GB RAM, Linux, torch 2.8.0+cu128,
+transformers 5.22.1, peft 0.21.2, Pillow with raqm. Full Qwen2.5-VL-3B weights loaded (3,754,622,976 parameters).
+
+**Setup/smoke:** CPU tests green (137 passed, 1 skipped). `finetune_qwen.py --smoke` (latin_p8) **ran as built: no
+code fixes were needed.** Measured: **1.21-1.22 s/step** (batch 4, grad checkpointing, bf16), **peak allocated
+11.4 GB** (nvidia-smi ~12.3 GB), model load ~1 min, eval ~2.3 min per cond (64 windows + 64 cloze + 32 MC). Page
+pre-render (1000 train pages): latin_p8 3 min, latin_p5 8 min, moonshot 11 min (parallel CPU jobs).
+
+**Sizing:** K = floor(0.85 x 24 / 11.4) = 1 job at a time. The section-3 formula gave 1250 steps, but it ignores the
+~7 min/job load+eval overhead (5 jobs), so **STEPS = 1000** for every job (~25 min/job). One fair_hash for all rows:
+`05dc0c9e8507`. Rows: `encoder_probe/results/round3_ft_gpu3h/` and `round3_ft_gpu3h_blind/`; logs
+`results/queue_logs/gpu3h_1/`.
+
+**Results: R3-1 short-budget (1000 steps, 1000 train pages, 16 test pages; 5000+ steps was the plan).**
+| arm | chars/token | cond | CER | blind CER | cloze | blind cloze | MC | blind MC | final val loss (blind) |
+|---|---|---|---|---|---|---|---|---|---|
+| latin_p8 | 28.1 | clean | **55.0%** | 88.5% | 0.52 | 0.22 | 0.88 | 0.25 | 1.125 (2.48) |
+| latin_p8 | 28.1 | jpeg75 | 57.5% | 86.3% | 0.48 | 0.23 | 0.91 | 0.25 | |
+| rgb3_lg_pb_h5 (moonshot) | 321.6 | clean | **83.6%** | 89.9% | 0.22 | 0.22 | 0.34 | 0.28 | 2.518 (2.517) |
+| rgb3_lg_pb_h5 (moonshot) | 321.6 | jpeg75 | 87.6% | 88.6% | 0.19 | 0.23 | 0.38 | 0.31 | |
+| latin_p5 | 72.4 | clean | 80.9% | (none; latin_p8's 88.5%) | 0.31 | (0.22) | 0.56 | (0.25) | 2.163 (no blind run) |
+| latin_p5 | 72.4 | jpeg75 | 79.0% | | 0.33 | | 0.53 | | |
+| lg_pb_h5 | ~107 | clean | running at hand-off | | | | | | |
+
+* **latin_p5 reads a little:** it has no blind control of its own (5 jobs fitted, a 6th didn't). Against latin_p8's blind floor
+  (same text targets) its cloze/MC (0.31/0.56 vs 0.22/0.25) and val loss (2.16, still falling, vs ~2.48-2.52 for
+  both blind runs) are above chance, but most generations are invented text. Read it as "starting to read".
+
+* **latin_p8 is read:** far below its blind floor on CER, cloze and MC, and val loss 1.13 vs 2.48 blind. Its CER is
+  high because it transcribes the first line(s) of a window nearly exactly, then drifts into fluent invented
+  continuation (samples in the rows); the loss was still falling at 1000 steps.
+* **The moonshot is not read at this budget:** CER, cloze and MC sit at the blind floor; train/val loss stayed flat
+  (~2.5) and is identical to the blind run's to 3 decimals; real and blind generations are the same generic text
+  ("in the 1970s, and the 1980s. The first was the 1973 film ...") whatever the page.
+* The op split (sub/ins/del) and hyp/ref length ratio are not in `finetune_qwen.py` rows (only CER + 4 samples), so
+  they were not reported; add them to `run_eval` before the next run.
+
+**Against ROUND3.md gate G3** (best code's chars/token at < 3% CER >= 1.5x the best Latin's at < 3%): **not
+decidable at this budget, no arm reaches 3% CER.** Short-budget signal: Latin learns to read within 1000 steps; the
+moonshot shows no sign of reading (at its blind floor), so on this evidence it is the weaker candidate. A code at
+its floor after 1000 steps is undecided, not failed, but its loss showed no movement at all, unlike Latin's.
+
+**Extra (user-approved, end of session):** lg_pb_h5 (single-channel learned glyph bank, ~107 chars/token) at the
+same settings and fair_hash, started 13:32 while the write-up ran, to ask whether the moonshot fails because of
+density (322) or because of the glyph code itself. Row above if it finished in time.
+
+**What did not run:** 5000-step arms; latin_p5 blind control; latin_p6, rgb3_p8; R3-2; the optional frozen-Qwen probe (R3-0);
+G2 at scale (section 6). Adapters (`encoder_probe/cache/r3_adapters/`, ~0.56 GB each) were not copied off the
+machine. Nothing was chosen on test-page CER.
+
+**Suggested next:** the 5000-step arms on the 3090 (overnight), with latin_p8 first to see where its drift error
+goes; for the moonshot, check whether an easier intermediate density (lg_pb_h5 ~107, rgb3_p8 ~73) moves off its
+blind floor before spending a long run on 322 chars/token.
+
+---
+
 # Handoff: cloud CPU runner -> any GPU runner (2026-11-05, morning)
 
 **For a GPU session of any hardware, start with [GPU_RUNNER.md](GPU_RUNNER.md)** (a time-boxed plan; measure, then

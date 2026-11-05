@@ -1,0 +1,112 @@
+$ python3 encoder_probe/experiments/finetune_qwen.py --encoding latin_p5 --steps 1000 --run-name round3_ft_gpu3h
+Loading weights:   0%|          | 0/824 [00:00<?, ?it/s]Loading weights:   8%|▊         | 65/824 [00:00<00:01, 611.20it/s]Loading weights:  15%|█▌        | 127/824 [00:00<00:01, 404.84it/s]Loading weights:  21%|██        | 172/824 [00:00<00:01, 395.69it/s]Loading weights:  26%|██▌       | 214/824 [00:00<00:01, 312.49it/s]Loading weights:  33%|███▎      | 269/824 [00:00<00:01, 364.27it/s]Loading weights:  38%|███▊      | 309/824 [00:00<00:01, 354.53it/s]Loading weights:  42%|████▏     | 347/824 [00:01<00:01, 298.13it/s]Loading weights:  47%|████▋     | 389/824 [00:01<00:01, 323.81it/s]Loading weights:  52%|█████▏    | 426/824 [00:01<00:01, 331.17it/s]Loading weights:  56%|█████▌    | 461/824 [00:01<00:01, 333.29it/s]Loading weights:  61%|██████    | 504/824 [00:01<00:00, 359.48it/s]Loading weights:  68%|██████▊   | 563/824 [00:01<00:00, 410.47it/s]Loading weights:  75%|███████▌  | 618/824 [00:01<00:00, 428.94it/s]Loading weights:  83%|████████▎ | 681/824 [00:01<00:00, 477.99it/s]Loading weights:  91%|█████████ | 747/824 [00:01<00:00, 523.05it/s]Loading weights: 100%|██████████| 824/824 [00:01<00:00, 433.05it/s]
+[ft] latin_p5 S=448 pitch=5 lines/page=89 train=1000 test=16 px2/char=10.83 chars/token=72.4 device=cuda bf16=True trainable={'trainable': 145450976, 'lora': 29933568, 'vision': 115517408, 'total': 3784556544} fair_hash=05dc0c9e8507 pages=1s
+[ft] step 1 loss 3.0496 ema 3.0496 lr 8.00e-06 (1.57 s/step)
+[ft] step 10 loss 2.7091 ema 2.9553 lr 4.40e-05 (1.18 s/step)
+[ft] step 20 loss 2.3844 ema 2.7853 lr 8.40e-05 (1.20 s/step)
+[ft] step 30 loss 2.3232 ema 2.5978 lr 1.24e-04 (1.21 s/step)
+[ft] step 40 loss 2.3793 ema 2.5211 lr 1.64e-04 (1.21 s/step)
+[ft] step 50 loss 2.6197 ema 2.4665 lr 2.00e-04 (1.20 s/step)
+[ft] step 60 loss 3.8017 ema 2.4256 lr 2.00e-04 (1.20 s/step)
+[ft] step 70 loss 2.3612 ema 2.4146 lr 2.00e-04 (1.20 s/step)
+[ft] step 80 loss 2.4604 ema 2.3651 lr 2.00e-04 (1.20 s/step)
+[ft] step 90 loss 2.2356 ema 2.3779 lr 1.99e-04 (1.19 s/step)
+[ft] step 100 loss 2.0222 ema 2.3130 lr 1.99e-04 (1.19 s/step)
+[ft] step 110 loss 2.4470 ema 2.2797 lr 1.98e-04 (1.19 s/step)
+[ft] step 120 loss 2.1154 ema 2.2849 lr 1.97e-04 (1.19 s/step)
+[ft] step 130 loss 2.2279 ema 2.3441 lr 1.97e-04 (1.19 s/step)
+[ft] step 140 loss 1.8091 ema 2.3336 lr 1.96e-04 (1.19 s/step)
+[ft] step 150 loss 2.6331 ema 2.3235 lr 1.95e-04 (1.19 s/step)
+[ft] step 160 loss 1.8919 ema 2.2297 lr 1.93e-04 (1.19 s/step)
+[ft] step 170 loss 2.4304 ema 2.2280 lr 1.92e-04 (1.19 s/step)
+[ft] step 180 loss 2.6301 ema 2.2662 lr 1.91e-04 (1.19 s/step)
+[ft] step 190 loss 2.5335 ema 2.2638 lr 1.89e-04 (1.19 s/step)
+[ft] step 200 loss 1.6638 ema 2.2138 lr 1.88e-04 (1.19 s/step)
+[ft] step 210 loss 2.1611 ema 2.1982 lr 1.86e-04 (1.19 s/step)
+[ft] step 220 loss 3.5039 ema 2.3138 lr 1.85e-04 (1.19 s/step)
+[ft] step 230 loss 2.6093 ema 2.2884 lr 1.83e-04 (1.19 s/step)
+[ft] step 240 loss 2.2581 ema 2.3080 lr 1.81e-04 (1.19 s/step)
+[ft] step 250 loss 2.3235 ema 2.2779 lr 1.79e-04 (1.19 s/step)
+[ft] step 250 val_loss 2.2491
+[ft] step 260 loss 2.6586 ema 2.3119 lr 1.77e-04 (1.20 s/step)
+[ft] step 270 loss 2.1800 ema 2.3117 lr 1.75e-04 (1.20 s/step)
+[ft] step 280 loss 2.1721 ema 2.2208 lr 1.72e-04 (1.20 s/step)
+[ft] step 290 loss 2.1713 ema 2.2938 lr 1.70e-04 (1.20 s/step)
+[ft] step 300 loss 2.4067 ema 2.2638 lr 1.68e-04 (1.20 s/step)
+[ft] step 310 loss 2.1588 ema 2.2831 lr 1.65e-04 (1.20 s/step)
+[ft] step 320 loss 2.4428 ema 2.2218 lr 1.63e-04 (1.20 s/step)
+[ft] step 330 loss 2.2080 ema 2.1228 lr 1.60e-04 (1.20 s/step)
+[ft] step 340 loss 2.0463 ema 2.1686 lr 1.57e-04 (1.20 s/step)
+[ft] step 350 loss 1.9744 ema 2.1882 lr 1.55e-04 (1.20 s/step)
+[ft] step 360 loss 2.3177 ema 2.2552 lr 1.52e-04 (1.20 s/step)
+[ft] step 370 loss 2.2607 ema 2.2255 lr 1.49e-04 (1.20 s/step)
+[ft] step 380 loss 2.0486 ema 2.2299 lr 1.46e-04 (1.20 s/step)
+[ft] step 390 loss 2.2073 ema 2.2243 lr 1.43e-04 (1.19 s/step)
+[ft] step 400 loss 2.4008 ema 2.2568 lr 1.40e-04 (1.20 s/step)
+[ft] step 410 loss 2.1201 ema 2.2746 lr 1.37e-04 (1.20 s/step)
+[ft] step 420 loss 2.0548 ema 2.1978 lr 1.34e-04 (1.19 s/step)
+[ft] step 430 loss 2.1904 ema 2.1917 lr 1.31e-04 (1.19 s/step)
+[ft] step 440 loss 2.2616 ema 2.2512 lr 1.28e-04 (1.19 s/step)
+[ft] step 450 loss 2.2096 ema 2.2534 lr 1.25e-04 (1.19 s/step)
+[ft] step 460 loss 2.3100 ema 2.2569 lr 1.21e-04 (1.19 s/step)
+[ft] step 470 loss 2.2455 ema 2.2411 lr 1.18e-04 (1.19 s/step)
+[ft] step 480 loss 2.3538 ema 2.3013 lr 1.15e-04 (1.19 s/step)
+[ft] step 490 loss 3.0856 ema 2.2874 lr 1.12e-04 (1.19 s/step)
+[ft] step 500 loss 2.4391 ema 2.2270 lr 1.08e-04 (1.19 s/step)
+[ft] step 500 val_loss 2.1974
+[ft] step 510 loss 2.8059 ema 2.2452 lr 1.05e-04 (1.20 s/step)
+[ft] step 520 loss 2.4495 ema 2.2195 lr 1.02e-04 (1.20 s/step)
+[ft] step 530 loss 1.7514 ema 2.1568 lr 9.83e-05 (1.20 s/step)
+[ft] step 540 loss 1.9959 ema 2.1588 lr 9.50e-05 (1.20 s/step)
+[ft] step 550 loss 1.9488 ema 2.1605 lr 9.17e-05 (1.20 s/step)
+[ft] step 560 loss 2.0207 ema 2.1699 lr 8.85e-05 (1.20 s/step)
+[ft] step 570 loss 2.3852 ema 2.1876 lr 8.52e-05 (1.20 s/step)
+[ft] step 580 loss 1.6556 ema 2.1309 lr 8.19e-05 (1.20 s/step)
+[ft] step 590 loss 2.1190 ema 2.1759 lr 7.87e-05 (1.20 s/step)
+[ft] step 600 loss 2.4278 ema 2.1681 lr 7.55e-05 (1.20 s/step)
+[ft] step 610 loss 1.9563 ema 2.1524 lr 7.23e-05 (1.20 s/step)
+[ft] step 620 loss 1.9402 ema 2.0978 lr 6.91e-05 (1.20 s/step)
+[ft] step 630 loss 2.4692 ema 2.1181 lr 6.60e-05 (1.20 s/step)
+[ft] step 640 loss 2.3501 ema 2.1726 lr 6.29e-05 (1.20 s/step)
+[ft] step 650 loss 1.8742 ema 2.2286 lr 5.98e-05 (1.20 s/step)
+[ft] step 660 loss 2.5741 ema 2.2994 lr 5.68e-05 (1.20 s/step)
+[ft] step 670 loss 2.3025 ema 2.2476 lr 5.39e-05 (1.20 s/step)
+[ft] step 680 loss 2.3250 ema 2.2604 lr 5.10e-05 (1.20 s/step)
+[ft] step 690 loss 2.2913 ema 2.2449 lr 4.81e-05 (1.20 s/step)
+[ft] step 700 loss 2.3317 ema 2.2709 lr 4.53e-05 (1.20 s/step)
+[ft] step 710 loss 2.0791 ema 2.2207 lr 4.26e-05 (1.19 s/step)
+[ft] step 720 loss 2.2644 ema 2.1682 lr 3.99e-05 (1.19 s/step)
+[ft] step 730 loss 2.5114 ema 2.1977 lr 3.73e-05 (1.19 s/step)
+[ft] step 740 loss 2.1330 ema 2.1754 lr 3.47e-05 (1.19 s/step)
+[ft] step 750 loss 1.9981 ema 2.1818 lr 3.23e-05 (1.19 s/step)
+[ft] step 750 val_loss 2.1718
+[ft] step 760 loss 2.3631 ema 2.1426 lr 2.99e-05 (1.20 s/step)
+[ft] step 770 loss 1.7901 ema 2.1789 lr 2.76e-05 (1.20 s/step)
+[ft] step 780 loss 2.2472 ema 2.1903 lr 2.53e-05 (1.20 s/step)
+[ft] step 790 loss 2.0521 ema 2.1694 lr 2.32e-05 (1.20 s/step)
+[ft] step 800 loss 2.4993 ema 2.1662 lr 2.11e-05 (1.20 s/step)
+[ft] step 810 loss 2.0326 ema 2.1014 lr 1.91e-05 (1.20 s/step)
+[ft] step 820 loss 2.2638 ema 2.1592 lr 1.72e-05 (1.20 s/step)
+[ft] step 830 loss 2.0402 ema 2.2230 lr 1.54e-05 (1.20 s/step)
+[ft] step 840 loss 1.8648 ema 2.1740 lr 1.37e-05 (1.20 s/step)
+[ft] step 850 loss 2.1183 ema 2.1355 lr 1.21e-05 (1.20 s/step)
+[ft] step 860 loss 2.4644 ema 2.1737 lr 1.05e-05 (1.20 s/step)
+[ft] step 870 loss 2.4859 ema 2.1598 lr 9.10e-06 (1.20 s/step)
+[ft] step 880 loss 2.4057 ema 2.1722 lr 7.77e-06 (1.20 s/step)
+[ft] step 890 loss 2.1313 ema 2.1757 lr 6.54e-06 (1.20 s/step)
+[ft] step 900 loss 1.5734 ema 2.1192 lr 5.42e-06 (1.20 s/step)
+[ft] step 910 loss 2.5564 ema 2.1868 lr 4.40e-06 (1.20 s/step)
+[ft] step 920 loss 2.0192 ema 2.1928 lr 3.48e-06 (1.20 s/step)
+[ft] step 930 loss 1.7937 ema 2.1565 lr 2.67e-06 (1.20 s/step)
+[ft] step 940 loss 2.6705 ema 2.1561 lr 1.96e-06 (1.20 s/step)
+[ft] step 950 loss 2.1016 ema 2.1041 lr 1.36e-06 (1.20 s/step)
+[ft] step 960 loss 2.1303 ema 2.1793 lr 8.74e-07 (1.20 s/step)
+[ft] step 970 loss 1.9631 ema 2.1792 lr 4.92e-07 (1.20 s/step)
+[ft] step 980 loss 2.4718 ema 2.1553 lr 2.19e-07 (1.21 s/step)
+[ft] step 990 loss 2.3504 ema 2.1893 lr 5.47e-08 (1.21 s/step)
+[ft] step 1000 loss 2.1078 ema 2.2054 lr 0.00e+00 (1.21 s/step)
+[ft] step 1000 val_loss 2.1634
+[ft] eval clean: cer 0.8088 (116944 chars, 64 windows) cloze 0.3125 mc 0.5625
+[ft] TEST latin_p5 clean cer=0.8088 cloze=0.3125 chars/token=72.4
+[ft] eval jpeg75: cer 0.7898 (116944 chars, 64 windows) cloze 0.328125 mc 0.53125
+[ft] TEST latin_p5 jpeg75 cer=0.7898 cloze=0.328125 chars/token=72.4
