@@ -9,7 +9,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-ARMS = ("frozen", "trained", "direct")
+ARMS = ("frozen", "trained", "direct", "trained@2e-3")
+# "trained" = the amended arm (merger LR 1e-4, ROUND3.md amendment 2); "trained@2e-3" = as registered (collapsed)
 
 
 def load(paths):
@@ -18,7 +19,10 @@ def load(paths):
         for l in Path(p).read_text().splitlines():
             if l.strip():
                 r = json.loads(l)
-                rows[(r["encoding"], r["arm"])] = r          # later rows win
+                arm = r["arm"]
+                if arm == "trained" and r.get("merger_lr") is None:
+                    arm = "trained@2e-3"
+                rows[(r["encoding"], arm)] = r               # later rows win
     return rows
 
 
