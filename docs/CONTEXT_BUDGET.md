@@ -61,7 +61,7 @@ Identity32 ceilings are at DeepEncoder's 512-px geometry (200 pages); the cpt co
 | rgb3_lg_free_h4 (405) | partial (37.0% at step 500) | fades by ViT block 24 (Q1): dropped | not run | not run |
 
 Q1 (linear pixel readout of the frozen Qwen ViT, `encoder_probe/results/quick_q1/summary.md`): ink MCC final / after
-merger: rgb3_lg_pb_h5 0.48 / 0.29, lg_pb_h5 0.65 / 0.30, latin_p8 0.02 / 0.03. Latin fails this linear test and is
+merger (rgb3 codes: mean of the R/G/B channels, per-channel 0.48/0.48/0.45): rgb3_lg_pb_h5 0.47 / 0.29, lg_pb_h5 0.65 / 0.30, latin_p8 0.02 / 0.03. Latin fails this linear test and is
 still read by Qwen, so Q1 is a lower bound, not a readability result.
 
 A row counts as a real context gain only when R3-2 shows QA accuracy within the ROUND3.md margins at that cpt. Until

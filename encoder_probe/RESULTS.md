@@ -154,7 +154,7 @@ Best (lowest-CER) encoding per family; unigram-level CER on this text is ≈ 72-
 Design, encoders, geometry, pre-registered predictions (a)-(f), decision rules and the run log are in
 [ROUND2.md](ROUND2.md); the local-GPU runbook (P0/P1) is [../docs/LOCAL_GPU.md](../docs/LOCAL_GPU.md). Qwen2.5-VL was
 dropped before any of its jobs ran (user decision), so round 2 is DeepEncoder only: 512 px page (Tiny mode),
-8x8 = 64 tokens of 1280-d, so chars/token = 4096 / px²/char. Rows: `results/round2_gpu_tp{200,1000,3000,5000}/`
+8x8 = 64 tokens of 1280-d, so chars/token = 4096 / px²/char. (Units: the identity32 ceiling rows store `chars_per_token` per 32-px patch, 1/4 of these; every table here quotes chars per 64-px DeepEncoder token.) Rows: `results/round2_gpu_tp{200,1000,3000,5000}/`
 (RTX 3090, the rows used below) and `results/round2/` (cloud CPU, 200 pages, a cross-check only). Tables come from
 `python encoder_probe/experiments/analyse2.py encoder_probe/results/round2_gpu_tp1000/runs.jsonl encoder_probe/results/round2_gpu_tp200/runs.jsonl`.
 

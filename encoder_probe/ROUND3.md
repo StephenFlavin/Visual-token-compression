@@ -133,7 +133,7 @@ What it shows:
     not ceilings yet and say nothing about the < 10% guard. **The full ceilings (identity28 clean + jpeg75, 3000
     steps) are to be run locally**; the cloud resume checkpoints were deleted (Windows renders differ, so they
     would not resume onto the same pages). For comparison, identity32 ceilings (round2_gpu_tp200, 3000 steps):
-    rgb3_p6 0.01% (169 chars/32-px token), rgb3_p8 0.42% (96), lg_pb_h5 0.52% (141), lg_free_h4 0.05% (177); no
+    rgb3_p6 0.01% (169 chars/32-px token), rgb3_p8 0.42% (96), lg_pb_h5 0.52% (141), lg_free_h4 0.05% (177) [units: identity32 rows store chars per 32-px patch; RESULTS.md quotes chars per 64-px DeepEncoder token, 4x these]; no
     identity28 rows exist yet for rgb3_p*/lg_*.
     **Update (2026-11-04/05): the clean ceilings were re-run on the cloud after all (G0, run `round3_cpu_tp200`).**
     * `rgb3_lg_pb_h5` val CER (4 pages): 15.2% at step 500, 2.3% at 1000, 1.5% at 1500.
