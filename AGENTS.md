@@ -31,6 +31,7 @@ python3 -m pytest -q tests                            # ~100 tests, <15 s, no ne
 | CPU job queue (any experiments) | append single-core commands to `results/queue.txt`; `nohup python3 scripts/job_queue.py results/queue.txt [--after-phase2] > results/queue.log 2>&1 &` | backfills free cores (subtracts busy Phase-2 processes); new lines can be appended while it runs; per-job logs in `results/queue_logs/`. **Restarting it re-claims from line 1** (it does not remember finished lines): start a new queue file (`--log-dir` too) for each new round |
 | Learned glyphs (sub-project) | see `learned_glyphs/PLAN.md`; `learned_glyphs/experiments/train_joint.py`, `calibrate_channel.py`, `transfer_eval.py` | `--dry-run` prints configs; `--grid e1` for the 2x2 grid |
 | Frozen-encoder probe (sub-project) | `python3 encoder_probe/experiments/run_probe.py --print-grid --steps 3000 --run-name main > results/queue_X.txt`, then the job queue; single run: `run_probe.py --encoding latin_p8 --encoder siglip_l6 --cond jpeg75` | see `encoder_probe/PLAN.md`; ~20-30 min/run at 1 thread (+1-3 min SigLIP features); `encoder_probe/experiments/analyse.py` prints the tables |
+| Any Linux GPU runner (time-boxed, e.g. 3 h) | `docs/GPU_RUNNER.md` | hardware-agnostic: measure s/step + peak memory in the smoke, then size equal-step arms; R3-1 fine-tune is the priority |
 | Encoder probe round 2 on a local GPU | `python3 encoder_probe/experiments/run_probe2.py --device cuda --encoding latin_p32 --encoder deepencoder --cond clean --train-pages 1000 --run-name round2_gpu_tp1000` | runbook: `docs/LOCAL_GPU.md` (setup, `EP_PAGE_CACHE=1`, P0-P3 queue, `encoder_probe/experiments/analyse2.py`); `--device auto` = cuda if available |
 | Analysis | `python3 -m vbpe.analysis <runs.jsonl> [more runs.jsonl] --out DIR` | works for Phase 1, 1b and 2 rows; writes summary.md/json + plots |
 | Claude vision checks | `python3 scripts/check_claude_vision.py` | token formula, legibility, latency (~$0.5) |
@@ -92,11 +93,31 @@ Claude responses are cached in `results/cache/claude/` (keyed on model+prompt+im
 - Through SigLIP the probe overfits (train CTC ~0, test 40-60%). More training pages help (1000 pages: latin_p10 61% -> 43%). Read SigLIP numbers as upper bounds on the information lost. The last layer loses much more than layer 6 (`--encoder siglip_l6`).
 - Colour refs are raw fixed-length chunks, so they keep their boundary spaces: do not whitespace-normalise colour hypotheses (doing so adds a ~0.4% CER floor). Rows with `score_v: 2` are scored correctly.
 - `job_queue.py` only subtracts Phase-2 processes, so two queues oversubscribe the cores. To reorder a running queue, atomically rewrite only its unclaimed tail and keep the first <claimed> lines byte-identical; the claimed count is the number of `start job` lines in its log.
-- **Local GPU PC is Windows** (use Git Bash, the venv's `python`, `PYTHONUTF8=1`). Its Pillow has no raqm, so Latin layout is hinted: px²/char differs from the Linux runner by up to ~3%, test-page digests differ and `test_rgb3_unsupported_pitch` fails for this reason only. Compare local rows with local rows.
-- **Windows pages GPU memory instead of raising OOM:** 5 parallel GPU jobs stalled when VRAM filled. Run at most 3 on the 3090 (resume from checkpoints).
+- **The user's local GPU PC (RTX 3090) is Windows** (use Git Bash, the venv's `python`, `PYTHONUTF8=1`). Its Pillow has no raqm, so Latin layout is hinted: px²/char differs from the Linux runner by up to ~3%, test-page digests differ and `test_rgb3_unsupported_pitch` fails for this reason only. Compare local rows with local rows.
+- **Windows pages GPU memory instead of raising OOM:** 5 parallel GPU jobs stalled when VRAM filled. Run at most 3 on the 3090 (resume from checkpoints). On any other GPU, size concurrency from the smoke's measured peak memory (keep the sum under ~85% of VRAM); Linux raises OOM instead of stalling.
 - **DeepEncoder on CUDA must run in fp32 with TF32 off** (CUDA bf16: corr 0.9974 vs CPU fp32; fp32: 0.999998). The probe itself uses bf16 autocast on CUDA. Rows record `device`, `enc_compute`, `bf16`.
 - **Quote the row's `cer` (16 test pages), not the last `curve` point (4 pages, ~0.5 points off).** `analyse2.py` keys rows by (encoder, cond, train_pages, encoding), not steps, and the later row wins; pass the runs.jsonl files explicitly (cloud `round2/` 200-page rows collide with `round2_gpu_tp200`).
-- 3090 speeds: probe 0.015-0.06 s/step (cloud CPU ~3 s/step), DeepEncoder ~0.05 s/page, Latin rendering ~45 s per 1000 pages (cache with `EP_PAGE_CACHE=1`).
+- Measured RTX 3090 speeds (other GPUs: measure in the smoke): probe 0.015-0.06 s/step (cloud CPU ~3 s/step), DeepEncoder ~0.05 s/page, Latin rendering ~45 s per 1000 pages (cache with `EP_PAGE_CACHE=1`).
+
+- **Fine-tuning a pretrained module at the probe's LR wrecks it.** G2-lite trained Qwen's patch merger with the probe's
+  AdamW LR 2e-3: within a few hundred steps 11-76% of output dims went dead and random token pairs reached cosine
+  0.81-0.91 (pretrained 0.10), so the "trained" arm measured a collapsed merger. Use a separate LR ≤ 1e-4 for
+  pretrained parameters (`run_g2lite.py --merger-lr`, `finetune_qwen.py --lr-vision 2e-5`), and check output std,
+  dead dims and token cosine early.
+- **GridProbe reads through a pixel reconstruction, so it favours pixel-like codes.** Q1: Latin is no longer linearly
+  pixel-decodable from Qwen states after block 24, while the whole-pixel glyph codes stay pixel-like to the last block.
+  Through frozen Qwen, Latin memorises 100 pages and reads held-out text at 75% (latin_p16; run_probe2 cross-check
+  74.5%). Probe Latin numbers through VLM encoders are lower bounds; compare Latin with codes only with the LLM as
+  reader (R3-1).
+- **The cloud runner's disk allowance is fixed (~39 GB here) and filled up overnight** (0 MB free: checkpoint saves
+  and a cache concat crashed with rc=1). Checkpoints are atomic (.tmp then replace), so the last good one survives;
+  delete `*.tmp` before restarting. Diagnostic snapshots (~725 MB each), qwen25vl_h32 caches (~1.35 GB per 500
+  pages) and old checkpoints add up: keep ≥ 3 GB free and log `df`.
+- **cgroup memory limit ~15.7 GB:** the OOM killer took the largest job twice (a 5.2 GB 1185-class probe; a 5.8 GB
+  cache build). Budget peak RSS per job; label strings for 500 rgb3_lg pages alone are ~1.5 GB.
+- **After a restart, don't restart an old queue file from line 1** if it holds lines whose runs were killed and
+  superseded (job_queue re-claims every line; only finished rows and caches skip). Write a fresh queue file with
+  just the remaining runs.
 
 **Git**
 - Never `pkill -f <name>` from a shell whose own command line contains <name> (it kills itself); likewise a `while pgrep -f <name>` wait loop matches itself and never exits. Use a bracket pattern, e.g. `pgrep -f "[j]ob_queue.py"`. The bracket only helps if the plain string appears nowhere else in that command line: `pkill -f "[r]un_probe.py --encoding x"` followed by `nohup python3 run_probe.py --encoding x ...` in the same Bash call kills its own shell (exit 144). Put the pkill in its own call. A stop hook demands a clean tree. Live Phase-2 logs/curves are git-ignored while runs are going (see .gitignore); force-add them (`git add -f`) when a grid finishes. Other long jobs: snapshot-commit (`WIP:`) and push.
@@ -109,3 +130,11 @@ Claude responses are cached in `results/cache/claude/` (keyed on model+prompt+im
 - Phase 2 (decisive, K3): **KILL.** Converged CRNNs: latin (DejaVu) 1.73% CER at 7.5 px²/char; subst300 2.26% at 8.9; subst1000 5.75% at 7.8; quadrant ≥3× worse. Plain Latin wins. Use `scripts/merge_phase2.py` (longest run per scheme/em) before `vbpe.analysis`. Details in docs/RESULTS.md.
 - Learned glyph alphabet (learned_glyphs/): **qualified GO.** Converged (10.5k) learned N=300 needs 0.57x Latin's px²/char at 3% and 1% CER in the bridge (frozen bank, unchanged Phase-2 pipeline) and 0.74x / 0.63x in E2 transfer; the gain survives harsh (h7: 3.5% vs DejaVu 43%). Whole-pixel banks: 0.88x / 0.77x. The densest banks are brittle on held-out degradations (55–68% CER). Judge banks by the bridge, not joint CER. Train ≥10.5k steps: tokens look useless at 3.5k. `vbpe.analysis` keys rows by em: set `budget=px_per_char` for banks with non-default cell widths. Untested: VLM encoders. Details in docs/RESULTS.md.
 - Frozen-encoder probe (encoder_probe/): **colour pixels and RGB overlay dead for frozen-encoder VLMs; learned glyphs should be whole-pixel.** Round 1 (SigLIP-B/16): with raw pixels the probe reads 1x1 colour blocks at 0.06% CER (256 chars/token), and colour survives JPEG q75 from 2x2 blocks up; through SigLIP no colour encoding gets below 62% CER, grey-level banks lose their ceiling lead (layer 6: lg_free_h4 76% vs lg_pb_h4 55%), and Latin needs ~2 chars/token for 5% CER at layer 6. Round 2 (DeepSeek-OCR's DeepEncoder, 512 px, 64 tokens; Qwen dropped; 1000 train pages, clean and JPEG q75): identity32 ceilings are < 3% for every encoding (guard passes), but through the encoder colour blocks (71-73%), rgb3 (83.5%) and both bank families (lg_free_h4 82.2% vs lg_pb_h5 82.4%) all sit at the floor, so colour/RGB is dead (P2/P3 gated off) and grey-level banks are not supported. Only latin_p32 (8.5 chars/token) is readable (19%, JPEG costs nothing); latin_p24 (15.4) and denser are at the floor, so no family reaches 10% and the decision rules apply only in weaker form. The probe is the limit for Latin (latin_p32 85% -> 15% from 200 to 5000 pages; latin_p16 ~74% and cannot fit its training pages), so absolute levels are upper bounds on the loss; decisions rest on same-probe comparisons. Details in encoder_probe/RESULTS.md.
+- Round 3 on CPU (2026-11-04/05, encoder_probe/ROUND3.md): **moonshot page readable, encoder is the open question.**
+  * G0: `rgb3_lg_pb_h5` (322 chars/Qwen token) read from raw pixels at 1.07% CER on 16 test pages.
+  * Q1 (linear readout of frozen Qwen ViT): the whole-pixel glyph codes stay pixel-like to the last block with no
+    colour-channel collapse; every code collapses linearly at the 2x2 merger. The grey-level `rgb3_lg_free_h4` fades
+    early (dropped).
+  * G2-lite (500 pages, CPU): the probe reads the moonshot better from pre-merger states than through the merger, but
+    no arm is near a usable level, and the probe can't measure Latin through Qwen at this scale.
+  * The fair test is R3-1 on a GPU (docs/GPU_RUNNER.md).

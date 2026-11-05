@@ -1,3 +1,35 @@
+# Handoff: cloud CPU runner -> any GPU runner (2026-11-05, morning)
+
+**For a GPU session of any hardware, start with [GPU_RUNNER.md](GPU_RUNNER.md)** (a time-boxed plan; measure, then
+size). The Windows/3090 runbook is [LOCAL_GPU.md](LOCAL_GPU.md). Read AGENTS.md first: it has the round-3 gotchas
+(merger LR collapse, probe bias, disk and memory limits). Design, pre-registrations and amendments are in
+[encoder_probe/ROUND3.md](../encoder_probe/ROUND3.md); the evidence table is in [CONTEXT_BUDGET.md](CONTEXT_BUDGET.md).
+
+**State of the evidence for the moonshot (`rgb3_lg_pb_h5`, 322 chars per Qwen token):**
+| Gate | Result | Where |
+|---|---|---|
+| G0: raw-pixel ceiling (identity28, 200 pages, CPU) | **1.07% CER**, passes the 3% go bar | `encoder_probe/results/round3_cpu_tp200/` |
+| Q1: linear pixel readout of the frozen Qwen ViT | glyph codes stay pixel-like to the last block, no channel collapse; everything collapses linearly at the merger | `encoder_probe/results/quick_q1/summary.md` |
+| G2-lite: frozen / trained / no merger (500 pages, 3000 steps, CPU) | in progress at hand-off; the no-merger arm leads by ~14 points at equal steps, no arm near usable | `encoder_probe/results/g2lite/` |
+| G3 / R3-1: fine-tune Qwen, LLM as reader | **not run: the next step, needs a GPU** | GPU_RUNNER.md |
+
+**What went wrong overnight, and the fixes (details in ROUND3.md amendments):**
+* **The trained-merger arm collapsed at the shared LR 2e-3.** Amendment 2 sets merger LR 1e-4, chosen on collapse stats,
+  never on test CER. The as-registered latin_p8 trained row (77.8%) is kept and labelled.
+* **GridProbe can't read Latin through Qwen at CPU-scale data** (latin_p16: 75%; cross-check 74.5%). So the
+  comparative "1.5x vs pushed Latin" rule can't be applied with the probe; it moves to R3-1.
+* **Amendment 1 (user):** sweep Latin to ~100 chars/token in G2/G3 (p8 ~28, p6 ~51, p5 ~72, p4 ~110 after its ceiling).
+* **Ops:** 2 container restarts, a full disk, 2 OOM kills. All recovered from checkpoints; no finished row was lost.
+
+**Open items, in priority order:**
+1. R3-1 short arms on a GPU: latin_p8, moonshot, latin_p5 at equal steps (GPU_RUNNER.md).
+2. G2-lite on a GPU at 1000+ pages. `run_g2lite.py` is CPU-only: port it with `--device`, or use `run_probe2.py
+   --encoder qwen25vl` for the frozen arm.
+3. Latin p6/p4 points; lg_pb_h5 arms; moonshot levers (grid-aligned 4/7 px pitch, merger redesign): ROUND3.md.
+4. R3-2 long-context benchmark, once a fine-tuned code passes G3.
+
+---
+
 # Handoff: cloud runner -> local RTX 3090 (2026-11-04, evening)
 
 The cloud runner is idle; nothing runs there. Everything below is on `claude/validation-harness`.

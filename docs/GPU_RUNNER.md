@@ -1,0 +1,111 @@
+# GPU runner: 3-hour plan (any Linux + NVIDIA GPU)
+
+For a rented or borrowed Linux machine with one NVIDIA GPU, for a limited time (planned: about 3 h). Nothing here
+assumes a particular GPU or CPU: measure first, then size the run. The Windows/RTX 3090 specifics live in
+[LOCAL_GPU.md](LOCAL_GPU.md); the design is in [encoder_probe/ROUND3.md](../encoder_probe/ROUND3.md); current state
+and open items are in [HANDOFF.md](HANDOFF.md). Every time and memory figure below is an **estimate** unless it says
+measured.
+
+## Goal for the session
+The one test the CPU runner cannot do: **R3-1 (gate G3)**, fine-tuning Qwen2.5-VL-3B so its own LLM reads each code.
+The comparison is plain Latin against the moonshot `rgb3_lg_pb_h5` at an identical budget. The CPU probe can't measure
+Latin through Qwen at feasible data sizes (HANDOFF.md), so the LLM-as-reader result is the first fair comparison.
+In about 3 h: setup, smoke, then short arms at equal steps. A short result is a signal, not a verdict. Label it so.
+
+## 0. Before you start (5 min)
+* Check `git push` works from the runner. The machine is ephemeral: anything not pushed is lost. If push doesn't
+  work, copy `encoder_probe/results/` out before the session ends.
+* Python ≥ 3.11, CUDA driver ≥ 12.x, **~40 GB free disk**:
+  * Qwen weights 7.5 GB;
+  * page caches ~1 GB per 1000 pages per code;
+  * finetune checkpoints ~1.75 GB each, adapters ~0.6 GB each.
+* Note the hardware in your first commit message:
+  ```bash
+  nvidia-smi --query-gpu=name,memory.total --format=csv; nproc; free -g; df -h .
+  python3 -c "import torch;print(torch.cuda.get_device_name(0), torch.cuda.is_bf16_supported())"
+  ```
+  **bf16 must be supported** (Ampere or newer: A10/A100/L4/L40/H100/RTX 30xx+). On a pre-Ampere GPU (T4, V100),
+  stop and report: the fine-tune assumes bf16.
+
+## 1. Setup (~20-30 min, mostly downloads; run the steps in parallel where marked)
+```bash
+git clone https://github.com/StephenFlavin/visual-bpe && cd visual-bpe && git checkout claude/validation-harness
+python3 -m venv .venv && . .venv/bin/activate
+pip install -r requirements.txt
+pip install --index-url https://download.pytorch.org/whl/cu128 torch   # pick the wheel your driver supports
+pip install "peft>=0.17"
+scripts/fetch_fonts.sh                                   # needs raw.githubusercontent.com
+ls /usr/share/fonts/truetype/dejavu/ || sudo apt-get install -y fonts-dejavu-core   # DejaVu is required
+export EP_TRAIN_R2_CAP=400000000 EP_PAGE_CACHE=1         # BEFORE the data build: the moonshot pages need ~82M train chars
+python3 scripts/build_data.py                            # WikiText-103 -> data/ (~5 min)
+python3 -m pytest -q encoder_probe/tests                 # ~2 min, CPU only (if a test fails, fix or report before GPU work)
+# (parallel) full Qwen2.5-VL-3B weights, ~7.5 GB, pinned revision; expect 3754622976 parameters:
+python3 -c "import torch; from encoder_probe.ep.qwen_ft import load_model; m,t=load_model(torch.device('cuda')); print(sum(p.numel() for p in m.parameters()))"
+```
+**(parallel) Pre-render the training pages on the CPU.** This is CPU-bound and single-threaded per job: the moonshot
+takes ~1 s/page, so ~17 min for 1000 pages; Latin ~1 min. Start it as soon as `data/` exists, with one job per code:
+```bash
+for e in latin_p8 latin_p5 rgb3_lg_pb_h5; do
+  nohup python3 encoder_probe/experiments/run_probe2.py --pages-only --encoding $e --encoder qwen25vl --train-pages 1000 > results/pages_$e.log 2>&1 &
+done
+```
+Linux renders with raqm: this matches the cloud runner's pages (the Windows PC's Latin pages differ by up to ~3% px²/char).
+
+## 2. Smoke (~10-15 min). Do not skip: the fine-tune has never run with real weights on a GPU
+```bash
+python3 encoder_probe/experiments/finetune_qwen.py --encoding latin_p8 --smoke        # 500 steps, 100 train / 4 test pages
+```
+Check:
+* the log shows `device=cuda bf16=True`;
+* the loss falls;
+* generation returns text;
+* write down **s/step** and **peak GPU memory** (`nvidia-smi`).
+
+If it fails, fix minimally, keep the CPU tests green, commit the fix, rerun. If it OOMs, add `--micro-batch 2`
+(same effective batch), and then use it for **every** arm.
+
+## 3. Size the run from the smoke
+* Time left for training: `T_min = (minutes remaining) - 25` (eval ~5-10 min per arm + write-up + push margin).
+* Arms, in priority order: `latin_p8` (~28 chars/token), `rgb3_lg_pb_h5` (moonshot, 322), `latin_p5` (~72, the
+  pushed Latin baseline), then `lg_pb_h5` (~107) if time allows.
+* Jobs at once: 1 finetune per GPU. Two only if peak memory from the smoke × 2 < 85% of VRAM.
+* Steps per arm, **identical for all arms** (fairness guard: same steps, batch, LRs, pages, every flag):
+  `STEPS = floor(T_min*60 / (n_arms_sequential * s_per_step) / 250) * 250`, minimum 1000. If that gives < 1000 for 3
+  arms, run 2 arms (latin_p8 + moonshot).
+
+## 4. Run
+```bash
+RUN=round3_ft_gpu3h   # one run name for all arms; rows must share one fair_hash
+for e in latin_p8 rgb3_lg_pb_h5 latin_p5; do
+  echo "python3 encoder_probe/experiments/finetune_qwen.py --encoding $e --steps $STEPS --run-name $RUN"
+done > results/queue_gpu3h.txt
+# keep EP_PAGE_CACHE=1 EP_TRAIN_R2_CAP=400000000 exported in this shell: the jobs must read the pre-rendered pages
+nohup python3 scripts/job_queue.py results/queue_gpu3h.txt --cores 1 --log-dir results/queue_logs/gpu3h_1 > results/queue_gpu3h_1.log 2>&1 &
+nohup scripts/autosave_results.sh 600 > results/autosave.log 2>&1 &     # commits+pushes runs.jsonl every 10 min
+```
+* `--cores 1` is the number of concurrent GPU jobs; use 2 only per section 3.
+* Resume after a crash: start the queue again with a **new** `--log-dir`. Finished rows are skipped, and a job continues
+  from its last checkpoint (every 250 steps). Never edit a running queue except by atomically rewriting its unclaimed
+  tail (AGENTS.md).
+* Watch: `tail -f results/queue_logs/gpu3h_1/*.log`, plus `nvidia-smi` and `df -h .` (keep ≥ 3 GB free; the CPU
+  runner died of a full disk once).
+* Optional, only if a GPU slot and memory are free: the frozen-Qwen probe for the moonshot (R3-0),
+  `run_probe2.py --device cuda --encoding rgb3_lg_pb_h5 --encoder qwen25vl --cond clean --train-pages 1000 --steps 10000 --run-name round3_qwen_tp1000`.
+  It measures the absolute question only: GridProbe can't read Latin through Qwen at these page counts.
+
+## 5. Results and hand-back (last ~20 min, whatever finished)
+* Rows: `encoder_probe/results/round3_ft_gpu3h/runs.jsonl`, one per eval cond, with `cer`, `cloze_acc`, `mc_acc`,
+  `chars_per_token`, `curve`, `s_per_step`, `peak_gpu_bytes`, `fair_hash`. Check that all rows share one `fair_hash`.
+* Read against ROUND3.md: G3 asks whether the best code's density at < 3% CER is ≥ 1.5x the best Latin density at
+  < 3% CER. Report CER per arm with chars/token. Label the result **short-budget (STEPS steps)**: 5000+ steps was the
+  plan, and a code that is still falling is undecided, not failed.
+* Commit and push:
+  ```bash
+  git add encoder_probe/results/round3_ft_gpu3h/ && git add -f results/queue_logs/gpu3h_1
+  git commit -m "Round 3 GPU (3 h, <GPU name>): R3-1 short arms, STEPS steps"
+  git pull --rebase origin claude/validation-harness && git push origin claude/validation-harness
+  ```
+* Add a dated "GPU runner session" note to HANDOFF.md: hardware, measured s/step and memory, what ran, results, what
+  was not run.
+* Adapters (`encoder_probe/cache/r3_adapters/*.pt`, ~0.6 GB each) are git-ignored. Copy them off the machine if R3-2
+  should reuse them; otherwise they're lost with the runner.

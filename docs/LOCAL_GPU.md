@@ -1,4 +1,6 @@
-# Running the encoder-probe experiments on a local GPU (RTX 3090 + Ryzen 9 5900X)
+# Running the encoder-probe experiments on the local Windows PC (RTX 3090 + Ryzen 9 5900X)
+
+For any other GPU machine (rented, cloud, unknown hardware) start from [GPU_RUNNER.md](GPU_RUNNER.md) instead.
 
 The remaining round-2 encoder-probe work (`encoder_probe/ROUND2.md`) is slow on the 4-vCPU cloud runner. This is
 the runbook for a Linux PC with an RTX 3090 (24 GB, Ampere, native bf16) and a Ryzen 9 5900X (12 cores / 24 threads,
