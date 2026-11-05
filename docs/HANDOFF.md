@@ -22,7 +22,8 @@ pre-render (1000 train pages): latin_p8 3 min, latin_p5 8 min, moonshot 11 min (
 | rgb3_lg_pb_h5 (moonshot) | 321.6 | jpeg75 | 87.6% | 88.6% | 0.19 | 0.23 | 0.38 | 0.31 | |
 | latin_p5 | 72.4 | clean | 80.9% | (none; latin_p8's 88.5%) | 0.31 | (0.22) | 0.56 | (0.25) | 2.163 (no blind run) |
 | latin_p5 | 72.4 | jpeg75 | 79.0% | | 0.33 | | 0.53 | | |
-| lg_pb_h5 | ~107 | clean | running at hand-off | | | | | | |
+| lg_pb_h5 | 107.3 | clean | 78.4% | (none) | 0.17 | | 0.31 | | 2.274 (no blind run) |
+| lg_pb_h5 | 107.3 | jpeg75 | 78.5% | | 0.17 | | 0.34 | | |
 
 * **latin_p5 reads a little:** it has no blind control of its own (5 jobs fitted, a 6th didn't). Against latin_p8's blind floor
   (same text targets) its cloze/MC (0.31/0.56 vs 0.22/0.25) and val loss (2.16, still falling, vs ~2.48-2.52 for
@@ -44,7 +45,10 @@ its floor after 1000 steps is undecided, not failed, but its loss showed no move
 
 **Extra (user-approved, end of session):** lg_pb_h5 (single-channel learned glyph bank, ~107 chars/token) at the
 same settings and fair_hash, started 13:32 while the write-up ran, to ask whether the moonshot fails because of
-density (322) or because of the glyph code itself. Row above if it finished in time.
+density (322) or because of the glyph code itself. It finished (rows above, no blind run): its val loss fell below
+the ~2.5 blind floors while the moonshot's did not, and its CER is a few points under latin_p5's, but cloze/MC are at
+chance. A weak hint that density, not the glyph code alone, is what stalls the moonshot; it needs its own blind
+control and longer training before it means anything.
 
 **What did not run:** 5000-step arms; latin_p5 blind control; latin_p6, rgb3_p8; R3-2; the optional frozen-Qwen probe (R3-0);
 G2 at scale (section 6). Adapters (`encoder_probe/cache/r3_adapters/`, ~0.56 GB each) were not copied off the

@@ -9,3 +9,5 @@
 [queue] start job005 (ext busy=0, running=1): python3 encoder_probe/experiments/finetune_qwen.py --encoding latin_p5 --steps 1000 --run-name round3_ft_gpu3h
 [queue] done rc=0: python3 encoder_probe/experiments/finetune_qwen.py --encoding latin_p5 --steps 1000 --run-name round3_ft_gpu3h
 [queue] start job006 (ext busy=0, running=1): python3 encoder_probe/experiments/finetune_qwen.py --encoding lg_pb_h5 --steps 1000 --run-name round3_ft_gpu3h
+[queue] done rc=0: python3 encoder_probe/experiments/finetune_qwen.py --encoding lg_pb_h5 --steps 1000 --run-name round3_ft_gpu3h
+[queue] empty, exiting
