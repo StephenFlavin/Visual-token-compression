@@ -1,0 +1,2 @@
+# G2-lite, after moonshot frozen exits: amended latin_p8 trained (merger LR 1e-4; a lower bound, probe limitation), only if that happens by 07:15 UTC
+bash -c 'while pgrep -f "^python3 encoder_probe/experiments/[r]un_g2lite.py --arm frozen --encoding rgb3_lg_pb_h5" >/dev/null; do sleep 30; done; if [ "$(date -u +%H%M)" -le 0715 ]; then python3 encoder_probe/experiments/run_g2lite.py --arm trained --encoding latin_p8 --steps 3000 --train-pages 500 --run-name g2lite --threads 1 --merger-lr 1e-4; else echo "too late: skipped"; fi'
