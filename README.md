@@ -14,7 +14,7 @@ RGB overlays and learned glyph alphabets) and compares them with plain text rend
 > | **Settled** | **Hand-picked chunk glyphs (Phases 1-2): KILL.** With Claude, PP-OCR and trained CRNN readers, plain Latin wins. |
 > | | **Learned glyph alphabet, pixel space: qualified GO.** With a trained reader it needs about 0.57x Latin's px²/char at 3% CER. |
 > | | **Frozen VLM encoders (SigLIP, DeepSeek-OCR's DeepEncoder): every dense code is lost.** Only low-density Latin (8.5 chars/token) reads through DeepEncoder. |
-> | | **Qwen2.5-VL-3B, raw pixels and frozen:** the moonshot code (322 chars/token) reads from raw pixels at 1.07% CER, but collapses at the ViT's 2x2 merger. A CPU probe's verdict: "the ViT output is the wall at this budget". |
+> | | **Qwen2.5-VL-3B, raw pixels and frozen:** the moonshot code (322 chars/token) reads from raw pixels at 1.07% CER, but its pixel detail collapses (linearly) at the ViT's 2x2 merger. A CPU probe's verdict: "the ViT output is the wall at this budget". |
 > | **Open** | **R3-1, LoRA fine-tune of Qwen's LLM (1000 steps):** Latin at 28 chars/token is read (55% CER vs 88.5% blind). Latin at 72 chars/token, learned glyphs (107) and the moonshot (322) sit at their blind floors. Gate G3 is undecidable: no arm is near 3% CER. |
 > | **Next** | Latin p8/p6/p5 at 5000 steps, each with a blind control. A vision-side diagnostic for the glyph codes before any long run. R3-2 (long-context QA at equal KV cache) only if G3 passes. |
 
@@ -22,8 +22,8 @@ RGB overlays and learned glyph alphabets) and compares them with plain text rend
 * **CER:** character error rate (edit distance / reference characters).
 * **px²/char:** image area per source character (lower is denser).
 * **Chars per vision token:** characters carried by one image token of a given encoder (higher is denser).
-* **Blind control:** the same fine-tune with the page image hidden. Its scores are the floor that the model's
-  language prior reaches on its own.
+* **Blind control:** the same fine-tune with the images shuffled between pages, so the image says nothing about
+  the answer. Its scores are the floor that the model's language prior reaches on its own.
 
 ## The codes
 

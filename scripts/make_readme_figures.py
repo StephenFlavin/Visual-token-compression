@@ -600,8 +600,8 @@ def chart_r3_1():
                                      (axes[1], "mc_acc", "Multiple-choice accuracy (higher is better)", "{:.2f}", 1.0)):
         rv = [real[a][key] for a in arms]
         bv = [blind[a][key] if a in blind else np.nan for a in arms]
-        ax.bar(x - w / 2 - 0.01, rv, w, color=FAMILY["latin"][1], label="reads the page", zorder=2)
-        ax.bar(x + w / 2 + 0.01, bv, w, color=BLIND_C, label="blind control (same training, no page)", zorder=2)
+        ax.bar(x - w / 2 - 0.01, rv, w, color=FAMILY["latin"][1], label="real page images", zorder=2)
+        ax.bar(x + w / 2 + 0.01, bv, w, color=BLIND_C, label="blind control (same training, images shuffled between pages)", zorder=2)
         for i, (a, b) in enumerate(zip(rv, bv)):
             ax.text(x[i] - w / 2 - 0.01, a + 0.015, fmt.format(a), ha="center", va="bottom", fontsize=8.5,
                     color=INK_1)
