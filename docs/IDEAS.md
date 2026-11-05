@@ -137,6 +137,10 @@ only, so not blocked by the VLM results.
 
 **Status:** recorded; gated on G0 (moonshot identity28 ceilings), Q1 (layer-wise linear readout) and R3-1 on the 3090.
 
+**Status (2026-11-05, later): own-encoder plan written up ([OWN_ENCODER.md](OWN_ENCODER.md)).** Its Stage 0
+asks the 2b question first (text-side compression ceiling into Qwen's frozen LLM), because it caps any 2a pixel
+encoder and sets its density target. Code ready, pre-registered, to run on a rented RTX 4090.
+
 **Status (2026-11-05): ladder step 2 applies, not yet decided.** G0 passed (moonshot 1.07% from raw pixels); Q1
 and G2-lite put the loss in the ViT output / merger ("ViT output is the wall at this budget"); R3-1 at 1000 steps
 reads latin_p8 (28 chars/token, 55% CER vs blind 88.5%) but leaves every denser code at its blind floor. Next: a

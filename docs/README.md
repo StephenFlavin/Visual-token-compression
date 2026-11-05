@@ -5,6 +5,8 @@ overview is the top-level [README.md](../README.md); how to run things and the g
 
 ## Current status
 * [HANDOFF.md](HANDOFF.md): status table, where the rows are, open items, the prompt for the next GPU session.
+* [OWN_ENCODER.md](OWN_ENCODER.md): training our own encoder for the moonshot: what it involves, GPUs, time and
+  cost, compute grants, and Stage 0 (text-side compression ceiling), pre-registered with a RunPod prompt.
 * [ANALYSIS.md](ANALYSIS.md): the results measured against blind controls (significance, information per vision
   token, where the glyph codes lose their information), an outlook per code and what to run next.
 

@@ -35,6 +35,11 @@ losses equal its blind run's to 3 decimals. No arm is near 3% CER, so G3 can't b
 * R3-1: `encoder_probe/results/round3_ft_gpu3h/` and `round3_ft_gpu3h_blind/` (one row per eval cond, clean and
   jpeg75); logs `results/queue_logs/gpu3h_{1,2}/`. The LoRA adapters were lost with the instance; nothing depends on them.
 
+## Own encoder, Stage 0 (ready to run on a rented RTX 4090)
+The text-side compression ceiling: how many chars per slot a learned encoder can pack into Qwen's frozen LLM.
+It sets the density target for an own encoder. Design (pre-registered), costs, runbook and the RunPod prompt:
+[OWN_ENCODER.md](OWN_ENCODER.md). Code: `encoder_probe/experiments/text_compress.py` (CPU-tested). ~6-7 h, ~$3-5.
+
 ## Open items, in priority order
 Reordered 2026-11-05 after [ANALYSIS.md](ANALYSIS.md): R3-1 trained too little of the ViT to test the glyph codes, and
 latin_p8 is underfitting, so the recipe is tested before the long runs.

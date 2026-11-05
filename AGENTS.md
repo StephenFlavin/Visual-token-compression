@@ -41,6 +41,7 @@ regenerates from the commands above.
 | Round 3 G2-lite: probe on Qwen ViT states | `python3 encoder_probe/experiments/run_g2lite.py --print-queue` (arms frozen / trained / direct = no merger, plus blind) | `--merger-lr 1e-4`; `analyse_g2lite.py`; rows `encoder_probe/results/g2lite*/` |
 | Round 3 R3-2: long-context QA (GPU) | `python3 encoder_probe/experiments/longctx_bench.py --inputs text latin_p8 --lengths 10000 --tasks needle cloze [--adapter <finetune result>.pt]` | not run yet; `docs/LOCAL_GPU.md` §8 |
 | Analysis | `python3 -m vbpe.analysis <runs.jsonl> [more] --out DIR` | Phase 1, 1b and 2 rows; summary.md/json + plots. Phase 2: run `scripts/merge_phase2.py` first |
+| Own encoder, Stage 0: text-side compression ceiling (GPU) | `python3 encoder_probe/experiments/text_compress.py --ratio 16 --smoke`, then `--ratio R --steps 3000 --run-name stage0` for R in 4 80 16 32 8 | ICAE-style: LLM+LoRA encoder -> m slots -> frozen LLM rebuilds the text; blind = other window's slots; design, rules and runbook `docs/OWN_ENCODER.md`; tests `encoder_probe/tests/test_text_compress.py` |
 | R3-1 analysis vs blinds | `python3 encoder_probe/experiments/analyse_r3.py` | exact tests, val-loss gain, bits per vision token -> `encoder_probe/results/analysis_r3/summary.md`, `encoder_probe/img/r31_info.png`; written up in `docs/ANALYSIS.md` |
 | Claude vision checks | `python3 scripts/check_claude_vision.py` | token formula, legibility, latency (~$0.5) |
 
@@ -88,6 +89,10 @@ model+prompt+image bytes), so re-runs are free.
 - Through SigLIP the probe overfits (train CTC ~0, test 40-60%); more pages help. SigLIP's last layer loses much more than layer 6 (`--encoder siglip_l6`). The probe is the limit for Latin, so absolute probe CERs are upper bounds on the loss: decide on same-probe comparisons.
 - **GridProbe reads through a pixel reconstruction, so it favours pixel-like codes.** Latin stops being pixel-decodable from Qwen after block 24; through frozen Qwen it reads held-out Latin at ~75% (latin_p16). Probe Latin numbers through VLM encoders are lower bounds; compare Latin with codes only with the LLM as reader (R3-1).
 - **Above ~75% CER, CER can't separate partial reading from none** (unrelated fluent text scores ~80%). Judge fine-tune arms first on the val-loss gain vs their blind run (same targets, paired, noise ~0.005 nats/token), then MC; `encoder_probe/experiments/analyse_r3.py` computes both with exact tests.
+- **peft's `disable_adapter()` context does not switch off LoRA when the inner modules are called directly, and
+  gradient checkpointing recomputes layers in backward under whatever adapter state is current then.**
+  `text_compress.py` toggles the LoRA layers itself (`AdapterSwitch`) and passes a checkpoint `context_fn` that
+  restores the forward-time state (tested: same gradients with and without checkpointing).
 - **Every probe or fine-tune arm needs its own blind control** (images/features swapped between pages): floors differ by code (R3-1: latin_p5 77.8%, latin_p8 88.5% CER) and an LLM writes fluent English from any image.
 - Colour refs are raw fixed-length chunks with boundary spaces: do not whitespace-normalise colour hypotheses (~0.4% CER floor). Rows with `score_v: 2` are scored correctly.
 - **Quote the row's `cer` (16 test pages), not the last `curve` point (4 pages).** `analyse2.py` keys rows by (encoder, cond, train_pages, encoding), later row wins: pass runs.jsonl files explicitly (`round2/` 200-page rows collide with `round2_gpu_tp200`).
