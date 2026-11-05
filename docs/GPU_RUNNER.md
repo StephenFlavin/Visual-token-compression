@@ -113,14 +113,14 @@ nohup scripts/autosave_results.sh 600 > results/autosave.log 2>&1 &     # commit
     deletions).
 
 ## 5. Results and hand-back (last ~20 min, whatever finished)
-* Rows: `encoder_probe/results/round3_ft_gpu3h/runs.jsonl`, one per eval cond, with `cer`, `cloze_acc`, `mc_acc`,
+* Rows: `encoder_probe/results/round3_ft_gpu3h/runs.jsonl` (blind controls: `round3_ft_gpu3h_blind/`), one per eval cond, with `cer`, `cloze_acc`, `mc_acc`,
   `chars_per_token`, `curve`, `s_per_step`, `peak_gpu_bytes`, `fair_hash`. Check that all rows share one `fair_hash`.
 * Read against ROUND3.md: G3 asks whether the best code's density at < 3% CER is ≥ 1.5x the best Latin density at
   < 3% CER. Report CER per arm with chars/token. Label the result **short-budget (STEPS steps)**: 5000+ steps was the
   plan, and a code that is still falling is undecided, not failed.
 * Commit and push:
   ```bash
-  git add encoder_probe/results/round3_ft_gpu3h/ && git add -f results/queue_logs/gpu3h_1
+  git add encoder_probe/results/round3_ft_gpu3h*/ && git add -f results/queue_logs/gpu3h_1
   git commit -m "Round 3 GPU (3 h, <GPU name>): R3-1 short arms, STEPS steps"
   git pull --rebase origin claude/validation-harness && git push origin claude/validation-harness
   ```
