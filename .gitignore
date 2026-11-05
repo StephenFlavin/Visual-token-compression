@@ -24,3 +24,13 @@ results/autosave.log
 # encoder_probe round 2: partial VLM weights and cached frozen-encoder tokens
 encoder_probe/cache/
 results/memlog/
+# loose top-level logs in results/ (finished rounds' logs are kept in results/archive/)
+results/*.log
+# generic clutter: interrupted atomic saves, venvs, editor/OS files, notebooks
+*.tmp
+nohup.out
+.venv/
+venv/
+*.egg-info/
+.ipynb_checkpoints/
+.DS_Store
