@@ -78,11 +78,13 @@ class Front(nn.Module):
         raw train tokens (fp32), so the frozen arm does not run the merger twice."""
         s = torch.zeros(self.d, dtype=torch.float64)
         s2 = torch.zeros(self.d, dtype=torch.float64)
-        n, kept = 0, []
+        n, kept = 0, None
         for i in range(0, len(h_train), batch):
             r = self.raw(h_train[i:i + batch])
-            if keep:
-                kept.append(r)
+            if keep:   # preallocated: no second copy at the end
+                if kept is None:
+                    kept = torch.empty((len(h_train), *r.shape[1:]), dtype=r.dtype)
+                kept[i:i + len(r)] = r
             x = r.double().reshape(-1, self.d)
             s += x.sum(0)
             s2 += (x * x).sum(0)
@@ -91,7 +93,7 @@ class Front(nn.Module):
         var = (s2 / n - mu * mu).clamp_min(0) * n / max(1, n - 1)
         self.mu.copy_(mu.float())
         self.sd.copy_(var.sqrt().float().clamp_min(1e-3))
-        return torch.cat(kept) if keep else None
+        return kept
 
     def forward(self, h: torch.Tensor) -> torch.Tensor:
         return (self.raw(h) - self.mu) / self.sd

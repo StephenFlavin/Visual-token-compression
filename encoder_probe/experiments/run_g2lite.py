@@ -231,6 +231,12 @@ def main(argv=None) -> int:
     split, window, vision_fn, merger_fn = towers(a)
     enc, tr, te = TC.split_pages(a.encoding, S, a.train_pages, a.test_pages, cache=True)
     t_pages = time.time() - t0
+    classes = enc.classes   # CTC targets first: frees the label strings before the big tensors exist
+    cidx = {ch: i + 1 for i, ch in enumerate(classes)}
+    tgt = [[torch.tensor([cidx[x] for x in lab], dtype=torch.long) for lab in p.labels] for p in tr]
+    for p in tr:   # the label strings of 500 dense pages hold ~1.5 GB (rgb3_lg: ~560 two-char labels per line)
+        p.labels = p.refs = None
+    gc.collect()
     dh, dt, waited = get_hidden(a, a.encoding, tr, te, split, vision_fn)
     h_tr, h_te = dh["train"], dh["test"]
     N, c = h_tr.shape[1:]
@@ -248,11 +254,10 @@ def main(argv=None) -> int:
         del chk_front, mt, ref
     front = Front(a.arm, None if a.arm == "direct" else merger_fn(), reverse, c)
     if a.arm == "frozen":
-        raw_tr = front.fit_standardiser(h_tr, keep=True)
+        tok_tr = front.fit_standardiser(h_tr, keep=True)
         with torch.no_grad():
-            tok_tr = (raw_tr - front.mu) / front.sd
+            tok_tr.sub_(front.mu).div_(front.sd)   # in place: one 1 GB copy for 500 pages
             tok_te = torch.cat([front(h_te[i:i + 4]) for i in range(0, len(h_te), 4)])
-        del raw_tr
     else:
         front.fit_standardiser(h_tr)
         tok_tr, tok_te = h_tr, h_te
@@ -262,12 +267,6 @@ def main(argv=None) -> int:
     for p in tr:
         p.img = None
     t_feat = time.time() - t0
-    classes = enc.classes
-    cidx = {ch: i + 1 for i, ch in enumerate(classes)}
-    tgt = [[torch.tensor([cidx[x] for x in lab], dtype=torch.long) for lab in p.labels] for p in tr]
-    for p in tr:   # the label strings of 500 dense pages hold ~1.5 GB (rgb3_lg: ~560 two-char labels per line)
-        p.labels = p.refs = None
-    gc.collect()
     chars = sum(p.n_chars for p in te)
     ppc = S * S * len(te) / max(1, chars)
     cpt = chars / (len(te) * G * G)
