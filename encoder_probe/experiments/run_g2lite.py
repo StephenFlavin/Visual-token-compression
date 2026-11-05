@@ -213,13 +213,15 @@ def main(argv=None) -> int:
     out = Path(a.out_root) / a.run_name
     out.mkdir(parents=True, exist_ok=True)
     key = dict(encoding=a.encoding, arm=a.arm, steps=a.steps, train_pages=a.train_pages, seed=a.seed)
+    if a.merger_lr is not None and a.arm == "trained":   # amended trained arm: its own row key and checkpoint
+        key["merger_lr"] = a.merger_lr
     rows = out / "runs.jsonl"
     if rows.exists():
         for l in rows.read_text().splitlines():
             if l.strip() and all(json.loads(l).get(k) == v for k, v in key.items()):
                 print(f"[g2] skip, done: {key}")
                 return 0
-    ck = cache_root / "ckpt" / f"g2lite__{a.run_name}__{a.arm}__{a.encoding}__{a.steps}__tp{a.train_pages}__s{a.seed}.pt"
+    ck = cache_root / "ckpt" / f"g2lite__{a.run_name}__{a.arm}__{a.encoding}__{a.steps}__tp{a.train_pages}__s{a.seed}{"__mlr%g" % a.merger_lr if "merger_lr" in key else ""}.pt"
     ck.parent.mkdir(parents=True, exist_ok=True)
     run_lock = open(ck.with_suffix(".lock"), "a")   # held for the process lifetime (released by the kernel)
     if not flock.try_lock(run_lock):
