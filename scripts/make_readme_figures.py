@@ -5,14 +5,15 @@ scripts/fetch_fonts.sh; Inter is optional, labels fall back to DejaVu Sans):
 1. glyphs.png   plain text vs the learned whole-pixel glyph alphabet (N=300 chunks)
 2. colour.png   plain text vs one coloured 2x2-pixel block per character (encoder_probe col_b2)
 3. rgb.png      three lines of text vs the same three lines overlaid in the R, G and B channels (rgb3)
+4. moonshot.png codes 1 + 3: each line in learned glyphs, then the three glyph lines overlaid (rgb3_lg_pb_h5)
 Every picture is drawn at one zoom factor per figure, so widths and areas compare honestly; each figure
 also shows the real 1:1 pixels ("actual size").
 
 Charts (need only matplotlib; every number is read from encoder_probe/results/*/runs.jsonl):
-4. readme_density.png  chars per vision token vs whether the code is read, per encoder and stage
-5. readme_r3_1.png     R3-1 short budget: CER and MC accuracy per arm next to its blind control
+5. readme_density.png  chars per vision token vs whether the code is read, per encoder and stage
+6. readme_r3_1.png     R3-1 short budget: CER and MC accuracy per arm next to its blind control
 
-    python3 scripts/make_readme_figures.py                 # all five
+    python3 scripts/make_readme_figures.py                 # all six
     python3 scripts/make_readme_figures.py --only charts   # just the two charts
 """
 from __future__ import annotations
@@ -389,6 +390,108 @@ def fig_rgb():
     print(f"rgb: {n_chars} chars, {mono_area / n_chars:.1f} -> {real3.shape[0] * real3.shape[1] / n_chars:.1f} px^2/char")
 
 
+# --------------------------------------------------------------------------- figure 4: the moonshot (codes 1 + 3)
+CHAN = [("R", (220, 38, 38)), ("G", (22, 163, 74)), ("B", (37, 99, 235))]
+
+
+def glyph_line_bitmaps():
+    """Each haiku line in the learned whole-pixel alphabet (same bank and encoding as glyphs.png):
+    -> list of 5 x w bool arrays (True = ink), one per line."""
+    import torch
+    from lg.alphabet import Alphabet
+
+    bank = torch.load(BANK, map_location="cpu", weights_only=False)
+    syms, ink, wss, ss = bank["symbols"], bank["ink"].numpy(), bank["widths_ss"].numpy(), bank["ss"]
+    alpha = Alphabet(syms[95:])
+
+    def cell_px(i):
+        w = int(wss[i]) // ss
+        return ink[i][:, : int(wss[i])].reshape(PITCH, ss, w, ss).mean((1, 3)) > 0.5
+
+    return [np.concatenate([cell_px(i) for i in alpha.encode(t)], 1) for t in HAIKU]
+
+
+def fig_moonshot():
+    """rgb3_lg_pb_h5: each line becomes learned glyphs (code 1), then the three glyph lines share one strip,
+    one per colour channel (code 3). Shown as light on black like rgb.png; the experiment uses the white page."""
+    z = 18
+    lines = glyph_line_bitmaps()
+    wmax = max(b.shape[1] for b in lines)
+    masks = [np.pad(b, ((0, 0), (0, wmax - b.shape[1]))) for b in lines]
+    light = np.stack(masks, 2).astype(np.uint8) * 255            # stream c lights channel c
+
+    img, d = new_card(1600)
+    lx, rx, ty = 70, 1100, 70
+    panel_title(d, lx, ty, "BEFORE", "Three lines of text", BEFORE)
+    panel_title(d, rx, ty, "AFTER", "Glyphs, one line per channel", AFTER)
+    y0 = ty + 110
+    pitch = PITCH * z
+    gap = 22
+    f = ImageFont.truetype(DEJAVU, round(EM * z))
+    sub = ui(26, "SemiBold")
+
+    # BEFORE: the haiku, one channel chip per line
+    for i, t in enumerate(HAIKU):
+        top = y0 + 50 + i * (pitch + gap)
+        tag, col = CHAN[i]
+        d.rounded_rectangle([lx, top + 26, lx + 44, top + pitch - 26], radius=10, fill=col)
+        d.text((lx + 22, top + pitch / 2), tag, font=ui(26, "Bold"), fill=(255, 255, 255), anchor="mm")
+        d.text((lx + 66, top + 0.9 * EM * z), t, font=f, fill=INK, anchor="ls")
+    lw = 66 + max(f.getlength(t) for t in HAIKU)
+
+    # AFTER, step 1: each line in learned glyphs (code 1), ink in its channel's colour
+    d.text((rx, y0), "1. Each line in learned glyphs", font=sub, fill=INK, anchor="lt")
+    for i, bm in enumerate(lines):
+        top = y0 + 50 + i * (pitch + gap)
+        col = CHAN[i][1]
+        d.rounded_rectangle([rx, top, rx + bm.shape[1] * z, top + pitch], radius=8, fill=CELL_A)
+        for r, c in zip(*np.nonzero(bm)):
+            px, py = rx + c * z, top + r * z
+            d.rounded_rectangle([px + 2, py + 2, px + z - 2, py + z - 2], radius=3, fill=col)
+    arrow(d, (lx + lw + rx) / 2 - 10, y0 + 50 + 1.5 * pitch + gap)
+
+    # AFTER, step 2: the three glyph lines overlaid, one per channel (code 3)
+    yo = y0 + 50 + 3 * (pitch + gap) + 30
+    d.text((rx, yo), "3. Overlay them, one per colour channel", font=sub, fill=INK, anchor="lt")
+    ys = yo + 50
+    d.rectangle([rx, ys, rx + wmax * z, ys + pitch], fill=(0, 0, 0))
+    for r in range(PITCH):
+        for c in range(wmax):
+            rgb = tuple(int(v) for v in light[r, c])
+            if any(rgb):
+                px, py = rx + c * z, ys + r * z
+                d.rounded_rectangle([px + 2, py + 2, px + z - 2, py + z - 2], radius=3, fill=rgb)
+    notes = ["each glyph line lights up only its own channel; overlaps mix like light",
+             "(red + green = yellow, all three = white). Shown on black: the experiment",
+             "uses the inverted, white-page version (identical information)"]
+    for k, line in enumerate(notes):
+        d.text((rx, ys + pitch + 18 + 32 * k), line, font=ui(24), fill=MUTED, anchor="lt")
+    ye = ys + pitch + 18 + 32 * len(notes)
+
+    # bars: plain text area -> glyphs (code 1) -> moonshot strip (codes 1 + 3), all at the 5-px pitch
+    fl = ImageFont.truetype(DEJAVU, 400)
+    plain = sum(fl.getlength(t) / 400 * EM for t in HAIKU) * PITCH
+    glyphs = sum(b.shape[1] for b in lines) * PITCH
+    moon = wmax * PITCH
+    yb = ye + 70
+    d.line([lx, yb - 24, W - 70, yb - 24], fill=FAINT, width=2)
+    y = bars(d, lx, yb, 1120, [
+        ("Plain text", plain, BEFORE, ""),
+        ("Glyphs (code 1)", glyphs, (129, 140, 248), f"  {glyphs / plain - 1:+.0%}"),
+        ("Moonshot (1 + 3)", moon, AFTER, f"  {moon / plain - 1:+.0%}"),
+    ], "px²")
+    real_light = light.copy()
+    actual_size(img, d, 1300, yb - 6, [(latin_real(HAIKU), "plain"),
+                                       (np.where(np.concatenate(masks, 0), 0, 255).astype(np.uint8), "glyphs"),
+                                       (real_light, "moonshot")])
+    img = img.crop((0, 0, W, y + 70))
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([0, 0, W - 1, img.height - 1], radius=36, outline=FAINT, width=3)
+    img.save(OUT / "moonshot.png", optimize=True)
+    n = sum(len(t) for t in HAIKU)
+    print(f"moonshot: {n} chars, {plain / n:.1f} -> {glyphs / n:.1f} (glyphs) -> {moon / n:.1f} px^2/char")
+
+
 # --------------------------------------------------------------------------- charts: shared data and style
 RES = ROOT / "encoder_probe" / "results"
 TEXT_CPT = 4.33        # chars per text token, Qwen tokenizer on held-out WikiText (docs/CONTEXT_BUDGET.md)
@@ -647,6 +750,7 @@ if __name__ == "__main__":
         fig_glyphs()
         fig_colour()
         fig_rgb()
+        fig_moonshot()
     if args.only != "demos":
         chart_density()
         chart_r3_1()

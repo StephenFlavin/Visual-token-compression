@@ -53,7 +53,9 @@ three independent streams of learned glyphs, one per colour channel, on the same
   learned to read it: after a 1000-step fine-tune its loss equals its blind control's. Details in
   [docs/ANALYSIS.md](docs/ANALYSIS.md).
 
-Below, magnified: the colour page (top) and its three channels.
+![Three lines of text vs learned glyphs overlaid one per colour channel](docs/img/moonshot.png)
+
+A strip of a real moonshot page, magnified: the colour page (top) and its three channels.
 
 ![Moonshot: RGB overlay of learned whole-pixel glyphs](docs/img/rgb3_lg_pb_h5_strip.png)
 
