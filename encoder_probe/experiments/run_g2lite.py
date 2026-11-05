@@ -44,6 +44,7 @@ from encoder_probe.ep.g2lite import (ARMS, Front, G2Reader, decode_pairs, edit_o
 from encoder_probe.ep.geom import pages_digest  # noqa: E402
 from encoder_probe.ep.probe_grid import GridProbe  # noqa: E402
 from encoder_probe.ep.vlm_encoders import WEIGHTS, cpu_has_bf16  # noqa: E402
+from encoder_probe.ep.encoders import resolve_device  # noqa: E402
 from run_probe import evaluate  # noqa: E402
 
 S, P, G = 448, 28, 16
@@ -105,8 +106,10 @@ def get_hidden(a, enc_name, tr, te, split, vision_fn, log=print):
     return dh, dt, waited
 
 
-def towers(a):
-    """-> (split block, window size, ViT factory, pretrained-merger factory) for the real or the tiny tower."""
+def towers(a, dev: torch.device | None = None):
+    """-> (split block, window size, ViT factory, pretrained-merger factory) for the real or the tiny tower.
+    The ViT runs on ``dev`` (default cpu), always in fp32."""
+    dev = dev or torch.device("cpu")
     if a.tiny:
         from encoder_probe.ep import qwen_ft
         tower = qwen_ft.load_model(torch.device("cpu"), tiny=True)[0].model.visual.eval()
@@ -117,8 +120,8 @@ def towers(a):
         # always fp32 (lossless: the weights are bf16 values), so every code's cache has the same precision
         # whatever the host; vlm_encoders would pick bf16 on a host with native bf16
         from encoder_probe.ep.vlm_encoders import QwenVision
-        v = QwenVision()
-        v.model, v.dtype, v.compute = v.model.float(), torch.float32, "cpu/float32"
+        v = QwenVision(device=dev)   # on CUDA: fp32 with TF32 off (vlm_encoders.compute_dtype)
+        v.model, v.dtype, v.compute = v.model.float(), torch.float32, f"{dev.type}/float32"
         return v
     return 32, 112, vision_fn, lambda: load_merger(WEIGHTS / "qwen25vl3b_visual.safetensors")
 
@@ -142,9 +145,11 @@ def build_only(a) -> int:
     """Build the (tokens + hidden-state) caches of one encoding with the label strings dropped first."""
     cache_root = Path(a.cache_root)
     TC.CACHE, TC.PAGES = cache_root / "tokens", cache_root / "pages"
+    dev = resolve_device(a.device)
     torch.set_num_threads(a.threads)
-    torch.set_flush_denormal(True)
-    split, _, vision_fn, _ = towers(a)
+    if dev.type == "cpu":
+        torch.set_flush_denormal(True)
+    split, _, vision_fn, _ = towers(a, dev)
     hp = TC.cache_path(TC.hidden_encoder("qwen25vl", split), "clean", a.encoding, a.train_pages, a.test_pages)
     tp = TC.cache_path("qwen25vl", "clean", a.encoding, a.train_pages, a.test_pages)
     t0 = time.time()
@@ -185,6 +190,9 @@ def main(argv=None) -> int:
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--bf16", choices=["auto", "on", "off"], default="auto",
                     help="bf16 autocast for the probe; auto = on only with native bf16 (AMX/AVX512-BF16)")
+    ap.add_argument("--device", choices=["auto", "cpu", "cuda"], default="auto",
+                    help="where the probe, merger and (for cache builds) the ViT run; cuda: bf16 autocast only if "
+                         "the GPU supports bf16 (Ampere+), else fp32 (e.g. T4). auto = cuda if available")
     ap.add_argument("--run-name", default="g2lite")
     ap.add_argument("--ckpt-every", type=int, default=200, help="resume checkpoint interval (0 = off)")
     ap.add_argument("--stop-after", type=int, default=0, help="exit after this step's checkpoint (resume tests)")
@@ -205,9 +213,12 @@ def main(argv=None) -> int:
     if a.build_only:
         return build_only(a)
     assert a.arm and a.encoding, "--arm and --encoding are required"
-    bf16 = a.bf16 == "on" or (a.bf16 == "auto" and cpu_has_bf16())
+    dev = resolve_device(a.device)
+    native_bf16 = torch.cuda.is_bf16_supported() if dev.type == "cuda" else cpu_has_bf16()
+    bf16 = a.bf16 == "on" or (a.bf16 == "auto" and native_bf16)
     torch.set_num_threads(a.threads)
-    torch.set_flush_denormal(True)   # fp32 on CPU: denormals made probes 5.5x slower (AGENTS.md)
+    if dev.type == "cpu":
+        torch.set_flush_denormal(True)   # fp32 on CPU: denormals made probes 5.5x slower (AGENTS.md)
     torch.manual_seed(a.seed)
     rng = np.random.default_rng(a.seed)
     cache_root = Path(a.cache_root)
@@ -230,7 +241,7 @@ def main(argv=None) -> int:
         print(f"[g2] skip, running in another process: {key}")
         return 0
     t0 = time.time()
-    split, window, vision_fn, merger_fn = towers(a)
+    split, window, vision_fn, merger_fn = towers(a, dev)
     enc, tr, te = TC.split_pages(a.encoding, S, a.train_pages, a.test_pages, cache=True)
     t_pages = time.time() - t0
     classes = enc.classes   # CTC targets first: frees the label strings before the big tensors exist
@@ -247,20 +258,20 @@ def main(argv=None) -> int:
     # check on the test pages: pretrained merger on the cached (bf16) states vs the cached model tokens (computed
     # from the fp32 states by the tower's own forward)
     with torch.no_grad():
-        chk_front = Front("frozen", merger_fn(), reverse, c)
-        mt = torch.cat([chk_front.raw(h_te[i:i + 4]) for i in range(0, len(h_te), 4)])
+        chk_front = Front("frozen", merger_fn(), reverse, c).to(dev)
+        mt = torch.cat([chk_front.raw(h_te[i:i + 4]).cpu() for i in range(0, len(h_te), 4)])
         ref = dt["test"].float()
         merger_check = {"max_abs": (mt - ref).abs().max().item(),
                         "rel_l2": ((mt - ref).norm() / ref.norm()).item(),
                         "corr": float(np.corrcoef(mt.flatten().numpy(), ref.flatten().numpy())[0, 1])}
         del chk_front, mt, ref
     farm = "frozen" if a.arm == "blind" else a.arm
-    front = Front(farm, None if farm == "direct" else merger_fn(), reverse, c)
+    front = Front(farm, None if farm == "direct" else merger_fn(), reverse, c).to(dev)
     if farm == "frozen":
-        tok_tr = front.fit_standardiser(h_tr, keep=True)
+        tok_tr = front.fit_standardiser(h_tr, keep=True)   # kept tokens stay on the CPU
         with torch.no_grad():
-            tok_tr.sub_(front.mu).div_(front.sd)   # in place: one 1 GB copy for 500 pages
-            tok_te = torch.cat([front(h_te[i:i + 4]) for i in range(0, len(h_te), 4)])
+            tok_tr.sub_(front.mu.cpu()).div_(front.sd.cpu())   # in place: one 1 GB copy for 500 pages
+            tok_te = torch.cat([front(h_te[i:i + 4]).cpu() for i in range(0, len(h_te), 4)])
     else:
         front.fit_standardiser(h_tr)
         tok_tr, tok_te = h_tr, h_te
@@ -287,12 +298,12 @@ def main(argv=None) -> int:
     cpt = chars / (len(te) * G * G)
     torch.manual_seed(a.seed)   # same probe init in every arm (the merger build above consumed the RNG)
     probe = GridProbe(enc.pitch, len(classes), d=front.d, G=G, P=P)
-    model = G2Reader(None if farm == "frozen" else front, probe)
+    model = G2Reader(None if farm == "frozen" else front, probe).to(dev)
     params = [p for p in model.parameters() if p.requires_grad]
     n_merger = sum(p.numel() for p in front.parameters() if p.requires_grad) if a.arm == "trained" else 0
     print(f"[g2] {key} pitch={enc.pitch} lines/page={enc.n_lines} classes={len(classes)} d={front.d} "
           f"train={len(tr)} test={len(te)} px2/char={ppc:.2f} chars/token={cpt:.1f} pages={t_pages:.0f}s "
-          f"wait={waited:.0f}s feat={t_feat:.0f}s bf16={bf16} trainable={sum(p.numel() for p in params)} "
+          f"wait={waited:.0f}s feat={t_feat:.0f}s device={dev} bf16={bf16} trainable={sum(p.numel() for p in params)} "
           f"(merger {n_merger}) merger_check={merger_check}", flush=True)
     if a.merger_lr is not None and a.arm == "trained":   # diagnostic only: the pre-registered arms use one LR
         mp = {id(p) for p in front.parameters()}
@@ -310,6 +321,8 @@ def main(argv=None) -> int:
         model.load_state_dict(st["model"]), opt.load_state_dict(st["opt"]), sched.load_state_dict(st["sched"])
         rng.bit_generator.state = st["rng"]
         torch.set_rng_state(st["torch_rng"])
+        if dev.type == "cuda" and st.get("cuda_rng") is not None:
+            torch.cuda.set_rng_state(st["cuda_rng"])
         curve, train_curve, ctcs = st["curve"], st["train_curve"], st["ctcs"]
         start, t_prev, segs = st["step"] + 1, st["t_train"], st.get("segs", [])
         print(f"[g2] resumed from step {st['step']} ({ck.name})", flush=True)
@@ -324,14 +337,15 @@ def main(argv=None) -> int:
             for i in rng.choice(ok, min(a.lines_per_page, len(ok)), replace=False):
                 pi.append(k), li.append(int(i)), ys.append(tgt[p][i])
         ix = torch.as_tensor(pb)
-        with torch.autocast("cpu", dtype=torch.bfloat16, enabled=bf16):
-            feat = model.features(tok_tr[fmap[ix]])
-            logp = model.read(feat, torch.tensor(pi), torch.tensor(li))
+        with torch.autocast(dev.type, dtype=torch.bfloat16, enabled=bf16):
+            feat = model.features(tok_tr[fmap[ix]].to(dev, non_blocking=True))
+            logp = model.read(feat, torch.tensor(pi, device=dev), torch.tensor(li, device=dev))
         logp = logp.float()
         T = logp.shape[0]
-        ctc = F.ctc_loss(logp, torch.cat(ys), torch.full((len(ys),), T, dtype=torch.long),
-                         torch.tensor([len(y) for y in ys]), blank=0, zero_infinity=True)
-        rec = GridProbe.recon_loss(feat, pix_tr[ix].float() / 127.5 - 1)
+        # targets on the device too: the native CTC kernel (cuDNN's needs CPU int32 targets and has limits)
+        ctc = F.ctc_loss(logp, torch.cat(ys).to(dev), torch.full((len(ys),), T, dtype=torch.long, device=dev),
+                         torch.tensor([len(y) for y in ys], device=dev), blank=0, zero_infinity=True)
+        rec = GridProbe.recon_loss(feat, pix_tr[ix].to(dev).float() / 127.5 - 1)
         loss = ctc + a.recon_weight * rec
         opt.zero_grad()
         loss.backward()
@@ -340,7 +354,7 @@ def main(argv=None) -> int:
         sched.step()
         ctcs.append(round(ctc.item(), 5))
         if step % a.eval_every == 0 or step == a.steps:
-            cv, _ = evaluate(model, tok_te, te, enc, classes, max_pages=a.eval_pages, bf16=bf16, device="cpu")
+            cv, _ = evaluate(model, tok_te, te, enc, classes, max_pages=a.eval_pages, bf16=bf16, device=dev)
             curve.append((step, round(cv, 5)))
             k0 = train_curve[-1][0] if train_curve else 0
             train_curve.append((step, round(float(np.mean(ctcs[k0:step])), 5)))
@@ -352,7 +366,8 @@ def main(argv=None) -> int:
             tmp = ck.with_suffix(".tmp")
             torch.save({"model": model.state_dict(), "opt": opt.state_dict(),
                         "sched": sched.state_dict(), "rng": rng.bit_generator.state,
-                        "torch_rng": torch.get_rng_state(), "curve": curve, "train_curve": train_curve,
+                        "torch_rng": torch.get_rng_state(),
+                        "cuda_rng": torch.cuda.get_rng_state() if dev.type == "cuda" else None, "curve": curve, "train_curve": train_curve,
                         "ctcs": ctcs, "step": step, "t_train": time.time() - t_train,
                         "segs": segs[:-1] + [[segs[-1][0], step, segs[-1][2]]]}, tmp)
             tmp.replace(ck)
@@ -360,7 +375,7 @@ def main(argv=None) -> int:
                 print(f"[g2] stop after step {step} (--stop-after)", flush=True)
                 return 0
     s_step = (time.time() - t_train) / a.steps
-    cer, samples = evaluate(model, tok_te, te, enc, classes, bf16=bf16, device="cpu")
+    cer, samples = evaluate(model, tok_te, te, enc, classes, bf16=bf16, device=dev)
     ops = edit_ops(decode_pairs(model, tok_te, te, enc, classes, bf16))   # CER split: sub / ins / del, length
     cfg = {k: v for k, v in vars(a).items() if k not in ("out_root", "cache_root", "stop_after", "print_queue",
                                                          "poll")}
@@ -370,7 +385,8 @@ def main(argv=None) -> int:
            "chars_per_token": cpt, "chars_per_vlm_token": P * P / ppc, "cer": cer, "score_v": 2,
            "train_ctc": float(np.mean(ctcs[-100:])), "train_ctc_last": ctcs[-1], "train_curve": train_curve,
            "bf16": bf16 if len({x[2] for x in segs}) == 1 else "mixed", "precision_segments": segs,
-           "device": "cpu", "enc_compute": enc_compute, "recon_weight": a.recon_weight,
+           "device": str(dev), "gpu": torch.cuda.get_device_name(dev) if dev.type == "cuda" else None,
+           "enc_compute": enc_compute, "recon_weight": a.recon_weight,
            "test_pages": len(te), "lr": a.lr, "n_test_chars": chars, "digest_test": digest_test, "curve": curve,
            "trainable": sorted({n.split(".")[0] + "." + n.split(".")[1] for n in trainable_names(model)}),
            "params": {"probe": sum(p.numel() for p in probe.parameters()), "merger_trainable": n_merger},

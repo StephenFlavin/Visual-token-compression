@@ -24,8 +24,8 @@ In about 3 h: setup, smoke, then short arms at equal steps. A short result is a 
   nvidia-smi --query-gpu=name,memory.total --format=csv; nproc; free -g; df -h .
   python3 -c "import torch;print(torch.cuda.get_device_name(0), torch.cuda.is_bf16_supported())"
   ```
-  **bf16 must be supported** (Ampere or newer: A10/A100/L4/L40/H100/RTX 30xx+). On a pre-Ampere GPU (T4, V100),
-  stop and report: the fine-tune assumes bf16.
+  **R3-1 needs bf16** (Ampere or newer: A10/A100/L4/L40/H100/RTX 30xx+). On a pre-Ampere GPU (T4, V100) skip
+  sections 2-5 and run **section 6 (G2 at scale)** instead: the probe runs in fp32 there.
 
 ## 1. Setup (~20-30 min, mostly downloads; run the steps in parallel where marked)
 ```bash
@@ -118,3 +118,40 @@ nohup scripts/autosave_results.sh 600 > results/autosave.log 2>&1 &     # commit
   was not run.
 * Adapters (`encoder_probe/cache/r3_adapters/*.pt`, ~0.6 GB each) are git-ignored. Copy them off the machine if R3-2
   should reuse them; otherwise they're lost with the runner.
+
+## 6. G2 at scale: the probe on any NVIDIA GPU, T4 included (a fallback or extra to R3-1)
+G2-lite (encoder_probe/ROUND3.md) ran on CPU at 500 pages. Only the no-merger moonshot arm read above label statistics
+(~29% vs ~15% correct chars), so the probe looked data-limited. This repeats it at 2000 pages with the blind floors.
+`run_g2lite.py --device cuda` runs the cache build (Qwen ViT, fp32, TF32 off), the merger and the probe on the GPU.
+The probe uses bf16 autocast if the GPU supports bf16, else fp32 (a T4 is fine: the probe is small). The CPU path is
+unchanged (identical CER and curves to the CPU runs), but **the CUDA path has not run on a GPU yet: smoke first.**
+Setup is section 1, minus the Qwen full-weight fetch (the ViT downloads its own ~1.3 GB of tensors) and minus peft.
+```bash
+export EP_PAGE_CACHE=1 EP_TRAIN_R2_CAP=400000000
+R=encoder_probe/experiments/run_g2lite.py; TP=2000
+# smoke (~5 min): tiny cache + 200 steps on the GPU
+python3 $R --device cuda --build-only --encoding latin_p24 --train-pages 20 --test-pages 4
+python3 $R --device cuda --arm direct --encoding latin_p24 --train-pages 20 --test-pages 4 --steps 200 --eval-every 100 --run-name g2gpu_smoke
+# caches (one at a time on the GPU; page rendering is CPU-bound, ~1 s/page for the moonshot, so start them early)
+for e in rgb3_lg_pb_h5 latin_p8 latin_p5; do echo "python3 $R --device cuda --build-only --encoding $e --train-pages $TP --test-pages 16"; done > results/queue_g2gpu_cache.txt
+# arms at equal steps (same order as overnight: moonshot first), each code with its blind floor
+for e in rgb3_lg_pb_h5 latin_p8 latin_p5; do for arm in direct frozen blind; do
+  echo "python3 $R --device cuda --arm $arm --encoding $e --train-pages $TP --steps 6000 --run-name g2gpu_tp$TP"; done
+  echo "python3 $R --device cuda --arm trained --merger-lr 1e-4 --encoding $e --train-pages $TP --steps 6000 --run-name g2gpu_tp$TP"
+done > results/queue_g2gpu_runs.txt
+nohup python3 scripts/job_queue.py results/queue_g2gpu_cache.txt --cores 1 --log-dir results/queue_logs/g2gpu_cache_1 > results/queue_g2gpu_cache_1.log 2>&1 &
+# after the caches exist (runs wait for a missing cache under its lock anyway):
+nohup python3 scripts/job_queue.py results/queue_g2gpu_runs.txt --cores 2 --log-dir results/queue_logs/g2gpu_runs_1 > results/queue_g2gpu_runs_1.log 2>&1 &
+python3 encoder_probe/experiments/analyse_g2lite.py encoder_probe/results/g2gpu_tp$TP/runs.jsonl
+```
+* **Sizes (estimates):**
+  * hidden-state cache ~5.4 GB per code at 2000 pages (bf16), plus the post-merger token cache ~2 GB, so keep
+    ≥ 25 GB of disk free for 3 codes;
+  * host RAM per run ~6-12 GB at 2000 pages (the states are memory-mapped; frozen precomputes fp32 tokens, ~4 GB);
+  * rendering 2000 moonshot pages takes ~35 min on one core, so on a 2-core Colab start the moonshot cache first.
+* **Concurrency:** `--cores 2` = two probe runs on the GPU at once. Raise it only if `nvidia-smi` shows headroom
+  and host RAM allows.
+* **Read it with section 4's blind-floor rule:** quote CER, op split and correct chars next to each code's blind floor.
+  The pre-registered G2-lite decision rule (ROUND3.md) applies unchanged; the larger page count is the only change.
+  Record it as a dated note before running.
+* Steps 6000 is a starting point. Measure s/step on the first run and keep every arm at the same steps.

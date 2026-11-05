@@ -66,7 +66,7 @@ class Front(nn.Module):
     def raw(self, h: torch.Tensor) -> torch.Tensor:
         """(B, N, c) any float dtype -> (B, N/4, d) fp32 row-major tokens, before standardisation."""
         B, N, c = h.shape
-        x = h.float()
+        x = h.to(self.mu.device).float()   # cached states live on the CPU; the front may be on the GPU
         if self.arm == "direct":
             return x.reshape(B, N // 4, 4 * c)[:, self.reverse]
         y = self.merger(x.reshape(B * N, c))                      # the merger's own forward (RMSNorm, view, MLP)
@@ -81,13 +81,13 @@ class Front(nn.Module):
         n, kept = 0, None
         for i in range(0, len(h_train), batch):
             r = self.raw(h_train[i:i + batch])
-            if keep:   # preallocated: no second copy at the end
+            if keep:   # preallocated on the CPU: no second copy at the end
                 if kept is None:
                     kept = torch.empty((len(h_train), *r.shape[1:]), dtype=r.dtype)
-                kept[i:i + len(r)] = r
+                kept[i:i + len(r)] = r.cpu()
             x = r.double().reshape(-1, self.d)
-            s += x.sum(0)
-            s2 += (x * x).sum(0)
+            s += x.sum(0).cpu()
+            s2 += (x * x).sum(0).cpu()
             n += len(x)
         mu = s / n
         var = (s2 / n - mu * mu).clamp_min(0) * n / max(1, n - 1)
@@ -151,12 +151,13 @@ def edit_ops(pairs) -> dict:
 def decode_pairs(model, tok, pages, enc, classes, bf16: bool, batch_pages: int = 2) -> list[tuple[str, str]]:
     """All (ref, hyp) line pairs on ``pages``, decoded exactly as run_probe.evaluate does."""
     from encoder_probe.ep.probe import greedy
+    dev = next(model.parameters()).device
     model.eval()
     out = []
     for s in range(0, len(pages), batch_pages):
         pb = list(range(s, min(len(pages), s + batch_pages)))
-        with torch.autocast("cpu", dtype=torch.bfloat16, enabled=bf16):
-            feat = model.features(tok[pb])
+        with torch.autocast(dev.type, dtype=torch.bfloat16, enabled=bf16):
+            feat = model.features(tok[pb].to(dev))
         pi, li, refs = [], [], []
         for k, p in enumerate(pb):
             for i, r in enumerate(pages[p].refs):
@@ -164,8 +165,8 @@ def decode_pairs(model, tok, pages, enc, classes, bf16: bool, batch_pages: int =
                     pi.append(k), li.append(i), refs.append(r)
         if not pi:
             continue
-        with torch.autocast("cpu", dtype=torch.bfloat16, enabled=bf16):
-            lp = model.read(feat, torch.tensor(pi), torch.tensor(li))
+        with torch.autocast(dev.type, dtype=torch.bfloat16, enabled=bf16):
+            lp = model.read(feat, torch.tensor(pi, device=dev), torch.tensor(li, device=dev))
         for d, r in zip(greedy(lp.float()), refs):
             out.append((r, enc.clean_hyp(enc.decode("".join(classes[j - 1] for j in d)))))
     model.train()

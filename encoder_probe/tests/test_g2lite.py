@@ -232,3 +232,17 @@ def test_build_only_and_run_lock(tmp_path):
     assert lv.inner is not None and lv.compute == "x"
     lv(last.copy())
     assert lv.inner is None
+
+
+def test_device_cuda_without_gpu_exits_clearly(tmp_path):
+    import pytest
+    if torch.cuda.is_available():
+        pytest.skip("a GPU is present: covered by the GPU smoke in docs/GPU_RUNNER.md")
+    with pytest.raises(SystemExit, match="cuda"):
+        _run(tmp_path / "o", tmp_path / "c", "trained", "--device", "cuda")
+
+
+def test_row_records_device(tmp_path):
+    assert _run(tmp_path / "o", tmp_path / "c", "direct", "--device", "cpu") == 0
+    r = _rows(tmp_path / "o")[0]
+    assert r["device"] == "cpu" and r["gpu"] is None and "ops" in r
