@@ -21,6 +21,11 @@ size). The Windows/3090 runbook is [LOCAL_GPU.md](LOCAL_GPU.md). Read AGENTS.md 
 * **Amendment 1 (user):** sweep Latin to ~100 chars/token in G2/G3 (p8 ~28, p6 ~51, p5 ~72, p4 ~110 after its ceiling).
 * **Ops:** 2 container restarts, a full disk, 2 OOM kills. All recovered from checkpoints; no finished row was lost.
 
+**GPU decision (user, 2026-11-05):** the only rentable options were a Colab T4 (Turing: no bf16, 16 GB) and a TPU
+v5e-1 (needs a torch_xla port). Neither runs R3-1 as built, so **R3-1 waits for the user's RTX 3090** (docs/LOCAL_GPU.md
+section 8, or docs/GPU_RUNNER.md, which works unchanged on any Ampere+ GPU). The CPU G2-lite runs finish here,
+including the blind floors.
+
 **Open items, in priority order:**
 1. R3-1 short arms on a GPU: latin_p8, moonshot, latin_p5 at equal steps (GPU_RUNNER.md).
 2. G2-lite on a GPU at 1000+ pages. `run_g2lite.py` is CPU-only: port it with `--device`, or use `run_probe2.py
