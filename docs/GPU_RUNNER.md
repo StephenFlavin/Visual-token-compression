@@ -8,9 +8,14 @@ measured.
 
 ## Goal for the session
 The one test the CPU runner cannot do: **R3-1 (gate G3)**, fine-tuning Qwen2.5-VL-3B so its own LLM reads each code.
-The comparison is plain Latin against the moonshot `rgb3_lg_pb_h5` at an identical budget. The CPU probe can't measure
-Latin through Qwen at feasible data sizes (HANDOFF.md), so the LLM-as-reader result is the first fair comparison.
+The comparison is plain Latin against the dense codes at an identical budget, each arm next to its own blind control.
+The CPU probe can't measure Latin through Qwen at feasible data sizes, so the LLM-as-reader result is the fair one.
 In about 3 h: setup, smoke, then short arms at equal steps. A short result is a signal, not a verdict. Label it so.
+
+**Done once (2026-11-05, RTX 4090, 1000 steps):** latin_p8 is read (55% CER vs blind 88.5%); latin_p5, lg_pb_h5
+and the moonshot sit at their blind floors. **The next session's arms and order are in [HANDOFF.md](HANDOFF.md)**
+(latin_p8/p6/p5 at 5000 steps with blinds, then a short vision-side diagnostic); sections 3-4 below show the
+mechanics with the first session's arms.
 
 ## 0. Before you start (5 min)
 * Check `git push` works from the runner. The machine is ephemeral: anything not pushed is lost. If push doesn't
@@ -19,6 +24,8 @@ In about 3 h: setup, smoke, then short arms at equal steps. A short result is a 
   * Qwen weights 7.5 GB;
   * page caches ~1 GB per 1000 pages per code;
   * finetune checkpoints ~1.75 GB each, adapters ~0.6 GB each.
+  * Check the **quota**, not just `df`: the 2026-11-05 runner's quota filled at ~10 GB of checkpoints, adapters and
+    page caches ("Disk quota exceeded"), which killed a blind job and truncated docs in a commit.
 * Note the hardware in your first commit message:
   ```bash
   nvidia-smi --query-gpu=name,memory.total --format=csv; nproc; free -g; df -h .
@@ -59,26 +66,29 @@ Check:
 * the log shows `device=cuda bf16=True`;
 * the loss falls;
 * generation returns text;
-* write down **s/step** and **peak GPU memory** (`nvidia-smi`).
+* write down **s/step** and **peak GPU memory** (`nvidia-smi`). Measured on an RTX 4090 (2026-11-05): 1.21-1.22
+  s/step at batch 4, peak allocated 11.4 GB, ~7 min of model load + eval per job.
 
 If it fails, fix minimally, keep the CPU tests green, commit the fix, rerun. If it OOMs, add `--micro-batch 2`
 (same effective batch), and then use it for **every** arm.
 
 ## 3. Size the run from the smoke
 * Time left for training: `T_min = (minutes remaining) - 25` (eval ~5-10 min per arm + write-up + push margin).
-* Arms, in priority order: `latin_p8` (~28 chars/token), `rgb3_lg_pb_h5` (moonshot, 322), `latin_p5` (~72, the
-  pushed Latin baseline), then `lg_pb_h5` (~107) if time allows.
-* **Blind controls (required):** `--blind-images` runs of latin_p8 and the moonshot at the same settings. Each
+* Arms, in priority order (first session): `latin_p8` (~28 chars/token), `rgb3_lg_pb_h5` (moonshot, 322),
+  `latin_p5` (~72, the pushed Latin baseline), then `lg_pb_h5` (~107) if time allows. Next session: HANDOFF.md.
+* **Blind controls (required for every arm):** a `--blind-images` run of each arm at the same settings. Each
   page's image is swapped for another page's, the text targets stay with the true page, and the run name gets
   `_blind`. An LLM can write fluent English from any image, so a CER is only evidence of reading when it is well
-  below its blind control. That makes 5 jobs: 3 arms + 2 blind.
+  below its blind control, and floors differ by code (latin_p5 77.8%, latin_p8 88.5%, moonshot 89.9%), so one
+  arm's blind can't stand in for another's. 3 arms make 6 jobs (`N_JOBS` below).
 * Jobs at once `K = floor(0.85 * VRAM / peak_memory_from_smoke)`, at most 5:
   * 24 GB cards (3090, 4090): K = 1 likely;
   * 48 GB cards (A40, A6000, L40, L40S): K = 2-3 likely.
   Measure, don't assume. With K > 1 each job runs somewhat slower, so re-measure s/step on the first parallel steps.
-* Steps per arm, **identical for all 5 jobs** (fairness guard: same steps, batch, LRs, pages, every flag):
-  `STEPS = floor(T_min*60 * K / (5 * s_per_step_at_K) / 250) * 250`, minimum 1000. If that's < 1000, drop latin_p5
-  first, then the latin_p8 blind control. Never drop the moonshot's blind control while the moonshot runs.
+* Steps per arm, **identical for all jobs** (fairness guard: same steps, batch, LRs, pages, every flag):
+  `STEPS = floor((T_min*60 - N_JOBS*420) * K / (N_JOBS * s_per_step_at_K) / 250) * 250` (420 s = the measured
+  load + eval overhead per job), minimum 1000. If that's < 1000, drop an arm together with its blind control; never
+  run an arm without its blind.
 
 ## 4. Run
 ```bash
@@ -88,7 +98,8 @@ F=encoder_probe/experiments/finetune_qwen.py
   echo "python3 $F --encoding rgb3_lg_pb_h5 --steps $STEPS --run-name $RUN"
   echo "python3 $F --encoding rgb3_lg_pb_h5 --steps $STEPS --run-name $RUN --blind-images"   # -> ${RUN}_blind
   echo "python3 $F --encoding latin_p8 --steps $STEPS --run-name $RUN --blind-images"
-  echo "python3 $F --encoding latin_p5 --steps $STEPS --run-name $RUN"; } > results/queue_gpu3h.txt
+  echo "python3 $F --encoding latin_p5 --steps $STEPS --run-name $RUN"
+  echo "python3 $F --encoding latin_p5 --steps $STEPS --run-name $RUN --blind-images"; } > results/queue_gpu3h.txt
 # keep EP_PAGE_CACHE=1 EP_TRAIN_R2_CAP=400000000 exported in this shell: the jobs must read the pre-rendered pages
 nohup python3 scripts/job_queue.py results/queue_gpu3h.txt --cores 1 --log-dir results/queue_logs/gpu3h_1 > results/queue_gpu3h_1.log 2>&1 &
 nohup scripts/autosave_results.sh 600 > results/autosave.log 2>&1 &     # commits+pushes runs.jsonl every 10 min
@@ -114,7 +125,10 @@ nohup scripts/autosave_results.sh 600 > results/autosave.log 2>&1 &     # commit
 
 ## 5. Results and hand-back (last ~20 min, whatever finished)
 * Rows: `encoder_probe/results/round3_ft_gpu3h/runs.jsonl` (blind controls: `round3_ft_gpu3h_blind/`), one per eval cond, with `cer`, `cloze_acc`, `mc_acc`,
-  `chars_per_token`, `curve`, `s_per_step`, `peak_gpu_bytes`, `fair_hash`. Check that all rows share one `fair_hash`.
+  `chars_per_token`, `curve`, `s_per_step`, `peak_gpu_bytes`, `fair_hash`, and `ops` (sub / ins / del as fractions
+  of ref chars, `len_ratio`, `prefix_frac` = share of ref chars before the first error; rows written after
+  2026-11-05 only). Check that all rows share one `fair_hash`.
+* Report every CER next to its own blind CER, with the op split and `prefix_frac`.
 * Read against ROUND3.md: G3 asks whether the best code's density at < 3% CER is ≥ 1.5x the best Latin density at
   < 3% CER. Report CER per arm with chars/token. Label the result **short-budget (STEPS steps)**: 5000+ steps was the
   plan, and a code that is still falling is undecided, not failed.
@@ -124,8 +138,8 @@ nohup scripts/autosave_results.sh 600 > results/autosave.log 2>&1 &     # commit
   git commit -m "Round 3 GPU (3 h, <GPU name>): R3-1 short arms, STEPS steps"
   git pull --rebase origin claude/validation-harness && git push origin claude/validation-harness
   ```
-* Add a dated "GPU runner session" note to HANDOFF.md: hardware, measured s/step and memory, what ran, results, what
-  was not run.
+* Update HANDOFF.md (status table, open items) and move the session's detailed notes (hardware, measured s/step and
+  memory, what ran, what was not run) to the top of `docs/history/HANDOFF_2026-11.md`.
 * Adapters (`encoder_probe/cache/r3_adapters/*.pt`, ~0.6 GB each) are git-ignored. Copy them off the machine if R3-2
   should reuse them; otherwise they're lost with the runner.
 

@@ -3,7 +3,13 @@
 Written 2026-11-04 for an external research task. Numbers are from this repo (claude/validation-harness); Q1 and G0
 numbers are preliminary.
 
+> **Status 2026-11-05:** the brief is kept as sent. The research report it asked for is
+> [research/2026-11-04_rgb3_lg_go_no_go_report.md](research/2026-11-04_rgb3_lg_go_no_go_report.md); current results are in
+> [RESULTS.md](RESULTS.md) (round 3) and [HANDOFF.md](HANDOFF.md). Each section below has a dated status line.
+
 ## What it is
+*Status 2026-11-05: unchanged. `rgb3_lg_free_h4` (405) was dropped after Q1; `rgb3_lg_pb_h5` (322) is the moonshot.*
+
 **Visual BPE moonshot, `rgb3_lg`:** render long text as page images that a vision-language model reads in place of
 text tokens, packing far more characters into each vision token than ordinary typography.
 * **Learned glyph alphabet ("Visual BPE").** A bank of 395 small learned glyphs (4-5 px line pitch). Each glyph stands
@@ -18,6 +24,9 @@ text tokens, packing far more characters into each vision token than ordinary ty
   * the single glyph bank: ~107.
 
 ## Origin and aim
+*Status 2026-11-05: aim and bar unchanged (G3: >= 1.5x fine-tuned Latin at < 3% CER, with Latin now pushed to
+p8/p6/p5 = ~28/51/72 chars/token). Not reached: only latin_p8 is read after a 1000-step fine-tune.*
+
 * **Inspiration.** DeepSeek-OCR's "contexts optical compression" (Oct 2025): render text, read it back from far fewer
   vision tokens (~97% OCR precision at ~10x, ~60% at ~20x). DeepSeek-V4.1-Flash, the user's motivating long-context
   model (552B MoE, 1M-token window, 890 B/token KV), is multimodal, but its paper abstract does not say how it encodes
@@ -33,6 +42,12 @@ text tokens, packing far more characters into each vision token than ordinary ty
   < 3% transcription CER, and keep long-context QA (needle, cloze) accuracy at ≤ 0.67x Latin's KV bytes.
 
 ## Evidence so far
+*Status 2026-11-05: superseded by the round-3 results. Moonshot G0 (raw pixels) **1.07% CER**, passes. Q1 final: glyph
+codes stay pixel-like through the ViT and collapse linearly at the merger. G2-lite (CPU probe): "ViT output is the
+wall at this budget" (no-merger arm ~29% of chars matched vs ~15% through the merger). R3-1 (LoRA, 1000 steps, RTX
+4090): only latin_p8 (28) is read, 55% CER vs blind 88.5%; the moonshot sits at its blind floor (83.6% vs 89.9%,
+loss equal to the blind run's). G3 undecidable. The table below is the state on 2026-11-04.*
+
 | Test | Result |
 |---|---|
 | Raw pixels, trained reader (the "identity ceiling": is the page itself readable?) | Single glyph banks, rgb3 Latin and colour codes: all < 3% CER. Moonshot: 15.2% (pb_h5) and 37.0% (free_h4) at step 500 of 3000, still falling; full run (G0, gate < 10%) pending |
@@ -42,6 +57,10 @@ text tokens, packing far more characters into each vision token than ordinary ty
 | Fine-tuned Qwen (LoRA + last 4 ViT blocks + merger), long-context QA | not run yet (code built, CPU-tested; GPU runs next week) |
 
 ## Hardest parts and where it's failing
+*Status 2026-11-05: points 1-2 are now measured, not hypothesised. Q1 and G2-lite place the loss in the ViT
+output and the 2x2 merger, and a 1000-step fine-tune of the merger + last 4 ViT blocks does not move the moonshot
+off its blind floor. Points 3-7 are untested (no long-context QA has run).*
+
 1. **Pretrained encoders throw away the fine detail the codes need.** This is the main failure so far. Every frozen
    encoder tested puts every dense code at the floor, while the same pages read near-perfectly as raw pixels. The
    information is in the pixels and lost in the encoder. Open question: can fine-tuning the encoder's later layers
@@ -68,6 +87,9 @@ text tokens, packing far more characters into each vision token than ordinary ty
    our own encoder, rendering to pixels may be a detour.
 
 ## Questions for the research task
+*Status 2026-11-05: answered by the research report (link above); its go region of ~30-90 chars/token shaped the
+round-3 density sweep and gates (ROUND3.md, "Re-scope after the literature report").*
+
 * Has anyone trained a VLM or ViT to read dense synthetic visual codes (2D barcodes / data matrix, colour-multiplexed
   or steganographic channels, learned glyph alphabets)? What capacity per token did they reach, and which layers had
   to be trained?

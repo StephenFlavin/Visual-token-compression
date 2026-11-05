@@ -1,8 +1,13 @@
 # Visual BPE: results so far (living document)
 
-Status: **2026-11-03.** Phase 2 (K3) is decided (KILL). Learned glyphs: **qualified GO**, full report in
-`learned_glyphs/RESULTS.md`. Frozen-encoder probe (`encoder_probe/`): round 1 (SigLIP) and round 2
-(DeepSeek-OCR's DeepEncoder) decided: colour pixels dead, learned glyphs whole-pixel.
+Status: **2026-11-05.** Current hand-off and next steps: [HANDOFF.md](HANDOFF.md).
+
+| Line of work | Verdict | Section |
+|---|---|---|
+| Phases 1-2: hand-designed glyph substitution / quadrant packing vs Latin | **KILL**: plain Latin wins | [Kill criteria](#kill-criteria-pre-registered-in-planmd) |
+| Learned glyph alphabet (pixel space, own reader) | **qualified GO**: 0.57x Latin's px²/char | [Learned glyphs](#learned-glyph-alphabet-learned_glyphs-qualified-go) |
+| Frozen encoders (SigLIP, DeepEncoder) | dense codes lost; colour dead; banks whole-pixel | [Frozen-encoder probe](#frozen-encoder-probe-encoder_probe-colour-pixels-dead-learned-glyphs-whole-pixel) |
+| Round 3: Qwen2.5-VL-3B (frozen probes + LoRA fine-tune) | only latin_p8 (28 chars/token) read so far; G3 undecidable | [Round 3](#round-3-qwen25-vl-3b-can-a-small-vlm-learn-to-read-dense-codes) |
 
 Metric throughout: **px²/char** = canvas area / source characters. **P@x** = px²/char at which CER
 first reaches x (isotonic fit, log-x interpolation). Lower is better.
@@ -20,7 +25,10 @@ Claude cannot be used to score any non-natural rendering at all (safety classifi
 What does work is **learning the glyphs** (`learned_glyphs/`). An alphabet optimised jointly with a reader, with ~300 chain
 tokens, needs 0.57× Latin's pixels in the unchanged Phase-2 pipeline and 0.63–0.74× with a fresh reader, and it survives a
 harsh channel. Part of the gain is grey-level coding, and the densest alphabets are brittle on unseen degradations.
-Whether a pretrained VLM encoder preserves such glyphs is tested by `encoder_probe/`.
+
+Through pretrained VLMs the dense codes have not survived so far: frozen SigLIP and DeepEncoder lose every dense
+code (`encoder_probe/`), and after a short LoRA fine-tune Qwen2.5-VL-3B reads Latin at 28 chars/token but none of the
+denser codes (round 3, below). The longer fine-tune that decides G3 has not run yet.
 
 ## Kill criteria (pre-registered in PLAN.md)
 
@@ -83,7 +91,8 @@ Full report: **`learned_glyphs/RESULTS.md`**. Summary (converged, 10.5k steps; b
 * Harsh channel (h7): learned 3.45% CER vs DejaVu 42.8%, so the gain grows under degradation.
 * Chain tokens add to the better shapes: at ~0.6% CER, N=300 needs 0.74× the pixels of chars-only learned glyphs.
 * Caveats: part of the gain is grey-level coding (whole-pixel banks win by only 12–23%); dense banks reach 55–68% CER on unseen
-  degradations; no VLM encoder tested.
+  degradations. ~~No VLM encoder tested~~ (superseded 2026-11-05: frozen VLM encoders lose the banks, and a
+  1000-step Qwen fine-tune does not read lg_pb_h5; see the two sections below).
 * The round-by-round history (including interim conclusions later reversed) is in this file's git history and `results/queue*.txt`.
 
 ## Frozen-encoder probe (encoder_probe/): colour pixels dead, learned glyphs whole-pixel
@@ -102,11 +111,11 @@ change are in encoder_probe/RESULTS.md and PLAN.md.
   banks only if they still beat whole-pixel ones through the encoder **fails**, so use whole-pixel banks.
 * Caveat: through SigLIP the probe overfits (1000 instead of 200 train pages: latin_p10 61% -> 43%), so these are
   upper bounds on the information lost, not what an LLM reading the tokens would get. VLMs that fine-tune the
-  encoder are not covered.
+  encoder are not covered here (round 3 starts on that).
 
 **Round 2: DeepSeek-OCR's DeepEncoder (OCR-trained, 512 px page, 64 tokens of 1280-d).** SigLIP has no OCR
 training, so round 2 repeats the probe on the encoder of an OCR-capable VLM at its own geometry (Qwen2.5-VL was
-dropped; details in encoder_probe/ROUND2.md and RESULTS.md). With raw pixels at the same geometry every encoding is
+dropped from round 2 and became the round-3 model; details in encoder_probe/ROUND2.md and RESULTS.md). With raw pixels at the same geometry every encoding is
 below 3% CER (colour 1x1 blocks 2.9%, everything else <= 0.5%), so all DeepEncoder rows pass the informativeness
 guard. Through the encoder (1000 train pages, clean and JPEG q75) colour blocks (71-73%), rgb3 (83.5%) and both
 learned-glyph banks (lg_free_h4 82.2% vs lg_pb_h5 82.4%) sit at the floor at every density, while only latin_p32
@@ -117,3 +126,24 @@ banks are not supported (0.2 points, both at the floor), so banks stay whole-pix
 weaker than DeepSeek-OCR's own decoder (~10x compression); latin_p32 still improves with data (85% -> 15% CER from
 200 to 5000 pages), so the absolute CERs overstate what the encoder loses; only the same-probe comparisons carry
 the decisions.
+
+## Round 3, Qwen2.5-VL-3B: can a small VLM learn to read dense codes?
+Design, gates and amendments: [encoder_probe/ROUND3.md](../encoder_probe/ROUND3.md); context arithmetic:
+[CONTEXT_BUDGET.md](CONTEXT_BUDGET.md). Densities are chars per Qwen vision token (448 px page, 256 tokens; text
+tokens are 4.33 chars). The moonshot `rgb3_lg_pb_h5` is an RGB overlay of three learned-glyph pages (322 chars/token).
+
+| Step (2026-11-04/05) | Result | Reading |
+|---|---|---|
+| G0: moonshot from raw pixels (identity28 probe, 200 pages, CPU) | **1.07% CER** | the page itself is readable (go bar 3%) |
+| Q1: linear pixel readout of the frozen Qwen ViT | glyph codes stay pixel-like to the last block (moonshot ink MCC 0.48 final), no colour-channel collapse; **every code collapses linearly at the 2x2 merger** (0.29) | Latin also fails this test and is still read by Qwen, so it is a lower bound, not a readability score |
+| G2-lite: CTC probe on frozen ViT states, 3 arms (500 pages, 3000 steps, CPU) | moonshot frozen merger 86.1%, trained merger 84.6% (~15% of chars matched), no merger 71.9% (**~29%** matched); blind floor 99.5% | pre-registered branch **"the ViT output is the wall at this budget"**; the probe under-reads Latin, so no Latin comparison |
+| R3-1: LoRA r=16 + merger + last 4 ViT blocks, LLM as reader (1000 steps, RTX 4090, each arm with a blind control) | only **latin_p8** (28) is read: 55.0% CER vs blind 88.5%, MC 0.88 vs 0.25; latin_p5 (72), lg_pb_h5 (107) and the moonshot sit at their own blind floors | **G3 undecidable** (no arm near 3% CER); short budget, so the dense codes are undecided, not failed |
+
+* latin_p8 transcribes the first line(s) of each window nearly exactly, then drifts into fluent invented text; its
+  loss was still falling at 1000 steps. The moonshot's losses equal its blind run's to 3 decimals.
+* Blind floors differ by code (latin_p5 77.8%, latin_p8 88.5%, moonshot 89.9%), so each arm needs its own control.
+* Rows: `encoder_probe/results/{round3_cpu_tp200,quick_q1,g2lite*,round3_ft_gpu3h,round3_ft_gpu3h_blind}/`.
+* Next: latin_p8/p6/p5 at 5000 steps with blinds; a short vision-side diagnostic for the glyph codes; R3-2
+  (long-context QA) only if G3 passes. See [HANDOFF.md](HANDOFF.md).
+
+![Chars in Qwen's 32k window per encoding: potential vs read so far](img/ctx_budget.png)

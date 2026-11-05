@@ -2,10 +2,11 @@
 
 For any other GPU machine (rented, cloud, unknown hardware) start from [GPU_RUNNER.md](GPU_RUNNER.md) instead.
 
-The remaining round-2 encoder-probe work (`encoder_probe/ROUND2.md`) is slow on the 4-vCPU cloud runner. This is
-the runbook for a Linux PC with an RTX 3090 (24 GB, Ampere, native bf16) and a Ryzen 9 5900X (12 cores / 24 threads,
-AVX2 only). All run times below are **estimates**, not measurements: the CUDA path was written on a machine without
-a GPU and has not been run yet (see "Smoke test" first).
+Runbook for the user's PC with an RTX 3090 (24 GB, Ampere, native bf16) and a Ryzen 9 5900X (12 cores / 24 threads,
+AVX2 only). Sections 1-7 were written for Linux before the PC turned out to be **Windows 11**: there, use Git Bash,
+the venv's `python` (not `python3`) and `PYTHONUTF8=1` (section 8; AGENTS.md has the Windows gotchas). Round 2 (sections
+4-7) ran here on 2026-11-04; round 3 (section 8) has not run on this PC yet. Times are **estimates** unless marked
+measured.
 
 ## 1. Setup
 
@@ -74,7 +75,11 @@ print('corr', torch.corrcoef(torch.stack([a.flatten(), b.flatten()]))[0, 1].item
 The log line should say `device=cuda bf16=True train-data-on-gpu=True`. These are smoke rows (`smoke: true`), not results.
 The first run also builds the `tr20` DeepEncoder token cache on the GPU. If anything fails here, fix it before queueing.
 
-## 4. Status in brief (2026-11-04)
+## 4. Status in brief (2026-11-04, superseded)
+
+*Superseded 2026-11-04 evening: round 2 finished on this PC (1000-5000 pages). Only latin_p32 (8.5 chars/token) reads
+through DeepEncoder (18.9% at 1000 pages, 14.9% at 5000); every denser code sits at the floor. Results:
+[RESULTS.md](RESULTS.md) and encoder_probe/RESULTS.md. The text below is the pre-run state.*
 
 Round 2 targets DeepSeek-OCR's DeepEncoder (512 px Tiny mode, 8x8 = 64 tokens of 1280-d); Qwen was dropped (user
 decision). Rows: `encoder_probe/results/round2/runs.jsonl` (cloud runner, fp32 probe, 200 train pages, 3000 steps).
@@ -210,8 +215,11 @@ git pull --rebase origin claude/validation-harness && git push origin claude/val
 
 ## 8. Round 3 on the 3090 (encoder_probe/ROUND3.md)
 
-**Status: the R3-1/R3-2 code is built and CPU-tested on a tiny random-init Qwen2.5-VL only. Nothing below has run
-on a GPU or with the real weights yet. Every time and VRAM figure is an estimate.** Run the smokes first.
+**Status (2026-11-05):** `finetune_qwen.py` ran as built on a Linux RTX 4090 (smoke + 1000-step arms with blind
+controls, [GPU_RUNNER.md](GPU_RUNNER.md); results in [HANDOFF.md](HANDOFF.md)): 1.2 s/step, peak 11.4 GB at batch 4.
+Nothing below has run on this Windows PC yet, and R3-0 (frozen Qwen probe on CUDA) and R3-2 (`longctx_bench.py`)
+have not run on any GPU. **The next arms and their order are in HANDOFF.md** (latin_p8/p6/p5 at 5000 steps with
+blinds, then a short vision-side diagnostic); the R3-1 block below is the original grid. Run the smokes first.
 
 ### Setup (Windows, Git Bash, the round-2 venv)
 ```bash
@@ -233,13 +241,15 @@ expansion). Windows: use `python`, not `python3`, in queue lines; keep `PYTHONUT
   `longctx_bench.py` job at a time, alone on the GPU**, until `nvidia-smi` shows headroom. Windows pages GPU memory
   to host RAM instead of failing with OOM: jobs then stall silently (round 2: 20 min with 5 jobs). Watch log
   progress and checkpoint mtimes.
-* VRAM estimates (not measured): finetune, batch 4, windows of <= 2000 chars (~800-token sequences): bf16 weights
-  7.5 GB + fp32 trainables, grads and AdamW for 145.5M params 2.3 GB + checkpointed activations 2-4 GB = **~12-15 GB**.
+* VRAM: finetune, batch 4, windows of <= 2000 chars (~800-token sequences): estimated ~12-15 GB (bf16 weights
+  7.5 GB + fp32 trainables, grads and AdamW for 145.5M params 2.3 GB + checkpointed activations 2-4 GB); **measured
+  11.4 GB peak allocated (~12.3 GB in nvidia-smi) on the RTX 4090**, so one finetune job at a time on 24 GB.
   If it pages, use `--micro-batch 2` (same effective batch). longctx_bench at 32k positions: weights 7.5 GB + KV
   1.2 GB + prefill activations 2-3 GB = **~11-13 GB**; text input at 32k is the peak (LM-head logits are computed for
   the last position only).
 * Disk: a finetune resume checkpoint is ~1.75 GB (trainables + AdamW, `encoder_probe/cache/ckpt/r3ft__*.pt`, deleted
   when the job ends); the kept adapter is ~0.6 GB (`encoder_probe/cache/r3_adapters/<run>__<encoding>__<steps>.pt`).
+  Keep >= 3 GB free: the 4090 runner's disk quota filled and killed a job.
 
 ### Smokes (run first, one at a time)
 ```bash
@@ -280,6 +290,8 @@ python encoder_probe/experiments/analyse2.py encoder_probe/results/round3_qwen_t
   on the cloud runner, `round3_cpu_tp200`; the 1185-class probe is ~2x slower per step).
 * Decision (ROUND3.md): pick the 1-2 best dense codes by chars/token at 10% CER; if none survives, still take
   col_b4 and rgb3_p8.
+* Quote every probe CER next to its code's blind floor and op split (`run_g2lite.py --arm blind`; GPU_RUNNER.md
+  section 4). GridProbe under-reads Latin through Qwen (ROUND3.md), so Latin probe rows are lower bounds.
 
 ### R3-1: fine-tuning arms (run name `round3_ft`; smokes `round3_ft_smoke`)
 ```bash
@@ -287,6 +299,7 @@ ARMS="latin_p5 latin_p8 col_b4 rgb3_p8 rgb3_lg_pb_h5 rgb3_lg_free_h4"   # replac
 for e in $ARMS; do echo "python encoder_probe/experiments/run_probe2.py --pages-only --encoding $e --encoder qwen25vl --train-pages 1000"; done > results/queue_cpu_r3_1.txt
 for e in $ARMS; do echo "python encoder_probe/experiments/finetune_qwen.py --encoding $e --smoke"; done > results/queue_gpu_r3_1.txt
 for e in $ARMS; do echo "python encoder_probe/experiments/finetune_qwen.py --encoding $e --steps 5000 --run-name round3_ft"; done >> results/queue_gpu_r3_1.txt
+for e in $ARMS; do echo "python encoder_probe/experiments/finetune_qwen.py --encoding $e --steps 5000 --run-name round3_ft --blind-images"; done >> results/queue_gpu_r3_1.txt   # -> round3_ft_blind
 nohup python scripts/job_queue.py results/queue_cpu_r3_1.txt --cores 8 --log-dir results/queue_logs/cpu_r3_1 > results/queue_cpu_r3_1.log 2>&1 &
 nohup python scripts/job_queue.py results/queue_gpu_r3_1.txt --cores 1 --log-dir results/queue_logs/gpu_r3_1 > results/queue_gpu_r3_1.log 2>&1 &
 ```
@@ -296,11 +309,16 @@ nohup python scripts/job_queue.py results/queue_gpu_r3_1.txt --cores 1 --log-dir
 * The pages-only lines fill the cache key `(encoding, 448, 1000, 16)` that the 5000-step runs read (the
   `rgb3_lg_*` pages need ~82M train chars for 1000 pages, hence `EP_TRAIN_R2_CAP=400000000`). Smokes use 100/4
   pages and render their own (~1-3 min).
+* **Blind control for every arm** (`--blind-images`: each page's image swapped for another page's, targets
+  unchanged, same `fair_hash`, run name gets `_blind`). Floors differ by code (latin_p5 77.8% CER, latin_p8 88.5%),
+  so quote every CER next to its own blind.
 * Rows: `encoder_probe/results/round3_ft/runs.jsonl`, one per eval cond (clean, jpeg75): `cer`, `cloze_acc`,
-  `mc_acc`, `chars_per_token`, `curve` [(step, train-loss EMA, val loss)], `s_per_step`, `peak_gpu_bytes`. Resume:
+  `mc_acc`, `chars_per_token`, `curve` [(step, train-loss EMA, val loss)], `s_per_step`, `peak_gpu_bytes`, and `ops`
+  (sub / ins / del, `len_ratio`, `prefix_frac`): report the op split with each CER. Resume:
   restart the queue with a new `--log-dir`; a job continues from its last `--ckpt-every` (250) checkpoint, exactly.
-* Estimate (not measured): 5000 steps at ~1.5-3 s/step = 2-4 h per arm plus ~5-10 min of eval, ~12-25 h for 6
-  arms. Run the two Latin arms and one code first if time is short; prediction 2 needs the best Latin at 3%.
+* Estimate: 5000 steps at ~1.2 s/step (4090, measured; the 3090 is likely slower) = ~1 h 45 min per job incl. load
+  and eval, so 6 arms + 6 blinds ≈ 20+ h. Run the Latin arms first if time is short; prediction 2 needs the best Latin
+  at 3%.
 
 ### R3-2: long-context benchmark (run names `round3_lc_base`, `round3_lc_ft`)
 ```bash

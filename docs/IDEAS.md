@@ -1,6 +1,7 @@
-# Idea backlog (not yet tested)
+# Idea backlog
 
 Ideas recorded for later. Each one gets a status, a short assessment, and the cheapest test that would settle it.
+The dated status line under each idea is the current state; the text above it is the assessment as first written.
 
 ## RGB word overlay (user idea, 2026-11-03)
 
@@ -34,6 +35,11 @@ Go on only if it beats `latin` chars/token at 3% CER through siglip with JPEG.
 `encoder_probe/ep/rgb_overlay.py`; design, pre-registered predictions, decision rule and the 48-command grid
 in [encoder_probe/RGB_OVERLAY.md](../encoder_probe/RGB_OVERLAY.md). Only a 300-step smoke run exists.
 
+**Status (2026-11-05): dead for frozen encoders.** From raw pixels rgb3 works (identity32: rgb3_p6 0.01% CER at
+3x mono's chars/token). Through DeepEncoder rgb3 sits at the floor (83.5%, worse than mono's 72-73%), so the SigLIP
+grid (P2) was gated off. In frozen Qwen, rgb3_p8 stops being linearly pixel-decodable by block 24 (Q1); it has no
+fine-tuned arm yet. The overlay lives on in the moonshot (`rgb3_lg_pb_h5`, below and in ROUND3.md).
+
 ## More layers per pixel: intensity levels within each channel (follow-up, 2026-11-03)
 
 **Idea (user):** go beyond 3 overlaid layers by adding more colours, e.g. yellow and black.
@@ -60,6 +66,9 @@ classes, 6 interleaved labels per cell; check the CTC frame budget) and run it w
 
 **Status:** recorded; gated on the rgb3 result.
 
+**Status (2026-11-05): gated off, not built.** rgb3 failed through the encoder (DeepEncoder floor), so rgb6 (P3)
+was not run.
+
 ## Braille-style fixed dot code (control for learned glyphs, 2026-11-04)
 
 **Observation (user):** the converged whole-pixel learned glyphs look like braille. They nearly are: single-char
@@ -84,6 +93,9 @@ optional; if both fixed codes stay near DejaVu, the learned shapes matter. Also 
 learned bank's lead was largest (h7: 3.5% vs DejaVu 43%).
 
 **Status:** recorded, not queued.
+
+**Status (2026-11-05): still not queued.** Still the cheapest open control for the learned-glyph GO; pixel-space
+only, so not blocked by the VLM results.
 
 ## If the moonshot fails: other avenues (user questions, 2026-11-04)
 
@@ -124,3 +136,9 @@ learned bank's lead was largest (h7: 3.5% vs DejaVu 43%).
    established field, not a new idea.
 
 **Status:** recorded; gated on G0 (moonshot identity28 ceilings), Q1 (layer-wise linear readout) and R3-1 on the 3090.
+
+**Status (2026-11-05): ladder step 2 applies, not yet decided.** G0 passed (moonshot 1.07% from raw pixels); Q1
+and G2-lite put the loss in the ViT output / merger ("ViT output is the wall at this budget"); R3-1 at 1000 steps
+reads latin_p8 (28 chars/token, 55% CER vs blind 88.5%) but leaves every denser code at its blind floor. Next: a
+short vision-side diagnostic (higher `--lr-vision`, more `--vision-blocks`; a light version of 2a) and the 5000-step
+Latin arms, which also size option 1 ([HANDOFF.md](HANDOFF.md)).
