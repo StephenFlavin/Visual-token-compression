@@ -32,7 +32,7 @@ Images, render caches, checkpoints and live logs are git-ignored and regenerate 
 
 ## Note on archived paths
 
-Older docs (`encoder_probe/ROUND2.md`, `encoder_probe/ROUND3.md`, `docs/history/`, `docs/HANDOFF.md`) name files such
+Older docs (`encoder_probe/ROUND2.md`, `encoder_probe/ROUND3.md`, `docs/history/`) name files such
 as `results/queue_probe_c.txt` or `results/queue_gpu3h.txt`. Those finished queue files and logs now live in
 `results/archive/` under the same names. New queue files can still be written to `results/` while a round runs;
 move them to `archive/` when it finishes.

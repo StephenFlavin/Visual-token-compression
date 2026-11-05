@@ -302,7 +302,7 @@ Through deepencoder no family reaches 10% (only latin_p32 gets below ~70%, at 19
 # Round 3: Qwen2.5-VL-3B, can a VLM learn to read the codes? (2026-11-05)
 
 Design, gates G0-G4, pre-registered predictions, decision rules and every dated amendment are in
-[ROUND3.md](ROUND3.md); the GPU session log is [../docs/HANDOFF.md](../docs/HANDOFF.md). Geometry: 448 px page,
+[ROUND3.md](ROUND3.md); the GPU session log is [../docs/history/HANDOFF_2026-11.md](../docs/history/HANDOFF_2026-11.md) (current hand-off: [../docs/HANDOFF.md](../docs/HANDOFF.md)). Geometry: 448 px page,
 28-px tokens, 256 vision tokens per page; Qwen text tokens hold 4.33 chars on this text. Figures:
 `python3 encoder_probe/experiments/make_figures.py`.
 

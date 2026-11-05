@@ -163,7 +163,7 @@ What it shows:
   the checkpoint's own chat template and processor expansion token for token (real tokenizer, 2026-11-04), and the
   hub's old key layout (`model.layers.*`, `visual.*`, tied head) loads into transformers 5.22.1 bit for bit (test).
 
-**R3-1 short-budget results (GPU runner, RTX 4090, 2026-11-05; details and samples in docs/HANDOFF.md).**
+**R3-1 short-budget results (GPU runner, RTX 4090, 2026-11-05; details and samples in docs/history/HANDOFF_2026-11.md).**
 1000 steps per arm (5000 planned), 1000 train / 16 test pages, one fair_hash `05dc0c9e8507`, with --blind-images
 controls. Rows: `encoder_probe/results/round3_ft_gpu3h{,_blind}/`.
 | Arm (chars/token) | CER clean | blind CER | cloze | MC | val loss (blind) |
@@ -543,5 +543,6 @@ Ways to push density past the literature's 30-90 chars/token, each testable on i
   transformers + peft) and R3-2 benchmark (`encoder_probe/experiments/longctx_bench.py`). Weights: full
   Qwen2.5-VL-3B (~7.5 GB, into the Hugging Face cache), not just the vision tensors. Commands, in order, with VRAM
   estimates: docs/LOCAL_GPU.md, "Round 3 on the 3090".
+* *(2026-11-05, measured on an RTX 4090: R3-1 1.21 s/step, peak 11.4 GB, so ~1 h 45 min per 5000-step arm plus ~7 min load+eval.)*
 * Estimates (not measured): R3-0 ~2 h; R3-1 smoke 30 min, full arms 2-4 h each; R3-2 harness ~1 day of coding,
   runs ~1-2 h per configuration.
