@@ -93,6 +93,13 @@ What it shows:
     would not resume onto the same pages). For comparison, identity32 ceilings (round2_gpu_tp200, 3000 steps):
     rgb3_p6 0.01% (169 chars/32-px token), rgb3_p8 0.42% (96), lg_pb_h5 0.52% (141), lg_free_h4 0.05% (177); no
     identity28 rows exist yet for rgb3_p*/lg_*.
+    **Update (2026-11-04/05): the clean ceilings were re-run on the cloud after all (G0, run `round3_cpu_tp200`).**
+    * `rgb3_lg_pb_h5` val CER (4 pages): 15.2% at step 500, 2.3% at 1000, 1.5% at 1500.
+    * `rgb3_lg_free_h4` was killed by the cgroup OOM killer (5.2 GB RSS) at about step 400. Not restarted: Q1 dropped
+      it.
+    * **Precision note for the `rgb3_lg_pb_h5` row:** steps 1-2400 ran in fp32 (host without native bf16). After a
+      container restart it resumed at step 2400 on an AMX host, so steps 2401-3000 ran in bf16 autocast. The row's
+      `bf16: true` therefore describes only the last 600 steps.
 * Metric: CER of generated transcriptions on held-out test pages (WikiText test/val, as rounds 1-2), clean and jpeg75;
   cloze accuracy.
 * **Code: built 2026-11-04, CPU-tested on a tiny random-init model, never run on a GPU or with the real weights.**
