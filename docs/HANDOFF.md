@@ -13,7 +13,8 @@ hardware, sizing and samples of the RTX 4090 session: [history/HANDOFF_2026-11.m
 | Round 3, G0: moonshot `rgb3_lg_pb_h5` (322 chars/token) from raw pixels | **1.07% CER**: the page itself is readable | ROUND3.md |
 | Round 3, Q1: linear readout of frozen Qwen ViT | glyph codes pixel-like to the last block; everything collapses linearly at the merger | ROUND3.md |
 | Round 3, G2-lite (CPU probe, 500 pages) | **"ViT output is the wall at this budget"**: no-merger arm matches ~29% of chars vs ~15% | ROUND3.md |
-| Round 3, R3-1 (LoRA fine-tune, 1000 steps, RTX 4090) | only **latin_p8 (28 chars/token)** is read; every denser code sits at its own blind floor; **G3 undecidable** | below |
+| Round 3, R3-1 (LoRA fine-tune, 1000 steps, RTX 4090) | **latin_p8 (28 chars/token)** is read; latin_p5 (72) gets the gist only; the glyph codes are not read; **G3 undecidable** | below |
+| Analysis of all of the above against blind controls | glyph codes' information is lost inside the frozen ViT, upstream of R3-1's trained blocks; next: train from block 8 | [ANALYSIS.md](ANALYSIS.md) |
 
 **R3-1 short budget** (1000 steps, 1000 train / 16 test pages, clean, one fair_hash `05dc0c9e8507`):
 | Arm (chars/token) | CER | blind CER | cloze (blind) | MC (blind) | val loss (blind) |
@@ -24,7 +25,8 @@ hardware, sizing and samples of the RTX 4090 session: [history/HANDOFF_2026-11.m
 | rgb3_lg_pb_h5 (321.6) | 83.6% | 89.9% | 0.22 (0.22) | 0.34 (0.28) | 2.518 (2.517) |
 
 latin_p8 transcribes the first line(s) of a window nearly exactly, then drifts into invented text; its loss was still
-falling. The moonshot's losses equal its blind run's to 3 decimals. No arm is near 3% CER, so G3 can't be decided.
+falling. latin_p5's val loss is 9.9% below its blind's (MC 18/32 vs 9/32, p = 0.02): gist, not words. The moonshot's
+losses equal its blind run's to 3 decimals. No arm is near 3% CER, so G3 can't be decided.
 
 ## What ran and where the rows are
 * G0: `encoder_probe/results/round3_cpu_tp200/`. Q1: `encoder_probe/results/quick_q1/summary.md`.
@@ -34,13 +36,19 @@ falling. The moonshot's losses equal its blind run's to 3 decimals. No arm is ne
   jpeg75); logs `results/queue_logs/gpu3h_{1,2}/`. The LoRA adapters were lost with the instance; nothing depends on them.
 
 ## Open items, in priority order
-1. **latin_p8, latin_p6, latin_p5 at 5000 steps, each with its own `--blind-images` control.** Does latin_p8's drift
-   go away, and how far can fine-tuned Latin be pushed? This sets the G3 baseline. On a 4090 ~1 h 45 min per job.
-2. **Short vision-side diagnostic** on lg_pb_h5 or the moonshot (R3-1b stage B, light): `--lr-vision 1e-4` and/or
-   more `--vision-blocks`, 1000 steps, loss vs its own blind at the same settings. A long dense-code run only if
-   the loss leaves the blind's.
-3. R3-2 long-context benchmark, only for an arm that passes G3.
-4. Lower priority: rgb3_p8 (~73) arm; G2 at scale on a GPU (GPU_RUNNER.md section 6); moonshot levers (ROUND3.md).
+Reordered 2026-11-05 after [ANALYSIS.md](ANALYSIS.md): R3-1 trained too little of the ViT to test the glyph codes, and
+latin_p8 is underfitting, so the recipe is tested before the long runs.
+1. **Stage A' vision-side diagnostic** (ROUND3.md R3-1b, pre-registered): `--vision-blocks 24 --lr-vision 1e-4`,
+   1000 steps, latin_p8, lg_pb_h5 and rgb3_lg_pb_h5, each with `--blind-images`. Glyph line continues only if its
+   val-loss gain vs blind is > 0.02 nats/token; latin_p8's val loss < 1.0 makes A' the recipe for later arms.
+   ~6 jobs of ~35 min on a 4090 (measure in the smoke: peak ~18-19 GB estimated).
+2. **Latin density sweep:** latin_p12 and latin_p10 (~12.5 and ~18 chars/token), 1000 steps, on the better recipe,
+   each with a blind. Maps how readability falls with density: the demo's operating point.
+3. **5000-step Latin arms** (latin_p8, p6, p5 with blinds) on the better recipe: the G3 baseline. ~1 h 45 min per
+   job on a 4090 with the R3-1 recipe.
+4. R3-2 long-context benchmark, only for an arm that passes G3.
+5. Lower priority: a per-line eval of latin_p8 (recognition vs losing its place; needs a flag); the G2-lite direct
+   probe on block-8/16 states (CPU, needs a block option); rgb3_p8 (~73); moonshot levers (ROUND3.md).
 
 ## Prompt for the next GPU session
 ```text
@@ -49,15 +57,19 @@ short-budget results, R3-1b and both amendments. Runbook: docs/GPU_RUNNER.md (an
 peak memory in the smoke, then size), or docs/LOCAL_GPU.md section 8 on the Windows RTX 3090 PC.
 
 1. Setup, CPU tests, then finetune_qwen.py --encoding latin_p8 --smoke. Pre-render pages on the CPU first.
-2. Arms at identical settings, 5000 steps, one run name (one fair_hash): latin_p8, latin_p6, latin_p5, and for
-   EACH the same command with --blind-images (run name gets _blind). Order: latin_p8 + blind, latin_p5 + blind,
-   latin_p6 + blind. Long jobs with nohup and checkpoints (--ckpt-every 250); push rows often.
-3. Then a short vision-side diagnostic (new run name, 1000 steps) on lg_pb_h5 or rgb3_lg_pb_h5: --lr-vision 1e-4
-   and/or --vision-blocks 8, plus its own --blind-images run at the same settings. Report train/val loss vs the
-   blind's; never above 1e-4 for pretrained weights (AGENTS.md: merger LR collapse).
-4. Report every CER next to its own blind floor, with the op split (ops: sub/ins/del, len_ratio) and prefix_frac.
-   Apply ROUND3.md G3; never choose anything on test-page CER. R3-2 only for an arm that passes G3.
-5. Keep >= 3 GB of disk free (df -h . ; delete finished checkpoints and page caches you no longer need).
+2. Stage A' (ROUND3.md R3-1b, pre-registered; read docs/ANALYSIS.md): 1000 steps, one run name, flags
+   --vision-blocks 24 --lr-vision 1e-4 for every arm: latin_p8, lg_pb_h5, rgb3_lg_pb_h5, and for EACH the same
+   command with --blind-images. Smoke it first and check peak memory (estimate ~18-19 GB); if it does not fit, use
+   --vision-blocks 16 for every arm and say so. Never above 1e-4 for pretrained weights. Then run
+   python3 encoder_probe/experiments/analyse_r3.py adapted to the new run names, and apply A''s decision rules.
+3. Latin density sweep: latin_p12 and latin_p10, 1000 steps, on the better recipe (A' if latin_p8's val loss < 1.0,
+   else R3-1's), each with --blind-images.
+4. If time remains: latin_p8, latin_p6, latin_p5 at 5000 steps on that recipe, each with --blind-images. Long jobs
+   with nohup and checkpoints (--ckpt-every 250); push rows often.
+5. Report every arm against its own blind: val-loss gain first, then MC/cloze, then CER with the op split (ops:
+   sub/ins/del, len_ratio) and prefix_frac. Apply ROUND3.md G3; never choose anything on test-page CER. R3-2 only
+   for an arm that passes G3.
+6. Keep >= 3 GB of disk free (df -h . ; delete finished checkpoints and page caches you no longer need).
 
 Stop and ask me if the smoke fails, if fine-tuned Latin stays at its blind floor, or if a result would change the
 plan. Record design changes as dated amendments in ROUND3.md before running them. At the end update

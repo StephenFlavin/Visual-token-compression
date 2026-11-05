@@ -320,8 +320,9 @@ Design, gates G0-G4, pre-registered predictions, decision rules and every dated 
 * **G2-lite (frozen ViT, CPU):** by the pre-registered rule, **the ViT output is the wall at this budget** (moonshot
   trained 84.6%, direct 71.9%, both > 30%). Post hoc, bypassing the merger reads ~29% of reference characters vs
   ~15% for the merger arms.
-* **R3-1 (fine-tune, LLM as reader, 1000 steps):** **only latin_p8 is read** (55.0% CER vs blind 88.5%). latin_p5,
-  lg_pb_h5 and the moonshot sit at their own blind floors. **G3 is undecidable** (no arm near 3%); the glyph codes
+* **R3-1 (fine-tune, LLM as reader, 1000 steps):** **only latin_p8 transcribes** (55.0% CER vs blind 88.5%). latin_p5
+  gets the gist only (val loss 9.9% below blind, MC 18/32 vs 9/32, p = 0.02); lg_pb_h5 and the moonshot are not
+  read (losses equal the blind runs'). Analysis: [docs/ANALYSIS.md](../docs/ANALYSIS.md). **G3 is undecidable** (no arm near 3%); the glyph codes
   are not read at this budget, which is "not reached yet", not "impossible".
 
 ## G0: raw-pixel ceiling of the moonshot
@@ -403,8 +404,9 @@ RTX 4090, 1.2 s/step, 11.4 GB peak. Rows: `results/round3_ft_gpu3h{,_blind}/`.
 
 * **latin_p8 is read** on every metric. Its CER is high because it transcribes the first line(s) of a window nearly
   exactly, then drifts into fluent invented text; its loss was still falling at 1000 steps.
-* **latin_p5 does not transcribe yet:** its blind control gets lower CER (77.8% vs 80.9%) and the same cloze; only
-  MC and val loss show some use of the image.
+* **latin_p5 does not transcribe yet, but it reads the gist:** its blind control gets lower CER (77.8% vs 80.9%) and
+  the same cloze, but its val loss is 9.9% below the blind's (the gap grew at every checkpoint) and MC is 18/32 vs
+  9/32 (one-sided Fisher p = 0.02). Fluent unrelated text scores ~80% CER, so CER can't show partial reading.
 * **Neither glyph code is read.** The moonshot's losses equal its blind run's to 3 decimals and its generations are
   the same generic text whatever the page; lg_pb_h5 (107) is at its floor too, so density alone does not explain
   the moonshot's failure. Blind floors differ by code (77.8% to 89.9%), so every arm needs its own.

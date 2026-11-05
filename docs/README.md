@@ -5,6 +5,8 @@ overview is the top-level [README.md](../README.md); how to run things and the g
 
 ## Current status
 * [HANDOFF.md](HANDOFF.md): status table, where the rows are, open items, the prompt for the next GPU session.
+* [ANALYSIS.md](ANALYSIS.md): the results measured against blind controls (significance, information per vision
+  token, where the glyph codes lose their information), an outlook per code and what to run next.
 
 ## Results
 * [RESULTS.md](RESULTS.md): cross-project summary: Phases 1-2 (KILL), learned glyphs (qualified GO), frozen encoders, round 3.

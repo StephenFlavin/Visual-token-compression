@@ -12,9 +12,9 @@ The comparison is plain Latin against the dense codes at an identical budget, ea
 The CPU probe can't measure Latin through Qwen at feasible data sizes, so the LLM-as-reader result is the fair one.
 In about 3 h: setup, smoke, then short arms at equal steps. A short result is a signal, not a verdict. Label it so.
 
-**Done once (2026-11-05, RTX 4090, 1000 steps):** latin_p8 is read (55% CER vs blind 88.5%); latin_p5, lg_pb_h5
-and the moonshot sit at their blind floors. **The next session's arms and order are in [HANDOFF.md](HANDOFF.md)**
-(latin_p8/p6/p5 at 5000 steps with blinds, then a short vision-side diagnostic); sections 3-4 below show the
+**Done once (2026-11-05, RTX 4090, 1000 steps):** latin_p8 is read (55% CER vs blind 88.5%); latin_p5 gets the
+gist only (val loss 10% below blind); lg_pb_h5 and the moonshot are not read ([ANALYSIS.md](ANALYSIS.md)). **The next session's arms and order are in [HANDOFF.md](HANDOFF.md)**
+(stage A' vision-side diagnostic with blinds, a Latin density sweep, then 5000-step Latin arms); sections 3-4 below show the
 mechanics with the first session's arms.
 
 ## 0. Before you start (5 min)

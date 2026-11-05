@@ -137,11 +137,12 @@ tokens are 4.33 chars). The moonshot `rgb3_lg_pb_h5` is an RGB overlay of three 
 | G0: moonshot from raw pixels (identity28 probe, 200 pages, CPU) | **1.07% CER** | the page itself is readable (go bar 3%) |
 | Q1: linear pixel readout of the frozen Qwen ViT | glyph codes stay pixel-like to the last block (moonshot ink MCC 0.48 final), no colour-channel collapse; **every code collapses linearly at the 2x2 merger** (0.29) | Latin also fails this test and is still read by Qwen, so it is a lower bound, not a readability score |
 | G2-lite: CTC probe on frozen ViT states, 3 arms (500 pages, 3000 steps, CPU) | moonshot frozen merger 86.1%, trained merger 84.6% (~15% of chars matched), no merger 71.9% (**~29%** matched); blind floor 99.5% | pre-registered branch **"the ViT output is the wall at this budget"**; the probe under-reads Latin, so no Latin comparison |
-| R3-1: LoRA r=16 + merger + last 4 ViT blocks, LLM as reader (1000 steps, RTX 4090, each arm with a blind control) | only **latin_p8** (28) is read: 55.0% CER vs blind 88.5%, MC 0.88 vs 0.25; latin_p5 (72), lg_pb_h5 (107) and the moonshot sit at their own blind floors | **G3 undecidable** (no arm near 3% CER); short budget, so the dense codes are undecided, not failed |
+| R3-1: LoRA r=16 + merger + last 4 ViT blocks, LLM as reader (1000 steps, RTX 4090, each arm with a blind control) | only **latin_p8** (28) is read: 55.0% CER vs blind 88.5%, MC 0.88 vs 0.25; latin_p5 (72) gets the gist only (val loss 10% below blind, MC 0.56 vs 0.28, p = 0.02; CER at its floor); lg_pb_h5 (107) and the moonshot are not read (loss = blind's) | **G3 undecidable** (no arm near 3% CER); short budget, so the dense codes are undecided, not failed |
 
 * latin_p8 transcribes the first line(s) of each window nearly exactly, then drifts into fluent invented text; its
   loss was still falling at 1000 steps. The moonshot's losses equal its blind run's to 3 decimals.
 * Blind floors differ by code (latin_p5 77.8%, latin_p8 88.5%, moonshot 89.9%), so each arm needs its own control.
+* Analysis against the blinds (exact tests, bits per vision token, where the information is lost): [ANALYSIS.md](ANALYSIS.md).
 * Rows: `encoder_probe/results/{round3_cpu_tp200,quick_q1,g2lite*,round3_ft_gpu3h,round3_ft_gpu3h_blind}/`.
 * Next: latin_p8/p6/p5 at 5000 steps with blinds; a short vision-side diagnostic for the glyph codes; R3-2
   (long-context QA) only if G3 passes. See [HANDOFF.md](HANDOFF.md).

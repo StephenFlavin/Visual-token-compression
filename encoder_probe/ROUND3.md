@@ -11,7 +11,7 @@ Model: Qwen2.5-VL-3B (448 px page = 256 tokens). Moonshot = `rgb3_lg_pb_h5`, thr
 | G0 | is the moonshot page (322 chars/token) readable from raw pixels? identity28, 200 pages, CPU | **1.07% CER** | pass (< 3%) |
 | Q1 | linear pixel readout of each frozen ViT block | glyph codes stay pixel-like to the last block (lg_pb_h5 final 0.65, moonshot 0.47 ink MCC); every code is at <= 0.30 after the 2x2 merger; Latin loses its readout by block 24 although Qwen reads it | pixels are lost at the merger; rgb3_lg_free_h4 dropped |
 | G2-lite | frozen / trained (LR 1e-4) / no merger, GridProbe, 500 pages, 3000 steps, CPU | moonshot 86.1 / 84.6 / **71.9%**, blind floor 99.5%; reference chars matched ~15 / 15 / **29%** | pre-registered branch: **"the ViT output is the wall at this budget"**; post hoc, the direct arm reads ~2x the merger arms |
-| R3-1 (G3) | LoRA fine-tune, the LLM as reader, **1000 steps** (5000 planned), RTX 4090, each arm vs its own blind control | latin_p8 (28): **55.0% CER vs blind 88.5%**, MC 0.88 vs 0.25, val loss 1.12 vs 2.48. latin_p5 (72), lg_pb_h5 (107), moonshot (322): at their own floors | only latin_p8 is read; **G3 undecidable** (no arm near 3%) |
+| R3-1 (G3) | LoRA fine-tune, the LLM as reader, **1000 steps** (5000 planned), RTX 4090, each arm vs its own blind control | latin_p8 (28): **55.0% CER vs blind 88.5%**, MC 0.88 vs 0.25, val loss 1.12 vs 2.48. latin_p5 (72): gist only (val loss 9.9% below blind, MC p = 0.02); lg_pb_h5 (107), moonshot (322): not read (loss = blind's) | latin_p8 read, latin_p5 partly; **G3 undecidable** (no arm near 3%). Analysis: [docs/ANALYSIS.md](../docs/ANALYSIS.md) |
 | R3-0, G1, G4, R3-2 | frozen-Qwen probe grid, glyph-ID probe, QA vs KV bytes | not run | - |
 
 ![R3-1: each arm against its blind control](img/r31_vs_blind.png)
@@ -25,9 +25,12 @@ Model: Qwen2.5-VL-3B (448 px page = 256 tokens). Moonshot = `rgb3_lg_pb_h5`, thr
 * **Reading of the evidence.** The moonshot's fine-tuned losses equal its blind run's to 3 decimals, and lg_pb_h5
   (107) is at its floor too, so density alone does not explain the failure. A 1000-step result is "not reached at
   this budget", not "impossible".
-* **Next:** latin_p8 / p6 / p5 at 5000 steps with blind controls; a vision-side diagnostic for the glyph codes
-  (R3-1b: higher vision LR, more unfrozen ViT blocks, judged on loss vs blind) before any long moonshot run; R3-2
-  only after a code passes G3.
+* **Analysis** ([docs/ANALYSIS.md](../docs/ANALYSIS.md)): measured against its blind, latin_p5 gets the gist
+  (val loss 9.9% below blind, MC p = 0.02); the glyph codes get nothing. Q1, G2-lite and R3-1 put the glyph codes'
+  loss inside the frozen ViT, upstream of R3-1's trained blocks 28-31.
+* **Next** (R3-1b stage A', proposed below): a 1000-step vision-side diagnostic (ViT blocks 8-31, LR 1e-4) on
+  latin_p8, lg_pb_h5 and the moonshot with blinds; a Latin density sweep (p12, p10); then 5000-step Latin arms on
+  the better recipe. R3-2 only after a code passes G3.
 
 <details><summary>G2-lite and Q1 figures</summary>
 
@@ -195,6 +198,16 @@ Latin gets the identical recipe, steps and data. Memory and time figures are est
   amount of model training helps; drop that code.
 * **Stage A = R3-1 as above** (LoRA r=16 + merger + last 4 ViT blocks, 5k steps). Go to stage B for a code only if
   its held-out CER is still falling at 5k, or it plateaus well above its ceiling while Latin converges.
+* **Stage A' (proposed 2026-11-05 from docs/ANALYSIS.md, after R3-1's 1000-step rows, before any A' row):** the
+  same recipe with `--vision-blocks 24 --lr-vision 1e-4` (trains from block 8, where Q1's moonshot ink MCC is still
+  0.86; R3-1 trained only from block 28, MCC 0.56, at 2e-5). 1000 steps, one run name, arms latin_p8 (positive
+  control), lg_pb_h5, rgb3_lg_pb_h5, each with `--blind-images`. Estimated peak ~18-19 GB.
+  * Primary metric: val-loss gain vs the arm's own blind at step 1000, on the same targets. Noise in the R3-1 glyph
+    arms is <= 0.005 nats per text token.
+  * Glyph codes: continue the glyph line on Qwen-3B only if the gap is > 0.02 nats/token; otherwise stop it (the
+    remaining route is stage B1 with the full ViT, or a new encoder).
+  * latin_p8: if A' beats R3-1 on val loss (< 1.0 vs 1.125), A' becomes the shared recipe for every later arm,
+    including the 5000-step Latin runs. Nothing is chosen on test-page CER.
 * **Stage B, vision-first training (standard VLM recipe):**
   * B1: the full ViT (~0.67B) + merger trained on transcription only, LLM frozen. AdamW state for 0.67B is about
     11 GB; fits with gradient checkpointing at batch 1.

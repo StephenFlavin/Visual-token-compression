@@ -15,8 +15,8 @@ RGB overlays and learned glyph alphabets) and compares them with plain text rend
 > | | **Learned glyph alphabet, pixel space: qualified GO.** With a trained reader it needs about 0.57x Latin's px²/char at 3% CER. |
 > | | **Frozen VLM encoders (SigLIP, DeepSeek-OCR's DeepEncoder): every dense code is lost.** Only low-density Latin (8.5 chars/token) reads through DeepEncoder. |
 > | | **Qwen2.5-VL-3B, raw pixels and frozen:** the moonshot code (322 chars/token) reads from raw pixels at 1.07% CER, but its pixel detail collapses (linearly) at the ViT's 2x2 merger. A CPU probe's verdict: "the ViT output is the wall at this budget". |
-> | **Open** | **R3-1, LoRA fine-tune of Qwen's LLM (1000 steps):** Latin at 28 chars/token is read (55% CER vs 88.5% blind). Latin at 72 chars/token, learned glyphs (107) and the moonshot (322) sit at their blind floors. Gate G3 is undecidable: no arm is near 3% CER. |
-> | **Next** | Latin p8/p6/p5 at 5000 steps, each with a blind control. A vision-side diagnostic for the glyph codes before any long run. R3-2 (long-context QA at equal KV cache) only if G3 passes. |
+> | **Open** | **R3-1, LoRA fine-tune of Qwen's LLM (1000 steps):** Latin at 28 chars/token is read (55% CER vs 88.5% blind). Latin at 72 chars/token gets the gist but not the words (val loss 10% below blind, MC above blind at p = 0.02). Learned glyphs (107) and the moonshot (322) are not read at all: their losses equal the blind runs'. Gate G3 is undecidable: no arm is near 3% CER. [Analysis](docs/ANALYSIS.md). |
+> | **Next** | A 1000-step vision-side diagnostic (train ViT blocks 8-31) on latin_p8, lg_pb_h5 and the moonshot, with blinds; a Latin density sweep (p12, p10); then 5000-step Latin runs on the better recipe. R3-2 (long-context QA at equal KV cache) only if G3 passes. |
 
 **Terms.**
 * **CER:** character error rate (edit distance / reference characters).

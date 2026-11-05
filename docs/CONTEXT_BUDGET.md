@@ -53,7 +53,7 @@ Identity32 ceilings are at DeepEncoder's 512-px geometry (200 pages); the cpt co
 | Input (cpt) | Raw pixels (identity probe) | Frozen encoder (probe) | Fine-tuned Qwen, R3-1 (1000 steps; blind in brackets) | Long-context QA (R3-2) |
 |---|---|---|---|---|
 | latin_p8 (28) | 0.04% (identity32) | DeepEncoder: only 8.5 cpt reads (15-19%). Qwen G2-lite: under-read by the probe (lower bound) | **read**: CER 55.0% (88.5%), cloze 0.52 (0.22), MC 0.88 (0.25) | not run |
-| latin_p5 (72) | 0.27% (identity32) | not run on Qwen | at its floor: 80.9% (77.8%), MC 0.56 (0.28) | not run |
+| latin_p5 (72) | 0.27% (identity32) | not run on Qwen | gist only: CER 80.9% (77.8%), MC 0.56 (0.28, p = 0.02), val loss 9.9% below blind | not run |
 | col_b4 (49) | 0.29% (identity32) | floor (71-73%) on SigLIP and DeepEncoder | not run | not run |
 | rgb3_p8 (73) | 0.42% (identity32) | floor (83.5%) on DeepEncoder | not run | not run |
 | lg_pb_h5 (107) | 0.52% (identity32) | floor (82.4%) on DeepEncoder | at its floor: 78.4%, val loss 2.274 (2.285 at step 500; blind died) | not run |
