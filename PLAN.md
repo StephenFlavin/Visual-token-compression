@@ -1,5 +1,19 @@
 # Visual BPE — Validation Plan (CPU cloud runner)
 
+> **Status (2026-11-05).** This plan (phases 1-2, kill criteria K1-K3) is finished: **K3 KILL**. Trained CRNN
+> readers favour plain Latin over substitution and quadrant packing (latin 1.73% CER at 7.5 px²/char vs subst300
+> 2.26% at 8.9); K1 (~1.19x em) and K2 (PP-OCR 0.89x vs the 0.80 bar) were negative too. Results:
+> [docs/RESULTS.md](docs/RESULTS.md). Later sub-projects, each with its own plan:
+> * Learned glyph alphabet, [learned_glyphs/PLAN.md](learned_glyphs/PLAN.md): qualified GO with raw-pixel readers
+>   (0.57x Latin's px²/char at 3% CER), [learned_glyphs/RESULTS.md](learned_glyphs/RESULTS.md).
+> * Frozen-encoder probe, [encoder_probe/PLAN.md](encoder_probe/PLAN.md): dense codes are lost through frozen SigLIP
+>   and DeepEncoder, [encoder_probe/RESULTS.md](encoder_probe/RESULTS.md).
+> * Round 3, fine-tuning Qwen2.5-VL-3B to read the codes, [encoder_probe/ROUND3.md](encoder_probe/ROUND3.md): at 1000
+>   steps only latin_p8 (28 chars/token) is read; the glyph codes sit at their blind floors; gate G3 undecided
+>   ([docs/HANDOFF.md](docs/HANDOFF.md)).
+>
+> The plan below is the pre-registered original, unchanged.
+
 Goal: reach a **go / no-go** on "Visual BPE" (render frequent multi-char chains as single
 glyphs / packed cells so text survives lower image resolution) *before* spending GPU money.
 
