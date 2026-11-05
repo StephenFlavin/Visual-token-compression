@@ -88,6 +88,10 @@ def parse(argv=None):
     ap.add_argument("--log-every", type=int, default=10)
     ap.add_argument("--ckpt-every", type=int, default=250, help="resume checkpoint interval (0 = off)")
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--blind-images", action="store_true",
+                    help="control: every page's image is replaced by another page's (seeded derangement, train and "
+                         "test separately; texts and targets stay with the true page). Same settings and fair_hash as "
+                         "the matched arm; run name gets _blind. Its CER is the floor from priors / label statistics")
     ap.add_argument("--threads", type=int, default=1)
     ap.add_argument("--device", choices=["auto", "cpu", "cuda"], default="auto", help="auto = cuda if available")
     ap.add_argument("--bf16", choices=["auto", "on", "off"], default="auto", help="bf16 autocast (auto = CUDA)")
@@ -104,6 +108,8 @@ def parse(argv=None):
         a.eval_windows, a.eval_cloze, a.eval_mc = min(a.eval_windows, 2), min(a.eval_cloze, 2), min(a.eval_mc, 2)
         if not a.run_name.endswith("_smoke"):
             a.run_name += "_smoke"
+    if a.blind_images and not a.run_name.endswith("_blind"):
+        a.run_name += "_blind"   # own rows file, checkpoint and adapter: never mixes with the matched arm
     if not a.max_new_tokens:
         a.max_new_tokens = a.max_target_chars // 2 + 32
     return a
@@ -193,6 +199,22 @@ def main(argv=None) -> int:
     enc, tr, te = split_pages(a.encoding, S, a.train_pages, a.test_pages)
     flats_tr = [T.flat_text(enc, p) for p in tr]
     flats_te = [T.flat_text(enc, p) for p in te]
+    blind = None
+    digest_true = pages_digest(te)   # of the true test pages (the blind control reports this one too)
+    if a.blind_images:   # break image-text alignment; every path (train, val, eval) reads p.img
+        brng = np.random.default_rng([a.seed, 7919])
+        perms = {}
+        for name, pages in (("train", tr), ("test", te)):
+            n = len(pages)
+            while True:
+                perm = brng.permutation(n)
+                if n < 2 or not np.any(perm == np.arange(n)):
+                    break
+            imgs = [pages[j].img for j in perm]
+            for pg, im in zip(pages, imgs):
+                pg.img = im
+            perms[name] = perm.tolist()
+        blind = {"seed": [a.seed, 7919], "perm_test": perms["test"], "perm_train_head": perms["train"][:20]}
     t_pages = time.time() - t0
     torch.manual_seed(a.seed)   # LoRA init draws from the global RNG: identical across arms and restarts
     model, tok = Q.load_model(dev, tiny=a.tiny, seed=a.seed)
@@ -305,10 +327,11 @@ def main(argv=None) -> int:
             "px_per_char": ppc, "budget": round(ppc, 3), "chars_per_token": cpt, "chars_per_vlm_token": cpt,
             "score_v": 2, "bf16": autocast, "device": dev.type, "tiny": a.tiny,
             "base": None if a.tiny else f"{Q.QWEN_REPO}@{Q.QWEN_REV}", "train_pages": len(tr),
-            "test_pages": len(te), "n_test_chars": chars_te, "digest_test": pages_digest(te), "curve": curve,
+            "test_pages": len(te), "n_test_chars": chars_te, "digest_test": digest_true, "curve": curve,
             "s_per_step": t_done / a.steps, "train_time_s": t_done, "peak_gpu_bytes": peak,
             "params": counts, "lora_modules": len(Q.lora_module_names(pm)), "adapter": str(adapter),
-            "config": cfg, "fair": fair, "fair_hash": fair_hash, "smoke": a.smoke or "smoke" in a.run_name}
+            "config": cfg, "fair": fair, "fair_hash": fair_hash, "smoke": a.smoke or "smoke" in a.run_name,
+            "blind_images": blind}
     for cond in a.eval_conds:
         if cond in done:
             continue

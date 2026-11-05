@@ -68,22 +68,32 @@ If it fails, fix minimally, keep the CPU tests green, commit the fix, rerun. If 
 * Time left for training: `T_min = (minutes remaining) - 25` (eval ~5-10 min per arm + write-up + push margin).
 * Arms, in priority order: `latin_p8` (~28 chars/token), `rgb3_lg_pb_h5` (moonshot, 322), `latin_p5` (~72, the
   pushed Latin baseline), then `lg_pb_h5` (~107) if time allows.
-* Jobs at once: 1 finetune per GPU. Two only if peak memory from the smoke × 2 < 85% of VRAM.
-* Steps per arm, **identical for all arms** (fairness guard: same steps, batch, LRs, pages, every flag):
-  `STEPS = floor(T_min*60 / (n_arms_sequential * s_per_step) / 250) * 250`, minimum 1000. If that gives < 1000 for 3
-  arms, run 2 arms (latin_p8 + moonshot).
+* **Blind controls (required):** `--blind-images` runs of latin_p8 and the moonshot at the same settings. Each
+  page's image is swapped for another page's, the text targets stay with the true page, and the run name gets
+  `_blind`. An LLM can write fluent English from any image, so a CER is only evidence of reading when it is well
+  below its blind control. That makes 5 jobs: 3 arms + 2 blind.
+* Jobs at once `K = floor(0.85 * VRAM / peak_memory_from_smoke)`, at most 5:
+  * 24 GB cards (3090, 4090): K = 1 likely;
+  * 48 GB cards (A40, A6000, L40, L40S): K = 2-3 likely.
+  Measure, don't assume. With K > 1 each job runs somewhat slower, so re-measure s/step on the first parallel steps.
+* Steps per arm, **identical for all 5 jobs** (fairness guard: same steps, batch, LRs, pages, every flag):
+  `STEPS = floor(T_min*60 * K / (5 * s_per_step_at_K) / 250) * 250`, minimum 1000. If that's < 1000, drop latin_p5
+  first, then the latin_p8 blind control. Never drop the moonshot's blind control while the moonshot runs.
 
 ## 4. Run
 ```bash
 RUN=round3_ft_gpu3h   # one run name for all arms; rows must share one fair_hash
-for e in latin_p8 rgb3_lg_pb_h5 latin_p5; do
-  echo "python3 encoder_probe/experiments/finetune_qwen.py --encoding $e --steps $STEPS --run-name $RUN"
-done > results/queue_gpu3h.txt
+F=encoder_probe/experiments/finetune_qwen.py
+{ echo "python3 $F --encoding latin_p8 --steps $STEPS --run-name $RUN"
+  echo "python3 $F --encoding rgb3_lg_pb_h5 --steps $STEPS --run-name $RUN"
+  echo "python3 $F --encoding rgb3_lg_pb_h5 --steps $STEPS --run-name $RUN --blind-images"   # -> ${RUN}_blind
+  echo "python3 $F --encoding latin_p8 --steps $STEPS --run-name $RUN --blind-images"
+  echo "python3 $F --encoding latin_p5 --steps $STEPS --run-name $RUN"; } > results/queue_gpu3h.txt
 # keep EP_PAGE_CACHE=1 EP_TRAIN_R2_CAP=400000000 exported in this shell: the jobs must read the pre-rendered pages
 nohup python3 scripts/job_queue.py results/queue_gpu3h.txt --cores 1 --log-dir results/queue_logs/gpu3h_1 > results/queue_gpu3h_1.log 2>&1 &
 nohup scripts/autosave_results.sh 600 > results/autosave.log 2>&1 &     # commits+pushes runs.jsonl every 10 min
 ```
-* `--cores 1` is the number of concurrent GPU jobs; use 2 only per section 3.
+* `--cores K`: the number of concurrent GPU jobs from section 3 (replace the `--cores 1` above).
 * Resume after a crash: start the queue again with a **new** `--log-dir`. Finished rows are skipped, and a job continues
   from its last checkpoint (every 250 steps). Never edit a running queue except by atomically rewriting its unclaimed
   tail (AGENTS.md).

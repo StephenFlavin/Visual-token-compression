@@ -375,3 +375,16 @@ def test_bf16_weights_fp32_trainables_autocast_path():
     merged = pm.merge_and_unload().to(torch.bfloat16).eval()
     r = answer(merged, tok, {"imgs": [img], "prompt": "Q?"}, CPU, 3)
     assert r["kv_bytes"] == r["kv_bytes_analytic"] == 2 * 2 * 2 * 16 * 2 * r["positions"]   # bf16 cache
+
+
+def test_blind_images_control(tmp_path):
+    """--blind-images: own run name, same fair_hash as the matched arm, images deranged (no page keeps its own)."""
+    assert _ft(tmp_path, "r", "latin_p24", "--eval-conds", "clean") == 0
+    assert _ft(tmp_path, "r", "latin_p24", "--eval-conds", "clean", "--blind-images") == 0
+    (m,) = [json.loads(l) for l in (tmp_path / "res" / "r" / "runs.jsonl").read_text().splitlines()]
+    (b,) = [json.loads(l) for l in (tmp_path / "res" / "r_blind" / "runs.jsonl").read_text().splitlines()]
+    assert m["blind_images"] is None and b["blind_images"] is not None
+    assert b["fair_hash"] == m["fair_hash"] and b["digest_test"] == m["digest_test"]   # same texts, same settings
+    perm = b["blind_images"]["perm_test"]
+    assert sorted(perm) == list(range(len(perm))) and all(p != i for i, p in enumerate(perm))
+    assert (tmp_path / "cache" / "r3_adapters" / "r_blind__latin_p24__4.pt").exists()

@@ -40,9 +40,9 @@ Goal: R3-1 (gate G3). LoRA fine-tune Qwen2.5-VL-3B so its own LLM reads each cod
    latin_p8, latin_p5, latin_p6 (the Latin baseline pushed toward ~100 chars/token, per amendment 1),
    rgb3_lg_pb_h5 (moonshot), lg_pb_h5, rgb3_p8. Order: latin_p8, moonshot, latin_p5, then the rest.
    Pre-render pages on the CPU first. Run long jobs with nohup and checkpoints; push rows often.
-3. Blind control: before the arms, add a --blind-images option to finetune_qwen.py (each page's image swapped
-   for another page's, text targets unchanged, fixed seed) and run it for latin_p8 and the moonshot at the same
-   settings. Report every CER next to its blind floor, with the substitution/insertion/deletion split and the
+3. Blind control: run finetune_qwen.py --blind-images (built and CPU-tested: each page's image swapped for
+   another page's, text targets unchanged, same fair_hash, run name gets _blind) for latin_p8 and the moonshot at
+   the same settings. Report every CER next to its blind floor, with the substitution/insertion/deletion split and the
    hypothesis/reference length ratio. A score near the blind floor means the model is not reading.
 4. Apply ROUND3.md: G3 asks whether the best code's density at < 3% CER is >= 1.5x the densest Latin reaching
    the same CER under the same budget. Never choose anything on test-page CER.
