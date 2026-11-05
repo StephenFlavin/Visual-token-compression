@@ -1,5 +1,17 @@
 # GPU runner session (2026-11-05, 10:59-13:59 UTC, 3 h, docs/GPU_RUNNER.md sections 0-5)
 
+**Status at shut-down (2026-11-05 ~15:00 UTC): instance shut off by the user; nothing running.**
+* Done and pushed: smoke; 1000-step arms latin_p8, rgb3_lg_pb_h5, latin_p5, lg_pb_h5; blind controls for latin_p8,
+  the moonshot and latin_p5 (lg_pb_h5's blind died at step 500 on a full disk, no eval row). Rows:
+  `encoder_probe/results/round3_ft_gpu3h{,_blind}/runs.jsonl`; logs `results/queue_logs/gpu3h_{1,2}/`.
+* Verdict at 1000 steps: only latin_p8 (28 chars/token) is read; latin_p5, lg_pb_h5 and the moonshot sit at their own
+  blind floors. G3 undecidable (no arm near 3% CER).
+* **Lost with the instance:** the six 1000-step LoRA adapters (`encoder_probe/cache/r3_adapters/`, 4.4 GB), page
+  caches, HF weights. Nothing downstream depends on them; the next runner re-renders and retrains.
+* Next (not started): latin_p8 at 5000 steps (~1 h 45 min on a 4090); for the moonshot, a vision-side diagnostic
+  (higher lr_vision / more unfrozen ViT blocks vs its blind loss) before any long run; every arm with its own blind
+  control. Keep >= 3 GB of disk quota free: this runner's quota filled at ~10 GB of checkpoints/adapters/pages.
+
 **Hardware:** NVIDIA GeForce RTX 4090 24 GB (bf16 supported), 32 CPU cores, 124 GB RAM, Linux, torch 2.8.0+cu128,
 transformers 5.22.1, peft 0.21.2, Pillow with raqm. Full Qwen2.5-VL-3B weights loaded (3,754,622,976 parameters).
 
