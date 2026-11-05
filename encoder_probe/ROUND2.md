@@ -1,5 +1,28 @@
 # Frozen-encoder probe, round 2: OCR-capable VLM encoders at their own token geometry
 
+## Status and summary (2026-11-05)
+**Finished; DeepEncoder only.** Qwen2.5-VL was dropped on 2026-11-04 before any of its jobs ran (user decision); Qwen
+work moved to [ROUND3.md](ROUND3.md). The grid ran on the user's RTX 3090 (`results/round2_gpu_tp{200,1000,3000,5000}/`);
+the cloud rows (`results/round2/`, 200 pages) are a CPU cross-check. Full tables:
+[RESULTS.md, round 2](RESULTS.md#round-2-deepseek-ocrs-deepencoder-at-its-own-geometry-2026-11-04). Everything below
+is the pre-registered record, unchanged except for short pointers.
+
+* **Result.** Through frozen DeepEncoder (512 px, 64 tokens; 1000 train pages, jpeg75) every dense code sits at the
+  floor: col_b2 71.5%, col_b4 72.5%, rgb3 83.5%, lg_free_h4 82.2%, lg_pb_h5 82.4%, while their identity32 ceilings
+  are all <= 0.52%. Only latin_p32 (8.5 chars/token) is readable: 18.9% clean / 19.1% jpeg75, 14.9% with 5000 pages;
+  latin_p24 (15.4) and denser are at 72-77% whatever the data.
+* **Predictions:** (a) not tested (Qwen dropped); (b) confirmed; (c) untestable (everything at the floor);
+  (d) confirmed (the gap collapses to noise); (e) first part fails (no Latin reaches 3%), second part confirmed;
+  (f) identity part passes (rgb3 3.0x mono), encoder part confirmed.
+* **Decision rules:** colour / rgb3 **fails** (weaker evidence: no Latin reaches 3% or 10%), so P2/P3 are gated off;
+  grey-level banks **not supported**, so banks stay whole-pixel; the informativeness guard passes for all 16 encodings.
+* **Limit.** The probe is data-limited (latin_p32 85% -> 15% from 200 to 5000 pages), so absolute CERs are upper
+  bounds on what the encoder loses; the decisions rest on same-probe comparisons.
+
+![Round 2: Latin CER through DeepEncoder vs probe training pages](img/round2_latin_data.png)
+
+---
+
 Written 2026-11-03, before any non-smoke round-2 run. Round 1 (PLAN.md, RGB_OVERLAY.md) is unchanged and still
 running; round 2 lives in new files only.
 
@@ -19,6 +42,8 @@ token geometry?
 | `deepencoder` | deepseek-ai/DeepSeek-OCR, DeepEncoder (rev 9f30c71f) | 512 (Tiny mode) | 64 | 8x8 = 64 | 1280 | projector output (what the LLM receives): SAM ViT-B/16 (12 blocks, window 14, global blocks 2/5/8/11) -> neck -> 2 stride-2 convs (16x compressor, 1024-d) -> CLIP-L/14 fed with those features (24 blocks, no final LN) -> concat(CLIP tokens 1..64, SAM tokens) 2048-d -> linear projector 1280-d. The LLM also gets a learned newline token after each of the 8 rows and one view separator (73 positions); these carry no image information and are not counted |
 | `identity28` | - | 448 | 28 | 256 | 2352 | raw 28x28x3 patches: ceiling for the Qwen geometry |
 | `identity32` | - | 512 | 32 | 256 | 3072 | raw 32x32x3 patches: ceiling for the DeepEncoder page (see "Probe changes" 4) |
+
+*(qwen25vl and identity28 were not run in round 2: Qwen was dropped; it is round 3's model.)*
 
 * **Native mode, verified.** Qwen: 448 is a multiple of 28 and inside min/max pixels, so `smart_resize` keeps it.
   Our patch layout equals `Qwen2VLImageProcessorPil` output exactly (tested), and `image_grid_thw` = [1, 32, 32] ->
@@ -137,6 +162,9 @@ Changes, all decided before any non-smoke run and none tuned on results:
   information survives the encoder", not "the VLM will read it".
 
 ## Run order, queue and cost
+*History (superseded 2026-11-04): the cloud queue below was trimmed and the grid moved to the RTX 3090; Qwen was
+dropped. See the status block at the top.*
+
 **Local GPU runbook (RTX 3090): [docs/LOCAL_GPU.md](../docs/LOCAL_GPU.md)** (`--device`, page cache, the prioritised
 P0-P3 list with commands, decision rules, analysis with `experiments/analyse2.py`).
 

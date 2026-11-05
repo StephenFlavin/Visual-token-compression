@@ -1,5 +1,43 @@
 # Round 3: can a small VLM learn to read dense codes, and does it shrink the KV cache?
 
+## Status and summary (2026-11-05)
+**Read this block, then skip to what you need.** Everything below it is the dated pre-registered record (design,
+predictions, decision rules, amendments), unchanged except for short "superseded" pointers. Tables and figures:
+[RESULTS.md, round 3](RESULTS.md#round-3-qwen25-vl-3b-can-a-vlm-learn-to-read-the-codes-2026-11-05).
+Model: Qwen2.5-VL-3B (448 px page = 256 tokens). Moonshot = `rgb3_lg_pb_h5`, three learned-glyph streams in R/G/B.
+
+| gate | what it tested | result | verdict |
+|---|---|---|---|
+| G0 | is the moonshot page (322 chars/token) readable from raw pixels? identity28, 200 pages, CPU | **1.07% CER** | pass (< 3%) |
+| Q1 | linear pixel readout of each frozen ViT block | glyph codes stay pixel-like to the last block (lg_pb_h5 final 0.65, moonshot 0.47 ink MCC); every code is at <= 0.30 after the 2x2 merger; Latin loses its readout by block 24 although Qwen reads it | pixels are lost at the merger; rgb3_lg_free_h4 dropped |
+| G2-lite | frozen / trained (LR 1e-4) / no merger, GridProbe, 500 pages, 3000 steps, CPU | moonshot 86.1 / 84.6 / **71.9%**, blind floor 99.5%; reference chars matched ~15 / 15 / **29%** | pre-registered branch: **"the ViT output is the wall at this budget"**; post hoc, the direct arm reads ~2x the merger arms |
+| R3-1 (G3) | LoRA fine-tune, the LLM as reader, **1000 steps** (5000 planned), RTX 4090, each arm vs its own blind control | latin_p8 (28): **55.0% CER vs blind 88.5%**, MC 0.88 vs 0.25, val loss 1.12 vs 2.48. latin_p5 (72), lg_pb_h5 (107), moonshot (322): at their own floors | only latin_p8 is read; **G3 undecidable** (no arm near 3%) |
+| R3-0, G1, G4, R3-2 | frozen-Qwen probe grid, glyph-ID probe, QA vs KV bytes | not run | - |
+
+![R3-1: each arm against its blind control](img/r31_vs_blind.png)
+
+* **Pre-registered predictions** (end of file): 1 (R3-0) not tested; 2 (R3-1: a code < 3% at >= 1.5x Latin)
+  not decidable at 1000 steps; 3 (R3-2) not tested. No decision rule (Go / Latin-only / Kill) applies yet.
+* **Amendments that changed the protocol** (all dated below): Latin is swept up to ~100 chars/token (amendment 1);
+  pretrained modules get LR <= 1e-4 because the merger collapses at 2e-3 (amendment 2); GridProbe under-reads Latin,
+  so the Latin comparison moves to G3 (limitation); every CER is quoted against its own blind floor with its op
+  split (required reference). Blind floors differ by code (R3-1: 77.8% to 89.9%).
+* **Reading of the evidence.** The moonshot's fine-tuned losses equal its blind run's to 3 decimals, and lg_pb_h5
+  (107) is at its floor too, so density alone does not explain the failure. A 1000-step result is "not reached at
+  this budget", not "impossible".
+* **Next:** latin_p8 / p6 / p5 at 5000 steps with blind controls; a vision-side diagnostic for the glyph codes
+  (R3-1b: higher vision LR, more unfrozen ViT blocks, judged on loss vs blind) before any long moonshot run; R3-2
+  only after a code passes G3.
+
+<details><summary>G2-lite and Q1 figures</summary>
+
+![G2-lite: moonshot arms vs the blind floor](img/g2lite_moonshot.png)
+![Q1: ink MCC by ViT depth](img/q1_ink_mcc.png)
+
+</details>
+
+---
+
 Written 2026-11-04, before any round-3 code or run. Rounds 1-2 (RESULTS.md, ROUND2.md) are unchanged.
 
 ## Why
@@ -29,6 +67,9 @@ A text-only LLM would need its own encoder + projector alignment: only after a p
 
 ## Steps
 ### R3-0: frozen Qwen probe (code exists, ~2 h GPU)
+*Status 2026-11-05: not run. Q1 and G2-lite (below) probed the frozen Qwen ViT on CPU instead, and R3-1
+ran without R3-0's picks; the GPU went to R3-1.*
+
 The round-2 Qwen geometry, never run: identity28 ceilings + qwen25vl clean/jpeg75 at 1000 train pages, 10k steps,
 encodings latin_p{5,6,8,10,16,24}, mono_p{6,8}, col_b{2,4}, rgb3_p{6,8}, lg_free_h4, lg_pb_h5
 (run names `round3_qwen_tp1000`, ceilings `round3_qwen_tp200`). First a CUDA smoke of `qwen25vl` (its CUDA path has
@@ -71,6 +112,7 @@ What it shows:
   round-2 guard: < 10% CER, else the combined page itself is unreadable). It goes into R3-1 even if R3-0 shows the
   overlay at the floor frozen, since fine-tuning is the test; if it fails, fall back to the best single code.
   Smoke: 500 steps per arm (~minutes) to check the loop, loss falls, generation works. Then ~5k steps per arm.
+  *(2026-11-05: the GPU session ran 1000 steps per arm, not 5k; results under "R3-1 short-budget results" below.)*
   * **Moonshot encodings (built 2026-11-04).** `rgb3_lg_pb_h5`, `rgb3_lg_free_h4` (any `rgb3_<LG_BANKS key>`):
     `ep/rgb_overlay.py::RGB3BankEncoding`, resolved by `get_encoding` (224) and `get_encoding_s` (448/512), so
     `run_probe2.py --encoding rgb3_lg_pb_h5` works. Each channel is the bank's own word-wrapped layout at its native
@@ -103,6 +145,7 @@ What it shows:
 * Metric: CER of generated transcriptions on held-out test pages (WikiText test/val, as rounds 1-2), clean and jpeg75;
   cloze accuracy.
 * **Code: built 2026-11-04, CPU-tested on a tiny random-init model, never run on a GPU or with the real weights.**
+  *(Superseded 2026-11-05: it ran on an RTX 4090 with the real weights with no code fixes; see the R3-1 results.)*
   `experiments/finetune_qwen.py` (shared code: `ep/qwen_ft.py` model/LoRA/inputs/KV, `ep/r3_tasks.py` prompts and
   answers; tests `tests/test_round3.py`). As planned: LoRA r=16 (alpha 32, dropout 0.05) on q/k/v/o/gate/up/down of
   all 36 LLM layers (29.9M params), merger + last 4 vision blocks unfrozen (115.5M), trainables fp32, bf16 weights +
@@ -495,6 +538,7 @@ Ways to push density past the literature's 30-90 chars/token, each testable on i
   `PYTHONUTF8=1 EP_PAGE_CACHE=1 EP_TRAIN_R2_CAP=400000000`, queue lines use `python`, not `python3`.
 * At most 3 GPU jobs (2 for Qwen-token jobs): Windows pages VRAM instead of OOM and jobs stall silently. Watch for
   checkpoints not updating. Keep `--ckpt-every`.
+* *(2026-11-05: the R3-1 trainer has since run on an RTX 4090; R3-2 is still CPU-tested only.)*
 * Code built (2026-11-04, CPU-tested only): R3-1 trainer (`encoder_probe/experiments/finetune_qwen.py`,
   transformers + peft) and R3-2 benchmark (`encoder_probe/experiments/longctx_bench.py`). Weights: full
   Qwen2.5-VL-3B (~7.5 GB, into the Hugging Face cache), not just the vision tensors. Commands, in order, with VRAM

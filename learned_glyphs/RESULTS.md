@@ -9,6 +9,11 @@ harsh degradation. Two things qualify it:
 
 Nothing here tests a pretrained VLM encoder. `encoder_probe/` covers that.
 
+**VLM status (2026-11-05):** frozen VLM encoders (SigLIP, DeepEncoder) lose the banks, and a LoRA-fine-tuned Qwen2.5-VL-3B
+does not read `lg_pb_h5` (107 chars/token) or its RGB overlay (322) after 1000 steps: both sit at their blind floors
+([encoder_probe/ROUND3.md](../encoder_probe/ROUND3.md), [results](../encoder_probe/RESULTS.md#round-3-qwen25-vl-3b-can-a-vlm-learn-to-read-the-codes-2026-11-05)). The CRNN result below stands;
+the VLM case is open.
+
 Design and pre-registered criteria: `PLAN.md`. Raw rows: `results/<run>/runs.jsonl`. The round-by-round log is in
 `../docs/RESULTS.md` (history) and `../results/queue*.txt` (exact commands).
 

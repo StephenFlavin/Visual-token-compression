@@ -1,5 +1,11 @@
 # Frozen-encoder probe: does a pretrained vision encoder keep fine pixel / colour detail?
 
+> **Status (2026-11-05): round 1, done.** Colour-pixel encoding is **dead for frozen-encoder VLMs**: no colour encoding
+> gets below 62% CER through SigLIP (raw pixels: col_b1 0.06%), and round 2 confirmed it through DeepEncoder (71-73%).
+> Grey-level learned glyphs are **not supported**: learned banks stay whole-pixel. Results:
+> [RESULTS.md](RESULTS.md#round-1-siglip-b16-2026-11-03); follow-ups: [ROUND2.md](ROUND2.md) (DeepEncoder),
+> [ROUND3.md](ROUND3.md) (Qwen2.5-VL fine-tuning). This file is the pre-registered round-1 record.
+
 Sub-project of Visual BPE. It tests the assumption shared by two ideas:
 * **Colour-pixel encoding** (one solid b×b colour block per character; user idea, 2026-11-03), and
 * **grey-level learned glyphs** (learned_glyphs/: the unconstrained banks win partly through grey-level codes).
