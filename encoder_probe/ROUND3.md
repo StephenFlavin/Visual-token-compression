@@ -311,6 +311,25 @@ capacity.
 * A latin_p16 frozen sanity run (about 7 chars/token, 100 train pages) decides whether Latin arms stay in tonight's
   CPU queue.
 
+**Sanity check (2026-11-05 ~03:55): the pipeline learns; Latin through Qwen overfits at this budget.**
+Setup: latin_p16 frozen, 6.8 chars/token, 100 train / 16 test pages, 1000 steps (diagnostic, `results/g2lite_diag`).
+
+| Step | train CTC | val CER |
+|---|---|---|
+| 250 | 3.40 | 99.8% |
+| 500 | 2.80 | 99.96% |
+| 750 | 1.78 | 82% |
+| 1000 | 0.97 | 75% |
+
+* Test CER **75.5%**, final train CTC 0.82, so it fits its training pages far below unigram level.
+* The same check through the independent round-2 pipeline (`run_probe2.py --encoder qwen25vl` on the cached merger
+  tokens, `results/g2lite_diag_probe2`) gives **74.5%**, with a matching curve. So there is no G2-lite-specific bug.
+* Latin is readable from Qwen's tokens but data-limited at 100 pages. This matches round 2 (Latin through
+  DeepEncoder: 85% -> 15% from 200 to 5000 pages).
+* Consequence for tonight's CPU: only the three moonshot arms run (frozen, trained at merger LR 1e-4, direct). The
+  latin_p5 cache (its chunks are kept) and the Latin sweep go to the 3090 at more pages. The amended latin_p8 trained
+  run gets a slot only if one frees before about 07:00, and is a lower bound.
+
 ### Moonshot levers (beyond the go/no-go; user: "shoot for the moon")
 Ways to push density past the literature's 30-90 chars/token, each testable on its own:
 1. **Grid-aligned pitch.** 4 or 7 px line pitch divides the 28 px token, plus the pixel-shift protocol.
