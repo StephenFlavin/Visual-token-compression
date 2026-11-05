@@ -174,6 +174,8 @@ def main(argv=None) -> int:
     ap.add_argument("--batch-pages", type=int, default=2)
     ap.add_argument("--lines-per-page", type=int, default=16)
     ap.add_argument("--lr", type=float, default=2e-3)
+    ap.add_argument("--merger-lr", type=float, default=None,
+                    help="diagnostics only: a separate LR for the trained merger (default: --lr, one group)")
     ap.add_argument("--recon-weight", type=float, default=10.0)
     ap.add_argument("--eval-every", type=int, default=500)
     ap.add_argument("--eval-pages", type=int, default=4, help="test pages for the curve (the row's cer uses all)")
@@ -276,8 +278,16 @@ def main(argv=None) -> int:
           f"train={len(tr)} test={len(te)} px2/char={ppc:.2f} chars/token={cpt:.1f} pages={t_pages:.0f}s "
           f"wait={waited:.0f}s feat={t_feat:.0f}s bf16={bf16} trainable={sum(p.numel() for p in params)} "
           f"(merger {n_merger}) merger_check={merger_check}", flush=True)
-    opt = torch.optim.AdamW(params, lr=a.lr, weight_decay=1e-4, fused=True)
-    sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=a.lr, total_steps=a.steps, pct_start=0.05)
+    if a.merger_lr is not None and a.arm == "trained":   # diagnostic only: the pre-registered arms use one LR
+        mp = {id(p) for p in front.parameters()}
+        groups = [{"params": [p for p in params if id(p) not in mp], "lr": a.lr},
+                  {"params": [p for p in params if id(p) in mp], "lr": a.merger_lr}]
+        opt = torch.optim.AdamW(groups, weight_decay=1e-4, fused=True)
+        max_lr = [a.lr, a.merger_lr]
+    else:
+        opt = torch.optim.AdamW(params, lr=a.lr, weight_decay=1e-4, fused=True)
+        max_lr = a.lr
+    sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=max_lr, total_steps=a.steps, pct_start=0.05)
     curve, train_curve, ctcs, start, t_prev, segs = [], [], [], 1, 0.0, []
     if a.ckpt_every and ck.exists():
         st = torch.load(ck, map_location="cpu", weights_only=False)
