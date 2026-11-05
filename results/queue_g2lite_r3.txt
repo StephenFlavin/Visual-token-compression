@@ -1,0 +1,3 @@
+# G2-lite, 3rd slot after the 02:33 restart: waits for the latin_p16 sanity chain (memory), then moonshot direct
+bash -c 'while pgrep -f "[g]2lite_diag_p16b.sh" >/dev/null; do sleep 30; done'
+python3 encoder_probe/experiments/run_g2lite.py --arm direct --encoding rgb3_lg_pb_h5 --steps 3000 --train-pages 500 --run-name g2lite --threads 1
