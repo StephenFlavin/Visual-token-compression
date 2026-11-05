@@ -143,7 +143,7 @@ def run_eval(pm, tok, enc, te, flats_te, cond, a, dev, autocast, log=print):
                     qs.append({"imgs": [imgs[k]], "prompt": s[0], "ref": s[1], "task": kind, "page": k})
     pm.eval()
     errs = chars = 0
-    samples = []
+    samples, pairs = [], []
     for i in range(0, len(trans), a.gen_batch):
         b = trans[i:i + a.gen_batch]
         cap = min(a.max_new_tokens, int(1.5 * max(len(tok.encode(s["ref"])) for s in b)) + 16)
@@ -152,6 +152,7 @@ def run_eval(pm, tok, enc, te, flats_te, cond, a, dev, autocast, log=print):
             h2 = T.clean_transcript(enc, h)
             errs += Levenshtein.distance(s["ref"], h2)
             chars += len(s["ref"])
+            pairs.append((s["ref"], h2))
             if len(samples) < 4:
                 samples.append((s["ref"][:300], h2[:300]))
     acc = {"cloze": [], "mc": []}
@@ -163,7 +164,12 @@ def run_eval(pm, tok, enc, te, flats_te, cond, a, dev, autocast, log=print):
             if len(qsamples) < 4:
                 qsamples.append((s["prompt"][:120], s["ref"], h[:60]))
     pm.train()
-    out = {"cer": errs / max(1, chars), "n_eval_chars": chars, "n_windows": len(trans),
+    from encoder_probe.ep.g2lite import edit_ops
+    ops = edit_ops(pairs)   # CER split: sub / ins / del (fractions of ref chars) and hyp/ref length ratio
+    # per-window "exact prefix": share of ref chars before the first error (read-then-drift diagnostic)
+    pref = [next((i for i, (x, y) in enumerate(zip(r, h)) if x != y), min(len(r), len(h))) for r, h in pairs]
+    ops["prefix_frac"] = sum(pref) / max(1, chars)
+    out = {"cer": errs / max(1, chars), "n_eval_chars": chars, "n_windows": len(trans), "ops": ops,
            "cloze_acc": float(np.mean(acc["cloze"])) if acc["cloze"] else None, "n_cloze": len(acc["cloze"]),
            "mc_acc": float(np.mean(acc["mc"])) if acc["mc"] else None, "n_mc": len(acc["mc"]),
            "samples": samples, "q_samples": qsamples}

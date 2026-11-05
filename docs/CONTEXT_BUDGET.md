@@ -52,11 +52,11 @@ ceiling at Qwen-equivalent density is ~51 (p6) to ~72 (p5) chars/token, and Deep
 
 | Input | Raw pixels (identity ceiling, probe) | Frozen encoder (probe) | Fine-tuned Qwen (R3-1) | Long-context QA (R3-2) |
 |---|---|---|---|---|
-| Latin images | latin_p16 0.06% (DeepEncoder geometry) | DeepEncoder: 8.5 cpt at 15-19%; 36 cpt at floor. SigLIP l6: ~2 cpt for 5%. Qwen (G2-lite, CPU, lower bounds: the probe under-reads Latin): latin_p8 28 cpt 79% trained-merger (correct chars 21%); latin_p16 7 cpt 75.5% frozen at 100 pages vs blind floor 87% | not run | not run (prior art: Glyph 3-4x at Qwen3-8B-level accuracy, with heavy training) |
+| Latin images | latin_p16 0.06% (DeepEncoder geometry) | DeepEncoder: 8.5 cpt at 15-19%; 36 cpt at floor. SigLIP l6: ~2 cpt for 5%. Qwen (G2-lite, CPU, lower bounds: the probe under-reads Latin): latin_p8 28 cpt 79% trained-merger (correct chars 21%); latin_p16 7 cpt 75.5% frozen at 100 pages vs blind floor 87% | **reads at 28 cpt**: latin_p8 55% CER vs blind 88.5%, cloze 0.52 vs 0.22, MC 0.88 vs 0.25 (1000 steps, RTX 4090); latin_p5 (72 cpt) starting: 81% vs ~88%, MC 0.56 vs 0.25 | not run (prior art: Glyph 3-4x at Qwen3-8B-level accuracy, with heavy training) |
 | col_b4 | col_b2 0.02%, colour < 3% | floor (71-73%) on SigLIP and DeepEncoder | not run | not run |
 | rgb3_p8 | 0.42% | floor (83.5%) | not run | not run |
 | lg_pb_h5 | 0.52% | floor (82.4%) | not run | not run |
-| rgb3_lg_pb_h5 | 1.07% (identity28, 200 pages) | Qwen G2-lite (500 pages, 3000 steps, CPU): frozen merger 86.1%, trained merger 84.6% (correct chars ~15%), no merger (direct) 71.9% (correct 29%); blind floor 99.5% (empty output). Decision rule: the ViT output is the wall at this budget (stage B or a lower density next) | not run | not run |
+| rgb3_lg_pb_h5 | 1.07% (identity28, 200 pages) | Qwen G2-lite (500 pages, 3000 steps, CPU): frozen merger 86.1%, trained merger 84.6% (correct chars ~15%), no merger (direct) 71.9% (correct 29%); blind floor 99.5% (empty output). Decision rule: the ViT output is the wall at this budget (stage B or a lower density next) | **not read at 1000 steps**: 83.6% vs blind 89.9%, cloze/MC at blind level, train/val loss identical to the blind run's | not run |
 | rgb3_lg_free_h4 | partial: 37.0% at step 500/3000 | not run | not run | not run |
 
 Q1 (2026-11-04, linear pixel readout of frozen Qwen ViT layers, encoder_probe/results/quick_q1/summary.md):

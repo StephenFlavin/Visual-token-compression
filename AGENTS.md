@@ -138,3 +138,7 @@ Claude responses are cached in `results/cache/claude/` (keyed on model+prompt+im
   * G2-lite (500 pages, CPU): the probe reads the moonshot better from pre-merger states than through the merger, but
     no arm is near a usable level, and the probe can't measure Latin through Qwen at this scale.
   * The fair test is R3-1 on a GPU (docs/GPU_RUNNER.md).
+  * R3-1 short-budget (RTX 4090, 1000 steps, blind controls): Qwen's LLM **reads latin_p8 (28 chars/token)**,
+    55% CER vs blind 88.5% (MC 0.88 vs 0.25). It reads the first line, then drifts into invented text. latin_p5
+    (72) is starting to read. **The moonshot is ignored:** losses equal the blind run's to 3 decimals. G3 is not
+    decidable yet (encoder_probe/ROUND3.md).

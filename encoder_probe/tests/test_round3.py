@@ -385,6 +385,9 @@ def test_blind_images_control(tmp_path):
     (b,) = [json.loads(l) for l in (tmp_path / "res" / "r_blind" / "runs.jsonl").read_text().splitlines()]
     assert m["blind_images"] is None and b["blind_images"] is not None
     assert b["fair_hash"] == m["fair_hash"] and b["digest_test"] == m["digest_test"]   # same texts, same settings
+    for r in (m, b):   # CER split: sub + ins + del == cer
+        o = r["ops"]
+        assert abs(o["sub"] + o["ins"] + o["del"] - r["cer"]) < 1e-9 and 0 <= o["prefix_frac"] <= 1
     perm = b["blind_images"]["perm_test"]
     assert sorted(perm) == list(range(len(perm))) and all(p != i for i, p in enumerate(perm))
     assert (tmp_path / "cache" / "r3_adapters" / "r_blind__latin_p24__4.pt").exists()
