@@ -22,6 +22,9 @@ def load(paths):
                 arm = r["arm"]
                 if arm == "trained" and r.get("merger_lr") is None:
                     arm = "trained@2e-3"
+                old = rows.get((r["encoding"], arm))
+                if old is not None and "ops" not in r and old.get("ops") and old["cer"] == r["cer"]:
+                    continue                                 # keep the exact-resume row with the op split
                 rows[(r["encoding"], arm)] = r               # later rows win
     return rows
 
@@ -35,8 +38,13 @@ def table(rows) -> str:
         cells = []
         for a in ARMS:
             r = rows.get((e, a))
-            cells.append("not run" if r is None else
-                         f"{100 * r['cer']:.1f}% (ctc {r['train_ctc']:.2f}; curve "
+            if r is None:
+                cells.append("not run")
+                continue
+            o = r.get("ops")
+            op = (f"; del {100 * o['del']:.0f} sub {100 * o['sub']:.0f} len {o['len_ratio']:.2f}"
+                  f" correct {100 * (o['len_ratio'] - o['sub'] - o['ins']):.0f}%") if o else ""
+            cells.append(f"{100 * r['cer']:.1f}% (ctc {r['train_ctc']:.2f}{op}; curve "
                          + " ".join(f"{100 * c:.0f}" for _, c in r["curve"]) + ")")
         out.append(f"| {e} | {cpt:.1f} | " + " | ".join(cells) + " |")
     return "\n".join(out)
