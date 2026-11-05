@@ -20,15 +20,14 @@ pre-render (1000 train pages): latin_p8 3 min, latin_p5 8 min, moonshot 11 min (
 | latin_p8 | 28.1 | jpeg75 | 57.5% | 86.3% | 0.48 | 0.23 | 0.91 | 0.25 | |
 | rgb3_lg_pb_h5 (moonshot) | 321.6 | clean | **83.6%** | 89.9% | 0.22 | 0.22 | 0.34 | 0.28 | 2.518 (2.517) |
 | rgb3_lg_pb_h5 (moonshot) | 321.6 | jpeg75 | 87.6% | 88.6% | 0.19 | 0.23 | 0.38 | 0.31 | |
-| latin_p5 | 72.4 | clean | 80.9% | (none; latin_p8's 88.5%) | 0.31 | (0.22) | 0.56 | (0.25) | 2.163 (no blind run) |
-| latin_p5 | 72.4 | jpeg75 | 79.0% | | 0.33 | | 0.53 | | |
+| latin_p5 | 72.4 | clean | 80.9% | **77.8%** | 0.31 | 0.30 | 0.56 | 0.28 | 2.163 (2.402) |
+| latin_p5 | 72.4 | jpeg75 | 79.0% | 79.9% | 0.33 | 0.31 | 0.53 | 0.28 | |
 | lg_pb_h5 | 107.3 | clean | 78.4% | (none) | 0.17 | | 0.31 | | 2.274 (no blind run) |
 | lg_pb_h5 | 107.3 | jpeg75 | 78.5% | | 0.17 | | 0.34 | | |
 
-* **latin_p5 reads a little:** it has no blind control of its own (5 jobs fitted, a 6th didn't). Against latin_p8's blind floor
-  (same text targets) its cloze/MC (0.31/0.56 vs 0.22/0.25) and val loss (2.16, still falling, vs ~2.48-2.52 for
-  both blind runs) are above chance, but most generations are invented text. Read it as "starting to read".
-
+* **latin_p5 does not transcribe at this budget:** its blind control (run 14:00-14:26, same settings) gets *lower*
+  CER (77.8% vs 80.9%) and the same cloze. Only MC (0.56 vs 0.28) and val loss (2.16 vs 2.40) show some image use.
+  The blind CER floor differs by code (77.8% here, 88.5% for latin_p8), so every arm needs its own blind control.
 * **latin_p8 is read:** far below its blind floor on CER, cloze and MC, and val loss 1.13 vs 2.48 blind. Its CER is
   high because it transcribes the first line(s) of a window nearly exactly, then drifts into fluent invented
   continuation (samples in the rows); the loss was still falling at 1000 steps.
@@ -39,7 +38,7 @@ pre-render (1000 train pages): latin_p8 3 min, latin_p5 8 min, moonshot 11 min (
   they were not reported; add them to `run_eval` before the next run.
 
 **Against ROUND3.md gate G3** (best code's chars/token at < 3% CER >= 1.5x the best Latin's at < 3%): **not
-decidable at this budget, no arm reaches 3% CER.** Short-budget signal: Latin learns to read within 1000 steps; the
+decidable at this budget, no arm reaches 3% CER.** Short-budget signal: latin_p8 learns to read within 1000 steps (latin_p5 does not yet); the
 moonshot shows no sign of reading (at its blind floor), so on this evidence it is the weaker candidate. A code at
 its floor after 1000 steps is undecided, not failed, but its loss showed no movement at all, unlike Latin's.
 
@@ -50,7 +49,7 @@ the ~2.5 blind floors while the moonshot's did not, and its CER is a few points 
 chance. A weak hint that density, not the glyph code alone, is what stalls the moonshot; it needs its own blind
 control and longer training before it means anything.
 
-**What did not run:** 5000-step arms; latin_p5 blind control; latin_p6, rgb3_p8; R3-2; the optional frozen-Qwen probe (R3-0);
+**What did not run:** 5000-step arms (queued for the follow-on hour, then dropped: ~1 h 45 min each did not fit); latin_p6, rgb3_p8; R3-2; the optional frozen-Qwen probe (R3-0);
 G2 at scale (section 6). Adapters (`encoder_probe/cache/r3_adapters/`, ~0.56 GB each) were not copied off the
 machine. Nothing was chosen on test-page CER.
 
