@@ -330,6 +330,26 @@ Setup: latin_p16 frozen, 6.8 chars/token, 100 train / 16 test pages, 1000 steps 
   latin_p5 cache (its chunks are kept) and the Latin sweep go to the 3090 at more pages. The amended latin_p8 trained
   run gets a slot only if one frees before about 07:00, and is a lower bound.
 
+**Required reference (2026-11-05 ~06:40, outside review): the blind floor and the CER op split.**
+* **The problem.** Decoding the moonshot direct checkpoint (step 1800, 4 test pages, 356 lines) gives distinct but
+  unaligned letter-frequency soup.
+  * Example: ref 'Robert Boulter is an English film…' -> hyp 'ld nola s i wistililielegr arreri btti…'.
+  * Its 74.5% CER splits into sub 18.4% / ins 0.3% / del 55.8%, with hyp/ref length 0.45.
+  * Frozen moonshot (3 stored samples): del 83%, length 0.17.
+  * latin_p16 frozen (3 stored samples): del 69%, length 0.31.
+  * A CER near 75-86% can therefore come from label statistics alone: a longer hyp of frequent letters lowers CER
+    without reading the page.
+* **Blind arm** (`--arm blind`, diagnostic, never a pre-registered arm):
+  * frozen-merger features, but each train and test page gets another random page's features (seeded derangement);
+  * labels and recon targets stay with the true page;
+  * same probe, recipe and pages.
+  * Its CER is the probe's floor for that code. Runs: `results/g2lite_blind/` (moonshot 1500 steps, latin_p16 1000
+    steps).
+* **Every G2-lite number, diagnostics included, is quoted against its code's blind floor and with its op split.**
+  * Rows written from now on carry `ops` (sub / ins / del / len_ratio over all 16 test pages).
+  * The rows already running get theirs from their last checkpoint, resumed to step 3000 under another run name.
+    Resume is exact.
+
 ### Moonshot levers (beyond the go/no-go; user: "shoot for the moon")
 Ways to push density past the literature's 30-90 chars/token, each testable on its own:
 1. **Grid-aligned pitch.** 4 or 7 px line pitch divides the 28 px token, plus the pixel-shift protocol.

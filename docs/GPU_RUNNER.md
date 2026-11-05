@@ -92,6 +92,15 @@ nohup scripts/autosave_results.sh 600 > results/autosave.log 2>&1 &     # commit
 * Optional, only if a GPU slot and memory are free: the frozen-Qwen probe for the moonshot (R3-0),
   `run_probe2.py --device cuda --encoding rgb3_lg_pb_h5 --encoder qwen25vl --cond clean --train-pages 1000 --steps 10000 --run-name round3_qwen_tp1000`.
   It measures the absolute question only: GridProbe can't read Latin through Qwen at these page counts.
+* **Required baseline for every GPU probe run (run_probe2 / run_g2lite): the blind floor.** Run the same probe,
+  recipe, pages and steps with each page's features replaced by another random page's
+  (`run_g2lite.py --arm blind --encoding <code> ... --run-name <run>_blind`; seeded derangement of train and of test
+  pages, labels and recon targets unchanged). That is the CER the probe gets from label statistics alone.
+  * Quote every probe CER next to its code's blind CER.
+  * Quote its op split (`ops`: sub / ins / del as fractions of ref chars, `len_ratio` = hyp / ref length).
+  * A CER at or near the blind floor, with mostly deletions and a short `len_ratio`, is "not read", whatever its
+    absolute value (2026-11-05: frozen moonshot 86% and direct 74.5% are short letter-frequency soup, 56-83%
+    deletions).
 
 ## 5. Results and hand-back (last ~20 min, whatever finished)
 * Rows: `encoder_probe/results/round3_ft_gpu3h/runs.jsonl`, one per eval cond, with `cer`, `cloze_acc`, `mc_acc`,
