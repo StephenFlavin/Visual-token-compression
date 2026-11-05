@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-ARMS = ("frozen", "trained", "direct", "trained@2e-3")
+ARMS = ("frozen", "trained", "direct", "trained@2e-3", "blind")
 # "trained" = the amended arm (merger LR 1e-4, ROUND3.md amendment 2); "trained@2e-3" = as registered (collapsed)
 
 

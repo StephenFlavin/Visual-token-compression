@@ -164,9 +164,16 @@ def test_resume_is_exact_and_row_schema(tmp_path):
     assert r["merger_check"]["rel_l2"] < 2e-2 and r["merger_check"]["corr"] > 0.999
     assert _run(a, cache, "trained") == 0 and len(_rows(a)) == 1                  # done -> skipped
     # the other arms: separate keys, same probe recipe and seed, only the arm's parameters
-    assert _run(a, cache, "frozen") == 0 and _run(a, cache, "direct") == 0
+    assert _run(a, cache, "frozen") == 0 and _run(a, cache, "direct") == 0 and _run(a, cache, "blind") == 0
     rows = {x["arm"]: x for x in _rows(a)}
-    assert set(rows) == set(G.ARMS)
+    assert set(rows) == set(G.ARMS) | {"blind"}
+    for x in rows.values():   # the op split reproduces the row's CER
+        assert abs(x["ops"]["sub"] + x["ops"]["ins"] + x["ops"]["del"] - x["ops"]["cer"]) < 1e-9
+        assert abs(x["ops"]["cer"] - x["cer"]) < 1e-9
+    b = rows["blind"]
+    assert b["blind"]["source"] == "frozen" and sorted(b["blind"]["perm_test"]) == list(range(4))
+    assert all(i != j for i, j in enumerate(b["blind"]["perm_test"]))
+    assert b["trainable"] == rows["frozen"]["trainable"]
     assert rows["frozen"]["trainable"] == ["probe.blocks", "probe.grid", "probe.inp", "probe.out", "probe.skip"]
     assert rows["direct"]["trainable"] == rows["frozen"]["trainable"] and rows["direct"]["d"] == 128
     assert rows["frozen"]["params"]["merger_trainable"] == 0 and rows["frozen"]["d"] == 64

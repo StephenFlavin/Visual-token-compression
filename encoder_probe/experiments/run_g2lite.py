@@ -39,7 +39,8 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "encoder_probe" / "experiments"))
 from encoder_probe.ep import flock  # noqa: E402
 from encoder_probe.ep import token_cache as TC  # noqa: E402
-from encoder_probe.ep.g2lite import ARMS, Front, G2Reader, load_merger, trainable_names, window_reverse  # noqa: E402
+from encoder_probe.ep.g2lite import (ARMS, Front, G2Reader, decode_pairs, edit_ops, load_merger,  # noqa: E402
+                                     trainable_names, window_reverse)
 from encoder_probe.ep.geom import pages_digest  # noqa: E402
 from encoder_probe.ep.probe_grid import GridProbe  # noqa: E402
 from encoder_probe.ep.vlm_encoders import WEIGHTS, cpu_has_bf16  # noqa: E402
@@ -166,7 +167,8 @@ def build_only(a) -> int:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--arm", choices=ARMS)
+    ap.add_argument("--arm", choices=ARMS + ("blind",),
+                    help="blind (diagnostic): frozen features of a different random page (seeded derangement, train and test separately): the probe's floor from label statistics alone")
     ap.add_argument("--encoding")
     ap.add_argument("--steps", type=int, default=3000)
     ap.add_argument("--train-pages", type=int, default=500)
@@ -252,8 +254,9 @@ def main(argv=None) -> int:
                         "rel_l2": ((mt - ref).norm() / ref.norm()).item(),
                         "corr": float(np.corrcoef(mt.flatten().numpy(), ref.flatten().numpy())[0, 1])}
         del chk_front, mt, ref
-    front = Front(a.arm, None if a.arm == "direct" else merger_fn(), reverse, c)
-    if a.arm == "frozen":
+    farm = "frozen" if a.arm == "blind" else a.arm
+    front = Front(farm, None if farm == "direct" else merger_fn(), reverse, c)
+    if farm == "frozen":
         tok_tr = front.fit_standardiser(h_tr, keep=True)
         with torch.no_grad():
             tok_tr.sub_(front.mu).div_(front.sd)   # in place: one 1 GB copy for 500 pages
@@ -261,6 +264,18 @@ def main(argv=None) -> int:
     else:
         front.fit_standardiser(h_tr)
         tok_tr, tok_te = h_tr, h_te
+    blind, fmap = None, torch.arange(len(tr))
+    if a.arm == "blind":   # break image-text alignment, keep the feature distribution
+        brng = np.random.default_rng(a.seed + 7919)
+
+        def derange(n):
+            while True:
+                p = brng.permutation(n)
+                if n < 2 or not np.any(p == np.arange(n)):
+                    return p
+        ptr, pte = derange(len(tr)), derange(len(te))
+        fmap, tok_te = torch.as_tensor(ptr), tok_te[torch.as_tensor(pte)]   # train: remapped per batch (no copy)
+        blind = {"source": "frozen", "perm_seed": a.seed + 7919, "perm_test": pte.tolist()}
     enc_compute = dh.get("enc_compute")
     digest_test = pages_digest(te)
     pix_tr = torch.from_numpy(np.stack([p.img for p in tr])).permute(0, 3, 1, 2).contiguous()   # clean, uint8
@@ -272,7 +287,7 @@ def main(argv=None) -> int:
     cpt = chars / (len(te) * G * G)
     torch.manual_seed(a.seed)   # same probe init in every arm (the merger build above consumed the RNG)
     probe = GridProbe(enc.pitch, len(classes), d=front.d, G=G, P=P)
-    model = G2Reader(None if a.arm == "frozen" else front, probe)
+    model = G2Reader(None if farm == "frozen" else front, probe)
     params = [p for p in model.parameters() if p.requires_grad]
     n_merger = sum(p.numel() for p in front.parameters() if p.requires_grad) if a.arm == "trained" else 0
     print(f"[g2] {key} pitch={enc.pitch} lines/page={enc.n_lines} classes={len(classes)} d={front.d} "
@@ -310,7 +325,7 @@ def main(argv=None) -> int:
                 pi.append(k), li.append(int(i)), ys.append(tgt[p][i])
         ix = torch.as_tensor(pb)
         with torch.autocast("cpu", dtype=torch.bfloat16, enabled=bf16):
-            feat = model.features(tok_tr[ix])
+            feat = model.features(tok_tr[fmap[ix]])
             logp = model.read(feat, torch.tensor(pi), torch.tensor(li))
         logp = logp.float()
         T = logp.shape[0]
@@ -346,6 +361,7 @@ def main(argv=None) -> int:
                 return 0
     s_step = (time.time() - t_train) / a.steps
     cer, samples = evaluate(model, tok_te, te, enc, classes, bf16=bf16, device="cpu")
+    ops = edit_ops(decode_pairs(model, tok_te, te, enc, classes, bf16))   # CER split: sub / ins / del, length
     cfg = {k: v for k, v in vars(a).items() if k not in ("out_root", "cache_root", "stop_after", "print_queue",
                                                          "poll")}
     row = {**key, "phase": "probe", "round": 3, "gate": "G2-lite", "encoder": f"qwen25vl_h{split}", "cond": "clean",
@@ -358,7 +374,7 @@ def main(argv=None) -> int:
            "test_pages": len(te), "lr": a.lr, "n_test_chars": chars, "digest_test": digest_test, "curve": curve,
            "trainable": sorted({n.split(".")[0] + "." + n.split(".")[1] for n in trainable_names(model)}),
            "params": {"probe": sum(p.numel() for p in probe.parameters()), "merger_trainable": n_merger},
-           "standardise": "merger_pretrained" if a.arm != "direct" else "concat_states",
+           "standardise": "merger_pretrained" if a.arm != "direct" else "concat_states", "ops": ops, "blind": blind,
            "merger_check": merger_check, "config": cfg, "tiny": a.tiny, "wait_s": waited, "s_per_step": s_step,
            "train_time_s": time.time() - t0, "smoke": "smoke" in a.run_name or a.tiny, "samples": samples}
     print(f"[g2] TEST {key} cer={cer:.4f} chars/token={cpt:.1f} train_ctc={row['train_ctc']:.3f}", flush=True)
