@@ -125,3 +125,48 @@ def precompute(front: Front, h, batch: int = 8) -> torch.Tensor:
 
 def trainable_names(model: nn.Module) -> list[str]:
     return sorted(n for n, p in model.named_parameters() if p.requires_grad)
+
+
+def edit_ops(pairs) -> dict:
+    """CER split for (ref, hyp) pairs: substitutions, insertions (extra hyp chars), deletions (missing ref chars),
+    and the hyp/ref length ratio. (sub + ins + del) / ref_chars equals the CER of run_probe.evaluate."""
+    from rapidfuzz.distance import Levenshtein
+    sub = ins = dele = nr = nh = 0
+    for r, h in pairs:
+        for tag, *_ in Levenshtein.editops(r, h):
+            if tag == "replace":
+                sub += 1
+            elif tag == "insert":
+                ins += 1
+            else:
+                dele += 1
+        nr += len(r)
+        nh += len(h)
+    n = max(1, nr)
+    return {"cer": (sub + ins + dele) / n, "sub": sub / n, "ins": ins / n, "del": dele / n, "ref_chars": nr,
+            "hyp_chars": nh, "len_ratio": nh / n}
+
+
+@torch.no_grad()
+def decode_pairs(model, tok, pages, enc, classes, bf16: bool, batch_pages: int = 2) -> list[tuple[str, str]]:
+    """All (ref, hyp) line pairs on ``pages``, decoded exactly as run_probe.evaluate does."""
+    from encoder_probe.ep.probe import greedy
+    model.eval()
+    out = []
+    for s in range(0, len(pages), batch_pages):
+        pb = list(range(s, min(len(pages), s + batch_pages)))
+        with torch.autocast("cpu", dtype=torch.bfloat16, enabled=bf16):
+            feat = model.features(tok[pb])
+        pi, li, refs = [], [], []
+        for k, p in enumerate(pb):
+            for i, r in enumerate(pages[p].refs):
+                if r:
+                    pi.append(k), li.append(i), refs.append(r)
+        if not pi:
+            continue
+        with torch.autocast("cpu", dtype=torch.bfloat16, enabled=bf16):
+            lp = model.read(feat, torch.tensor(pi), torch.tensor(li))
+        for d, r in zip(greedy(lp.float()), refs):
+            out.append((r, enc.clean_hyp(enc.decode("".join(classes[j - 1] for j in d)))))
+    model.train()
+    return out
