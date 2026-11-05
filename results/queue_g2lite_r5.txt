@@ -1,0 +1,2 @@
+# G2-lite diagnostic (not a pre-registered arm): moonshot blind floor, in moonshot trained's slot (r5 starts when queue r2 exits)
+python3 encoder_probe/experiments/run_g2lite.py --arm blind --encoding rgb3_lg_pb_h5 --steps 1500 --train-pages 500 --run-name g2lite_blind --threads 1
