@@ -145,6 +145,8 @@ def test_resume_is_exact_and_row_schema(tmp_path):
     ra, rb = _rows(a)[-1], _rows(b)[-1]
     for k in ("cer", "curve", "train_curve", "train_ctc", "train_ctc_last", "samples"):
         assert ra[k] == rb[k], k
+    p = "bf16" if ra["bf16"] else "fp32"
+    assert ra["precision_segments"] == [[1, 4, p]] and rb["precision_segments"] == [[1, 2, p], [3, 4, p]]
     r = ra
     for k in ("encoding", "arm", "steps", "train_pages", "seed", "phase", "round", "gate", "encoder", "cond",
               "scheme", "family", "pitch", "S", "P", "G", "n_tokens", "d", "px_per_char", "budget",

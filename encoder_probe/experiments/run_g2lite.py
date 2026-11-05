@@ -113,8 +113,12 @@ def towers(a):
                 lambda: copy.deepcopy(tower.merger).float())
 
     def vision_fn():
+        # always fp32 (lossless: the weights are bf16 values), so every code's cache has the same precision
+        # whatever the host; vlm_encoders would pick bf16 on a host with native bf16
         from encoder_probe.ep.vlm_encoders import QwenVision
-        return QwenVision()
+        v = QwenVision()
+        v.model, v.dtype, v.compute = v.model.float(), torch.float32, "cpu/float32"
+        return v
     return 32, 112, vision_fn, lambda: load_merger(WEIGHTS / "qwen25vl3b_visual.safetensors")
 
 
@@ -274,16 +278,18 @@ def main(argv=None) -> int:
           f"(merger {n_merger}) merger_check={merger_check}", flush=True)
     opt = torch.optim.AdamW(params, lr=a.lr, weight_decay=1e-4, fused=True)
     sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=a.lr, total_steps=a.steps, pct_start=0.05)
-    curve, train_curve, ctcs, start, t_prev = [], [], [], 1, 0.0
+    curve, train_curve, ctcs, start, t_prev, segs = [], [], [], 1, 0.0, []
     if a.ckpt_every and ck.exists():
         st = torch.load(ck, map_location="cpu", weights_only=False)
         model.load_state_dict(st["model"]), opt.load_state_dict(st["opt"]), sched.load_state_dict(st["sched"])
         rng.bit_generator.state = st["rng"]
         torch.set_rng_state(st["torch_rng"])
         curve, train_curve, ctcs = st["curve"], st["train_curve"], st["ctcs"]
-        start, t_prev = st["step"] + 1, st["t_train"]
+        start, t_prev, segs = st["step"] + 1, st["t_train"], st.get("segs", [])
         print(f"[g2] resumed from step {st['step']} ({ck.name})", flush=True)
     t_train = time.time() - t_prev
+    # probe precision per stretch of steps (a container restart can move the run to a host with/without bf16)
+    segs.append([start, a.steps, "bf16" if bf16 else "fp32"])
     for step in range(start, a.steps + 1):
         pb = rng.choice(len(tr), a.batch_pages, replace=False)
         pi, li, ys = [], [], []
@@ -321,7 +327,8 @@ def main(argv=None) -> int:
             torch.save({"model": model.state_dict(), "opt": opt.state_dict(),
                         "sched": sched.state_dict(), "rng": rng.bit_generator.state,
                         "torch_rng": torch.get_rng_state(), "curve": curve, "train_curve": train_curve,
-                        "ctcs": ctcs, "step": step, "t_train": time.time() - t_train}, tmp)
+                        "ctcs": ctcs, "step": step, "t_train": time.time() - t_train,
+                        "segs": segs[:-1] + [[segs[-1][0], step, segs[-1][2]]]}, tmp)
             tmp.replace(ck)
             if a.stop_after and step >= a.stop_after:
                 print(f"[g2] stop after step {step} (--stop-after)", flush=True)
@@ -335,7 +342,8 @@ def main(argv=None) -> int:
            "G": G, "n_tokens": G * G, "d": front.d, "px_per_char": ppc, "budget": round(ppc, 3),
            "chars_per_token": cpt, "chars_per_vlm_token": P * P / ppc, "cer": cer, "score_v": 2,
            "train_ctc": float(np.mean(ctcs[-100:])), "train_ctc_last": ctcs[-1], "train_curve": train_curve,
-           "bf16": bf16, "device": "cpu", "enc_compute": enc_compute, "recon_weight": a.recon_weight,
+           "bf16": bf16 if len({x[2] for x in segs}) == 1 else "mixed", "precision_segments": segs,
+           "device": "cpu", "enc_compute": enc_compute, "recon_weight": a.recon_weight,
            "test_pages": len(te), "lr": a.lr, "n_test_chars": chars, "digest_test": digest_test, "curve": curve,
            "trainable": sorted({n.split(".")[0] + "." + n.split(".")[1] for n in trainable_names(model)}),
            "params": {"probe": sum(p.numel() for p in probe.parameters()), "merger_trainable": n_merger},
