@@ -3,3 +3,4 @@ python3 encoder_probe/experiments/finetune_qwen.py --encoding rgb3_lg_pb_h5 --st
 python3 encoder_probe/experiments/finetune_qwen.py --encoding rgb3_lg_pb_h5 --steps 1000 --run-name round3_ft_gpu3h --blind-images
 python3 encoder_probe/experiments/finetune_qwen.py --encoding latin_p8 --steps 1000 --run-name round3_ft_gpu3h --blind-images
 python3 encoder_probe/experiments/finetune_qwen.py --encoding latin_p5 --steps 1000 --run-name round3_ft_gpu3h
+python3 encoder_probe/experiments/finetune_qwen.py --encoding lg_pb_h5 --steps 1000 --run-name round3_ft_gpu3h
