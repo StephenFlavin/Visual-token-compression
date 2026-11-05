@@ -1,0 +1,1 @@
+python3 encoder_probe/experiments/run_probe2.py --encoding rgb3_lg_pb_h5 --encoder identity28 --cond clean --steps 3000 --run-name round3_cpu_tp200 --threads 1 --ckpt-every 200
