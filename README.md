@@ -27,25 +27,33 @@ RGB overlays and learned glyph alphabets) and compares them with plain text rend
 
 ## The codes
 
-**Glyphs for frequent chunks (visual BPE).** Byte-pair encoding merges frequent letter runs (`the`, `ing`, ` of the `)
+**1. Glyphs for frequent chunks (visual BPE).** Byte-pair encoding merges frequent letter runs (`the`, `ing`, ` of the `)
 into one token. Here each of the 300 most useful chunks gets its own glyph, and every other letter is spelled
 out. In the version that works, all 395 symbols are learned 5-px bitmaps, optimised together with a reader.
 The haiku below goes from 66 characters to 32 symbols, and its lines get 36% shorter.
 
 ![Plain text vs learned glyphs](docs/img/glyphs.png)
 
-**Colour blocks.** Each of the 95 printable characters gets its own colour, and each character is drawn as one solid block
+**2. Colour blocks.** Each of the 95 printable characters gets its own colour, and each character is drawn as one solid block
 (here 2x2 px, 60% less area than a 5-px font).
 
 ![Plain text vs one colour block per character](docs/img/colour.png)
 
-**RGB overlay.** Three lines of text share one strip of pixels, one line per colour channel. That is 3x the text of a
+**3. RGB overlay.** Three lines of text share one strip of pixels, one line per colour channel. That is 3x the text of a
 monospace line.
 
 ![Three lines of text vs RGB overlay](docs/img/rgb.png)
 
-**The moonshot, `rgb3_lg_pb_h5`.** An RGB overlay of three learned-glyph streams: 322 characters per Qwen2.5-VL
-vision token. Below, magnified: the colour page (top) and its three channels.
+**The moonshot, `rgb3_lg_pb_h5` = codes 1 + 3.** It blends the learned glyph alphabet (1) with the RGB overlay (3):
+three independent streams of learned glyphs, one per colour channel, on the same pixels.
+* **Why the two combine:** each channel is an ordinary black-on-white glyph page, so the three layers never
+  occlude each other. Code 1 packs ~107 chars into each Qwen2.5-VL vision token; three layers make that **322**,
+  ~75x plain text's 4.3 chars per token.
+* **Status:** the page itself is readable (1.07% CER for a reader trained on raw pixels), but Qwen2.5-VL has not
+  learned to read it: after a 1000-step fine-tune its loss equals its blind control's. Details in
+  [docs/ANALYSIS.md](docs/ANALYSIS.md).
+
+Below, magnified: the colour page (top) and its three channels.
 
 ![Moonshot: RGB overlay of learned whole-pixel glyphs](docs/img/rgb3_lg_pb_h5_strip.png)
 
