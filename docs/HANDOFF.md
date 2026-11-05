@@ -22,7 +22,7 @@ pre-render (1000 train pages): latin_p8 3 min, latin_p5 8 min, moonshot 11 min (
 | rgb3_lg_pb_h5 (moonshot) | 321.6 | jpeg75 | 87.6% | 88.6% | 0.19 | 0.23 | 0.38 | 0.31 | |
 | latin_p5 | 72.4 | clean | 80.9% | **77.8%** | 0.31 | 0.30 | 0.56 | 0.28 | 2.163 (2.402) |
 | latin_p5 | 72.4 | jpeg75 | 79.0% | 79.9% | 0.33 | 0.31 | 0.53 | 0.28 | |
-| lg_pb_h5 | 107.3 | clean | 78.4% | (none) | 0.17 | | 0.31 | | 2.274 (no blind run) |
+| lg_pb_h5 | 107.3 | clean | 78.4% | (blind died at step 500) | 0.17 | | 0.31 | | 2.274 (blind 2.285 at step 500) |
 | lg_pb_h5 | 107.3 | jpeg75 | 78.5% | | 0.17 | | 0.34 | | |
 
 * **latin_p5 does not transcribe at this budget:** its blind control (run 14:00-14:26, same settings) gets *lower*
@@ -44,10 +44,16 @@ its floor after 1000 steps is undecided, not failed, but its loss showed no move
 
 **Extra (user-approved, end of session):** lg_pb_h5 (single-channel learned glyph bank, ~107 chars/token) at the
 same settings and fair_hash, started 13:32 while the write-up ran, to ask whether the moonshot fails because of
-density (322) or because of the glyph code itself. It finished (rows above, no blind run): its val loss fell below
-the ~2.5 blind floors while the moonshot's did not, and its CER is a few points under latin_p5's, but cloze/MC are at
-chance. A weak hint that density, not the glyph code alone, is what stalls the moonshot; it needs its own blind
-control and longer training before it means anything.
+density (322) or because of the glyph code itself. It finished (rows above). **Its own blind control (follow-on hour) shows it is at its floor too:** blind val loss
+2.279 / 2.285 at steps 250 / 500 vs the real arm's 2.274 at 1000; cloze/MC are at chance. The blind job died at step
+500 (~14:37) because **the runner's disk quota filled** ("Disk quota exceeded": checkpoints ~1.75 GB, adapters
+~0.56 GB each, page caches ~3 GB); no eval row. Freed by deleting the stale checkpoint and page caches; adapters kept.
+The full disk also truncated 4 docs in commit 61e2e9b (restored in the next commit). So at 1000 steps neither glyph
+code is read, at 107 or 322 chars/token: density alone does not explain the moonshot's failure. Its val loss looked
+below 2.5 only against the other codes' floors: **every arm needs its own blind control** (floors differ by code:
+latin_p5 77.8% CER, latin_p8 88.5%).
+
+**Follow-on hour (14:00-15:00):** latin_p5 blind control (done); lg_pb_h5 blind control (died at step 500).
 
 **What did not run:** 5000-step arms (queued for the follow-on hour, then dropped: ~1 h 45 min each did not fit); latin_p6, rgb3_p8; R3-2; the optional frozen-Qwen probe (R3-0);
 G2 at scale (section 6). Adapters (`encoder_probe/cache/r3_adapters/`, ~0.56 GB each) were not copied off the

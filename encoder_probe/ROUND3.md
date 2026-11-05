@@ -126,11 +126,13 @@ controls. Rows: `encoder_probe/results/round3_ft_gpu3h{,_blind}/`.
 | Arm (chars/token) | CER clean | blind CER | cloze | MC | val loss (blind) |
 |---|---|---|---|---|---|
 | latin_p8 (28) | 55.0% | 88.5% | 0.52 (0.22) | 0.88 (0.25) | 1.12 (2.48) |
-| latin_p5 (72) | 80.9% | no own blind (latin_p8's 88.5%) | 0.31 | 0.56 | 2.16 |
+| latin_p5 (72) | 80.9% | **77.8%** (own blind, run after) | 0.31 (0.30) | 0.56 (0.28) | 2.16 (2.40) |
+| lg_pb_h5 (107) | 78.4% | blind died at step 500 (disk full) | 0.17 | 0.31 | 2.27 (2.29 at 500) |
 | rgb3_lg_pb_h5 (322) | 83.6% | 89.9% | 0.22 (0.22) | 0.34 (0.28) | 2.518 (2.517) |
 * **The LLM reads Latin at 28 chars/token within 1000 steps:** well below its blind control on every metric. The
   first line of a window comes out near-exact, then the output drifts into fluent invented continuation (the
-  language prior takes over). latin_p5 (72) is starting to read.
+  language prior takes over). latin_p5 (72) does **not** transcribe yet: its own blind control gets lower CER (77.8% vs 80.9%) and the same
+  cloze; only MC and val loss show some image use. Blind CER floors differ by code, so each arm needs its own.
 * **The moonshot is not used at all at this budget.** Its losses match the blind run's to 3 decimals, and its
   generations are the same generic text as the blind run's, whatever the page. This agrees with G2-lite (the
   information dies at or before the merger); the vision side (merger + last 4 blocks at lr_vision 2e-5) didn't
@@ -139,8 +141,8 @@ controls. Rows: `encoder_probe/results/round3_ft_gpu3h{,_blind}/`.
   Undecided, not failed.
 * `finetune_qwen.py` rows now carry `ops` (sub/ins/del, len_ratio) and `prefix_frac` (the share of ref chars
   before the first error, the read-then-drift measure). Added after this run.
-* Next, before any long moonshot run: whether an intermediate density moves off its blind floor (lg_pb_h5 ~107 was
-  running at hand-off; rgb3_p8 ~73), and a vision-first stage-B diagnostic (R3-1b) for the moonshot (higher
+* Next, before any long moonshot run: whether an intermediate density moves off its blind floor (lg_pb_h5 ~107: also at
+  its floor at 1000 steps, val loss = its blind's; rgb3_p8 ~73 not run), and a vision-first stage-B diagnostic (R3-1b) for the moonshot (higher
   lr_vision / more unfrozen blocks, loss vs blind). For Latin: 5000 steps for latin_p8/p5 to see where the drift goes.
 
 ### R3-1b: deeper training if LoRA is not enough (added 2026-11-04, user: "LoRA first, then proper training")

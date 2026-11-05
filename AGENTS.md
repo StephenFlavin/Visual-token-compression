@@ -140,5 +140,5 @@ Claude responses are cached in `results/cache/claude/` (keyed on model+prompt+im
   * The fair test is R3-1 on a GPU (docs/GPU_RUNNER.md).
   * R3-1 short-budget (RTX 4090, 1000 steps, blind controls): Qwen's LLM **reads latin_p8 (28 chars/token)**,
     55% CER vs blind 88.5% (MC 0.88 vs 0.25). It reads the first line, then drifts into invented text. latin_p5
-    (72) is starting to read. **The moonshot is ignored:** losses equal the blind run's to 3 decimals. G3 is not
+    (72) is at its own blind floor (77.8% blind vs 80.9%; only MC/val loss show image use); lg_pb_h5 (107) too. **The moonshot is ignored:** losses equal the blind run's to 3 decimals. G3 is not
     decidable yet (encoder_probe/ROUND3.md).
