@@ -33,6 +33,7 @@ LG_BANKS = {  # tag -> bank path (converged e1long banks, N=300 tokens)
     "lg_free_w23_h4": "learned_glyphs/results/e1long/banks/lg_learned_n300_w23_h4.pt",
     "lg_pb_h4": "learned_glyphs/results/e1long/banks/lg_learned_n300_pb_h4.pt",
     "lg_pb_h5": "learned_glyphs/results/e1long/banks/lg_learned_n300_pb_h5.pt",
+    "lg_n0_pb_h5": "learned_glyphs/results/e1long/banks/lg_learned_n0_pb_h5.pt",   # characters only (95 symbols)
 }
 
 
