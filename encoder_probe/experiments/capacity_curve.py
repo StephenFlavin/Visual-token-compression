@@ -286,7 +286,7 @@ def report(out: Path) -> str:
                          f"{fmt_ci(r['recovered_chars_per_token'], r['recovered_chars_per_token_ci'])} | {cer} |")
         lines.append("")
         _plot(plain, out / "capacity.png")
-        lines += ["![capacity](capacity.png)", ""]
+        lines += ["![capacity](capacity.png)", ""] + run0_checks(plain)
     shifted = [r for r in rows if r.get("shifted")]
     if shifted:
         S_ = load_jsonl(out / "samples.jsonl")
@@ -310,6 +310,48 @@ def report(out: Path) -> str:
     md = "\n".join(lines)
     (out / "summary.md").write_text(md)
     return md
+
+
+def spearman(x, y, reps: int = 10000, seed: int = 0) -> tuple[float, float]:
+    """Spearman rho (average ranks for ties) and a two-sided permutation p."""
+    def rank(v):
+        v = np.asarray(v, float)
+        o = np.argsort(v, kind="mergesort")
+        r = np.empty(len(v))
+        r[o] = np.arange(len(v))
+        for u in np.unique(v):
+            r[v == u] = r[v == u].mean()
+        return r
+    rx, ry = rank(x), rank(y)
+    rho = float(np.corrcoef(rx, ry)[0, 1])
+    rng = np.random.default_rng(seed)
+    null = np.array([np.corrcoef(rx, rng.permutation(ry))[0, 1] for _ in range(reps)])
+    return rho, float((np.sum(np.abs(null) >= abs(rho) - 1e-12) + 1) / (reps + 1))
+
+
+def run0_checks(rows: list[dict]) -> list[str]:
+    """The Run 0 criteria as operationalised in PLAN_3090 amendment 2b (descriptive lines for summary.md)."""
+    out = ["## Run 0 checks (PLAN_3090 amendment 2b)", ""]
+    nat = sorted([r for r in rows if r["text"] == "natural"], key=lambda r: r["chars_per_token"])
+    if len(nat) >= 3:
+        b = [r["bits_per_vtok"] for r in nat]
+        k = int(np.argmax(b))
+        out.append(f"* natural: sparsest recovered fraction {nat[0]['recovered_frac']:.2f} (needs >= 0.8); max bits/vtok "
+                   f"{b[k]:.2f} at {nat[k]['encoding']} (interior: {0 < k < len(nat) - 1}); densest point CI upper "
+                   f"{nat[-1]['bits_per_vtok_ci'][1]:.2f} vs max {b[k]:.2f}")
+    pts = [r for r in rows if r.get("cer") is not None]
+    if len(pts) >= 3:
+        rho, p = spearman([r["gap_per_text_token"] for r in pts], [r["cer"] for r in pts])
+        out.append(f"* gap per text token vs CER over {len(pts)} points: Spearman rho = {rho:.2f} (permutation "
+                   f"p = {p:.3g}; needs <= -0.8)")
+    by = {(r["encoding"], r["text"]): r for r in rows}
+    pairs = [(by[(e, "natural")], by[(e, "shuffled")]) for e, t in by if t == "natural" and (e, "shuffled") in by]
+    if pairs:
+        worse = sum(s["recovered_frac"] < n["recovered_frac"] for n, s in pairs)
+        out.append(f"* shuffled recovered fraction below natural at {worse} of {len(pairs)} pitches (needs >= 4 of 6): "
+                   + ", ".join(f"{n['encoding']} {n['recovered_frac']:.2f}/{s['recovered_frac']:.2f}"
+                               for n, s in pairs))
+    return out + [""]
 
 
 def alignment_matrix(samples: list[dict], enc: str, text: str):

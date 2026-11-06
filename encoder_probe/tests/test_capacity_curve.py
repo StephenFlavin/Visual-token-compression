@@ -60,6 +60,13 @@ def test_curve_rows_resume_and_report(tmp_path):
     assert C.main([*enc, *common]) == 0                              # all done: no model load, report only
     md = (tmp_path / "r" / "summary.md").read_text()
     assert "latin_p16" in md and (tmp_path / "r" / "capacity.png").exists()
+    assert "Spearman" in md and "shuffled recovered fraction below natural at" in md
+
+
+def test_spearman():
+    assert C.spearman([1, 2, 3, 4, 5, 6], [6, 5, 4, 3, 2, 1])[0] == -1.0
+    rho, p = C.spearman([1, 2, 2, 4], [1, 3, 3, 9], reps=500)
+    assert np.isclose(rho, 1.0) and p > 0.01             # ties averaged; 4 points cannot be significant
 
 
 def test_shift_grid_scores_blank_once_per_page(tmp_path):
