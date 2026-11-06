@@ -97,6 +97,59 @@ Code: `encoder_probe/experiments/zeroshot_colour.py`. Rows: `encoder_probe/resul
   * per-stream prompts in `r3_tasks.py`;
   * per-stream scoring in `finetune_qwen.py`.
 
+**Amendment 1 (2026-11-06, user, before any A1 row): headline bar.** The headline claim is that the overlay
+carries **more information per vision token than one stream**: R(2) > 1, with the lower bound of a 95% bootstrap
+CI above 1.
+* R(k) = information per vision token of the k-stream arm ÷ that of the 1-stream arm.
+* Information per vision token = the val-loss gap vs the arm's own blind, on the same 64 fixed val targets
+  (`val_per_sample`), × text tokens per vision token.
+
+The gate above stays as the "strong" level (R(2) ≥ 1.5 plus the per-stream rules). `analyse_colour.py` reports both.
+
+**Built (2026-11-06, CPU-tested in `encoder_probe/tests/test_colour.py`):**
+* **Encodings** `rgb1s_p<p>`, `rgb2s_p<p>`, `rgb3s_p<p>` (`ep/geom.py`):
+  * each channel holds an ordinary latin_p<p> page of its own contiguous span of text;
+  * `rgb1s` is pixel-identical to latin_p<p>;
+  * at p16: 6.9 / 13.7 / 20.5 chars per vision token.
+* **Per-stream tasks** (`ep/r3_tasks.py`): every prompt names the stream by its ink colour. The MC lure is a phrase
+  from another stream on the same page; for 1 stream, a phrase from the text that follows the page.
+* **Per-stream eval** in `finetune_qwen.py`: CER, MC, lure rate and cloze per stream (`per_stream` in the row),
+  plus `val_per_sample`.
+* **Gate analysis:** `analyse_colour.py`.
+
+**A1 runbook (RTX 4090, ~2 h; ~3 h with A2's arm).** Every arm uses the same command and flags (one
+`fair_hash`), each with its blind:
+```bash
+F="--steps 1000 --train-pages 1000 --eval-mc 4 --eval-cloze 4 --val-samples 64 --eval-conds clean --run-name colour_a1"
+for e in rgb1s_p16 rgb2s_p16 rgb3s_p16; do
+  python3 encoder_probe/experiments/finetune_qwen.py --encoding $e $F || break
+  python3 encoder_probe/experiments/finetune_qwen.py --encoding $e $F --blind-images || break
+  git add encoder_probe/results/colour_a1* && git commit -qm "colour A1: $e" && git push -q
+done
+python3 encoder_probe/experiments/analyse_colour.py --real colour_a1 --pitch 16
+```
+rgb3s runs last and is analysed under the A2 gate only if A1's headline passes.
+
+**Prompt for the GPU session:**
+```text
+Pull branch claude/validation-harness. Read AGENTS.md (gotchas) and docs/COLOUR_GIST.md (plan, A1 gate,
+amendment 1 and the A1 runbook); runbook mechanics in docs/GPU_RUNNER.md sections 0-2.
+
+1. Setup (GPU_RUNNER.md section 1; no page pre-rendering needed beyond what finetune_qwen.py does), then the CPU
+   tests encoder_probe/tests/test_colour.py and test_round3.py.
+2. Smoke: python3 encoder_probe/experiments/finetune_qwen.py --encoding rgb2s_p16 --smoke. Record s/step and peak
+   GPU memory; check the row has per_stream (cyan, magenta) and val_per_sample.
+3. Run the A1 runbook loop exactly (rgb1s_p16, rgb2s_p16, then rgb3s_p16; each with its --blind-images run;
+   identical flags, one fair_hash). nohup, push after each arm, keep >= 5 GB disk free.
+4. Then python3 encoder_probe/experiments/analyse_colour.py --real colour_a1 --pitch 16 and add its table plus
+   the gate verdicts as a dated "A1 results" section in docs/COLOUR_GIST.md, with a line in docs/HANDOFF.md.
+   Headline = R(2) with its CI (amendment 1). Apply the A2 gate to rgb3s only if the headline passed.
+
+Stop and ask me if the smoke fails or a result would change the plan; record changes as dated amendments
+before running them. Never choose on test-page CER. No PRs, no Claude API calls, no model IDs in commits.
+Stop the pod when finished.
+```
+
 ### A2: three streams (only if A1 passes)
 * **Arm:** the same recipe with a third stream darkening B (yellow ink).
 * **Gate:** each stream's MC ≥ 0.8x the 1-stream arm's, and bits per vision token ≥ 1.3x the 2-stream arm's.

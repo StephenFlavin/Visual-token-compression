@@ -50,6 +50,7 @@ S = 448                     # Qwen-native page: 448 = 16 x 28 -> 256 image token
 FAIR_KEYS = ("steps", "batch_size", "lr", "lr_vision", "warmup", "weight_decay", "clip", "lora_r", "lora_alpha",
              "lora_dropout", "vision_blocks", "train_merger", "train_pages", "test_pages", "task_mix",
              "max_target_chars", "train_conds", "seed", "eval_windows", "eval_cloze", "eval_mc", "max_new_tokens",
+             "val_samples",
              "grad_ckpt", "tiny")
 
 
@@ -131,27 +132,48 @@ def run_eval(pm, tok, enc, te, flats_te, cond, a, dev, autocast, log=print):
     imgs = [degrade(p.img, cond) for p in te]
     trans, qs = [], []
     for k, pg in enumerate(te):
+        r = np.random.default_rng([a.seed, 1000, k])
+        others = flats_te[:k] + flats_te[k + 1:]
+        if getattr(pg, "streams", None):   # colour-gist pages: windows and questions per stream
+            for st, lines in enumerate(pg.streams):
+                for (lo, hi) in T.eval_windows(pg, a.max_target_chars, a.eval_windows, lines):
+                    trans.append({"imgs": [imgs[k]], "ref": "\n".join(lines[lo:hi]), "page": k, "stream": st,
+                                  "prompt": T.stream_transcribe_prompt(pg.colours[st], lo, hi, len(lines))})
+                for kind, n in (("cloze", a.eval_cloze), ("mc", a.eval_mc)):
+                    for _ in range(n):
+                        s = (T.stream_cloze_sample(pg, st, r) if kind == "cloze"
+                             else T.stream_mc_sample(pg, st, others, r))
+                        if s is not None:
+                            qs.append({"imgs": [imgs[k]], "prompt": s[0], "ref": s[1], "task": kind, "page": k,
+                                       "stream": st, "lure": s[2].get("lure")})
+            continue
         for (lo, hi) in T.eval_windows(pg, a.max_target_chars, a.eval_windows):
             trans.append({"imgs": [imgs[k]], "prompt": T.transcribe_prompt(lo, hi, len(pg.refs)),
                           "ref": T.transcript(pg, lo, hi), "page": k, "lines": (lo, hi)})
-        r = np.random.default_rng([a.seed, 1000, k])
         for kind, n in (("cloze", a.eval_cloze), ("mc", a.eval_mc)):
             for _ in range(n):
-                others = flats_te[:k] + flats_te[k + 1:]
                 s = T.cloze_sample(flats_te[k], r) if kind == "cloze" else T.mc_sample(flats_te[k], others, r)
                 if s is not None:
                     qs.append({"imgs": [imgs[k]], "prompt": s[0], "ref": s[1], "task": kind, "page": k})
     pm.eval()
     errs = chars = 0
     samples, pairs = [], []
+    per = {}   # stream -> counters (colour-gist pages only)
+
+    def ps(st):
+        return per.setdefault(st, {"errs": 0, "chars": 0, "mc": [], "lure": [], "cloze": []})
     for i in range(0, len(trans), a.gen_batch):
         b = trans[i:i + a.gen_batch]
         cap = min(a.max_new_tokens, int(1.5 * max(len(tok.encode(s["ref"])) for s in b)) + 16)
         hyps = Q.generate(pm, tok, b, dev, cap, autocast)
         for s, h in zip(b, hyps):
             h2 = T.clean_transcript(enc, h)
-            errs += Levenshtein.distance(s["ref"], h2)
+            e = Levenshtein.distance(s["ref"], h2)
+            errs += e
             chars += len(s["ref"])
+            if "stream" in s:
+                ps(s["stream"])["errs"] += e
+                ps(s["stream"])["chars"] += len(s["ref"])
             pairs.append((s["ref"], h2))
             if len(samples) < 4:
                 samples.append((s["ref"][:300], h2[:300]))
@@ -160,7 +182,12 @@ def run_eval(pm, tok, enc, te, flats_te, cond, a, dev, autocast, log=print):
     for i in range(0, len(qs), a.gen_batch):
         b = qs[i:i + a.gen_batch]
         for s, h in zip(b, Q.generate(pm, tok, b, dev, 12, autocast)):
-            acc[s["task"]].append(T.answer_correct(s["task"], s["ref"], h))
+            ok = T.answer_correct(s["task"], s["ref"], h)
+            acc[s["task"]].append(ok)
+            if "stream" in s:
+                ps(s["stream"])[s["task"]].append(ok)
+                if s["task"] == "mc" and s.get("lure"):
+                    ps(s["stream"])["lure"].append(T.answer_correct("mc", s["lure"], h))
             if len(qsamples) < 4:
                 qsamples.append((s["prompt"][:120], s["ref"], h[:60]))
     pm.train()
@@ -173,6 +200,12 @@ def run_eval(pm, tok, enc, te, flats_te, cond, a, dev, autocast, log=print):
            "cloze_acc": float(np.mean(acc["cloze"])) if acc["cloze"] else None, "n_cloze": len(acc["cloze"]),
            "mc_acc": float(np.mean(acc["mc"])) if acc["mc"] else None, "n_mc": len(acc["mc"]),
            "samples": samples, "q_samples": qsamples}
+    if per:
+        out["per_stream"] = [{"colour": te[0].colours[st], "cer": c["errs"] / max(1, c["chars"]),
+                              "n_chars": c["chars"], "mc_acc": float(np.mean(c["mc"])) if c["mc"] else None,
+                              "n_mc": len(c["mc"]), "lure_rate": float(np.mean(c["lure"])) if c["lure"] else None,
+                              "cloze_acc": float(np.mean(c["cloze"])) if c["cloze"] else None,
+                              "n_cloze": len(c["cloze"])} for st, c in sorted(per.items())]
     log(f"[ft] eval {cond}: cer {out['cer']:.4f} ({chars} chars, {len(trans)} windows) cloze {out['cloze_acc']} "
         f"mc {out['mc_acc']}", flush=True)
     return out
@@ -263,6 +296,19 @@ def main(argv=None) -> int:
         pm.train()
         return tot / max(1, n)
 
+    def val_per_sample():
+        """[(loss sum, target tokens)] per fixed val sample, same order in every run of an encoding (real and
+        blind share the targets): paired bootstrap CIs in analyse_colour.py."""
+        pm.eval()
+        out = []
+        with torch.no_grad():
+            for v in val:
+                with torch.autocast(dev.type, dtype=torch.bfloat16, enabled=autocast):
+                    l, k = Q.lm_loss(pm, Q.collate([v], tok, dev))
+                out.append((round(l.item() * k, 4), k))
+        pm.train()
+        return out
+
     tag = f"{a.run_name}__{a.encoding}__{a.steps}"
     ck = Path(a.cache_root) / "ckpt" / f"r3ft__{tag}.pt"
     curve, start, t_prev, ema = [], 1, 0.0, None
@@ -322,6 +368,7 @@ def main(argv=None) -> int:
             return 0
     t_done = time.time() - t_train
     peak = torch.cuda.max_memory_allocated() if cuda else None
+    vps = val_per_sample()
     adapter = Path(a.cache_root) / "r3_adapters" / f"{tag}.pt"
     adapter.parent.mkdir(parents=True, exist_ok=True)
     torch.save({"trainable": Q.trainable_state(pm), "encoding": a.encoding, "steps": a.steps, "config": cfg,
@@ -337,7 +384,7 @@ def main(argv=None) -> int:
             "s_per_step": t_done / a.steps, "train_time_s": t_done, "peak_gpu_bytes": peak,
             "params": counts, "lora_modules": len(Q.lora_module_names(pm)), "adapter": str(adapter),
             "config": cfg, "fair": fair, "fair_hash": fair_hash, "smoke": a.smoke or "smoke" in a.run_name,
-            "blind_images": blind}
+            "blind_images": blind, "val_per_sample": vps}
     for cond in a.eval_conds:
         if cond in done:
             continue

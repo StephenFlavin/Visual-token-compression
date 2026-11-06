@@ -166,6 +166,57 @@ class SizedRGB3(Sized, R1.RGB3Encoding):
         return Page(img, labs, refs), p - pos
 
 
+from dataclasses import dataclass, field  # noqa: E402
+
+# colour-gist phase A (docs/COLOUR_GIST.md): stream c darkens only its own channel(s) on a white page
+STREAM_INKS = {1: [("black", (0, 1, 2))],
+               2: [("cyan", (0,)), ("magenta", (1,))],
+               3: [("cyan", (0,)), ("magenta", (1,)), ("yellow", (2,))]}
+
+
+@dataclass
+class StreamPage(Page):
+    """A page of k text streams. ``refs`` = every stream's lines, stream by stream (so n_chars, flat text and
+    digests cover the whole page); ``streams[s]`` = stream s's lines; ``after`` = the source text that follows
+    the page (a topic-matched phrase source that is NOT on the page)."""
+    streams: list = field(default_factory=list)
+    colours: list = field(default_factory=list)
+    after: str = ""
+
+
+class SizedStreams(Sized, Encoding):
+    """rgb<k>s_p<p>: k contiguous spans of text, each an ordinary latin_p<p> page (DejaVu Sans, word wrap) in its
+    own colour channel(s): stream 1 = the first page-worth of text, stream 2 the next, ... rgb1s_p<p> is the
+    single-stream reference (black ink, pixel-identical to latin_p<p>)."""
+
+    def __init__(self, k: int, pitch: int, S: int):
+        if k not in STREAM_INKS:
+            raise KeyError(f"rgb{k}s: 1-3 streams")
+        Encoding.__init__(self, f"rgb{k}s_p{pitch}", "streams", pitch, list(PRINTABLE))
+        self.S, self.k = S, k
+        self.base = get_encoding_s(f"latin_p{pitch}", S)
+
+    @property
+    def page_chars_max(self) -> int:
+        return self.k * self.base.page_chars_max
+
+    def clean_hyp(self, s: str) -> str:
+        return self.base.clean_hyp(s)
+
+    def render(self, text: str, pos: int) -> tuple[Page, int]:
+        p, streams, labels = pos, [], []
+        img = np.full((self.S, self.S, 3), 255, np.uint8)
+        for c, (_, chans) in enumerate(STREAM_INKS[self.k]):
+            pg, used = self.base.render(text, p)
+            for ch in chans:
+                img[:, :, ch] = pg.img[:, :, 0]
+            streams.append(list(pg.refs))
+            labels += pg.labels
+            p += used
+        return StreamPage(img, labels, [ln for st in streams for ln in st], streams,
+                          [n for n, _ in STREAM_INKS[self.k]], text[p:p + 600]), p - pos
+
+
 def get_encoding_s(name: str, S: int) -> Encoding:
     if name.startswith("latin_p"):
         from vbpe.schemes.latin import LatinScheme
@@ -179,6 +230,10 @@ def get_encoding_s(name: str, S: int) -> Encoding:
         return SizedRGB3(int(name[len("rgb3_p"):]), S)
     if name.startswith("rgb3a_p"):
         return SizedRGB3(int(name[len("rgb3a_p"):]), S, tagged=False)
+    import re as _re
+    m = _re.fullmatch(r"rgb([123])s_p(\d+)", name)
+    if m:   # colour-gist phase A: k Latin streams, one per colour channel
+        return SizedStreams(int(m.group(1)), int(m.group(2)), S)
     if name.startswith("rgb3_lg_"):   # round-3 moonshot: RGB overlay of learned-glyph streams (any S)
         return R1.RGB3BankEncoding(name[len("rgb3_"):], S)
     if name in LG_BANKS:

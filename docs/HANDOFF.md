@@ -39,7 +39,8 @@ losses equal its blind run's to 3 decimals. No arm is near 3% CER, so G3 can't b
 ## Current direction (2026-11-06): gist through colour channels
 Plan, gates and the first (zero-shot) result: [COLOUR_GIST.md](COLOUR_GIST.md). Untrained Qwen reads one stream
 through an overlapping one (14% CER) but cannot pick a stream by colour, so stream separation has to be trained:
-A1 (2 streams, fine-tuned, ~2 h on a 4090) is next, once its encodings and per-stream tasks are built.
+A1 (2 streams, fine-tuned, ~2 h on a 4090) is next: code built and CPU-tested; runbook and GPU prompt in COLOUR_GIST.md.
+Headline bar (user): the overlay carries > 1x the information per vision token of one stream (CI above 1).
 
 ## Own encoder, Stage 0 (ran 2026-11-05/06, RunPod RTX 4090)
 The text-side compression ceiling: how many chars per slot a learned encoder can pack into Qwen's frozen LLM.

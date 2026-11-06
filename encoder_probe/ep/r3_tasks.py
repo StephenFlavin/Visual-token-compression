@@ -84,9 +84,9 @@ def transcribe_sample(page, rng: np.random.Generator, max_chars: int) -> tuple[s
     return transcribe_prompt(a, b, n), transcript(page, a, b), {"task": "transcribe", "lines": (a, b)}
 
 
-def eval_windows(page, max_chars: int, k: int) -> list[tuple[int, int]]:
-    """``k`` deterministic windows spread evenly over the page (all windows if there are fewer)."""
-    w = windows(page.refs, max_chars)
+def eval_windows(page, max_chars: int, k: int, lines: list[str] | None = None) -> list[tuple[int, int]]:
+    """``k`` deterministic windows spread evenly over the page's lines, or over ``lines`` (one stream)."""
+    w = windows(page.refs if lines is None else lines, max_chars)
     if len(w) <= k:
         return w
     return [w[i] for i in sorted({int(round(x)) for x in np.linspace(0, len(w) - 1, k)})]
@@ -160,6 +160,8 @@ def mc_sample(flat: str, others: list[str], rng, n_words: int = 4, tries: int = 
 def page_sample(page, flat: str, others: list[str], rng, max_chars: int, task_mix: float = 0.6):
     """One (prompt, answer, meta) for a training page: transcription with prob ``task_mix``, else a question
     (cloze / mc / copy, equally likely; falls back to transcription if the page has no usable context)."""
+    if getattr(page, "streams", None):
+        return stream_page_sample(page, others, rng, max_chars, task_mix)
     if rng.random() >= task_mix:
         kind = ("cloze", "mc", "copy")[int(rng.integers(3))]
         s = (cloze_sample(flat, rng) if kind == "cloze" else mc_sample(flat, others, rng) if kind == "mc"
@@ -167,6 +169,109 @@ def page_sample(page, flat: str, others: list[str], rng, max_chars: int, task_mi
         if s is not None:
             return s
     return transcribe_sample(page, rng, max_chars)
+
+
+# ----------------------------------------------------------------- colour-gist streams (docs/COLOUR_GIST.md)
+# A StreamPage (geom.SizedStreams) holds k text streams, each in its own colour. Every question names the stream
+# by its ink colour; the MC "lure" is a phrase from ANOTHER stream on the same page (for 1 stream: from the text
+# that follows the page), so a model that cannot tell the streams apart picks it.
+
+def stream_flat(page, s: int) -> str:
+    return " ".join(page.streams[s])
+
+
+def _all_flat(page) -> str:
+    return " | ".join(stream_flat(page, t) for t in range(len(page.streams)))
+
+
+def stream_transcribe_prompt(colour: str, a: int, b: int, n: int) -> str:
+    if a == 0 and b == n:
+        return f"Transcribe all the {colour} text on this page."
+    return f"Transcribe lines {a + 1}-{b} of the {n} lines of {colour} text on this page."
+
+
+def stream_transcribe_sample(page, s: int, rng, max_chars: int):
+    lines = page.streams[s]
+    n = len(lines)
+    if len("\n".join(lines)) <= max_chars:
+        a, b = 0, n
+    else:
+        a, b = window_from(lines, int(rng.integers(n)), max_chars)
+    return (stream_transcribe_prompt(page.colours[s], a, b, n), "\n".join(lines[a:b]),
+            {"task": "transcribe", "stream": s, "lines": (a, b)})
+
+
+def stream_cloze_sample(page, s: int, rng, n_ctx: int = 3):
+    words = stream_flat(page, s).split()
+    i = _unique_context(words, _all_flat(page), rng, n_ctx, 1)   # context unique across ALL streams
+    if i is None:
+        return None
+    ctx = " ".join(words[i - n_ctx:i])
+    return (f'In the {page.colours[s]} text, what word follows "{ctx}"? Answer with that word only.', words[i],
+            {"task": "cloze", "stream": s, "context": ctx})
+
+
+def stream_copy_sample(page, s: int, rng, n_ctx: int = 3, k_range=(5, 20)):
+    k = int(rng.integers(k_range[0], k_range[1] + 1))
+    words = stream_flat(page, s).split()
+    i = _unique_context(words, _all_flat(page), rng, n_ctx, k)
+    if i is None:
+        return None
+    ctx = " ".join(words[i - n_ctx:i])
+    return (f'In the {page.colours[s]} text, copy the {k} words that follow "{ctx}".', " ".join(words[i:i + k]),
+            {"task": "copy", "stream": s, "context": ctx, "k": k})
+
+
+def _phrase(text: str, rng, n_words: int, avoid: str, tries: int = 60):
+    w = text.split()
+    if len(w) < n_words:
+        return None
+    for _ in range(tries):
+        j = int(rng.integers(0, len(w) - n_words + 1))
+        ph = " ".join(w[j:j + n_words])
+        if ph not in avoid:
+            return ph
+    return None
+
+
+def stream_mc_sample(page, s: int, others: list[str], rng, n_words: int = 4):
+    """One phrase of stream s, a LURE (another stream on the page; 1 stream: the text after the page) and 2
+    phrases of other pages. meta["lure"] = the lure's letter."""
+    flat, allf = stream_flat(page, s), _all_flat(page)
+    right = _phrase(flat, rng, n_words, "")
+    if right is None or not others:
+        return None
+    k = len(page.streams)
+    lure_src = stream_flat(page, (s + 1 + int(rng.integers(k - 1))) % k) if k > 1 else page.after
+    lure = _phrase(lure_src, rng, n_words, flat)
+    wrong = []
+    for _ in range(60):
+        if len(wrong) == 2:
+            break
+        ph = _phrase(others[int(rng.integers(len(others)))], rng, n_words, allf + " " + page.after)
+        if ph and ph != right and ph != lure and ph not in wrong:
+            wrong.append(ph)
+    if lure is None or len(wrong) < 2:
+        return None
+    opts = [right, lure] + wrong
+    order = rng.permutation(4)
+    q = (f"Which of these phrases appears in the {page.colours[s]} text? "
+         + " ".join(f'{LETTERS[j]}) "{opts[o]}"' for j, o in enumerate(order)) + " Answer with the letter only.")
+    pos = int(np.where(order == 0)[0][0])
+    return q, LETTERS[pos], {"task": "mc", "stream": s, "options": [opts[o] for o in order],
+                             "lure": LETTERS[int(np.where(order == 1)[0][0])]}
+
+
+def stream_page_sample(page, others: list[str], rng, max_chars: int, task_mix: float = 0.6):
+    """page_sample for a StreamPage: pick a stream uniformly, then a task as in page_sample."""
+    s = int(rng.integers(len(page.streams)))
+    if rng.random() >= task_mix:
+        kind = ("cloze", "mc", "copy")[int(rng.integers(3))]
+        out = (stream_cloze_sample(page, s, rng) if kind == "cloze" else
+               stream_mc_sample(page, s, others, rng) if kind == "mc" else stream_copy_sample(page, s, rng))
+        if out is not None:
+            return out
+    return stream_transcribe_sample(page, s, rng, max_chars)
 
 
 def answer_correct(task: str, ref: str, hyp: str) -> bool:
