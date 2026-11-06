@@ -65,7 +65,7 @@ token is measured against each arm's own blind control:
     collapse fix and an alignment stage. That is a bootstrap and budget limit, not an overlay result
     (COLOUR_GIST.md "S1 result").
 
-So the GPU A1 trains the ViT from block 16 (amendment 3); the prompt below runs it. Remaining CPU options are
+**2026-11-06: superseded by the user's 3090 plan ([PLAN_3090.md](PLAN_3090.md)); the colour A1 prompt below is parked (colour returns as Run 4).** So the GPU A1 trains the ViT from block 16 (amendment 3); the prompt below runs it. Remaining CPU options are
 builds, not tests (the phase B from-scratch encoder).
 
 ## Own encoder, Stage 0 (ran 2026-11-05/06, RunPod RTX 4090)
