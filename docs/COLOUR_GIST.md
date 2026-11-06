@@ -353,6 +353,23 @@ stopped after ~150 steps, its checkpoint deleted, and S1 relaunched with these c
   * **Unchanged:** stages, gates and measures. Runs go to `encoder_probe/results/s1r/`; the collapsed run stays
     in `encoder_probe/results/s1/` as the record.
 
+**S1r interim and amendment 3 (pre-registered 2026-11-06 ~19:50 UTC, before any `s1a` row).**
+* **s1r so far:** the encoder no longer collapses (image spread 0.36 at step 250, 0.63 at step 500; reconstruction
+  MSE 0.21 → 0.04). The LLM still ignores it: val 2.950 vs swapped 2.949 at step 250, 2.982 vs 2.981 at step 500
+  (gap -0.001). Val loss rises while train loss falls, as in run 1: the LoRA (r 16 on every layer) memorises the
+  3000 training pages' text, which is cheaper than learning to read.
+* **Rule:** if the s1r gap at step 750 is still < 0.02 nats/token, s1r stops and S1 relaunches as `s1a`.
+* **`s1a` design:** the s1r recipe plus a LLaVA-style alignment stage, `--align-steps 500 --align-chars 120`.
+  * Steps 1-500: the LLM is fully frozen (LoRA not updated). The encoder (+ reconstruction head) learns from
+    transcriptions of ≤ 120-char windows of a random stream, so the loss can fall only through the image.
+  * Steps 501-1500: the amendment-1 gist mix with LoRA, as before.
+* **s1a gates:**
+  * **Alignment gate at step 500:** the val gap vs swapped images must be ≥ 0.05 nats/token.
+  * **If it fails: S1 is closed as inconclusive.** A from-scratch encoder cannot be bootstrapped at this CPU
+    budget. That says nothing about the overlay, and no further CPU variants follow.
+  * **If it passes:** the s1r stages and gates apply unchanged (learnability, interim R(2)/G(2), trained blinds,
+    equal density), with every blind arm on the same recipe.
+
 **What S1 can and cannot show:** it tests the overlay *mechanism*, whether a model with no pretrained bias reads
 two colour streams for more information per token than one. It is a different model from Qwen2.5-VL, so it says
 nothing about whether Qwen's pretrained ViT can be retrained to do so (that is A1 on a GPU).
