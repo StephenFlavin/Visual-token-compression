@@ -171,7 +171,10 @@ from dataclasses import dataclass, field  # noqa: E402
 # colour-gist phase A (docs/COLOUR_GIST.md): stream c darkens only its own channel(s) on a white page
 STREAM_INKS = {1: [("black", (0, 1, 2))],
                2: [("cyan", (0,)), ("magenta", (1,))],
-               3: [("cyan", (0,)), ("magenta", (1,)), ("yellow", (2,))]}
+               3: [("cyan", (0,)), ("magenta", (1,)), ("yellow", (2,))],
+               # brightness-balanced 2 streams (rgb2ls): Rec. 601 luma drop G 0.587 vs R+B 0.413 (cyan/magenta:
+               # 0.299 vs 0.587), for a pretrained ViT that reads mostly brightness
+               "2l": [("magenta", (1,)), ("green", (0, 2))]}
 
 
 @dataclass
@@ -189,11 +192,11 @@ class SizedStreams(Sized, Encoding):
     own colour channel(s): stream 1 = the first page-worth of text, stream 2 the next, ... rgb1s_p<p> is the
     single-stream reference (black ink, pixel-identical to latin_p<p>)."""
 
-    def __init__(self, k: int, pitch: int, S: int):
-        if k not in STREAM_INKS:
-            raise KeyError(f"rgb{k}s: 1-3 streams")
-        Encoding.__init__(self, f"rgb{k}s_p{pitch}", "streams", pitch, list(PRINTABLE))
-        self.S, self.k = S, k
+    def __init__(self, k: int, pitch: int, S: int, variant: str = ""):
+        if (k if not variant else f"{k}{variant}") not in STREAM_INKS:
+            raise KeyError(f"rgb{k}{variant}s: unknown stream layout")
+        Encoding.__init__(self, f"rgb{k}{variant}s_p{pitch}", "streams", pitch, list(PRINTABLE))
+        self.S, self.k, self.inks = S, k, STREAM_INKS[f"{k}{variant}" if variant else k]
         self.base = get_encoding_s(f"latin_p{pitch}", S)
 
     @property
@@ -206,7 +209,7 @@ class SizedStreams(Sized, Encoding):
     def render(self, text: str, pos: int) -> tuple[Page, int]:
         p, streams, labels = pos, [], []
         img = np.full((self.S, self.S, 3), 255, np.uint8)
-        for c, (_, chans) in enumerate(STREAM_INKS[self.k]):
+        for c, (_, chans) in enumerate(self.inks):
             pg, used = self.base.render(text, p)
             for ch in chans:
                 img[:, :, ch] = pg.img[:, :, 0]
@@ -214,7 +217,7 @@ class SizedStreams(Sized, Encoding):
             labels += pg.labels
             p += used
         return StreamPage(img, labels, [ln for st in streams for ln in st], streams,
-                          [n for n, _ in STREAM_INKS[self.k]], text[p:p + 600]), p - pos
+                          [n for n, _ in self.inks], text[p:p + 600]), p - pos
 
 
 def get_encoding_s(name: str, S: int) -> Encoding:
@@ -231,9 +234,9 @@ def get_encoding_s(name: str, S: int) -> Encoding:
     if name.startswith("rgb3a_p"):
         return SizedRGB3(int(name[len("rgb3a_p"):]), S, tagged=False)
     import re as _re
-    m = _re.fullmatch(r"rgb([123])s_p(\d+)", name)
-    if m:   # colour-gist phase A: k Latin streams, one per colour channel
-        return SizedStreams(int(m.group(1)), int(m.group(2)), S)
+    m = _re.fullmatch(r"rgb([123])(l?)s_p(\d+)", name)
+    if m:   # colour-gist phase A: k Latin streams, one per colour channel (l = brightness-balanced inks)
+        return SizedStreams(int(m.group(1)), int(m.group(3)), S, m.group(2))
     if name.startswith("rgb3_lg_"):   # round-3 moonshot: RGB overlay of learned-glyph streams (any S)
         return R1.RGB3BankEncoding(name[len("rgb3_"):], S)
     if name in LG_BANKS:

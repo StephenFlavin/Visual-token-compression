@@ -43,22 +43,3 @@ Closed-form ridge from each feature to the clean pixels it covers (14-px patches
 | rgb3_lg_pb_h5 | 1692.6 | 0.017 | 0.29/0.29/0.29 | 0.62/0.62/0.62 |
 
 Check: merger output rebuilt from the raster/window bookkeeping vs the module's pooler_output, max |diff| 0.00e+00 (fp32).
-
-## Reading (written after the run; `--summarize` regenerates the tables above, not this section)
-* **Use ink MCC to compare codes.** F1 has a chance level of 2p/(1+p), which is high for the dense binary codes
-  (ink fraction p ~ 0.45, chance 0.63) and low for Latin (0.25-0.28).
-* **A linear pixel readout falls for every encoding, the Latin controls included.** latin_p16 MCC goes 0.94 (b8) ->
-  0.39 (b24) -> 0.08 (b28) -> 0.06 (merger), latin_p8 0.89 -> 0.18 -> 0.02 -> 0.03. Qwen reads Latin pages, so
-  deep layers re-code text nonlinearly, and a low deep-layer linear readout does not mean the content is lost. What
-  this test can show is which codes stay linearly pixel-like, and where.
-* **Whole-pixel binary banks stay pixel-like deep into the ViT, and the merger costs the most.** lg_pb_h5 MCC
-  1.00 (b8/b16) -> 0.91 (b24) -> 0.81 (b28) -> 0.65 (final) -> 0.30 (merger). The moonshot rgb3_lg_pb_h5 goes
-  0.86 -> 0.79 -> 0.64 -> 0.56 -> 0.47 -> 0.29 (mean over R/G/B). Its overlay costs ~0.15 MCC by b8, against the
-  single bank. Merger level ~0.29 equals the DeepEncoder calibration (0.29, where 1280 dims cannot hold 12288
-  pixels). So after the merger only coarse ink density survives linearly. Both codes are therefore still largely
-  linear at b28 (the input to R3-1's unfrozen blocks) and lose most of it in blocks 28-31 + merger, which R3-1 trains.
-* **Grey-level / antialiased codes fade early, like Latin.** rgb3_lg_free_h4 goes 0.57 (b8) -> 0.43 (b16) -> 0.22
-  (b24) -> 0.16 (b28) -> 0.00 (merger). rgb3_p8 goes 0.63 -> 0.48 -> 0.19 -> 0.07 -> 0.10. Whether the ViT re-codes
-  them (as it does Latin) or destroys them, a linear readout cannot tell. For rgb3_lg_free_h4 the loss is already
-  large at b8-b16, below the 4 blocks R3-1 unfreezes.
-* col_b4 was dropped for time.

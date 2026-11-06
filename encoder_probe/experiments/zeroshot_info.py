@@ -35,6 +35,7 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--pitches", type=int, nargs="+", default=[16])
     ap.add_argument("--streams", type=int, nargs="+", default=[1, 2, 3])
+    ap.add_argument("--variant", default="", help="stream layout variant, e.g. l = brightness-balanced (rgb2ls)")
     ap.add_argument("--pages", type=int, default=12)
     ap.add_argument("--max-target-chars", type=int, default=2000)
     ap.add_argument("--device", default="auto")
@@ -68,7 +69,7 @@ def main(argv=None) -> int:
     rows = []
     for p in a.pitches:
         for k in a.streams:
-            enc = get_encoding_s(f"rgb{k}s_p{p}", S)
+            enc = get_encoding_s(f"rgb{k}{a.variant if k > 1 else ''}s_p{p}", S)
             pages = make_pages_s(enc, "test", a.pages)
             cpt = sum(pg.n_chars for pg in pages) / (len(pages) * Q.image_tokens(S))
             per = {"real": [], "blind": []}

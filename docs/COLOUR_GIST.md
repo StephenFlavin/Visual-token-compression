@@ -22,6 +22,7 @@ images swapped between pages) × text tokens per vision token. R(k) = that of th
 | A0 | Can untrained Qwen read colour-overlaid Latin? | (look only) | CPU | **done**: it reads one stream through the other, but can't pick a stream by colour |
 | A0b | How much information does untrained Qwen take per stream? | (look only: zero-shot R(2), R(3)) | CPU | **done**: R(2) = 0.51 at 16 px, below 1 at every size |
 | A1-cpu | 2 streams, LoRA-only fine-tune on CPU (amendment 2) | interim: R(2) > 1, CI above 1 | CPU (~4 h) | **missed**: R(2) = 0.72 (0.54-0.94). Magenta is read well; cyan still isn't |
+| A1-diag | Where are the streams blended? | (diagnostic) | CPU | both survive equally to ViT block 16, then blend; untrained Qwen reads the superposition as one text |
 | **A1** | 2 streams, fine-tuned (1000 steps, R3-1 recipe, 16 px) | **Headline: R(2) > 1, 95% CI above 1.** Strong: R(2) ≥ 1.5, each stream's MC ≥ 0.8x 1-stream MC, other-stream lure ≤ 15% | GPU (~2 h on a 4090) | built, CPU-tested, waiting for a GPU |
 | A2 | 3 streams | R(3) ≥ 1.3 R(2), same per-stream rules | GPU (~1 h) | after A1 |
 | A3 | Smaller font (16 → 12 → 8 px) on the best stream count | R(k) holds at each step, vs 1 stream at the same size | GPU | after A2 |
@@ -165,15 +166,41 @@ overlap.
 * **It did not unlock cyan.** Questions about cyan are still answered from magenta 56% of the time.
 * **The blind rule was binding.** With the untrained no-image loss alone as the blind, R(2) would be 0.99.
 
-**Likely cause: brightness.** A pretrained ViT reads mostly brightness. Each ink removes one channel's share of
-the brightness (Rec. 601 weights): magenta (G) 0.59, cyan (R) 0.30, yellow (B) 0.11. Every result so far ranks the
-streams in exactly that order:
-* A0: red ink (G+B, 0.70) read perfectly; cyan (0.30) not.
-* A0b: magenta > cyan > yellow.
-* A1-cpu: the same order after training.
+**Why cyan is not read: diagnosed on CPU (2026-11-06).** My first guess was brightness: a pretrained ViT reads
+mostly brightness, and the cyan ink removes less of it (Rec. 601 weights: magenta 0.59, cyan 0.30). The two
+diagnostics below rule it out.
+* **Brightness-balanced inks** (`rgb2ls_p16`: magenta = G, green = R+B; 0.59 vs 0.41), zero-shot as in A0b:
+  * R(2) = 0.63 (0.39-0.89), against 0.51 for cyan/magenta;
+  * but now the **green** stream is the one read (1.43 nats/token) and magenta is not (0.07), although magenta
+    has the higher contrast.
+  * Rows: `encoder_probe/results/z0_info_l/`.
+* **What the untrained model actually writes:** asked for either colour, it transcribes a blend of the two
+  streams: "Robert Dull Safe Hadgott Bolter starred as ..." mixes "Robert Boulter" (stream 1) with "In Safe Hands"
+  and "Boulter starred" (stream 2). It does not select a stream at all. It reads the superimposed letters as one
+  text, and whichever stream dominates the blend gets the credit.
+* **Layer readout (Q1 method, frozen ViT, ink pixels per channel, MCC):** both streams survive **equally** to
+  block 16, then fade together after it, exactly as a single stream does.
 
-With the vision encoder frozen, training can only use what survives it. The test of this is where cyan is lost
-inside the frozen ViT (next, on CPU) and whether training the first vision layers recovers it (GPU).
+  | Pages | Embedding | Block 8 | Block 16 | Block 24 | Block 28 | Merger |
+  |---|---|---|---|---|---|---|
+  | 1 stream (black) | 1.00 | 0.94 | 0.85 | 0.39 | 0.08 | 0.06 |
+  | 2 streams: cyan / magenta | 0.98 / 0.98 | 0.88 / 0.88 | 0.71 / 0.71 | 0.26 / 0.29 | 0.06 / 0.06 | 0.06 / 0.06 |
+
+  Rows: `encoder_probe/results/quick_q1/rows.jsonl`.
+
+**Reading.** Nothing is lost early: both streams' pixels are intact through block 16. The blending happens in the
+later blocks (about 16-32), where the ViT turns pixels into letter and word features: its pretrained text features
+fire on the superimposed shapes as one text. A1-cpu froze the whole ViT, so training could only use the blended
+features. That fits the result: one stream read reasonably, the other not.
+
+**Amendment 3 (proposed 2026-11-06, needs the user's OK, before any GPU A1 row): train where the blending
+happens.**
+* **Recipe:** run the GPU A1 with `--vision-blocks 16 --lr-vision 1e-4` (the ViT from block 16 onwards, plus the
+  merger and LoRA) instead of R3-1's last 4 blocks at 2e-5. Identical for every arm and blind (one `fair_hash`),
+  ≤ 1e-4 for pretrained weights (AGENTS.md: merger collapse).
+* **Cost:** estimated ~+5 GB of fp32 weights, gradients and Adam state (fits 24 GB) and a somewhat slower step;
+  measured in the smoke.
+* **Gates:** unchanged.
 
 ### A1: two streams, fine-tuned (GPU, next)
 * **Recipe:** R3-1's (LoRA r = 16 + merger + last 4 ViT blocks, 1000 steps, 1000 train pages). One `fair_hash`;
