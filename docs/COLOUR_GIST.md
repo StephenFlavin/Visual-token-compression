@@ -346,7 +346,10 @@ stopped after ~150 steps, its checkpoint deleted, and S1 relaunched with these c
   * **Memory (no effect on results):** the first `s1r` launch was OOM-killed at step ~235 (RSS 13.9 GB of the
     15.7 GB cgroup; glibc malloc fragmentation; run 1 sat at 13.2 GB and slowed from 5.8 to 9.2 s/step). The
     runner now preloads jemalloc, and the vocabulary CE is computed in checkpointed chunks (identical values).
-    It resumed from the step-200 checkpoint at 3-4 GB.
+    It resumed from the step-200 checkpoint at 3-4 GB. Steps still slow from ~6 to ~8.5-10.5 s over a run (high
+    page-fault rate; no denormals in the weights or optimiser state). jemalloc without decay grew to 11.8 GB and
+    was OOM-killed once more (resumed from step 400). The runner now also restarts each run in a fresh process
+    every 300 steps (`--session-steps`, exit 5); resume is exact (same step losses).
   * **Unchanged:** stages, gates and measures. Runs go to `encoder_probe/results/s1r/`; the collapsed run stays
     in `encoder_probe/results/s1/` as the record.
 

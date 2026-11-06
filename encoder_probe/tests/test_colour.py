@@ -120,7 +120,7 @@ def test_small_vlm_from_scratch_encoder_rows_resume_and_swap_analysis(tmp_path):
               "--threads", "1", "--out-root", str(tmp_path / "res"), "--cache-root", str(tmp_path / "cache")]
     for e in ("rgb1s_p24", "rgb2s_p24"):
         assert SV.main(["--encoding", e, *common, "--run-name", "a"]) == 0
-    assert SV.main(["--encoding", "rgb2s_p24", *common, "--run-name", "b", "--stop-after", "2"]) == 0
+    assert SV.main(["--encoding", "rgb2s_p24", *common, "--run-name", "b", "--session-steps", "2"]) == 5
     assert SV.main(["--encoding", "rgb2s_p24", *common, "--run-name", "b"]) == 0      # resumes from step 2
     ra = {json.loads(l)["encoding"]: json.loads(l) for l in (tmp_path / "res/a/runs.jsonl").read_text().splitlines()}
     (rb,) = [json.loads(l) for l in (tmp_path / "res/b/runs.jsonl").read_text().splitlines()]

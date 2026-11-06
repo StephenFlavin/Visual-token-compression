@@ -87,6 +87,8 @@ def parse(argv=None):
     ap.add_argument("--out-root", default=str(ROOT / "encoder_probe" / "results"))
     ap.add_argument("--cache-root", default=str(ROOT / "encoder_probe" / "cache"))
     ap.add_argument("--stop-after", type=int, default=0)
+    ap.add_argument("--session-steps", type=int, default=0, help="exit with code 5 after this many steps in this "
+                    "process, at a checkpoint (the CPU slows down progressively within a process; resume is exact)")
     ap.add_argument("--tiny", action="store_true", help="tiny random LLM + byte tokenizer (CPU tests)")
     ap.add_argument("--smoke", action="store_true", help="30 steps, small eval: timing")
     a = ap.parse_args(argv)
@@ -353,7 +355,7 @@ def main(argv=None) -> int:
                                for x in rows_f.read_text().splitlines() if x.strip()):
         print(f"[s1] skip, done: {a.encoding} {a.steps}")
         return 0
-    cfg = {k: v for k, v in vars(a).items() if k not in ("out_root", "cache_root", "stop_after")}
+    cfg = {k: v for k, v in vars(a).items() if k not in ("out_root", "cache_root", "stop_after", "session_steps")}
     fair_hash = Q.config_hash({k: cfg[k] for k in FAIR_KEYS})
     enc = get_encoding_s(a.encoding, a.S)
     tr = make_pages_s(enc, "train", a.train_pages)
@@ -443,6 +445,10 @@ def main(argv=None) -> int:
             tmp.replace(ck)
         if a.stop_after and step >= a.stop_after:
             return 0
+        if (a.session_steps and a.ckpt_every and step % a.ckpt_every == 0 and step < a.steps
+                and step - start + 1 >= a.session_steps):
+            print(f"[s1] session limit: exit at step {step} to resume in a fresh process", flush=True)
+            return 5
     train_s = time.time() - t0
     fin = Path(a.cache_root) / "s1_models" / f"{a.run_name}__{a.encoding}__{a.steps}.pt"
     fin.parent.mkdir(parents=True, exist_ok=True)
