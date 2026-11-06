@@ -178,6 +178,16 @@ def sample_stats(s: dict) -> dict:
             "bits_vtok": gap / LN2 * s["page_chars"] / s["window_chars"] / s["vision_tokens"]}
 
 
+def cer_trunc(target: str, hyp: str) -> float:
+    """CER of the hypothesis cut to the target's length (normalised whitespace): a model that reads the window
+    and then keeps transcribing past its last line (zero-shot Qwen ignores "lines a-b" on most pages) is not
+    charged for the extra lines; stopping early or summarising still counts as errors."""
+    from rapidfuzz.distance import Levenshtein
+    from vbpe.metrics import normalize
+    r, h = normalize(target), normalize(hyp)
+    return Levenshtein.distance(r, h[:len(r)]) / max(1, len(r))
+
+
 def point_row(samples: list[dict], meta: dict) -> dict:
     st = [sample_stats(s) for s in samples]
     gap = np.array([x["gap"] for x in st])
@@ -199,6 +209,9 @@ def point_row(samples: list[dict], meta: dict) -> dict:
            "loss_real_per_token": float(sum(s["loss_real"] for s in samples) / n.sum()),
            "loss_ref_per_token": float(ref.sum() / n.sum()),
            "cer": float(np.mean(cers)) if cers else None, "cer_pages": len(cers)}
+    ct = [s["cer_trunc"] for s in samples if s.get("cer_trunc") is not None]
+    if ct:
+        row["cer_trunc"] = float(np.mean(ct))
     for arm in ("swap", "blank"):
         v = [s.get(f"loss_{arm}") for s in samples]
         if all(x is not None for x in v):
@@ -269,6 +282,7 @@ def report(out: Path) -> str:
     rows = load_jsonl(out / "runs.jsonl")
     if not rows:
         return ""
+    backfill_cer_trunc(rows, load_jsonl(out / "samples.jsonl"))
     lines = [f"# Capacity curve: {out.name}", "",
              "bits/vtok = conservative-blind gap (min of swap, blank) in bits per vision token, extrapolated from "
              "the scored window to the page; recovered chars/vtok = chars/vtok x recovered fraction (gap / blind "
@@ -276,14 +290,15 @@ def report(out: Path) -> str:
     plain = [r for r in rows if tuple(r.get("shift", (0, 0))) == (0, 0) and not r.get("shifted")]
     if plain:
         lines += ["| encoding | text | pages | chars/vtok | window chars | gap nats/text tok | bits/vtok | "
-                  "recovered frac | recovered chars/vtok | CER (pages) |", "|" + "---|" * 10]
+                  "recovered frac | recovered chars/vtok | CER (pages) | CER cut to window |", "|" + "---|" * 11]
         for r in sorted(plain, key=lambda r: (r["text"], r["chars_per_token"])):
             cer = f"{100 * r['cer']:.1f}% ({r['cer_pages']})" if r.get("cer") is not None else "-"
             lines.append(f"| {r['encoding']} | {r['text']} | {r['pages']} | {r['chars_per_token']:.1f} | "
                          f"{r['window_chars_mean']:.0f} | {fmt_ci(r['gap_per_text_token'], r['gap_per_text_token_ci'], 3)} | "
                          f"{fmt_ci(r['bits_per_vtok'], r['bits_per_vtok_ci'])} | "
                          f"{fmt_ci(r['recovered_frac'], r['recovered_frac_ci'])} | "
-                         f"{fmt_ci(r['recovered_chars_per_token'], r['recovered_chars_per_token_ci'])} | {cer} |")
+                         f"{fmt_ci(r['recovered_chars_per_token'], r['recovered_chars_per_token_ci'])} | {cer} | "
+                         + (f"{100 * r['cer_trunc']:.1f}% |" if r.get("cer_trunc") is not None else "- |"))
         lines.append("")
         _plot(plain, out / "capacity.png")
         lines += ["![capacity](capacity.png)", ""] + run0_checks(plain)
@@ -344,6 +359,11 @@ def run0_checks(rows: list[dict]) -> list[str]:
         rho, p = spearman([r["gap_per_text_token"] for r in pts], [r["cer"] for r in pts])
         out.append(f"* gap per text token vs CER over {len(pts)} points: Spearman rho = {rho:.2f} (permutation "
                    f"p = {p:.3g}; needs <= -0.8)")
+        pt = [r for r in pts if r.get("cer_trunc") is not None]
+        if len(pt) >= 3:
+            rho, p = spearman([r["gap_per_text_token"] for r in pt], [r["cer_trunc"] for r in pt])
+            out.append(f"* (added after the first rows, amendment 2c) the same with CER cut to the window: rho = "
+                       f"{rho:.2f} (p = {p:.3g})")
     by = {(r["encoding"], r["text"]): r for r in rows}
     pairs = [(by[(e, "natural")], by[(e, "shuffled")]) for e, t in by if t == "natural" and (e, "shuffled") in by]
     if pairs:
@@ -352,6 +372,25 @@ def run0_checks(rows: list[dict]) -> list[str]:
                    + ", ".join(f"{n['encoding']} {n['recovered_frac']:.2f}/{s['recovered_frac']:.2f}"
                                for n, s in pairs))
     return out + [""]
+
+
+def backfill_cer_trunc(rows: list[dict], samples: list[dict]) -> None:
+    """Rows written before cer_trunc existed: compute it from their samples' hypotheses (targets re-rendered)."""
+    for r in rows:
+        if r.get("cer_trunc") is not None or not r.get("cer_pages"):
+            continue
+        sel = [s for s in samples if s["encoding"] == r["encoding"] and s["text"] == r["text"]
+               and s["shift"] == r["shift"] and s.get("hyp") is not None]
+        if not sel:
+            continue
+        ps = None
+        if any(s.get("target") is None for s in sel):
+            ps = PageSet(r["encoding"], r["text"], r["pages"], r.get("seed", 0), r.get("margin", 0))
+        base, f = parse_encoding(r["encoding"])
+        enc = ps.enc if ps else get_encoding_s(base, (S - r.get("margin", 0)) // f)
+        r["cer_trunc"] = float(np.mean([
+            cer_trunc(s["target"] if s.get("target") is not None else T.transcript(ps.pages[s["page"]], *s["window"]),
+                      T.clean_transcript(enc, s["hyp"])) for s in sel]))
 
 
 def alignment_matrix(samples: list[dict], enc: str, text: str):
@@ -489,13 +528,15 @@ def main(argv=None) -> int:
                 s["loss_blank"] = prev["loss_blank"] if prev else loss_of(blank_image(), prompt, target)[0]
             else:
                 s["loss_blank"] = None
-            s["cer"] = s["hyp"] = None
+            s["cer"] = s["hyp"] = s["cer_trunc"] = None
+            s["target"] = target
             if i < a.cer_pages:
                 n_tgt = len(tok.encode(target))
                 (hyp,) = Q.generate(model, tok, [{"imgs": [ps.image(i, sh)], "prompt": prompt}], dev,
                                     min(a.cer_max_new, int(1.25 * n_tgt) + 16), autocast=autocast)
                 s["hyp"] = hyp
                 s["cer"] = cer_fn(target, T.clean_transcript(ps.enc, hyp))
+                s["cer_trunc"] = cer_trunc(target, T.clean_transcript(ps.enc, hyp))
             done[k] = s
             samples.append(s)
             with open(out / "samples.jsonl", "a") as f:

@@ -61,6 +61,8 @@ def test_curve_rows_resume_and_report(tmp_path):
     md = (tmp_path / "r" / "summary.md").read_text()
     assert "latin_p16" in md and (tmp_path / "r" / "capacity.png").exists()
     assert "Spearman" in md and "shuffled recovered fraction below natural at" in md
+    assert all(s["target"] for s in samples) and rows[0].get("cer_trunc") is not None
+    assert C.cer_trunc("ab cd", "ab cd ef gh") == 0 and C.cer_trunc("ab cd", "ab") == 0.6
 
 
 def test_spearman():
