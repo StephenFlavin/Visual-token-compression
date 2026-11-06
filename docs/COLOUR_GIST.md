@@ -21,7 +21,7 @@ images swapped between pages) × text tokens per vision token. R(k) = that of th
 |---|---|---|---|---|
 | A0 | Can untrained Qwen read colour-overlaid Latin? | (look only) | CPU | **done**: it reads one stream through the other, but can't pick a stream by colour |
 | A0b | How much information does untrained Qwen take per stream? | (look only: zero-shot R(2), R(3)) | CPU | **done**: R(2) = 0.51 at 16 px, below 1 at every size |
-| A1-cpu | 2 streams, LoRA-only fine-tune on CPU (amendment 2) | interim: R(2) > 1, CI above 1 | CPU (~4 h) | pre-registered, running |
+| A1-cpu | 2 streams, LoRA-only fine-tune on CPU (amendment 2) | interim: R(2) > 1, CI above 1 | CPU (~4 h) | **missed**: R(2) = 0.72 (0.54-0.94). Magenta is read well; cyan still isn't |
 | **A1** | 2 streams, fine-tuned (1000 steps, R3-1 recipe, 16 px) | **Headline: R(2) > 1, 95% CI above 1.** Strong: R(2) ≥ 1.5, each stream's MC ≥ 0.8x 1-stream MC, other-stream lure ≤ 15% | GPU (~2 h on a 4090) | built, CPU-tested, waiting for a GPU |
 | A2 | 3 streams | R(3) ≥ 1.3 R(2), same per-stream rules | GPU (~1 h) | after A1 |
 | A3 | Smaller font (16 → 12 → 8 px) on the best stream count | R(k) holds at each step, vs 1 stream at the same size | GPU | after A2 |
@@ -138,6 +138,42 @@ on this page." Teacher-forced loss of the true text with the page's own image, a
   zero-shot A0 numbers (cyan MC 1/12, lure 10/12).
 * **Reading:** a pass is early evidence that training teaches stream selection. A fail at this budget (a quarter
   of A1's samples, vision frozen) is not a verdict; the GPU A1 is.
+
+### A1-cpu results (2026-11-06, CPU, 500 steps, LoRA only, vision encoder frozen)
+Rows: `encoder_probe/results/colour_a1cpu/` (fine-tune eval), `a1cpu_info/` (trained measurement),
+`z0_info_w400/` (zero-shot reference, same targets); log `results/a1cpu.log` (not committed). 23 s/step, no
+restarts.
+
+Information per text token (nats). Blind = the lower of the trained model with another page's image and the
+untrained model's no-image loss:
+
+| Stream | Untrained: loss | Trained: loss | Trained: blind | Trained: gain per token | Share of the 1-stream gain (2.41) |
+|---|---|---|---|---|---|
+| cyan (darkens R) | 2.66 | 2.32 | 2.46 | **0.14** | 6% |
+| magenta (darkens G) | 1.42 | **0.89** | 2.53 | **1.64** | 68% |
+| both | 2.05 | 1.62 | 2.49 | 0.87 | R(2) = **0.72** (0.54-0.94) |
+
+| Fine-tune eval, 16 test pages | MC (chance 0.25) | MC answered with the other stream's phrase | Cloze | CER |
+|---|---|---|---|---|
+| cyan | 0.30 | **0.56** | 0.25 | 79% |
+| magenta | 0.66 | 0.23 | 0.50 | 56% |
+
+**Verdict: the interim target is missed** (R(2) = 0.72, CI below 1). It is up from the untrained 0.63, but the CIs
+overlap.
+* **Training improved the stream the model could already see.** Magenta's loss fell from 1.42 to 0.89: it now
+  carries 68% of a single stream's information.
+* **It did not unlock cyan.** Questions about cyan are still answered from magenta 56% of the time.
+* **The blind rule was binding.** With the untrained no-image loss alone as the blind, R(2) would be 0.99.
+
+**Likely cause: brightness.** A pretrained ViT reads mostly brightness. Each ink removes one channel's share of
+the brightness (Rec. 601 weights): magenta (G) 0.59, cyan (R) 0.30, yellow (B) 0.11. Every result so far ranks the
+streams in exactly that order:
+* A0: red ink (G+B, 0.70) read perfectly; cyan (0.30) not.
+* A0b: magenta > cyan > yellow.
+* A1-cpu: the same order after training.
+
+With the vision encoder frozen, training can only use what survives it. The test of this is where cyan is lost
+inside the frozen ViT (next, on CPU) and whether training the first vision layers recovers it (GPU).
 
 ### A1: two streams, fine-tuned (GPU, next)
 * **Recipe:** R3-1's (LoRA r = 16 + merger + last 4 ViT blocks, 1000 steps, 1000 train pages). One `fair_hash`;
