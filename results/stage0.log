@@ -1,0 +1,326 @@
+Thu Nov  5 22:42:21 UTC 2026
+4.4G	encoder_probe/cache
+overlay          20G  1.2G   19G   6% /
+Loading weights:   0%|          | 0/824 [00:00<?, ?it/s]Loading weights:  12%|█▏        | 96/824 [00:00<00:00, 891.55it/s]Loading weights:  23%|██▎       | 186/824 [00:00<00:00, 732.97it/s]Loading weights:  32%|███▏      | 261/824 [00:00<00:00, 659.45it/s]Loading weights:  40%|███▉      | 328/824 [00:00<00:00, 577.55it/s]Loading weights:  47%|████▋     | 387/824 [00:00<00:00, 550.71it/s]Loading weights:  57%|█████▋    | 466/824 [00:00<00:00, 555.87it/s]Loading weights:  67%|██████▋   | 555/824 [00:00<00:00, 616.94it/s]Loading weights:  77%|███████▋  | 638/824 [00:00<00:00, 669.81it/s]Loading weights:  87%|████████▋ | 720/824 [00:01<00:00, 708.43it/s]Loading weights:  96%|█████████▌| 793/824 [00:01<00:00, 703.61it/s]Loading weights: 100%|██████████| 824/824 [00:01<00:00, 679.18it/s]
+[s0] ratio 4: L=480 slots=120 train_tokens=9013063 test_tokens=248600 device=cuda bf16=True lora=119734272 slots_params=4442113 fair_hash=b9c3b50b198a
+[s0] step 1/3000 loss 10.1405 ema 10.1405 lr 1.33e-06 1.04s/step
+[s0] step 10/3000 loss 9.9592 ema 10.1036 lr 7.33e-06 0.92s/step
+[s0] step 20/3000 loss 9.4840 ema 10.0379 lr 1.40e-05 0.91s/step
+[s0] step 30/3000 loss 9.3052 ema 9.9409 lr 2.07e-05 0.91s/step
+[s0] step 40/3000 loss 8.8583 ema 9.8135 lr 2.73e-05 0.91s/step
+[s0] step 50/3000 loss 9.2441 ema 9.6884 lr 3.40e-05 0.91s/step
+[s0] step 60/3000 loss 8.9451 ema 9.5577 lr 4.07e-05 0.92s/step
+[s0] step 70/3000 loss 8.6842 ema 9.4061 lr 4.73e-05 0.92s/step
+[s0] step 80/3000 loss 8.1000 ema 9.2196 lr 5.40e-05 0.92s/step
+[s0] step 90/3000 loss 8.3889 ema 9.0158 lr 6.07e-05 0.92s/step
+[s0] step 100/3000 loss 7.6321 ema 8.8037 lr 6.73e-05 0.92s/step
+[s0] step 110/3000 loss 7.8790 ema 8.6291 lr 7.40e-05 0.92s/step
+[s0] step 120/3000 loss 7.6742 ema 8.5000 lr 8.07e-05 0.92s/step
+[s0] step 130/3000 loss 7.3223 ema 8.3851 lr 8.73e-05 0.92s/step
+[s0] step 140/3000 loss 7.8180 ema 8.2705 lr 9.40e-05 0.92s/step
+[s0] step 150/3000 loss 7.3728 ema 8.1458 lr 1.00e-04 0.92s/step
+[s0] step 160/3000 loss 7.5606 ema 8.0579 lr 1.00e-04 0.92s/step
+[s0] step 170/3000 loss 7.3553 ema 7.9800 lr 1.00e-04 0.92s/step
+[s0] step 180/3000 loss 7.4882 ema 7.9140 lr 1.00e-04 0.92s/step
+[s0] step 190/3000 loss 7.5908 ema 7.8491 lr 1.00e-04 0.92s/step
+[s0] step 200/3000 loss 7.8224 ema 7.8180 lr 9.99e-05 0.92s/step
+[s0] step 210/3000 loss 7.7519 ema 7.7847 lr 9.99e-05 0.92s/step
+[s0] step 220/3000 loss 7.8823 ema 7.7380 lr 9.99e-05 0.92s/step
+[s0] step 230/3000 loss 8.0251 ema 7.7409 lr 9.98e-05 0.92s/step
+[s0] step 240/3000 loss 7.4279 ema 7.7028 lr 9.98e-05 0.92s/step
+[s0] step 250/3000 loss 7.4137 ema 7.6778 lr 9.97e-05 0.92s/step
+[s0] step 250 val_loss 7.7360 blind 7.8615
+[s0] step 260/3000 loss 7.4914 ema 7.6608 lr 9.96e-05 0.93s/step
+[s0] step 270/3000 loss 7.3134 ema 7.6265 lr 9.96e-05 0.93s/step
+[s0] step 280/3000 loss 7.1075 ema 7.5713 lr 9.95e-05 0.93s/step
+[s0] step 290/3000 loss 7.4165 ema 7.5317 lr 9.94e-05 0.93s/step
+[s0] step 300/3000 loss 7.4074 ema 7.5220 lr 9.93e-05 0.93s/step
+[s0] step 310/3000 loss 7.6279 ema 7.5221 lr 9.92e-05 0.93s/step
+[s0] step 320/3000 loss 7.4706 ema 7.5577 lr 9.91e-05 0.93s/step
+[s0] step 330/3000 loss 7.3093 ema 7.5088 lr 9.90e-05 0.93s/step
+[s0] step 340/3000 loss 6.9445 ema 7.4321 lr 9.89e-05 0.93s/step
+[s0] step 350/3000 loss 7.2365 ema 7.3914 lr 9.88e-05 0.93s/step
+[s0] step 360/3000 loss 6.9101 ema 7.3344 lr 9.87e-05 0.93s/step
+[s0] step 370/3000 loss 6.8069 ema 7.2542 lr 9.85e-05 0.93s/step
+[s0] step 380/3000 loss 6.8344 ema 7.1901 lr 9.84e-05 0.93s/step
+[s0] step 390/3000 loss 7.1581 ema 7.1496 lr 9.83e-05 0.93s/step
+[s0] step 400/3000 loss 6.7777 ema 7.0853 lr 9.81e-05 0.93s/step
+[s0] step 410/3000 loss 6.5672 ema 7.0356 lr 9.80e-05 0.93s/step
+[s0] step 420/3000 loss 7.1950 ema 6.9854 lr 9.78e-05 0.93s/step
+[s0] step 430/3000 loss 6.7005 ema 6.9280 lr 9.76e-05 0.93s/step
+[s0] step 440/3000 loss 6.8409 ema 6.9031 lr 9.75e-05 0.93s/step
+[s0] step 450/3000 loss 6.3959 ema 6.8644 lr 9.73e-05 0.93s/step
+[s0] step 460/3000 loss 6.9279 ema 6.8272 lr 9.71e-05 0.93s/step
+[s0] step 470/3000 loss 6.5201 ema 6.8022 lr 9.69e-05 0.93s/step
+[s0] step 480/3000 loss 6.6822 ema 6.7694 lr 9.67e-05 0.93s/step
+[s0] step 490/3000 loss 6.3626 ema 6.7369 lr 9.65e-05 0.93s/step
+[s0] step 500/3000 loss 6.5435 ema 6.7056 lr 9.63e-05 0.93s/step
+[s0] step 500 val_loss 6.5777 blind 7.4021
+[s0] step 510/3000 loss 6.6974 ema 6.6809 lr 9.61e-05 0.93s/step
+[s0] step 520/3000 loss 6.3024 ema 6.6466 lr 9.59e-05 0.93s/step
+[s0] step 530/3000 loss 6.5334 ema 6.5999 lr 9.57e-05 0.93s/step
+[s0] step 540/3000 loss 6.3569 ema 6.5859 lr 9.55e-05 0.93s/step
+[s0] step 550/3000 loss 6.4594 ema 6.5560 lr 9.52e-05 0.93s/step
+[s0] step 560/3000 loss 6.5596 ema 6.5100 lr 9.50e-05 0.93s/step
+[s0] step 570/3000 loss 6.0743 ema 6.4690 lr 9.47e-05 0.93s/step
+[s0] step 580/3000 loss 6.4302 ema 6.4433 lr 9.45e-05 0.93s/step
+[s0] step 590/3000 loss 6.5771 ema 6.4367 lr 9.42e-05 0.93s/step
+[s0] step 600/3000 loss 6.0996 ema 6.3861 lr 9.40e-05 0.93s/step
+[s0] step 610/3000 loss 6.4137 ema 6.3609 lr 9.37e-05 0.93s/step
+[s0] step 620/3000 loss 5.7802 ema 6.3198 lr 9.34e-05 0.93s/step
+[s0] step 630/3000 loss 5.7222 ema 6.2362 lr 9.32e-05 0.93s/step
+[s0] step 640/3000 loss 5.6766 ema 6.1749 lr 9.29e-05 0.93s/step
+[s0] step 650/3000 loss 3.4476 ema 5.9491 lr 9.26e-05 0.93s/step
+[s0] step 660/3000 loss 2.4477 ema 5.3151 lr 9.23e-05 0.93s/step
+[s0] step 670/3000 loss 2.1662 ema 4.7794 lr 9.20e-05 0.93s/step
+[s0] step 680/3000 loss 2.5196 ema 4.3529 lr 9.17e-05 0.93s/step
+[s0] step 690/3000 loss 2.1300 ema 3.9964 lr 9.14e-05 0.93s/step
+[s0] step 700/3000 loss 2.4730 ema 3.7000 lr 9.11e-05 0.93s/step
+[s0] step 710/3000 loss 2.7190 ema 3.4802 lr 9.08e-05 0.93s/step
+[s0] step 720/3000 loss 2.5835 ema 3.2992 lr 9.05e-05 0.93s/step
+[s0] step 730/3000 loss 2.4206 ema 3.1571 lr 9.01e-05 0.93s/step
+[s0] step 740/3000 loss 2.2996 ema 3.0377 lr 8.98e-05 0.93s/step
+[s0] step 750/3000 loss 2.4471 ema 2.9526 lr 8.95e-05 0.93s/step
+[s0] step 750 val_loss 2.4245 blind 2.4967
+[s0] step 760/3000 loss 2.4731 ema 2.8492 lr 8.91e-05 0.93s/step
+[s0] step 770/3000 loss 2.1372 ema 2.7673 lr 8.88e-05 0.93s/step
+[s0] step 780/3000 loss 2.7479 ema 2.7045 lr 8.84e-05 0.93s/step
+[s0] step 790/3000 loss 2.2384 ema 2.6616 lr 8.81e-05 0.93s/step
+[s0] step 800/3000 loss 2.3706 ema 2.6042 lr 8.77e-05 0.93s/step
+[s0] step 810/3000 loss 3.2116 ema 2.5677 lr 8.73e-05 0.93s/step
+[s0] step 820/3000 loss 2.2633 ema 2.5539 lr 8.70e-05 0.93s/step
+[s0] step 830/3000 loss 2.3518 ema 2.5342 lr 8.66e-05 0.93s/step
+[s0] step 840/3000 loss 2.6438 ema 2.5251 lr 8.62e-05 0.93s/step
+[s0] step 850/3000 loss 1.7818 ema 2.4793 lr 8.58e-05 0.93s/step
+[s0] step 860/3000 loss 2.7195 ema 2.4765 lr 8.55e-05 0.93s/step
+[s0] step 870/3000 loss 2.6548 ema 2.4597 lr 8.51e-05 0.93s/step
+[s0] step 880/3000 loss 2.5431 ema 2.4495 lr 8.47e-05 0.93s/step
+[s0] step 890/3000 loss 2.0649 ema 2.4266 lr 8.43e-05 0.93s/step
+[s0] step 900/3000 loss 2.3909 ema 2.4200 lr 8.39e-05 0.93s/step
+[s0] step 910/3000 loss 2.5204 ema 2.4131 lr 8.35e-05 0.93s/step
+[s0] step 920/3000 loss 2.6663 ema 2.4135 lr 8.30e-05 0.93s/step
+[s0] step 930/3000 loss 2.4569 ema 2.3989 lr 8.26e-05 0.93s/step
+[s0] step 940/3000 loss 2.5375 ema 2.3853 lr 8.22e-05 0.93s/step
+[s0] step 950/3000 loss 2.3077 ema 2.3852 lr 8.18e-05 0.93s/step
+[s0] step 960/3000 loss 2.4622 ema 2.3856 lr 8.14e-05 0.93s/step
+[s0] step 970/3000 loss 2.3429 ema 2.3959 lr 8.09e-05 0.93s/step
+[s0] step 980/3000 loss 2.5277 ema 2.3801 lr 8.05e-05 0.93s/step
+[s0] step 990/3000 loss 2.2863 ema 2.3775 lr 8.01e-05 0.93s/step
+[s0] step 1000/3000 loss 2.2120 ema 2.3634 lr 7.96e-05 0.93s/step
+[s0] step 1000 val_loss 2.3433 blind 2.4561
+[s0] step 1010/3000 loss 2.1940 ema 2.3721 lr 7.92e-05 0.93s/step
+[s0] step 1020/3000 loss 2.0966 ema 2.3520 lr 7.87e-05 0.93s/step
+[s0] step 1030/3000 loss 2.1639 ema 2.3537 lr 7.83e-05 0.93s/step
+[s0] step 1040/3000 loss 2.4124 ema 2.3522 lr 7.78e-05 0.93s/step
+[s0] step 1050/3000 loss 2.2029 ema 2.3628 lr 7.73e-05 0.93s/step
+[s0] step 1060/3000 loss 2.4724 ema 2.3549 lr 7.69e-05 0.93s/step
+[s0] step 1070/3000 loss 2.4478 ema 2.3426 lr 7.64e-05 0.93s/step
+[s0] step 1080/3000 loss 2.3419 ema 2.3447 lr 7.59e-05 0.93s/step
+[s0] step 1090/3000 loss 2.2418 ema 2.3488 lr 7.55e-05 0.93s/step
+[s0] step 1100/3000 loss 2.2808 ema 2.3452 lr 7.50e-05 0.93s/step
+[s0] step 1110/3000 loss 2.3495 ema 2.3640 lr 7.45e-05 0.93s/step
+[s0] step 1120/3000 loss 2.5258 ema 2.3652 lr 7.40e-05 0.93s/step
+[s0] step 1130/3000 loss 2.5278 ema 2.3601 lr 7.36e-05 0.93s/step
+[s0] step 1140/3000 loss 2.0606 ema 2.3539 lr 7.31e-05 0.93s/step
+[s0] step 1150/3000 loss 2.3961 ema 2.3477 lr 7.26e-05 0.93s/step
+[s0] step 1160/3000 loss 2.6226 ema 2.3696 lr 7.21e-05 0.93s/step
+[s0] step 1170/3000 loss 1.9024 ema 2.3583 lr 7.16e-05 0.93s/step
+[s0] step 1180/3000 loss 2.2140 ema 2.3628 lr 7.11e-05 0.93s/step
+[s0] step 1190/3000 loss 2.2972 ema 2.3599 lr 7.06e-05 0.93s/step
+[s0] step 1200/3000 loss 2.6315 ema 2.3438 lr 7.01e-05 0.93s/step
+[s0] step 1210/3000 loss 2.3167 ema 2.3389 lr 6.96e-05 0.93s/step
+[s0] step 1220/3000 loss 2.1024 ema 2.3209 lr 6.91e-05 0.93s/step
+[s0] step 1230/3000 loss 2.4228 ema 2.3369 lr 6.86e-05 0.93s/step
+[s0] step 1240/3000 loss 2.1818 ema 2.3403 lr 6.80e-05 0.93s/step
+[s0] step 1250/3000 loss 2.3779 ema 2.3378 lr 6.75e-05 0.93s/step
+[s0] step 1250 val_loss 2.3236 blind 2.4403
+[s0] step 1260/3000 loss 2.3044 ema 2.3250 lr 6.70e-05 0.93s/step
+[s0] step 1270/3000 loss 2.5616 ema 2.3279 lr 6.65e-05 0.93s/step
+[s0] step 1280/3000 loss 2.2558 ema 2.3301 lr 6.60e-05 0.93s/step
+[s0] step 1290/3000 loss 2.4234 ema 2.3331 lr 6.55e-05 0.93s/step
+[s0] step 1300/3000 loss 2.0930 ema 2.3236 lr 6.49e-05 0.93s/step
+[s0] step 1310/3000 loss 2.1521 ema 2.3374 lr 6.44e-05 0.93s/step
+[s0] step 1320/3000 loss 2.2793 ema 2.3245 lr 6.39e-05 0.93s/step
+[s0] step 1330/3000 loss 2.3521 ema 2.3052 lr 6.33e-05 0.93s/step
+[s0] step 1340/3000 loss 2.5777 ema 2.3063 lr 6.28e-05 0.93s/step
+[s0] step 1350/3000 loss 1.8454 ema 2.2962 lr 6.23e-05 0.93s/step
+[s0] step 1360/3000 loss 2.6201 ema 2.3118 lr 6.17e-05 0.93s/step
+[s0] step 1370/3000 loss 2.1151 ema 2.3003 lr 6.12e-05 0.93s/step
+[s0] step 1380/3000 loss 2.5554 ema 2.3046 lr 6.07e-05 0.93s/step
+[s0] step 1390/3000 loss 2.3061 ema 2.2977 lr 6.01e-05 0.93s/step
+[s0] step 1400/3000 loss 2.0825 ema 2.3009 lr 5.96e-05 0.93s/step
+[s0] step 1410/3000 loss 2.2787 ema 2.2912 lr 5.90e-05 0.93s/step
+[s0] step 1420/3000 loss 2.1968 ema 2.2967 lr 5.85e-05 0.93s/step
+[s0] step 1430/3000 loss 2.1398 ema 2.2929 lr 5.80e-05 0.93s/step
+[s0] step 1440/3000 loss 2.1998 ema 2.2838 lr 5.74e-05 0.93s/step
+[s0] step 1450/3000 loss 2.4117 ema 2.2859 lr 5.69e-05 0.93s/step
+[s0] step 1460/3000 loss 2.3327 ema 2.2862 lr 5.63e-05 0.93s/step
+[s0] step 1470/3000 loss 2.0188 ema 2.2804 lr 5.58e-05 0.93s/step
+[s0] step 1480/3000 loss 2.1235 ema 2.2756 lr 5.52e-05 0.93s/step
+[s0] step 1490/3000 loss 2.3256 ema 2.2679 lr 5.47e-05 0.93s/step
+[s0] step 1500/3000 loss 2.4348 ema 2.2734 lr 5.41e-05 0.93s/step
+[s0] step 1500 val_loss 2.2588 blind 2.4629
+[s0] step 1510/3000 loss 2.2589 ema 2.2694 lr 5.36e-05 0.93s/step
+[s0] step 1520/3000 loss 2.1324 ema 2.2528 lr 5.30e-05 0.93s/step
+[s0] step 1530/3000 loss 2.2395 ema 2.2518 lr 5.25e-05 0.93s/step
+[s0] step 1540/3000 loss 2.4490 ema 2.2686 lr 5.19e-05 0.93s/step
+[s0] step 1550/3000 loss 2.6340 ema 2.2808 lr 5.14e-05 0.93s/step
+[s0] step 1560/3000 loss 2.2407 ema 2.2779 lr 5.08e-05 0.93s/step
+[s0] step 1570/3000 loss 2.2023 ema 2.2706 lr 5.03e-05 0.93s/step
+[s0] step 1580/3000 loss 2.3637 ema 2.2699 lr 4.97e-05 0.93s/step
+[s0] step 1590/3000 loss 2.2024 ema 2.2496 lr 4.92e-05 0.93s/step
+[s0] step 1600/3000 loss 1.7378 ema 2.2279 lr 4.86e-05 0.93s/step
+[s0] step 1610/3000 loss 2.4773 ema 2.2379 lr 4.81e-05 0.93s/step
+[s0] step 1620/3000 loss 2.4082 ema 2.2423 lr 4.75e-05 0.93s/step
+[s0] step 1630/3000 loss 2.0878 ema 2.2439 lr 4.70e-05 0.93s/step
+[s0] step 1640/3000 loss 2.2235 ema 2.2253 lr 4.64e-05 0.93s/step
+[s0] step 1650/3000 loss 2.3411 ema 2.2205 lr 4.59e-05 0.93s/step
+[s0] step 1660/3000 loss 2.1736 ema 2.2289 lr 4.53e-05 0.93s/step
+[s0] step 1670/3000 loss 2.2514 ema 2.2345 lr 4.48e-05 0.93s/step
+[s0] step 1680/3000 loss 2.1494 ema 2.2261 lr 4.42e-05 0.93s/step
+[s0] step 1690/3000 loss 2.3473 ema 2.2417 lr 4.37e-05 0.93s/step
+[s0] step 1700/3000 loss 2.2716 ema 2.2264 lr 4.31e-05 0.93s/step
+[s0] step 1710/3000 loss 2.2236 ema 2.2249 lr 4.26e-05 0.93s/step
+[s0] step 1720/3000 loss 2.1109 ema 2.2032 lr 4.20e-05 0.93s/step
+[s0] step 1730/3000 loss 2.1864 ema 2.2093 lr 4.15e-05 0.93s/step
+[s0] step 1740/3000 loss 2.4055 ema 2.2184 lr 4.10e-05 0.93s/step
+[s0] step 1750/3000 loss 2.4982 ema 2.2085 lr 4.04e-05 0.93s/step
+[s0] step 1750 val_loss 2.1815 blind 2.4876
+[s0] step 1760/3000 loss 2.4175 ema 2.2019 lr 3.99e-05 0.93s/step
+[s0] step 1770/3000 loss 1.8727 ema 2.1810 lr 3.93e-05 0.93s/step
+[s0] step 1780/3000 loss 2.0540 ema 2.1701 lr 3.88e-05 0.93s/step
+[s0] step 1790/3000 loss 1.8213 ema 2.1733 lr 3.83e-05 0.93s/step
+[s0] step 1800/3000 loss 2.1929 ema 2.1534 lr 3.77e-05 0.93s/step
+[s0] step 1810/3000 loss 2.2974 ema 2.1349 lr 3.72e-05 0.93s/step
+[s0] step 1820/3000 loss 2.0386 ema 2.1367 lr 3.67e-05 0.93s/step
+[s0] step 1830/3000 loss 2.3802 ema 2.1232 lr 3.61e-05 0.93s/step
+[s0] step 1840/3000 loss 1.9239 ema 2.0978 lr 3.56e-05 0.93s/step
+[s0] step 1850/3000 loss 2.1319 ema 2.0804 lr 3.51e-05 0.93s/step
+[s0] step 1860/3000 loss 1.9243 ema 2.0904 lr 3.45e-05 0.93s/step
+[s0] step 1870/3000 loss 2.1523 ema 2.0902 lr 3.40e-05 0.93s/step
+[s0] step 1880/3000 loss 1.7812 ema 2.0648 lr 3.35e-05 0.93s/step
+[s0] step 1890/3000 loss 1.9268 ema 2.0744 lr 3.30e-05 0.93s/step
+[s0] step 1900/3000 loss 2.1459 ema 2.0601 lr 3.25e-05 0.93s/step
+[s0] step 1910/3000 loss 2.0722 ema 2.0514 lr 3.20e-05 0.93s/step
+[s0] step 1920/3000 loss 2.0809 ema 2.0556 lr 3.14e-05 0.93s/step
+[s0] step 1930/3000 loss 2.1773 ema 2.0720 lr 3.09e-05 0.93s/step
+[s0] step 1940/3000 loss 2.0738 ema 2.0654 lr 3.04e-05 0.93s/step
+[s0] step 1950/3000 loss 1.8822 ema 2.0544 lr 2.99e-05 0.93s/step
+[s0] step 1960/3000 loss 1.8197 ema 2.0214 lr 2.94e-05 0.93s/step
+[s0] step 1970/3000 loss 1.9596 ema 2.0041 lr 2.89e-05 0.93s/step
+[s0] step 1980/3000 loss 2.1210 ema 2.0018 lr 2.84e-05 0.93s/step
+[s0] step 1990/3000 loss 2.3041 ema 2.0096 lr 2.79e-05 0.93s/step
+[s0] step 2000/3000 loss 2.0974 ema 2.0004 lr 2.74e-05 0.93s/step
+[s0] step 2000 val_loss 2.0043 blind 2.4946
+[s0] step 2010/3000 loss 2.0700 ema 1.9939 lr 2.69e-05 0.93s/step
+[s0] step 2020/3000 loss 1.7725 ema 1.9917 lr 2.64e-05 0.93s/step
+[s0] step 2030/3000 loss 1.9930 ema 1.9851 lr 2.60e-05 0.93s/step
+[s0] step 2040/3000 loss 2.0180 ema 1.9870 lr 2.55e-05 0.93s/step
+[s0] step 2050/3000 loss 2.0157 ema 1.9830 lr 2.50e-05 0.93s/step
+[s0] step 2060/3000 loss 1.9351 ema 1.9729 lr 2.45e-05 0.93s/step
+[s0] step 2070/3000 loss 2.1922 ema 1.9807 lr 2.41e-05 0.93s/step
+[s0] step 2080/3000 loss 1.9688 ema 1.9670 lr 2.36e-05 0.93s/step
+[s0] step 2090/3000 loss 1.9833 ema 1.9632 lr 2.31e-05 0.93s/step
+[s0] step 2100/3000 loss 2.2328 ema 1.9573 lr 2.27e-05 0.93s/step
+[s0] step 2110/3000 loss 1.8007 ema 1.9459 lr 2.22e-05 0.93s/step
+[s0] step 2120/3000 loss 2.1036 ema 1.9619 lr 2.17e-05 0.93s/step
+[s0] step 2130/3000 loss 1.9510 ema 1.9587 lr 2.13e-05 0.93s/step
+[s0] step 2140/3000 loss 2.1333 ema 1.9509 lr 2.08e-05 0.93s/step
+[s0] step 2150/3000 loss 2.0530 ema 1.9599 lr 2.04e-05 0.93s/step
+[s0] step 2160/3000 loss 2.0397 ema 1.9468 lr 1.99e-05 0.93s/step
+[s0] step 2170/3000 loss 1.8566 ema 1.9329 lr 1.95e-05 0.93s/step
+[s0] step 2180/3000 loss 2.0657 ema 1.9418 lr 1.91e-05 0.93s/step
+[s0] step 2190/3000 loss 1.8941 ema 1.9463 lr 1.86e-05 0.93s/step
+[s0] step 2200/3000 loss 1.8911 ema 1.9405 lr 1.82e-05 0.93s/step
+[s0] step 2210/3000 loss 1.9213 ema 1.9346 lr 1.78e-05 0.93s/step
+[s0] step 2220/3000 loss 1.9389 ema 1.9218 lr 1.74e-05 0.93s/step
+[s0] step 2230/3000 loss 1.9873 ema 1.9049 lr 1.70e-05 0.93s/step
+[s0] step 2240/3000 loss 1.7505 ema 1.9057 lr 1.65e-05 0.93s/step
+[s0] step 2250/3000 loss 2.0880 ema 1.9136 lr 1.61e-05 0.93s/step
+[s0] step 2250 val_loss 1.9357 blind 2.4976
+[s0] step 2260/3000 loss 1.7807 ema 1.9055 lr 1.57e-05 0.93s/step
+[s0] step 2270/3000 loss 1.6762 ema 1.8997 lr 1.53e-05 0.93s/step
+[s0] step 2280/3000 loss 1.6628 ema 1.8906 lr 1.49e-05 0.93s/step
+[s0] step 2290/3000 loss 1.7291 ema 1.8727 lr 1.45e-05 0.93s/step
+[s0] step 2300/3000 loss 1.9181 ema 1.8780 lr 1.42e-05 0.93s/step
+[s0] step 2310/3000 loss 1.8796 ema 1.8676 lr 1.38e-05 0.93s/step
+[s0] step 2320/3000 loss 1.8439 ema 1.8674 lr 1.34e-05 0.93s/step
+[s0] step 2330/3000 loss 1.8712 ema 1.8680 lr 1.30e-05 0.93s/step
+[s0] step 2340/3000 loss 1.7298 ema 1.8457 lr 1.27e-05 0.93s/step
+[s0] step 2350/3000 loss 1.8096 ema 1.8443 lr 1.23e-05 0.93s/step
+[s0] step 2360/3000 loss 1.6642 ema 1.8402 lr 1.19e-05 0.93s/step
+[s0] step 2370/3000 loss 1.9237 ema 1.8341 lr 1.16e-05 0.93s/step
+[s0] step 2380/3000 loss 2.0076 ema 1.8366 lr 1.12e-05 0.93s/step
+[s0] step 2390/3000 loss 1.7130 ema 1.8206 lr 1.09e-05 0.93s/step
+[s0] step 2400/3000 loss 1.4779 ema 1.8152 lr 1.05e-05 0.93s/step
+[s0] step 2410/3000 loss 1.8366 ema 1.8155 lr 1.02e-05 0.93s/step
+[s0] step 2420/3000 loss 1.5422 ema 1.8207 lr 9.88e-06 0.93s/step
+[s0] step 2430/3000 loss 1.9014 ema 1.8129 lr 9.55e-06 0.93s/step
+[s0] step 2440/3000 loss 1.9074 ema 1.7936 lr 9.23e-06 0.93s/step
+[s0] step 2450/3000 loss 1.7647 ema 1.7876 lr 8.91e-06 0.93s/step
+[s0] step 2460/3000 loss 1.9467 ema 1.7923 lr 8.60e-06 0.93s/step
+[s0] step 2470/3000 loss 1.7197 ema 1.7807 lr 8.29e-06 0.93s/step
+[s0] step 2480/3000 loss 1.8954 ema 1.7942 lr 7.99e-06 0.93s/step
+[s0] step 2490/3000 loss 1.9292 ema 1.7953 lr 7.70e-06 0.93s/step
+[s0] step 2500/3000 loss 1.6182 ema 1.7957 lr 7.40e-06 0.93s/step
+[s0] step 2500 val_loss 1.8075 blind 2.5283
+[s0] step 2510/3000 loss 1.7650 ema 1.7881 lr 7.12e-06 0.93s/step
+[s0] step 2520/3000 loss 1.7742 ema 1.7936 lr 6.84e-06 0.93s/step
+[s0] step 2530/3000 loss 1.8341 ema 1.7940 lr 6.56e-06 0.93s/step
+[s0] step 2540/3000 loss 1.8940 ema 1.7897 lr 6.29e-06 0.93s/step
+[s0] step 2550/3000 loss 1.5505 ema 1.7831 lr 6.03e-06 0.93s/step
+[s0] step 2560/3000 loss 1.7363 ema 1.7740 lr 5.77e-06 0.93s/step
+[s0] step 2570/3000 loss 2.1014 ema 1.7679 lr 5.51e-06 0.93s/step
+[s0] step 2580/3000 loss 1.7826 ema 1.7660 lr 5.26e-06 0.93s/step
+[s0] step 2590/3000 loss 1.8417 ema 1.7638 lr 5.02e-06 0.93s/step
+[s0] step 2600/3000 loss 1.7106 ema 1.7712 lr 4.78e-06 0.93s/step
+[s0] step 2610/3000 loss 1.4758 ema 1.7636 lr 4.55e-06 0.93s/step
+[s0] step 2620/3000 loss 1.7373 ema 1.7353 lr 4.32e-06 0.93s/step
+[s0] step 2630/3000 loss 1.8758 ema 1.7358 lr 4.10e-06 0.93s/step
+[s0] step 2640/3000 loss 1.7299 ema 1.7366 lr 3.89e-06 0.93s/step
+[s0] step 2650/3000 loss 1.8968 ema 1.7276 lr 3.68e-06 0.93s/step
+[s0] step 2660/3000 loss 1.7191 ema 1.7320 lr 3.47e-06 0.93s/step
+[s0] step 2670/3000 loss 1.9963 ema 1.7563 lr 3.27e-06 0.93s/step
+[s0] step 2680/3000 loss 1.6229 ema 1.7500 lr 3.08e-06 0.93s/step
+[s0] step 2690/3000 loss 1.8929 ema 1.7487 lr 2.89e-06 0.93s/step
+[s0] step 2700/3000 loss 1.7335 ema 1.7390 lr 2.71e-06 0.93s/step
+[s0] step 2710/3000 loss 1.5464 ema 1.7211 lr 2.53e-06 0.93s/step
+[s0] step 2720/3000 loss 1.5760 ema 1.7217 lr 2.36e-06 0.93s/step
+[s0] step 2730/3000 loss 1.7148 ema 1.7194 lr 2.20e-06 0.93s/step
+[s0] step 2740/3000 loss 1.9839 ema 1.7171 lr 2.04e-06 0.93s/step
+[s0] step 2750/3000 loss 1.7166 ema 1.7016 lr 1.89e-06 0.93s/step
+[s0] step 2750 val_loss 1.7588 blind 2.5346
+[s0] step 2760/3000 loss 1.4960 ema 1.6818 lr 1.74e-06 0.93s/step
+[s0] step 2770/3000 loss 1.5478 ema 1.6906 lr 1.60e-06 0.93s/step
+[s0] step 2780/3000 loss 1.8897 ema 1.6964 lr 1.46e-06 0.93s/step
+[s0] step 2790/3000 loss 1.7628 ema 1.6983 lr 1.33e-06 0.93s/step
+[s0] step 2800/3000 loss 1.5332 ema 1.7073 lr 1.21e-06 0.93s/step
+[s0] step 2810/3000 loss 1.6554 ema 1.6957 lr 1.09e-06 0.93s/step
+[s0] step 2820/3000 loss 1.7090 ema 1.6992 lr 9.81e-07 0.93s/step
+[s0] step 2830/3000 loss 1.8131 ema 1.7132 lr 8.75e-07 0.93s/step
+[s0] step 2840/3000 loss 1.6296 ema 1.6968 lr 7.76e-07 0.93s/step
+[s0] step 2850/3000 loss 1.7597 ema 1.6798 lr 6.82e-07 0.93s/step
+[s0] step 2860/3000 loss 1.3930 ema 1.6811 lr 5.94e-07 0.93s/step
+[s0] step 2870/3000 loss 1.7881 ema 1.6944 lr 5.12e-07 0.93s/step
+[s0] step 2880/3000 loss 1.5136 ema 1.6940 lr 4.37e-07 0.93s/step
+[s0] step 2890/3000 loss 1.5674 ema 1.6884 lr 3.67e-07 0.93s/step
+[s0] step 2900/3000 loss 1.6693 ema 1.6892 lr 3.03e-07 0.93s/step
+[s0] step 2910/3000 loss 1.5412 ema 1.6851 lr 2.46e-07 0.93s/step
+[s0] step 2920/3000 loss 1.7191 ema 1.6887 lr 1.94e-07 0.93s/step
+[s0] step 2930/3000 loss 1.8263 ema 1.6875 lr 1.49e-07 0.93s/step
+[s0] step 2940/3000 loss 1.5914 ema 1.6786 lr 1.09e-07 0.93s/step
+[s0] step 2950/3000 loss 1.5796 ema 1.6725 lr 7.59e-08 0.93s/step
+[s0] step 2960/3000 loss 1.7753 ema 1.6818 lr 4.86e-08 0.93s/step
+[s0] step 2970/3000 loss 1.9165 ema 1.6848 lr 2.73e-08 0.93s/step
+[s0] step 2980/3000 loss 1.8281 ema 1.6968 lr 1.22e-08 0.93s/step
+[s0] step 2990/3000 loss 1.3370 ema 1.6896 lr 3.04e-09 0.93s/step
+[s0] step 3000/3000 loss 1.7984 ema 1.6963 lr 0.00e+00 0.93s/step
+[s0] step 3000 val_loss 1.7277 blind 2.5376
+[s0] TEST ratio 4 (17.6 chars/slot): cer 0.7477 (blind 0.7897) loss 1.6442 (blind 2.4774) prefix 0.002 exact 0.000 0.93s/step peak 10.1 GiB
+Thu Nov  5 23:31:33 UTC 2026
+4.4G	encoder_probe/cache
+overlay          20G  1.2G   19G   6% /
+Loading weights:   0%|          | 0/824 [00:00<?, ?it/s]Loading weights:   6%|▌         | 49/824 [00:00<00:01, 391.92it/s]Loading weights:  11%|█         | 89/824 [00:00<00:01, 376.64it/s]Loading weights:  16%|█▌        | 131/824 [00:00<00:01, 372.80it/s]Loading weights:  21%|██▏       | 177/824 [00:00<00:01, 392.44it/s]Loading weights:  27%|██▋       | 220/824 [00:00<00:01, 387.04it/s]Loading weights:  31%|███▏      | 259/824 [00:00<00:01, 377.71it/s]Loading weights:  36%|███▌      | 297/824 [00:00<00:01, 360.92it/s]Loading weights:  41%|████      | 336/824 [00:00<00:01, 348.08it/s]Loading weights:  46%|████▌     | 379/824 [00:01<00:01, 350.77it/s]Loading weights:  50%|█████     | 415/824 [00:01<00:01, 348.77it/s]Loading weights:  55%|█████▍    | 450/824 [00:01<00:01, 335.47it/s]Loading weights:  62%|██████▏   | 511/824 [00:01<00:00, 411.54it/s]Loading weights:  72%|███████▏  | 593/824 [00:01<00:00, 514.49it/s]Loading weights:  79%|███████▉  | 655/824 [00:01<00:00, 541.19it/s]Loading weights:  89%|████████▉ | 737/824 [00:01<00:00, 615.06it/s]Loading weights:  98%|█████████▊| 810/824 [00:01<00:00, 644.25it/s]Loading weights: 100%|██████████| 824/824 [00:01<00:00, 462.90it/s]
+[s0] ratio 80: L=480 slots=6 train_tokens=9013063 test_tokens=248600 device=cuda bf16=True lora=119734272 slots_params=4208641 fair_hash=b9c3b50b198a
+[s0] step 1/3000 loss 7.6802 ema 7.6802 lr 1.33e-06 0.90s/step
+[s0] step 10/3000 loss 7.1609 ema 7.6198 lr 7.33e-06 0.76s/step

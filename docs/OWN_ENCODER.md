@@ -205,3 +205,88 @@ calls, no model IDs in commits. Stop the pod (or tell me to) when finished: it b
 * **Reading:** if r = 4 still misses 10% at 8000 steps with its loss still falling, the recipe is too slow for
   this budget. That is not evidence against the ratio, and the next step would be a recipe amendment
   (e.g. a higher LR for the slots and projector), not a conclusion.
+
+## Stage 0 results (2026-11-06, RunPod RTX 4090)
+**Environment:**
+* torch 2.8.0+cu128, transformers 5.22.1, peft 0.21.2;
+* bf16 autocast, SDPA attention, gradient checkpointing.
+
+Rows: `encoder_probe/results/stage0/runs.jsonl`. Table and curves: `python3
+encoder_probe/experiments/analyse_stage0.py`. Logs: `results/stage0.log` (3000 steps), `results/stage0_8k.log`.
+Every row has 64 test windows, 480 tokens each.
+
+**Arms that ran:**
+* r = 4 at 3000 steps, as pre-registered. Ratio 80 was started, then stopped at step 1 when the control failed.
+* r = 4 and r = 16 at 8000 steps (amendment 1).
+* r = 8, 32 and 80 were not run.
+
+| ratio | steps | chars/slot | CER | blind CER | loss | blind loss | gain (nats/tok) | prefix_frac | exact windows | s/step | peak GiB |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 4 | 3000 | 17.6 | 74.8% | 79.0% | 1.644 | 2.477 | 0.833 | 0.002 | 0/64 | 0.93 | 10.1 |
+| 4 | 8000 | 17.6 | 64.0% | 77.8% | 1.094 | 3.038 | 1.945 | 0.003 | 0/64 | 0.93 | 10.1 |
+| 16 | 8000 | 70.2 | 78.1% | 80.3% | 2.115 | 2.537 | 0.422 | 0.003 | 0/64 | 0.79 | 10.0 |
+
+Op split (sub / ins / del), as a share of reference chars:
+* r = 4, 3000 steps: 48.3 / 12.5 / 14.1%;
+* r = 4, 8000 steps: 35.4 / 11.7 / 16.9%;
+* r = 16, 8000 steps: 51.3 / 12.9 / 13.9%.
+
+Hypothesis length is 95-99% of the reference in every arm.
+
+![Stage 0 val curves](../encoder_probe/img/stage0_curves.png)
+
+Val curves (16 val windows, real / blind loss in nats per token):
+
+| step | r = 4, 3000 steps | r = 4, 8000 steps | r = 16, 8000 steps |
+|---|---|---|---|
+| 1000 | 2.34 / 2.46 | 2.38 / 2.43 | 2.43 / 2.45 |
+| 2000 | 2.00 / 2.49 | 1.93 / 2.49 | 2.41 / 2.48 |
+| 3000 | 1.73 / 2.54 | 1.55 / 2.61 | 2.38 / 2.46 |
+| 4000 | | 1.36 / 2.79 | 2.33 / 2.49 |
+| 6000 | | 1.19 / 3.04 | 2.20 / 2.62 |
+| 8000 | | 1.15 / 3.07 | 2.18 / 2.64 |
+
+**D3 = none, D10 = none.** No arm reaches 10% CER at either step budget.
+
+**Which rule applies.** The positive-control-failure rule.
+* At 3000 steps, r = 4 missed 10% with its loss still falling, so it was rerun longer (amendment 1: 8000 steps,
+  not 12k, for the 5 h budget).
+* At 8000 steps it still misses 10%, by a wide margin. Its val loss is flat over the last 1500 steps (1.15), but
+  that is where the cosine schedule takes the LR to zero, so it is no evidence of a pipeline fault.
+* The pipeline carries information: r = 4's loss is 1.9 nats/token below its blind control. The blind loss also
+  rises above the decoder's prior (3.07 vs ~2.45), so the decoder relies on the slots.
+* As pre-registered for this case, **nothing is concluded about density.** D3 and D10 are not measured. The
+  moonshot rule (r = 80 ≤ 10%) and the demo-path rule (D3 ≥ ~70) cannot be evaluated.
+
+**Predictions:**
+1. r = 4 ≤ 5% CER at 3000 steps: **wrong** (74.8%).
+2. CER rises steeply with r: r = 16 is 78.1% at 8000 steps, outside the predicted 10-50%. Ratio 80 did not run.
+3. Every arm's loss is well below its blind: **true for r = 4** (0.83 and 1.95 nats/token). For r = 16 the gap
+   is smaller but clear: 0.42, against ~0.005 noise.
+
+**What the outputs look like.** The decoder writes fluent text on the right topic and keeps some names and
+phrases, but it does not copy; prefix_frac is 0.003. r = 4 at 8000 steps:
+* reference: "Robert Boulter is an English film, television and theatre actor. … This was followed by a starring
+  role in the play Herons written by Simon Stephens";
+* output: "Boulton is an English television, film and stage actor. … This was followed by a starring role in the
+  1990s play Heroin, written by Simon Stephens".
+
+r = 16 at 8000 steps keeps only fragments: "Robert … actor Boulton … television series". This is gist, not
+reconstruction, at both ratios.
+
+**Reading.** The recipe learns too slowly for these budgets.
+* r = 4 improved from loss 1.64 to 1.09 between the 3000- and 8000-step runs, so steps help, but 8000 steps
+  (32k windows, ~15M tokens) is far from ICAE's near-lossless 4x.
+* r = 16's gain over blind only opens after step ~3500.
+* Candidate levers for an amendment, not tested here:
+  * a higher LR for the slots and projector (e.g. 1e-3), with LoRA kept at 1e-4;
+  * a longer budget on a faster GPU;
+  * a short warm-up stage that trains only the slots and projector;
+  * the encoder reading from a mid-layer instead of the last hidden state.
+* Each lever should be tested first on r = 4 against the 8000-step row, at a fixed step budget.
+
+**Run costs (measured):**
+* 0.93 s/step at r = 4 and 0.79 at r = 16;
+* 10.0-10.1 GiB peak with gradient checkpointing (without it, r = 4 runs out of memory at 24 GiB);
+* ~2 min eval per arm;
+* about 5.5 GPU-hours in total, smoke and benchmarks included.

@@ -15,6 +15,7 @@ hardware, sizing and samples of the RTX 4090 session: [history/HANDOFF_2026-11.m
 | Round 3, G2-lite (CPU probe, 500 pages) | **"ViT output is the wall at this budget"**: no-merger arm matches ~29% of chars vs ~15% | ROUND3.md |
 | Round 3, R3-1 (LoRA fine-tune, 1000 steps, RTX 4090) | **latin_p8 (28 chars/token)** is read; latin_p5 (72) gets the gist only; the glyph codes are not read; **G3 undecidable** | below |
 | Analysis of all of the above against blind controls | glyph codes' information is lost inside the frozen ViT, upstream of R3-1's trained blocks; next: train from block 8 | [ANALYSIS.md](ANALYSIS.md) |
+| Own encoder, Stage 0: text compressor into frozen Qwen LLM (RTX 4090) | **inconclusive**: the ratio-4 positive control reached only 64% CER at 8000 steps; recipe too slow | [OWN_ENCODER.md](OWN_ENCODER.md) |
 
 **R3-1 short budget** (1000 steps, 1000 train / 16 test pages, clean, one fair_hash `05dc0c9e8507`):
 | Arm (chars/token) | CER | blind CER | cloze (blind) | MC (blind) | val loss (blind) |
@@ -35,10 +36,14 @@ losses equal its blind run's to 3 decimals. No arm is near 3% CER, so G3 can't b
 * R3-1: `encoder_probe/results/round3_ft_gpu3h/` and `round3_ft_gpu3h_blind/` (one row per eval cond, clean and
   jpeg75); logs `results/queue_logs/gpu3h_{1,2}/`. The LoRA adapters were lost with the instance; nothing depends on them.
 
-## Own encoder, Stage 0 (ready to run on a rented RTX 4090)
+## Own encoder, Stage 0 (ran 2026-11-05/06, RunPod RTX 4090)
 The text-side compression ceiling: how many chars per slot a learned encoder can pack into Qwen's frozen LLM.
-It sets the density target for an own encoder. Design (pre-registered), costs, runbook and the RunPod prompt:
-[OWN_ENCODER.md](OWN_ENCODER.md). Code: `encoder_probe/experiments/text_compress.py` (CPU-tested). ~6-7 h, ~$3-5.
+Design, amendment 1 and results: [OWN_ENCODER.md](OWN_ENCODER.md); code `encoder_probe/experiments/text_compress.py`,
+table and curves `analyse_stage0.py`, rows `encoder_probe/results/stage0/runs.jsonl`.
+* **2026-11-06: positive control failed, Stage 0 inconclusive.** Ratio 4 (17.6 chars/slot) reached CER 74.8% at
+  3000 steps and **64.0% at 8000** (blind 77.8%), though its loss is 1.9 nats/token below blind: the decoder
+  paraphrases instead of copying. Ratio 16 at 8000 steps: 78.1% (blind 80.3%). Ratios 8, 32 and 80 not run.
+  No D3 or D10. Next: a recipe amendment (faster slot learning), not a density conclusion.
 
 ## Open items, in priority order
 Reordered 2026-11-05 after [ANALYSIS.md](ANALYSIS.md): R3-1 trained too little of the ViT to test the glyph codes, and
