@@ -48,7 +48,7 @@ LORA_TARGETS = r".*layers\.\d+\.(self_attn\.(q|k|v|o)_proj|mlp\.(gate|up|down)_p
 P = 28
 FAIR_KEYS = ["S", "steps", "batch_size", "lr", "lr_enc", "warmup", "lora_r", "enc_dim", "enc_layers", "train_pages",
              "test_pages", "task_mix", "max_target_chars", "eval_mc", "eval_cloze", "seed", "tiny", "gist",
-             "gist_words", "recon"]
+             "gist_words", "recon", "align_steps", "align_chars"]
 
 
 def parse(argv=None):
@@ -86,6 +86,10 @@ def parse(argv=None):
     ap.add_argument("--run-name", default="s1")
     ap.add_argument("--out-root", default=str(ROOT / "encoder_probe" / "results"))
     ap.add_argument("--cache-root", default=str(ROOT / "encoder_probe" / "cache"))
+    ap.add_argument("--align-steps", type=int, default=0, help="S1 amendment 3: for the first N steps the LLM is "
+                    "fully frozen (LoRA not updated) and the encoder learns from short transcriptions only, so the "
+                    "loss can fall only through the image (LLaVA-style stage 1)")
+    ap.add_argument("--align-chars", type=int, default=120, help="transcription window during alignment")
     ap.add_argument("--stop-after", type=int, default=0)
     ap.add_argument("--session-steps", type=int, default=0, help="exit with code 5 after this many steps in this "
                     "process, at a checkpoint (the CPU slows down progressively within a process; resume is exact)")
@@ -412,14 +416,22 @@ def main(argv=None) -> int:
     t0 = time.time() - t_prev
     for step in range(start, a.steps + 1):
         batch = []
+        aligning = step <= a.align_steps
         for k in rng.choice(len(tr), a.batch_size, replace=len(tr) < a.batch_size):
-            prompt, ans, _ = T.stream_page_sample(tr[k], flats_tr, rng, a.max_target_chars, a.task_mix,
-                                                  ("cloze", "mc", "copy", "word") if a.gist else ("cloze", "mc", "copy"))
+            if aligning:
+                prompt, ans = T.stream_transcribe_sample(tr[k], int(rng.integers(len(tr[k].streams))), rng,
+                                                         a.align_chars)[:2]
+            else:
+                prompt, ans, _ = T.stream_page_sample(tr[k], flats_tr, rng, a.max_target_chars, a.task_mix,
+                                                      ("cloze", "mc", "copy", "word") if a.gist
+                                                      else ("cloze", "mc", "copy"))
             batch.append({"img": tr[k].img, "prompt": prompt, "answer": ans})
         opt.zero_grad(set_to_none=True)
         loss, _, _ = m.loss(batch)
         loss.backward()
         torch.nn.utils.clip_grad_norm_(params, 1.0)
+        if aligning:   # LLM frozen: no LoRA update (weight decay is 0, so lr 0 leaves it unchanged)
+            opt.param_groups[0]["lr"] = 0.0
         opt.step()
         sched.step()
         lv = loss.item()

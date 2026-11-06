@@ -169,3 +169,20 @@ def test_s1_recon_target_is_per_token_ink():
     assert t.shape == (1, 4, 3 * 28 * 28)
     assert t[0, 2].sum() == 4 and t[0, [0, 1, 3]].sum() == 0
     assert t[0, 2].reshape(3, 28, 28)[1, 2, 3] == 1   # channel-major, row 30 - 28, col 3
+
+
+def test_s1_alignment_stage_freezes_lora_and_trains_encoder(tmp_path):
+    import small_vlm as SV
+    common = ["--tiny", "--device", "cpu", "--steps", "4", "--train-pages", "6", "--test-pages", "4",
+              "--batch-size", "2", "--eval-every", "2", "--ckpt-every", "2", "--eval-mc", "1", "--eval-cloze", "1",
+              "--threads", "1", "--out-root", str(tmp_path / "res"), "--cache-root", str(tmp_path / "cache"),
+              "--encoding", "rgb1s_p24", "--align-steps", "2", "--run-name", "al"]
+    assert SV.main([*common, "--stop-after", "2"]) == 0
+    st = torch.load(tmp_path / "cache/ckpt/s1__al__rgb1s_p24__4.pt", weights_only=False)
+    a = SV.parse(common)
+    m = SV.SmallVLM(a, torch.device("cpu"))
+    lora0, enc0 = m.params()
+    n = len(lora0)
+    assert all(torch.equal(p.detach(), q) for p, q in zip(lora0, st["params"][:n]))        # LoRA untouched
+    assert any(not torch.equal(p.detach(), q) for p, q in zip(enc0, st["params"][n:]))   # encoder trained
+    assert SV.main(common) == 0                                                         # then the normal mix
