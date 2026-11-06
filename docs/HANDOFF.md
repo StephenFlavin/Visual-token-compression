@@ -60,6 +60,11 @@ token is measured against each arm's own blind control:
 * **Where the streams blend:** both streams survive equally in the frozen ViT up to block 16, then the pretrained
   letter and word features blend them.
 
+* **S1, a small VLM with a vision encoder trained from scratch (CPU, 2026-11-06): closed, inconclusive.**
+  * It never learned to read a single stream: gap vs swapped images ≤ 0.001 nats/token in all three runs, with a
+    collapse fix and an alignment stage. That is a bootstrap and budget limit, not an overlay result
+    (COLOUR_GIST.md "S1 result").
+
 So the GPU A1 trains the ViT from block 16 (amendment 3); the prompt below runs it. Remaining CPU options are
 builds, not tests (the phase B from-scratch encoder).
 

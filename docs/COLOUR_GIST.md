@@ -24,7 +24,7 @@ images swapped between pages) × text tokens per vision token. R(k) = that of th
 | A1-cpu | 2 streams, LoRA-only fine-tune on CPU (amendment 2) | interim: R(2) > 1, CI above 1 | CPU (~4 h) | **missed**: R(2) = 0.72 (0.54-0.94). Magenta is read well; cyan still isn't |
 | A1-diag | Where are the streams blended? | (diagnostic) | CPU | both survive equally to ViT block 16, then blend; untrained Qwen reads the superposition as one text |
 | **A1** | 2 streams, fine-tuned (1000 steps, R3-1 recipe, 16 px) | **Headline: R(2) > 1, 95% CI above 1.** Strong: R(2) ≥ 1.5, each stream's MC ≥ 0.8x 1-stream MC, other-stream lure ≤ 15% | GPU (~2 h on a 4090) | built, CPU-tested, waiting for a GPU |
-| S1 | Fairest overlay test: small VLM with a vision encoder trained **from scratch** (no pretrained text features), Qwen2.5-0.5B + LoRA, 224-px pages, CPU | learnability first; then **gist headline: 2 streams carry > 1x the gist (content words known) per vision token of 1 stream**, CI above 1; equal-density gist bar | CPU (~17 h, staged) | run 1: encoder collapsed (gap 0.000; engineering failure); s1r (reconstruction loss): encoder alive, LLM ignores it (gap -0.0002 at step 750), stopped; s1a (amendment 3: alignment stage) running |
+| S1 | Fairest overlay test: small VLM with a vision encoder trained **from scratch** (no pretrained text features), Qwen2.5-0.5B + LoRA, 224-px pages, CPU | learnability first; then **gist headline: 2 streams carry > 1x the gist (content words known) per vision token of 1 stream**, CI above 1; equal-density gist bar | CPU (~17 h, staged) | **closed, inconclusive** (alignment gate failed: gap 0.001 < 0.05). Run 1: encoder collapsed (gap 0.000); s1r: encoder alive, LLM ignores it (gap -0.0002 at step 750); s1a: LLM frozen, still no gap. No overlay conclusion |
 | A2 | 3 streams | R(3) ≥ 1.3 R(2), same per-stream rules | GPU (~1 h) | after A1 |
 | A3 | Smaller font (16 → 12 → 8 px) on the best stream count | R(k) holds at each step, vs 1 stream at the same size | GPU | after A2 |
 | B | Learned glyphs without BPE, read by a "pure" VLM | Glyph pages give at least Latin's gist at equal chars/token | GPU | not started |
@@ -371,6 +371,26 @@ stopped after ~150 steps, its checkpoint deleted, and S1 relaunched with these c
     budget. That says nothing about the overlay, and no further CPU variants follow.
   * **If it passes:** the s1r stages and gates apply unchanged (learnability, interim R(2)/G(2), trained blinds,
     equal density), with every blind arm on the same recipe.
+
+**S1 result (2026-11-06 ~21:05 UTC): closed as inconclusive at the s1a alignment gate.**
+* **s1a (alignment stage, LLM frozen, ≤ 120-char transcriptions):** val 3.0662 vs swapped 3.0662 at step 250
+  (gap 0.0000, image spread 0.017), and 3.0915 vs 3.0924 at step 500 (gap 0.0009, spread 0.039). The gate needed
+  0.05. The training loss stayed at ~4.35 nats/token on these short targets, so even with the image as the only
+  route, the encoder did not learn to produce embeddings the frozen LLM can decode.
+* **Across the three runs (~9 CPU-hours):** a ~4M-parameter encoder trained from scratch through Qwen2.5-0.5B's
+  loss does not bootstrap reading within 500-1500 steps (4-12k samples).
+  * Without help it collapses to a constant prompt (run 1).
+  * With a reconstruction loss it keeps the page, but the LLM ignores it (s1r) or cannot decode it (s1a).
+* **What it does and does not say:** this is a training-budget and bootstrap limit. It says nothing about the colour
+  overlay, because the 1-stream control never became readable. Per the pre-registered rule, no further CPU variants.
+* **If S1 is revisited (GPU):**
+  * Bootstrap the encoder with a direct reading loss: per-token CTC or character targets, as the round-1 probe
+    did.
+  * Or start from a small pretrained OCR encoder.
+  * Train ~10x longer.
+  * Then the alignment gate, then the same stages.
+* **Rows and logs:** run 1 `encoder_probe/results/s1/runs.jsonl` + `results/s1.log`; s1r and s1a have no rows
+  (stopped before their first arm finished): `results/s1r.log`, `results/s1a.log`.
 
 **What S1 can and cannot show:** it tests the overlay *mechanism*, whether a model with no pretrained bias reads
 two colour streams for more information per token than one. It is a different model from Qwen2.5-VL, so it says

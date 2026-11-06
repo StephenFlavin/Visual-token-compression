@@ -1,0 +1,60 @@
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 3619.13it/s]
+[s1] rgb1s_p16 S=224 chars/token=6.5 train=3000 test=24 val=24 lora=8798208 enc=5894449 device=cpu bf16=True fair_hash=b85ccaf46cbd blind=False
+[s1] step 1/1500 loss 7.7495 ema 7.7495 recon 0.2062 rss 2.5 GB (5.11 s/step)
+[s1] step 10/1500 loss 5.6529 ema 7.3996 recon 0.1164 rss 2.8 GB (4.94 s/step)
+[s1] step 20/1500 loss 5.8605 ema 6.6903 recon 0.0904 rss 3.2 GB (5.13 s/step)
+[s1] step 30/1500 loss 5.3591 ema 6.2106 recon 0.0877 rss 3.3 GB (5.13 s/step)
+[s1] step 40/1500 loss 5.1270 ema 5.9532 recon 0.0847 rss 3.4 GB (5.07 s/step)
+[s1] step 50/1500 loss 5.2929 ema 5.7229 recon 0.0838 rss 3.5 GB (5.04 s/step)
+[s1] step 60/1500 loss 5.0519 ema 5.4453 recon 0.0880 rss 3.5 GB (5.06 s/step)
+[s1] step 70/1500 loss 4.9365 ema 5.2909 recon 0.0887 rss 3.6 GB (5.05 s/step)
+[s1] step 80/1500 loss 4.9264 ema 5.1886 recon 0.0893 rss 3.5 GB (5.03 s/step)
+[s1] step 90/1500 loss 4.4884 ema 5.0282 recon 0.1076 rss 3.5 GB (5.03 s/step)
+[s1] step 100/1500 loss 5.1151 ema 5.0151 recon 0.0922 rss 3.6 GB (5.01 s/step)
+[s1] step 110/1500 loss 4.9149 ema 5.0119 recon 0.0894 rss 3.6 GB (5.00 s/step)
+[s1] step 120/1500 loss 4.8039 ema 4.9445 recon 0.0942 rss 3.7 GB (4.99 s/step)
+[s1] step 130/1500 loss 5.2159 ema 4.9440 recon 0.1230 rss 3.7 GB (5.00 s/step)
+[s1] step 140/1500 loss 4.6125 ema 4.9414 recon 0.1016 rss 3.7 GB (5.00 s/step)
+[s1] step 150/1500 loss 4.3001 ema 4.8736 recon 0.0884 rss 3.8 GB (5.00 s/step)
+[s1] step 160/1500 loss 4.5464 ema 4.8486 recon 0.0803 rss 3.7 GB (5.00 s/step)
+[s1] step 170/1500 loss 4.7914 ema 4.8449 recon 0.0786 rss 3.7 GB (4.98 s/step)
+[s1] step 180/1500 loss 4.3599 ema 4.7115 recon 0.0723 rss 3.7 GB (4.97 s/step)
+[s1] step 190/1500 loss 3.9717 ema 4.6128 recon 0.0695 rss 3.7 GB (4.96 s/step)
+[s1] step 200/1500 loss 4.4276 ema 4.6243 recon 0.0734 rss 3.8 GB (4.95 s/step)
+[s1] step 210/1500 loss 4.0371 ema 4.5455 recon 0.0664 rss 3.7 GB (4.95 s/step)
+[s1] step 220/1500 loss 4.1540 ema 4.5254 recon 0.0677 rss 3.7 GB (4.95 s/step)
+[s1] step 230/1500 loss 4.5978 ema 4.4919 recon 0.0674 rss 3.7 GB (4.96 s/step)
+[s1] step 240/1500 loss 4.4422 ema 4.5138 recon 0.0771 rss 3.8 GB (4.96 s/step)
+[s1] step 250/1500 loss 5.1010 ema 4.5297 recon 0.0658 rss 3.8 GB (4.96 s/step)
+[s1] step 250 val_loss 3.0662 swapped 3.0662 gap 0.0000 image_spread 0.0167
+[s1] step 260/1500 loss 4.5027 ema 4.5085 recon 0.0643 rss 3.6 GB (5.13 s/step)
+[s1] step 270/1500 loss 4.1560 ema 4.4609 recon 0.0808 rss 3.6 GB (5.25 s/step)
+[s1] step 280/1500 loss 4.5752 ema 4.5102 recon 0.0786 rss 3.6 GB (5.34 s/step)
+[s1] step 290/1500 loss 4.4387 ema 4.5346 recon 0.0687 rss 3.6 GB (5.43 s/step)
+[s1] step 300/1500 loss 4.6765 ema 4.5735 recon 0.0672 rss 3.7 GB (5.51 s/step)
+[s1] session limit: exit at step 300 to resume in a fresh process
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights: 100%|██████████| 290/290 [00:00<00:00, 4418.71it/s]
+[s1] rgb1s_p16 S=224 chars/token=6.5 train=3000 test=24 val=24 lora=8798208 enc=5894449 device=cpu bf16=True fair_hash=b85ccaf46cbd blind=False
+[s1] resumed from step 300
+[s1] step 310/1500 loss 4.5773 ema 4.5386 recon 0.0650 rss 2.9 GB (5.49 s/step)
+[s1] step 320/1500 loss 4.2875 ema 4.4913 recon 0.0631 rss 3.2 GB (5.48 s/step)
+[s1] step 330/1500 loss 4.2176 ema 4.4185 recon 0.0640 rss 3.1 GB (5.46 s/step)
+[s1] step 340/1500 loss 4.2555 ema 4.4119 recon 0.0613 rss 3.2 GB (5.45 s/step)
+[s1] step 350/1500 loss 4.4414 ema 4.4099 recon 0.0609 rss 3.2 GB (5.43 s/step)
+[s1] step 360/1500 loss 4.6335 ema 4.3813 recon 0.0625 rss 3.2 GB (5.42 s/step)
+[s1] step 370/1500 loss 4.1670 ema 4.3578 recon 0.0618 rss 3.3 GB (5.42 s/step)
+[s1] step 380/1500 loss 4.5966 ema 4.3705 recon 0.0662 rss 3.4 GB (5.41 s/step)
+[s1] step 390/1500 loss 4.3891 ema 4.3454 recon 0.0643 rss 3.4 GB (5.41 s/step)
+[s1] step 400/1500 loss 4.5895 ema 4.3961 recon 0.0651 rss 3.5 GB (5.42 s/step)
+[s1] step 410/1500 loss 4.4919 ema 4.3612 recon 0.0616 rss 3.6 GB (5.42 s/step)
+[s1] step 420/1500 loss 4.6782 ema 4.3417 recon 0.0605 rss 3.6 GB (5.42 s/step)
+[s1] step 430/1500 loss 4.5585 ema 4.3362 recon 0.0630 rss 3.5 GB (5.43 s/step)
+[s1] step 440/1500 loss 4.2123 ema 4.3146 recon 0.0617 rss 3.6 GB (5.43 s/step)
+[s1] step 450/1500 loss 4.2444 ema 4.3187 recon 0.0627 rss 3.7 GB (5.43 s/step)
+[s1] step 460/1500 loss 4.4539 ema 4.3271 recon 0.0602 rss 3.8 GB (5.43 s/step)
+[s1] step 470/1500 loss 4.2443 ema 4.3662 recon 0.0609 rss 3.8 GB (5.42 s/step)
+[s1] step 480/1500 loss 4.5411 ema 4.3907 recon 0.0596 rss 3.7 GB (5.42 s/step)
+[s1] step 490/1500 loss 4.4753 ema 4.3366 recon 0.0600 rss 3.8 GB (5.41 s/step)
+[s1] step 500/1500 loss 4.3703 ema 4.3529 recon 0.0598 rss 3.8 GB (5.42 s/step)
+[s1] step 500 val_loss 3.0915 swapped 3.0924 gap 0.0009 image_spread 0.0386
+S1a alignment gate (step 500): val 3.092, swapped 3.092, gap 0.001, image spread 0.039
