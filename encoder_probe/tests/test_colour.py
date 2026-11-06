@@ -109,3 +109,29 @@ def test_zeroshot_info_with_adapter_and_conservative_blind(tmp_path):
     for (b, n), (sw, _), (zb, _) in zip(t["val_per_sample_blind"], t["val_per_sample_blind_swap"],
                                         z["rgb2s_p24"]["val_per_sample_blind"]):
         assert b == min(sw, zb)
+
+
+def test_small_vlm_from_scratch_encoder_rows_resume_and_swap_analysis(tmp_path):
+    import small_vlm as SV
+    import analyse_colour as AC
+    common = ["--tiny", "--device", "cpu", "--steps", "4", "--train-pages", "6", "--test-pages", "4",
+              "--batch-size", "2", "--eval-every", "2", "--ckpt-every", "2", "--eval-mc", "1", "--eval-cloze", "1",
+              "--threads", "1", "--out-root", str(tmp_path / "res"), "--cache-root", str(tmp_path / "cache")]
+    for e in ("rgb1s_p24", "rgb2s_p24"):
+        assert SV.main(["--encoding", e, *common, "--run-name", "a"]) == 0
+    assert SV.main(["--encoding", "rgb2s_p24", *common, "--run-name", "b", "--stop-after", "2"]) == 0
+    assert SV.main(["--encoding", "rgb2s_p24", *common, "--run-name", "b"]) == 0      # resumes from step 2
+    ra = {json.loads(l)["encoding"]: json.loads(l) for l in (tmp_path / "res/a/runs.jsonl").read_text().splitlines()}
+    (rb,) = [json.loads(l) for l in (tmp_path / "res/b/runs.jsonl").read_text().splitlines()]
+    r2 = ra["rgb2s_p24"]
+    assert rb["curve"] == r2["curve"] and rb["val_per_sample"] == r2["val_per_sample"]
+    assert [s["colour"] for s in r2["per_stream"]] == ["cyan", "magenta"] and r2["n_tokens"] == 64
+    assert len(r2["val_per_sample"]) == len(r2["val_swap_per_sample"]) == 8           # 4 pages x 2 streams
+    assert [n for _, n in r2["val_per_sample"]] == [n for _, n in r2["val_swap_per_sample"]]
+    assert SV.main(["--encoding", "rgb1s_p24", *common, "--run-name", "a", "--blind-images"]) == 0
+    (bl,) = [json.loads(l) for l in (tmp_path / "res/a_blind/runs.jsonl").read_text().splitlines()]
+    assert bl["fair_hash"] == ra["rgb1s_p24"]["fair_hash"] and bl["blind_images"]
+    assert [n for _, n in bl["val_per_sample"]] == [n for _, n in ra["rgb1s_p24"]["val_per_sample"]]
+    AC.RES = tmp_path / "res"
+    rows, verdict = AC.analyse("a", "a_blind", 24, swap=True)
+    assert [r["k"] for r in rows] == [1, 2] and "R" in rows[1]

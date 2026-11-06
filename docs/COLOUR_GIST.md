@@ -24,6 +24,7 @@ images swapped between pages) × text tokens per vision token. R(k) = that of th
 | A1-cpu | 2 streams, LoRA-only fine-tune on CPU (amendment 2) | interim: R(2) > 1, CI above 1 | CPU (~4 h) | **missed**: R(2) = 0.72 (0.54-0.94). Magenta is read well; cyan still isn't |
 | A1-diag | Where are the streams blended? | (diagnostic) | CPU | both survive equally to ViT block 16, then blend; untrained Qwen reads the superposition as one text |
 | **A1** | 2 streams, fine-tuned (1000 steps, R3-1 recipe, 16 px) | **Headline: R(2) > 1, 95% CI above 1.** Strong: R(2) ≥ 1.5, each stream's MC ≥ 0.8x 1-stream MC, other-stream lure ≤ 15% | GPU (~2 h on a 4090) | built, CPU-tested, waiting for a GPU |
+| S1 | Fairest overlay test: small VLM with a vision encoder trained **from scratch** (no pretrained text features), Qwen2.5-0.5B + LoRA, 224-px pages, CPU | learnability first (1 stream must be read); then the same headline / strong / equal-density bars | CPU (~17 h, staged) | pre-registered, running |
 | A2 | 3 streams | R(3) ≥ 1.3 R(2), same per-stream rules | GPU (~1 h) | after A1 |
 | A3 | Smaller font (16 → 12 → 8 px) on the best stream count | R(k) holds at each step, vs 1 stream at the same size | GPU | after A2 |
 | B | Learned glyphs without BPE, read by a "pure" VLM | Glyph pages give at least Latin's gist at equal chars/token | GPU | not started |
@@ -276,6 +277,36 @@ rgb3s is analysed under the A2 gate only if A1's headline passes. A1-cpu numbers
 other blind).
 
 **Prompt for the GPU session:** in [HANDOFF.md](HANDOFF.md) ("Prompt for the next GPU session").
+
+### S1: small VLM with a from-scratch vision encoder (CPU; pre-registered 2026-11-06, before any S1 row)
+**Why:** in Qwen2.5-VL both streams survive to ViT block 16, then its pretrained letter and word features blend
+them. An encoder with no pretrained text features is the fairest test of the overlay itself, and a small model
+trains on this CPU.
+
+**Design** (`encoder_probe/experiments/small_vlm.py`, CPU-tested in `test_colour.py`):
+* **Pages:** the A1 stream encodings at 224 px = 64 vision tokens of 28 x 28 px, the same token size as
+  Qwen2.5-VL. Chars per token at 16 px: 6.5 (1 stream), 12.9 (2), 19.2 (3); 1 stream at 12 px: 11.5.
+* **Encoder:** random init, ~3.8M params. Conv stem 224 → 32 → 16 → 8 x 8, 4 transformer layers (d 256),
+  projection to the LLM width.
+* **LLM:** Qwen2.5-0.5B-Instruct, frozen, with LoRA r = 16.
+* **Training:** the A1 stream tasks; 1500 steps, batch 8, 3000 train pages. Learning rates: encoder 1e-3,
+  LoRA 2e-4.
+* **Measured cost:** 6.1 s/step on this CPU (bf16, AMX), ~2.8 h per run including eval.
+* **Measure:** the analyse_colour.py measure, on fixed val targets (each test page's whole stream, 24 pages). Each
+  run also records an eval-time blind (every val item shown the next page's image).
+
+**Stages and gates** (runner `results/run_s1.sh`):
+1. **Learnability:** rgb1s_p16. If its val loss is not ≥ 0.3 nats/token below the swapped-image loss, the
+   from-scratch encoder has not learned to read at this budget. S1 is then inconclusive and stops: no overlay
+   conclusion.
+2. **rgb2s_p16, then an interim R(2)** with the eval-time blind (`--swap-blind`). This is indicative only.
+3. **Trained blinds for both arms, then the proper R(2):** headline R(2) > 1 with the CI above 1; strong
+   = A1's per-stream rules.
+4. **rgb1s_p12 + blind:** the equal-density bar (rgb2s_p16 vs rgb1s_p12, CI above 1).
+
+**What S1 can and cannot show:** it tests the overlay *mechanism*, whether a model with no pretrained bias reads
+two colour streams for more information per token than one. It is a different model from Qwen2.5-VL, so it says
+nothing about whether Qwen's pretrained ViT can be retrained to do so (that is A1 on a GPU).
 
 ### A2: three streams (only if A1 passes)### A2: three streams (only if A1 passes)
 * **Arm:** the same recipe with a third stream darkening B (yellow ink).

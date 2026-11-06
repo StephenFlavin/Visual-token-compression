@@ -72,8 +72,15 @@ def ratio_ci(a, b, cpt_a, cpt_b, reps: int = 10000, seed: int = 0) -> tuple[floa
     return float(point), float(lo), float(hi)
 
 
-def analyse(real_run: str, blind_run: str, pitch: int) -> tuple[list[dict], dict]:
-    R, B = load(real_run), load(blind_run)
+def swap_blind(R: dict) -> dict:
+    """Interim blind from the real rows' eval-time image swap (small_vlm.py ``val_swap_per_sample``)."""
+    return {e: {**r, "val_per_sample": r["val_swap_per_sample"], "per_stream": [], "cer": float("nan")}
+            for e, r in R.items() if "val_swap_per_sample" in r}
+
+
+def analyse(real_run: str, blind_run: str, pitch: int, swap: bool = False) -> tuple[list[dict], dict]:
+    R = load(real_run)
+    B = swap_blind(R) if swap else load(blind_run)
     arms = {}
     for k in (1, 2, 3):
         enc = f"rgb{k}s_p{pitch}"
@@ -109,10 +116,11 @@ def analyse(real_run: str, blind_run: str, pitch: int) -> tuple[list[dict], dict
     return rows, verdict
 
 
-def equal_density(real_run: str, blind_run: str, arm: str, ref: str) -> dict | None:
+def equal_density(real_run: str, blind_run: str, arm: str, ref: str, swap: bool = False) -> dict | None:
     """The 'useful' bar: info per vision token of ``arm`` (e.g. rgb2s_p16) vs a single stream at a SMALLER font with
     about the same chars per token (e.g. rgb1s_p12). -> {R, R_lo, R_hi, ...} or None if a row is missing."""
-    R, B = load(real_run), load(blind_run)
+    R = load(real_run)
+    B = swap_blind(R) if swap else load(blind_run)
     if not all(e in R and e in B for e in (arm, ref)):
         return None
     a, b = arm_gap(R[arm], B[arm]), arm_gap(R[ref], B[ref])
@@ -155,13 +163,17 @@ def main(argv=None) -> int:
     ap.add_argument("--real", default="colour_a1")
     ap.add_argument("--blind", default=None, help="default <real>_blind")
     ap.add_argument("--pitch", type=int, default=16)
+    ap.add_argument("--swap-blind", action="store_true", help="interim: eval-time image swap of the real runs "
+                    "as the blind (small_vlm.py rows), instead of the trained blind runs")
     ap.add_argument("--equal-density", nargs=2, metavar=("ARM", "REF"), default=["rgb2s_p16", "rgb1s_p12"],
                     help="also compare ARM with a single stream REF at about the same chars per token")
     a = ap.parse_args(argv)
     blind = a.blind or f"{a.real}_blind"
-    rows, verdict = analyse(a.real, blind, a.pitch)
-    eq = equal_density(a.real, blind, *a.equal_density)
-    print(write_md(rows, verdict, a.real, blind, eq=eq, out=RES / f"analysis_{re.sub(r'[^A-Za-z0-9_]', '_', a.real)}" /
+    rows, verdict = analyse(a.real, blind, a.pitch, a.swap_blind)
+    eq = equal_density(a.real, blind, *a.equal_density, swap=a.swap_blind)
+    if a.swap_blind:
+        blind = "eval-time image swap (interim)"
+    print(write_md(rows, verdict, a.real, blind, eq=eq, out=RES / f"analysis_{re.sub(r'[^A-Za-z0-9_]', '_', a.real)}{'_swap' if a.swap_blind else ''}" /
                    "summary.md"))
     return 0
 
