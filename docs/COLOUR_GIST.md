@@ -12,6 +12,29 @@
 Every phase compares against plain single-stream Latin under the same recipe. That comparison is a **control**,
 not a goal (see [ANALYSIS.md](ANALYSIS.md)).
 
+## At a glance: targets and status
+**Measure.** Information per vision token = the val-loss gap vs the arm's own blind control (same targets,
+images swapped between pages) × text tokens per vision token. R(k) = that of the k-stream page ÷ that of the
+1-stream page at the same font size.
+
+| Step | Question | Target (pre-registered) | Where | Status |
+|---|---|---|---|---|
+| A0 | Can untrained Qwen read colour-overlaid Latin? | (look only) | CPU | **done**: it reads one stream through the other, but can't pick a stream by colour |
+| A0b | How much information does untrained Qwen take per stream? | (look only: zero-shot R(2), R(3)) | CPU | **done**: R(2) = 0.51 at 16 px, below 1 at every size |
+| A1-cpu | 2 streams, LoRA-only fine-tune on CPU (amendment 2) | interim: R(2) > 1, CI above 1 | CPU (~4 h) | pre-registered, running |
+| **A1** | 2 streams, fine-tuned (1000 steps, R3-1 recipe, 16 px) | **Headline: R(2) > 1, 95% CI above 1.** Strong: R(2) ≥ 1.5, each stream's MC ≥ 0.8x 1-stream MC, other-stream lure ≤ 15% | GPU (~2 h on a 4090) | built, CPU-tested, waiting for a GPU |
+| A2 | 3 streams | R(3) ≥ 1.3 R(2), same per-stream rules | GPU (~1 h) | after A1 |
+| A3 | Smaller font (16 → 12 → 8 px) on the best stream count | R(k) holds at each step, vs 1 stream at the same size | GPU | after A2 |
+| B | Learned glyphs without BPE, read by a "pure" VLM | Glyph pages give at least Latin's gist at equal chars/token | GPU | not started |
+| C | Merge: glyph streams in colour channels, then BPE | Each step pays for itself | GPU | not started |
+| Use | "System 1": bulk background context as colour pages | Beats a text summary at equal KV bytes on gist QA | GPU | not started |
+
+**The bar that makes it useful (equal density).** Beating one stream at the same font size (R(k) > 1) shows the
+overlay works. To be worth using, an overlay must also carry at least as much information per vision token as a
+single stream **shrunk to the same characters per token**. For example, rgb2s_p16 (13.7 chars/token) against
+rgb1s_p12 (12.2). Zero-shot reference, single stream: 5.5 / 7.8 / 11.6 bits per vision token at 16 / 12 / 8 px
+(A0b).
+
 ## Why gist, and what it has to beat
 * **Every result so far points the same way:** meaning compresses much more easily than exact wording.
   * R3-1: latin_p5 got the gist only.
@@ -69,6 +92,52 @@ Code: `encoder_probe/experiments/zeroshot_colour.py`. Rows: `encoder_probe/resul
   answers come from the red stream). On black it mixes the two. It reads whichever stream is more salient.
 * **So separating the streams has to be trained.** That is A1. The information is there: each stream owns its
   channels, and Q1 found all three colour channels survive about equally through Qwen's ViT.
+
+### A0b: zero-shot information per stream. Done on CPU, 2026-11-06
+Untrained Qwen2.5-VL-3B (bf16, CPU), the A1 encodings, 12 test pages. Prompt: "Transcribe all the <colour> text
+on this page." Teacher-forced loss of the true text with the page's own image, against another page's image
+(blind). Code `encoder_probe/experiments/zeroshot_info.py`; rows `encoder_probe/results/z0_info/`.
+
+| Pitch | Streams | Chars per vision token | Loss (blind) | Info gap per text token, per stream | R(k) vs 1 stream (95% CI) |
+|---|---|---|---|---|---|
+| 16 px | 1 | 6.9 | 0.04 (2.42) | 2.38 | 1 |
+| | 2 | 13.6 | 1.68 (2.29) | cyan 0.05, magenta 1.17 | **0.51** (0.31-0.72) |
+| | 3 | 20.5 | 2.14 (2.30) | 0.01 / 0.46 / 0.02 | 0.21 (0.12-0.30) |
+| 12 px | 1 | 12.2 | 0.42 (2.33) | 1.91 | 1 |
+| | 2 | 24.4 | 2.00 (2.30) | 0.01 / 0.59 | 0.31 (0.18-0.45) |
+| | 3 | 36.6 | 2.36 (2.40) | ~0 / 0.10 / ~0 | 0.06 (0.03-0.10) |
+| 8 px | 1 | 28.2 | 1.10 (2.34) | 1.24 | 1 |
+| | 2 | 56.3 | 2.41 (2.45) | ~0 / 0.08 | 0.06 (0.03-0.10) |
+| | 3 | 84.4 | 2.43 (2.44) | ~0 | 0.01 (0.01-0.02) |
+
+**Reading:**
+* **Untrained, an overlay loses.** Qwen reads the magenta stream partly and the cyan and yellow streams hardly at
+  all, as A0 found. This is the baseline training has to lift: A1 asks whether fine-tuning teaches the model to
+  pick the stream it is asked about.
+* **At 16 px a single stream is already read almost perfectly** (loss 0.04 against 2.42 blind: 98% of the
+  information). Fine-tuning a 1-stream arm can add at most ~2% there.
+* **Side finding:** untrained Qwen reads single-stream 8 px Latin about as well as R3-1's 1000-step fine-tune
+  did (loss 1.10 here vs R3-1's val loss 1.12; different target mix, so indicative only). R3-1's Latin gain was
+  mostly task format, not new reading ability.
+
+**Amendment 2 (2026-11-06, before any A1-cpu row): a CPU interim check (A1-cpu), no GPU available.**
+* **Measured CPU cost:**
+  * the full A1 recipe: 85 s/step, so ~24 h per arm, not viable;
+  * LoRA only (ViT and merger frozen), batch 2, ≤ 400-char targets: 24 s/step.
+* **Run:** rgb2s_p16 only, LoRA r = 16 only, 500 steps, batch 2, 1000 train pages, `--max-target-chars 400`,
+  run name `colour_a1cpu`.
+  * **No trained 1-stream arm:** the reference is the zero-shot 1-stream arm, which is already at 98% of its
+    blind loss, so training it could add ≤ 2%.
+  * **No trained blind run:** per sample, the blind loss is the lower of (a) the trained model's loss with another
+    page's image and (b) the untrained model's no-information loss on the same target. This can only shrink the
+    gap, never inflate it.
+* **Measure:** `zeroshot_info.py` on 24 test pages, first ≤ 400-char window of each stream (the training target
+  length), zero-shot reference run first (`z0_info_w400`). Also `finetune_qwen.py`'s per-stream MC, lure rate and
+  cloze.
+* **Interim target:** R(2) > 1 with the CI above 1. Each stream's MC and lure rate are reported against the
+  zero-shot A0 numbers (cyan MC 1/12, lure 10/12).
+* **Reading:** a pass is early evidence that training teaches stream selection. A fail at this budget (a quarter
+  of A1's samples, vision frozen) is not a verdict; the GPU A1 is.
 
 ### A1: two streams, fine-tuned (GPU, next)
 * **Recipe:** R3-1's (LoRA r = 16 + merger + last 4 ViT blocks, 1000 steps, 1000 train pages). One `fair_hash`;

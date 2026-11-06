@@ -1,0 +1,19 @@
+Loading weights:   0%|          | 0/824 [00:00<?, ?it/s]Loading weights:  34%|███▍      | 279/824 [00:00<00:00, 2783.52it/s]Loading weights:  68%|██████▊   | 558/824 [00:00<00:00, 2708.67it/s]Loading weights: 100%|██████████| 824/824 [00:00<00:00, 3809.10it/s]
+[z0i] model loaded in 3s
+[z0i] rgb1s_p16: 6.9 chars/token, loss 0.039 vs blind 2.419, gap/token 2.380, per stream [2.38] (78s)
+[z0i] rgb2s_p16: 13.6 chars/token, loss 1.683 vs blind 2.291, gap/token 0.609, per stream [0.053, 1.165] (155s)
+[z0i] rgb3s_p16: 20.5 chars/token, loss 2.138 vs blind 2.304, gap/token 0.166, per stream [0.013, 0.463, 0.022] (214s)
+[z0i] rgb1s_p12: 12.2 chars/token, loss 0.419 vs blind 2.330, gap/token 1.911, per stream [1.911] (78s)
+[z0i] rgb2s_p12: 24.4 chars/token, loss 2.002 vs blind 2.298, gap/token 0.296, per stream [0.007, 0.585] (151s)
+[z0i] rgb3s_p12: 36.6 chars/token, loss 2.358 vs blind 2.395, gap/token 0.037, per stream [0.004, 0.104, 0.005] (228s)
+[z0i] rgb1s_p8: 28.2 chars/token, loss 1.102 vs blind 2.338, gap/token 1.237, per stream [1.237] (77s)
+[z0i] rgb2s_p8: 56.3 chars/token, loss 2.409 vs blind 2.448, gap/token 0.039, per stream [0.0, 0.077] (150s)
+[z0i] rgb3s_p8: 84.4 chars/token, loss 2.432 vs blind 2.438, gap/token 0.006, per stream [0.003, 0.014, 0.0] (212s)
+
+zero-shot info per vision token vs 1 stream (95% bootstrap CI):
+  p16 2 streams: R = 0.51 (0.31-0.72)
+  p16 3 streams: R = 0.21 (0.12-0.30)
+  p12 2 streams: R = 0.31 (0.18-0.45)
+  p12 3 streams: R = 0.06 (0.03-0.10)
+  p8 2 streams: R = 0.06 (0.03-0.10)
+  p8 3 streams: R = 0.01 (0.01-0.02)

@@ -107,9 +107,11 @@ def tiny_config(tok, layers: int = 2, hidden: int = 64, heads: int = 4, kv_heads
         tie_word_embeddings=True)
 
 
-def load_model(device: torch.device, tiny: bool = False, rope_scaling: dict | None = None, seed: int = 0):
-    """-> (model, tokenizer). Real: bf16 on CUDA (fp32 on CPU); tiny: fp32 random init (seeded, so every
-    build is identical: needed for exact resume in tests)."""
+def load_model(device: torch.device, tiny: bool = False, rope_scaling: dict | None = None, seed: int = 0,
+               bf16_cpu: bool = False):
+    """-> (model, tokenizer). Real: bf16 on CUDA (fp32 on CPU, or bf16 with ``bf16_cpu``: the fp32 model needs
+    ~15 GB, bf16 ~7.5 GB; fast only with AMX/AVX512-BF16); tiny: fp32 random init (seeded, so every build is
+    identical: needed for exact resume in tests)."""
     from transformers import Qwen2_5_VLForConditionalGeneration
     if tiny:
         tok = ByteTok()
@@ -129,7 +131,7 @@ def load_model(device: torch.device, tiny: bool = False, rope_scaling: dict | No
         cfg = AutoConfig.from_pretrained(QWEN_REPO, revision=QWEN_REV)
         cfg.text_config.rope_parameters = {**cfg.text_config.rope_parameters, **rope_scaling}
         kw["config"] = cfg
-    dtype = torch.bfloat16 if device.type == "cuda" else torch.float32
+    dtype = torch.bfloat16 if device.type == "cuda" or bf16_cpu else torch.float32
     model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
         QWEN_REPO, revision=QWEN_REV, dtype=dtype, attn_implementation="sdpa", **kw)
     return model.to(device), tok

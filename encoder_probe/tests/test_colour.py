@@ -86,3 +86,21 @@ def test_ratio_and_ci_on_synthetic_arms():
     assert abs(r - 2) < 1e-9 and lo <= r <= hi
     half = (np.full(50, 25.0), n)                 # half the gap per token: no gain per vision token
     assert abs(AC.ratio_ci(half, one, 14.0, 7.0)[0] - 1) < 1e-9
+
+
+def test_zeroshot_info_with_adapter_and_conservative_blind(tmp_path):
+    from finetune_qwen import main as ft
+    import zeroshot_info as ZI
+    common = [*FT, "--run-name", "c", "--out-root", str(tmp_path / "res"), "--cache-root", str(tmp_path / "cache")]
+    assert ft(["--encoding", "rgb2s_p24", *common]) == 0
+    zi = ["--tiny", "--device", "cpu", "--pitches", "24", "--pages", "3", "--out-root", str(tmp_path / "res")]
+    assert ZI.main([*zi, "--streams", "1", "2", "--run-name", "z"]) == 0
+    adapter = tmp_path / "cache" / "r3_adapters" / "c__rgb2s_p24__2.pt"
+    assert ZI.main([*zi, "--streams", "2", "--run-name", "zt", "--adapter", str(adapter),
+                    "--blind-ref", str(tmp_path / "res" / "z" / "runs.jsonl")]) == 0
+    z = {json.loads(l)["encoding"]: json.loads(l) for l in (tmp_path / "res/z/runs.jsonl").read_text().splitlines()}
+    (t,) = [json.loads(l) for l in (tmp_path / "res/zt/runs.jsonl").read_text().splitlines()]
+    assert t["adapter"] and len(t["val_per_sample_real"]) == 6
+    for (b, n), (sw, _), (zb, _) in zip(t["val_per_sample_blind"], t["val_per_sample_blind_swap"],
+                                        z["rgb2s_p24"]["val_per_sample_blind"]):
+        assert b == min(sw, zb)

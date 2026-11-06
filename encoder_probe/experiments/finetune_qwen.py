@@ -256,7 +256,7 @@ def main(argv=None) -> int:
         blind = {"seed": [a.seed, 7919], "perm_test": perms["test"], "perm_train_head": perms["train"][:20]}
     t_pages = time.time() - t0
     torch.manual_seed(a.seed)   # LoRA init draws from the global RNG: identical across arms and restarts
-    model, tok = Q.load_model(dev, tiny=a.tiny, seed=a.seed)
+    model, tok = Q.load_model(dev, tiny=a.tiny, seed=a.seed, bf16_cpu=autocast and not cuda)
     pm = Q.make_trainable(model, a.lora_r, a.lora_alpha, a.lora_dropout, a.vision_blocks, a.train_merger)
     if a.grad_ckpt:
         Q.hf_model(pm).gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
