@@ -1,0 +1,8 @@
+[train_joint] run=e1align out=/home/user/visual-bpe/learned_glyphs/results/e1align configs=1 done=0 todo=1 parallel=1
+  lg_learned_n0_pb_c2_h7: steps=10500 batch=32 lr_reader=0.002 lr_glyph=0.05 tau=1.0->0.2 hard_from=0.6 channel=default
+[lg_learned_n0_pb_c2_h7] symbols=95 classes=96 learn=True mode=joint h=7 cell_w=2/4 col_stride=2 expand=2 pad=4 readers=1 reader_params=1020176 glyph_params=21280 channel=default ramp_levels=8 heldout=True resets=[] bits/char=4.589 oversample=0.0
+[lg_learned_n0_pb_c2_h7] step 250 loss 4.159 pen 0.0005 val_cer 1.0000 tau 0.963 hard=0 chan=0 ink=0.058 (52.6s)
+[lg_learned_n0_pb_c2_h7] step 500 loss 2.948 pen 0.0007 val_cer 0.8751 tau 0.926 hard=0 chan=1 ink=0.084 (105.9s)
+[lg_learned_n0_pb_c2_h7] step 750 loss 1.012 pen 0.0026 val_cer 0.6775 tau 0.891 hard=0 chan=1 ink=0.102 (157.2s)
+[lg_learned_n0_pb_c2_h7] step 1000 loss 0.169 pen 0.0035 val_cer 0.6112 tau 0.858 hard=0 chan=2 ink=0.166 (211.5s)
+[lg_learned_n0_pb_c2_h7] step 1250 loss 0.069 pen 0.0046 val_cer 0.6911 tau 0.826 hard=0 chan=2 ink=0.208 (266.4s)

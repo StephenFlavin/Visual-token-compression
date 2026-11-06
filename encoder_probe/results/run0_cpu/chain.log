@@ -1,0 +1,4 @@
+Loading weights:   0%|          | 0/824 [00:00<?, ?it/s]Loading weights:  42%|████▏     | 344/824 [00:00<00:00, 3431.27it/s]Loading weights: 100%|██████████| 824/824 [00:00<00:00, 6290.10it/s]
+[cap] model loaded in 4s; 12 points to do
+[cap] latin_p16 natural (0, 0) page 0: real 0.043 ref 1.353 nats/tok, 3.57 bits/vtok, CER 2.0% (117s)
+[cap] latin_p16 natural (0, 0) page 1: real 0.042 ref 2.575 nats/tok, 6.64 bits/vtok, CER 2.5% (215s)
