@@ -24,7 +24,7 @@ images swapped between pages) × text tokens per vision token. R(k) = that of th
 | A1-cpu | 2 streams, LoRA-only fine-tune on CPU (amendment 2) | interim: R(2) > 1, CI above 1 | CPU (~4 h) | **missed**: R(2) = 0.72 (0.54-0.94). Magenta is read well; cyan still isn't |
 | A1-diag | Where are the streams blended? | (diagnostic) | CPU | both survive equally to ViT block 16, then blend; untrained Qwen reads the superposition as one text |
 | **A1** | 2 streams, fine-tuned (1000 steps, R3-1 recipe, 16 px) | **Headline: R(2) > 1, 95% CI above 1.** Strong: R(2) ≥ 1.5, each stream's MC ≥ 0.8x 1-stream MC, other-stream lure ≤ 15% | GPU (~2 h on a 4090) | built, CPU-tested, waiting for a GPU |
-| S1 | Fairest overlay test: small VLM with a vision encoder trained **from scratch** (no pretrained text features), Qwen2.5-0.5B + LoRA, 224-px pages, CPU | learnability first; then **gist headline: 2 streams carry > 1x the gist (content words known) per vision token of 1 stream**, CI above 1; equal-density gist bar | CPU (~17 h, staged) | run 1: encoder collapsed (gap 0.000, gate failed: an engineering failure); amendment 2 (reconstruction loss) running |
+| S1 | Fairest overlay test: small VLM with a vision encoder trained **from scratch** (no pretrained text features), Qwen2.5-0.5B + LoRA, 224-px pages, CPU | learnability first; then **gist headline: 2 streams carry > 1x the gist (content words known) per vision token of 1 stream**, CI above 1; equal-density gist bar | CPU (~17 h, staged) | run 1: encoder collapsed (gap 0.000; engineering failure); s1r (reconstruction loss): encoder alive, LLM ignores it (gap -0.0002 at step 750), stopped; s1a (amendment 3: alignment stage) running |
 | A2 | 3 streams | R(3) ≥ 1.3 R(2), same per-stream rules | GPU (~1 h) | after A1 |
 | A3 | Smaller font (16 → 12 → 8 px) on the best stream count | R(k) holds at each step, vs 1 stream at the same size | GPU | after A2 |
 | B | Learned glyphs without BPE, read by a "pure" VLM | Glyph pages give at least Latin's gist at equal chars/token | GPU | not started |
@@ -359,6 +359,8 @@ stopped after ~150 steps, its checkpoint deleted, and S1 relaunched with these c
   (gap -0.001). Val loss rises while train loss falls, as in run 1: the LoRA (r 16 on every layer) memorises the
   3000 training pages' text, which is cheaper than learning to read.
 * **Rule:** if the s1r gap at step 750 is still < 0.02 nats/token, s1r stops and S1 relaunches as `s1a`.
+* **Outcome: s1r stopped at step 750** (val 2.9775 vs swapped 2.9774, gap -0.0002, image spread 0.74; no row
+  written). `s1a` launched at ~20:15 UTC (`results/run_s1a.sh`).
 * **`s1a` design:** the s1r recipe plus a LLaVA-style alignment stage, `--align-steps 500 --align-chars 120`.
   * Steps 1-500: the LLM is fully frozen (LoRA not updated). The encoder (+ reconstruction head) learns from
     transcriptions of ≤ 120-char windows of a random stream, so the loss can fall only through the image.
