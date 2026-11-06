@@ -91,6 +91,9 @@ model+prompt+image bytes), so re-runs are free.
 - Through SigLIP the probe overfits (train CTC ~0, test 40-60%); more pages help. SigLIP's last layer loses much more than layer 6 (`--encoder siglip_l6`). The probe is the limit for Latin, so absolute probe CERs are upper bounds on the loss: decide on same-probe comparisons.
 - **GridProbe reads through a pixel reconstruction, so it favours pixel-like codes.** Latin stops being pixel-decodable from Qwen after block 24; through frozen Qwen it reads held-out Latin at ~75% (latin_p16). Probe Latin numbers through VLM encoders are lower bounds; compare Latin with codes only with the LLM as reader (R3-1).
 - **Above ~75% CER, CER can't separate partial reading from none** (unrelated fluent text scores ~80%). Judge fine-tune arms first on the val-loss gain vs their blind run (same targets, paired, noise ~0.005 nats/token), then MC; `encoder_probe/experiments/analyse_r3.py` computes both with exact tests.
+- **A from-scratch vision encoder trained only through an LLM's loss collapses to a constant soft prompt** (S1 run 1:
+  output std across images 2e-5, gap vs swapped images 0.000 after 4 h). Add an auxiliary reconstruction loss
+  (`small_vlm.py --recon`, default 10) and watch `image_spread` and the swapped-image gap at every eval.
 - **peft's `disable_adapter()` context does not switch off LoRA when the inner modules are called directly, and
   gradient checkpointing recomputes layers in backward under whatever adapter state is current then.**
   `text_compress.py` toggles the LoRA layers itself (`AdapterSwitch`) and passes a checkpoint `context_fn` that

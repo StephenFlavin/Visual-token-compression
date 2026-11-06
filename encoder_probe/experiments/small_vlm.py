@@ -48,7 +48,7 @@ LORA_TARGETS = r".*layers\.\d+\.(self_attn\.(q|k|v|o)_proj|mlp\.(gate|up|down)_p
 P = 28
 FAIR_KEYS = ["S", "steps", "batch_size", "lr", "lr_enc", "warmup", "lora_r", "enc_dim", "enc_layers", "train_pages",
              "test_pages", "task_mix", "max_target_chars", "eval_mc", "eval_cloze", "seed", "tiny", "gist",
-             "gist_words"]
+             "gist_words", "recon"]
 
 
 def parse(argv=None):
@@ -63,6 +63,9 @@ def parse(argv=None):
     ap.add_argument("--lora-r", type=int, default=16)
     ap.add_argument("--enc-dim", type=int, default=256)
     ap.add_argument("--enc-layers", type=int, default=4)
+    ap.add_argument("--recon", type=float, default=10.0, help="S1 amendment 2: weight of the auxiliary MSE loss "
+                    "reconstructing each token's 28x28x3 ink patch from the encoder output (stops the encoder "
+                    "collapsing to a constant prompt; 0 = off, the collapsed first S1 run)")
     ap.add_argument("--train-pages", type=int, default=3000)
     ap.add_argument("--test-pages", type=int, default=24)
     ap.add_argument("--task-mix", type=float, default=0.4, help="share of transcription samples (S1 amendment 1: "
@@ -114,11 +117,22 @@ class PageEncoder(nn.Module):
         self.out = nn.Sequential(nn.LayerNorm(d), nn.Linear(d, out_dim))
         self.gain = nn.Parameter(torch.ones(()))
 
-    def forward(self, imgs: torch.Tensor) -> torch.Tensor:          # imgs uint8 (B, S, S, 3)
+    def features(self, imgs: torch.Tensor) -> torch.Tensor:         # imgs uint8 (B, S, S, 3) -> before the gain
         x = imgs.permute(0, 3, 1, 2).float() / 127.5 - 1.0
         x = self.stem(x).flatten(2).transpose(1, 2)                    # (B, g*g, d)
         assert x.shape[1] == self.g * self.g, x.shape
-        return self.out(self.tf(x + self.pos)) * self.gain
+        return self.out(self.tf(x + self.pos))
+
+    def forward(self, imgs: torch.Tensor) -> torch.Tensor:
+        return self.features(imgs) * self.gain
+
+
+def ink_patches(imgs: torch.Tensor) -> torch.Tensor:
+    """(B, S, S, 3) uint8 -> (B, g*g, 3*P*P) per-channel ink in [0, 1] (0 = white): the reconstruction target."""
+    B, S = imgs.shape[0], imgs.shape[1]
+    g = S // P
+    x = 1.0 - imgs.float() / 255.0
+    return x.reshape(B, g, P, g, P, 3).permute(0, 1, 3, 5, 2, 4).reshape(B, g * g, 3 * P * P)
 
 
 def load_llm(dev, tiny: bool, seed: int):
@@ -163,6 +177,8 @@ class SmallVLM:
         self.head = self.lm.get_output_embeddings()
         width = self.emb.weight.shape[1]
         self.enc = PageEncoder(a.S, a.enc_dim, a.enc_layers, width).to(dev)
+        self.dec = nn.Linear(width, 3 * P * P).to(dev)   # auxiliary reconstruction head (training only)
+        self.recon, self.last_recon, self.last_feats = getattr(a, "recon", 0.0), 0.0, None
         with torch.no_grad():   # vision tokens start at the scale of real token embeddings (per-vector RMS)
             self.enc.gain.fill_(float(self.emb.weight.float().pow(2).mean(1).sqrt().mean()))
         self.dev, self.n_vis = dev, (a.S // P) ** 2
@@ -194,7 +210,10 @@ class SmallVLM:
         ids, att = ids.to(self.dev), att.to(self.dev)
         with self.ac():
             x = self.emb(ids)
-            v = self.enc(torch.from_numpy(np.stack(imgs)).to(self.dev)).to(x.dtype)
+            im = torch.from_numpy(np.stack(imgs)).to(self.dev)
+            f = self.enc.features(im)
+            self.last_feats, self.last_imgs = f, im
+            v = (f * self.enc.gain).to(x.dtype)
             rows = []
             for i in range(B):
                 a0 = offs[i] + vis_at[i]
@@ -221,7 +240,12 @@ class SmallVLM:
             n = int(sel[i].sum())
             per.append((float(ce[k:k + n].detach().sum()), n))
             k += n
-        return ce.mean(), int(sel.sum()), per
+        total = ce.mean()
+        if self.recon > 0 and torch.is_grad_enabled():
+            rec = F.mse_loss(self.dec(self.last_feats.float()), ink_patches(self.last_imgs))
+            self.last_recon = float(rec.detach())
+            total = total + self.recon * rec
+        return total, int(sel.sum()), per
 
     @torch.no_grad()
     def generate(self, img: np.ndarray, prompt: str, max_new: int) -> str:
@@ -253,7 +277,14 @@ class SmallVLM:
         return (lp[:, y] - lp[:, n]).tolist()
 
     def params(self):
-        return [p for p in self.lm.parameters() if p.requires_grad], list(self.enc.parameters())
+        return ([p for p in self.lm.parameters() if p.requires_grad],
+                list(self.enc.parameters()) + (list(self.dec.parameters()) if self.recon > 0 else []))
+
+    @torch.no_grad()
+    def image_spread(self, imgs: list[np.ndarray]) -> float:
+        """Collapse monitor: std of the encoder output across images / its RMS (~0 = image ignored)."""
+        f = self.enc.features(torch.from_numpy(np.stack(imgs)).to(self.dev)).float()
+        return float(f.std(0).mean() / f.pow(2).mean().sqrt().clamp_min(1e-12))
 
 
 # ------------------------------------------------------------------------------------------------ helpers
@@ -369,12 +400,16 @@ def main(argv=None) -> int:
         lv = loss.item()
         ema = lv if ema is None else 0.95 * ema + 0.05 * lv
         if step % a.log_every == 0 or step == 1:
-            print(f"[s1] step {step}/{a.steps} loss {lv:.4f} ema {ema:.4f} ({(time.time() - t0) / step:.2f} s/step)",
-                  flush=True)
+            print(f"[s1] step {step}/{a.steps} loss {lv:.4f} ema {ema:.4f} recon {m.last_recon:.4f} "
+                  f"({(time.time() - t0) / step:.2f} s/step)", flush=True)
         if step % a.eval_every == 0 or step == a.steps:
-            vl = val_loss()
-            curve.append((step, round(ema, 5), round(vl, 5)))
-            print(f"[s1] step {step} val_loss {vl:.4f}", flush=True)
+            vl, vsw = val_loss(), val_loss(swap=True)
+            m.enc.eval()
+            spread = m.image_spread([pg.img for pg in te[:8]])
+            m.enc.train()
+            curve.append((step, round(ema, 5), round(vl, 5), round(vsw, 5), round(spread, 5)))
+            print(f"[s1] step {step} val_loss {vl:.4f} swapped {vsw:.4f} gap {vsw - vl:.4f} "
+                  f"image_spread {spread:.4f}", flush=True)
         if a.ckpt_every and step % a.ckpt_every == 0 and step < a.steps:
             ck.parent.mkdir(parents=True, exist_ok=True)
             tmp = ck.with_suffix(".tmp")
@@ -388,7 +423,8 @@ def main(argv=None) -> int:
     train_s = time.time() - t0
     fin = Path(a.cache_root) / "s1_models" / f"{a.run_name}__{a.encoding}__{a.steps}.pt"
     fin.parent.mkdir(parents=True, exist_ok=True)
-    torch.save({"lora": [p.detach().cpu() for p in lora_p], "encoder": m.enc.state_dict(), "config": cfg}, fin)
+    torch.save({"lora": [p.detach().cpu() for p in lora_p], "encoder": m.enc.state_dict(),
+                "decoder": m.dec.state_dict(), "config": cfg}, fin)
     vl, vps = val_loss(per_sample=True)
     vsl, vsps = val_loss(per_sample=True, swap=True)
     print(f"[s1] val {vl:.4f} vs swapped images {vsl:.4f} (gap {vsl - vl:.3f} nats/token)", flush=True)

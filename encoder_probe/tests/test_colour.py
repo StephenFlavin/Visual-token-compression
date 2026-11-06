@@ -6,6 +6,7 @@ from pathlib import Path
 
 import numpy as np
 import pytest
+import torch
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "encoder_probe" / "experiments"))
@@ -140,6 +141,9 @@ def test_small_vlm_from_scratch_encoder_rows_resume_and_swap_analysis(tmp_path):
     assert all(len(e["present"]) and len(e["absent"]) and len(e["lure"]) for e in g)
     assert all("lure" not in e for e in ra["rgb1s_p24"]["gist_pages"])
     assert (tmp_path / "cache" / "s1_models" / "a__rgb2s_p24__4.pt").exists()
+    assert all(len(c) == 5 and c[4] > 0 for c in r2["curve"])          # (step, ema, val, swapped val, spread)
+    st = torch.load(tmp_path / "cache" / "s1_models" / "a__rgb2s_p24__4.pt", weights_only=False)
+    assert "decoder" in st and st["config"]["recon"] == 10.0
     md = "\n".join(AC.gist_section("a", "a_blind", 24, ("rgb2s_p24", "rgb1s_p24")))
     assert "Gist" in md and "rgb2s_p24" in md and "Gist at equal density" in md
 
@@ -155,3 +159,13 @@ def test_gist_auc_and_value():
                                           for p in range(3)]}
     r, lo, hi = AC.gist_ratio(row, one)
     assert abs(r - 2) < 1e-9 and lo <= r <= hi
+
+
+def test_s1_recon_target_is_per_token_ink():
+    import small_vlm as SV
+    img = np.full((1, 56, 56, 3), 255, np.uint8)
+    img[0, 30:32, 3:5, 1] = 0                      # ink in the G channel of token (1, 0)
+    t = SV.ink_patches(torch.from_numpy(img))
+    assert t.shape == (1, 4, 3 * 28 * 28)
+    assert t[0, 2].sum() == 4 and t[0, [0, 1, 3]].sum() == 0
+    assert t[0, 2].reshape(3, 28, 28)[1, 2, 3] == 1   # channel-major, row 30 - 28, col 3

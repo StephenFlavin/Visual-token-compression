@@ -24,7 +24,7 @@ images swapped between pages) × text tokens per vision token. R(k) = that of th
 | A1-cpu | 2 streams, LoRA-only fine-tune on CPU (amendment 2) | interim: R(2) > 1, CI above 1 | CPU (~4 h) | **missed**: R(2) = 0.72 (0.54-0.94). Magenta is read well; cyan still isn't |
 | A1-diag | Where are the streams blended? | (diagnostic) | CPU | both survive equally to ViT block 16, then blend; untrained Qwen reads the superposition as one text |
 | **A1** | 2 streams, fine-tuned (1000 steps, R3-1 recipe, 16 px) | **Headline: R(2) > 1, 95% CI above 1.** Strong: R(2) ≥ 1.5, each stream's MC ≥ 0.8x 1-stream MC, other-stream lure ≤ 15% | GPU (~2 h on a 4090) | built, CPU-tested, waiting for a GPU |
-| S1 | Fairest overlay test: small VLM with a vision encoder trained **from scratch** (no pretrained text features), Qwen2.5-0.5B + LoRA, 224-px pages, CPU | learnability first; then **gist headline: 2 streams carry > 1x the gist (content words known) per vision token of 1 stream**, CI above 1; equal-density gist bar | CPU (~17 h, staged) | pre-registered (amendment 1: gist), running |
+| S1 | Fairest overlay test: small VLM with a vision encoder trained **from scratch** (no pretrained text features), Qwen2.5-0.5B + LoRA, 224-px pages, CPU | learnability first; then **gist headline: 2 streams carry > 1x the gist (content words known) per vision token of 1 stream**, CI above 1; equal-density gist bar | CPU (~17 h, staged) | run 1: encoder collapsed (gap 0.000, gate failed: an engineering failure); amendment 2 (reconstruction loss) running |
 | A2 | 3 streams | R(3) ≥ 1.3 R(2), same per-stream rules | GPU (~1 h) | after A1 |
 | A3 | Smaller font (16 → 12 → 8 px) on the best stream count | R(k) holds at each step, vs 1 stream at the same size | GPU | after A2 |
 | B | Learned glyphs without BPE, read by a "pure" VLM | Glyph pages give at least Latin's gist at equal chars/token | GPU | not started |
@@ -325,6 +325,26 @@ stopped after ~150 steps, its checkpoint deleted, and S1 relaunched with these c
 * **Also:** final weights saved to `encoder_probe/cache/s1_models/`, so more gist evaluations can run later
   without retraining.
 * **Unchanged:** the GPU A1 recipe (`finetune_qwen.py` keeps its pre-registered task mix).
+
+**S1 result 1 and amendment 2 (2026-11-06): the encoder collapsed; relaunched with a reconstruction loss.**
+* **Result (run `s1`, rgb1s_p16, 1500 steps, ~4 h at 9.2 s/step):** the learnability gate failed. Val loss
+  3.021 with the page's own image and 3.021 with another page's: gap 0.000 nats/token. Gist AUC 0.565, MC 0.21
+  (chance 0.25), CER 0.79. Val loss was lowest at step 250 (2.947) and rose while train loss fell (EMA 2.34): the
+  LoRA memorised training text.
+* **Cause: an engineering failure, not evidence about the overlay.** The trained encoder's output is the same for
+  every image and every token position: its std across images is 2e-5 of an RMS of 0.02, against 0.05 at
+  initialisation. Early on, the random image features were noise to the LLM, so its loss trained them away and the
+  64 vision tokens became a constant soft prompt. This is the language-model analogue of AGENTS.md's "CTC alone
+  cannot bootstrap a learned token->pixel map; it needs the auxiliary MSE loss".
+* **Amendment 2 (before any `s1r` row):**
+  * **Reconstruction loss:** `--recon 10` adds an auxiliary MSE loss. A linear head on the encoder output (before
+    the gain the LLM sees) rebuilds each token's 28 x 28 x 3 ink patch, so the vision tokens must keep the page's
+    information. The LLM can still ignore them, and then the gap stays honestly 0.
+  * **Collapse monitor:** at every eval the run logs the swapped-image val loss, the gap and `image_spread`
+    (std of the encoder output across images ÷ its RMS).
+  * **Early check:** `results/run_s1r.sh` exits 4 at step 500 if the spread is below 0.01.
+  * **Unchanged:** stages, gates and measures. Runs go to `encoder_probe/results/s1r/`; the collapsed run stays
+    in `encoder_probe/results/s1/` as the record.
 
 **What S1 can and cannot show:** it tests the overlay *mechanism*, whether a model with no pretrained bias reads
 two colour streams for more information per token than one. It is a different model from Qwen2.5-VL, so it says
