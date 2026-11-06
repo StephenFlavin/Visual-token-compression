@@ -31,6 +31,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 RES = ROOT / "results"
+EQ = ["rgb2s_p16", "rgb1s_p12"]   # equal-density pair (main() sets it from --equal-density)
 CHARS_PER_TEXT_TOKEN = 4.33
 
 
@@ -129,6 +130,85 @@ def equal_density(real_run: str, blind_run: str, arm: str, ref: str, swap: bool 
             "R": r, "R_lo": lo, "R_hi": hi, "pass": lo > 1}
 
 
+# ------------------------------------------------------------------------------------------------- gist
+# Word presence ("Does the word w appear in the <colour> text?", small_vlm.py ``gist_pages``): per stream, the AUC
+# of the yes-no score separating the stream's content words from other pages' words. Gist per vision token
+# G = sum over streams of (content words in the stream) x max(0, 2 (AUC - AUC_blind)) / vision tokens, i.e. the
+# number of the page's content words the model "knows", per token. AUC_blind = 0.5 unless a blind row exists.
+
+def auc(pos, neg) -> float:
+    pos, neg = np.asarray(pos, float), np.asarray(neg, float)
+    if not len(pos) or not len(neg):
+        return float("nan")
+    gt = (pos[:, None] > neg[None, :]).sum() + 0.5 * (pos[:, None] == neg[None, :]).sum()
+    return float(gt / (len(pos) * len(neg)))
+
+
+def gist_value(row: dict, pages=None, blind_auc: dict | None = None) -> tuple[float, dict]:
+    """-> (G per vision token, {stream: (AUC, separation AUC vs lures, mean content words)}) on ``pages``."""
+    gp = row["gist_pages"]
+    pages = sorted({e["page"] for e in gp}) if pages is None else pages
+    out, G = {}, 0.0
+    for st in sorted({e["stream"] for e in gp}):
+        es = {e["page"]: e for e in gp if e["stream"] == st}
+        sel = [es[p] for p in pages if p in es]
+        pos = [x for e in sel for x in e["present"]]
+        a = auc(pos, [x for e in sel for x in e["absent"]])
+        sep = auc(pos, [x for e in sel for x in e.get("lure", [])])
+        ncw = float(np.mean([e["n_cw"] for e in sel])) if sel else 0.0
+        base = (blind_auc or {}).get(st, 0.5)
+        if not np.isnan(a):
+            G += ncw * max(0.0, 2 * (a - base))
+        out[st] = (a, sep, ncw)
+    return G / row["n_tokens"], out
+
+
+def gist_ratio(arm: dict, ref: dict, arm_blind: dict | None = None, ref_blind: dict | None = None,
+               reps: int = 2000, seed: int = 0) -> tuple[float, float, float]:
+    """G(arm) / G(ref) with a 95% bootstrap CI over test pages (resampled independently per arm)."""
+    def bauc(b):
+        return {st: v[0] for st, v in gist_value(b)[1].items()} if b and "gist_pages" in b else None
+    ba, br = bauc(arm_blind), bauc(ref_blind)
+    point = gist_value(arm, None, ba)[0] / max(1e-12, gist_value(ref, None, br)[0])
+    rng = np.random.default_rng(seed)
+    pa = sorted({e["page"] for e in arm["gist_pages"]})
+    pr = sorted({e["page"] for e in ref["gist_pages"]})
+    rs = []
+    for _ in range(reps):
+        ga = gist_value(arm, list(rng.choice(pa, len(pa))), ba)[0]
+        gr = gist_value(ref, list(rng.choice(pr, len(pr))), br)[0]
+        if gr > 0:
+            rs.append(ga / gr)
+    lo, hi = np.percentile(rs, [2.5, 97.5]) if rs else (float("nan"), float("nan"))
+    return float(point), float(lo), float(hi)
+
+
+def gist_section(real_run: str, blind_run: str, pitch: int, eq: tuple[str, str]) -> list[str]:
+    R, B = load(real_run), load(blind_run)
+    arms = {k: f"rgb{k}s_p{pitch}" for k in (1, 2, 3) if f"rgb{k}s_p{pitch}" in R and "gist_pages" in R[f"rgb{k}s_p{pitch}"]}
+    if 1 not in arms:
+        return []
+    L = ["", "## Gist (word presence): content words the model knows, per vision token", "",
+         "| Arm | gist per vision token | ratio vs 1 stream (95% CI) | per stream: AUC present vs absent (separation "
+         "vs the other stream's words) | content words per stream |", "|---|---|---|---|---|"]
+    ref = R[arms[1]]
+    for k, e in sorted(arms.items()):
+        g, per = gist_value(R[e], None, {st: v[0] for st, v in gist_value(B[e])[1].items()}
+                            if e in B and "gist_pages" in B[e] else None)
+        rat = "1 (reference)"
+        if k > 1:
+            r, lo, hi = gist_ratio(R[e], ref, B.get(e), B.get(arms[1]))
+            rat = f"{r:.2f} ({lo:.2f}-{hi:.2f})"
+        ps = "; ".join(f"{a:.2f}" + (f" ({sp:.2f})" if not np.isnan(sp) else "") for a, sp, _ in per.values())
+        L.append(f"| {e} | {g:.2f} | {rat} | {ps} | {', '.join(f'{c:.0f}' for _, _, c in per.values())} |")
+    a, r = eq
+    if a in R and r in R and "gist_pages" in R[a] and "gist_pages" in R[r]:
+        x, lo, hi = gist_ratio(R[a], R[r], B.get(a), B.get(r))
+        L += ["", f"Gist at equal density: {a} vs {r}: {x:.2f} ({lo:.2f}-{hi:.2f}), "
+              f"{'PASS' if lo > 1 else 'not passed'} (needs the CI above 1)"]
+    return L
+
+
 def write_md(rows, verdict, real_run, blind_run, out: Path, eq: dict | None = None) -> str:
     L = [f"# Colour-gist analysis: `{real_run}` vs `{blind_run}` (generated by analyse_colour.py)", "",
          "| Arm | chars/token | info gap (nats/text token) | bits per vision token | ratio vs 1 stream (95% CI) "
@@ -150,6 +230,8 @@ def write_md(rows, verdict, real_run, blind_run, out: Path, eq: dict | None = No
         L += ["", f"Equal density (the 'useful' bar): {eq['arm']} ({eq['cpt_arm']:.1f} chars/token) vs {eq['ref']} "
               f"({eq['cpt_ref']:.1f}): R = {eq['R']:.2f} ({eq['R_lo']:.2f}-{eq['R_hi']:.2f}), "
               f"{'PASS' if eq['pass'] else 'not passed'} (needs the CI above 1)"]
+    L += gist_section(real_run, blind_run if not blind_run.startswith("eval-time") else "", rows[0]["enc"].split("_p")[-1]
+                      and int(rows[0]["enc"].split("_p")[-1]), tuple(EQ)) if rows else []
     L += ["", "Gates: " + (", ".join(f"{k} = {'PASS' if v else 'fail'}" for k, v in verdict.items()) or
                            "not evaluable (arms missing)")]
     text = "\n".join(L) + "\n"
@@ -169,6 +251,7 @@ def main(argv=None) -> int:
                     help="also compare ARM with a single stream REF at about the same chars per token")
     a = ap.parse_args(argv)
     blind = a.blind or f"{a.real}_blind"
+    EQ[:] = a.equal_density
     rows, verdict = analyse(a.real, blind, a.pitch, a.swap_blind)
     eq = equal_density(a.real, blind, *a.equal_density, swap=a.swap_blind)
     if a.swap_blind:

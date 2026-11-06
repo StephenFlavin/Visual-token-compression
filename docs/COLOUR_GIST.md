@@ -24,7 +24,7 @@ images swapped between pages) × text tokens per vision token. R(k) = that of th
 | A1-cpu | 2 streams, LoRA-only fine-tune on CPU (amendment 2) | interim: R(2) > 1, CI above 1 | CPU (~4 h) | **missed**: R(2) = 0.72 (0.54-0.94). Magenta is read well; cyan still isn't |
 | A1-diag | Where are the streams blended? | (diagnostic) | CPU | both survive equally to ViT block 16, then blend; untrained Qwen reads the superposition as one text |
 | **A1** | 2 streams, fine-tuned (1000 steps, R3-1 recipe, 16 px) | **Headline: R(2) > 1, 95% CI above 1.** Strong: R(2) ≥ 1.5, each stream's MC ≥ 0.8x 1-stream MC, other-stream lure ≤ 15% | GPU (~2 h on a 4090) | built, CPU-tested, waiting for a GPU |
-| S1 | Fairest overlay test: small VLM with a vision encoder trained **from scratch** (no pretrained text features), Qwen2.5-0.5B + LoRA, 224-px pages, CPU | learnability first (1 stream must be read); then the same headline / strong / equal-density bars | CPU (~17 h, staged) | pre-registered, running |
+| S1 | Fairest overlay test: small VLM with a vision encoder trained **from scratch** (no pretrained text features), Qwen2.5-0.5B + LoRA, 224-px pages, CPU | learnability first; then **gist headline: 2 streams carry > 1x the gist (content words known) per vision token of 1 stream**, CI above 1; equal-density gist bar | CPU (~17 h, staged) | pre-registered (amendment 1: gist), running |
 | A2 | 3 streams | R(3) ≥ 1.3 R(2), same per-stream rules | GPU (~1 h) | after A1 |
 | A3 | Smaller font (16 → 12 → 8 px) on the best stream count | R(k) holds at each step, vs 1 stream at the same size | GPU | after A2 |
 | B | Learned glyphs without BPE, read by a "pure" VLM | Glyph pages give at least Latin's gist at equal chars/token | GPU | not started |
@@ -303,6 +303,28 @@ trains on this CPU.
 3. **Trained blinds for both arms, then the proper R(2):** headline R(2) > 1 with the CI above 1; strong
    = A1's per-stream rules.
 4. **rgb1s_p12 + blind:** the equal-density bar (rgb2s_p16 vs rgb1s_p12, CI above 1).
+
+**S1 amendment 1 (2026-11-06, user: "the goal is gist, not exact"; before any S1 row).** The first launch was
+stopped after ~150 steps, its checkpoint deleted, and S1 relaunched with these changes:
+* **Training mix shifted towards gist:** transcription 40% (was 60%). Questions now include **word presence**
+  ("Does the word 'w' appear in the cyan text? Answer yes or no.") alongside cloze, MC and copy, equally likely.
+  The "no" cases are words from other pages (2/3) or from the other stream on the page (1/3).
+* **Primary measure: gist per vision token.** For each test page and stream the model scores 8 present content
+  words, 8 absent ones (from other pages) and, with 2+ streams, 8 lures (from the other stream), as log p(yes) -
+  log p(no).
+  * Per stream: the AUC of present vs absent.
+  * Gist per vision token = Σ over streams of (distinct content words in the stream) × max(0, 2 (AUC - AUC_blind))
+    ÷ vision tokens: how many of the page's content words the model knows, per token. Order-free and
+    spelling-light.
+  * AUC_blind = the trained blind run's AUC, 0.5 before it exists.
+  * Ratio G(k) vs 1 stream at the same font, with a 95% page-bootstrap CI.
+* **S1 headline: gist G(2) > 1 with the CI above 1.** Equal-density bar: G(rgb2s_p16 vs rgb1s_p12) > 1.
+* **Secondary:** the val-loss information measure (exact-text flavoured), plus MC, lure rate and CER, as before.
+* **Learnability gate:** rgb1s_p16 passes if the val-loss gap vs swapped images is ≥ 0.3 nats/token **or** its
+  gist AUC is ≥ 0.65.
+* **Also:** final weights saved to `encoder_probe/cache/s1_models/`, so more gist evaluations can run later
+  without retraining.
+* **Unchanged:** the GPU A1 recipe (`finetune_qwen.py` keeps its pre-registered task mix).
 
 **What S1 can and cannot show:** it tests the overlay *mechanism*, whether a model with no pretrained bias reads
 two colour streams for more information per token than one. It is a different model from Qwen2.5-VL, so it says

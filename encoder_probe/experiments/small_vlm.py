@@ -47,7 +47,8 @@ LLM = "Qwen/Qwen2.5-0.5B-Instruct"
 LORA_TARGETS = r".*layers\.\d+\.(self_attn\.(q|k|v|o)_proj|mlp\.(gate|up|down)_proj)"
 P = 28
 FAIR_KEYS = ["S", "steps", "batch_size", "lr", "lr_enc", "warmup", "lora_r", "enc_dim", "enc_layers", "train_pages",
-             "test_pages", "task_mix", "max_target_chars", "eval_mc", "eval_cloze", "seed", "tiny"]
+             "test_pages", "task_mix", "max_target_chars", "eval_mc", "eval_cloze", "seed", "tiny", "gist",
+             "gist_words"]
 
 
 def parse(argv=None):
@@ -64,7 +65,11 @@ def parse(argv=None):
     ap.add_argument("--enc-layers", type=int, default=4)
     ap.add_argument("--train-pages", type=int, default=3000)
     ap.add_argument("--test-pages", type=int, default=24)
-    ap.add_argument("--task-mix", type=float, default=0.6)
+    ap.add_argument("--task-mix", type=float, default=0.4, help="share of transcription samples (S1 amendment 1: "
+                    "0.4, gist-weighted)")
+    ap.add_argument("--no-gist", dest="gist", action="store_false",
+                    help="drop the gist word-presence task from training (questions: cloze, mc, copy only)")
+    ap.add_argument("--gist-words", type=int, default=8, help="eval: present / absent / lure words per page+stream")
     ap.add_argument("--max-target-chars", type=int, default=500)
     ap.add_argument("--eval-mc", type=int, default=4, help="MC questions per test page and stream")
     ap.add_argument("--eval-cloze", type=int, default=4)
@@ -236,6 +241,17 @@ class SmallVLM:
                 past, logits = o.past_key_values, o.logits[:, -1]
         return self.tok.decode(out)
 
+    @torch.no_grad()
+    def yes_no(self, samples: list[dict]) -> list[float]:
+        """log p(yes) - log p(no) at the first answer position (gist word presence, no generation)."""
+        y, n = self.tok.encode("yes")[0], self.tok.encode("no")[0]
+        built = [self.ids(s["prompt"], None) for s in samples]
+        x, att, _ = self.embed([s["img"] for s in samples], [b[0] for b in built], [b[2] for b in built], left=True)
+        with self.ac():
+            h = self.lm.base_model.model.model(inputs_embeds=x, attention_mask=att, use_cache=False).last_hidden_state
+        lp = torch.log_softmax(self.head(h[:, -1]).float(), -1)
+        return (lp[:, y] - lp[:, n]).tolist()
+
     def params(self):
         return [p for p in self.lm.parameters() if p.requires_grad], list(self.enc.parameters())
 
@@ -341,7 +357,8 @@ def main(argv=None) -> int:
     for step in range(start, a.steps + 1):
         batch = []
         for k in rng.choice(len(tr), a.batch_size, replace=len(tr) < a.batch_size):
-            prompt, ans, _ = T.page_sample(tr[k], flats_tr[k], flats_tr, rng, a.max_target_chars, a.task_mix)
+            prompt, ans, _ = T.stream_page_sample(tr[k], flats_tr, rng, a.max_target_chars, a.task_mix,
+                                                  ("cloze", "mc", "copy", "word") if a.gist else ("cloze", "mc", "copy"))
             batch.append({"img": tr[k].img, "prompt": prompt, "answer": ans})
         opt.zero_grad(set_to_none=True)
         loss, _, _ = m.loss(batch)
@@ -369,6 +386,9 @@ def main(argv=None) -> int:
         if a.stop_after and step >= a.stop_after:
             return 0
     train_s = time.time() - t0
+    fin = Path(a.cache_root) / "s1_models" / f"{a.run_name}__{a.encoding}__{a.steps}.pt"
+    fin.parent.mkdir(parents=True, exist_ok=True)
+    torch.save({"lora": [p.detach().cpu() for p in lora_p], "encoder": m.enc.state_dict(), "config": cfg}, fin)
     vl, vps = val_loss(per_sample=True)
     vsl, vsps = val_loss(per_sample=True, swap=True)
     print(f"[s1] val {vl:.4f} vs swapped images {vsl:.4f} (gap {vsl - vl:.3f} nats/token)", flush=True)
@@ -398,6 +418,17 @@ def main(argv=None) -> int:
             h = m.generate(pg.img, v["prompt"], int(1.4 * len(m.tok.encode(v["answer"]))) + 8)
             c["errs"] += Levenshtein.distance(v["answer"], h)
             c["chars"] += len(v["answer"])
+    # gist: word presence per page and stream (scores = log p(yes) - log p(no)); analysed in analyse_colour.py
+    gist_pages = []
+    for k, pg in enumerate(te):
+        others = flats_te[:k] + flats_te[k + 1:]
+        for s in range(len(pg.streams)):
+            r = np.random.default_rng([a.seed, 2000, k, s])
+            entry = {"page": k, "stream": s, "n_cw": len(T.content_words(T.stream_flat(pg, s)))}
+            for kind in ("present", "absent") + (("lure",) if len(pg.streams) > 1 else ()):
+                qs = [q for q in (T.stream_word_sample(pg, s, others, r, kind) for _ in range(a.gist_words)) if q]
+                entry[kind] = m.yes_no([{"img": pg.img, "prompt": q[0]} for q in qs]) if qs else []
+            gist_pages.append(entry)
     per_stream = [{"colour": te[0].colours[s], "cer": c["errs"] / max(1, c["chars"]), "n_chars": c["chars"],
                    "mc_acc": float(np.mean(c["mc"])) if c["mc"] else None, "n_mc": len(c["mc"]),
                    "lure_rate": float(np.mean(c["lure"])) if c["lure"] else None,
@@ -409,7 +440,7 @@ def main(argv=None) -> int:
            "cer": sum(c["errs"] for c in per.values()) / max(1, sum(c["chars"] for c in per.values())),
            "mc_acc": float(np.mean(allmc)) if allmc else None, "per_stream": per_stream, "val_loss": vl,
            "val_per_sample": vps, "val_swap_loss": vsl,
-           "val_swap_per_sample": vsps, "curve": curve, "s_per_step": train_s / max(1, a.steps - start + 1),
+           "val_swap_per_sample": vsps, "gist_pages": gist_pages, "curve": curve, "s_per_step": train_s / max(1, a.steps - start + 1),
            "train_time_s": train_s, "eval_time_s": time.time() - t1, "device": str(dev), "bf16": m.autocast,
            "llm": "tiny" if a.tiny else LLM, "config": cfg, "fair_hash": fair_hash, "blind_images": blind,
            "smoke": a.smoke, "tiny": a.tiny}

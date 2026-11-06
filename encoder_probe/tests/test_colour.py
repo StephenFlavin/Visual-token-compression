@@ -135,3 +135,23 @@ def test_small_vlm_from_scratch_encoder_rows_resume_and_swap_analysis(tmp_path):
     AC.RES = tmp_path / "res"
     rows, verdict = AC.analyse("a", "a_blind", 24, swap=True)
     assert [r["k"] for r in rows] == [1, 2] and "R" in rows[1]
+    g = r2["gist_pages"]
+    assert len(g) == 8 and {e["stream"] for e in g} == {0, 1}
+    assert all(len(e["present"]) and len(e["absent"]) and len(e["lure"]) for e in g)
+    assert all("lure" not in e for e in ra["rgb1s_p24"]["gist_pages"])
+    assert (tmp_path / "cache" / "s1_models" / "a__rgb2s_p24__4.pt").exists()
+    md = "\n".join(AC.gist_section("a", "a_blind", 24, ("rgb2s_p24", "rgb1s_p24")))
+    assert "Gist" in md and "rgb2s_p24" in md and "Gist at equal density" in md
+
+
+def test_gist_auc_and_value():
+    import analyse_colour as AC
+    assert AC.auc([2, 3], [0, 1]) == 1.0 and AC.auc([0], [0]) == 0.5 and AC.auc([0, 1], [2, 3]) == 0.0
+    row = {"n_tokens": 64, "gist_pages": [{"page": p, "stream": s, "n_cw": 32, "present": [1.0, 2.0],
+                                           "absent": [-1.0, 0.0]} for p in range(3) for s in range(2)]}
+    g, per = AC.gist_value(row)
+    assert abs(g - 2 * 32 / 64) < 1e-9 and per[0][0] == 1.0     # perfect AUC: every content word known
+    one = {"n_tokens": 64, "gist_pages": [{"page": p, "stream": 0, "n_cw": 32, "present": [1.0], "absent": [0.0]}
+                                          for p in range(3)]}
+    r, lo, hi = AC.gist_ratio(row, one)
+    assert abs(r - 2) < 1e-9 and lo <= r <= hi

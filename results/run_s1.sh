@@ -9,9 +9,13 @@ $R --encoding rgb1s_p16
 python3 - <<'PY'
 import json, sys
 r = [json.loads(l) for l in open("encoder_probe/results/s1/runs.jsonl") if '"rgb1s_p16"' in l][-1]
+sys.path.insert(0, "encoder_probe/experiments")
+import analyse_colour as AC
 gap = r["val_swap_loss"] - r["val_loss"]
-print(f"S1 learnability: rgb1s_p16 val {r['val_loss']:.3f}, swapped images {r['val_swap_loss']:.3f}, gap {gap:.3f}")
-sys.exit(0 if gap >= 0.3 else 3)
+a = AC.gist_value(r)[1][0][0]
+print(f"S1 learnability: rgb1s_p16 val {r['val_loss']:.3f}, swapped images {r['val_swap_loss']:.3f}, gap {gap:.3f}; "
+      f"gist AUC {a:.3f}")
+sys.exit(0 if gap >= 0.3 or a >= 0.65 else 3)
 PY
 $R --encoding rgb2s_p16
 python3 encoder_probe/experiments/analyse_colour.py --real s1 --pitch 16 --swap-blind --equal-density rgb2s_p16 rgb1s_p12 || true

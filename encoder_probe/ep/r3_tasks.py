@@ -262,13 +262,52 @@ def stream_mc_sample(page, s: int, others: list[str], rng, n_words: int = 4):
                              "lure": LETTERS[int(np.where(order == 1)[0][0])]}
 
 
-def stream_page_sample(page, others: list[str], rng, max_chars: int, task_mix: float = 0.6):
-    """page_sample for a StreamPage: pick a stream uniformly, then a task as in page_sample."""
+# gist: word presence (order-free, spelling-light): does content word w occur in stream s?
+_STOP = set("""about above after again against also among around because been before being below between both
+could does doing down during each from further have having here into itself just more most much must never once
+only other over same should since some such than that their theirs them then there these they this those through
+under until upon very were what when where which while whom whose will with within without would your also later
+first second third following during including made became became""".split())
+_WORD = re.compile(r"[A-Za-z][A-Za-z'-]{3,}")
+
+
+def content_words(text: str) -> set[str]:
+    """Distinct lower-cased words of >= 4 letters that are not stop words."""
+    return {w.lower().strip("'-") for w in _WORD.findall(text)} - _STOP
+
+
+def stream_word_sample(page, s: int, others: list[str], rng, kind: str | None = None):
+    """'Does the word "w" appear in the <colour> text? Answer yes or no.' kind: present (a content word of stream
+    s), absent (a content word of another page, not on this page) or lure (on the page, other stream only; k > 1).
+    Default for training: present 1/2, absent 1/3, lure 1/6 (absent if k = 1)."""
+    here = content_words(stream_flat(page, s))
+    page_all = content_words(_all_flat(page))
+    if kind is None:
+        x = rng.random()
+        kind = "present" if x < 0.5 else "absent" if x < 5 / 6 or len(page.streams) == 1 else "lure"
+    if kind == "present":
+        pool = sorted(here)
+    elif kind == "lure":
+        pool = sorted(page_all - here)
+    else:
+        pool = sorted({w for o in others for w in content_words(o)} - page_all)
+    if not pool:
+        return None
+    w = pool[int(rng.integers(len(pool)))]
+    return (f'Does the word "{w}" appear in the {page.colours[s]} text? Answer yes or no.',
+            "yes" if kind == "present" else "no", {"task": "word", "stream": s, "kind": kind, "word": w})
+
+
+def stream_page_sample(page, others: list[str], rng, max_chars: int, task_mix: float = 0.6,
+                       kinds: tuple = ("cloze", "mc", "copy")):
+    """page_sample for a StreamPage: pick a stream uniformly, then a task as in page_sample (``kinds`` = the
+    question types, equally likely; "word" = gist word presence)."""
     s = int(rng.integers(len(page.streams)))
     if rng.random() >= task_mix:
-        kind = ("cloze", "mc", "copy")[int(rng.integers(3))]
+        kind = kinds[int(rng.integers(len(kinds)))]
         out = (stream_cloze_sample(page, s, rng) if kind == "cloze" else
-               stream_mc_sample(page, s, others, rng) if kind == "mc" else stream_copy_sample(page, s, rng))
+               stream_mc_sample(page, s, others, rng) if kind == "mc" else
+               stream_word_sample(page, s, others, rng) if kind == "word" else stream_copy_sample(page, s, rng))
         if out is not None:
             return out
     return stream_transcribe_sample(page, s, rng, max_chars)
