@@ -343,6 +343,10 @@ stopped after ~150 steps, its checkpoint deleted, and S1 relaunched with these c
   * **Collapse monitor:** at every eval the run logs the swapped-image val loss, the gap and `image_spread`
     (std of the encoder output across images ÷ its RMS).
   * **Early check:** `results/run_s1r.sh` exits 4 at step 500 if the spread is below 0.01.
+  * **Memory (no effect on results):** the first `s1r` launch was OOM-killed at step ~235 (RSS 13.9 GB of the
+    15.7 GB cgroup; glibc malloc fragmentation; run 1 sat at 13.2 GB and slowed from 5.8 to 9.2 s/step). The
+    runner now preloads jemalloc, and the vocabulary CE is computed in checkpointed chunks (identical values).
+    It resumed from the step-200 checkpoint at 3-4 GB.
   * **Unchanged:** stages, gates and measures. Runs go to `encoder_probe/results/s1r/`; the collapsed run stays
     in `encoder_probe/results/s1/` as the record.
 

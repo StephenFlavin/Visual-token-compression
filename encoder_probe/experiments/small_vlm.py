@@ -135,6 +135,22 @@ def ink_patches(imgs: torch.Tensor) -> torch.Tensor:
     return x.reshape(B, g, P, g, P, 3).permute(0, 1, 3, 5, 2, 4).reshape(B, g * g, 3 * P * P)
 
 
+def _ce_chunk(head, h, y):
+    return F.cross_entropy(head(h).float(), y, reduction="none")
+
+
+def chunked_ce(head, h: torch.Tensor, y: torch.Tensor, chunk: int = 256) -> torch.Tensor:
+    """Per-token CE over the vocabulary in chunks; under grad each chunk is checkpointed, so the (tokens x vocab)
+    logits are never all held (151k-wide vocab: ~0.7 GB per step in fp32 otherwise)."""
+    from torch.utils.checkpoint import checkpoint
+    out = []
+    for i in range(0, h.shape[0], chunk):
+        hc, yc = h[i:i + chunk], y[i:i + chunk]
+        out.append(checkpoint(_ce_chunk, head, hc, yc, use_reentrant=False) if torch.is_grad_enabled()
+                   else _ce_chunk(head, hc, yc))
+    return torch.cat(out) if out else h.new_zeros(0)
+
+
 def load_llm(dev, tiny: bool, seed: int):
     if tiny:
         from transformers import Qwen2Config, Qwen2ForCausalLM
@@ -234,7 +250,7 @@ class SmallVLM:
             h = self.lm.base_model.model.model(inputs_embeds=x, attention_mask=att, use_cache=False).last_hidden_state
         h, y = h[:, :-1], lab[:, 1:]
         sel = y != -100
-        ce = F.cross_entropy(self.head(h[sel]).float(), y[sel], reduction="none")
+        ce = chunked_ce(self.head, h[sel], y[sel])
         per, k = [], 0
         for i in range(len(built)):
             n = int(sel[i].sum())
@@ -311,6 +327,13 @@ def val_set(te, max_chars: int) -> list[dict]:
             out.append({"img": pg.img, "prompt": T.stream_transcribe_prompt(pg.colours[s], lo, hi, len(lines)),
                         "answer": "\n".join(lines[lo:hi]), "stream": s})
     return out
+
+
+def rss_gb() -> float:
+    try:
+        return int(Path("/proc/self/statm").read_text().split()[1]) * 4096 / 1e9
+    except (OSError, IndexError, ValueError):
+        return float("nan")
 
 
 def lr_lambda(steps: int, warmup: float):
@@ -401,7 +424,7 @@ def main(argv=None) -> int:
         ema = lv if ema is None else 0.95 * ema + 0.05 * lv
         if step % a.log_every == 0 or step == 1:
             print(f"[s1] step {step}/{a.steps} loss {lv:.4f} ema {ema:.4f} recon {m.last_recon:.4f} "
-                  f"({(time.time() - t0) / step:.2f} s/step)", flush=True)
+                  f"rss {rss_gb():.1f} GB ({(time.time() - t0) / step:.2f} s/step)", flush=True)
         if step % a.eval_every == 0 or step == a.steps:
             vl, vsw = val_loss(), val_loss(swap=True)
             m.enc.eval()

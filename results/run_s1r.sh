@@ -6,6 +6,8 @@
 set -e
 cd "$(dirname "$0")/.."
 export OMP_NUM_THREADS=4
+# jemalloc: glibc malloc fragmentation grew RSS to the 15.7 GB cgroup limit (OOM at step ~235)
+JE=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2; [ -f $JE ] && export LD_PRELOAD=$JE
 R="python3 encoder_probe/experiments/small_vlm.py --steps 1500 --device cpu --run-name s1r"
 CK=encoder_probe/cache/ckpt/s1__s1r__rgb1s_p16__1500.pt
 if ! grep -qs '"rgb1s_p16"' encoder_probe/results/s1r/runs.jsonl; then
