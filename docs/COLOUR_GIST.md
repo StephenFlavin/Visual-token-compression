@@ -193,8 +193,8 @@ later blocks (about 16-32), where the ViT turns pixels into letter and word feat
 fire on the superimposed shapes as one text. A1-cpu froze the whole ViT, so training could only use the blended
 features. That fits the result: one stream read reasonably, the other not.
 
-**Amendment 3 (proposed 2026-11-06, needs the user's OK, before any GPU A1 row): train where the blending
-happens.**
+**Amendment 3 (2026-11-06, before any GPU A1 row; built into the hand-off prompt, and the user can drop the two
+flags to run the original recipe): train where the blending happens.**
 * **Recipe:** run the GPU A1 with `--vision-blocks 16 --lr-vision 1e-4` (the ViT from block 16 onwards, plus the
   merger and LoRA) instead of R3-1's last 4 blocks at 2e-5. Identical for every arm and blind (one `fair_hash`),
   ≤ 1e-4 for pretrained weights (AGENTS.md: merger collapse).
@@ -249,40 +249,35 @@ The gate above stays as the "strong" level (R(2) ≥ 1.5 plus the per-stream rul
   plus `val_per_sample`.
 * **Gate analysis:** `analyse_colour.py`.
 
-**A1 runbook (RTX 4090, ~2 h; ~3 h with A2's arm).** Every arm uses the same command and flags (one
-`fair_hash`), each with its blind:
+**A1 runbook (amendment 3 recipe).** Every arm uses the same command and flags (one `fair_hash`), each with its
+own blind. Order = information per GPU-hour:
+1. 1 and 2 streams at 16 px: the headline.
+2. 1 stream at 12 px: the equal-density bar.
+3. 3 streams at 16 px: A2.
+
 ```bash
-F="--steps 1000 --train-pages 1000 --eval-mc 4 --eval-cloze 4 --val-samples 64 --eval-conds clean --run-name colour_a1"
-for e in rgb1s_p16 rgb2s_p16 rgb3s_p16; do
+F="--steps 1000 --train-pages 1000 --eval-mc 4 --eval-cloze 4 --val-samples 64 --eval-conds clean \
+   --vision-blocks 16 --lr-vision 1e-4 --ckpt-every 250 --run-name colour_a1"
+for e in rgb1s_p16 rgb2s_p16 rgb1s_p12 rgb3s_p16; do
   python3 encoder_probe/experiments/finetune_qwen.py --encoding $e $F || break
   python3 encoder_probe/experiments/finetune_qwen.py --encoding $e $F --blind-images || break
   git add encoder_probe/results/colour_a1* && git commit -qm "colour A1: $e" && git push -q
 done
-python3 encoder_probe/experiments/analyse_colour.py --real colour_a1 --pitch 16
+python3 encoder_probe/experiments/analyse_colour.py --real colour_a1 --pitch 16 --equal-density rgb2s_p16 rgb1s_p12
 ```
-rgb3s runs last and is analysed under the A2 gate only if A1's headline passes.
+**Time:** estimated ~35 min per job on a 4090 (R3-1 measured 1.2 s/step with 4 vision blocks; 16 blocks are
+slower, so measure in the smoke). Totals:
+* the headline (4 jobs): ~2.3 h;
+* + equal density: ~3.5 h;
+* + A2: ~4.7 h;
+* on a 3090: ~1.6x.
 
-**Prompt for the GPU session:**
-```text
-Pull branch claude/validation-harness. Read AGENTS.md (gotchas) and docs/COLOUR_GIST.md (plan, A1 gate,
-amendment 1 and the A1 runbook); runbook mechanics in docs/GPU_RUNNER.md sections 0-2.
+rgb3s is analysed under the A2 gate only if A1's headline passes. A1-cpu numbers are not comparable (frozen ViT,
+other blind).
 
-1. Setup (GPU_RUNNER.md section 1; no page pre-rendering needed beyond what finetune_qwen.py does), then the CPU
-   tests encoder_probe/tests/test_colour.py and test_round3.py.
-2. Smoke: python3 encoder_probe/experiments/finetune_qwen.py --encoding rgb2s_p16 --smoke. Record s/step and peak
-   GPU memory; check the row has per_stream (cyan, magenta) and val_per_sample.
-3. Run the A1 runbook loop exactly (rgb1s_p16, rgb2s_p16, then rgb3s_p16; each with its --blind-images run;
-   identical flags, one fair_hash). nohup, push after each arm, keep >= 5 GB disk free.
-4. Then python3 encoder_probe/experiments/analyse_colour.py --real colour_a1 --pitch 16 and add its table plus
-   the gate verdicts as a dated "A1 results" section in docs/COLOUR_GIST.md, with a line in docs/HANDOFF.md.
-   Headline = R(2) with its CI (amendment 1). Apply the A2 gate to rgb3s only if the headline passed.
+**Prompt for the GPU session:** in [HANDOFF.md](HANDOFF.md) ("Prompt for the next GPU session").
 
-Stop and ask me if the smoke fails or a result would change the plan; record changes as dated amendments
-before running them. Never choose on test-page CER. No PRs, no Claude API calls, no model IDs in commits.
-Stop the pod when finished.
-```
-
-### A2: three streams (only if A1 passes)
+### A2: three streams (only if A1 passes)### A2: three streams (only if A1 passes)
 * **Arm:** the same recipe with a third stream darkening B (yellow ink).
 * **Gate:** each stream's MC ≥ 0.8x the 1-stream arm's, and bits per vision token ≥ 1.3x the 2-stream arm's.
 * **Then density:** shrink the pitch (16 → 12 → 8) on the best channel count, each step against a 1-stream arm at

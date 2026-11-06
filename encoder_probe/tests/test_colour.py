@@ -75,6 +75,11 @@ def test_finetune_rows_carry_per_stream_metrics_and_paired_val(tmp_path):
     AC.RES = tmp_path / "res"
     out, verdict = AC.analyse("c", "c_blind", 24)
     assert [r["k"] for r in out] == [1, 2] and "R" in out[1] and "headline_R2_gt_1" in verdict
+    eq = AC.equal_density("c", "c_blind", "rgb2s_p24", "rgb1s_p24")
+    assert eq is not None and eq["R_lo"] <= eq["R"] <= eq["R_hi"] and abs(eq["R"] - out[1]["R"]) < 1e-9
+    assert AC.equal_density("c", "c_blind", "rgb2s_p24", "rgb1s_p12") is None   # missing arm -> None
+    md = AC.write_md(out, verdict, "c", "c_blind", tmp_path / "s.md", eq)
+    assert "Equal density" in md and "rgb1s_p24" in md
 
 
 def test_ratio_and_ci_on_synthetic_arms():

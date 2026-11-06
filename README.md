@@ -7,7 +7,7 @@ of text. A page image that carries 30-300 characters per vision token, and is st
 same model hold millions. This repo tests codes for doing that (glyphs for frequent letter chunks, colour pixels,
 RGB overlays and learned glyph alphabets) and compares them with plain text rendered equally densely.
 
-> **Status (2026-11-05)**
+> **Status (2026-11-06)**
 >
 > | | Result |
 > |---|---|
@@ -16,7 +16,8 @@ RGB overlays and learned glyph alphabets) and compares them with plain text rend
 > | | **Frozen VLM encoders (SigLIP, DeepSeek-OCR's DeepEncoder): every dense code is lost.** Only low-density Latin (8.5 chars/token) reads through DeepEncoder. |
 > | | **Qwen2.5-VL-3B, raw pixels and frozen:** the moonshot code (322 chars/token) reads from raw pixels at 1.07% CER, but its pixel detail collapses (linearly) at the ViT's 2x2 merger. A CPU probe's verdict: "the ViT output is the wall at this budget". |
 > | **Open** | **R3-1, LoRA fine-tune of Qwen's LLM (1000 steps):** Latin at 28 chars/token is read (55% CER vs 88.5% blind). Latin at 72 chars/token gets the gist but not the words (val loss 10% below blind, MC above blind at p = 0.02). Learned glyphs (107) and the moonshot (322) are not read at all: their losses equal the blind runs'. Gate G3 is undecidable: no arm is near 3% CER. [Analysis](docs/ANALYSIS.md). |
-> | **Next** | A 1000-step vision-side diagnostic (train ViT blocks 8-31) on latin_p8, lg_pb_h5 and the moonshot, with blinds; a Latin density sweep (p12, p10); then 5000-step Latin runs on the better recipe. R3-2 (long-context QA at equal KV cache) only if G3 passes. In parallel: [own-encoder Stage 0](docs/OWN_ENCODER.md), the text-side compression ceiling that sets the density any own encoder can aim for. |
+> | **Open** | **Own encoder, Stage 0** (text compressor into frozen Qwen): inconclusive, its 4x positive control failed (64% CER at 8000 steps); the decoder keeps the gist, not the words. [OWN_ENCODER.md](docs/OWN_ENCODER.md) |
+> | **Now** | **Gist through colour channels** ([COLOUR_GIST.md](docs/COLOUR_GIST.md)): Latin in 2-3 colour channels, then glyphs without BPE, then merge. Untrained, Qwen reads the overlay as one blended text (2-stream info per vision token 0.51x one stream's). A CPU fine-tune with the vision encoder frozen reached 0.72x. Both streams survive inside the encoder to block 16, then blend. **Next (GPU):** train the encoder from block 16, against the > 1x headline. |
 
 **Terms.**
 * **CER:** character error rate (edit distance / reference characters).

@@ -144,7 +144,9 @@ tokens are 4.33 chars). The moonshot `rgb3_lg_pb_h5` is an RGB overlay of three 
 * Blind floors differ by code (latin_p5 77.8%, latin_p8 88.5%, moonshot 89.9%), so each arm needs its own control.
 * Analysis against the blinds (exact tests, bits per vision token, where the information is lost): [ANALYSIS.md](ANALYSIS.md).
 * Rows: `encoder_probe/results/{round3_cpu_tp200,quick_q1,g2lite*,round3_ft_gpu3h,round3_ft_gpu3h_blind}/`.
-* Next: latin_p8/p6/p5 at 5000 steps with blinds; a short vision-side diagnostic for the glyph codes; R3-2
-  (long-context QA) only if G3 passes. See [HANDOFF.md](HANDOFF.md).
+* Since then (2026-11-06): own-encoder Stage 0 was inconclusive ([OWN_ENCODER.md](OWN_ENCODER.md)). The current
+  direction is gist through colour channels ([COLOUR_GIST.md](COLOUR_GIST.md)). Untrained Qwen reads 2-stream
+  Latin overlays as one blended text (R(2) = 0.51); a CPU LoRA-only fine-tune reached R(2) = 0.72 against the
+  > 1 target. Next: a GPU run training the ViT from block 16. See [HANDOFF.md](HANDOFF.md).
 
 ![Chars in Qwen's 32k window per encoding: potential vs read so far](img/ctx_budget.png)
