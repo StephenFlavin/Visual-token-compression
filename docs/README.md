@@ -5,6 +5,8 @@ overview is the top-level [README.md](../README.md); how to run things and the g
 
 ## Current status
 * [HANDOFF.md](HANDOFF.md): status table, where the rows are, open items, the prompt for the next GPU session.
+* [COLOUR_GIST.md](COLOUR_GIST.md): **current direction (2026-11-06):** gist through colour channels. Latin in 2 then 3
+  channels, then glyphs without BPE, then merge; zero-shot result (A0) and the A1 gate.
 * [OWN_ENCODER.md](OWN_ENCODER.md): training our own encoder for the moonshot: what it involves, GPUs, time and
   cost, compute grants, and Stage 0 (text-side compression ceiling), pre-registered with a RunPod prompt.
 * [ANALYSIS.md](ANALYSIS.md): the results measured against blind controls (significance, information per vision

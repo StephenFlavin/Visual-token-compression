@@ -1,0 +1,126 @@
+# Gist through colour channels: plan and first result (2026-11-06)
+
+**User's direction (2026-11-06):**
+* Target **gist**, not exact reconstruction.
+* **"System 1" context:** bulk-load the subject matter as dense, low-resolution pages, and keep the user's own
+  context as ordinary full-resolution text.
+* **One variable at a time:**
+  1. Latin text in 2 colour channels, then 3. No BPE chunks, no learned glyphs, large font first.
+  2. A separate test of learned glyphs without BPE, to decide whether glyphs are worth pursuing.
+  3. Only then merge the two.
+
+Every phase compares against plain single-stream Latin under the same recipe. That comparison is a **control**,
+not a goal (see [ANALYSIS.md](ANALYSIS.md)).
+
+## Why gist, and what it has to beat
+* **Every result so far points the same way:** meaning compresses much more easily than exact wording.
+  * R3-1: latin_p5 got the gist only.
+  * Stage 0: the 4x and 16x arms rebuilt the topic, not the text.
+* **Gist is also what a "background knowledge" context needs.** Exact recall (names, numbers) can come from
+  fetching the source passage on demand.
+* **Prior art:** the DeepSeek-OCR paper proposes, without testing it, a similar memory: older context re-rendered
+  at ever lower resolution, like forgetting. Nobody has tested colour-multiplexed pages for this.
+* **Competitors at equal KV-cache bytes:**
+  * no context (the model's own prior);
+  * plain text cut to the same budget;
+  * **a text summary of the same material**, the strongest baseline for gist.
+
+  The system-1 test (after phase A) must beat all three.
+
+## Phase A: Latin in colour channels (no BPE, no glyphs)
+Each stream is ordinary text that owns its own colour channel(s), so every stream is fully recoverable from the
+pixels. Two streams per page double the characters per vision token; three triple them.
+
+| Pitch (DejaVu Sans, Qwen's 28-px tokens) | 1 stream | 2 streams | 3 streams |
+|---|---|---|---|
+| 16 px (large: phase A starts here) | 6.8 chars/vision token (plain text: 4.3 per token) | ~14 | ~20 |
+| 8 px (later, if A passes) | 28 | ~56 | ~84 |
+
+(1 stream = latin_p16 / latin_p8 as measured in rounds 2-3; multi-stream values are those x the stream count.)
+
+At 16 px the test is a mechanism test (can streams be separated and understood?), not yet a context saving.
+Density comes after.
+
+### A0: zero-shot, no training. Done on CPU, 2026-11-06
+Qwen2.5-VL-3B-Instruct, bf16 on CPU. Pages are 448 px with DejaVu Sans Mono at a 16-px pitch: 23 lines of ~56
+characters, two different Wikipedia passages per page. For each stream the model was asked:
+* "Transcribe only the red text": 3 pages;
+* "Which of these phrases appears in the red text?": 12 pages. The 4 options include one phrase from the **other**
+  stream on the same page.
+
+Code: `encoder_probe/experiments/zeroshot_colour.py`. Rows: `encoder_probe/results/z0_colour/` and
+`z0_colour_mc/` (the rerun that records whether a wrong answer picked the other stream).
+
+![A0 pages: mono, red+cyan on white, red+green on black](../encoder_probe/img/z0_pages_p16.png)
+
+| Condition | Stream | MC correct | MC answered with the other stream's phrase | Transcription CER |
+|---|---|---|---|---|
+| mono (black on white) | — | 12/12 | — | **0.0%** |
+| red text alone, on white / on black | — | 12/12 / 12/12 | — | 0.1% / 20.9% |
+| 2 streams, red + cyan inks on white | red | **12/12** | 0 | **14.3%** |
+| | cyan | 1/12 | **10** | 76% (it transcribes the red text) |
+| 2 streams, red + green light on black | red | 2/12 | 6 | 95% |
+| | green | 6/12 | 4 | 82% |
+
+**Reading:**
+* **Overlap does not stop reading.** Untrained, Qwen reads the red stream at 14% CER straight through the
+  overlapping cyan text, and answers every question about it.
+* **It cannot select a stream by colour.** Asked for the cyan text, it reads the red text instead (10 of 12 MC
+  answers come from the red stream). On black it mixes the two. It reads whichever stream is more salient.
+* **So separating the streams has to be trained.** That is A1. The information is there: each stream owns its
+  channels, and Q1 found all three colour channels survive about equally through Qwen's ViT.
+
+### A1: two streams, fine-tuned (GPU, next)
+* **Recipe:** R3-1's (LoRA r = 16 + merger + last 4 ViT blocks, 1000 steps, 1000 train pages). One `fair_hash`;
+  every arm with its own blind control.
+* **Arms:**
+  * 1 stream (black ink);
+  * 2 streams with **symmetric channels**: stream 1 darkens R (cyan ink), stream 2 darkens G (magenta ink), B is
+    left free for A2's third stream (yellow ink).
+* **Layout:** each channel is an ordinary Latin page (DejaVu Sans, 16 px) of one contiguous span, so stream 1
+  reads top to bottom, then stream 2.
+* **Tasks, all per stream:**
+  * transcription windows ("Transcribe lines a-b of the magenta text");
+  * MC with the other stream's phrase as a distractor;
+  * cloze.
+* **Metrics:**
+  * per-stream MC, cloze and CER;
+  * other-stream confusion rate;
+  * val-loss gain vs blind, turned into bits per vision token (`analyse_r3.py`).
+* **Gate (pre-registered here, before any A1 row):** two streams pass if all of these hold:
+  * each stream's MC ≥ 0.8x the 1-stream arm's MC;
+  * other-stream confusion ≤ 15% of MC answers;
+  * the 2-stream arm delivers ≥ 1.5x the 1-stream arm's bits per vision token.
+* **Cost:** 4 jobs (2 arms + 2 blinds), ~2 h on an RTX 4090.
+* **To build first** (CPU-tested, as for R3-1):
+  * the stream-contiguous colour encodings (`rgb2s_p<p>`, `rgb3s_p<p>`);
+  * per-stream prompts in `r3_tasks.py`;
+  * per-stream scoring in `finetune_qwen.py`.
+
+### A2: three streams (only if A1 passes)
+* **Arm:** the same recipe with a third stream darkening B (yellow ink).
+* **Gate:** each stream's MC ≥ 0.8x the 1-stream arm's, and bits per vision token ≥ 1.3x the 2-stream arm's.
+* **Then density:** shrink the pitch (16 → 12 → 8) on the best channel count, each step against a 1-stream arm at
+  the same pitch.
+
+## Phase B: learned glyphs without BPE ("pure VLM" for glyphs)
+* **Code:** the learned **characters-only** alphabet (`lg_learned_n0_pb_h5`: 95 whole-pixel glyphs, 5 px tall),
+  no chunk glyphs. In raw pixels it already needs ~0.82x Latin's area for the same accuracy (8.0 vs ~9.8
+  px²/char at ~0.6% CER, [learned_glyphs/RESULTS.md](../learned_glyphs/RESULTS.md)): a modest prior.
+* **Scale:** glyphs upscaled (nearest neighbour, e.g. 3x) so tiny pixels are not the question. Latin at the same
+  characters per vision token is the comparison.
+* **Model, as I read "pure VLM":** a vision encoder with no pretrained bias towards Latin. A small ViT/CNN trained
+  from scratch feeds a small LLM (Qwen2.5-0.5B), with Latin trained identically as the control. The cheaper
+  alternative is Qwen with its ViT trained from block 8 (stage A' in [HANDOFF.md](HANDOFF.md)).
+* **Gate:** glyph pages give at least Latin's gist (MC, bits per vision token) at equal chars/token. If not, glyphs
+  are dropped and the merged phase uses Latin in colour channels.
+
+## Phase C: merge
+1. Glyph streams in colour channels: the moonshot without BPE.
+2. Then BPE chunk glyphs on top, only if each earlier step paid for itself.
+
+## System-1 use test (after phase A passes)
+* **Setup:** long documents in the passing colour format as background context, then gist questions (topic,
+  claims, relations; not needles).
+* **Baselines:** no context, plain text cut to equal KV bytes, a text summary at equal KV bytes.
+* **Bar:** beat the summary baseline, or match it at lower prefill compute.

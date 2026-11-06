@@ -42,6 +42,7 @@ regenerates from the commands above.
 | Round 3 R3-2: long-context QA (GPU) | `python3 encoder_probe/experiments/longctx_bench.py --inputs text latin_p8 --lengths 10000 --tasks needle cloze [--adapter <finetune result>.pt]` | not run yet; `docs/LOCAL_GPU.md` §8 |
 | Analysis | `python3 -m vbpe.analysis <runs.jsonl> [more] --out DIR` | Phase 1, 1b and 2 rows; summary.md/json + plots. Phase 2: run `scripts/merge_phase2.py` first |
 | Own encoder, Stage 0: text-side compression ceiling (GPU) | `python3 encoder_probe/experiments/text_compress.py --ratio 16 --smoke`, then `--ratio R --steps 3000 --run-name stage0` for R in 4 80 16 32 8 | ICAE-style: LLM+LoRA encoder -> m slots -> frozen LLM rebuilds the text; blind = other window's slots; design, rules and runbook `docs/OWN_ENCODER.md`; tests `encoder_probe/tests/test_text_compress.py` |
+| Colour-channel Latin, zero-shot (A0) | `python3 encoder_probe/experiments/zeroshot_colour.py --pages 12 --transcribe-pages 3` | Qwen2.5-VL-3B bf16, ~6 min on an AMX CPU (needs the full weights, 7.5 GB); per-stream MC (other stream's phrase as a distractor) and CER; plan `docs/COLOUR_GIST.md` |
 | R3-1 analysis vs blinds | `python3 encoder_probe/experiments/analyse_r3.py` | exact tests, val-loss gain, bits per vision token -> `encoder_probe/results/analysis_r3/summary.md`, `encoder_probe/img/r31_info.png`; written up in `docs/ANALYSIS.md` |
 | Claude vision checks | `python3 scripts/check_claude_vision.py` | token formula, legibility, latency (~$0.5) |
 

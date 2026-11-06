@@ -36,6 +36,11 @@ losses equal its blind run's to 3 decimals. No arm is near 3% CER, so G3 can't b
 * R3-1: `encoder_probe/results/round3_ft_gpu3h/` and `round3_ft_gpu3h_blind/` (one row per eval cond, clean and
   jpeg75); logs `results/queue_logs/gpu3h_{1,2}/`. The LoRA adapters were lost with the instance; nothing depends on them.
 
+## Current direction (2026-11-06): gist through colour channels
+Plan, gates and the first (zero-shot) result: [COLOUR_GIST.md](COLOUR_GIST.md). Untrained Qwen reads one stream
+through an overlapping one (14% CER) but cannot pick a stream by colour, so stream separation has to be trained:
+A1 (2 streams, fine-tuned, ~2 h on a 4090) is next, once its encodings and per-stream tasks are built.
+
 ## Own encoder, Stage 0 (ran 2026-11-05/06, RunPod RTX 4090)
 The text-side compression ceiling: how many chars per slot a learned encoder can pack into Qwen's frozen LLM.
 Design, amendment 1 and results: [OWN_ENCODER.md](OWN_ENCODER.md); code `encoder_probe/experiments/text_compress.py`,
