@@ -44,7 +44,8 @@ and every pixel repeated f x f (the same alphabet at f times the cell size; f*(S
 
 Shifts (Run 0b, grid alignment): ``--shifts 0 7 14 21`` scores every (dx, dy) pair of the list. The text is
 rendered once at (S - margin) px, ``--shift-margin`` defaulting to the largest shift, and pasted at (dx, dy) on a
-white S x S page, so no text is cut and all shifts carry the same text. Use ``--arms real blank`` there: the
+white S x S page, so no text is cut and all shifts carry the same text. ``--shift-dx 7`` holds dx at 7 and sweeps
+only dy (the dy-only sweep of PLAN_3090 amendment 5; the margin must still cover the largest dy). Use ``--arms real blank`` there: the
 blank arm does not depend on the shift and is scored once per page.
 
 Resume: every scored sample is appended to ``samples.jsonl`` (keyed by encoding, text set, shift, page) and is
@@ -298,7 +299,13 @@ def report(out: Path) -> str:
              "bits/vtok = conservative-blind gap (min of swap, blank) in bits per vision token, extrapolated from "
              "the scored window to the page; recovered chars/vtok = chars/vtok x recovered fraction (gap / blind "
              "loss); 95% page-bootstrap CIs. CER = greedy transcription of the window (first pages only).", ""]
-    plain = [r for r in rows if tuple(r.get("shift", (0, 0))) == (0, 0) and not r.get("shifted")]
+    # a point measured at a single placement (no shifts, or one --shifts value such as Runs 1-2's 7-px margin) goes
+    # in the main table; points with several placements go to the alignment tables
+    nsh = {}
+    for r in rows:
+        nsh.setdefault((r["encoding"], r["text"]), set()).add(tuple(r.get("shift", (0, 0))))
+    single = lambda r: len(nsh[(r["encoding"], r["text"])]) == 1  # noqa: E731
+    plain = [r for r in rows if single(r)]
     if plain:
         lines += ["| encoding | text | pages | chars/vtok | window chars | gap nats/text tok | bits/vtok | "
                   "recovered frac | recovered chars/vtok | CER (pages) | CER cut to window |", "|" + "---|" * 11]
@@ -313,7 +320,7 @@ def report(out: Path) -> str:
         lines.append("")
         _plot(plain, out / "capacity.png")
         lines += ["![capacity](capacity.png)", ""] + run0_checks(plain)
-    shifted = [r for r in rows if r.get("shifted")]
+    shifted = [r for r in rows if r.get("shifted") and not single(r)]
     if shifted:
         S_ = load_jsonl(out / "samples.jsonl")
         lines += ["## Grid alignment (paired over pages; bits per vision token)", "",
@@ -456,6 +463,8 @@ def main(argv=None) -> int:
     ap.add_argument("--arms", nargs="+", default=["real", "swap", "blank"], choices=["real", "swap", "blank"])
     ap.add_argument("--shifts", type=int, nargs="*", default=None, help="Run 0b: score every (dx, dy) pair")
     ap.add_argument("--shift-margin", type=int, default=None, help="default: the largest shift")
+    ap.add_argument("--shift-dx", type=int, default=None,
+                    help="hold dx at this value and sweep only dy over --shifts (the phase effect is vertical)")
     ap.add_argument("--cer-pages", type=int, default=3, help="greedy-transcribe the first N pages per point")
     ap.add_argument("--cer-max-new", type=int, default=640)
     ap.add_argument("--seed", type=int, default=0)
@@ -478,7 +487,9 @@ def main(argv=None) -> int:
     from encoder_probe.ep.encoders import resolve_device
     from vbpe.metrics import cer as cer_fn
 
-    shifts = [(0, 0)] if a.shifts is None else [(dx, dy) for dy in a.shifts for dx in a.shifts]
+    shifts = ([(0, 0)] if a.shifts is None else
+              [(a.shift_dx, dy) for dy in a.shifts] if a.shift_dx is not None else
+              [(dx, dy) for dy in a.shifts for dx in a.shifts])
     margin = (max(a.shifts) if a.shifts else 0) if a.shift_margin is None else a.shift_margin
     done = {(s["encoding"], s["text"], tuple(s["shift"]), s["page"]): s for s in load_jsonl(out / "samples.jsonl")}
     rows_done = {(r["encoding"], r["text"], tuple(r["shift"])) for r in load_jsonl(out / "runs.jsonl")}

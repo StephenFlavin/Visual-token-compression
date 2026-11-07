@@ -1,16 +1,16 @@
 # Hand-off (current state, 2026-11-07)
 
 Nothing is running. Everything is on `claude/validation-harness`. Read [AGENTS.md](../AGENTS.md) first (gotchas), then
-**[PLAN_3090.md](PLAN_3090.md) (the current plan: review, ladder, amendments 1-3, CPU results of Run 0/0b and the
-aligned banks)**. The prompt for the 3090 (Runs 1-2) is the next section. The colour-gist line
+**[PLAN_3090.md](PLAN_3090.md) (the current plan: review, ladder, amendments 1-5, CPU results of Run 0/0b, the
+aligned banks, the min-distance banks and Run 0b at 6 px)**. The prompt for the 3090 (Runs 1-2) is the next section. The colour-gist line
 ([COLOUR_GIST.md](COLOUR_GIST.md)) is parked; its old GPU prompt is further down. Older session notes:
 [history/HANDOFF_2026-11.md](history/HANDOFF_2026-11.md).
 
-## Prompt for the 3090: PLAN_3090 Runs 1-2 (amendment 4: stage A learnability, B Latin, C dense glyphs)
+## Prompt for the 3090: PLAN_3090 Runs 1-2 (amendment 4: stage A learnability, B Latin, C dense glyphs; amendment 5: the bar)
 ```text
 Pull branch claude/validation-harness (git pull --rebase origin claude/validation-harness). Read AGENTS.md
-(gotchas, especially GPU runners), docs/PLAN_3090.md (the ladder, amendments 1-4 and the Results section;
-amendment 4 sets the budget, the arm order and the gates) and docs/LOCAL_GPU.md section 8 (Windows RTX 3090:
+(gotchas, especially GPU runners), docs/PLAN_3090.md (the ladder, amendments 1-5 and the Results sections;
+amendment 4 sets the budget, the arm order and the gates; amendment 5 which number the > 20 bar reads) and docs/LOCAL_GPU.md section 8 (Windows RTX 3090:
 Git Bash, `. .venv/env.sh`, `python` not `python3`, PYTHONUTF8=1, EP_TRAIN_R2_CAP=400000000, one finetune job at a
 time; Windows pages VRAM instead of raising OOM, so watch progress and checkpoint mtimes). Everything below is
 pre-registered: do not change it after seeing data; if something must change, add a dated amendment to PLAN_3090.md
@@ -40,8 +40,12 @@ first. Never commit adapters (encoder_probe/cache is git-ignored).
        --run-name r12_cap_trained
      python encoder_probe/experiments/capacity_curve.py ... same ... --adapter
        encoder_probe/cache/r3_adapters/r12_blind__<enc>__S.pt --run-name r12_cap_blind
+     python encoder_probe/experiments/capacity_curve.py --device cuda --encodings <enc> --texts natural shuffled
+       --pages 64 --shifts 7 14 21 28 --shift-dx 7 --shift-margin 28 --arms real blank --cer-pages 0
+       --adapter encoder_probe/cache/r3_adapters/r12__<enc>__S.pt --run-name r12_sweep   (trained adapter only)
      python encoder_probe/experiments/analyse_run12.py --frozen encoder_probe/results/r12_frozen
        --trained encoder_probe/results/r12_cap_trained --blind encoder_probe/results/r12_cap_blind
+       --sweep encoder_probe/results/r12_sweep
    Then commit and push encoder_probe/results/r12* and encoder_probe/results/analysis_run12.
    Sanity after every arm (amendment 3): the blind adapter's bits per token on shuffled text <= 1.0, and the trained
    arm is not below its frozen point by more than its CI. If either fails, stop and report.
@@ -49,12 +53,13 @@ first. Never commit adapters (encoder_probe/cache is git-ignored).
    analysis_run12/summary.md and report them (send a short status message if you can).
 5. Stage B: latin_p6, latin_p5 (Run 1 verdict).
 6. Stage C, only if A1 and A2 both PASS and the banks lg_n0_pb_c2_h7md / lg_pb_c2t4_h7md exist on the branch
-   (pull first; they are being built on the CPU runner): lg_n0_pb_c2_h7md, then lg_pb_c2t4_h7md (Run 2 verdict).
+   (they are on the branch since 2026-11-07): lg_n0_pb_c2_h7md, then lg_pb_c2t4_h7md (Run 2 verdict).
    If A1 or A2 fails, skip stage C: the glyph line stops per amendment 4.
 7. Write the results into docs/PLAN_3090.md (Results: a "Runs 1-2" subsection with analyse_run12's tables, the gates
-   and verdicts vs amendments 3-4, the > 20 recovered-chars bar, s/step, peak VRAM, S, problems) and one line in
+   and verdicts vs amendments 3-4, the > 20 recovered-chars bar table with its amendment-5 status (PASS,
+   placement-sensitive pass, below bar), s/step, peak VRAM, S, problems) and one line in
    AGENTS.md "Findings". Commit, pull --rebase, push.
-Report: the analyse_run12 summary.md tables, gates A1/A2, the Run 1 and Run 2 verdicts, the sanity checks, timings
+Report: the analyse_run12 summary.md tables (incl. the bar table), gates A1/A2, the Run 1 and Run 2 verdicts, the sanity checks, timings
 and problems.
 ```
 

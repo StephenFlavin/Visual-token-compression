@@ -128,6 +128,10 @@ def test_run1_recipe_frozen_llm_shuffled_margin_then_adapter_curve(tmp_path):
     assert C.main(["--encodings", "latin_p24", "--texts", "shuffled", *common]) == 0
     r = json.loads((tmp_path / "cap" / "runs.jsonl").read_text().splitlines()[0])
     assert r["adapter"] == row["adapter"]
+    # the Runs 1-2 placement (one --shifts value = the 7-px margin) is reported in the main table
+    assert C.main(["--encodings", "latin_p24", "--texts", "shuffled", *common[:-4], "--run-name", "cap7",
+                   "--shifts", "7"]) == 0
+    assert "| latin_p24 | shuffled |" in (tmp_path / "cap7" / "summary.md").read_text()
 
 
 def test_analyse_run12_paired_and_matched(tmp_path):
@@ -155,3 +159,25 @@ def test_analyse_run12_paired_and_matched(tmp_path):
     assert abs(r2["glyph_minus_latin"][0] - 3) < 1e-6 and r2["glyph_wins"]
     assert res["gate_A2"] == "PASS" and res["gate_A1"] == "n/a" and res["verdict_run2"] == "n/a"   # no md banks yet
     assert "PASS" in A.write_md(res, tmp_path / "s.md")
+
+
+def test_shift_dx_sweeps_dy_only(tmp_path):
+    common = ["--tiny", "--device", "cpu", "--threads", "1", "--pages", "2", "--window-chars", "150",
+              "--cer-pages", "0", "--out-root", str(tmp_path), "--run-name", "dy"]
+    assert C.main(["--encodings", "latin_p24", "--texts", "natural", "--shifts", "7", "21", "--shift-dx", "7",
+                   "--shift-margin", "28", "--arms", "real", "blank", *common]) == 0
+    samples = [json.loads(x) for x in (tmp_path / "dy" / "samples.jsonl").read_text().splitlines()]
+    assert sorted({tuple(s["shift"]) for s in samples}) == [(7, 7), (7, 21)] and len(samples) == 4
+    import analyse_run12 as A
+    sw = A.load_sweep(tmp_path / "dy")
+    assert set(sw[("latin_p24", "natural")]) == {7, 21}
+
+
+def test_bar_status_placement_sensitive():
+    import analyse_run12 as A
+    assert A.bar_status(21.0, None)["status"] == "PASS"
+    assert A.bar_status(19.0, None)["status"] == "below bar"
+    b = A.bar_status(19.0, {7: 10.0, 14: 9.0, 21: 11.0, 28: 10.5})
+    assert b["best_dy"] == 21 and abs(b["adjusted"] - 20.9) < 1e-9 and b["status"] == "placement-sensitive pass"
+    assert A.bar_status(17.0, {7: 10.0, 21: 13.0})["status"] == "below bar"        # below 18 at the trained placement
+    assert A.bar_status(19.0, {7: 10.0, 21: 10.4})["status"] == "below bar"        # adjusted 19.76

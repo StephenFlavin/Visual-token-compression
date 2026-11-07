@@ -7,7 +7,8 @@ Inputs are capacity_curve.py run dirs (samples.jsonl), all scored on the same te
 * --blind    each encoding scored with its blind control's adapter (images deranged during training).
 Per (encoding, text): mean bits per vision token with a page-bootstrap 95% CI. Run 1 test: trained minus frozen,
 paired by page. Run 2 test: glyph minus the trained Latin arm it is matched to, unpaired page bootstrap (different
-encodings consume different text). Writes summary.md / summary.json to --out.
+encodings consume different text). Optional --sweep: the dy sweep of the trained adapters (``capacity_curve.py
+--shifts 7 14 21 28 --shift-dx 7 --arms real blank``, amendment 5), used only for the placement-sensitive bar. Writes summary.md / summary.json to --out.
 
     python encoder_probe/experiments/analyse_run12.py --frozen encoder_probe/results/r12_frozen \\
         --trained encoder_probe/results/r12_trained --blind encoder_probe/results/r12_blind
@@ -31,6 +32,7 @@ PAIRS = {"lg_n0_pb_c4_h7": "latin_p8", "lg_n0_pb_c2_h7md": "latin_p6", "lg_pb_c2
          "lg_n0_pb_c2_h7": "latin_p6", "lg_pb_c2t4_h7": "latin_p5"}
 STAGE_C = ("lg_n0_pb_c2_h7md", "lg_pb_c2t4_h7md")
 BAR_RECOVERED = 20.0   # amendment 4: the write-up bar, recovered chars per vision token
+BAR_SENSITIVE_LO = 18.0   # amendment 5: a placement-sensitive pass needs at least this at the trained placement
 LATIN_RUN1 = ["latin_p8", "latin_p6", "latin_p5"]
 
 
@@ -53,6 +55,39 @@ def load(d: Path | None) -> dict:
     return out
 
 
+def load_sweep(d: Path | None) -> dict:
+    """dy sweep (amendment 5): (encoding, text) -> {dy: recovered chars per vision token}, pooled over pages."""
+    acc = {}
+    if d is None or not (Path(d) / "samples.jsonl").exists():
+        return {}
+    for line in (Path(d) / "samples.jsonl").read_text().splitlines():
+        if not line.strip():
+            continue
+        s = json.loads(line)
+        st = C.sample_stats(s)
+        e = acc.setdefault((s["encoding"], s["text"]), {}).setdefault(int(s["shift"][1]),
+                                                                       {"gap": 0.0, "ref": 0.0, "cpt": []})
+        e["gap"] += st["gap"]
+        e["ref"] += st["ref"]
+        e["cpt"].append(s["page_chars"] / s["vision_tokens"])
+    return {k: {dy: (v["gap"] / v["ref"]) * float(np.mean(v["cpt"])) for dy, v in sorted(by.items()) if v["ref"]}
+            for k, by in acc.items()}
+
+
+def bar_status(primary: float, sweep_dy: dict | None, train_dy: int = 7) -> dict:
+    """Amendment 5: the > 20 bar reads the trained placement (dy = 7, the main curve). The dy sweep (margin 28, less
+    text per page) is used only as a ratio: placement-adjusted = primary x best-dy / dy-7 within the sweep. A
+    'placement-sensitive pass' = primary in [18, 20] and placement-adjusted > 20 (the best dy is selected post hoc)."""
+    out = {"primary": primary, "status": "PASS" if primary > BAR_RECOVERED else "below bar"}
+    if sweep_dy and train_dy in sweep_dy and sweep_dy[train_dy] > 0:
+        best = max(sweep_dy, key=sweep_dy.get)
+        ratio = sweep_dy[best] / sweep_dy[train_dy]
+        out.update({"sweep": sweep_dy, "best_dy": best, "best_over_dy7": ratio, "adjusted": primary * ratio})
+        if out["status"] != "PASS" and BAR_SENSITIVE_LO <= primary <= BAR_RECOVERED and primary * ratio > BAR_RECOVERED:
+            out["status"] = "placement-sensitive pass"
+    return out
+
+
 def boot_mean(x: np.ndarray, reps: int = 10000, seed: int = 0) -> tuple[float, float, float]:
     rng = np.random.default_rng(seed)
     b = x[rng.integers(0, len(x), (reps, len(x)))].mean(1)
@@ -67,7 +102,7 @@ def boot_diff(x: np.ndarray, y: np.ndarray, reps: int = 10000, seed: int = 0) ->
     return float(x.mean() - y.mean()), float(np.percentile(d, 2.5)), float(np.percentile(d, 97.5))
 
 
-def analyse(frozen: dict, trained: dict, blind: dict) -> dict:
+def analyse(frozen: dict, trained: dict, blind: dict, sweep: dict | None = None) -> dict:
     res = {"points": [], "run1": [], "run2": []}
     for k in sorted(set(frozen) | set(trained)):
         row = {"encoding": k[0], "text": k[1]}
@@ -116,6 +151,9 @@ def analyse(frozen: dict, trained: dict, blind: dict) -> dict:
         res["gate_A2_ratio"] = glyph / lat if lat else float("nan")
     res["bar_recovered_cpt"] = {f"{r['encoding']}/{r['text']}": r["trained_recovered_cpt"]
                                 for r in res["points"] if "trained_recovered_cpt" in r}
+    res["bar"] = {f"{r['encoding']}/{r['text']}": bar_status(r["trained_recovered_cpt"],
+                                                             (sweep or {}).get((r["encoding"], r["text"])))
+                  for r in res["points"] if "trained_recovered_cpt" in r}
     return res
 
 
@@ -134,7 +172,13 @@ def write_md(res: dict, path: Path) -> str:
            f"{res['gate_A1']} ({res.get('gate_A1_value')}); A2 glyph matches Latin at 28 (lg_n0_pb_c4_h7 >= 0.9 x "
            f"latin_p8, CI upper >= 0) {res['gate_A2']} (ratio {res.get('gate_A2_ratio')})**", "",
            f"Write-up bar: recovered chars per vision token > {BAR_RECOVERED:.0f} (trained): "
-           + ", ".join(f"{k} {v:.1f}" for k, v in res["bar_recovered_cpt"].items())]
+           + ", ".join(f"{k} {v:.1f}" for k, v in res["bar_recovered_cpt"].items()), "",
+           "| encoding/text | recovered chars/token at dy 7 (primary) | dy sweep (recovered chars/token by dy) | "
+           "best dy / dy 7 | placement-adjusted | bar (amendment 5) |", "|---|---|---|---|---|---|"]
+    for k, b in res.get("bar", {}).items():
+        sw = ", ".join(f"{dy}: {v:.1f}" for dy, v in b["sweep"].items()) if "sweep" in b else "-"
+        md.append(f"| {k} | {b['primary']:.1f} | {sw} | " + (f"{b['best_over_dy7']:.3f} (dy {b['best_dy']}) | "
+                  f"{b['adjusted']:.1f} |" if "sweep" in b else "- | - |") + f" {b['status']} |")
     md += ["", f"**Run 1 (trained minus frozen, paired by page): {res['verdict_run1']}** "
            "(pass = CI above 0 on shuffled text at latin_p6 or latin_p5)", "",
            "| encoding | text | pages | trained − frozen |", "|---|---|---|---|"]
@@ -154,9 +198,11 @@ def main(argv=None) -> int:
     ap.add_argument("--frozen", required=True)
     ap.add_argument("--trained", required=True)
     ap.add_argument("--blind", default=None)
+    ap.add_argument("--sweep", default=None, help="dy-sweep run dir of the trained adapters (amendment 5)")
     ap.add_argument("--out", default=str(ROOT / "encoder_probe" / "results" / "analysis_run12"))
     a = ap.parse_args(argv)
-    res = analyse(load(Path(a.frozen)), load(Path(a.trained)), load(Path(a.blind) if a.blind else None))
+    res = analyse(load(Path(a.frozen)), load(Path(a.trained)), load(Path(a.blind) if a.blind else None),
+                  load_sweep(Path(a.sweep) if a.sweep else None))
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
     (out / "summary.json").write_text(json.dumps(res, indent=1))
