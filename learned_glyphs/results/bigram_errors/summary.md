@@ -1,0 +1,10 @@
+# Bigram error check (learned_glyphs/experiments/bigram_errors.py)
+
+3000 held-out test lines per reader, characters-only banks. 'Frequent - rare' = within each char, error rate in its more-frequent bigram contexts minus its rarer ones (occurrence-weighted, line bootstrap 95% CI). Positive = frequent pairs read worse (the hypothesis).
+
+| reader | CER | frequent - rare (CI) | error by bigram quintile, rare → frequent | near-identical glyph pairs | share of substitutions between them |
+|---|---|---|---|---|---|
+| learned_n0_pb_h5 | 0.0089 | -0.0012 (-0.0017 to -0.0007) | 0.030 / 0.012 / 0.002 / 0.000 / 0.000 | 136 | 0.72 |
+| learned_n0_h5 | 0.0063 | -0.0019 (-0.0024 to -0.0013) | 0.026 / 0.005 / 0.000 / 0.000 / 0.000 | 90 | 0.34 |
+| fixed_n0_h5 (Latin) | 0.0606 | -0.0352 (-0.0375 to -0.0329) | 0.161 / 0.068 / 0.041 / 0.023 / 0.011 | 32 | 0.16 |
+| learned_n0_h4 | 0.0051 | -0.0015 (-0.0020 to -0.0010) | 0.020 / 0.005 / 0.001 / 0.000 / 0.000 | 370 | 0.49 |

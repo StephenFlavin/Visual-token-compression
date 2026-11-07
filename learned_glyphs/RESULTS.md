@@ -108,3 +108,26 @@ python3 learned_glyphs/experiments/transfer_eval.py --run-name e2_transfer_long 
 # harsh: --channel harsh --run-name e1long_harsh
 ```
 About 35 min per 10.5k-step run at 1 thread. All runs: `results/queue*.txt`.
+
+## Bigram error check (2026-11-07, user question: do frequent letter pairs read worse?)
+`learned_glyphs/experiments/bigram_errors.py`; results in `learned_glyphs/results/bigram_errors/`. 3000 held-out
+test lines per saved CRNN reader, characters-only banks. Within each character, the error rate in its
+more-frequent bigram contexts minus its rarer ones (occurrence-weighted, line-bootstrap 95% CI). The rule was set
+before the run: the hypothesis is supported only if the CI is above 0.
+
+| reader | CER | frequent − rare (CI) | error by bigram quintile, rare → frequent | near-identical glyph pairs (< 1 px) | share of substitutions between them |
+|---|---|---|---|---|---|
+| learned_n0_pb_h5 (whole-pixel) | 0.89% | −0.0012 (−0.0017 to −0.0007) | 3.0 / 1.2 / 0.2 / 0.0 / 0.0% | 136 | 72% |
+| learned_n0_h5 (grey) | 0.63% | −0.0019 (−0.0024 to −0.0013) | 2.6 / 0.5 / 0.0 / 0.0 / 0.0% | 90 | 34% |
+| fixed_n0_h5 (Latin font) | 6.06% | −0.0352 (−0.0375 to −0.0329) | 16.1 / 6.8 / 4.1 / 2.3 / 1.1% | 32 | 16% |
+| learned_n0_h4 (grey) | 0.51% | −0.0015 (−0.0020 to −0.0010) | 2.0 / 0.5 / 0.1 / 0.0 / 0.0% | 370 | 49% |
+
+* **Hypothesis rejected for every reader.** Frequent pairs read *better*, not worse, even within the same
+  character. The joint training on real text put frequent pairs in proportion, and the reader's recurrent context
+  uses them.
+* **Almost all errors are on rare contexts:** names, digits, punctuation.
+* **The learned alphabets reuse shapes.** The whole-pixel bank has 136 pixel-identical glyph pairs, and they carry
+  72% of its substitution errors. The CRNN gets away with it through context.
+  * For an LLM reader on shuffled text these collisions are pure information loss.
+  * Run 2c, or any bank trained for the VLM, should enforce a minimum glyph distance (or measure the collisions'
+    cost on the shuffled set).

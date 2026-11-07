@@ -1,0 +1,86 @@
+{
+ "learned_n0_pb_h5": {
+  "n_lines": 3000,
+  "n_chars": 141242,
+  "cer_ref": 0.008857138811401708,
+  "strat_freq_minus_rare": -0.0012055143388970525,
+  "ci": [
+   -0.0016923637441941073,
+   -0.0007012787557396408
+  ],
+  "err_by_bigram_quintile_rare_to_freq": [
+   0.03034517187277136,
+   0.012049485125858123,
+   0.001732734537996393,
+   0.0002460111056441976,
+   0.00024563989191844754
+  ],
+  "n_subs": 1400,
+  "subs_between_near_identical_glyphs": 1013,
+  "share_near_identical": 0.7235714285714285,
+  "n_near_identical_pairs": 136
+ },
+ "learned_n0_h5": {
+  "n_lines": 3000,
+  "n_chars": 141242,
+  "cer_ref": 0.006322481981280356,
+  "strat_freq_minus_rare": -0.001873058147832438,
+  "ci": [
+   -0.0023722540988430326,
+   -0.001341827270997672
+  ],
+  "err_by_bigram_quintile_rare_to_freq": [
+   0.0262444729710455,
+   0.004969965675057208,
+   0.00042434315216238196,
+   0.00021086666198074085,
+   0.0
+  ],
+  "n_subs": 980,
+  "subs_between_near_identical_glyphs": 337,
+  "share_near_identical": 0.3438775510204082,
+  "n_near_identical_pairs": 90
+ },
+ "fixed_n0_h5 (Latin)": {
+  "n_lines": 3000,
+  "n_chars": 141242,
+  "cer_ref": 0.06055564208946347,
+  "strat_freq_minus_rare": -0.035218434558476355,
+  "ci": [
+   -0.03753134886768709,
+   -0.03294085417301524
+  ],
+  "err_by_bigram_quintile_rare_to_freq": [
+   0.1607473969476537,
+   0.06836384439359268,
+   0.040701580678241804,
+   0.023195332817881494,
+   0.011299435028248588
+  ],
+  "n_subs": 6366,
+  "subs_between_near_identical_glyphs": 1037,
+  "share_near_identical": 0.1628966383914546,
+  "n_near_identical_pairs": 32
+ },
+ "learned_n0_h4": {
+  "n_lines": 3000,
+  "n_chars": 141242,
+  "cer_ref": 0.005062233613231192,
+  "strat_freq_minus_rare": -0.0014844795407059732,
+  "ci": [
+   -0.002025628686676468,
+   -0.0009662733302187075
+  ],
+  "err_by_bigram_quintile_rare_to_freq": [
+   0.019540721723006704,
+   0.004755434782608696,
+   0.0007779624456310336,
+   0.0002811555493076545,
+   0.00014036565252482718
+  ],
+  "n_subs": 772,
+  "subs_between_near_identical_glyphs": 382,
+  "share_near_identical": 0.4948186528497409,
+  "n_near_identical_pairs": 370
+ }
+}
