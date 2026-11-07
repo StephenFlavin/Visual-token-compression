@@ -1,9 +1,57 @@
-# Hand-off (current state, 2026-11-06)
+# Hand-off (current state, 2026-11-07)
 
 Nothing is running. Everything is on `claude/validation-harness`. Read [AGENTS.md](../AGENTS.md) first (gotchas), then
-**[COLOUR_GIST.md](COLOUR_GIST.md) (the current direction: targets, results, amendments, runbook)**; round-3 design
-in [encoder_probe/ROUND3.md](../encoder_probe/ROUND3.md). Older session notes, incl.
-hardware, sizing and samples of the RTX 4090 session: [history/HANDOFF_2026-11.md](history/HANDOFF_2026-11.md).
+**[PLAN_3090.md](PLAN_3090.md) (the current plan: review, ladder, amendments 1-3, CPU results of Run 0/0b and the
+aligned banks)**. The prompt for the 3090 (Runs 1-2) is the next section. The colour-gist line
+([COLOUR_GIST.md](COLOUR_GIST.md)) is parked; its old GPU prompt is further down. Older session notes:
+[history/HANDOFF_2026-11.md](history/HANDOFF_2026-11.md).
+
+## Prompt for the 3090: PLAN_3090 Runs 1-2 (trained ViT, LLM frozen; Latin, then aligned glyphs)
+```text
+Pull branch claude/validation-harness (git pull --rebase origin claude/validation-harness). Read AGENTS.md
+(gotchas, especially GPU runners), docs/PLAN_3090.md (the ladder, amendments 1-3, the Results section) and
+docs/LOCAL_GPU.md section 8 (Windows RTX 3090: Git Bash, `. .venv/env.sh`, use `python` not `python3`,
+PYTHONUTF8=1, EP_TRAIN_R2_CAP=400000000, one finetune job at a time; Windows pages VRAM instead of OOM, so watch
+progress). The recipe, arms and gates are pre-registered in PLAN_3090 amendment 3: do not change them after
+seeing data; if something must change, add a dated amendment to PLAN_3090.md first.
+
+0. Setup and tests: `python -m pytest -q encoder_probe/tests/test_capacity_curve.py encoder_probe/tests/test_colour.py
+   encoder_probe/tests/test_round3.py` (tiny model, CPU). test_rgb3_unsupported_pitch may fail on Windows (no raqm,
+   known). Make sure the Qwen2.5-VL-3B weights are cached (LOCAL_GPU.md section 8 one-liner).
+1. Frozen baseline on the GPU (inference only, minutes):
+   python encoder_probe/experiments/capacity_curve.py --device cuda --encodings latin_p8 latin_p6 latin_p5
+     lg_n0_pb_c2_h7 lg_pb_c2t4_h7 lg_n0_pb_h5 --texts natural shuffled --pages 200 --shifts 7 --cer-pages 4
+     --run-name r12_frozen
+   Expect latin_p8 near the CPU Run 0 (12.6 natural / 25.7 shuffled bits per vision token, maybe ~10% higher with
+   the margin) and the glyph encodings near 0 (frozen Qwen cannot read them). If latin_p8 is far off, stop and
+   report before training.
+2. Smoke of the Run 1 recipe (one at a time): set
+   R="--lora-r 0 --vision-blocks 16 --lr-vision 2e-5 --task-mix 1.0 --text shuffled --top-margin 7
+      --train-pages 4000 --test-pages 16 --batch-size 4 --max-target-chars 2000 --eval-conds clean --device cuda"
+   python encoder_probe/experiments/finetune_qwen.py --encoding latin_p6 $R --smoke
+   Check: the loss falls, val_loss falls, peak VRAM (nvidia-smi) < ~21 GB (else add --micro-batch 2), and s/step.
+   Fix S (steps) from it per amendment 3 (3000, or the largest multiple of 250 that keeps one run <= 2.5 h, not
+   below 1500). Write S into PLAN_3090 Results before the first arm.
+3. Run 1, in this order, each followed by its blind (same flags plus --blind-images), one job at a time:
+   latin_p6, latin_p5, latin_p8:
+     python encoder_probe/experiments/finetune_qwen.py --encoding <enc> $R --steps S --run-name r12
+     python encoder_probe/experiments/finetune_qwen.py --encoding <enc> $R --steps S --run-name r12 --blind-images
+   After each job, score its adapter (path in the row's "adapter" field: encoder_probe/cache/r3_adapters/
+   r12__<enc>__S.pt, blind r12_blind__<enc>__S.pt):
+     python encoder_probe/experiments/capacity_curve.py --device cuda --encodings <enc> --texts natural shuffled
+       --pages 200 --shifts 7 --cer-pages 4 --adapter <adapter> --run-name r12_cap_trained   (blind: r12_cap_blind)
+   Then: python encoder_probe/experiments/analyse_run12.py --frozen encoder_probe/results/r12_frozen
+     --trained encoder_probe/results/r12_cap_trained --blind encoder_probe/results/r12_cap_blind
+   Commit and push the rows (encoder_probe/results/r12*, analysis_run12) after every job. Do not commit adapters.
+4. Sanity gate (amendment 3) before Run 2: every blind adapter <= 1.0 bits/token on shuffled text; no trained arm
+   below its frozen point by more than its CI. If it fails, stop and report.
+5. Run 2, same recipe and S, each with its blind and capacity scoring as in step 3: lg_n0_pb_c2_h7, then
+   lg_pb_c2t4_h7; then (optional, if time) lg_n0_pb_h5. Re-run analyse_run12.py.
+6. Write the results into docs/PLAN_3090.md (Results: a "Runs 1-2" subsection with analyse_run12's tables and the
+   verdicts vs amendment 3, s/step, peak VRAM, S, anything that went wrong) and one line in AGENTS.md "Findings".
+   Commit (message ending with the repo's attribution lines if your setup adds them), pull --rebase, push.
+Report: the analyse_run12 summary.md tables, both verdicts, the sanity gate, timings, and problems.
+```
 
 ## Status
 | Line of work | Verdict | Details |
@@ -93,7 +141,7 @@ table and curves `analyse_stage0.py`, rows `encoder_probe/results/stage0/runs.js
    * Stage 0 amendment 2 ([OWN_ENCODER.md](OWN_ENCODER.md));
    * 5000-step Latin arms.
 
-## Prompt for the next GPU session
+## Prompt for the next GPU session (colour A1: parked 2026-11-07, superseded by the 3090 prompt above)
 ```text
 Pull branch claude/validation-harness. Read AGENTS.md (gotchas), docs/HANDOFF.md and docs/COLOUR_GIST.md:
 targets ("At a glance"), A0/A0b/A1-cpu results, amendments 1-3 and the A1 runbook. Mechanics: docs/GPU_RUNNER.md

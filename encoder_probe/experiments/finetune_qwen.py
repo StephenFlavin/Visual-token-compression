@@ -48,7 +48,7 @@ from encoder_probe.ep.token_cache import split_pages  # noqa: E402
 
 S = 448                     # Qwen-native page: 448 = 16 x 28 -> 256 image tokens, no resizing (ROUND2.md)
 FAIR_KEYS = ("steps", "batch_size", "lr", "lr_vision", "warmup", "weight_decay", "clip", "lora_r", "lora_alpha",
-             "lora_dropout", "vision_blocks", "train_merger", "train_pages", "test_pages", "task_mix",
+             "lora_dropout", "vision_blocks", "train_merger", "train_patch_embed", "text", "top_margin", "train_pages", "test_pages", "task_mix",
              "max_target_chars", "train_conds", "seed", "eval_windows", "eval_cloze", "eval_mc", "max_new_tokens",
              "val_samples",
              "grad_ckpt", "tiny")
@@ -71,6 +71,13 @@ def parse(argv=None):
     ap.add_argument("--lora-dropout", type=float, default=0.05)
     ap.add_argument("--vision-blocks", type=int, default=4, help="last N vision blocks unfrozen")
     ap.add_argument("--no-train-merger", dest="train_merger", action="store_false")
+    ap.add_argument("--train-patch-embed", action="store_true", help="also train the patch embedding (full-ViT arm "
+                    "with --vision-blocks 32; PLAN_3090 amendment 1)")
+    ap.add_argument("--text", choices=["natural", "shuffled"], default="natural",
+                    help="page text: natural, or each page's passage with its words shuffled (PLAN_3090: low "
+                         "predictability; capacity_curve.py's definition)")
+    ap.add_argument("--top-margin", type=int, default=0, help="render at (448 - m) px and paste at (m, m) on the "
+                    "white page (Run 0b: text flush with the top edge loses ~10%%; PLAN_3090 uses 7)")
     ap.add_argument("--train-pages", type=int, default=1000)
     ap.add_argument("--test-pages", type=int, default=16)
     ap.add_argument("--task-mix", type=float, default=0.6, help="share of transcription samples")
@@ -235,7 +242,16 @@ def main(argv=None) -> int:
     fair_hash = Q.config_hash(fair)
 
     t0 = time.time()
-    enc, tr, te = split_pages(a.encoding, S, a.train_pages, a.test_pages)
+    if a.text == "natural" and a.top_margin == 0:
+        enc, tr, te = split_pages(a.encoding, S, a.train_pages, a.test_pages)
+    else:   # PLAN_3090 Runs 1-2: shuffled text and/or a margin (capacity_curve.PageSet, the Run 0 definition)
+        import capacity_curve as CC
+        sets = [CC.PageSet(a.encoding, a.text, n, seed=a.seed, margin=a.top_margin, split=sp)
+                for sp, n in (("train", a.train_pages), ("test", a.test_pages))]
+        enc = sets[0].enc
+        tr, te = ([CC.with_image(s.pages[i], s.image(i, (a.top_margin, a.top_margin))) for i in range(len(s.pages))]
+                  for s in sets)
+        del sets   # the pasted copies are what the run uses
     flats_tr = [T.flat_text(enc, p) for p in tr]
     flats_te = [T.flat_text(enc, p) for p in te]
     blind = None
@@ -257,7 +273,8 @@ def main(argv=None) -> int:
     t_pages = time.time() - t0
     torch.manual_seed(a.seed)   # LoRA init draws from the global RNG: identical across arms and restarts
     model, tok = Q.load_model(dev, tiny=a.tiny, seed=a.seed, bf16_cpu=autocast and not cuda)
-    pm = Q.make_trainable(model, a.lora_r, a.lora_alpha, a.lora_dropout, a.vision_blocks, a.train_merger)
+    pm = Q.make_trainable(model, a.lora_r, a.lora_alpha, a.lora_dropout, a.vision_blocks, a.train_merger,
+                          a.train_patch_embed)
     if a.grad_ckpt:
         Q.hf_model(pm).gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
     pm.train()
@@ -266,7 +283,8 @@ def main(argv=None) -> int:
     rng = np.random.default_rng(a.seed)
     lora_p = [p for n, p in pm.named_parameters() if p.requires_grad and "lora_" in n]
     vis_p = [p for n, p in pm.named_parameters() if p.requires_grad and "lora_" not in n]
-    groups = [{"params": lora_p, "lr": a.lr}] + ([{"params": vis_p, "lr": a.lr_vision}] if vis_p else [])
+    groups = (([{"params": lora_p, "lr": a.lr}] if lora_p else [])
+              + ([{"params": vis_p, "lr": a.lr_vision}] if vis_p else []))
     opt = torch.optim.AdamW(groups, weight_decay=a.weight_decay, betas=(0.9, 0.999), eps=1e-8)
     sched = torch.optim.lr_scheduler.LambdaLR(opt, lr_lambda(a.steps, a.warmup))
     chars_te = sum(p.n_chars for p in te)
@@ -374,7 +392,8 @@ def main(argv=None) -> int:
     torch.save({"trainable": Q.trainable_state(pm), "encoding": a.encoding, "steps": a.steps, "config": cfg,
                 "fair": fair, "fair_hash": fair_hash, "base": None if a.tiny else f"{Q.QWEN_REPO}@{Q.QWEN_REV}",
                 "lora": {"r": a.lora_r, "alpha": a.lora_alpha, "dropout": a.lora_dropout,
-                         "vision_blocks": a.vision_blocks, "train_merger": a.train_merger}}, adapter)
+                         "vision_blocks": a.vision_blocks, "train_merger": a.train_merger,
+                         "train_patch_embed": a.train_patch_embed}}, adapter)
     base = {"encoding": a.encoding, "steps": a.steps, "phase": "finetune", "round": 3,
             "family": enc.family, "pitch": enc.pitch, "S": S, "P": 28, "G": S // 28, "n_tokens": Q.image_tokens(S),
             "px_per_char": ppc, "budget": round(ppc, 3), "chars_per_token": cpt, "chars_per_vlm_token": cpt,

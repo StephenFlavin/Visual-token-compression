@@ -93,3 +93,59 @@ def test_alignment_stats_null_vs_effect():
     assert null["perm_p"] > 0.05 and eff["perm_p"] < 0.01
     assert eff["best_shift"] == [0, 0] and eff["aligned_vs_mean_ci"][0] > 0.3
     assert eff["crossval_ci"][0] > 0 and null["crossval_ci"][0] < 0 < null["crossval_ci"][1]
+
+
+def test_run1_recipe_frozen_llm_shuffled_margin_then_adapter_curve(tmp_path):
+    """PLAN_3090 Runs 1-2: LoRA off (LLM frozen), ViT blocks + merger trained, shuffled text, top margin; the saved
+    adapter loads into capacity_curve.py."""
+    import torch
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "experiments"))
+    from finetune_qwen import main as ft
+    from encoder_probe.ep import qwen_ft as Q
+    FT = ["--tiny", "--device", "cpu", "--steps", "2", "--train-pages", "3", "--test-pages", "2", "--batch-size", "2",
+          "--max-target-chars", "80", "--max-new-tokens", "16", "--eval-windows", "1", "--eval-cloze", "1",
+          "--eval-mc", "2", "--val-samples", "3", "--eval-every", "2", "--ckpt-every", "0", "--log-every", "100",
+          "--eval-conds", "clean", "--lora-r", "0", "--vision-blocks", "1", "--task-mix", "1.0",
+          "--text", "shuffled", "--top-margin", "7", "--run-name", "r1",
+          "--out-root", str(tmp_path / "res"), "--cache-root", str(tmp_path / "cache")]
+    assert ft(["--encoding", "latin_p24", *FT]) == 0
+    assert ft(["--encoding", "latin_p24", *FT, "--blind-images"]) == 0
+    row = json.loads((tmp_path / "res/r1/runs.jsonl").read_text().splitlines()[0])
+    blind = json.loads((tmp_path / "res/r1_blind/runs.jsonl").read_text().splitlines()[0])
+    assert row["fair_hash"] == blind["fair_hash"] and row["lora_modules"] == 0
+    st = torch.load(row["adapter"], map_location="cpu", weights_only=False)
+    assert st["lora"]["r"] == 0 and not any("lora_" in n for n in st["trainable"])
+    assert any(".blocks." in n for n in st["trainable"]) and any("merger" in n for n in st["trainable"])
+    m, _ = Q.load_model(torch.device("cpu"), tiny=True)
+    pm = Q.make_trainable(m, 0, 32, 0.0, 1, True, True)
+    names = [n for n, p in pm.named_parameters() if p.requires_grad]
+    assert any("patch_embed" in n for n in names) and not any("language_model" in n for n in names)
+    common = ["--tiny", "--device", "cpu", "--threads", "1", "--pages", "2", "--window-chars", "200",
+              "--cer-pages", "0", "--out-root", str(tmp_path), "--run-name", "cap", "--adapter", row["adapter"]]
+    assert C.main(["--encodings", "latin_p24", "--texts", "shuffled", *common]) == 0
+    r = json.loads((tmp_path / "cap" / "runs.jsonl").read_text().splitlines()[0])
+    assert r["adapter"] == row["adapter"]
+
+
+def test_analyse_run12_paired_and_matched(tmp_path):
+    import analyse_run12 as A
+
+    def write(d, enc_bits):
+        d.mkdir(parents=True)
+        with open(d / "samples.jsonl", "w") as f:
+            for (enc, text), bits in enc_bits.items():
+                for p, b in enumerate(bits):   # loss_real chosen so bits_vtok == b exactly
+                    gap = b * np.log(2) * 256
+                    f.write(json.dumps({"encoding": enc, "text": text, "page": p, "page_chars": 100,
+                                        "window_chars": 100, "vision_tokens": 256, "n_tokens": 50,
+                                        "loss_real": 1000.0 - gap, "loss_swap": 1000.0, "loss_blank": 2000.0}) + "\n")
+    rng = np.random.default_rng(0)
+    base = rng.normal(10, 1, 40)
+    write(tmp_path / "f", {("latin_p6", "shuffled"): base, ("lg_n0_pb_c2_h7", "shuffled"): base * 0})
+    write(tmp_path / "t", {("latin_p6", "shuffled"): base + 2, ("lg_n0_pb_c2_h7", "shuffled"): base + 5})
+    res = A.analyse(A.load(tmp_path / "f"), A.load(tmp_path / "t"), {})
+    r1 = next(r for r in res["run1"] if r["encoding"] == "latin_p6")
+    assert abs(r1["trained_minus_frozen"][0] - 2) < 1e-6 and r1["moves_right"] and res["verdict_run1"] == "PASS"
+    r2 = res["run2"][0]
+    assert r2["glyph"] == "lg_n0_pb_c2_h7" and abs(r2["glyph_minus_latin"][0] - 3) < 1e-6 and r2["glyph_wins"]
+    assert "PASS" in A.write_md(res, tmp_path / "s.md")

@@ -54,7 +54,8 @@ def main(argv=None) -> int:
     if a.adapter:
         st = torch.load(a.adapter, map_location="cpu", weights_only=False)
         lo = st["lora"]
-        model = Q.make_trainable(model, lo["r"], lo["alpha"], lo["dropout"], lo["vision_blocks"], lo["train_merger"])
+        model = Q.make_trainable(model, lo["r"], lo["alpha"], lo["dropout"], lo["vision_blocks"], lo["train_merger"],
+                                 lo.get("train_patch_embed", False))
         Q.load_trainable_state(model, st["trainable"])
         print(f"[z0i] adapter {Path(a.adapter).name} ({st['encoding']}, {st['steps']} steps)", flush=True)
     model.eval()

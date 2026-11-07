@@ -34,6 +34,11 @@ LG_BANKS = {  # tag -> bank path (converged e1long banks, N=300 tokens)
     "lg_pb_h4": "learned_glyphs/results/e1long/banks/lg_learned_n300_pb_h4.pt",
     "lg_pb_h5": "learned_glyphs/results/e1long/banks/lg_learned_n300_pb_h5.pt",
     "lg_n0_pb_h5": "learned_glyphs/results/e1long/banks/lg_learned_n0_pb_h5.pt",   # characters only (95 symbols)
+    # grid-aligned whole-pixel banks (7-px rows; PLAN_3090 amendment 1, fix 3): cells w x h
+    "lg_n0_pb_c2_h7": "learned_glyphs/results/e1align/banks/lg_learned_n0_pb_c2_h7.pt",     # chars 2x7: 56 chars/token
+    "lg_n0_pb_c4_h7": "learned_glyphs/results/e1align/banks/lg_learned_n0_pb_c4_h7.pt",     # chars 4x7: 28
+    "lg_n0_pb_c7_h7": "learned_glyphs/results/e1align/banks/lg_learned_n0_pb_c7_h7.pt",     # chars 7x7: 16
+    "lg_pb_c2t4_h7": "learned_glyphs/results/e1align/banks/lg_learned_n300_pb_c2t4_h7.pt",  # BPE 2x7 + 4x7: ~76
 }
 
 

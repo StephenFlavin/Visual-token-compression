@@ -92,20 +92,28 @@ def shuffle_words(text: str, seed: int, i: int) -> str:
     return " ".join(words[j] for j in perm)
 
 
+def with_image(page, img: np.ndarray):
+    """A copy of ``page`` with another image (same lines and refs): pasted / margin pages for finetune_qwen.py."""
+    import copy
+    q = copy.copy(page)
+    q.img = img
+    return q
+
+
 class PageSet:
     """Pages of one (encoding, text set): content rendered at ``inner`` px, upscaled x f, pasted on S x S."""
 
-    def __init__(self, name: str, text_set: str, n: int, seed: int = 0, margin: int = 0):
+    def __init__(self, name: str, text_set: str, n: int, seed: int = 0, margin: int = 0, split: str = "test"):
         self.name, self.text_set = name, text_set
         base, self.f = parse_encoding(name)
         self.inner = (S - margin) // self.f
         self.enc = get_encoding_s(base, self.inner)
         cap = self.enc.page_chars_max
-        text = text_stream_s("test", (n + 1) * cap + cap)
+        text = text_stream_s(split, (n + 1) * cap + cap)
         pos, segs, pages = 0, [], []
         for _ in range(n):
             if len(text) - pos < cap:
-                raise ValueError(f"{name}: only {len(pages)} of {n} test pages fit the text")
+                raise ValueError(f"{name}: only {len(pages)} of {n} {split} pages fit the text")
             pg, used = self.enc.render(text, pos)
             pages.append(pg)
             segs.append((pos, used))
@@ -486,7 +494,8 @@ def main(argv=None) -> int:
     if a.adapter:
         st = torch.load(a.adapter, map_location="cpu", weights_only=False)
         lo = st["lora"]
-        model = Q.make_trainable(model, lo["r"], lo["alpha"], lo["dropout"], lo["vision_blocks"], lo["train_merger"])
+        model = Q.make_trainable(model, lo["r"], lo["alpha"], lo["dropout"], lo["vision_blocks"], lo["train_merger"],
+                                 lo.get("train_patch_embed", False))
         Q.load_trainable_state(model, st["trainable"])
         print(f"[cap] adapter {Path(a.adapter).name} ({st['encoding']}, {st['steps']} steps)", flush=True)
     model.eval()

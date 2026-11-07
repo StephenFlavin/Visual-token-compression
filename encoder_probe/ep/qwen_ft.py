@@ -149,17 +149,23 @@ def rope_info(model) -> dict:
 
 
 def make_trainable(model, r: int = 16, alpha: int = 32, dropout: float = 0.05, vision_blocks: int = 4,
-                   train_merger: bool = True):
+                   train_merger: bool = True, train_patch_embed: bool = False):
     """LoRA on the LLM's attention + MLP projections; unfreeze the patch merger and the last ``vision_blocks``
-    vision blocks; freeze everything else. Trainable tensors are cast to fp32. -> the peft model."""
-    from peft import LoraConfig, get_peft_model
+    vision blocks (and the patch embedding if ``train_patch_embed``); freeze everything else. Trainable tensors are
+    cast to fp32. -> the peft model. ``r = 0``: no LoRA, the LLM stays fully frozen (PLAN_3090 Runs 1-2), and the
+    plain model is returned."""
     for p in model.parameters():
         p.requires_grad_(False)
-    pm = get_peft_model(model, LoraConfig(r=r, lora_alpha=alpha, lora_dropout=dropout, target_modules=LORA_TARGETS,
-                                          bias="none"))
+    if r > 0:
+        from peft import LoraConfig, get_peft_model
+        pm = get_peft_model(model, LoraConfig(r=r, lora_alpha=alpha, lora_dropout=dropout,
+                                              target_modules=LORA_TARGETS, bias="none"))
+    else:
+        pm = model
     vis = model.model.visual
     depth = len(vis.blocks)
     mods = [vis.blocks[i] for i in range(depth - vision_blocks, depth)] + ([vis.merger] if train_merger else [])
+    mods += [vis.patch_embed] if train_patch_embed else []
     for m in mods:
         for p in m.parameters():
             p.requires_grad_(True)
