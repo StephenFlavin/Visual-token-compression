@@ -131,3 +131,21 @@ before the run: the hypothesis is supported only if the CI is above 0.
   * For an LLM reader on shuffled text these collisions are pure information loss.
   * Run 2c, or any bank trained for the VLM, should enforce a minimum glyph distance (or measure the collisions'
     cost on the shuffled set).
+
+## Minimum glyph distance (2026-11-07, PLAN_3090 amendment 4, stage C)
+`train_joint.py --min-dist-px D --min-dist-weight w`: a hinge relu(D − d) on every pair of same-width glyphs, with d
+the expected L1 of their 1x ink (sum of a + b − 2ab, exactly the number of differing whole pixels for binary 1x
+ink), summed over pairs / glyphs of that width; on through the hard phase. Default off. The two dense aligned banks
+were retrained with D = 2, weight 1, all else as in `e1align` (10.5k steps): `results/e1align_md/`, bridge
+`results/e3_bridge_align_md/`.
+
+| bank | identical pairs (1x) | min distance | joint CER (held-out) | bridge CER | px²/char |
+|---|---|---|---|---|---|
+| n0_pb_c2_h7 (chars 2x7) | 35 | 0 px | 0.31% (2.15%) | 0.083% | 14.0 |
+| n0_pb_c2_h7**md** | 0 | 2 px | 1.49% (4.49%) | **0.021%** | 14.0 |
+| n300_pb_c2t4_h7 (chars 2x7, tokens 4x7) | 13 | 0 px | 0.40% (2.11%) | 0.110% | 10.29 |
+| n300_pb_c2t4_h7**md** | 0 | 2 px | 1.08% (2.54%) | **0.025%** | 10.29 |
+
+* The distance constraint costs nothing in density and makes the frozen banks ~4x easier for a fresh reader (bridge).
+* The joint CER is worse: the penalty still moves glyphs late in the hard phase, and the co-trained reader has less
+  time to settle. Judge banks by the bridge, as before.
