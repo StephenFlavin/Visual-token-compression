@@ -1,13 +1,13 @@
 {
  "argv": [
   "--n-tokens",
-  "0",
+  "300",
   "--char-w",
-  "7",
+  "2",
   "--token-w",
-  "7",
+  "4",
   "--scheme-suffix",
-  "_pb_c7",
+  "_pb_c2t4",
   "--pixel-block",
   "--guard-ss",
   "0",
@@ -22,10 +22,10 @@
  ],
  "configs": [
   {
-   "n_tokens": 0,
+   "n_tokens": 300,
    "height_px": 7,
-   "char_w": 7,
-   "token_w": 7,
+   "char_w": 2,
+   "token_w": 4,
    "learn_glyphs": true,
    "init": "random",
    "font": "latin",
@@ -74,7 +74,7 @@
    "threads": 1,
    "run_name": "e1align",
    "out_root": null,
-   "scheme_suffix": "_pb_c7",
+   "scheme_suffix": "_pb_c2t4",
    "model": {}
   }
  ]
