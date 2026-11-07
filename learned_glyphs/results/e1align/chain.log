@@ -85,3 +85,37 @@ BANK c2 rc=1
 [lg_learned_n0_pb_c4_h7] step 3250 loss 0.004 pen 0.0000 val_cer 0.0965 tau 0.608 hard=0 chan=7 ink=0.300 (1224.4s)
 [lg_learned_n0_pb_c4_h7] step 3500 loss 0.004 pen 0.0000 val_cer 0.1016 tau 0.585 hard=0 chan=7 ink=0.303 (1321.3s)
 [lg_learned_n0_pb_c4_h7] step 3750 loss 0.003 pen 0.0000 val_cer 0.0756 tau 0.563 hard=0 chan=7 ink=0.306 (1416.3s)
+[lg_learned_n0_pb_c4_h7] step 4000 loss 0.002 pen 0.0000 val_cer 0.0529 tau 0.542 hard=0 chan=7 ink=0.308 (1510.0s)
+[lg_learned_n0_pb_c4_h7] step 4250 loss 0.002 pen 0.0000 val_cer 0.0847 tau 0.521 hard=0 chan=7 ink=0.316 (1602.8s)
+[lg_learned_n0_pb_c4_h7] step 4500 loss 0.002 pen 0.0000 val_cer 0.0504 tau 0.502 hard=0 chan=7 ink=0.323 (1697.8s)
+[lg_learned_n0_pb_c4_h7] step 4750 loss 0.001 pen 0.0000 val_cer 0.0299 tau 0.483 hard=0 chan=7 ink=0.321 (1791.6s)
+[lg_learned_n0_pb_c4_h7] step 5000 loss 0.001 pen 0.0000 val_cer 0.0665 tau 0.465 hard=0 chan=7 ink=0.318 (1885.6s)
+[lg_learned_n0_pb_c4_h7] step 5250 loss 0.001 pen 0.0000 val_cer 0.0352 tau 0.447 hard=0 chan=7 ink=0.321 (1978.7s)
+[lg_learned_n0_pb_c4_h7] step 5500 loss 0.001 pen 0.0000 val_cer 0.0401 tau 0.430 hard=0 chan=7 ink=0.326 (2072.3s)
+[lg_learned_n0_pb_c4_h7] step 5750 loss 0.001 pen 0.0000 val_cer 0.0418 tau 0.414 hard=0 chan=7 ink=0.323 (2166.2s)
+[lg_learned_n0_pb_c4_h7] step 6000 loss 0.001 pen 0.0000 val_cer 0.0217 tau 0.399 hard=0 chan=7 ink=0.325 (2258.2s)
+[lg_learned_n0_pb_c4_h7] step 6250 loss 0.001 pen 0.0000 val_cer 0.0086 tau 0.384 hard=0 chan=7 ink=0.327 (2349.3s)
+[lg_learned_n0_pb_c4_h7] step 6500 loss 0.025 pen 0.0013 val_cer 0.0012 tau 0.369 hard=1 chan=7 ink=0.330 (2442.8s)
+[lg_learned_n0_pb_c4_h7] step 6750 loss 0.008 pen 0.0005 val_cer 0.0009 tau 0.355 hard=1 chan=7 ink=0.327 (2535.6s)
+[lg_learned_n0_pb_c4_h7] step 7000 loss 0.005 pen 0.0006 val_cer 0.0001 tau 0.342 hard=1 chan=7 ink=0.327 (2630.0s)
+[lg_learned_n0_pb_c4_h7] step 7250 loss 0.005 pen 0.0004 val_cer 0.0003 tau 0.329 hard=1 chan=7 ink=0.332 (2722.6s)
+[lg_learned_n0_pb_c4_h7] step 7500 loss 0.004 pen 0.0003 val_cer 0.0001 tau 0.317 hard=1 chan=7 ink=0.334 (2815.6s)
+[lg_learned_n0_pb_c4_h7] step 7750 loss 0.003 pen 0.0003 val_cer 0.0001 tau 0.305 hard=1 chan=7 ink=0.339 (2909.6s)
+[lg_learned_n0_pb_c4_h7] step 8000 loss 0.003 pen 0.0003 val_cer 0.0001 tau 0.293 hard=1 chan=7 ink=0.337 (3004.1s)
+[lg_learned_n0_pb_c4_h7] step 8250 loss 0.002 pen 0.0002 val_cer 0.0000 tau 0.282 hard=1 chan=7 ink=0.335 (3097.7s)
+[lg_learned_n0_pb_c4_h7] step 8500 loss 0.002 pen 0.0003 val_cer 0.0006 tau 0.272 hard=1 chan=7 ink=0.339 (3190.5s)
+[lg_learned_n0_pb_c4_h7] step 8750 loss 0.002 pen 0.0003 val_cer 0.0002 tau 0.262 hard=1 chan=7 ink=0.340 (3283.4s)
+[lg_learned_n0_pb_c4_h7] step 9000 loss 0.002 pen 0.0001 val_cer 0.0001 tau 0.252 hard=1 chan=7 ink=0.342 (3378.4s)
+[lg_learned_n0_pb_c4_h7] step 9250 loss 0.001 pen 0.0002 val_cer 0.0001 tau 0.242 hard=1 chan=7 ink=0.337 (3472.5s)
+[lg_learned_n0_pb_c4_h7] step 9500 loss 0.002 pen 0.0001 val_cer 0.0000 tau 0.233 hard=1 chan=7 ink=0.336 (3566.5s)
+[lg_learned_n0_pb_c4_h7] step 9750 loss 0.001 pen 0.0001 val_cer 0.0001 tau 0.224 hard=1 chan=7 ink=0.336 (3658.6s)
+[lg_learned_n0_pb_c4_h7] step 10000 loss 0.001 pen 0.0001 val_cer 0.0001 tau 0.216 hard=1 chan=7 ink=0.338 (3749.2s)
+[lg_learned_n0_pb_c4_h7] step 10250 loss 0.001 pen 0.0001 val_cer 0.0001 tau 0.208 hard=1 chan=7 ink=0.339 (3841.5s)
+[lg_learned_n0_pb_c4_h7] step 10500 loss 0.001 pen 0.0000 val_cer 0.0001 tau 0.200 hard=1 chan=7 ink=0.341 (3934.8s)
+[lg_learned_n0_pb_c4_h7] TEST cer=0.0003 symbol_cer=0.0003 heldout=0.001179635761589404 px/char=28.00 bits/px2=0.1638 min_ham=16.0 best_step=9500 time=3935s s/step=0.3712
+[train_joint] finished 1/1 in 3942s
+BANK c4 rc=0
+[train_joint] run=e1align out=/home/user/visual-bpe/learned_glyphs/results/e1align configs=1 done=0 todo=1 parallel=1
+  lg_learned_n0_pb_c7_h7: steps=10500 batch=32 lr_reader=0.002 lr_glyph=0.05 tau=1.0->0.2 hard_from=0.6 channel=default
+[lg_learned_n0_pb_c7_h7] symbols=95 classes=96 learn=True mode=joint h=7 cell_w=7/7 col_stride=2 expand=1 pad=4 readers=1 reader_params=954384 glyph_params=74480 channel=default ramp_levels=8 heldout=True resets=[] bits/char=4.589 oversample=0.0
+[lg_learned_n0_pb_c7_h7] step 250 loss 5.162 pen 0.0007 val_cer 1.0000 tau 0.963 hard=0 chan=0 ink=0.093 (148.8s)

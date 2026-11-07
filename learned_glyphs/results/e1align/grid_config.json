@@ -3,11 +3,11 @@
   "--n-tokens",
   "0",
   "--char-w",
-  "4",
+  "7",
   "--token-w",
-  "4",
+  "7",
   "--scheme-suffix",
-  "_pb_c4",
+  "_pb_c7",
   "--pixel-block",
   "--guard-ss",
   "0",
@@ -24,8 +24,8 @@
   {
    "n_tokens": 0,
    "height_px": 7,
-   "char_w": 4,
-   "token_w": 4,
+   "char_w": 7,
+   "token_w": 7,
    "learn_glyphs": true,
    "init": "random",
    "font": "latin",
@@ -74,7 +74,7 @@
    "threads": 1,
    "run_name": "e1align",
    "out_root": null,
-   "scheme_suffix": "_pb_c4",
+   "scheme_suffix": "_pb_c7",
    "model": {}
   }
  ]
