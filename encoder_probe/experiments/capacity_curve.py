@@ -420,7 +420,7 @@ def _plot(rows: list[dict], path: Path) -> None:
             ax.errorbar(x, y, yerr=[y - ci[:, 0], ci[:, 1] - y], marker="o", capsize=3, label=text,
                         color=colours.get(text))
     xs = sorted({r["chars_per_token"] for r in rows})
-    axs[1].plot([0, max(xs)], [0, max(xs)], ":", color="grey", label="all chars recovered")
+    axs[1].plot(xs, xs, ":", color="grey", label="all chars recovered")
     for ax, t in ((axs[0], "bits recovered per vision token"), (axs[1], "recovered chars per vision token")):
         ax.set_xscale("log")
         ax.set_xlabel("chars per vision token")
