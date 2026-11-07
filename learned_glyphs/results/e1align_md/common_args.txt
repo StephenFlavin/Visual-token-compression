@@ -1,0 +1,1 @@
+--char-w 2 --token-w 4 --tag-suffix md --pixel-block --guard-ss 0 --height-px 7 --steps 10500 --threads 1 --min-dist-px 2 --min-dist-weight 1 --ckpt-every 500 --run-name e1align_md

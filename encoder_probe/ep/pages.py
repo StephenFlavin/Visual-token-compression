@@ -39,6 +39,10 @@ LG_BANKS = {  # tag -> bank path (converged e1long banks, N=300 tokens)
     "lg_n0_pb_c4_h7": "learned_glyphs/results/e1align/banks/lg_learned_n0_pb_c4_h7.pt",     # chars 4x7: 28
     "lg_n0_pb_c7_h7": "learned_glyphs/results/e1align/banks/lg_learned_n0_pb_c7_h7.pt",     # chars 7x7: 16
     "lg_pb_c2t4_h7": "learned_glyphs/results/e1align/banks/lg_learned_n300_pb_c2t4_h7.pt",  # BPE 2x7 + 4x7: ~76
+    # the same two dense banks retrained with a minimum glyph distance (same-width glyphs >= 2 px apart;
+    # PLAN_3090 amendment 4, stage C; train_joint.py --min-dist-px 2)
+    "lg_n0_pb_c2_h7md": "learned_glyphs/results/e1align_md/banks/lg_learned_n0_pb_c2_h7md.pt",
+    "lg_pb_c2t4_h7md": "learned_glyphs/results/e1align_md/banks/lg_learned_n300_pb_c2t4_h7md.pt",
 }
 
 
