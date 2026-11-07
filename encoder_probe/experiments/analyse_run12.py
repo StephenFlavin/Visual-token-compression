@@ -88,6 +88,31 @@ def bar_status(primary: float, sweep_dy: dict | None, train_dy: int = 7) -> dict
     return out
 
 
+def load_chan(d: Path | None) -> list[dict]:
+    """channel_capacity.py rows (amendment 6), non-smoke, one per (cell, levels, patch-embed arm)."""
+    if d is None or not (Path(d) / "runs.jsonl").exists():
+        return []
+    rows = [json.loads(x) for x in (Path(d) / "runs.jsonl").read_text().splitlines() if x.strip()]
+    return [r for r in rows if r.get("phase") == "channel_capacity" and not r.get("smoke")]
+
+
+def chan_readout(chan: list[dict], points: list[dict]) -> dict:
+    """Amendment 6 readout (a diagnostic, not a gate): the best block arm's recovered bits per token vs the best
+    trained Latin arm on shuffled text. Blocks are one code at one budget, so their result is a FLOOR on the pipe's
+    capacity: headroom above Latin says the pipe is not the wall at that rate; no headroom is inconclusive."""
+    if not chan:
+        return {}
+    best = max(chan, key=lambda r: r["trained"]["recovered_bits_per_token"][0])
+    lat = [r for r in points if r["encoding"].startswith("latin_") and r["text"] == "shuffled" and "trained" in r]
+    lb = max(lat, key=lambda r: r["trained"][0]) if lat else None
+    out = {"best_cell": best["cell"], "best_bits": best["trained"]["recovered_bits_per_token"],
+           "swap_ok": all(r["trained"]["swap_recovered_bits_per_token"][2] <= 0.5 for r in chan)}
+    if lb:
+        out.update({"latin": lb["encoding"], "latin_bits": lb["trained"][0],
+                    "headroom": best["trained"]["recovered_bits_per_token"][1] > lb["trained"][0]})
+    return out
+
+
 def boot_mean(x: np.ndarray, reps: int = 10000, seed: int = 0) -> tuple[float, float, float]:
     rng = np.random.default_rng(seed)
     b = x[rng.integers(0, len(x), (reps, len(x)))].mean(1)
@@ -102,7 +127,7 @@ def boot_diff(x: np.ndarray, y: np.ndarray, reps: int = 10000, seed: int = 0) ->
     return float(x.mean() - y.mean()), float(np.percentile(d, 2.5)), float(np.percentile(d, 97.5))
 
 
-def analyse(frozen: dict, trained: dict, blind: dict, sweep: dict | None = None) -> dict:
+def analyse(frozen: dict, trained: dict, blind: dict, sweep: dict | None = None, chan: list | None = None) -> dict:
     res = {"points": [], "run1": [], "run2": []}
     for k in sorted(set(frozen) | set(trained)):
         row = {"encoding": k[0], "text": k[1]}
@@ -154,6 +179,8 @@ def analyse(frozen: dict, trained: dict, blind: dict, sweep: dict | None = None)
     res["bar"] = {f"{r['encoding']}/{r['text']}": bar_status(r["trained_recovered_cpt"],
                                                              (sweep or {}).get((r["encoding"], r["text"])))
                   for r in res["points"] if "trained_recovered_cpt" in r}
+    res["chan"] = chan or []
+    res["chan_readout"] = chan_readout(res["chan"], res["points"])
     return res
 
 
@@ -179,6 +206,23 @@ def write_md(res: dict, path: Path) -> str:
         sw = ", ".join(f"{dy}: {v:.1f}" for dy, v in b["sweep"].items()) if "sweep" in b else "-"
         md.append(f"| {k} | {b['primary']:.1f} | {sw} | " + (f"{b['best_over_dy7']:.3f} (dy {b['best_dy']}) | "
                   f"{b['adjusted']:.1f} |" if "sweep" in b else "- | - |") + f" {b['status']} |")
+    if res.get("chan"):
+        c = res["chan_readout"]
+        md += ["", "**Channel capacity (amendment 6, diagnostic): random bits as colour blocks, recovered bits per "
+               "vision token = 3 x digits - CE (exact reference, no blind needed)**", "",
+               "| cell px | levels | offered bits/token | tokens (px) | frozen | trained (CI) | fraction | digit acc | "
+               "swapped images (must be <= 0) |", "|---|---|---|---|---|---|---|---|---|"]
+        for r in sorted(res["chan"], key=lambda r: r["bits_per_token"]):
+            t, f = r["trained"], r["frozen"]
+            md.append(f"| {r['cell']}{' +pe' if r['config'].get('train_patch_embed') else ''} | {r['levels']} | "
+                      f"{r['bits_per_token']} | {r['n_tokens']} ({r['S']}) | {f['recovered_bits_per_token'][0]:.1f} | "
+                      f"{fmt(t['recovered_bits_per_token'])} | {t['recovered_frac']:.3f} | {t['digit_acc']:.3f} | "
+                      f"{fmt(t['swap_recovered_bits_per_token'])} |")
+        if c:
+            md += ["", f"Best block arm: cell {c['best_cell']}, {fmt(c['best_bits'])} bits/token; best trained Latin "
+                   f"(shuffled): {c.get('latin', '-')} {c.get('latin_bits', float('nan')):.2f}; headroom (block CI "
+                   f"lower bound above Latin): {c.get('headroom', 'n/a')}; swap check (all upper CIs <= 0.5): "
+                   f"{'PASS' if c['swap_ok'] else 'FAIL'}"]
     md += ["", f"**Run 1 (trained minus frozen, paired by page): {res['verdict_run1']}** "
            "(pass = CI above 0 on shuffled text at latin_p6 or latin_p5)", "",
            "| encoding | text | pages | trained − frozen |", "|---|---|---|---|"]
@@ -199,10 +243,11 @@ def main(argv=None) -> int:
     ap.add_argument("--trained", required=True)
     ap.add_argument("--blind", default=None)
     ap.add_argument("--sweep", default=None, help="dy-sweep run dir of the trained adapters (amendment 5)")
+    ap.add_argument("--chan", default=None, help="channel_capacity.py run dir (amendment 6)")
     ap.add_argument("--out", default=str(ROOT / "encoder_probe" / "results" / "analysis_run12"))
     a = ap.parse_args(argv)
     res = analyse(load(Path(a.frozen)), load(Path(a.trained)), load(Path(a.blind) if a.blind else None),
-                  load_sweep(Path(a.sweep) if a.sweep else None))
+                  load_sweep(Path(a.sweep) if a.sweep else None), load_chan(Path(a.chan) if a.chan else None))
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
     (out / "summary.json").write_text(json.dumps(res, indent=1))
