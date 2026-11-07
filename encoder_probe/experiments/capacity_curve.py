@@ -308,6 +308,7 @@ def report(out: Path) -> str:
         lines += ["## Grid alignment (paired over pages; bits per vision token)", "",
                   "| encoding | text | pages | best shift | worst shift | best - worst (CI, re-selected) | perm p | "
                   "cross-validated best - worst (CI) | (0,0) - mean of others (CI) |", "|" + "---|" * 9]
+        align = []
         for (e, t) in sorted({(r["encoding"], r["text"]) for r in shifted}):
             G, shifts = alignment_matrix(S_, e, t)
             if G is None:
@@ -317,11 +318,11 @@ def report(out: Path) -> str:
                          f"{fmt_ci(a['best_vs_worst'], a['best_vs_worst_ci'], 3)} | {a['perm_p']:.3f} | "
                          f"{fmt_ci(a['crossval_best_vs_worst'], a['crossval_ci'], 3)} | "
                          f"{fmt_ci(a['aligned_vs_mean'], a['aligned_vs_mean_ci'], 3)} |")
-            with open(out / "alignment.json", "a") as f:
-                f.write(json.dumps({"encoding": e, "text": t, **a}) + "\n")
+            align.append({"encoding": e, "text": t, **a})
             lines += ["", "mean bits/vtok by (dx, dy): " + ", ".join(f"({k}) {v:.3f}"
                                                                     for k, v in a["mean_by_shift"].items()), ""]
         lines.append("")
+        (out / "alignment.json").write_text("".join(json.dumps(x) + "\n" for x in align))
     md = "\n".join(lines)
     (out / "summary.md").write_text(md)
     return md

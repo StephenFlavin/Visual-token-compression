@@ -1,0 +1,915 @@
+Loading weights:   0%|          | 0/824 [00:00<?, ?it/s]Loading weights:   1%|          | 6/824 [00:00<00:35, 22.74it/s]Loading weights:   1%|          | 9/824 [00:00<01:08, 11.84it/s]Loading weights:   1%|▏         | 11/824 [00:01<01:57,  6.91it/s]Loading weights:   2%|▏         | 16/824 [00:01<01:30,  8.95it/s]Loading weights:   2%|▏         | 19/824 [00:01<01:26,  9.29it/s]Loading weights:   3%|▎         | 28/824 [00:02<00:56, 14.00it/s]Loading weights:   4%|▎         | 30/824 [00:02<01:04, 12.36it/s]Loading weights:   4%|▍         | 32/824 [00:03<01:26,  9.12it/s]Loading weights:   4%|▍         | 33/824 [00:03<02:11,  6.01it/s]Loading weights:   4%|▍         | 34/824 [00:04<02:31,  5.20it/s]Loading weights:   5%|▌         | 43/824 [00:05<02:06,  6.15it/s]Loading weights:   6%|▌         | 49/824 [00:06<01:57,  6.61it/s]Loading weights:   6%|▋         | 52/824 [00:06<01:48,  7.14it/s]Loading weights:   7%|▋         | 57/824 [00:06<01:18,  9.76it/s]Loading weights:   7%|▋         | 59/824 [00:07<01:39,  7.70it/s]Loading weights:   8%|▊         | 64/824 [00:07<01:18,  9.64it/s]Loading weights:   8%|▊         | 68/824 [00:07<01:15,  9.97it/s]Loading weights:   9%|▊         | 71/824 [00:08<01:27,  8.59it/s]Loading weights:   9%|▉         | 75/824 [00:08<01:24,  8.86it/s]Loading weights:  10%|▉         | 79/824 [00:09<01:15,  9.90it/s]Loading weights:  10%|▉         | 81/824 [00:09<01:51,  6.67it/s]Loading weights:  10%|█         | 84/824 [00:09<01:30,  8.13it/s]Loading weights:  10%|█         | 86/824 [00:10<01:31,  8.10it/s]Loading weights:  11%|█         | 88/824 [00:11<03:17,  3.73it/s]Loading weights:  11%|█         | 91/824 [00:11<02:21,  5.17it/s]Loading weights:  12%|█▏        | 96/824 [00:12<01:41,  7.14it/s]Loading weights:  12%|█▏        | 98/824 [00:12<01:45,  6.91it/s]Loading weights:  12%|█▏        | 100/824 [00:12<01:37,  7.40it/s]Loading weights:  12%|█▏        | 102/824 [00:13<01:39,  7.27it/s]Loading weights:  13%|█▎        | 105/824 [00:13<01:54,  6.28it/s]Loading weights:  13%|█▎        | 108/824 [00:14<02:05,  5.71it/s]Loading weights:  14%|█▎        | 112/824 [00:14<01:48,  6.59it/s]Loading weights:  14%|█▍        | 116/824 [00:15<01:39,  7.12it/s]Loading weights:  14%|█▍        | 117/824 [00:15<01:43,  6.81it/s]Loading weights:  14%|█▍        | 118/824 [00:15<01:58,  5.94it/s]Loading weights:  14%|█▍        | 119/824 [00:15<02:06,  5.56it/s]Loading weights:  15%|█▌        | 125/824 [00:16<01:23,  8.36it/s]Loading weights:  15%|█▌        | 126/824 [00:16<01:51,  6.27it/s]Loading weights:  16%|█▌        | 129/824 [00:17<01:47,  6.46it/s]Loading weights:  16%|█▌        | 130/824 [00:17<01:46,  6.51it/s]Loading weights:  16%|█▌        | 131/824 [00:17<01:55,  5.99it/s]Loading weights:  16%|█▌        | 132/824 [00:17<01:53,  6.07it/s]Loading weights:  17%|█▋        | 137/824 [00:18<01:48,  6.34it/s]Loading weights:  17%|█▋        | 143/824 [00:18<01:16,  8.93it/s]Loading weights:  18%|█▊        | 145/824 [00:19<01:11,  9.49it/s]Loading weights:  18%|█▊        | 151/824 [00:19<00:49, 13.72it/s]Loading weights:  19%|█▊        | 153/824 [00:20<01:21,  8.24it/s]Loading weights:  19%|█▉        | 155/824 [00:20<01:53,  5.90it/s]Loading weights:  19%|█▉        | 160/824 [00:21<01:27,  7.58it/s]Loading weights:  20%|█▉        | 162/824 [00:21<01:19,  8.34it/s]Loading weights:  20%|█▉        | 164/824 [00:21<01:16,  8.59it/s]Loading weights:  20%|██        | 166/824 [00:21<01:09,  9.40it/s]Loading weights:  21%|██        | 175/824 [00:22<01:01, 10.59it/s]Loading weights:  21%|██▏       | 177/824 [00:22<01:05,  9.93it/s]Loading weights:  22%|██▏       | 179/824 [00:22<01:03, 10.18it/s]Loading weights:  22%|██▏       | 182/824 [00:23<00:56, 11.30it/s]Loading weights:  22%|██▏       | 184/824 [00:23<01:13,  8.68it/s]Loading weights:  22%|██▏       | 185/824 [00:23<01:19,  8.09it/s]Loading weights:  23%|██▎       | 186/824 [00:23<01:23,  7.60it/s]Loading weights:  23%|██▎       | 192/824 [00:24<00:55, 11.29it/s]Loading weights:  24%|██▎       | 195/824 [00:24<01:31,  6.91it/s]Loading weights:  24%|██▍       | 196/824 [00:25<01:43,  6.09it/s]Loading weights:  24%|██▍       | 198/824 [00:26<02:18,  4.52it/s]Loading weights:  24%|██▍       | 199/824 [00:26<02:08,  4.88it/s]Loading weights:  24%|██▍       | 200/824 [00:26<02:07,  4.91it/s]Loading weights:  25%|██▍       | 202/824 [00:26<01:37,  6.40it/s]Loading weights:  25%|██▍       | 205/824 [00:27<02:08,  4.81it/s]Loading weights:  25%|██▌       | 207/824 [00:27<02:05,  4.93it/s]Loading weights:  25%|██▌       | 209/824 [00:27<01:46,  5.77it/s]Loading weights:  26%|██▌       | 212/824 [00:29<02:38,  3.85it/s]Loading weights:  26%|██▌       | 214/824 [00:29<02:06,  4.82it/s]Loading weights:  26%|██▌       | 215/824 [00:29<02:16,  4.45it/s]Loading weights:  26%|██▌       | 216/824 [00:30<02:47,  3.62it/s]Loading weights:  26%|██▋       | 217/824 [00:30<02:43,  3.72it/s]Loading weights:  26%|██▋       | 218/824 [00:30<03:37,  2.78it/s]Loading weights:  27%|██▋       | 219/824 [00:31<03:37,  2.78it/s]Loading weights:  27%|██▋       | 220/824 [00:31<03:02,  3.32it/s]Loading weights:  27%|██▋       | 226/824 [00:31<01:21,  7.31it/s]Loading weights:  28%|██▊       | 227/824 [00:31<01:21,  7.36it/s]Loading weights:  28%|██▊       | 229/824 [00:32<01:15,  7.84it/s]Loading weights:  28%|██▊       | 231/824 [00:32<01:07,  8.80it/s]Loading weights:  29%|██▉       | 237/824 [00:32<00:54, 10.70it/s]Loading weights:  29%|██▉       | 240/824 [00:32<00:48, 12.16it/s]Loading weights:  29%|██▉       | 242/824 [00:33<00:49, 11.81it/s]Loading weights:  30%|██▉       | 244/824 [00:33<00:52, 10.99it/s]Loading weights:  30%|██▉       | 246/824 [00:34<01:42,  5.62it/s]Loading weights:  30%|███       | 248/824 [00:34<01:31,  6.29it/s]Loading weights:  30%|███       | 249/824 [00:34<01:28,  6.53it/s]Loading weights:  30%|███       | 250/824 [00:35<02:28,  3.86it/s]Loading weights:  30%|███       | 251/824 [00:35<02:45,  3.46it/s]Loading weights:  31%|███       | 257/824 [00:36<01:15,  7.48it/s]Loading weights:  31%|███▏      | 259/824 [00:36<01:19,  7.07it/s]Loading weights:  32%|███▏      | 263/824 [00:36<01:01,  9.14it/s]Loading weights:  32%|███▏      | 265/824 [00:37<01:36,  5.80it/s]Loading weights:  33%|███▎      | 270/824 [00:37<01:14,  7.48it/s]Loading weights:  33%|███▎      | 275/824 [00:38<00:55,  9.89it/s]Loading weights:  34%|███▎      | 277/824 [00:38<01:04,  8.49it/s]Loading weights:  34%|███▍      | 284/824 [00:38<00:44, 12.24it/s]Loading weights:  35%|███▌      | 289/824 [00:38<00:38, 13.86it/s]Loading weights:  36%|███▌      | 295/824 [00:39<00:46, 11.44it/s]Loading weights:  36%|███▌      | 297/824 [00:40<00:55,  9.57it/s]Loading weights:  36%|███▋      | 299/824 [00:40<01:00,  8.63it/s]Loading weights:  36%|███▋      | 300/824 [00:40<01:20,  6.50it/s]Loading weights:  37%|███▋      | 301/824 [00:41<01:29,  5.81it/s]Loading weights:  37%|███▋      | 308/824 [00:41<00:53,  9.59it/s]Loading weights:  38%|███▊      | 309/824 [00:41<01:05,  7.83it/s]Loading weights:  38%|███▊      | 312/824 [00:42<01:01,  8.32it/s]Loading weights:  38%|███▊      | 314/824 [00:42<01:32,  5.52it/s]Loading weights:  38%|███▊      | 317/824 [00:43<01:12,  6.99it/s]Loading weights:  39%|███▊      | 319/824 [00:43<01:05,  7.75it/s]Loading weights:  40%|███▉      | 329/824 [00:43<00:37, 13.19it/s]Loading weights:  41%|████      | 335/824 [00:44<00:31, 15.57it/s]Loading weights:  41%|████      | 338/824 [00:44<00:37, 13.11it/s]Loading weights:  41%|████▏     | 340/824 [00:44<00:35, 13.61it/s]Loading weights:  42%|████▏     | 345/824 [00:44<00:27, 17.69it/s]Loading weights:  42%|████▏     | 348/824 [00:44<00:32, 14.86it/s]Loading weights:  42%|████▏     | 350/824 [00:45<00:58,  8.12it/s]Loading weights:  43%|████▎     | 352/824 [00:45<00:53,  8.81it/s]Loading weights:  43%|████▎     | 354/824 [00:46<00:55,  8.44it/s]Loading weights:  43%|████▎     | 356/824 [00:46<00:53,  8.77it/s]Loading weights:  44%|████▎     | 360/824 [00:46<00:49,  9.37it/s]Loading weights:  44%|████▍     | 362/824 [00:47<01:00,  7.61it/s]Loading weights:  44%|████▍     | 364/824 [00:47<01:01,  7.45it/s]Loading weights:  45%|████▍     | 369/824 [00:47<00:49,  9.16it/s]Loading weights:  45%|████▍     | 370/824 [00:47<00:50,  8.96it/s]Loading weights:  45%|████▌     | 372/824 [00:48<00:46,  9.70it/s]Loading weights:  46%|████▌     | 375/824 [00:48<00:38, 11.69it/s]Loading weights:  46%|████▌     | 378/824 [00:48<00:37, 11.93it/s]Loading weights:  46%|████▋     | 382/824 [00:48<00:31, 14.08it/s]Loading weights:  47%|████▋     | 384/824 [00:48<00:29, 15.04it/s]Loading weights:  47%|████▋     | 386/824 [00:48<00:30, 14.28it/s]Loading weights:  47%|████▋     | 388/824 [00:49<00:50,  8.71it/s]Loading weights:  48%|████▊     | 392/824 [00:49<00:40, 10.77it/s]Loading weights:  48%|████▊     | 394/824 [00:49<00:37, 11.59it/s]Loading weights:  48%|████▊     | 398/824 [00:50<01:07,  6.30it/s]Loading weights:  49%|████▉     | 404/824 [00:51<00:41, 10.10it/s]Loading weights:  50%|████▉     | 408/824 [00:51<00:38, 10.72it/s]Loading weights:  50%|████▉     | 410/824 [00:51<00:36, 11.43it/s]Loading weights:  50%|█████     | 412/824 [00:51<00:37, 10.90it/s]Loading weights:  50%|█████     | 414/824 [00:51<00:39, 10.39it/s]Loading weights:  50%|█████     | 416/824 [00:52<00:44,  9.19it/s]Loading weights:  51%|█████     | 418/824 [00:52<00:42,  9.52it/s]Loading weights:  51%|█████     | 420/824 [00:52<00:46,  8.70it/s]Loading weights:  51%|█████     | 421/824 [00:52<00:46,  8.71it/s]Loading weights:  51%|█████     | 422/824 [00:53<00:48,  8.32it/s]Loading weights:  51%|█████▏    | 423/824 [00:53<01:17,  5.16it/s]Loading weights:  52%|█████▏    | 427/824 [00:53<00:42,  9.31it/s]Loading weights:  52%|█████▏    | 429/824 [00:53<00:48,  8.17it/s]Loading weights:  52%|█████▏    | 431/824 [00:54<00:57,  6.83it/s]Loading weights:  53%|█████▎    | 435/824 [00:54<00:48,  8.09it/s]Loading weights:  53%|█████▎    | 436/824 [00:54<00:49,  7.83it/s]Loading weights:  53%|█████▎    | 440/824 [00:55<00:35, 10.86it/s]Loading weights:  55%|█████▍    | 450/824 [00:55<00:17, 20.86it/s]Loading weights:  55%|█████▍    | 453/824 [00:55<00:17, 20.87it/s]Loading weights:  55%|█████▌    | 457/824 [00:55<00:15, 22.94it/s]Loading weights:  56%|█████▌    | 461/824 [00:55<00:14, 24.82it/s]Loading weights:  56%|█████▋    | 464/824 [00:55<00:19, 18.64it/s]Loading weights:  57%|█████▋    | 470/824 [00:56<00:15, 22.49it/s]Loading weights:  58%|█████▊    | 474/824 [00:56<00:19, 18.29it/s]Loading weights:  58%|█████▊    | 477/824 [00:56<00:25, 13.40it/s]Loading weights:  58%|█████▊    | 479/824 [00:57<00:25, 13.37it/s]Loading weights:  59%|█████▊    | 484/824 [00:57<00:25, 13.58it/s]Loading weights:  59%|█████▉    | 488/824 [00:57<00:24, 13.95it/s]Loading weights:  60%|█████▉    | 493/824 [00:58<00:25, 12.83it/s]Loading weights:  60%|██████    | 495/824 [00:58<00:33,  9.79it/s]Loading weights:  61%|██████    | 502/824 [00:58<00:20, 15.47it/s]Loading weights:  61%|██████▏   | 505/824 [00:58<00:19, 16.40it/s]Loading weights:  62%|██████▏   | 508/824 [00:59<00:28, 10.94it/s]Loading weights:  62%|██████▏   | 510/824 [00:59<00:27, 11.46it/s]Loading weights:  62%|██████▏   | 513/824 [00:59<00:28, 10.85it/s]Loading weights:  62%|██████▎   | 515/824 [01:00<00:42,  7.30it/s]Loading weights:  63%|██████▎   | 517/824 [01:00<00:41,  7.32it/s]Loading weights:  63%|██████▎   | 521/824 [01:01<00:37,  7.98it/s]Loading weights:  63%|██████▎   | 522/824 [01:02<01:06,  4.53it/s]Loading weights:  64%|██████▎   | 524/824 [01:02<01:04,  4.63it/s]Loading weights:  64%|██████▍   | 526/824 [01:02<00:51,  5.77it/s]Loading weights:  64%|██████▍   | 527/824 [01:02<01:00,  4.87it/s]Loading weights:  64%|██████▍   | 528/824 [01:03<01:14,  3.97it/s]Loading weights:  65%|██████▍   | 534/824 [01:03<00:35,  8.22it/s]Loading weights:  65%|██████▌   | 537/824 [01:04<00:36,  7.95it/s]Loading weights:  66%|██████▌   | 541/824 [01:04<00:34,  8.11it/s]Loading weights:  66%|██████▌   | 542/824 [01:05<00:52,  5.39it/s]Loading weights:  66%|██████▌   | 544/824 [01:05<00:59,  4.72it/s]Loading weights:  66%|██████▌   | 545/824 [01:06<01:06,  4.21it/s]Loading weights:  66%|██████▋   | 546/824 [01:06<01:17,  3.60it/s]Loading weights:  67%|██████▋   | 550/824 [01:06<00:48,  5.62it/s]Loading weights:  67%|██████▋   | 551/824 [01:07<00:48,  5.63it/s]Loading weights:  67%|██████▋   | 555/824 [01:07<00:29,  9.17it/s]Loading weights:  68%|██████▊   | 558/824 [01:07<00:27,  9.75it/s]Loading weights:  68%|██████▊   | 561/824 [01:07<00:25, 10.12it/s]Loading weights:  69%|██████▊   | 565/824 [01:08<00:29,  8.69it/s]Loading weights:  69%|██████▉   | 567/824 [01:09<00:42,  6.06it/s]Loading weights:  70%|██████▉   | 573/824 [01:09<00:24, 10.35it/s]Loading weights:  70%|██████▉   | 575/824 [01:09<00:25,  9.65it/s]Loading weights:  70%|███████   | 577/824 [01:09<00:22, 10.78it/s]Loading weights:  70%|███████   | 579/824 [01:09<00:22, 11.05it/s]Loading weights:  71%|███████   | 581/824 [01:10<00:37,  6.50it/s]Loading weights:  71%|███████   | 583/824 [01:10<00:33,  7.30it/s]Loading weights:  71%|███████   | 585/824 [01:10<00:34,  6.90it/s]Loading weights:  71%|███████▏  | 588/824 [01:11<00:36,  6.43it/s]Loading weights:  72%|███████▏  | 590/824 [01:11<00:37,  6.32it/s]Loading weights:  72%|███████▏  | 591/824 [01:12<00:39,  5.92it/s]Loading weights: 100%|██████████| 824/824 [01:12<00:00, 11.44it/s]
+[cap] model loaded in 94s; 3 points to do
+[cap] latin_p6 shuffled (0, 0) page 9: real 4.829 ref 5.664 nats/tok, 14.55 bits/vtok (273s)
+[cap] latin_p6 shuffled (0, 0) page 10: real 5.118 ref 6.090 nats/tok, 17.95 bits/vtok (296s)
+[cap] latin_p6 shuffled (0, 0) page 11: real 4.693 ref 5.762 nats/tok, 16.89 bits/vtok (350s)
+[cap] latin_p6 shuffled (0, 0) page 12: real 4.884 ref 5.701 nats/tok, 14.22 bits/vtok (414s)
+[cap] latin_p6 shuffled (0, 0) page 13: real 4.738 ref 5.664 nats/tok, 15.98 bits/vtok (434s)
+[cap] latin_p6 shuffled (0, 0) page 14: real 5.279 ref 6.275 nats/tok, 16.36 bits/vtok (452s)
+[cap] latin_p6 shuffled (0, 0) page 15: real 5.481 ref 6.362 nats/tok, 15.25 bits/vtok (470s)
+[cap] latin_p6 shuffled (0, 0) page 16: real 4.686 ref 5.714 nats/tok, 17.46 bits/vtok (489s)
+[cap] latin_p6 shuffled (0, 0) page 17: real 4.033 ref 4.932 nats/tok, 16.17 bits/vtok (507s)
+[cap] latin_p6 shuffled (0, 0) page 18: real 4.052 ref 4.849 nats/tok, 14.56 bits/vtok (526s)
+[cap] latin_p6 shuffled (0, 0) page 19: real 5.085 ref 6.382 nats/tok, 20.59 bits/vtok (543s)
+[cap] latin_p6 shuffled (0, 0) page 20: real 5.382 ref 6.274 nats/tok, 15.32 bits/vtok (560s)
+[cap] latin_p6 shuffled (0, 0) page 21: real 4.832 ref 5.628 nats/tok, 14.91 bits/vtok (579s)
+[cap] latin_p6 shuffled (0, 0) page 22: real 4.401 ref 5.287 nats/tok, 17.14 bits/vtok (600s)
+[cap] latin_p6 shuffled (0, 0) page 23: real 5.517 ref 6.457 nats/tok, 15.43 bits/vtok (619s)
+[cap] latin_p6 shuffled (0, 0) page 24: real 4.984 ref 6.100 nats/tok, 19.30 bits/vtok (639s)
+[cap] latin_p6 shuffled (0, 0) page 25: real 5.250 ref 6.334 nats/tok, 17.65 bits/vtok (658s)
+[cap] latin_p6 shuffled (0, 0) page 26: real 5.238 ref 6.314 nats/tok, 16.93 bits/vtok (679s)
+[cap] latin_p6 shuffled (0, 0) page 27: real 4.857 ref 5.968 nats/tok, 18.15 bits/vtok (699s)
+[cap] latin_p6 shuffled (0, 0) page 28: real 5.007 ref 6.058 nats/tok, 17.50 bits/vtok (717s)
+[cap] latin_p6 shuffled (0, 0) page 29: real 4.677 ref 5.612 nats/tok, 16.50 bits/vtok (736s)
+[cap] latin_p6 shuffled (0, 0) page 30: real 4.727 ref 5.638 nats/tok, 15.21 bits/vtok (754s)
+[cap] latin_p6 shuffled (0, 0) page 31: real 4.612 ref 5.712 nats/tok, 18.39 bits/vtok (772s)
+[cap] POINT latin_p6 shuffled (0, 0): 49.8 chars/vtok, 16.76 (16.17-17.36) bits/vtok, recovered 0.17 (0.16-0.17), CER 0.8454630388714625
+[cap] latin_p5 natural (0, 0) page 0: real 2.129 ref 2.207 nats/tok, 2.11 bits/vtok, CER 81.3% (57s)
+[cap] latin_p5 natural (0, 0) page 1: real 2.444 ref 2.518 nats/tok, 1.64 bits/vtok, CER 77.6% (111s)
+[cap] latin_p5 natural (0, 0) page 2: real 1.493 ref 1.509 nats/tok, 0.57 bits/vtok, CER 85.4% (266s)
+[cap] latin_p5 natural (0, 0) page 3: real 2.970 ref 3.061 nats/tok, 2.14 bits/vtok (284s)
+[cap] latin_p5 natural (0, 0) page 4: real 2.228 ref 2.280 nats/tok, 1.48 bits/vtok (304s)
+[cap] latin_p5 natural (0, 0) page 5: real 2.639 ref 2.660 nats/tok, 0.53 bits/vtok (323s)
+[cap] latin_p5 natural (0, 0) page 6: real 2.886 ref 2.910 nats/tok, 0.55 bits/vtok (340s)
+[cap] latin_p5 natural (0, 0) page 7: real 2.391 ref 2.465 nats/tok, 1.80 bits/vtok (358s)
+[cap] latin_p5 natural (0, 0) page 8: real 2.315 ref 2.332 nats/tok, 0.41 bits/vtok (376s)
+[cap] latin_p5 natural (0, 0) page 9: real 2.415 ref 2.413 nats/tok, -0.04 bits/vtok (393s)
+[cap] latin_p5 natural (0, 0) page 10: real 2.433 ref 2.612 nats/tok, 4.42 bits/vtok (410s)
+[cap] latin_p5 natural (0, 0) page 11: real 3.255 ref 3.356 nats/tok, 2.29 bits/vtok (427s)
+[cap] latin_p5 natural (0, 0) page 12: real 2.157 ref 2.200 nats/tok, 1.10 bits/vtok (446s)
+[cap] latin_p5 natural (0, 0) page 13: real 2.253 ref 2.417 nats/tok, 3.92 bits/vtok (464s)
+[cap] latin_p5 natural (0, 0) page 14: real 2.682 ref 2.731 nats/tok, 1.09 bits/vtok (481s)
+[cap] latin_p5 natural (0, 0) page 15: real 1.874 ref 1.927 nats/tok, 1.41 bits/vtok (501s)
+[cap] latin_p5 natural (0, 0) page 16: real 2.184 ref 2.221 nats/tok, 0.94 bits/vtok (520s)
+[cap] latin_p5 natural (0, 0) page 17: real 3.173 ref 3.304 nats/tok, 3.17 bits/vtok (537s)
+[cap] latin_p5 natural (0, 0) page 18: real 2.691 ref 2.820 nats/tok, 2.89 bits/vtok (555s)
+[cap] latin_p5 natural (0, 0) page 19: real 3.020 ref 3.052 nats/tok, 0.69 bits/vtok (573s)
+[cap] latin_p5 natural (0, 0) page 20: real 2.140 ref 2.219 nats/tok, 2.05 bits/vtok (592s)
+[cap] latin_p5 natural (0, 0) page 21: real 1.977 ref 2.032 nats/tok, 1.36 bits/vtok (612s)
+[cap] latin_p5 natural (0, 0) page 22: real 1.801 ref 1.855 nats/tok, 1.42 bits/vtok (631s)
+[cap] latin_p5 natural (0, 0) page 23: real 2.543 ref 2.577 nats/tok, 0.76 bits/vtok (647s)
+[cap] latin_p5 natural (0, 0) page 24: real 2.720 ref 2.789 nats/tok, 1.60 bits/vtok (666s)
+[cap] latin_p5 natural (0, 0) page 25: real 2.166 ref 2.202 nats/tok, 0.90 bits/vtok (688s)
+[cap] latin_p5 natural (0, 0) page 26: real 2.348 ref 2.386 nats/tok, 0.93 bits/vtok (707s)
+[cap] latin_p5 natural (0, 0) page 27: real 2.122 ref 2.188 nats/tok, 1.60 bits/vtok (727s)
+[cap] latin_p5 natural (0, 0) page 28: real 2.594 ref 2.798 nats/tok, 5.02 bits/vtok (744s)
+[cap] latin_p5 natural (0, 0) page 29: real 2.030 ref 2.074 nats/tok, 1.13 bits/vtok (761s)
+[cap] latin_p5 natural (0, 0) page 30: real 2.150 ref 2.245 nats/tok, 2.17 bits/vtok (778s)
+[cap] latin_p5 natural (0, 0) page 31: real 2.620 ref 2.721 nats/tok, 2.34 bits/vtok (794s)
+[cap] POINT latin_p5 natural (0, 0): 72.2 chars/vtok, 1.70 (1.32-2.11) bits/vtok, recovered 0.03 (0.02-0.03), CER 0.8144336706859502
+[cap] latin_p5 shuffled (0, 0) page 0: real 6.370 ref 6.416 nats/tok, 1.06 bits/vtok, CER 83.2% (41s)
+[cap] latin_p5 shuffled (0, 0) page 1: real 6.078 ref 6.123 nats/tok, 1.17 bits/vtok, CER 92.9% (70s)
+[cap] latin_p5 shuffled (0, 0) page 2: real 5.581 ref 5.658 nats/tok, 2.11 bits/vtok, CER 77.1% (131s)
+[cap] latin_p5 shuffled (0, 0) page 3: real 6.677 ref 6.731 nats/tok, 1.24 bits/vtok (148s)
+[cap] latin_p5 shuffled (0, 0) page 4: real 6.076 ref 6.173 nats/tok, 2.40 bits/vtok (168s)
+[cap] latin_p5 shuffled (0, 0) page 5: real 5.727 ref 5.741 nats/tok, 0.34 bits/vtok (187s)
+[cap] latin_p5 shuffled (0, 0) page 6: real 5.769 ref 5.822 nats/tok, 1.27 bits/vtok (209s)
+[cap] latin_p5 shuffled (0, 0) page 7: real 6.135 ref 6.141 nats/tok, 0.17 bits/vtok (229s)
+[cap] latin_p5 shuffled (0, 0) page 8: real 5.589 ref 5.621 nats/tok, 0.81 bits/vtok (247s)
+[cap] latin_p5 shuffled (0, 0) page 9: real 5.369 ref 5.421 nats/tok, 1.29 bits/vtok (265s)
+[cap] latin_p5 shuffled (0, 0) page 10: real 6.508 ref 6.554 nats/tok, 1.06 bits/vtok (284s)
+[cap] latin_p5 shuffled (0, 0) page 11: real 5.604 ref 5.639 nats/tok, 0.86 bits/vtok (304s)
+[cap] latin_p5 shuffled (0, 0) page 12: real 5.397 ref 5.451 nats/tok, 1.29 bits/vtok (324s)
+[cap] latin_p5 shuffled (0, 0) page 13: real 6.063 ref 6.223 nats/tok, 3.86 bits/vtok (342s)
+[cap] latin_p5 shuffled (0, 0) page 14: real 6.279 ref 6.415 nats/tok, 3.22 bits/vtok (362s)
+[cap] latin_p5 shuffled (0, 0) page 15: real 5.576 ref 5.572 nats/tok, -0.09 bits/vtok (382s)
+[cap] latin_p5 shuffled (0, 0) page 16: real 6.406 ref 6.542 nats/tok, 3.19 bits/vtok (399s)
+[cap] latin_p5 shuffled (0, 0) page 17: real 6.208 ref 6.200 nats/tok, -0.18 bits/vtok (419s)
+[cap] latin_p5 shuffled (0, 0) page 18: real 6.536 ref 6.686 nats/tok, 3.21 bits/vtok (436s)
+[cap] latin_p5 shuffled (0, 0) page 19: real 6.469 ref 6.567 nats/tok, 2.24 bits/vtok (453s)
+[cap] latin_p5 shuffled (0, 0) page 20: real 6.005 ref 6.014 nats/tok, 0.20 bits/vtok (471s)
+[cap] latin_p5 shuffled (0, 0) page 21: real 5.481 ref 5.581 nats/tok, 2.56 bits/vtok (491s)
+[cap] latin_p5 shuffled (0, 0) page 22: real 5.629 ref 5.665 nats/tok, 0.93 bits/vtok (509s)
+[cap] latin_p5 shuffled (0, 0) page 23: real 6.131 ref 6.154 nats/tok, 0.56 bits/vtok (529s)
+[cap] latin_p5 shuffled (0, 0) page 24: real 5.996 ref 5.999 nats/tok, 0.09 bits/vtok (547s)
+[cap] latin_p5 shuffled (0, 0) page 25: real 5.737 ref 5.759 nats/tok, 0.55 bits/vtok (567s)
+[cap] latin_p5 shuffled (0, 0) page 26: real 6.022 ref 6.055 nats/tok, 0.78 bits/vtok (585s)
+[cap] latin_p5 shuffled (0, 0) page 27: real 6.578 ref 6.673 nats/tok, 2.29 bits/vtok (606s)
+[cap] latin_p5 shuffled (0, 0) page 28: real 6.620 ref 6.744 nats/tok, 2.79 bits/vtok (624s)
+[cap] latin_p5 shuffled (0, 0) page 29: real 5.571 ref 5.616 nats/tok, 1.19 bits/vtok (648s)
+[cap] latin_p5 shuffled (0, 0) page 30: real 6.231 ref 6.317 nats/tok, 1.93 bits/vtok (670s)
+[cap] latin_p5 shuffled (0, 0) page 31: real 6.309 ref 6.366 nats/tok, 1.37 bits/vtok (688s)
+[cap] POINT latin_p5 shuffled (0, 0): 72.2 chars/vtok, 1.43 (1.07-1.81) bits/vtok, recovered 0.01 (0.01-0.01), CER 0.8439508990118929
+CHAIN run0 done rc=0
+Loading weights:   0%|          | 0/824 [00:00<?, ?it/s]Loading weights:  42%|████▏     | 347/824 [00:00<00:00, 3468.10it/s]Loading weights: 100%|██████████| 824/824 [00:00<00:00, 4154.07it/s]
+[cap] model loaded in 4s; 16 points to do
+[cap] latin_p8 natural (0, 0) page 0: real 0.941 ref 2.138 nats/tok, 11.58 bits/vtok (15s)
+[cap] latin_p8 natural (0, 0) page 1: real 1.004 ref 2.311 nats/tok, 11.21 bits/vtok (55s)
+[cap] latin_p8 natural (0, 0) page 2: real 1.177 ref 2.617 nats/tok, 12.61 bits/vtok (99s)
+[cap] latin_p8 natural (0, 0) page 3: real 1.117 ref 2.569 nats/tok, 11.84 bits/vtok (142s)
+[cap] latin_p8 natural (0, 0) page 4: real 1.117 ref 2.355 nats/tok, 11.69 bits/vtok (183s)
+[cap] latin_p8 natural (0, 0) page 5: real 1.092 ref 2.474 nats/tok, 11.87 bits/vtok (196s)
+[cap] latin_p8 natural (0, 0) page 6: real 0.912 ref 1.666 nats/tok, 8.77 bits/vtok (210s)
+[cap] latin_p8 natural (0, 0) page 7: real 1.090 ref 2.091 nats/tok, 9.86 bits/vtok (224s)
+[cap] latin_p8 natural (0, 0) page 8: real 1.324 ref 2.546 nats/tok, 10.93 bits/vtok (236s)
+[cap] latin_p8 natural (0, 0) page 9: real 1.177 ref 2.399 nats/tok, 10.47 bits/vtok (249s)
+[cap] latin_p8 natural (0, 0) page 10: real 1.169 ref 2.282 nats/tok, 10.01 bits/vtok (262s)
+[cap] latin_p8 natural (0, 0) page 11: real 1.049 ref 2.137 nats/tok, 10.06 bits/vtok (274s)
+[cap] latin_p8 natural (0, 0) page 12: real 1.112 ref 2.409 nats/tok, 11.56 bits/vtok (287s)
+[cap] latin_p8 natural (0, 0) page 13: real 1.066 ref 2.286 nats/tok, 11.11 bits/vtok (299s)
+[cap] latin_p8 natural (0, 0) page 14: real 1.124 ref 2.432 nats/tok, 11.18 bits/vtok (310s)
+[cap] latin_p8 natural (0, 0) page 15: real 1.219 ref 2.517 nats/tok, 11.66 bits/vtok (323s)
+[cap] POINT latin_p8 natural (0, 0): 25.4 chars/vtok, 11.02 (10.54-11.46) bits/vtok, recovered 0.52 (0.51-0.54), CER None
+[cap] latin_p8 natural (7, 0) page 0: real 0.895 ref 2.138 nats/tok, 12.02 bits/vtok (6s)
+[cap] latin_p8 natural (7, 0) page 1: real 0.973 ref 2.311 nats/tok, 11.48 bits/vtok (12s)
+[cap] latin_p8 natural (7, 0) page 2: real 1.218 ref 2.617 nats/tok, 12.25 bits/vtok (18s)
+[cap] latin_p8 natural (7, 0) page 3: real 1.100 ref 2.569 nats/tok, 11.97 bits/vtok (24s)
+[cap] latin_p8 natural (7, 0) page 4: real 1.074 ref 2.355 nats/tok, 12.10 bits/vtok (30s)
+[cap] latin_p8 natural (7, 0) page 5: real 1.039 ref 2.474 nats/tok, 12.33 bits/vtok (35s)
+[cap] latin_p8 natural (7, 0) page 6: real 0.909 ref 1.666 nats/tok, 8.80 bits/vtok (42s)
+[cap] latin_p8 natural (7, 0) page 7: real 1.048 ref 2.091 nats/tok, 10.27 bits/vtok (48s)
+[cap] latin_p8 natural (7, 0) page 8: real 1.260 ref 2.546 nats/tok, 11.49 bits/vtok (54s)
+[cap] latin_p8 natural (7, 0) page 9: real 1.156 ref 2.399 nats/tok, 10.65 bits/vtok (60s)
+[cap] latin_p8 natural (7, 0) page 10: real 1.118 ref 2.282 nats/tok, 10.47 bits/vtok (66s)
+[cap] latin_p8 natural (7, 0) page 11: real 1.042 ref 2.137 nats/tok, 10.12 bits/vtok (72s)
+[cap] latin_p8 natural (7, 0) page 12: real 1.114 ref 2.409 nats/tok, 11.54 bits/vtok (78s)
+[cap] latin_p8 natural (7, 0) page 13: real 1.059 ref 2.286 nats/tok, 11.18 bits/vtok (83s)
+[cap] latin_p8 natural (7, 0) page 14: real 1.082 ref 2.432 nats/tok, 11.54 bits/vtok (89s)
+[cap] latin_p8 natural (7, 0) page 15: real 1.301 ref 2.517 nats/tok, 10.92 bits/vtok (95s)
+[cap] POINT latin_p8 natural (7, 0): 25.4 chars/vtok, 11.20 (10.72-11.63) bits/vtok, recovered 0.53 (0.51-0.55), CER None
+[cap] latin_p8 natural (14, 0) page 0: real 0.948 ref 2.138 nats/tok, 11.51 bits/vtok (6s)
+[cap] latin_p8 natural (14, 0) page 1: real 1.007 ref 2.311 nats/tok, 11.19 bits/vtok (12s)
+[cap] latin_p8 natural (14, 0) page 2: real 1.226 ref 2.617 nats/tok, 12.18 bits/vtok (17s)
+[cap] latin_p8 natural (14, 0) page 3: real 1.058 ref 2.569 nats/tok, 12.31 bits/vtok (23s)
+[cap] latin_p8 natural (14, 0) page 4: real 1.089 ref 2.355 nats/tok, 11.95 bits/vtok (29s)
+[cap] latin_p8 natural (14, 0) page 5: real 1.068 ref 2.474 nats/tok, 12.07 bits/vtok (34s)
+[cap] latin_p8 natural (14, 0) page 6: real 0.897 ref 1.666 nats/tok, 8.94 bits/vtok (41s)
+[cap] latin_p8 natural (14, 0) page 7: real 1.087 ref 2.091 nats/tok, 9.89 bits/vtok (47s)
+[cap] latin_p8 natural (14, 0) page 8: real 1.330 ref 2.546 nats/tok, 10.87 bits/vtok (53s)
+[cap] latin_p8 natural (14, 0) page 9: real 1.148 ref 2.399 nats/tok, 10.71 bits/vtok (58s)
+[cap] latin_p8 natural (14, 0) page 10: real 1.168 ref 2.282 nats/tok, 10.02 bits/vtok (64s)
+[cap] latin_p8 natural (14, 0) page 11: real 1.060 ref 2.137 nats/tok, 9.96 bits/vtok (70s)
+[cap] latin_p8 natural (14, 0) page 12: real 1.136 ref 2.409 nats/tok, 11.34 bits/vtok (76s)
+[cap] latin_p8 natural (14, 0) page 13: real 1.103 ref 2.286 nats/tok, 10.78 bits/vtok (82s)
+[cap] latin_p8 natural (14, 0) page 14: real 1.140 ref 2.432 nats/tok, 11.05 bits/vtok (87s)
+[cap] latin_p8 natural (14, 0) page 15: real 1.270 ref 2.517 nats/tok, 11.20 bits/vtok (93s)
+[cap] POINT latin_p8 natural (14, 0): 25.4 chars/vtok, 11.00 (10.54-11.43) bits/vtok, recovered 0.52 (0.51-0.54), CER None
+[cap] latin_p8 natural (21, 0) page 0: real 0.899 ref 2.138 nats/tok, 11.98 bits/vtok (6s)
+[cap] latin_p8 natural (21, 0) page 1: real 0.972 ref 2.311 nats/tok, 11.49 bits/vtok (11s)
+[cap] latin_p8 natural (21, 0) page 2: real 1.238 ref 2.617 nats/tok, 12.07 bits/vtok (17s)
+[cap] latin_p8 natural (21, 0) page 3: real 1.058 ref 2.569 nats/tok, 12.32 bits/vtok (23s)
+[cap] latin_p8 natural (21, 0) page 4: real 1.077 ref 2.355 nats/tok, 12.07 bits/vtok (29s)
+[cap] latin_p8 natural (21, 0) page 5: real 1.011 ref 2.474 nats/tok, 12.57 bits/vtok (35s)
+[cap] latin_p8 natural (21, 0) page 6: real 0.862 ref 1.666 nats/tok, 9.35 bits/vtok (41s)
+[cap] latin_p8 natural (21, 0) page 7: real 1.047 ref 2.091 nats/tok, 10.28 bits/vtok (48s)
+[cap] latin_p8 natural (21, 0) page 8: real 1.288 ref 2.546 nats/tok, 11.25 bits/vtok (54s)
+[cap] latin_p8 natural (21, 0) page 9: real 1.153 ref 2.399 nats/tok, 10.67 bits/vtok (60s)
+[cap] latin_p8 natural (21, 0) page 10: real 1.096 ref 2.282 nats/tok, 10.67 bits/vtok (66s)
+[cap] latin_p8 natural (21, 0) page 11: real 1.113 ref 2.137 nats/tok, 9.47 bits/vtok (73s)
+[cap] latin_p8 natural (21, 0) page 12: real 1.100 ref 2.409 nats/tok, 11.67 bits/vtok (79s)
+[cap] latin_p8 natural (21, 0) page 13: real 1.051 ref 2.286 nats/tok, 11.25 bits/vtok (85s)
+[cap] latin_p8 natural (21, 0) page 14: real 1.073 ref 2.432 nats/tok, 11.62 bits/vtok (91s)
+[cap] latin_p8 natural (21, 0) page 15: real 1.317 ref 2.517 nats/tok, 10.78 bits/vtok (98s)
+[cap] POINT latin_p8 natural (21, 0): 25.4 chars/vtok, 11.22 (10.75-11.66) bits/vtok, recovered 0.53 (0.51-0.55), CER None
+[cap] latin_p8 natural (0, 7) page 0: real 0.805 ref 2.138 nats/tok, 12.90 bits/vtok (7s)
+[cap] latin_p8 natural (0, 7) page 1: real 0.987 ref 2.311 nats/tok, 11.36 bits/vtok (12s)
+[cap] latin_p8 natural (0, 7) page 2: real 1.128 ref 2.617 nats/tok, 13.04 bits/vtok (18s)
+[cap] latin_p8 natural (0, 7) page 3: real 1.183 ref 2.569 nats/tok, 11.29 bits/vtok (24s)
+[cap] latin_p8 natural (0, 7) page 4: real 1.046 ref 2.355 nats/tok, 12.36 bits/vtok (30s)
+[cap] latin_p8 natural (0, 7) page 5: real 0.974 ref 2.474 nats/tok, 12.88 bits/vtok (36s)
+[cap] latin_p8 natural (0, 7) page 6: real 0.800 ref 1.666 nats/tok, 10.07 bits/vtok (43s)
+[cap] latin_p8 natural (0, 7) page 7: real 0.893 ref 2.091 nats/tok, 11.80 bits/vtok (49s)
+[cap] latin_p8 natural (0, 7) page 8: real 1.015 ref 2.546 nats/tok, 13.69 bits/vtok (56s)
+[cap] latin_p8 natural (0, 7) page 9: real 0.895 ref 2.399 nats/tok, 12.88 bits/vtok (62s)
+[cap] latin_p8 natural (0, 7) page 10: real 0.877 ref 2.282 nats/tok, 12.64 bits/vtok (69s)
+[cap] latin_p8 natural (0, 7) page 11: real 0.909 ref 2.137 nats/tok, 11.36 bits/vtok (75s)
+[cap] latin_p8 natural (0, 7) page 12: real 0.986 ref 2.409 nats/tok, 12.69 bits/vtok (83s)
+[cap] latin_p8 natural (0, 7) page 13: real 1.000 ref 2.286 nats/tok, 11.71 bits/vtok (90s)
+[cap] latin_p8 natural (0, 7) page 14: real 1.036 ref 2.432 nats/tok, 11.94 bits/vtok (97s)
+[cap] latin_p8 natural (0, 7) page 15: real 0.922 ref 2.517 nats/tok, 14.33 bits/vtok (104s)
+[cap] POINT latin_p8 natural (0, 7): 25.4 chars/vtok, 12.31 (11.81-12.79) bits/vtok, recovered 0.58 (0.57-0.60), CER None
+[cap] latin_p8 natural (7, 7) page 0: real 0.799 ref 2.138 nats/tok, 12.95 bits/vtok (7s)
+[cap] latin_p8 natural (7, 7) page 1: real 0.946 ref 2.311 nats/tok, 11.71 bits/vtok (13s)
+[cap] latin_p8 natural (7, 7) page 2: real 1.039 ref 2.617 nats/tok, 13.81 bits/vtok (19s)
+[cap] latin_p8 natural (7, 7) page 3: real 1.186 ref 2.569 nats/tok, 11.27 bits/vtok (25s)
+[cap] latin_p8 natural (7, 7) page 4: real 1.015 ref 2.355 nats/tok, 12.65 bits/vtok (31s)
+[cap] latin_p8 natural (7, 7) page 5: real 0.908 ref 2.474 nats/tok, 13.44 bits/vtok (37s)
+[cap] latin_p8 natural (7, 7) page 6: real 0.798 ref 1.666 nats/tok, 10.10 bits/vtok (44s)
+[cap] latin_p8 natural (7, 7) page 7: real 0.908 ref 2.091 nats/tok, 11.65 bits/vtok (51s)
+[cap] latin_p8 natural (7, 7) page 8: real 0.995 ref 2.546 nats/tok, 13.87 bits/vtok (58s)
+[cap] latin_p8 natural (7, 7) page 9: real 0.930 ref 2.399 nats/tok, 12.58 bits/vtok (65s)
+[cap] latin_p8 natural (7, 7) page 10: real 0.865 ref 2.282 nats/tok, 12.75 bits/vtok (72s)
+[cap] latin_p8 natural (7, 7) page 11: real 0.901 ref 2.137 nats/tok, 11.43 bits/vtok (78s)
+[cap] latin_p8 natural (7, 7) page 12: real 1.000 ref 2.409 nats/tok, 12.56 bits/vtok (85s)
+[cap] latin_p8 natural (7, 7) page 13: real 0.963 ref 2.286 nats/tok, 12.04 bits/vtok (91s)
+[cap] latin_p8 natural (7, 7) page 14: real 1.015 ref 2.432 nats/tok, 12.12 bits/vtok (97s)
+[cap] latin_p8 natural (7, 7) page 15: real 0.944 ref 2.517 nats/tok, 14.13 bits/vtok (103s)
+[cap] POINT latin_p8 natural (7, 7): 25.4 chars/vtok, 12.44 (11.92-12.94) bits/vtok, recovered 0.59 (0.58-0.60), CER None
+[cap] latin_p8 natural (14, 7) page 0: real 0.748 ref 2.138 nats/tok, 13.44 bits/vtok (6s)
+[cap] latin_p8 natural (14, 7) page 1: real 0.980 ref 2.311 nats/tok, 11.42 bits/vtok (12s)
+[cap] latin_p8 natural (14, 7) page 2: real 1.101 ref 2.617 nats/tok, 13.27 bits/vtok (18s)
+[cap] latin_p8 natural (14, 7) page 3: real 1.157 ref 2.569 nats/tok, 11.50 bits/vtok (24s)
+[cap] latin_p8 natural (14, 7) page 4: real 1.089 ref 2.355 nats/tok, 11.95 bits/vtok (30s)
+[cap] latin_p8 natural (14, 7) page 5: real 0.930 ref 2.474 nats/tok, 13.26 bits/vtok (36s)
+[cap] latin_p8 natural (14, 7) page 6: real 0.781 ref 1.666 nats/tok, 10.29 bits/vtok (43s)
+[cap] latin_p8 natural (14, 7) page 7: real 0.898 ref 2.091 nats/tok, 11.75 bits/vtok (51s)
+[cap] latin_p8 natural (14, 7) page 8: real 0.992 ref 2.546 nats/tok, 13.90 bits/vtok (58s)
+[cap] latin_p8 natural (14, 7) page 9: real 0.861 ref 2.399 nats/tok, 13.17 bits/vtok (64s)
+[cap] latin_p8 natural (14, 7) page 10: real 0.889 ref 2.282 nats/tok, 12.53 bits/vtok (70s)
+[cap] latin_p8 natural (14, 7) page 11: real 0.855 ref 2.137 nats/tok, 11.86 bits/vtok (77s)
+[cap] latin_p8 natural (14, 7) page 12: real 1.008 ref 2.409 nats/tok, 12.48 bits/vtok (83s)
+[cap] latin_p8 natural (14, 7) page 13: real 0.997 ref 2.286 nats/tok, 11.74 bits/vtok (90s)
+[cap] latin_p8 natural (14, 7) page 14: real 1.039 ref 2.432 nats/tok, 11.91 bits/vtok (96s)
+[cap] latin_p8 natural (14, 7) page 15: real 0.973 ref 2.517 nats/tok, 13.87 bits/vtok (102s)
+[cap] POINT latin_p8 natural (14, 7): 25.4 chars/vtok, 12.40 (11.92-12.87) bits/vtok, recovered 0.59 (0.57-0.61), CER None
+[cap] latin_p8 natural (21, 7) page 0: real 0.778 ref 2.138 nats/tok, 13.15 bits/vtok (6s)
+[cap] latin_p8 natural (21, 7) page 1: real 0.955 ref 2.311 nats/tok, 11.63 bits/vtok (12s)
+[cap] latin_p8 natural (21, 7) page 2: real 1.049 ref 2.617 nats/tok, 13.73 bits/vtok (18s)
+[cap] latin_p8 natural (21, 7) page 3: real 1.123 ref 2.569 nats/tok, 11.78 bits/vtok (25s)
+[cap] latin_p8 natural (21, 7) page 4: real 1.087 ref 2.355 nats/tok, 11.98 bits/vtok (31s)
+[cap] latin_p8 natural (21, 7) page 5: real 0.872 ref 2.474 nats/tok, 13.76 bits/vtok (37s)
+[cap] latin_p8 natural (21, 7) page 6: real 0.801 ref 1.666 nats/tok, 10.06 bits/vtok (44s)
+[cap] latin_p8 natural (21, 7) page 7: real 0.913 ref 2.091 nats/tok, 11.60 bits/vtok (50s)
+[cap] latin_p8 natural (21, 7) page 8: real 0.991 ref 2.546 nats/tok, 13.90 bits/vtok (56s)
+[cap] latin_p8 natural (21, 7) page 9: real 0.922 ref 2.399 nats/tok, 12.65 bits/vtok (62s)
+[cap] latin_p8 natural (21, 7) page 10: real 0.899 ref 2.282 nats/tok, 12.44 bits/vtok (68s)
+[cap] latin_p8 natural (21, 7) page 11: real 0.906 ref 2.137 nats/tok, 11.38 bits/vtok (73s)
+[cap] latin_p8 natural (21, 7) page 12: real 1.012 ref 2.409 nats/tok, 12.46 bits/vtok (79s)
+[cap] latin_p8 natural (21, 7) page 13: real 0.978 ref 2.286 nats/tok, 11.91 bits/vtok (85s)
+[cap] latin_p8 natural (21, 7) page 14: real 0.969 ref 2.432 nats/tok, 12.51 bits/vtok (91s)
+[cap] latin_p8 natural (21, 7) page 15: real 0.948 ref 2.517 nats/tok, 14.09 bits/vtok (97s)
+[cap] POINT latin_p8 natural (21, 7): 25.4 chars/vtok, 12.44 (11.91-12.96) bits/vtok, recovered 0.59 (0.57-0.61), CER None
+[cap] latin_p8 natural (0, 14) page 0: real 0.778 ref 2.138 nats/tok, 13.15 bits/vtok (6s)
+[cap] latin_p8 natural (0, 14) page 1: real 0.898 ref 2.311 nats/tok, 12.12 bits/vtok (12s)
+[cap] latin_p8 natural (0, 14) page 2: real 1.098 ref 2.617 nats/tok, 13.30 bits/vtok (18s)
+[cap] latin_p8 natural (0, 14) page 3: real 0.964 ref 2.569 nats/tok, 13.08 bits/vtok (24s)
+[cap] latin_p8 natural (0, 14) page 4: real 0.976 ref 2.355 nats/tok, 13.02 bits/vtok (30s)
+[cap] latin_p8 natural (0, 14) page 5: real 0.989 ref 2.474 nats/tok, 12.75 bits/vtok (36s)
+[cap] latin_p8 natural (0, 14) page 6: real 0.809 ref 1.666 nats/tok, 9.97 bits/vtok (42s)
+[cap] latin_p8 natural (0, 14) page 7: real 1.003 ref 2.091 nats/tok, 10.71 bits/vtok (49s)
+[cap] latin_p8 natural (0, 14) page 8: real 1.180 ref 2.546 nats/tok, 12.21 bits/vtok (55s)
+[cap] latin_p8 natural (0, 14) page 9: real 0.997 ref 2.399 nats/tok, 12.01 bits/vtok (62s)
+[cap] latin_p8 natural (0, 14) page 10: real 1.034 ref 2.282 nats/tok, 11.23 bits/vtok (68s)
+[cap] latin_p8 natural (0, 14) page 11: real 0.925 ref 2.137 nats/tok, 11.21 bits/vtok (74s)
+[cap] latin_p8 natural (0, 14) page 12: real 1.017 ref 2.409 nats/tok, 12.40 bits/vtok (80s)
+[cap] latin_p8 natural (0, 14) page 13: real 0.903 ref 2.286 nats/tok, 12.59 bits/vtok (87s)
+[cap] latin_p8 natural (0, 14) page 14: real 0.985 ref 2.432 nats/tok, 12.37 bits/vtok (93s)
+[cap] latin_p8 natural (0, 14) page 15: real 0.988 ref 2.517 nats/tok, 13.74 bits/vtok (99s)
+[cap] POINT latin_p8 natural (0, 14): 25.4 chars/vtok, 12.24 (11.73-12.71) bits/vtok, recovered 0.58 (0.56-0.60), CER None
+[cap] latin_p8 natural (7, 14) page 0: real 0.782 ref 2.138 nats/tok, 13.11 bits/vtok (7s)
+[cap] latin_p8 natural (7, 14) page 1: real 0.876 ref 2.311 nats/tok, 12.31 bits/vtok (12s)
+[cap] latin_p8 natural (7, 14) page 2: real 1.093 ref 2.617 nats/tok, 13.34 bits/vtok (18s)
+[cap] latin_p8 natural (7, 14) page 3: real 0.968 ref 2.569 nats/tok, 13.05 bits/vtok (24s)
+[cap] latin_p8 natural (7, 14) page 4: real 1.053 ref 2.355 nats/tok, 12.29 bits/vtok (30s)
+[cap] latin_p8 natural (7, 14) page 5: real 0.896 ref 2.474 nats/tok, 13.55 bits/vtok (36s)
+[cap] latin_p8 natural (7, 14) page 6: real 0.819 ref 1.666 nats/tok, 9.85 bits/vtok (43s)
+[cap] latin_p8 natural (7, 14) page 7: real 0.930 ref 2.091 nats/tok, 11.43 bits/vtok (49s)
+[cap] latin_p8 natural (7, 14) page 8: real 1.120 ref 2.546 nats/tok, 12.75 bits/vtok (55s)
+[cap] latin_p8 natural (7, 14) page 9: real 1.049 ref 2.399 nats/tok, 11.56 bits/vtok (61s)
+[cap] latin_p8 natural (7, 14) page 10: real 1.081 ref 2.282 nats/tok, 10.80 bits/vtok (67s)
+[cap] latin_p8 natural (7, 14) page 11: real 0.943 ref 2.137 nats/tok, 11.04 bits/vtok (73s)
+[cap] latin_p8 natural (7, 14) page 12: real 0.968 ref 2.409 nats/tok, 12.84 bits/vtok (79s)
+[cap] latin_p8 natural (7, 14) page 13: real 0.917 ref 2.286 nats/tok, 12.47 bits/vtok (85s)
+[cap] latin_p8 natural (7, 14) page 14: real 0.894 ref 2.432 nats/tok, 13.15 bits/vtok (90s)
+[cap] latin_p8 natural (7, 14) page 15: real 0.998 ref 2.517 nats/tok, 13.65 bits/vtok (96s)
+[cap] POINT latin_p8 natural (7, 14): 25.4 chars/vtok, 12.33 (11.77-12.82) bits/vtok, recovered 0.58 (0.57-0.60), CER None
+[cap] latin_p8 natural (14, 14) page 0: real 0.839 ref 2.138 nats/tok, 12.56 bits/vtok (6s)
+[cap] latin_p8 natural (14, 14) page 1: real 0.972 ref 2.311 nats/tok, 11.49 bits/vtok (12s)
+[cap] latin_p8 natural (14, 14) page 2: real 1.101 ref 2.617 nats/tok, 13.27 bits/vtok (18s)
+[cap] latin_p8 natural (14, 14) page 3: real 0.962 ref 2.569 nats/tok, 13.10 bits/vtok (23s)
+[cap] latin_p8 natural (14, 14) page 4: real 0.929 ref 2.355 nats/tok, 13.46 bits/vtok (29s)
+[cap] latin_p8 natural (14, 14) page 5: real 0.931 ref 2.474 nats/tok, 13.25 bits/vtok (35s)
+[cap] latin_p8 natural (14, 14) page 6: real 0.832 ref 1.666 nats/tok, 9.70 bits/vtok (42s)
+[cap] latin_p8 natural (14, 14) page 7: real 1.019 ref 2.091 nats/tok, 10.56 bits/vtok (48s)
+[cap] latin_p8 natural (14, 14) page 8: real 1.153 ref 2.546 nats/tok, 12.46 bits/vtok (54s)
+[cap] latin_p8 natural (14, 14) page 9: real 1.031 ref 2.399 nats/tok, 11.72 bits/vtok (59s)
+[cap] latin_p8 natural (14, 14) page 10: real 1.093 ref 2.282 nats/tok, 10.70 bits/vtok (65s)
+[cap] latin_p8 natural (14, 14) page 11: real 0.914 ref 2.137 nats/tok, 11.30 bits/vtok (71s)
+[cap] latin_p8 natural (14, 14) page 12: real 0.955 ref 2.409 nats/tok, 12.96 bits/vtok (77s)
+[cap] latin_p8 natural (14, 14) page 13: real 0.889 ref 2.286 nats/tok, 12.72 bits/vtok (83s)
+[cap] latin_p8 natural (14, 14) page 14: real 0.940 ref 2.432 nats/tok, 12.75 bits/vtok (90s)
+[cap] latin_p8 natural (14, 14) page 15: real 0.989 ref 2.517 nats/tok, 13.72 bits/vtok (96s)
+[cap] POINT latin_p8 natural (14, 14): 25.4 chars/vtok, 12.23 (11.65-12.77) bits/vtok, recovered 0.58 (0.56-0.60), CER None
+[cap] latin_p8 natural (21, 14) page 0: real 0.827 ref 2.138 nats/tok, 12.68 bits/vtok (6s)
+[cap] latin_p8 natural (21, 14) page 1: real 0.930 ref 2.311 nats/tok, 11.85 bits/vtok (14s)
+[cap] latin_p8 natural (21, 14) page 2: real 1.131 ref 2.617 nats/tok, 13.01 bits/vtok (20s)
+[cap] latin_p8 natural (21, 14) page 3: real 0.949 ref 2.569 nats/tok, 13.20 bits/vtok (25s)
+[cap] latin_p8 natural (21, 14) page 4: real 1.001 ref 2.355 nats/tok, 12.78 bits/vtok (31s)
+[cap] latin_p8 natural (21, 14) page 5: real 0.876 ref 2.474 nats/tok, 13.73 bits/vtok (37s)
+[cap] latin_p8 natural (21, 14) page 6: real 0.833 ref 1.666 nats/tok, 9.69 bits/vtok (44s)
+[cap] latin_p8 natural (21, 14) page 7: real 1.000 ref 2.091 nats/tok, 10.74 bits/vtok (50s)
+[cap] latin_p8 natural (21, 14) page 8: real 1.102 ref 2.546 nats/tok, 12.91 bits/vtok (56s)
+[cap] latin_p8 natural (21, 14) page 9: real 0.996 ref 2.399 nats/tok, 12.02 bits/vtok (62s)
+[cap] latin_p8 natural (21, 14) page 10: real 1.063 ref 2.282 nats/tok, 10.97 bits/vtok (67s)
+[cap] latin_p8 natural (21, 14) page 11: real 0.930 ref 2.137 nats/tok, 11.16 bits/vtok (73s)
+[cap] latin_p8 natural (21, 14) page 12: real 0.996 ref 2.409 nats/tok, 12.59 bits/vtok (80s)
+[cap] latin_p8 natural (21, 14) page 13: real 0.915 ref 2.286 nats/tok, 12.49 bits/vtok (85s)
+[cap] latin_p8 natural (21, 14) page 14: real 0.920 ref 2.432 nats/tok, 12.93 bits/vtok (91s)
+[cap] latin_p8 natural (21, 14) page 15: real 1.010 ref 2.517 nats/tok, 13.54 bits/vtok (97s)
+[cap] POINT latin_p8 natural (21, 14): 25.4 chars/vtok, 12.27 (11.71-12.77) bits/vtok, recovered 0.58 (0.56-0.60), CER None
+[cap] latin_p8 natural (0, 21) page 0: real 0.824 ref 2.138 nats/tok, 12.71 bits/vtok (6s)
+[cap] latin_p8 natural (0, 21) page 1: real 1.025 ref 2.311 nats/tok, 11.03 bits/vtok (11s)
+[cap] latin_p8 natural (0, 21) page 2: real 1.081 ref 2.617 nats/tok, 13.45 bits/vtok (18s)
+[cap] latin_p8 natural (0, 21) page 3: real 1.172 ref 2.569 nats/tok, 11.38 bits/vtok (24s)
+[cap] latin_p8 natural (0, 21) page 4: real 1.040 ref 2.355 nats/tok, 12.42 bits/vtok (30s)
+[cap] latin_p8 natural (0, 21) page 5: real 0.884 ref 2.474 nats/tok, 13.66 bits/vtok (36s)
+[cap] latin_p8 natural (0, 21) page 6: real 0.821 ref 1.666 nats/tok, 9.83 bits/vtok (43s)
+[cap] latin_p8 natural (0, 21) page 7: real 0.878 ref 2.091 nats/tok, 11.95 bits/vtok (49s)
+[cap] latin_p8 natural (0, 21) page 8: real 0.971 ref 2.546 nats/tok, 14.08 bits/vtok (55s)
+[cap] latin_p8 natural (0, 21) page 9: real 0.877 ref 2.399 nats/tok, 13.04 bits/vtok (61s)
+[cap] latin_p8 natural (0, 21) page 10: real 0.888 ref 2.282 nats/tok, 12.54 bits/vtok (67s)
+[cap] latin_p8 natural (0, 21) page 11: real 0.907 ref 2.137 nats/tok, 11.38 bits/vtok (73s)
+[cap] latin_p8 natural (0, 21) page 12: real 1.024 ref 2.409 nats/tok, 12.34 bits/vtok (79s)
+[cap] latin_p8 natural (0, 21) page 13: real 0.931 ref 2.286 nats/tok, 12.34 bits/vtok (84s)
+[cap] latin_p8 natural (0, 21) page 14: real 1.076 ref 2.432 nats/tok, 11.59 bits/vtok (89s)
+[cap] latin_p8 natural (0, 21) page 15: real 0.961 ref 2.517 nats/tok, 13.98 bits/vtok (95s)
+[cap] POINT latin_p8 natural (0, 21): 25.4 chars/vtok, 12.36 (11.81-12.89) bits/vtok, recovered 0.59 (0.57-0.60), CER None
+[cap] latin_p8 natural (7, 21) page 0: real 0.860 ref 2.138 nats/tok, 12.36 bits/vtok (6s)
+[cap] latin_p8 natural (7, 21) page 1: real 1.033 ref 2.311 nats/tok, 10.96 bits/vtok (12s)
+[cap] latin_p8 natural (7, 21) page 2: real 1.039 ref 2.617 nats/tok, 13.82 bits/vtok (17s)
+[cap] latin_p8 natural (7, 21) page 3: real 1.221 ref 2.569 nats/tok, 10.99 bits/vtok (23s)
+[cap] latin_p8 natural (7, 21) page 4: real 1.025 ref 2.355 nats/tok, 12.56 bits/vtok (29s)
+[cap] latin_p8 natural (7, 21) page 5: real 0.910 ref 2.474 nats/tok, 13.43 bits/vtok (35s)
+[cap] latin_p8 natural (7, 21) page 6: real 0.782 ref 1.666 nats/tok, 10.28 bits/vtok (42s)
+[cap] latin_p8 natural (7, 21) page 7: real 0.888 ref 2.091 nats/tok, 11.85 bits/vtok (47s)
+[cap] latin_p8 natural (7, 21) page 8: real 0.957 ref 2.546 nats/tok, 14.20 bits/vtok (53s)
+[cap] latin_p8 natural (7, 21) page 9: real 0.967 ref 2.399 nats/tok, 12.26 bits/vtok (59s)
+[cap] latin_p8 natural (7, 21) page 10: real 0.847 ref 2.282 nats/tok, 12.91 bits/vtok (65s)
+[cap] latin_p8 natural (7, 21) page 11: real 0.918 ref 2.137 nats/tok, 11.27 bits/vtok (71s)
+[cap] latin_p8 natural (7, 21) page 12: real 0.998 ref 2.409 nats/tok, 12.57 bits/vtok (77s)
+[cap] latin_p8 natural (7, 21) page 13: real 0.966 ref 2.286 nats/tok, 12.02 bits/vtok (83s)
+[cap] latin_p8 natural (7, 21) page 14: real 0.997 ref 2.432 nats/tok, 12.27 bits/vtok (89s)
+[cap] latin_p8 natural (7, 21) page 15: real 1.071 ref 2.517 nats/tok, 12.99 bits/vtok (95s)
+[cap] POINT latin_p8 natural (7, 21): 25.4 chars/vtok, 12.30 (11.79-12.79) bits/vtok, recovered 0.58 (0.57-0.60), CER None
+[cap] latin_p8 natural (14, 21) page 0: real 0.781 ref 2.138 nats/tok, 13.12 bits/vtok (6s)
+[cap] latin_p8 natural (14, 21) page 1: real 1.059 ref 2.311 nats/tok, 10.74 bits/vtok (12s)
+[cap] latin_p8 natural (14, 21) page 2: real 1.072 ref 2.617 nats/tok, 13.52 bits/vtok (19s)
+[cap] latin_p8 natural (14, 21) page 3: real 1.155 ref 2.569 nats/tok, 11.52 bits/vtok (25s)
+[cap] latin_p8 natural (14, 21) page 4: real 1.029 ref 2.355 nats/tok, 12.52 bits/vtok (31s)
+[cap] latin_p8 natural (14, 21) page 5: real 0.901 ref 2.474 nats/tok, 13.51 bits/vtok (37s)
+[cap] latin_p8 natural (14, 21) page 6: real 0.798 ref 1.666 nats/tok, 10.10 bits/vtok (44s)
+[cap] latin_p8 natural (14, 21) page 7: real 0.851 ref 2.091 nats/tok, 12.21 bits/vtok (50s)
+[cap] latin_p8 natural (14, 21) page 8: real 0.993 ref 2.546 nats/tok, 13.88 bits/vtok (55s)
+[cap] latin_p8 natural (14, 21) page 9: real 0.903 ref 2.399 nats/tok, 12.82 bits/vtok (61s)
+[cap] latin_p8 natural (14, 21) page 10: real 0.874 ref 2.282 nats/tok, 12.66 bits/vtok (67s)
+[cap] latin_p8 natural (14, 21) page 11: real 0.912 ref 2.137 nats/tok, 11.32 bits/vtok (73s)
+[cap] latin_p8 natural (14, 21) page 12: real 1.012 ref 2.409 nats/tok, 12.46 bits/vtok (79s)
+[cap] latin_p8 natural (14, 21) page 13: real 0.971 ref 2.286 nats/tok, 11.97 bits/vtok (85s)
+[cap] latin_p8 natural (14, 21) page 14: real 1.037 ref 2.432 nats/tok, 11.92 bits/vtok (91s)
+[cap] latin_p8 natural (14, 21) page 15: real 1.041 ref 2.517 nats/tok, 13.26 bits/vtok (96s)
+[cap] POINT latin_p8 natural (14, 21): 25.4 chars/vtok, 12.35 (11.84-12.83) bits/vtok, recovered 0.59 (0.57-0.60), CER None
+[cap] latin_p8 natural (21, 21) page 0: real 0.797 ref 2.138 nats/tok, 12.97 bits/vtok (6s)
+[cap] latin_p8 natural (21, 21) page 1: real 0.964 ref 2.311 nats/tok, 11.56 bits/vtok (12s)
+[cap] latin_p8 natural (21, 21) page 2: real 1.059 ref 2.617 nats/tok, 13.64 bits/vtok (19s)
+[cap] latin_p8 natural (21, 21) page 3: real 1.164 ref 2.569 nats/tok, 11.45 bits/vtok (25s)
+[cap] latin_p8 natural (21, 21) page 4: real 1.046 ref 2.355 nats/tok, 12.36 bits/vtok (30s)
+[cap] latin_p8 natural (21, 21) page 5: real 0.874 ref 2.474 nats/tok, 13.74 bits/vtok (36s)
+[cap] latin_p8 natural (21, 21) page 6: real 0.747 ref 1.666 nats/tok, 10.69 bits/vtok (42s)
+[cap] latin_p8 natural (21, 21) page 7: real 0.828 ref 2.091 nats/tok, 12.44 bits/vtok (49s)
+[cap] latin_p8 natural (21, 21) page 8: real 0.970 ref 2.546 nats/tok, 14.09 bits/vtok (55s)
+[cap] latin_p8 natural (21, 21) page 9: real 0.926 ref 2.399 nats/tok, 12.62 bits/vtok (62s)
+[cap] latin_p8 natural (21, 21) page 10: real 0.858 ref 2.282 nats/tok, 12.81 bits/vtok (68s)
+[cap] latin_p8 natural (21, 21) page 11: real 0.909 ref 2.137 nats/tok, 11.35 bits/vtok (74s)
+[cap] latin_p8 natural (21, 21) page 12: real 0.981 ref 2.409 nats/tok, 12.73 bits/vtok (80s)
+[cap] latin_p8 natural (21, 21) page 13: real 0.929 ref 2.286 nats/tok, 12.36 bits/vtok (87s)
+[cap] latin_p8 natural (21, 21) page 14: real 1.003 ref 2.432 nats/tok, 12.21 bits/vtok (93s)
+[cap] latin_p8 natural (21, 21) page 15: real 1.044 ref 2.517 nats/tok, 13.24 bits/vtok (99s)
+[cap] POINT latin_p8 natural (21, 21): 25.4 chars/vtok, 12.52 (12.07-12.95) bits/vtok, recovered 0.59 (0.58-0.61), CER None
+CHAIN run0b p8 done rc=0
+Loading weights:   0%|          | 0/824 [00:00<?, ?it/s]Loading weights:  40%|███▉      | 327/824 [00:00<00:00, 3240.21it/s]Loading weights:  79%|███████▉  | 652/824 [00:00<00:00, 3185.76it/s]Loading weights: 100%|██████████| 824/824 [00:00<00:00, 3705.96it/s]
+[cap] model loaded in 4s; 32 points to do
+[cap] latin_p12 natural (0, 0) page 0: real 0.279 ref 2.151 nats/tok, 8.05 bits/vtok (13s)
+[cap] latin_p12 natural (0, 0) page 1: real 0.449 ref 2.844 nats/tok, 9.69 bits/vtok (27s)
+[cap] latin_p12 natural (0, 0) page 2: real 0.415 ref 2.620 nats/tok, 8.27 bits/vtok (40s)
+[cap] latin_p12 natural (0, 0) page 3: real 0.336 ref 2.466 nats/tok, 8.35 bits/vtok (56s)
+[cap] latin_p12 natural (0, 0) page 4: real 0.403 ref 2.687 nats/tok, 9.13 bits/vtok (78s)
+[cap] latin_p12 natural (0, 0) page 5: real 0.354 ref 2.935 nats/tok, 9.11 bits/vtok (90s)
+[cap] latin_p12 natural (0, 0) page 6: real 0.529 ref 2.897 nats/tok, 8.68 bits/vtok (102s)
+[cap] latin_p12 natural (0, 0) page 7: real 0.350 ref 2.576 nats/tok, 8.12 bits/vtok (114s)
+[cap] latin_p12 natural (0, 0) page 8: real 0.252 ref 2.076 nats/tok, 7.30 bits/vtok (126s)
+[cap] latin_p12 natural (0, 0) page 9: real 0.409 ref 2.473 nats/tok, 8.48 bits/vtok (138s)
+[cap] latin_p12 natural (0, 0) page 10: real 0.338 ref 2.128 nats/tok, 7.36 bits/vtok (151s)
+[cap] latin_p12 natural (0, 0) page 11: real 0.379 ref 2.529 nats/tok, 8.55 bits/vtok (162s)
+[cap] latin_p12 natural (0, 0) page 12: real 0.297 ref 2.026 nats/tok, 7.22 bits/vtok (174s)
+[cap] latin_p12 natural (0, 0) page 13: real 0.350 ref 1.546 nats/tok, 6.32 bits/vtok (187s)
+[cap] latin_p12 natural (0, 0) page 14: real 0.289 ref 1.508 nats/tok, 6.74 bits/vtok (203s)
+[cap] latin_p12 natural (0, 0) page 15: real 0.297 ref 2.001 nats/tok, 7.62 bits/vtok (215s)
+[cap] POINT latin_p12 natural (0, 0): 11.0 chars/vtok, 8.06 (7.63-8.49) bits/vtok, recovered 0.85 (0.83-0.86), CER None
+[cap] latin_p12 natural (7, 0) page 0: real 0.270 ref 2.151 nats/tok, 8.09 bits/vtok (6s)
+[cap] latin_p12 natural (7, 0) page 1: real 0.373 ref 2.844 nats/tok, 10.00 bits/vtok (13s)
+[cap] latin_p12 natural (7, 0) page 2: real 0.407 ref 2.620 nats/tok, 8.30 bits/vtok (18s)
+[cap] latin_p12 natural (7, 0) page 3: real 0.399 ref 2.466 nats/tok, 8.10 bits/vtok (24s)
+[cap] latin_p12 natural (7, 0) page 4: real 0.395 ref 2.687 nats/tok, 9.16 bits/vtok (30s)
+[cap] latin_p12 natural (7, 0) page 5: real 0.383 ref 2.935 nats/tok, 9.01 bits/vtok (36s)
+[cap] latin_p12 natural (7, 0) page 6: real 0.666 ref 2.897 nats/tok, 8.18 bits/vtok (41s)
+[cap] latin_p12 natural (7, 0) page 7: real 0.308 ref 2.576 nats/tok, 8.28 bits/vtok (47s)
+[cap] latin_p12 natural (7, 0) page 8: real 0.306 ref 2.076 nats/tok, 7.08 bits/vtok (53s)
+[cap] latin_p12 natural (7, 0) page 9: real 0.420 ref 2.473 nats/tok, 8.43 bits/vtok (59s)
+[cap] latin_p12 natural (7, 0) page 10: real 0.326 ref 2.128 nats/tok, 7.41 bits/vtok (65s)
+[cap] latin_p12 natural (7, 0) page 11: real 0.368 ref 2.529 nats/tok, 8.60 bits/vtok (71s)
+[cap] latin_p12 natural (7, 0) page 12: real 0.352 ref 2.026 nats/tok, 6.99 bits/vtok (77s)
+[cap] latin_p12 natural (7, 0) page 13: real 0.319 ref 1.546 nats/tok, 6.49 bits/vtok (85s)
+[cap] latin_p12 natural (7, 0) page 14: real 0.306 ref 1.508 nats/tok, 6.65 bits/vtok (93s)
+[cap] latin_p12 natural (7, 0) page 15: real 0.324 ref 2.001 nats/tok, 7.50 bits/vtok (99s)
+[cap] POINT latin_p12 natural (7, 0): 11.0 chars/vtok, 8.02 (7.57-8.47) bits/vtok, recovered 0.84 (0.82-0.85), CER None
+[cap] latin_p12 natural (14, 0) page 0: real 0.282 ref 2.151 nats/tok, 8.04 bits/vtok (6s)
+[cap] latin_p12 natural (14, 0) page 1: real 0.421 ref 2.844 nats/tok, 9.80 bits/vtok (13s)
+[cap] latin_p12 natural (14, 0) page 2: real 0.378 ref 2.620 nats/tok, 8.41 bits/vtok (18s)
+[cap] latin_p12 natural (14, 0) page 3: real 0.369 ref 2.466 nats/tok, 8.22 bits/vtok (24s)
+[cap] latin_p12 natural (14, 0) page 4: real 0.397 ref 2.687 nats/tok, 9.15 bits/vtok (30s)
+[cap] latin_p12 natural (14, 0) page 5: real 0.314 ref 2.935 nats/tok, 9.25 bits/vtok (36s)
+[cap] latin_p12 natural (14, 0) page 6: real 0.535 ref 2.897 nats/tok, 8.66 bits/vtok (41s)
+[cap] latin_p12 natural (14, 0) page 7: real 0.310 ref 2.576 nats/tok, 8.27 bits/vtok (47s)
+[cap] latin_p12 natural (14, 0) page 8: real 0.260 ref 2.076 nats/tok, 7.26 bits/vtok (53s)
+[cap] latin_p12 natural (14, 0) page 9: real 0.360 ref 2.473 nats/tok, 8.68 bits/vtok (59s)
+[cap] latin_p12 natural (14, 0) page 10: real 0.350 ref 2.128 nats/tok, 7.31 bits/vtok (65s)
+[cap] latin_p12 natural (14, 0) page 11: real 0.399 ref 2.529 nats/tok, 8.47 bits/vtok (71s)
+[cap] latin_p12 natural (14, 0) page 12: real 0.316 ref 2.026 nats/tok, 7.14 bits/vtok (77s)
+[cap] latin_p12 natural (14, 0) page 13: real 0.317 ref 1.546 nats/tok, 6.50 bits/vtok (84s)
+[cap] latin_p12 natural (14, 0) page 14: real 0.287 ref 1.508 nats/tok, 6.76 bits/vtok (92s)
+[cap] latin_p12 natural (14, 0) page 15: real 0.325 ref 2.001 nats/tok, 7.49 bits/vtok (99s)
+[cap] POINT latin_p12 natural (14, 0): 11.0 chars/vtok, 8.09 (7.64-8.54) bits/vtok, recovered 0.85 (0.84-0.86), CER None
+[cap] latin_p12 natural (21, 0) page 0: real 0.264 ref 2.151 nats/tok, 8.12 bits/vtok (7s)
+[cap] latin_p12 natural (21, 0) page 1: real 0.402 ref 2.844 nats/tok, 9.88 bits/vtok (13s)
+[cap] latin_p12 natural (21, 0) page 2: real 0.422 ref 2.620 nats/tok, 8.25 bits/vtok (19s)
+[cap] latin_p12 natural (21, 0) page 3: real 0.307 ref 2.466 nats/tok, 8.46 bits/vtok (25s)
+[cap] latin_p12 natural (21, 0) page 4: real 0.358 ref 2.687 nats/tok, 9.31 bits/vtok (31s)
+[cap] latin_p12 natural (21, 0) page 5: real 0.338 ref 2.935 nats/tok, 9.17 bits/vtok (37s)
+[cap] latin_p12 natural (21, 0) page 6: real 0.573 ref 2.897 nats/tok, 8.52 bits/vtok (43s)
+[cap] latin_p12 natural (21, 0) page 7: real 0.321 ref 2.576 nats/tok, 8.23 bits/vtok (49s)
+[cap] latin_p12 natural (21, 0) page 8: real 0.306 ref 2.076 nats/tok, 7.08 bits/vtok (56s)
+[cap] latin_p12 natural (21, 0) page 9: real 0.411 ref 2.473 nats/tok, 8.47 bits/vtok (62s)
+[cap] latin_p12 natural (21, 0) page 10: real 0.352 ref 2.128 nats/tok, 7.31 bits/vtok (67s)
+[cap] latin_p12 natural (21, 0) page 11: real 0.415 ref 2.529 nats/tok, 8.41 bits/vtok (73s)
+[cap] latin_p12 natural (21, 0) page 12: real 0.324 ref 2.026 nats/tok, 7.11 bits/vtok (79s)
+[cap] latin_p12 natural (21, 0) page 13: real 0.320 ref 1.546 nats/tok, 6.49 bits/vtok (87s)
+[cap] latin_p12 natural (21, 0) page 14: real 0.309 ref 1.508 nats/tok, 6.63 bits/vtok (95s)
+[cap] latin_p12 natural (21, 0) page 15: real 0.315 ref 2.001 nats/tok, 7.54 bits/vtok (101s)
+[cap] POINT latin_p12 natural (21, 0): 11.0 chars/vtok, 8.06 (7.60-8.52) bits/vtok, recovered 0.85 (0.83-0.86), CER None
+[cap] latin_p12 natural (0, 7) page 0: real 0.252 ref 2.151 nats/tok, 8.17 bits/vtok (6s)
+[cap] latin_p12 natural (0, 7) page 1: real 0.474 ref 2.844 nats/tok, 9.59 bits/vtok (13s)
+[cap] latin_p12 natural (0, 7) page 2: real 0.343 ref 2.620 nats/tok, 8.54 bits/vtok (19s)
+[cap] latin_p12 natural (0, 7) page 3: real 0.353 ref 2.466 nats/tok, 8.28 bits/vtok (25s)
+[cap] latin_p12 natural (0, 7) page 4: real 0.503 ref 2.687 nats/tok, 8.73 bits/vtok (31s)
+[cap] latin_p12 natural (0, 7) page 5: real 0.435 ref 2.935 nats/tok, 8.83 bits/vtok (37s)
+[cap] latin_p12 natural (0, 7) page 6: real 0.416 ref 2.897 nats/tok, 9.10 bits/vtok (43s)
+[cap] latin_p12 natural (0, 7) page 7: real 0.411 ref 2.576 nats/tok, 7.90 bits/vtok (49s)
+[cap] latin_p12 natural (0, 7) page 8: real 0.372 ref 2.076 nats/tok, 6.82 bits/vtok (56s)
+[cap] latin_p12 natural (0, 7) page 9: real 0.451 ref 2.473 nats/tok, 8.31 bits/vtok (62s)
+[cap] latin_p12 natural (0, 7) page 10: real 0.399 ref 2.128 nats/tok, 7.11 bits/vtok (69s)
+[cap] latin_p12 natural (0, 7) page 11: real 0.317 ref 2.529 nats/tok, 8.80 bits/vtok (75s)
+[cap] latin_p12 natural (0, 7) page 12: real 0.292 ref 2.026 nats/tok, 7.24 bits/vtok (82s)
+[cap] latin_p12 natural (0, 7) page 13: real 0.253 ref 1.546 nats/tok, 6.84 bits/vtok (89s)
+[cap] latin_p12 natural (0, 7) page 14: real 0.242 ref 1.508 nats/tok, 7.00 bits/vtok (98s)
+[cap] latin_p12 natural (0, 7) page 15: real 0.306 ref 2.001 nats/tok, 7.58 bits/vtok (104s)
+[cap] POINT latin_p12 natural (0, 7): 11.0 chars/vtok, 8.05 (7.65-8.46) bits/vtok, recovered 0.84 (0.83-0.85), CER None
+[cap] latin_p12 natural (7, 7) page 0: real 0.267 ref 2.151 nats/tok, 8.10 bits/vtok (6s)
+[cap] latin_p12 natural (7, 7) page 1: real 0.469 ref 2.844 nats/tok, 9.61 bits/vtok (12s)
+[cap] latin_p12 natural (7, 7) page 2: real 0.339 ref 2.620 nats/tok, 8.56 bits/vtok (18s)
+[cap] latin_p12 natural (7, 7) page 3: real 0.340 ref 2.466 nats/tok, 8.33 bits/vtok (23s)
+[cap] latin_p12 natural (7, 7) page 4: real 0.455 ref 2.687 nats/tok, 8.92 bits/vtok (29s)
+[cap] latin_p12 natural (7, 7) page 5: real 0.436 ref 2.935 nats/tok, 8.82 bits/vtok (35s)
+[cap] latin_p12 natural (7, 7) page 6: real 0.447 ref 2.897 nats/tok, 8.98 bits/vtok (42s)
+[cap] latin_p12 natural (7, 7) page 7: real 0.424 ref 2.576 nats/tok, 7.85 bits/vtok (48s)
+[cap] latin_p12 natural (7, 7) page 8: real 0.365 ref 2.076 nats/tok, 6.85 bits/vtok (54s)
+[cap] latin_p12 natural (7, 7) page 9: real 0.436 ref 2.473 nats/tok, 8.37 bits/vtok (61s)
+[cap] latin_p12 natural (7, 7) page 10: real 0.411 ref 2.128 nats/tok, 7.06 bits/vtok (68s)
+[cap] latin_p12 natural (7, 7) page 11: real 0.322 ref 2.529 nats/tok, 8.78 bits/vtok (74s)
+[cap] latin_p12 natural (7, 7) page 12: real 0.293 ref 2.026 nats/tok, 7.24 bits/vtok (80s)
+[cap] latin_p12 natural (7, 7) page 13: real 0.242 ref 1.546 nats/tok, 6.90 bits/vtok (87s)
+[cap] latin_p12 natural (7, 7) page 14: real 0.233 ref 1.508 nats/tok, 7.05 bits/vtok (94s)
+[cap] latin_p12 natural (7, 7) page 15: real 0.261 ref 2.001 nats/tok, 7.78 bits/vtok (100s)
+[cap] POINT latin_p12 natural (7, 7): 11.0 chars/vtok, 8.08 (7.67-8.48) bits/vtok, recovered 0.85 (0.84-0.86), CER None
+[cap] latin_p12 natural (14, 7) page 0: real 0.218 ref 2.151 nats/tok, 8.31 bits/vtok (6s)
+[cap] latin_p12 natural (14, 7) page 1: real 0.480 ref 2.844 nats/tok, 9.57 bits/vtok (13s)
+[cap] latin_p12 natural (14, 7) page 2: real 0.297 ref 2.620 nats/tok, 8.71 bits/vtok (18s)
+[cap] latin_p12 natural (14, 7) page 3: real 0.346 ref 2.466 nats/tok, 8.31 bits/vtok (24s)
+[cap] latin_p12 natural (14, 7) page 4: real 0.398 ref 2.687 nats/tok, 9.15 bits/vtok (31s)
+[cap] latin_p12 natural (14, 7) page 5: real 0.376 ref 2.935 nats/tok, 9.04 bits/vtok (36s)
+[cap] latin_p12 natural (14, 7) page 6: real 0.404 ref 2.897 nats/tok, 9.14 bits/vtok (42s)
+[cap] latin_p12 natural (14, 7) page 7: real 0.415 ref 2.576 nats/tok, 7.88 bits/vtok (48s)
+[cap] latin_p12 natural (14, 7) page 8: real 0.329 ref 2.076 nats/tok, 6.99 bits/vtok (55s)
+[cap] latin_p12 natural (14, 7) page 9: real 0.412 ref 2.473 nats/tok, 8.46 bits/vtok (61s)
+[cap] latin_p12 natural (14, 7) page 10: real 0.374 ref 2.128 nats/tok, 7.21 bits/vtok (67s)
+[cap] latin_p12 natural (14, 7) page 11: real 0.266 ref 2.529 nats/tok, 9.00 bits/vtok (74s)
+[cap] latin_p12 natural (14, 7) page 12: real 0.299 ref 2.026 nats/tok, 7.21 bits/vtok (81s)
+[cap] latin_p12 natural (14, 7) page 13: real 0.257 ref 1.546 nats/tok, 6.82 bits/vtok (89s)
+[cap] latin_p12 natural (14, 7) page 14: real 0.201 ref 1.508 nats/tok, 7.23 bits/vtok (97s)
+[cap] latin_p12 natural (14, 7) page 15: real 0.266 ref 2.001 nats/tok, 7.76 bits/vtok (103s)
+[cap] POINT latin_p12 natural (14, 7): 11.0 chars/vtok, 8.17 (7.76-8.59) bits/vtok, recovered 0.86 (0.85-0.87), CER None
+[cap] latin_p12 natural (21, 7) page 0: real 0.244 ref 2.151 nats/tok, 8.20 bits/vtok (6s)
+[cap] latin_p12 natural (21, 7) page 1: real 0.456 ref 2.844 nats/tok, 9.66 bits/vtok (13s)
+[cap] latin_p12 natural (21, 7) page 2: real 0.299 ref 2.620 nats/tok, 8.71 bits/vtok (18s)
+[cap] latin_p12 natural (21, 7) page 3: real 0.351 ref 2.466 nats/tok, 8.29 bits/vtok (25s)
+[cap] latin_p12 natural (21, 7) page 4: real 0.409 ref 2.687 nats/tok, 9.10 bits/vtok (31s)
+[cap] latin_p12 natural (21, 7) page 5: real 0.418 ref 2.935 nats/tok, 8.89 bits/vtok (36s)
+[cap] latin_p12 natural (21, 7) page 6: real 0.407 ref 2.897 nats/tok, 9.13 bits/vtok (43s)
+[cap] latin_p12 natural (21, 7) page 7: real 0.403 ref 2.576 nats/tok, 7.93 bits/vtok (49s)
+[cap] latin_p12 natural (21, 7) page 8: real 0.329 ref 2.076 nats/tok, 6.99 bits/vtok (56s)
+[cap] latin_p12 natural (21, 7) page 9: real 0.424 ref 2.473 nats/tok, 8.41 bits/vtok (62s)
+[cap] latin_p12 natural (21, 7) page 10: real 0.370 ref 2.128 nats/tok, 7.23 bits/vtok (68s)
+[cap] latin_p12 natural (21, 7) page 11: real 0.348 ref 2.529 nats/tok, 8.68 bits/vtok (74s)
+[cap] latin_p12 natural (21, 7) page 12: real 0.317 ref 2.026 nats/tok, 7.14 bits/vtok (81s)
+[cap] latin_p12 natural (21, 7) page 13: real 0.243 ref 1.546 nats/tok, 6.89 bits/vtok (88s)
+[cap] latin_p12 natural (21, 7) page 14: real 0.224 ref 1.508 nats/tok, 7.10 bits/vtok (95s)
+[cap] latin_p12 natural (21, 7) page 15: real 0.246 ref 2.001 nats/tok, 7.85 bits/vtok (102s)
+[cap] POINT latin_p12 natural (21, 7): 11.0 chars/vtok, 8.14 (7.73-8.55) bits/vtok, recovered 0.85 (0.85-0.86), CER None
+[cap] latin_p12 natural (0, 14) page 0: real 0.276 ref 2.151 nats/tok, 8.06 bits/vtok (6s)
+[cap] latin_p12 natural (0, 14) page 1: real 0.391 ref 2.844 nats/tok, 9.93 bits/vtok (12s)
+[cap] latin_p12 natural (0, 14) page 2: real 0.377 ref 2.620 nats/tok, 8.41 bits/vtok (18s)
+[cap] latin_p12 natural (0, 14) page 3: real 0.336 ref 2.466 nats/tok, 8.35 bits/vtok (24s)
+[cap] latin_p12 natural (0, 14) page 4: real 0.381 ref 2.687 nats/tok, 9.21 bits/vtok (30s)
+[cap] latin_p12 natural (0, 14) page 5: real 0.404 ref 2.935 nats/tok, 8.93 bits/vtok (37s)
+[cap] latin_p12 natural (0, 14) page 6: real 0.563 ref 2.897 nats/tok, 8.56 bits/vtok (43s)
+[cap] latin_p12 natural (0, 14) page 7: real 0.343 ref 2.576 nats/tok, 8.15 bits/vtok (49s)
+[cap] latin_p12 natural (0, 14) page 8: real 0.338 ref 2.076 nats/tok, 6.95 bits/vtok (56s)
+[cap] latin_p12 natural (0, 14) page 9: real 0.427 ref 2.473 nats/tok, 8.40 bits/vtok (62s)
+[cap] latin_p12 natural (0, 14) page 10: real 0.260 ref 2.128 nats/tok, 7.69 bits/vtok (68s)
+[cap] latin_p12 natural (0, 14) page 11: real 0.340 ref 2.529 nats/tok, 8.71 bits/vtok (74s)
+[cap] latin_p12 natural (0, 14) page 12: real 0.260 ref 2.026 nats/tok, 7.38 bits/vtok (80s)
+[cap] latin_p12 natural (0, 14) page 13: real 0.255 ref 1.546 nats/tok, 6.83 bits/vtok (87s)
+[cap] latin_p12 natural (0, 14) page 14: real 0.301 ref 1.508 nats/tok, 6.68 bits/vtok (94s)
+[cap] latin_p12 natural (0, 14) page 15: real 0.312 ref 2.001 nats/tok, 7.55 bits/vtok (100s)
+[cap] POINT latin_p12 natural (0, 14): 11.0 chars/vtok, 8.11 (7.69-8.54) bits/vtok, recovered 0.85 (0.84-0.86), CER None
+[cap] latin_p12 natural (7, 14) page 0: real 0.214 ref 2.151 nats/tok, 8.33 bits/vtok (6s)
+[cap] latin_p12 natural (7, 14) page 1: real 0.343 ref 2.844 nats/tok, 10.12 bits/vtok (12s)
+[cap] latin_p12 natural (7, 14) page 2: real 0.443 ref 2.620 nats/tok, 8.17 bits/vtok (18s)
+[cap] latin_p12 natural (7, 14) page 3: real 0.312 ref 2.466 nats/tok, 8.44 bits/vtok (24s)
+[cap] latin_p12 natural (7, 14) page 4: real 0.328 ref 2.687 nats/tok, 9.42 bits/vtok (30s)
+[cap] latin_p12 natural (7, 14) page 5: real 0.375 ref 2.935 nats/tok, 9.04 bits/vtok (36s)
+[cap] latin_p12 natural (7, 14) page 6: real 0.555 ref 2.897 nats/tok, 8.59 bits/vtok (42s)
+[cap] latin_p12 natural (7, 14) page 7: real 0.347 ref 2.576 nats/tok, 8.14 bits/vtok (48s)
+[cap] latin_p12 natural (7, 14) page 8: real 0.316 ref 2.076 nats/tok, 7.04 bits/vtok (54s)
+[cap] latin_p12 natural (7, 14) page 9: real 0.422 ref 2.473 nats/tok, 8.42 bits/vtok (60s)
+[cap] latin_p12 natural (7, 14) page 10: real 0.319 ref 2.128 nats/tok, 7.44 bits/vtok (66s)
+[cap] latin_p12 natural (7, 14) page 11: real 0.387 ref 2.529 nats/tok, 8.52 bits/vtok (71s)
+[cap] latin_p12 natural (7, 14) page 12: real 0.293 ref 2.026 nats/tok, 7.24 bits/vtok (77s)
+[cap] latin_p12 natural (7, 14) page 13: real 0.287 ref 1.546 nats/tok, 6.66 bits/vtok (85s)
+[cap] latin_p12 natural (7, 14) page 14: real 0.277 ref 1.508 nats/tok, 6.81 bits/vtok (92s)
+[cap] latin_p12 natural (7, 14) page 15: real 0.301 ref 2.001 nats/tok, 7.60 bits/vtok (99s)
+[cap] POINT latin_p12 natural (7, 14): 11.0 chars/vtok, 8.12 (7.68-8.58) bits/vtok, recovered 0.85 (0.84-0.86), CER None
+[cap] latin_p12 natural (14, 14) page 0: real 0.208 ref 2.151 nats/tok, 8.36 bits/vtok (8s)
+[cap] latin_p12 natural (14, 14) page 1: real 0.362 ref 2.844 nats/tok, 10.04 bits/vtok (14s)
+[cap] latin_p12 natural (14, 14) page 2: real 0.406 ref 2.620 nats/tok, 8.30 bits/vtok (20s)
+[cap] latin_p12 natural (14, 14) page 3: real 0.319 ref 2.466 nats/tok, 8.42 bits/vtok (27s)
+[cap] latin_p12 natural (14, 14) page 4: real 0.375 ref 2.687 nats/tok, 9.24 bits/vtok (33s)
+[cap] latin_p12 natural (14, 14) page 5: real 0.351 ref 2.935 nats/tok, 9.12 bits/vtok (39s)
+[cap] latin_p12 natural (14, 14) page 6: real 0.550 ref 2.897 nats/tok, 8.60 bits/vtok (45s)
+[cap] latin_p12 natural (14, 14) page 7: real 0.336 ref 2.576 nats/tok, 8.17 bits/vtok (51s)
+[cap] latin_p12 natural (14, 14) page 8: real 0.338 ref 2.076 nats/tok, 6.96 bits/vtok (58s)
+[cap] latin_p12 natural (14, 14) page 9: real 0.453 ref 2.473 nats/tok, 8.30 bits/vtok (64s)
+[cap] latin_p12 natural (14, 14) page 10: real 0.257 ref 2.128 nats/tok, 7.70 bits/vtok (71s)
+[cap] latin_p12 natural (14, 14) page 11: real 0.358 ref 2.529 nats/tok, 8.64 bits/vtok (77s)
+[cap] latin_p12 natural (14, 14) page 12: real 0.266 ref 2.026 nats/tok, 7.35 bits/vtok (84s)
+[cap] latin_p12 natural (14, 14) page 13: real 0.255 ref 1.546 nats/tok, 6.83 bits/vtok (91s)
+[cap] latin_p12 natural (14, 14) page 14: real 0.278 ref 1.508 nats/tok, 6.81 bits/vtok (100s)
+[cap] latin_p12 natural (14, 14) page 15: real 0.284 ref 2.001 nats/tok, 7.68 bits/vtok (107s)
+[cap] POINT latin_p12 natural (14, 14): 11.0 chars/vtok, 8.16 (7.73-8.59) bits/vtok, recovered 0.86 (0.84-0.87), CER None
+[cap] latin_p12 natural (21, 14) page 0: real 0.215 ref 2.151 nats/tok, 8.33 bits/vtok (7s)
+[cap] latin_p12 natural (21, 14) page 1: real 0.334 ref 2.844 nats/tok, 10.15 bits/vtok (14s)
+[cap] latin_p12 natural (21, 14) page 2: real 0.461 ref 2.620 nats/tok, 8.10 bits/vtok (21s)
+[cap] latin_p12 natural (21, 14) page 3: real 0.346 ref 2.466 nats/tok, 8.31 bits/vtok (26s)
+[cap] latin_p12 natural (21, 14) page 4: real 0.367 ref 2.687 nats/tok, 9.27 bits/vtok (33s)
+[cap] latin_p12 natural (21, 14) page 5: real 0.316 ref 2.935 nats/tok, 9.25 bits/vtok (39s)
+[cap] latin_p12 natural (21, 14) page 6: real 0.524 ref 2.897 nats/tok, 8.70 bits/vtok (46s)
+[cap] latin_p12 natural (21, 14) page 7: real 0.334 ref 2.576 nats/tok, 8.18 bits/vtok (52s)
+[cap] latin_p12 natural (21, 14) page 8: real 0.289 ref 2.076 nats/tok, 7.15 bits/vtok (59s)
+[cap] latin_p12 natural (21, 14) page 9: real 0.412 ref 2.473 nats/tok, 8.47 bits/vtok (65s)
+[cap] latin_p12 natural (21, 14) page 10: real 0.307 ref 2.128 nats/tok, 7.49 bits/vtok (72s)
+[cap] latin_p12 natural (21, 14) page 11: real 0.312 ref 2.529 nats/tok, 8.82 bits/vtok (78s)
+[cap] latin_p12 natural (21, 14) page 12: real 0.286 ref 2.026 nats/tok, 7.27 bits/vtok (84s)
+[cap] latin_p12 natural (21, 14) page 13: real 0.278 ref 1.546 nats/tok, 6.71 bits/vtok (91s)
+[cap] latin_p12 natural (21, 14) page 14: real 0.317 ref 1.508 nats/tok, 6.59 bits/vtok (99s)
+[cap] latin_p12 natural (21, 14) page 15: real 0.317 ref 2.001 nats/tok, 7.53 bits/vtok (106s)
+[cap] POINT latin_p12 natural (21, 14): 11.0 chars/vtok, 8.14 (7.68-8.61) bits/vtok, recovered 0.85 (0.84-0.87), CER None
+[cap] latin_p12 natural (0, 21) page 0: real 0.271 ref 2.151 nats/tok, 8.09 bits/vtok (7s)
+[cap] latin_p12 natural (0, 21) page 1: real 0.439 ref 2.844 nats/tok, 9.73 bits/vtok (13s)
+[cap] latin_p12 natural (0, 21) page 2: real 0.335 ref 2.620 nats/tok, 8.57 bits/vtok (20s)
+[cap] latin_p12 natural (0, 21) page 3: real 0.326 ref 2.466 nats/tok, 8.39 bits/vtok (26s)
+[cap] latin_p12 natural (0, 21) page 4: real 0.437 ref 2.687 nats/tok, 8.99 bits/vtok (32s)
+[cap] latin_p12 natural (0, 21) page 5: real 0.462 ref 2.935 nats/tok, 8.73 bits/vtok (38s)
+[cap] latin_p12 natural (0, 21) page 6: real 0.402 ref 2.897 nats/tok, 9.15 bits/vtok (45s)
+[cap] latin_p12 natural (0, 21) page 7: real 0.418 ref 2.576 nats/tok, 7.88 bits/vtok (50s)
+[cap] latin_p12 natural (0, 21) page 8: real 0.327 ref 2.076 nats/tok, 7.00 bits/vtok (56s)
+[cap] latin_p12 natural (0, 21) page 9: real 0.491 ref 2.473 nats/tok, 8.14 bits/vtok (63s)
+[cap] latin_p12 natural (0, 21) page 10: real 0.373 ref 2.128 nats/tok, 7.22 bits/vtok (69s)
+[cap] latin_p12 natural (0, 21) page 11: real 0.314 ref 2.529 nats/tok, 8.81 bits/vtok (75s)
+[cap] latin_p12 natural (0, 21) page 12: real 0.312 ref 2.026 nats/tok, 7.16 bits/vtok (81s)
+[cap] latin_p12 natural (0, 21) page 13: real 0.265 ref 1.546 nats/tok, 6.78 bits/vtok (89s)
+[cap] latin_p12 natural (0, 21) page 14: real 0.189 ref 1.508 nats/tok, 7.30 bits/vtok (97s)
+[cap] latin_p12 natural (0, 21) page 15: real 0.284 ref 2.001 nats/tok, 7.67 bits/vtok (103s)
+[cap] POINT latin_p12 natural (0, 21): 11.0 chars/vtok, 8.10 (7.70-8.51) bits/vtok, recovered 0.85 (0.84-0.86), CER None
+[cap] latin_p12 natural (7, 21) page 0: real 0.261 ref 2.151 nats/tok, 8.13 bits/vtok (6s)
+[cap] latin_p12 natural (7, 21) page 1: real 0.438 ref 2.844 nats/tok, 9.73 bits/vtok (13s)
+[cap] latin_p12 natural (7, 21) page 2: real 0.376 ref 2.620 nats/tok, 8.42 bits/vtok (20s)
+[cap] latin_p12 natural (7, 21) page 3: real 0.380 ref 2.466 nats/tok, 8.17 bits/vtok (26s)
+[cap] latin_p12 natural (7, 21) page 4: real 0.435 ref 2.687 nats/tok, 9.00 bits/vtok (32s)
+[cap] latin_p12 natural (7, 21) page 5: real 0.468 ref 2.935 nats/tok, 8.71 bits/vtok (38s)
+[cap] latin_p12 natural (7, 21) page 6: real 0.434 ref 2.897 nats/tok, 9.03 bits/vtok (44s)
+[cap] latin_p12 natural (7, 21) page 7: real 0.390 ref 2.576 nats/tok, 7.98 bits/vtok (50s)
+[cap] latin_p12 natural (7, 21) page 8: real 0.348 ref 2.076 nats/tok, 6.91 bits/vtok (56s)
+[cap] latin_p12 natural (7, 21) page 9: real 0.458 ref 2.473 nats/tok, 8.28 bits/vtok (62s)
+[cap] latin_p12 natural (7, 21) page 10: real 0.402 ref 2.128 nats/tok, 7.10 bits/vtok (68s)
+[cap] latin_p12 natural (7, 21) page 11: real 0.296 ref 2.529 nats/tok, 8.88 bits/vtok (74s)
+[cap] latin_p12 natural (7, 21) page 12: real 0.312 ref 2.026 nats/tok, 7.16 bits/vtok (80s)
+[cap] latin_p12 natural (7, 21) page 13: real 0.284 ref 1.546 nats/tok, 6.67 bits/vtok (86s)
+[cap] latin_p12 natural (7, 21) page 14: real 0.231 ref 1.508 nats/tok, 7.06 bits/vtok (94s)
+[cap] latin_p12 natural (7, 21) page 15: real 0.255 ref 2.001 nats/tok, 7.81 bits/vtok (100s)
+[cap] POINT latin_p12 natural (7, 21): 11.0 chars/vtok, 8.06 (7.65-8.49) bits/vtok, recovered 0.85 (0.84-0.86), CER None
+[cap] latin_p12 natural (14, 21) page 0: real 0.247 ref 2.151 nats/tok, 8.19 bits/vtok (7s)
+[cap] latin_p12 natural (14, 21) page 1: real 0.409 ref 2.844 nats/tok, 9.85 bits/vtok (13s)
+[cap] latin_p12 natural (14, 21) page 2: real 0.347 ref 2.620 nats/tok, 8.53 bits/vtok (19s)
+[cap] latin_p12 natural (14, 21) page 3: real 0.343 ref 2.466 nats/tok, 8.32 bits/vtok (25s)
+[cap] latin_p12 natural (14, 21) page 4: real 0.410 ref 2.687 nats/tok, 9.10 bits/vtok (31s)
+[cap] latin_p12 natural (14, 21) page 5: real 0.399 ref 2.935 nats/tok, 8.95 bits/vtok (38s)
+[cap] latin_p12 natural (14, 21) page 6: real 0.429 ref 2.897 nats/tok, 9.05 bits/vtok (44s)
+[cap] latin_p12 natural (14, 21) page 7: real 0.383 ref 2.576 nats/tok, 8.00 bits/vtok (50s)
+[cap] latin_p12 natural (14, 21) page 8: real 0.337 ref 2.076 nats/tok, 6.96 bits/vtok (56s)
+[cap] latin_p12 natural (14, 21) page 9: real 0.410 ref 2.473 nats/tok, 8.47 bits/vtok (62s)
+[cap] latin_p12 natural (14, 21) page 10: real 0.384 ref 2.128 nats/tok, 7.17 bits/vtok (68s)
+[cap] latin_p12 natural (14, 21) page 11: real 0.276 ref 2.529 nats/tok, 8.97 bits/vtok (75s)
+[cap] latin_p12 natural (14, 21) page 12: real 0.307 ref 2.026 nats/tok, 7.18 bits/vtok (81s)
+[cap] latin_p12 natural (14, 21) page 13: real 0.248 ref 1.546 nats/tok, 6.87 bits/vtok (88s)
+[cap] latin_p12 natural (14, 21) page 14: real 0.198 ref 1.508 nats/tok, 7.24 bits/vtok (96s)
+[cap] latin_p12 natural (14, 21) page 15: real 0.269 ref 2.001 nats/tok, 7.74 bits/vtok (102s)
+[cap] POINT latin_p12 natural (14, 21): 11.0 chars/vtok, 8.16 (7.74-8.59) bits/vtok, recovered 0.86 (0.85-0.86), CER None
+[cap] latin_p12 natural (21, 21) page 0: real 0.233 ref 2.151 nats/tok, 8.25 bits/vtok (6s)
+[cap] latin_p12 natural (21, 21) page 1: real 0.410 ref 2.844 nats/tok, 9.85 bits/vtok (12s)
+[cap] latin_p12 natural (21, 21) page 2: real 0.335 ref 2.620 nats/tok, 8.57 bits/vtok (18s)
+[cap] latin_p12 natural (21, 21) page 3: real 0.364 ref 2.466 nats/tok, 8.24 bits/vtok (24s)
+[cap] latin_p12 natural (21, 21) page 4: real 0.387 ref 2.687 nats/tok, 9.19 bits/vtok (31s)
+[cap] latin_p12 natural (21, 21) page 5: real 0.436 ref 2.935 nats/tok, 8.82 bits/vtok (36s)
+[cap] latin_p12 natural (21, 21) page 6: real 0.422 ref 2.897 nats/tok, 9.07 bits/vtok (43s)
+[cap] latin_p12 natural (21, 21) page 7: real 0.336 ref 2.576 nats/tok, 8.17 bits/vtok (49s)
+[cap] latin_p12 natural (21, 21) page 8: real 0.310 ref 2.076 nats/tok, 7.07 bits/vtok (55s)
+[cap] latin_p12 natural (21, 21) page 9: real 0.414 ref 2.473 nats/tok, 8.46 bits/vtok (62s)
+[cap] latin_p12 natural (21, 21) page 10: real 0.374 ref 2.128 nats/tok, 7.21 bits/vtok (68s)
+[cap] latin_p12 natural (21, 21) page 11: real 0.301 ref 2.529 nats/tok, 8.87 bits/vtok (75s)
+[cap] latin_p12 natural (21, 21) page 12: real 0.291 ref 2.026 nats/tok, 7.24 bits/vtok (82s)
+[cap] latin_p12 natural (21, 21) page 13: real 0.260 ref 1.546 nats/tok, 6.80 bits/vtok (89s)
+[cap] latin_p12 natural (21, 21) page 14: real 0.225 ref 1.508 nats/tok, 7.10 bits/vtok (98s)
+[cap] latin_p12 natural (21, 21) page 15: real 0.261 ref 2.001 nats/tok, 7.78 bits/vtok (105s)
+[cap] POINT latin_p12 natural (21, 21): 11.0 chars/vtok, 8.17 (7.75-8.59) bits/vtok, recovered 0.86 (0.85-0.86), CER None
+[cap] lg_pb_h5 natural (0, 0) page 0: real 2.323 ref 2.329 nats/tok, 0.22 bits/vtok (13s)
+[cap] lg_pb_h5 natural (0, 0) page 1: real 2.692 ref 2.707 nats/tok, 0.47 bits/vtok (25s)
+[cap] lg_pb_h5 natural (0, 0) page 2: real 2.286 ref 2.302 nats/tok, 0.59 bits/vtok (37s)
+[cap] lg_pb_h5 natural (0, 0) page 3: real 2.629 ref 2.656 nats/tok, 0.92 bits/vtok (47s)
+[cap] lg_pb_h5 natural (0, 0) page 4: real 2.878 ref 2.893 nats/tok, 0.45 bits/vtok (59s)
+[cap] lg_pb_h5 natural (0, 0) page 5: real 2.613 ref 2.630 nats/tok, 0.58 bits/vtok (70s)
+[cap] lg_pb_h5 natural (0, 0) page 6: real 2.881 ref 2.889 nats/tok, 0.25 bits/vtok (80s)
+[cap] lg_pb_h5 natural (0, 0) page 7: real 2.509 ref 2.528 nats/tok, 0.60 bits/vtok (90s)
+[cap] lg_pb_h5 natural (0, 0) page 8: real 2.566 ref 2.563 nats/tok, -0.07 bits/vtok (102s)
+[cap] lg_pb_h5 natural (0, 0) page 9: real 2.058 ref 2.065 nats/tok, 0.21 bits/vtok (113s)
+[cap] lg_pb_h5 natural (0, 0) page 10: real 2.240 ref 2.262 nats/tok, 0.79 bits/vtok (124s)
+[cap] lg_pb_h5 natural (0, 0) page 11: real 1.849 ref 1.861 nats/tok, 0.45 bits/vtok (137s)
+[cap] lg_pb_h5 natural (0, 0) page 12: real 2.669 ref 2.685 nats/tok, 0.52 bits/vtok (148s)
+[cap] lg_pb_h5 natural (0, 0) page 13: real 2.435 ref 2.438 nats/tok, 0.10 bits/vtok (159s)
+[cap] lg_pb_h5 natural (0, 0) page 14: real 2.556 ref 2.575 nats/tok, 0.68 bits/vtok (171s)
+[cap] lg_pb_h5 natural (0, 0) page 15: real 2.100 ref 2.106 nats/tok, 0.22 bits/vtok (182s)
+[cap] POINT lg_pb_h5 natural (0, 0): 97.5 chars/vtok, 0.43 (0.31-0.56) bits/vtok, recovered 0.01 (0.00-0.01), CER None
+[cap] lg_pb_h5 natural (7, 0) page 0: real 2.324 ref 2.329 nats/tok, 0.19 bits/vtok (6s)
+[cap] lg_pb_h5 natural (7, 0) page 1: real 2.694 ref 2.707 nats/tok, 0.42 bits/vtok (12s)
+[cap] lg_pb_h5 natural (7, 0) page 2: real 2.285 ref 2.302 nats/tok, 0.65 bits/vtok (17s)
+[cap] lg_pb_h5 natural (7, 0) page 3: real 2.624 ref 2.656 nats/tok, 1.07 bits/vtok (22s)
+[cap] lg_pb_h5 natural (7, 0) page 4: real 2.876 ref 2.893 nats/tok, 0.52 bits/vtok (28s)
+[cap] lg_pb_h5 natural (7, 0) page 5: real 2.608 ref 2.630 nats/tok, 0.74 bits/vtok (33s)
+[cap] lg_pb_h5 natural (7, 0) page 6: real 2.878 ref 2.889 nats/tok, 0.35 bits/vtok (39s)
+[cap] lg_pb_h5 natural (7, 0) page 7: real 2.514 ref 2.528 nats/tok, 0.44 bits/vtok (44s)
+[cap] lg_pb_h5 natural (7, 0) page 8: real 2.562 ref 2.563 nats/tok, 0.05 bits/vtok (50s)
+[cap] lg_pb_h5 natural (7, 0) page 9: real 2.058 ref 2.065 nats/tok, 0.23 bits/vtok (56s)
+[cap] lg_pb_h5 natural (7, 0) page 10: real 2.233 ref 2.262 nats/tok, 1.01 bits/vtok (61s)
+[cap] lg_pb_h5 natural (7, 0) page 11: real 1.844 ref 1.861 nats/tok, 0.65 bits/vtok (67s)
+[cap] lg_pb_h5 natural (7, 0) page 12: real 2.676 ref 2.685 nats/tok, 0.29 bits/vtok (72s)
+[cap] lg_pb_h5 natural (7, 0) page 13: real 2.436 ref 2.438 nats/tok, 0.06 bits/vtok (77s)
+[cap] lg_pb_h5 natural (7, 0) page 14: real 2.551 ref 2.575 nats/tok, 0.86 bits/vtok (83s)
+[cap] lg_pb_h5 natural (7, 0) page 15: real 2.097 ref 2.106 nats/tok, 0.31 bits/vtok (88s)
+[cap] POINT lg_pb_h5 natural (7, 0): 97.5 chars/vtok, 0.49 (0.34-0.64) bits/vtok, recovered 0.01 (0.00-0.01), CER None
+[cap] lg_pb_h5 natural (14, 0) page 0: real 2.324 ref 2.329 nats/tok, 0.18 bits/vtok (6s)
+[cap] lg_pb_h5 natural (14, 0) page 1: real 2.696 ref 2.707 nats/tok, 0.35 bits/vtok (12s)
+[cap] lg_pb_h5 natural (14, 0) page 2: real 2.290 ref 2.302 nats/tok, 0.46 bits/vtok (17s)
+[cap] lg_pb_h5 natural (14, 0) page 3: real 2.634 ref 2.656 nats/tok, 0.75 bits/vtok (22s)
+[cap] lg_pb_h5 natural (14, 0) page 4: real 2.882 ref 2.893 nats/tok, 0.33 bits/vtok (28s)
+[cap] lg_pb_h5 natural (14, 0) page 5: real 2.609 ref 2.630 nats/tok, 0.70 bits/vtok (33s)
+[cap] lg_pb_h5 natural (14, 0) page 6: real 2.880 ref 2.889 nats/tok, 0.28 bits/vtok (39s)
+[cap] lg_pb_h5 natural (14, 0) page 7: real 2.512 ref 2.528 nats/tok, 0.50 bits/vtok (44s)
+[cap] lg_pb_h5 natural (14, 0) page 8: real 2.563 ref 2.563 nats/tok, 0.01 bits/vtok (49s)
+[cap] lg_pb_h5 natural (14, 0) page 9: real 2.058 ref 2.065 nats/tok, 0.23 bits/vtok (54s)
+[cap] lg_pb_h5 natural (14, 0) page 10: real 2.234 ref 2.262 nats/tok, 0.97 bits/vtok (60s)
+[cap] lg_pb_h5 natural (14, 0) page 11: real 1.848 ref 1.861 nats/tok, 0.51 bits/vtok (67s)
+[cap] lg_pb_h5 natural (14, 0) page 12: real 2.675 ref 2.685 nats/tok, 0.30 bits/vtok (72s)
+[cap] lg_pb_h5 natural (14, 0) page 13: real 2.435 ref 2.438 nats/tok, 0.09 bits/vtok (77s)
+[cap] lg_pb_h5 natural (14, 0) page 14: real 2.554 ref 2.575 nats/tok, 0.77 bits/vtok (83s)
+[cap] lg_pb_h5 natural (14, 0) page 15: real 2.099 ref 2.106 nats/tok, 0.25 bits/vtok (89s)
+[cap] POINT lg_pb_h5 natural (14, 0): 97.5 chars/vtok, 0.42 (0.30-0.55) bits/vtok, recovered 0.00 (0.00-0.01), CER None
+[cap] lg_pb_h5 natural (21, 0) page 0: real 2.325 ref 2.329 nats/tok, 0.14 bits/vtok (5s)
+[cap] lg_pb_h5 natural (21, 0) page 1: real 2.694 ref 2.707 nats/tok, 0.42 bits/vtok (11s)
+[cap] lg_pb_h5 natural (21, 0) page 2: real 2.291 ref 2.302 nats/tok, 0.42 bits/vtok (16s)
+[cap] lg_pb_h5 natural (21, 0) page 3: real 2.636 ref 2.656 nats/tok, 0.69 bits/vtok (21s)
+[cap] lg_pb_h5 natural (21, 0) page 4: real 2.878 ref 2.893 nats/tok, 0.47 bits/vtok (27s)
+[cap] lg_pb_h5 natural (21, 0) page 5: real 2.615 ref 2.630 nats/tok, 0.50 bits/vtok (32s)
+[cap] lg_pb_h5 natural (21, 0) page 6: real 2.881 ref 2.889 nats/tok, 0.26 bits/vtok (37s)
+[cap] lg_pb_h5 natural (21, 0) page 7: real 2.514 ref 2.528 nats/tok, 0.45 bits/vtok (43s)
+[cap] lg_pb_h5 natural (21, 0) page 8: real 2.560 ref 2.563 nats/tok, 0.10 bits/vtok (48s)
+[cap] lg_pb_h5 natural (21, 0) page 9: real 2.060 ref 2.065 nats/tok, 0.14 bits/vtok (53s)
+[cap] lg_pb_h5 natural (21, 0) page 10: real 2.240 ref 2.262 nats/tok, 0.76 bits/vtok (60s)
+[cap] lg_pb_h5 natural (21, 0) page 11: real 1.848 ref 1.861 nats/tok, 0.48 bits/vtok (65s)
+[cap] lg_pb_h5 natural (21, 0) page 12: real 2.672 ref 2.685 nats/tok, 0.42 bits/vtok (71s)
+[cap] lg_pb_h5 natural (21, 0) page 13: real 2.436 ref 2.438 nats/tok, 0.07 bits/vtok (76s)
+[cap] lg_pb_h5 natural (21, 0) page 14: real 2.558 ref 2.575 nats/tok, 0.61 bits/vtok (82s)
+[cap] lg_pb_h5 natural (21, 0) page 15: real 2.104 ref 2.106 nats/tok, 0.05 bits/vtok (87s)
+[cap] POINT lg_pb_h5 natural (21, 0): 97.5 chars/vtok, 0.37 (0.27-0.48) bits/vtok, recovered 0.00 (0.00-0.01), CER None
+[cap] lg_pb_h5 natural (0, 7) page 0: real 2.325 ref 2.329 nats/tok, 0.15 bits/vtok (6s)
+[cap] lg_pb_h5 natural (0, 7) page 1: real 2.692 ref 2.707 nats/tok, 0.49 bits/vtok (12s)
+[cap] lg_pb_h5 natural (0, 7) page 2: real 2.283 ref 2.302 nats/tok, 0.71 bits/vtok (18s)
+[cap] lg_pb_h5 natural (0, 7) page 3: real 2.624 ref 2.656 nats/tok, 1.06 bits/vtok (23s)
+[cap] lg_pb_h5 natural (0, 7) page 4: real 2.877 ref 2.893 nats/tok, 0.50 bits/vtok (28s)
+[cap] lg_pb_h5 natural (0, 7) page 5: real 2.611 ref 2.630 nats/tok, 0.63 bits/vtok (34s)
+[cap] lg_pb_h5 natural (0, 7) page 6: real 2.879 ref 2.889 nats/tok, 0.32 bits/vtok (39s)
+[cap] lg_pb_h5 natural (0, 7) page 7: real 2.515 ref 2.528 nats/tok, 0.40 bits/vtok (44s)
+[cap] lg_pb_h5 natural (0, 7) page 8: real 2.562 ref 2.563 nats/tok, 0.05 bits/vtok (49s)
+[cap] lg_pb_h5 natural (0, 7) page 9: real 2.058 ref 2.065 nats/tok, 0.21 bits/vtok (55s)
+[cap] lg_pb_h5 natural (0, 7) page 10: real 2.237 ref 2.262 nats/tok, 0.88 bits/vtok (60s)
+[cap] lg_pb_h5 natural (0, 7) page 11: real 1.845 ref 1.861 nats/tok, 0.61 bits/vtok (67s)
+[cap] lg_pb_h5 natural (0, 7) page 12: real 2.675 ref 2.685 nats/tok, 0.32 bits/vtok (72s)
+[cap] lg_pb_h5 natural (0, 7) page 13: real 2.436 ref 2.438 nats/tok, 0.04 bits/vtok (77s)
+[cap] lg_pb_h5 natural (0, 7) page 14: real 2.551 ref 2.575 nats/tok, 0.88 bits/vtok (83s)
+[cap] lg_pb_h5 natural (0, 7) page 15: real 2.097 ref 2.106 nats/tok, 0.31 bits/vtok (88s)
+[cap] POINT lg_pb_h5 natural (0, 7): 97.5 chars/vtok, 0.47 (0.33-0.62) bits/vtok, recovered 0.01 (0.00-0.01), CER None
+[cap] lg_pb_h5 natural (7, 7) page 0: real 2.322 ref 2.329 nats/tok, 0.28 bits/vtok (5s)
+[cap] lg_pb_h5 natural (7, 7) page 1: real 2.691 ref 2.707 nats/tok, 0.52 bits/vtok (11s)
+[cap] lg_pb_h5 natural (7, 7) page 2: real 2.283 ref 2.302 nats/tok, 0.71 bits/vtok (17s)
+[cap] lg_pb_h5 natural (7, 7) page 3: real 2.626 ref 2.656 nats/tok, 1.02 bits/vtok (22s)
+[cap] lg_pb_h5 natural (7, 7) page 4: real 2.872 ref 2.893 nats/tok, 0.67 bits/vtok (27s)
+[cap] lg_pb_h5 natural (7, 7) page 5: real 2.615 ref 2.630 nats/tok, 0.50 bits/vtok (32s)
+[cap] lg_pb_h5 natural (7, 7) page 6: real 2.876 ref 2.889 nats/tok, 0.41 bits/vtok (37s)
+[cap] lg_pb_h5 natural (7, 7) page 7: real 2.513 ref 2.528 nats/tok, 0.48 bits/vtok (43s)
+[cap] lg_pb_h5 natural (7, 7) page 8: real 2.563 ref 2.563 nats/tok, 0.00 bits/vtok (48s)
+[cap] lg_pb_h5 natural (7, 7) page 9: real 2.062 ref 2.065 nats/tok, 0.09 bits/vtok (53s)
+[cap] lg_pb_h5 natural (7, 7) page 10: real 2.234 ref 2.262 nats/tok, 0.99 bits/vtok (59s)
+[cap] lg_pb_h5 natural (7, 7) page 11: real 1.844 ref 1.861 nats/tok, 0.63 bits/vtok (64s)
+[cap] lg_pb_h5 natural (7, 7) page 12: real 2.673 ref 2.685 nats/tok, 0.37 bits/vtok (69s)
+[cap] lg_pb_h5 natural (7, 7) page 13: real 2.437 ref 2.438 nats/tok, 0.01 bits/vtok (75s)
+[cap] lg_pb_h5 natural (7, 7) page 14: real 2.553 ref 2.575 nats/tok, 0.80 bits/vtok (80s)
+[cap] lg_pb_h5 natural (7, 7) page 15: real 2.099 ref 2.106 nats/tok, 0.25 bits/vtok (86s)
+[cap] POINT lg_pb_h5 natural (7, 7): 97.5 chars/vtok, 0.48 (0.34-0.63) bits/vtok, recovered 0.01 (0.00-0.01), CER None
+[cap] lg_pb_h5 natural (14, 7) page 0: real 2.326 ref 2.329 nats/tok, 0.13 bits/vtok (6s)
+[cap] lg_pb_h5 natural (14, 7) page 1: real 2.695 ref 2.707 nats/tok, 0.38 bits/vtok (11s)
+[cap] lg_pb_h5 natural (14, 7) page 2: real 2.285 ref 2.302 nats/tok, 0.64 bits/vtok (16s)
+[cap] lg_pb_h5 natural (14, 7) page 3: real 2.628 ref 2.656 nats/tok, 0.96 bits/vtok (21s)
+[cap] lg_pb_h5 natural (14, 7) page 4: real 2.878 ref 2.893 nats/tok, 0.46 bits/vtok (26s)
+[cap] lg_pb_h5 natural (14, 7) page 5: real 2.615 ref 2.630 nats/tok, 0.49 bits/vtok (31s)
+[cap] lg_pb_h5 natural (14, 7) page 6: real 2.878 ref 2.889 nats/tok, 0.34 bits/vtok (37s)
+[cap] lg_pb_h5 natural (14, 7) page 7: real 2.519 ref 2.528 nats/tok, 0.29 bits/vtok (42s)
+[cap] lg_pb_h5 natural (14, 7) page 8: real 2.565 ref 2.563 nats/tok, -0.04 bits/vtok (47s)
+[cap] lg_pb_h5 natural (14, 7) page 9: real 2.061 ref 2.065 nats/tok, 0.12 bits/vtok (52s)
+[cap] lg_pb_h5 natural (14, 7) page 10: real 2.233 ref 2.262 nats/tok, 1.02 bits/vtok (58s)
+[cap] lg_pb_h5 natural (14, 7) page 11: real 1.848 ref 1.861 nats/tok, 0.50 bits/vtok (64s)
+[cap] lg_pb_h5 natural (14, 7) page 12: real 2.675 ref 2.685 nats/tok, 0.33 bits/vtok (69s)
+[cap] lg_pb_h5 natural (14, 7) page 13: real 2.436 ref 2.438 nats/tok, 0.05 bits/vtok (75s)
+[cap] lg_pb_h5 natural (14, 7) page 14: real 2.551 ref 2.575 nats/tok, 0.86 bits/vtok (81s)
+[cap] lg_pb_h5 natural (14, 7) page 15: real 2.099 ref 2.106 nats/tok, 0.25 bits/vtok (87s)
+[cap] POINT lg_pb_h5 natural (14, 7): 97.5 chars/vtok, 0.42 (0.28-0.58) bits/vtok, recovered 0.01 (0.00-0.01), CER None
+[cap] lg_pb_h5 natural (21, 7) page 0: real 2.323 ref 2.329 nats/tok, 0.21 bits/vtok (5s)
+[cap] lg_pb_h5 natural (21, 7) page 1: real 2.694 ref 2.707 nats/tok, 0.42 bits/vtok (11s)
+[cap] lg_pb_h5 natural (21, 7) page 2: real 2.280 ref 2.302 nats/tok, 0.82 bits/vtok (16s)
+[cap] lg_pb_h5 natural (21, 7) page 3: real 2.622 ref 2.656 nats/tok, 1.13 bits/vtok (21s)
+[cap] lg_pb_h5 natural (21, 7) page 4: real 2.877 ref 2.893 nats/tok, 0.49 bits/vtok (27s)
+[cap] lg_pb_h5 natural (21, 7) page 5: real 2.613 ref 2.630 nats/tok, 0.58 bits/vtok (32s)
+[cap] lg_pb_h5 natural (21, 7) page 6: real 2.873 ref 2.889 nats/tok, 0.49 bits/vtok (37s)
+[cap] lg_pb_h5 natural (21, 7) page 7: real 2.520 ref 2.528 nats/tok, 0.26 bits/vtok (43s)
+[cap] lg_pb_h5 natural (21, 7) page 8: real 2.561 ref 2.563 nats/tok, 0.07 bits/vtok (48s)
+[cap] lg_pb_h5 natural (21, 7) page 9: real 2.060 ref 2.065 nats/tok, 0.17 bits/vtok (53s)
+[cap] lg_pb_h5 natural (21, 7) page 10: real 2.235 ref 2.262 nats/tok, 0.96 bits/vtok (60s)
+[cap] lg_pb_h5 natural (21, 7) page 11: real 1.848 ref 1.861 nats/tok, 0.50 bits/vtok (65s)
+[cap] lg_pb_h5 natural (21, 7) page 12: real 2.671 ref 2.685 nats/tok, 0.44 bits/vtok (71s)
+[cap] lg_pb_h5 natural (21, 7) page 13: real 2.433 ref 2.438 nats/tok, 0.15 bits/vtok (76s)
+[cap] lg_pb_h5 natural (21, 7) page 14: real 2.550 ref 2.575 nats/tok, 0.89 bits/vtok (81s)
+[cap] lg_pb_h5 natural (21, 7) page 15: real 2.095 ref 2.106 nats/tok, 0.38 bits/vtok (87s)
+[cap] POINT lg_pb_h5 natural (21, 7): 97.5 chars/vtok, 0.50 (0.35-0.65) bits/vtok, recovered 0.01 (0.00-0.01), CER None
+[cap] lg_pb_h5 natural (0, 14) page 0: real 2.325 ref 2.329 nats/tok, 0.16 bits/vtok (6s)
+[cap] lg_pb_h5 natural (0, 14) page 1: real 2.694 ref 2.707 nats/tok, 0.41 bits/vtok (11s)
+[cap] lg_pb_h5 natural (0, 14) page 2: real 2.286 ref 2.302 nats/tok, 0.59 bits/vtok (17s)
+[cap] lg_pb_h5 natural (0, 14) page 3: real 2.625 ref 2.656 nats/tok, 1.04 bits/vtok (22s)
+[cap] lg_pb_h5 natural (0, 14) page 4: real 2.876 ref 2.893 nats/tok, 0.52 bits/vtok (28s)
+[cap] lg_pb_h5 natural (0, 14) page 5: real 2.610 ref 2.630 nats/tok, 0.66 bits/vtok (33s)
+[cap] lg_pb_h5 natural (0, 14) page 6: real 2.877 ref 2.889 nats/tok, 0.38 bits/vtok (38s)
+[cap] lg_pb_h5 natural (0, 14) page 7: real 2.518 ref 2.528 nats/tok, 0.31 bits/vtok (43s)
+[cap] lg_pb_h5 natural (0, 14) page 8: real 2.562 ref 2.563 nats/tok, 0.03 bits/vtok (48s)
+[cap] lg_pb_h5 natural (0, 14) page 9: real 2.060 ref 2.065 nats/tok, 0.17 bits/vtok (52s)
+[cap] lg_pb_h5 natural (0, 14) page 10: real 2.235 ref 2.262 nats/tok, 0.96 bits/vtok (58s)
+[cap] lg_pb_h5 natural (0, 14) page 11: real 1.846 ref 1.861 nats/tok, 0.58 bits/vtok (63s)
+[cap] lg_pb_h5 natural (0, 14) page 12: real 2.673 ref 2.685 nats/tok, 0.39 bits/vtok (69s)
+[cap] lg_pb_h5 natural (0, 14) page 13: real 2.436 ref 2.438 nats/tok, 0.05 bits/vtok (74s)
+[cap] lg_pb_h5 natural (0, 14) page 14: real 2.550 ref 2.575 nats/tok, 0.89 bits/vtok (79s)
+[cap] lg_pb_h5 natural (0, 14) page 15: real 2.100 ref 2.106 nats/tok, 0.21 bits/vtok (85s)
+[cap] POINT lg_pb_h5 natural (0, 14): 97.5 chars/vtok, 0.46 (0.31-0.61) bits/vtok, recovered 0.01 (0.00-0.01), CER None
+[cap] lg_pb_h5 natural (7, 14) page 0: real 2.322 ref 2.329 nats/tok, 0.27 bits/vtok (6s)
+[cap] lg_pb_h5 natural (7, 14) page 1: real 2.693 ref 2.707 nats/tok, 0.44 bits/vtok (12s)
+[cap] lg_pb_h5 natural (7, 14) page 2: real 2.280 ref 2.302 nats/tok, 0.82 bits/vtok (17s)
+[cap] lg_pb_h5 natural (7, 14) page 3: real 2.623 ref 2.656 nats/tok, 1.11 bits/vtok (22s)
+[cap] lg_pb_h5 natural (7, 14) page 4: real 2.874 ref 2.893 nats/tok, 0.60 bits/vtok (27s)
+[cap] lg_pb_h5 natural (7, 14) page 5: real 2.618 ref 2.630 nats/tok, 0.41 bits/vtok (32s)
+[cap] lg_pb_h5 natural (7, 14) page 6: real 2.876 ref 2.889 nats/tok, 0.40 bits/vtok (37s)
+[cap] lg_pb_h5 natural (7, 14) page 7: real 2.516 ref 2.528 nats/tok, 0.37 bits/vtok (42s)
+[cap] lg_pb_h5 natural (7, 14) page 8: real 2.566 ref 2.563 nats/tok, -0.11 bits/vtok (48s)
+[cap] lg_pb_h5 natural (7, 14) page 9: real 2.061 ref 2.065 nats/tok, 0.13 bits/vtok (53s)
+[cap] lg_pb_h5 natural (7, 14) page 10: real 2.236 ref 2.262 nats/tok, 0.93 bits/vtok (59s)
+[cap] lg_pb_h5 natural (7, 14) page 11: real 1.848 ref 1.861 nats/tok, 0.50 bits/vtok (64s)
+[cap] lg_pb_h5 natural (7, 14) page 12: real 2.678 ref 2.685 nats/tok, 0.23 bits/vtok (69s)
+[cap] lg_pb_h5 natural (7, 14) page 13: real 2.432 ref 2.438 nats/tok, 0.18 bits/vtok (74s)
+[cap] lg_pb_h5 natural (7, 14) page 14: real 2.553 ref 2.575 nats/tok, 0.78 bits/vtok (79s)
+[cap] lg_pb_h5 natural (7, 14) page 15: real 2.103 ref 2.106 nats/tok, 0.10 bits/vtok (85s)
+[cap] POINT lg_pb_h5 natural (7, 14): 97.5 chars/vtok, 0.45 (0.30-0.61) bits/vtok, recovered 0.01 (0.00-0.01), CER None
+[cap] lg_pb_h5 natural (14, 14) page 0: real 2.324 ref 2.329 nats/tok, 0.17 bits/vtok (5s)
+[cap] lg_pb_h5 natural (14, 14) page 1: real 2.691 ref 2.707 nats/tok, 0.50 bits/vtok (11s)
+[cap] lg_pb_h5 natural (14, 14) page 2: real 2.281 ref 2.302 nats/tok, 0.76 bits/vtok (17s)
+[cap] lg_pb_h5 natural (14, 14) page 3: real 2.626 ref 2.656 nats/tok, 1.01 bits/vtok (22s)
+[cap] lg_pb_h5 natural (14, 14) page 4: real 2.878 ref 2.893 nats/tok, 0.45 bits/vtok (27s)
+[cap] lg_pb_h5 natural (14, 14) page 5: real 2.615 ref 2.630 nats/tok, 0.51 bits/vtok (33s)
+[cap] lg_pb_h5 natural (14, 14) page 6: real 2.875 ref 2.889 nats/tok, 0.43 bits/vtok (38s)
+[cap] lg_pb_h5 natural (14, 14) page 7: real 2.516 ref 2.528 nats/tok, 0.38 bits/vtok (43s)
+[cap] lg_pb_h5 natural (14, 14) page 8: real 2.568 ref 2.563 nats/tok, -0.14 bits/vtok (48s)
+[cap] lg_pb_h5 natural (14, 14) page 9: real 2.057 ref 2.065 nats/tok, 0.26 bits/vtok (53s)
+[cap] lg_pb_h5 natural (14, 14) page 10: real 2.233 ref 2.262 nats/tok, 1.03 bits/vtok (59s)
+[cap] lg_pb_h5 natural (14, 14) page 11: real 1.843 ref 1.861 nats/tok, 0.69 bits/vtok (65s)
+[cap] lg_pb_h5 natural (14, 14) page 12: real 2.673 ref 2.685 nats/tok, 0.37 bits/vtok (70s)
+[cap] lg_pb_h5 natural (14, 14) page 13: real 2.435 ref 2.438 nats/tok, 0.09 bits/vtok (76s)
+[cap] lg_pb_h5 natural (14, 14) page 14: real 2.552 ref 2.575 nats/tok, 0.84 bits/vtok (81s)
+[cap] lg_pb_h5 natural (14, 14) page 15: real 2.096 ref 2.106 nats/tok, 0.35 bits/vtok (87s)
+[cap] POINT lg_pb_h5 natural (14, 14): 97.5 chars/vtok, 0.48 (0.33-0.64) bits/vtok, recovered 0.01 (0.00-0.01), CER None
+[cap] lg_pb_h5 natural (21, 14) page 0: real 2.325 ref 2.329 nats/tok, 0.16 bits/vtok (6s)
+[cap] lg_pb_h5 natural (21, 14) page 1: real 2.690 ref 2.707 nats/tok, 0.56 bits/vtok (11s)
+[cap] lg_pb_h5 natural (21, 14) page 2: real 2.281 ref 2.302 nats/tok, 0.78 bits/vtok (17s)
+[cap] lg_pb_h5 natural (21, 14) page 3: real 2.630 ref 2.656 nats/tok, 0.88 bits/vtok (22s)
+[cap] lg_pb_h5 natural (21, 14) page 4: real 2.876 ref 2.893 nats/tok, 0.51 bits/vtok (27s)
+[cap] lg_pb_h5 natural (21, 14) page 5: real 2.617 ref 2.630 nats/tok, 0.43 bits/vtok (33s)
+[cap] lg_pb_h5 natural (21, 14) page 6: real 2.878 ref 2.889 nats/tok, 0.33 bits/vtok (38s)
+[cap] lg_pb_h5 natural (21, 14) page 7: real 2.514 ref 2.528 nats/tok, 0.44 bits/vtok (43s)
+[cap] lg_pb_h5 natural (21, 14) page 8: real 2.562 ref 2.563 nats/tok, 0.05 bits/vtok (48s)
+[cap] lg_pb_h5 natural (21, 14) page 9: real 2.060 ref 2.065 nats/tok, 0.15 bits/vtok (54s)
+[cap] lg_pb_h5 natural (21, 14) page 10: real 2.234 ref 2.262 nats/tok, 0.97 bits/vtok (59s)
+[cap] lg_pb_h5 natural (21, 14) page 11: real 1.846 ref 1.861 nats/tok, 0.57 bits/vtok (65s)
+[cap] lg_pb_h5 natural (21, 14) page 12: real 2.674 ref 2.685 nats/tok, 0.35 bits/vtok (71s)
+[cap] lg_pb_h5 natural (21, 14) page 13: real 2.434 ref 2.438 nats/tok, 0.12 bits/vtok (76s)
+[cap] lg_pb_h5 natural (21, 14) page 14: real 2.553 ref 2.575 nats/tok, 0.80 bits/vtok (82s)
+[cap] lg_pb_h5 natural (21, 14) page 15: real 2.098 ref 2.106 nats/tok, 0.28 bits/vtok (89s)
+[cap] POINT lg_pb_h5 natural (21, 14): 97.5 chars/vtok, 0.46 (0.33-0.60) bits/vtok, recovered 0.01 (0.00-0.01), CER None
+[cap] lg_pb_h5 natural (0, 21) page 0: real 2.324 ref 2.329 nats/tok, 0.18 bits/vtok (6s)
+[cap] lg_pb_h5 natural (0, 21) page 1: real 2.695 ref 2.707 nats/tok, 0.39 bits/vtok (12s)
+[cap] lg_pb_h5 natural (0, 21) page 2: real 2.286 ref 2.302 nats/tok, 0.58 bits/vtok (18s)
+[cap] lg_pb_h5 natural (0, 21) page 3: real 2.625 ref 2.656 nats/tok, 1.05 bits/vtok (24s)
+[cap] lg_pb_h5 natural (0, 21) page 4: real 2.875 ref 2.893 nats/tok, 0.56 bits/vtok (30s)
+[cap] lg_pb_h5 natural (0, 21) page 5: real 2.613 ref 2.630 nats/tok, 0.56 bits/vtok (35s)
+[cap] lg_pb_h5 natural (0, 21) page 6: real 2.878 ref 2.889 nats/tok, 0.36 bits/vtok (41s)
+[cap] lg_pb_h5 natural (0, 21) page 7: real 2.516 ref 2.528 nats/tok, 0.38 bits/vtok (46s)
+[cap] lg_pb_h5 natural (0, 21) page 8: real 2.566 ref 2.563 nats/tok, -0.09 bits/vtok (52s)
+[cap] lg_pb_h5 natural (0, 21) page 9: real 2.061 ref 2.065 nats/tok, 0.12 bits/vtok (57s)
+[cap] lg_pb_h5 natural (0, 21) page 10: real 2.236 ref 2.262 nats/tok, 0.90 bits/vtok (63s)
+[cap] lg_pb_h5 natural (0, 21) page 11: real 1.847 ref 1.861 nats/tok, 0.52 bits/vtok (69s)
+[cap] lg_pb_h5 natural (0, 21) page 12: real 2.676 ref 2.685 nats/tok, 0.28 bits/vtok (75s)
+[cap] lg_pb_h5 natural (0, 21) page 13: real 2.436 ref 2.438 nats/tok, 0.06 bits/vtok (80s)
+[cap] lg_pb_h5 natural (0, 21) page 14: real 2.553 ref 2.575 nats/tok, 0.78 bits/vtok (86s)
+[cap] lg_pb_h5 natural (0, 21) page 15: real 2.102 ref 2.106 nats/tok, 0.13 bits/vtok (92s)
+[cap] POINT lg_pb_h5 natural (0, 21): 97.5 chars/vtok, 0.42 (0.28-0.57) bits/vtok, recovered 0.01 (0.00-0.01), CER None
+[cap] lg_pb_h5 natural (7, 21) page 0: real 2.324 ref 2.329 nats/tok, 0.19 bits/vtok (6s)
+[cap] lg_pb_h5 natural (7, 21) page 1: real 2.697 ref 2.707 nats/tok, 0.30 bits/vtok (11s)
+[cap] lg_pb_h5 natural (7, 21) page 2: real 2.284 ref 2.302 nats/tok, 0.68 bits/vtok (17s)
+[cap] lg_pb_h5 natural (7, 21) page 3: real 2.627 ref 2.656 nats/tok, 0.96 bits/vtok (22s)
+[cap] lg_pb_h5 natural (7, 21) page 4: real 2.878 ref 2.893 nats/tok, 0.46 bits/vtok (28s)
+[cap] lg_pb_h5 natural (7, 21) page 5: real 2.614 ref 2.630 nats/tok, 0.54 bits/vtok (33s)
+[cap] lg_pb_h5 natural (7, 21) page 6: real 2.879 ref 2.889 nats/tok, 0.32 bits/vtok (38s)
+[cap] lg_pb_h5 natural (7, 21) page 7: real 2.523 ref 2.528 nats/tok, 0.17 bits/vtok (43s)
+[cap] lg_pb_h5 natural (7, 21) page 8: real 2.568 ref 2.563 nats/tok, -0.17 bits/vtok (49s)
+[cap] lg_pb_h5 natural (7, 21) page 9: real 2.061 ref 2.065 nats/tok, 0.14 bits/vtok (54s)
+[cap] lg_pb_h5 natural (7, 21) page 10: real 2.233 ref 2.262 nats/tok, 1.01 bits/vtok (59s)
+[cap] lg_pb_h5 natural (7, 21) page 11: real 1.848 ref 1.861 nats/tok, 0.48 bits/vtok (65s)
+[cap] lg_pb_h5 natural (7, 21) page 12: real 2.671 ref 2.685 nats/tok, 0.43 bits/vtok (70s)
+[cap] lg_pb_h5 natural (7, 21) page 13: real 2.435 ref 2.438 nats/tok, 0.07 bits/vtok (75s)
+[cap] lg_pb_h5 natural (7, 21) page 14: real 2.554 ref 2.575 nats/tok, 0.78 bits/vtok (81s)
+[cap] lg_pb_h5 natural (7, 21) page 15: real 2.098 ref 2.106 nats/tok, 0.26 bits/vtok (86s)
+[cap] POINT lg_pb_h5 natural (7, 21): 97.5 chars/vtok, 0.41 (0.26-0.57) bits/vtok, recovered 0.00 (0.00-0.01), CER None
+[cap] lg_pb_h5 natural (14, 21) page 0: real 2.326 ref 2.329 nats/tok, 0.12 bits/vtok (5s)
+[cap] lg_pb_h5 natural (14, 21) page 1: real 2.698 ref 2.707 nats/tok, 0.30 bits/vtok (10s)
+[cap] lg_pb_h5 natural (14, 21) page 2: real 2.284 ref 2.302 nats/tok, 0.67 bits/vtok (16s)
+[cap] lg_pb_h5 natural (14, 21) page 3: real 2.628 ref 2.656 nats/tok, 0.94 bits/vtok (21s)
+[cap] lg_pb_h5 natural (14, 21) page 4: real 2.879 ref 2.893 nats/tok, 0.44 bits/vtok (26s)
+[cap] lg_pb_h5 natural (14, 21) page 5: real 2.619 ref 2.630 nats/tok, 0.38 bits/vtok (32s)
+[cap] lg_pb_h5 natural (14, 21) page 6: real 2.871 ref 2.889 nats/tok, 0.56 bits/vtok (37s)
+[cap] lg_pb_h5 natural (14, 21) page 7: real 2.517 ref 2.528 nats/tok, 0.36 bits/vtok (42s)
+[cap] lg_pb_h5 natural (14, 21) page 8: real 2.566 ref 2.563 nats/tok, -0.08 bits/vtok (48s)
+[cap] lg_pb_h5 natural (14, 21) page 9: real 2.055 ref 2.065 nats/tok, 0.31 bits/vtok (52s)
+[cap] lg_pb_h5 natural (14, 21) page 10: real 2.236 ref 2.262 nats/tok, 0.93 bits/vtok (58s)
+[cap] lg_pb_h5 natural (14, 21) page 11: real 1.849 ref 1.861 nats/tok, 0.47 bits/vtok (63s)
+[cap] lg_pb_h5 natural (14, 21) page 12: real 2.674 ref 2.685 nats/tok, 0.35 bits/vtok (69s)
+[cap] lg_pb_h5 natural (14, 21) page 13: real 2.439 ref 2.438 nats/tok, -0.04 bits/vtok (74s)
+[cap] lg_pb_h5 natural (14, 21) page 14: real 2.551 ref 2.575 nats/tok, 0.85 bits/vtok (80s)
+[cap] lg_pb_h5 natural (14, 21) page 15: real 2.098 ref 2.106 nats/tok, 0.29 bits/vtok (85s)
+[cap] POINT lg_pb_h5 natural (14, 21): 97.5 chars/vtok, 0.43 (0.29-0.57) bits/vtok, recovered 0.01 (0.00-0.01), CER None
+[cap] lg_pb_h5 natural (21, 21) page 0: real 2.324 ref 2.329 nats/tok, 0.18 bits/vtok (6s)
+[cap] lg_pb_h5 natural (21, 21) page 1: real 2.696 ref 2.707 nats/tok, 0.36 bits/vtok (11s)
+[cap] lg_pb_h5 natural (21, 21) page 2: real 2.285 ref 2.302 nats/tok, 0.63 bits/vtok (18s)
+[cap] lg_pb_h5 natural (21, 21) page 3: real 2.625 ref 2.656 nats/tok, 1.03 bits/vtok (23s)
+[cap] lg_pb_h5 natural (21, 21) page 4: real 2.880 ref 2.893 nats/tok, 0.41 bits/vtok (28s)
+[cap] lg_pb_h5 natural (21, 21) page 5: real 2.616 ref 2.630 nats/tok, 0.48 bits/vtok (34s)
+[cap] lg_pb_h5 natural (21, 21) page 6: real 2.875 ref 2.889 nats/tok, 0.44 bits/vtok (38s)
+[cap] lg_pb_h5 natural (21, 21) page 7: real 2.520 ref 2.528 nats/tok, 0.26 bits/vtok (43s)
+[cap] lg_pb_h5 natural (21, 21) page 8: real 2.563 ref 2.563 nats/tok, -0.00 bits/vtok (49s)
+[cap] lg_pb_h5 natural (21, 21) page 9: real 2.059 ref 2.065 nats/tok, 0.19 bits/vtok (54s)
+[cap] lg_pb_h5 natural (21, 21) page 10: real 2.236 ref 2.262 nats/tok, 0.90 bits/vtok (59s)
+[cap] lg_pb_h5 natural (21, 21) page 11: real 1.850 ref 1.861 nats/tok, 0.41 bits/vtok (64s)
+[cap] lg_pb_h5 natural (21, 21) page 12: real 2.676 ref 2.685 nats/tok, 0.29 bits/vtok (69s)
+[cap] lg_pb_h5 natural (21, 21) page 13: real 2.437 ref 2.438 nats/tok, 0.02 bits/vtok (74s)
+[cap] lg_pb_h5 natural (21, 21) page 14: real 2.552 ref 2.575 nats/tok, 0.82 bits/vtok (79s)
+[cap] lg_pb_h5 natural (21, 21) page 15: real 2.098 ref 2.106 nats/tok, 0.27 bits/vtok (85s)
+[cap] POINT lg_pb_h5 natural (21, 21): 97.5 chars/vtok, 0.42 (0.28-0.56) bits/vtok, recovered 0.00 (0.00-0.01), CER None
+CHAIN run0b p12/lg done rc=0
