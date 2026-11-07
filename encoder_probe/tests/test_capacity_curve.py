@@ -92,6 +92,9 @@ def test_alignment_stats_null_vs_effect():
     eff = C.alignment_stats(page + rng.normal(0, 0.1, (16, 4)) + np.array([0.5, 0, 0, 0]), shifts, reps=2000)
     assert null["perm_p"] > 0.05 and eff["perm_p"] < 0.01
     assert eff["best_shift"] == [0, 0] and eff["aligned_vs_mean_ci"][0] > 0.3
+    assert eff["aligned_shift"] == [0, 0]
+    off = [(7, 7), (28, 7), (28, 28), (7, 28)]                  # no (0, 0): the on-grid shift is (28, 28)
+    assert C.alignment_stats(page + rng.normal(0, 0.1, (16, 4)), off, reps=200)["aligned_shift"] == [28, 28]
     assert eff["crossval_ci"][0] > 0 and null["crossval_ci"][0] < 0 < null["crossval_ci"][1]
 
 

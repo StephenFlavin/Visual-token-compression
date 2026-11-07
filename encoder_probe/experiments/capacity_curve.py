@@ -237,7 +237,8 @@ def alignment_stats(G: np.ndarray, shifts: list, reps: int = 10000, seed: int = 
       shifts exchangeable);
     * crossval: best/worst chosen on one half of the pages, the difference measured on the other half (both
       halves, averaged), with a bootstrap CI over random splits x page resamples;
-    * aligned_vs_mean: shift (0, 0) minus the mean of the other shifts (no selection), paired page-bootstrap CI.
+    * aligned_vs_mean: the aligned shift (``aligned_shift``: (0, 0), else the first on the 28-px grid, e.g. (28, 28))
+      minus the mean of the other shifts (no selection), paired page-bootstrap CI.
     """
     rng = np.random.default_rng(seed)
     P, K = G.shape
@@ -263,7 +264,9 @@ def alignment_stats(G: np.ndarray, shifts: list, reps: int = 10000, seed: int = 
         return float(np.mean(d))
     cvs = np.array([cv(G[rng.integers(0, P, P)], rng) for _ in range(min(reps, 2000))])
     cv_point = float(np.mean([cv(G, np.random.default_rng(seed + k)) for k in range(200)]))
-    a0 = shifts.index((0, 0)) if (0, 0) in shifts else 0
+    # the grid-aligned shift: (0, 0), else the first shift on the 28-px token grid (e.g. (28, 28)), else the first
+    on_grid = [k for k, sh in enumerate(shifts) if all(int(v) % 28 == 0 for v in sh)]
+    a0 = on_grid[0] if on_grid else 0
     others = [k for k in range(K) if k != a0]
     d = G[:, a0] - G[:, others].mean(1)
     am, alo, ahi = boot_mean(d, reps, seed)
@@ -272,7 +275,7 @@ def alignment_stats(G: np.ndarray, shifts: list, reps: int = 10000, seed: int = 
             "perm_p": float((np.sum(perm >= obs) + 1) / (len(perm) + 1)),
             "crossval_best_vs_worst": cv_point,
             "crossval_ci": [float(np.percentile(cvs, 2.5)), float(np.percentile(cvs, 97.5))],
-            "aligned_vs_mean": am, "aligned_vs_mean_ci": [alo, ahi],
+            "aligned_shift": list(shifts[a0]), "aligned_vs_mean": am, "aligned_vs_mean_ci": [alo, ahi],
             "mean_by_shift": {f"{s[0]},{s[1]}": float(v) for s, v in zip(shifts, m)}}
 
 
@@ -315,7 +318,7 @@ def report(out: Path) -> str:
         S_ = load_jsonl(out / "samples.jsonl")
         lines += ["## Grid alignment (paired over pages; bits per vision token)", "",
                   "| encoding | text | pages | best shift | worst shift | best - worst (CI, re-selected) | perm p | "
-                  "cross-validated best - worst (CI) | (0,0) - mean of others (CI) |", "|" + "---|" * 9]
+                  "cross-validated best - worst (CI) | aligned shift - mean of others (CI) |", "|" + "---|" * 9]
         align = []
         for (e, t) in sorted({(r["encoding"], r["text"]) for r in shifted}):
             G, shifts = alignment_matrix(S_, e, t)
@@ -325,7 +328,7 @@ def report(out: Path) -> str:
             lines.append(f"| {e} | {t} | {G.shape[0]} | {tuple(a['best_shift'])} | {tuple(a['worst_shift'])} | "
                          f"{fmt_ci(a['best_vs_worst'], a['best_vs_worst_ci'], 3)} | {a['perm_p']:.3f} | "
                          f"{fmt_ci(a['crossval_best_vs_worst'], a['crossval_ci'], 3)} | "
-                         f"{fmt_ci(a['aligned_vs_mean'], a['aligned_vs_mean_ci'], 3)} |")
+                         f"{tuple(a['aligned_shift'])}: {fmt_ci(a['aligned_vs_mean'], a['aligned_vs_mean_ci'], 3)} |")
             align.append({"encoding": e, "text": t, **a})
             lines += ["", "mean bits/vtok by (dx, dy): " + ", ".join(f"({k}) {v:.3f}"
                                                                     for k, v in a["mean_by_shift"].items()), ""]
