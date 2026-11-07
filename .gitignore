@@ -13,6 +13,7 @@ results/phase2/*/curves/
 results/phase2/*/driver/
 results/phase2_*.log
 learned_glyphs/results/**/checkpoints/
+learned_glyphs/results/**/ckpt/
 learned_glyphs/results/**/cache/
 learned_glyphs/results/**/logs/
 learned_glyphs/results/**/curves/

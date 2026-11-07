@@ -248,6 +248,72 @@ def test_penalties():
     assert float(T.coverage_penalty(ink, mm, 0.10, 0.45)) == pytest.approx(0.55 / 2)
 
 
+def _block_glyph(bits, ss=4):
+    """(H, W) 0/1 at 1x -> (H*ss, W*ss) whole-pixel ink at ss resolution."""
+    t = torch.as_tensor(bits, dtype=torch.float32)
+    return t.repeat_interleave(ss, 0).repeat_interleave(ss, 1)
+
+
+def test_min_distance_penalty_and_stats():
+    ss = 4
+    a = _block_glyph([[1, 0], [0, 0], [1, 1]])
+    b = _block_glyph([[1, 0], [0, 0], [1, 1]])            # identical to a
+    c = _block_glyph([[1, 1], [0, 0], [1, 1]])            # 1 px from a and b
+    d = _block_glyph([[0, 1], [1, 1], [0, 0]])            # 5 px from a/b, 4 from c
+    wide = torch.zeros(3 * ss, 4 * ss)
+    wide[:, : 2 * ss] = a                                 # same pixels as a, but a 4-px cell
+    ink = torch.zeros(5, 3 * ss, 4 * ss)
+    for i, g in enumerate((a, b, c, d)):
+        ink[i, :, : 2 * ss] = g
+    ink[4] = wide
+    wss = torch.tensor([2 * ss] * 4 + [4 * ss])
+    # pairs of the 2-px group: (a,b)=0 (a,c)=1 (b,c)=1, others >= 4; the lone 4-px cell is never compared
+    assert float(T.min_distance_penalty(ink, wss, ss, 2.0)) == pytest.approx((2 + 1 + 1) / 4)
+    assert float(T.min_distance_penalty(ink, wss, ss, 1.0)) == pytest.approx(1 / 4)
+    assert float(T.min_distance_penalty(ink[2:4], wss[2:4], ss, 2.0)) == 0.0
+    st = T.distance_stats(ink, wss, ss, list("abcdw"))
+    g2 = st["by_width"]["w2px"]
+    assert st["identical_pairs"] == 1 and st["min_l1_1x"] == 0.0
+    assert (g2["n"], g2["distinct"], g2["pairs_lt_1px"], g2["pairs_lt_2px"]) == (4, 3, 1, 3)
+    assert g2["closest"][0][:2] == ["a", "b"] and st["by_width"]["w4px"]["n"] == 1
+    # soft relaxation: equals the L1 for binary ink, and coincident glyphs still get a gradient
+    x = torch.tensor([[1.0, 0.0, 1.0], [1.0, 0.0, 1.0], [0.0, 1.0, 1.0]])
+    assert torch.equal(T.soft_l1_matrix(x), torch.cdist(x, x, p=1))
+    z = (6 * torch.stack([a, a]) - 3).requires_grad_(True)  # two identical, nearly binary glyphs
+    pen = T.min_distance_penalty(torch.sigmoid(z), torch.tensor([2 * ss, 2 * ss]), ss, 2.0)
+    pen.backward()
+    assert float(pen.detach()) > 0.5 and float(z.grad.abs().sum()) > 0
+
+
+def test_min_dist_option_tag_suffix_and_resume(tmp_path, lines):
+    assert T.JointConfig().min_dist_px == 0.0 and T.JointConfig().ckpt_every == 0   # default off
+    kw = dict(steps=8, eval_every=2, min_dist_px=2.0, min_dist_weight=1.0, tag_suffix="md", ckpt_every=4)
+    data = dict(train_lines=lines[40:] * 2, eval_lines=(lines[:8], lines[8:16]))
+    cfg = _tiny(tmp_path / "a", **kw)
+    assert cfg.tag == "lg_learned_n0_h7md"
+    full = T.train_joint(cfg, log=lambda m: None, **data)[0]
+    assert full["scheme"] == "lg_learned_n0md" and "identical_pairs_1x" in full
+    assert full["min_l1_1x_same_width"] is not None
+    assert not T.ckpt_path(cfg).exists()                       # removed after the row
+    cfg2 = _tiny(tmp_path / "b", **kw)
+    assert T.train_joint(cfg2, log=lambda m: None, stop_at=5, **data) == []
+    assert T.ckpt_path(cfg2).exists()                          # step-4 checkpoint
+    msgs = []
+    res = T.train_joint(cfg2, log=msgs.append, **data)[0]
+    assert any("resumed from step 4" in m for m in msgs)
+    assert res["cer"] == full["cer"] and res["best_step"] == full["best_step"]
+    b1 = torch.load(tmp_path / "a" / "t" / "banks" / f"{cfg.tag}.pt", weights_only=False)
+    b2 = torch.load(tmp_path / "b" / "t" / "banks" / f"{cfg.tag}.pt", weights_only=False)
+    k = "logits" if isinstance(b1, dict) and "logits" in b1 else None
+    if k:
+        assert torch.equal(b1[k], b2[k])
+    else:
+        for name in b1:
+            assert torch.equal(b1[name], b2[name]), name
+    curve = (tmp_path / "b" / "t" / "curves" / f"{cfg.tag}.jsonl").read_text().splitlines()
+    assert [json.loads(x)["step"] for x in curve] == [2, 4, 6, 8]
+
+
 def test_channel_ramp_levels():
     Channel = T.lg1()[2]
     cfg = T.JointConfig(channel="default", channel_ramp=0.5, steps=100)

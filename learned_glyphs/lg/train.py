@@ -38,6 +38,12 @@ Anti-degeneracy (learned banks only; PLAN amendments):
     weaker at these scales and does not skip the space): mean over non-space glyphs of the LINEAR
     hinge distance of each glyph's ink coverage from [coverage_lo, coverage_hi] = [0.10, 0.45];
   * ``ink_penalty`` / ``entropy_penalty`` (off): mean ink / mean binary entropy of soft glyphs;
+  * ``min_dist_px`` D (default 0 = off) x ``min_dist_weight``: minimum glyph distance. For every pair of
+    same-width glyphs, a hinge relu(D - d) on their distance d at 1x (output-pixel) resolution, summed over
+    pairs and divided by the number of glyphs of that width (``min_distance_penalty``). d is the expected
+    L1 of the 1x ink, sum a + b - 2ab: equal to the L1 (= the number of differing whole pixels) for binary
+    1x ink, and its gradient does not vanish when two glyphs coincide (|a - b| has zero gradient there).
+    It acts on the same ink as the CTC loss, so through the straight-through hard phase too;
   * all penalty weights ramp linearly 0 -> 1 over the first ``penalty_ramp`` (0.3) x steps, so CTC
     shapes the glyphs before the morphology terms act (with full weight from step 1 the
     min-feature term erased most random-init ink in the smoke: mean ink 0.05, many blank glyphs).
@@ -141,6 +147,8 @@ class JointConfig:
     ink_penalty: float = 0.0
     entropy_penalty: float = 0.0
     penalty_ramp: float = 0.3             # penalty weights ramp 0 -> 1 over this fraction of steps
+    min_dist_px: float = 0.0              # >0: hinge pushing same-width glyphs >= D whole px apart (1x L1)
+    min_dist_weight: float = 1.0
     # co-adaptation countermeasures
     channel_ramp: float = 0.3
     reader_resets: int = 0
@@ -163,6 +171,8 @@ class JointConfig:
     run_name: str = "joint"
     out_root: str | None = None           # default learned_glyphs/results
     scheme_suffix: str = ""
+    tag_suffix: str = ""                  # appended after _h<h> in the tag (bank / log file names)
+    ckpt_every: int = 0                   # >0: resumable checkpoint every N steps (multiple of eval_every)
     model: dict = field(default_factory=dict)     # CRNN kwargs override
 
     # ---- derived ----
@@ -197,7 +207,7 @@ class JointConfig:
 
     @property
     def tag(self) -> str:
-        t = f"{self.scheme}_h{self.height_px}"
+        t = f"{self.scheme}_h{self.height_px}{self.tag_suffix}"
         if self.channel != "default":
             t += f"_{self.channel}"
         if self.seed:
@@ -311,6 +321,74 @@ def coverage_penalty(ink, mask, lo: float, hi: float, skip=(0,)):
     keep[list(skip)] = False
     pen = (lo - cov).clamp_min(0) + (cov - hi).clamp_min(0)
     return pen[keep].mean() if keep.any() else pen.sum() * 0
+
+
+def ink_1x(ink, ss: int):
+    """(n, H, W) ink at ss resolution -> (n, ceil(H/ss), ceil(W/ss)) mean ink per output pixel."""
+    import torch.nn.functional as F
+    H, W = ink.shape[1:]
+    return F.avg_pool2d(F.pad(ink[:, None], (0, -W % ss, 0, -H % ss)), ss)[:, 0]
+
+
+def width_groups(widths_ss_t) -> list:
+    """[(width_ss, index tensor)] for each distinct cell width, ascending."""
+    import torch
+    w = torch.as_tensor(widths_ss_t)
+    return [(int(v), (w == v).nonzero().flatten()) for v in torch.unique(w).tolist()]
+
+
+def soft_l1_matrix(x):
+    """(n, P) values in [0, 1] -> (n, n) sum over P of a + b - 2ab (the L1 if x is binary)."""
+    s = x.sum(1)
+    return s[:, None] + s[None, :] - 2 * (x @ x.T)
+
+
+def min_distance_penalty(ink, widths_ss_t, ss: int, d_px: float):
+    """Hinge sum over same-width glyph pairs of relu(d_px - d_ij), d = ``soft_l1_matrix`` of the 1x ink,
+    divided by the number of glyphs of that width; summed over widths. 0 iff every same-width pair is at
+    least ``d_px`` (expected) whole pixels apart."""
+    import torch
+    tot = ink.sum() * 0
+    for w, idx in width_groups(widths_ss_t):
+        n = int(idx.numel())
+        if n < 2:
+            continue
+        x = ink_1x(ink[idx][:, :, :w], ss).reshape(n, -1)
+        d = soft_l1_matrix(x)
+        iu = torch.triu_indices(n, n, 1, device=d.device)
+        tot = tot + torch.relu(d_px - d[iu[0], iu[1]]).sum() / n
+    return tot
+
+
+def distance_stats(ink, widths_ss_t, ss: int, symbols=None, n_pairs: int = 10) -> dict:
+    """Exact same-width distances of the BINARISED glyphs (ink > 0.5) at 1x: per width, number of
+    glyphs, distinct shapes, identical pairs, pairs under 1 / 2 px, min and median nearest-neighbour L1
+    (whole pixels for whole-pixel banks), and the closest pairs."""
+    import torch
+    with torch.no_grad():
+        b = (ink > 0.5).float()
+        out, tot_id, mins = {}, 0, []
+        for w, idx in width_groups(widths_ss_t):
+            n = int(idx.numel())
+            x = ink_1x(b[idx][:, :, :w], ss).reshape(n, -1)
+            d = torch.cdist(x.double(), x.double(), p=1).float()
+            iu = torch.triu_indices(n, n, 1)
+            dv = d[iu[0], iu[1]]
+            nn_d = d.masked_fill(torch.eye(n, dtype=torch.bool), float("inf")).min(1).values
+            order = torch.argsort(dv)[:n_pairs]
+            sym = symbols or [str(i) for i in range(len(ink))]
+            g = {"n": n, "distinct": len({r.numpy().tobytes() for r in x}),
+                 "identical_pairs": int((dv == 0).sum()), "pairs_lt_1px": int((dv < 1).sum()),
+                 "pairs_lt_2px": int((dv < 2).sum()),
+                 "min_l1_1x": float(dv.min()) if n > 1 else None,
+                 "median_nn_l1_1x": float(nn_d.median()) if n > 1 else None,
+                 "closest": [[sym[int(idx[iu[0, k]])], sym[int(idx[iu[1, k]])], float(dv[k])]
+                             for k in order]}
+            out[f"w{w / ss:g}px"] = g
+            tot_id += g["identical_pairs"]
+            if n > 1:
+                mins.append(g["min_l1_1x"])
+    return {"identical_pairs": tot_id, "min_l1_1x": min(mins) if mins else None, "by_width": out}
 
 
 def feature_penalty(bank, ink, mask, ss: int):
@@ -623,13 +701,23 @@ def entropy_bits_per_char(counts: np.ndarray, n_chars_text: int) -> float:
 
 
 # ============================================================================ train
+def ckpt_path(cfg: JointConfig) -> Path:
+    return cfg.out_dir() / "ckpt" / f"{cfg.tag}.pt"
+
+
 def train_joint(cfg: JointConfig, log=print, train_lines=None, eval_lines=None,
-                save: bool = True) -> list[dict]:
+                save: bool = True, stop_at: int | None = None) -> list[dict]:
     """Train bank + reader(s) jointly (or glyphs only against a frozen reader); returns [row]
     and (if ``save``) appends it to ``<out_dir>/runs.jsonl`` and writes banks/, atlas/, readers/,
     curves/, samples/, glyph_report/ files.
 
-    ``train_lines`` / ``eval_lines=(val, test)`` override the corpus (tests)."""
+    ``train_lines`` / ``eval_lines=(val, test)`` override the corpus (tests).
+
+    Resume (``ckpt_every`` > 0, with ``save``): after the eval at every ``ckpt_every``-th step the full
+    training state (bank, readers, optimiser, scheduler, RNGs, best snapshot, counters) is written
+    atomically to ``<out_dir>/ckpt/<tag>.pt``; a later call with the same config resumes from it and
+    replays the train stream to the same position, so the result equals an uninterrupted run. The
+    checkpoint is deleted once the row is written. ``stop_at`` (tests) returns [] after that step."""
     import torch
     from torch import nn
     from vbpe.crnn import data as D
@@ -647,6 +735,8 @@ def train_joint(cfg: JointConfig, log=print, train_lines=None, eval_lines=None,
     out_dir = cfg.out_dir()
     if cfg.frozen_reader and not cfg.learn_glyphs:
         raise ValueError("frozen_reader with a fixed bank: nothing to train")
+    if cfg.ckpt_every and cfg.ckpt_every % cfg.eval_every:
+        raise ValueError("ckpt_every must be a multiple of eval_every")
 
     alphabet = Alphabet.build(cfg.n_tokens)
     bank = build_bank(cfg, alphabet)
@@ -736,7 +826,21 @@ def train_joint(cfg: JointConfig, log=print, train_lines=None, eval_lines=None,
     if save:
         for sub in ("curves", "banks", "atlas", "readers", "samples", "glyph_report"):
             (out_dir / sub).mkdir(parents=True, exist_ok=True)
-        files["curve"] = open(out_dir / "curves" / f"{tag}.jsonl", "w")
+    resume = None
+    cpath = ckpt_path(cfg)
+    if save and cfg.ckpt_every and cpath.exists():
+        resume = torch.load(cpath, map_location="cpu", weights_only=False)
+        if resume.get("config") != asdict(cfg):
+            raise ValueError(f"{cpath}: checkpoint was written by a different config; delete it to restart")
+    if save:
+        cfile = out_dir / "curves" / f"{tag}.jsonl"
+        if resume is not None:                      # keep the curve up to the checkpoint
+            keep = [x for x in (cfile.read_text().splitlines() if cfile.exists() else [])
+                    if x.strip() and json.loads(x)["step"] <= resume["step"]]
+            cfile.write_text("".join(k + "\n" for k in keep))
+            files["curve"] = open(cfile, "a")
+        else:
+            files["curve"] = open(cfile, "w")
     log(f"[{tag}] symbols={len(alphabet)} classes={cmap.n_classes} learn={cfg.learn_glyphs} "
         f"mode={cfg.train_mode} h={cfg.height_px} cell_w={cfg.char_w_px}/{cfg.token_w_px} "
         f"col_stride={stride} expand={expand} pad={pad} readers={len(readers)} "
@@ -771,9 +875,39 @@ def train_joint(cfg: JointConfig, log=print, train_lines=None, eval_lines=None,
     n_resets_done = 0
     t0, c0 = time.time(), time.process_time()
     eval_time = 0.0
+    start = 1
+    if resume is not None:
+        bank.load_state_dict(resume["bank"])
+        for r, sd in zip(readers, resume["readers"]):
+            r.load_state_dict(sd)
+        opt.load_state_dict(resume["opt"])
+        sched.load_state_dict(resume["sched"])
+        gen.set_state(resume["gen"])
+        best, skipped, n_resets_done = resume["best"], resume["skipped"], resume["n_resets_done"]
+        eval_time = resume["eval_time"]
+        t0, c0 = t0 - resume["elapsed"], c0 - resume["cpu"]
+        tr = time.time()
+        for _ in range(resume["step"]):              # replay the stream to the same position
+            next(stream)
+        torch.set_rng_state(resume["torch_rng"])
+        start = resume["step"] + 1
+        log(f"[{tag}] resumed from step {resume['step']} ({cpath}; stream replay {time.time() - tr:.0f}s)")
+        del resume
+
+    def write_ckpt(step):
+        cpath.parent.mkdir(parents=True, exist_ok=True)
+        tmp = cpath.with_suffix(".pt.tmp")
+        torch.save({"step": step, "config": asdict(cfg), "bank": bank.state_dict(),
+                    "readers": [r.state_dict() for r in readers], "opt": opt.state_dict(),
+                    "sched": sched.state_dict(), "gen": gen.get_state(),
+                    "torch_rng": torch.get_rng_state(), "best": best, "skipped": skipped,
+                    "n_resets_done": n_resets_done, "eval_time": eval_time,
+                    "elapsed": time.time() - t0, "cpu": time.process_time() - c0}, tmp)
+        tmp.replace(cpath)
+
     for r in readers:
         r.train(not cfg.frozen_reader)
-    for step in range(1, cfg.steps + 1):
+    for step in range(start, cfg.steps + 1):
         if step in resets:
             ri = n_resets_done % len(readers)
             fresh = CRNN(cmap.n_classes, col_stride=stride, expand=expand, **cfg.model)
@@ -803,6 +937,9 @@ def train_joint(cfg: JointConfig, log=print, train_lines=None, eval_lines=None,
             if cfg.coverage_weight:
                 pen = pen + cfg.coverage_weight * coverage_penalty(
                     ink, cmask, cfg.coverage_lo, cfg.coverage_hi)
+            if cfg.min_dist_px > 0 and cfg.min_dist_weight:
+                pen = pen + cfg.min_dist_weight * min_distance_penalty(
+                    ink, widths_ss_t, ss, cfg.min_dist_px)
             area = cmask.sum().clamp_min(1.0)
             if cfg.ink_penalty:
                 pen = pen + cfg.ink_penalty * ink.sum() / area
@@ -864,6 +1001,11 @@ def train_joint(cfg: JointConfig, log=print, train_lines=None, eval_lines=None,
             loss_acc = pen_acc = n_acc = 0
             if ev["cer"] <= best["cer"]:          # ties -> later checkpoint
                 best = snapshot(ev["cer"], step, ri)
+            if save and cfg.ckpt_every and step % cfg.ckpt_every == 0 and step < cfg.steps:
+                write_ckpt(step)
+            if stop_at is not None and step >= stop_at:
+                files["curve"].close() if "curve" in files else None
+                return []
     train_time = time.time() - t0
     train_cpu = time.process_time() - c0
     if "curve" in files:
@@ -885,12 +1027,15 @@ def train_joint(cfg: JointConfig, log=print, train_lines=None, eval_lines=None,
                             cfg, seed=54321, cmap=cmap, chan_kw=held[1])
         mean_ink = float((ink * cmask).sum() / cmask.sum().clamp_min(1.0))
         grep = glyph_report(ink.detach(), widths_ss_t, ss, alphabet, test_ids, ev["pred_ids"])
+        dstats = distance_stats(ink.detach(), widths_ss_t, ss, alphabet.symbols)
+        grep["same_width_1x"] = dstats
     ppc = float(np.mean([cfg.height_px * (wss_np[i].sum() / ss) / max(1, len(normalize(t)))
                          for t, i in zip(test_t, test_ids)]))
     n_sym = sum(len(i) for i in test_ids)
     n_chr = sum(len(normalize(t)) for t in test_t)
     row = {
-        "phase": "lg", "run": cfg.run_name, "train_mode": cfg.train_mode, "scheme": cfg.scheme,
+        "phase": "lg", "run": cfg.run_name, "train_mode": cfg.train_mode,
+        "scheme": cfg.scheme + cfg.tag_suffix,
         "em": cfg.em, "height_px": cfg.height_px, "px_per_char": ppc,
         "cer": ev["cer"], "symbol_cer": ev["symbol_cer"], "steps": cfg.steps,
         "channel": cfg.channel, "n_tokens": cfg.n_tokens, "learn_glyphs": cfg.learn_glyphs,
@@ -911,6 +1056,7 @@ def train_joint(cfg: JointConfig, log=print, train_lines=None, eval_lines=None,
         "seg_ratio": n_sym / max(1, n_chr), "mean_ink": mean_ink,
         "min_hamming_ss": grep["min_hamming_ss"], "n_pairs_lt_1px": grep["n_pairs_lt_1px"],
         "min_l1_1x": grep["min_l1_1x"],
+        "identical_pairs_1x": dstats["identical_pairs"], "min_l1_1x_same_width": dstats["min_l1_1x"],
         "s_per_step": round((train_time - eval_time) / cfg.steps, 4),
         "train_cpu_s": round(train_cpu, 1), "eval_time_s": round(eval_time, 1),
         "ctc_infeasible": skipped, "n_val": len(val_t), "n_test": len(test_t),
@@ -918,7 +1064,8 @@ def train_joint(cfg: JointConfig, log=print, train_lines=None, eval_lines=None,
     }
     log(f"[{tag}] TEST cer={row['cer']:.4f} symbol_cer={row['symbol_cer']:.4f} "
         f"heldout={row['cer_heldout']} px/char={ppc:.2f} bits/px2={row['bits_per_px2']:.4f} "
-        f"min_ham={grep['min_hamming_ss']} best_step={best['step']} time={train_time:.0f}s "
+        f"min_ham={grep['min_hamming_ss']} identical_1x={dstats['identical_pairs']} "
+        f"min_l1_1x={dstats['min_l1_1x']} best_step={best['step']} time={train_time:.0f}s "
         f"s/step={row['s_per_step']}")
     if save:
         bp = out_dir / "banks" / f"{tag}.pt"
@@ -942,6 +1089,8 @@ def train_joint(cfg: JointConfig, log=print, train_lines=None, eval_lines=None,
                 fh.write(f"REF {test_t[i]}\nHYP {ev['preds'][i]}\n\n")
         with open(out_dir / "runs.jsonl", "a") as fh:
             fh.write(json.dumps(row) + "\n")
+        if cpath.exists():
+            cpath.unlink()
     return [row]
 
 
@@ -950,7 +1099,7 @@ def run_job(cfg_dict: dict) -> list[dict]:
     cfg = JointConfig.from_dict(cfg_dict)
     log_path = cfg.out_dir() / "logs" / f"{cfg.tag}.log"
     log_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(log_path, "w") as fh:
+    with open(log_path, "a" if cfg.ckpt_every and ckpt_path(cfg).exists() else "w") as fh:
         def log(msg: str) -> None:
             fh.write(msg + "\n")
             fh.flush()
