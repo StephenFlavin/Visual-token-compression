@@ -149,3 +149,5 @@ were retrained with D = 2, weight 1, all else as in `e1align` (10.5k steps): `re
 * The distance constraint costs nothing in density and makes the frozen banks ~4x easier for a fresh reader (bridge).
 * The joint CER is worse: the penalty still moves glyphs late in the hard phase, and the co-trained reader has less
   time to settle. Judge banks by the bridge, as before.
+* So the higher joint CER is not a regression: the constraint makes the trainer's own job harder and a fresh
+  reader's easier, which is the intended trade.
