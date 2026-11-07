@@ -141,11 +141,14 @@ def test_analyse_run12_paired_and_matched(tmp_path):
                                         "loss_real": 1000.0 - gap, "loss_swap": 1000.0, "loss_blank": 2000.0}) + "\n")
     rng = np.random.default_rng(0)
     base = rng.normal(10, 1, 40)
-    write(tmp_path / "f", {("latin_p6", "shuffled"): base, ("lg_n0_pb_c2_h7", "shuffled"): base * 0})
-    write(tmp_path / "t", {("latin_p6", "shuffled"): base + 2, ("lg_n0_pb_c2_h7", "shuffled"): base + 5})
+    write(tmp_path / "f", {("latin_p6", "shuffled"): base, ("lg_n0_pb_c2_h7", "shuffled"): base * 0,
+                           ("latin_p8", "shuffled"): base, ("lg_n0_pb_c4_h7", "shuffled"): base * 0})
+    write(tmp_path / "t", {("latin_p6", "shuffled"): base + 2, ("lg_n0_pb_c2_h7", "shuffled"): base + 5,
+                           ("latin_p8", "shuffled"): base + 2, ("lg_n0_pb_c4_h7", "shuffled"): base + 2.5})
     res = A.analyse(A.load(tmp_path / "f"), A.load(tmp_path / "t"), {})
     r1 = next(r for r in res["run1"] if r["encoding"] == "latin_p6")
     assert abs(r1["trained_minus_frozen"][0] - 2) < 1e-6 and r1["moves_right"] and res["verdict_run1"] == "PASS"
-    r2 = res["run2"][0]
-    assert r2["glyph"] == "lg_n0_pb_c2_h7" and abs(r2["glyph_minus_latin"][0] - 3) < 1e-6 and r2["glyph_wins"]
+    r2 = next(r for r in res["run2"] if r["glyph"] == "lg_n0_pb_c2_h7")
+    assert abs(r2["glyph_minus_latin"][0] - 3) < 1e-6 and r2["glyph_wins"]
+    assert res["gate_A2"] == "PASS" and res["gate_A1"] == "n/a" and res["verdict_run2"] == "n/a"   # no md banks yet
     assert "PASS" in A.write_md(res, tmp_path / "s.md")

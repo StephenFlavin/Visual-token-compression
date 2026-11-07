@@ -26,8 +26,11 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import capacity_curve as C  # noqa: E402
 
-# Run 2 matched pairs (amendment 3): glyph arm -> trained Latin arm at the nearest LOWER density
-PAIRS = {"lg_n0_pb_c2_h7": "latin_p6", "lg_pb_c2t4_h7": "latin_p5", "lg_n0_pb_h5": "latin_p5"}
+# Run 2 matched pairs (amendments 3-4): glyph arm -> trained Latin arm at about the same density (7-px margin)
+PAIRS = {"lg_n0_pb_c4_h7": "latin_p8", "lg_n0_pb_c2_h7md": "latin_p6", "lg_pb_c2t4_h7md": "latin_p5",
+         "lg_n0_pb_c2_h7": "latin_p6", "lg_pb_c2t4_h7": "latin_p5"}
+STAGE_C = ("lg_n0_pb_c2_h7md", "lg_pb_c2t4_h7md")
+BAR_RECOVERED = 20.0   # amendment 4: the write-up bar, recovered chars per vision token
 LATIN_RUN1 = ["latin_p8", "latin_p6", "latin_p5"]
 
 
@@ -41,9 +44,12 @@ def load(d: Path | None) -> dict:
             continue
         s = json.loads(line)
         k = (s["encoding"], s["text"])
-        e = out.setdefault(k, {"bits": {}, "cpt": []})
-        e["bits"][s["page"]] = C.sample_stats(s)["bits_vtok"]
+        e = out.setdefault(k, {"bits": {}, "cpt": [], "gap": 0.0, "ref": 0.0})
+        st = C.sample_stats(s)
+        e["bits"][s["page"]] = st["bits_vtok"]
         e["cpt"].append(s["page_chars"] / s["vision_tokens"])
+        e["gap"] += st["gap"]
+        e["ref"] += st["ref"]
     return out
 
 
@@ -70,6 +76,9 @@ def analyse(frozen: dict, trained: dict, blind: dict) -> dict:
                 x = np.array(list(src[k]["bits"].values()))
                 row[name] = boot_mean(x)
                 row["chars_per_token"] = float(np.mean(src[k]["cpt"]))
+                frac = src[k]["gap"] / src[k]["ref"] if src[k]["ref"] else float("nan")
+                row[f"{name}_recovered_frac"] = frac
+                row[f"{name}_recovered_cpt"] = frac * row["chars_per_token"]
         res["points"].append(row)
         if k in frozen and k in trained:   # Run 1: paired by page
             pages = sorted(set(frozen[k]["bits"]) & set(trained[k]["bits"]))
@@ -89,8 +98,24 @@ def analyse(frozen: dict, trained: dict, blind: dict) -> dict:
                                     "latin_cpt": float(np.mean(trained[(lat, t)]["cpt"]))})
     shuf = [r for r in res["run1"] if r["text"] == "shuffled" and r["encoding"] in ("latin_p6", "latin_p5")]
     res["verdict_run1"] = ("PASS" if any(r["moves_right"] for r in shuf) else "FAIL") if shuf else "n/a"
-    g2 = [r for r in res["run2"] if r["text"] == "shuffled" and r["glyph"] in ("lg_n0_pb_c2_h7", "lg_pb_c2t4_h7")]
+    g2 = [r for r in res["run2"] if r["text"] == "shuffled" and r["glyph"] in STAGE_C]
     res["verdict_run2"] = ("PASS" if any(r["glyph_wins"] for r in g2) else "FAIL") if g2 else "n/a"
+    # amendment 4, stage A
+    pt = {(r["encoding"], r["text"]): r for r in res["points"]}
+    c7 = pt.get(("lg_n0_pb_c7_h7", "shuffled"), {})
+    res["gate_A1"] = ("n/a" if "trained" not in c7 else
+                      ("PASS" if c7["trained_recovered_frac"] >= 0.8 else "FAIL"))
+    res["gate_A1_value"] = c7.get("trained_recovered_frac")
+    a2 = next((r for r in res["run2"] if r["glyph"] == "lg_n0_pb_c4_h7" and r["text"] == "shuffled"), None)
+    if a2 is None:
+        res["gate_A2"] = "n/a"
+    else:
+        lat = pt[("latin_p8", "shuffled")]["trained"][0]
+        glyph = pt[("lg_n0_pb_c4_h7", "shuffled")]["trained"][0]
+        res["gate_A2"] = "PASS" if glyph >= 0.9 * lat and a2["glyph_minus_latin"][2] >= 0 else "FAIL"
+        res["gate_A2_ratio"] = glyph / lat if lat else float("nan")
+    res["bar_recovered_cpt"] = {f"{r['encoding']}/{r['text']}": r["trained_recovered_cpt"]
+                                for r in res["points"] if "trained_recovered_cpt" in r}
     return res
 
 
@@ -105,6 +130,11 @@ def write_md(res: dict, path: Path) -> str:
     for r in res["points"]:
         md.append(f"| {r['encoding']} | {r['text']} | {r.get('chars_per_token', 0):.1f} | {fmt(r.get('frozen'))} | "
                   f"{fmt(r.get('trained'))} | {fmt(r.get('blind'))} |")
+    md += ["", f"**Stage A (amendment 4): A1 learnability (lg_n0_pb_c7_h7 recovered fraction on shuffled >= 0.8) "
+           f"{res['gate_A1']} ({res.get('gate_A1_value')}); A2 glyph matches Latin at 28 (lg_n0_pb_c4_h7 >= 0.9 x "
+           f"latin_p8, CI upper >= 0) {res['gate_A2']} (ratio {res.get('gate_A2_ratio')})**", "",
+           f"Write-up bar: recovered chars per vision token > {BAR_RECOVERED:.0f} (trained): "
+           + ", ".join(f"{k} {v:.1f}" for k, v in res["bar_recovered_cpt"].items())]
     md += ["", f"**Run 1 (trained minus frozen, paired by page): {res['verdict_run1']}** "
            "(pass = CI above 0 on shuffled text at latin_p6 or latin_p5)", "",
            "| encoding | text | pages | trained − frozen |", "|---|---|---|---|"]

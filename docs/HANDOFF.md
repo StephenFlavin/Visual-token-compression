@@ -6,51 +6,56 @@ aligned banks)**. The prompt for the 3090 (Runs 1-2) is the next section. The co
 ([COLOUR_GIST.md](COLOUR_GIST.md)) is parked; its old GPU prompt is further down. Older session notes:
 [history/HANDOFF_2026-11.md](history/HANDOFF_2026-11.md).
 
-## Prompt for the 3090: PLAN_3090 Runs 1-2 (trained ViT, LLM frozen; Latin, then aligned glyphs)
+## Prompt for the 3090: PLAN_3090 Runs 1-2 (amendment 4: stage A learnability, B Latin, C dense glyphs)
 ```text
 Pull branch claude/validation-harness (git pull --rebase origin claude/validation-harness). Read AGENTS.md
-(gotchas, especially GPU runners), docs/PLAN_3090.md (the ladder, amendments 1-3, the Results section) and
-docs/LOCAL_GPU.md section 8 (Windows RTX 3090: Git Bash, `. .venv/env.sh`, use `python` not `python3`,
-PYTHONUTF8=1, EP_TRAIN_R2_CAP=400000000, one finetune job at a time; Windows pages VRAM instead of OOM, so watch
-progress). The recipe, arms and gates are pre-registered in PLAN_3090 amendment 3: do not change them after
-seeing data; if something must change, add a dated amendment to PLAN_3090.md first.
+(gotchas, especially GPU runners), docs/PLAN_3090.md (the ladder, amendments 1-4 and the Results section;
+amendment 4 sets the budget, the arm order and the gates) and docs/LOCAL_GPU.md section 8 (Windows RTX 3090:
+Git Bash, `. .venv/env.sh`, `python` not `python3`, PYTHONUTF8=1, EP_TRAIN_R2_CAP=400000000, one finetune job at a
+time; Windows pages VRAM instead of raising OOM, so watch progress and checkpoint mtimes). Everything below is
+pre-registered: do not change it after seeing data; if something must change, add a dated amendment to PLAN_3090.md
+first. Never commit adapters (encoder_probe/cache is git-ignored).
 
-0. Setup and tests: `python -m pytest -q encoder_probe/tests/test_capacity_curve.py encoder_probe/tests/test_colour.py
-   encoder_probe/tests/test_round3.py` (tiny model, CPU). test_rgb3_unsupported_pitch may fail on Windows (no raqm,
+0. Setup and tests: python -m pytest -q encoder_probe/tests/test_capacity_curve.py encoder_probe/tests/test_colour.py
+   encoder_probe/tests/test_round3.py   (tiny model, CPU; test_rgb3_unsupported_pitch may fail on Windows: no raqm,
    known). Make sure the Qwen2.5-VL-3B weights are cached (LOCAL_GPU.md section 8 one-liner).
-1. Frozen baseline on the GPU (inference only, minutes):
+1. Frozen baseline (inference only, minutes):
    python encoder_probe/experiments/capacity_curve.py --device cuda --encodings latin_p8 latin_p6 latin_p5
-     lg_n0_pb_c2_h7 lg_pb_c2t4_h7 lg_n0_pb_h5 --texts natural shuffled --pages 200 --shifts 7 --cer-pages 4
-     --run-name r12_frozen
+     lg_n0_pb_c4_h7 lg_n0_pb_c7_h7 --texts natural shuffled --pages 200 --shifts 7 --cer-pages 4 --run-name r12_frozen
    Expect latin_p8 near the CPU Run 0 (12.6 natural / 25.7 shuffled bits per vision token, maybe ~10% higher with
-   the margin) and the glyph encodings near 0 (frozen Qwen cannot read them). If latin_p8 is far off, stop and
-   report before training.
-2. Smoke of the Run 1 recipe (one at a time): set
+   the margin) and the glyph encodings near 0. If latin_p8 is far off, stop and report.
+2. Smoke: set
    R="--lora-r 0 --vision-blocks 16 --lr-vision 2e-5 --task-mix 1.0 --text shuffled --top-margin 7
-      --train-pages 4000 --test-pages 16 --batch-size 4 --max-target-chars 2000 --eval-conds clean --device cuda"
-   python encoder_probe/experiments/finetune_qwen.py --encoding latin_p6 $R --smoke
-   Check: the loss falls, val_loss falls, peak VRAM (nvidia-smi) < ~21 GB (else add --micro-batch 2), and s/step.
-   Fix S (steps) from it per amendment 3 (3000, or the largest multiple of 250 that keeps one run <= 2.5 h, not
-   below 1500). Write S into PLAN_3090 Results before the first arm.
-3. Run 1, in this order, each followed by its blind (same flags plus --blind-images), one job at a time:
-   latin_p6, latin_p5, latin_p8:
+      --train-pages 12000 --test-pages 16 --batch-size 8 --max-target-chars 2000 --eval-conds clean --device cuda"
+   python encoder_probe/experiments/finetune_qwen.py --encoding latin_p8 $R --smoke
+   Check: loss and val_loss fall; peak VRAM (nvidia-smi) < ~21 GB, else add --micro-batch 4 (same effective
+   batch); note s/step and RAM (12000 pages ~7 GB). S = 6000 steps unless one run would exceed 12 h; then the
+   largest multiple of 500 that fits, not below 3000. Write S, s/step and VRAM into PLAN_3090 Results before the
+   first arm.
+3. For every arm <enc> below, one job at a time, in order:
      python encoder_probe/experiments/finetune_qwen.py --encoding <enc> $R --steps S --run-name r12
      python encoder_probe/experiments/finetune_qwen.py --encoding <enc> $R --steps S --run-name r12 --blind-images
-   After each job, score its adapter (path in the row's "adapter" field: encoder_probe/cache/r3_adapters/
-   r12__<enc>__S.pt, blind r12_blind__<enc>__S.pt):
      python encoder_probe/experiments/capacity_curve.py --device cuda --encodings <enc> --texts natural shuffled
-       --pages 200 --shifts 7 --cer-pages 4 --adapter <adapter> --run-name r12_cap_trained   (blind: r12_cap_blind)
-   Then: python encoder_probe/experiments/analyse_run12.py --frozen encoder_probe/results/r12_frozen
-     --trained encoder_probe/results/r12_cap_trained --blind encoder_probe/results/r12_cap_blind
-   Commit and push the rows (encoder_probe/results/r12*, analysis_run12) after every job. Do not commit adapters.
-4. Sanity gate (amendment 3) before Run 2: every blind adapter <= 1.0 bits/token on shuffled text; no trained arm
-   below its frozen point by more than its CI. If it fails, stop and report.
-5. Run 2, same recipe and S, each with its blind and capacity scoring as in step 3: lg_n0_pb_c2_h7, then
-   lg_pb_c2t4_h7; then (optional, if time) lg_n0_pb_h5. Re-run analyse_run12.py.
-6. Write the results into docs/PLAN_3090.md (Results: a "Runs 1-2" subsection with analyse_run12's tables and the
-   verdicts vs amendment 3, s/step, peak VRAM, S, anything that went wrong) and one line in AGENTS.md "Findings".
-   Commit (message ending with the repo's attribution lines if your setup adds them), pull --rebase, push.
-Report: the analyse_run12 summary.md tables, both verdicts, the sanity gate, timings, and problems.
+       --pages 200 --shifts 7 --cer-pages 4 --adapter encoder_probe/cache/r3_adapters/r12__<enc>__S.pt
+       --run-name r12_cap_trained
+     python encoder_probe/experiments/capacity_curve.py ... same ... --adapter
+       encoder_probe/cache/r3_adapters/r12_blind__<enc>__S.pt --run-name r12_cap_blind
+     python encoder_probe/experiments/analyse_run12.py --frozen encoder_probe/results/r12_frozen
+       --trained encoder_probe/results/r12_cap_trained --blind encoder_probe/results/r12_cap_blind
+   Then commit and push encoder_probe/results/r12* and encoder_probe/results/analysis_run12.
+   Sanity after every arm (amendment 3): the blind adapter's bits per token on shuffled text <= 1.0, and the trained
+   arm is not below its frozen point by more than its CI. If either fails, stop and report.
+4. Stage A, in order: latin_p8, lg_n0_pb_c4_h7, lg_n0_pb_c7_h7. Then read gates A1 and A2 in
+   analysis_run12/summary.md and report them (send a short status message if you can).
+5. Stage B: latin_p6, latin_p5 (Run 1 verdict).
+6. Stage C, only if A1 and A2 both PASS and the banks lg_n0_pb_c2_h7md / lg_pb_c2t4_h7md exist on the branch
+   (pull first; they are being built on the CPU runner): lg_n0_pb_c2_h7md, then lg_pb_c2t4_h7md (Run 2 verdict).
+   If A1 or A2 fails, skip stage C: the glyph line stops per amendment 4.
+7. Write the results into docs/PLAN_3090.md (Results: a "Runs 1-2" subsection with analyse_run12's tables, the gates
+   and verdicts vs amendments 3-4, the > 20 recovered-chars bar, s/step, peak VRAM, S, problems) and one line in
+   AGENTS.md "Findings". Commit, pull --rebase, push.
+Report: the analyse_run12 summary.md tables, gates A1/A2, the Run 1 and Run 2 verdicts, the sanity checks, timings
+and problems.
 ```
 
 ## Status
