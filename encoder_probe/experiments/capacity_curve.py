@@ -60,7 +60,10 @@ the end) writes summary.md and capacity.png (and alignment tables when shifts ex
 from __future__ import annotations
 
 import argparse
+import gzip
 import json
+import os
+import pickle
 import math
 import re
 import sys
@@ -110,6 +113,28 @@ class PageSet:
         base, self.f = parse_encoding(name)
         self.inner = (S - margin) // self.f
         self.enc = get_encoding_s(base, self.inner)
+        cp = self.cache_file(name, text_set, n, seed, margin, split, allow_fewer)
+        if cp is not None and cp.exists():   # EP_PAGE_CACHE=1: same pages, rendered once (rendering ~0.27 s/page)
+            with gzip.open(cp, "rb") as f:
+                self.pages = pickle.load(f)
+            return
+        self._build(name, text_set, n, seed, split, allow_fewer)
+        if cp is not None:
+            tmp = cp.with_suffix(f".tmp{os.getpid()}")
+            with gzip.open(tmp, "wb", compresslevel=1) as f:
+                pickle.dump(self.pages, f, protocol=pickle.HIGHEST_PROTOCOL)
+            os.replace(tmp, cp)
+
+    @staticmethod
+    def cache_file(name, text_set, n, seed, margin, split, allow_fewer):
+        """Page-set cache (only with EP_PAGE_CACHE=1). Delete encoder_probe/cache/pages after changing a renderer."""
+        if os.environ.get("EP_PAGE_CACHE", "") in ("", "0"):
+            return None
+        d = ROOT / "encoder_probe" / "cache" / "pages"
+        d.mkdir(parents=True, exist_ok=True)
+        return d / f"ps_{name}_{text_set}_{split}_n{n}_seed{seed}_m{margin}{'_af' if allow_fewer else ''}.pkl.gz"
+
+    def _build(self, name, text_set, n, seed, split, allow_fewer):
         cap = self.enc.page_chars_max
         text = text_stream_s(split, (n + 1) * cap + cap)
         pos, segs, pages = 0, [], []

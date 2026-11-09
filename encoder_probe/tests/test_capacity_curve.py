@@ -192,3 +192,16 @@ def test_pageset_allow_fewer(monkeypatch):
         C.PageSet("latin_p24", "natural", 50)
     ps = C.PageSet("latin_p24", "shuffled", 50, allow_fewer=True)
     assert 4 <= len(ps.pages) < 50
+
+
+def test_pageset_disk_cache(monkeypatch, tmp_path):
+    """EP_PAGE_CACHE=1: the second PageSet loads the first one's pages from disk, identical."""
+    monkeypatch.setenv("EP_PAGE_CACHE", "1")
+    monkeypatch.setattr(C, "ROOT", tmp_path)
+    a = C.PageSet("latin_p24", "shuffled", 3, margin=7, split="train")
+    f = C.PageSet.cache_file("latin_p24", "shuffled", 3, 0, 7, "train", False)
+    assert f.exists()
+    b = C.PageSet("latin_p24", "shuffled", 3, margin=7, split="train")
+    assert [p.refs for p in a.pages] == [p.refs for p in b.pages]
+    assert all(np.array_equal(x.img, y.img) for x, y in zip(a.pages, b.pages))
+    assert np.array_equal(a.image(1, (7, 7)), b.image(1, (7, 7)))
