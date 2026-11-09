@@ -6,6 +6,18 @@ aligned banks, the min-distance banks and Run 0b at 6 px)**. The prompt for the 
 ([COLOUR_GIST.md](COLOUR_GIST.md)) is parked; its old GPU prompt is further down. Older session notes:
 [history/HANDOFF_2026-11.md](history/HANDOFF_2026-11.md).
 
+## 3090 session state (Runs 1-2 in progress since 2026-11-09)
+Steps 0-2 of the prompt below are done (PLAN_3090 "Results (RTX 3090 ...)": S = 6000, 3.93 s/step, 17.9 GB;
+amendment 7: page counts). Steps 3-6 run under `encoder_probe/experiments/run12_driver.py`, which records finished
+steps in `results/r12_logs/done.txt` and resumes after a power-off (the PC is on in 6-7 h stretches). After a
+restart, in Git Bash:
+```bash
+cd /c/git/visual-bpe-run && . .venv/env.sh && git pull --rebase origin claude/validation-harness
+cat results/r12_logs/driver.log | tail; ls results/r12_logs/STOP 2>/dev/null   # a STOP file = a failed check: read it first
+nohup python encoder_probe/experiments/run12_driver.py --steps 6000 --stages A chan B C >> results/r12_logs/driver.out 2>&1 &
+```
+Then do step 7 (write-up) when the driver logs "all requested stages done".
+
 ## Prompt for the 3090: PLAN_3090 Runs 1-2 (amendment 4: stage A learnability, B Latin, C dense glyphs; amendment 5: the bar; amendment 6: channel capacity)
 ```text
 Pull branch claude/validation-harness (git pull --rebase origin claude/validation-harness). Read AGENTS.md

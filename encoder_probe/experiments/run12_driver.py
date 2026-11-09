@@ -132,6 +132,24 @@ def main() -> int:
     extra = ["--micro-batch", str(a.micro_batch)] if a.micro_batch else []
     for st in a.stages:
         if st == "chan":
+            # step 4b smoke: loss must fall below ln 8 = 2.079 nats/digit; peak VRAM < ~21 GB in nvidia-smi
+            # (~3.3 GB above torch's peak allocated in the Run 1 smoke, so allocated < 17.5 GB)
+            run("chansmoke", [PY, "encoder_probe/experiments/channel_capacity.py", "--cell", "4", "--smoke",
+                              "--device", "cuda"] + extra)
+            if "chansmoke_ok" not in done():
+                import re
+                emas = [float(x) for x in re.findall(r"ema ([\d.]+)", (LOGS / "chansmoke.log").read_text())]
+                rows = [json.loads(x) for x in (ROOT / RES / "r12_chan_smoke" / "runs.jsonl").read_text().splitlines()
+                        if x.strip()]
+                peak = rows[-1].get("peak_gpu_bytes") or 0
+                log(f"chan smoke: final ema {emas[-1] if emas else None} nats/digit, peak allocated {peak / 1e9:.1f} GB, "
+                    f"{rows[-1].get('s_per_step')} s/step")
+                if not emas or emas[-1] >= 2.079:
+                    stop("chan smoke: loss did not fall below 2.079 nats/digit")
+                if peak > 17.5e9:
+                    stop("chan smoke: peak VRAM too high; rerun the chan stage with --micro-batch 4")
+                with open(DONE, "a") as f:
+                    f.write("chansmoke_ok\n")
             for c in (7, 4, 2):
                 run(f"chan__{c}", [PY, "encoder_probe/experiments/channel_capacity.py", "--cell", str(c),
                                    "--steps", str(a.steps), "--device", "cuda", "--run-name", "r12_chan"] + extra)
