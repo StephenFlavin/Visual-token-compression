@@ -48,7 +48,11 @@ def stop(msg: str) -> None:
 def run(key: str, cmd: list[str]) -> None:
     if key in done():
         return
-    log(f"start {key}: {' '.join(cmd)}")
+    import shutil
+    free = shutil.disk_usage(ROOT).free / 1e9
+    if free < 10:   # a resume checkpoint is 4.0 GB and is written next to the old one; adapters are ~1.4 GB
+        stop(f"only {free:.1f} GB disk free before {key}")
+    log(f"start {key} ({free:.0f} GB free): {' '.join(cmd)}")
     with open(LOGS / f"{key}.log", "a", encoding="utf-8") as f:
         f.write(f"\n=== {time.strftime('%Y-%m-%d %H:%M:%S')} {' '.join(cmd)}\n")
         f.flush()
