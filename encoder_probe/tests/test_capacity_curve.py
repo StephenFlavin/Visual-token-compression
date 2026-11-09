@@ -181,3 +181,14 @@ def test_bar_status_placement_sensitive():
     assert b["best_dy"] == 21 and abs(b["adjusted"] - 20.9) < 1e-9 and b["status"] == "placement-sensitive pass"
     assert A.bar_status(17.0, {7: 10.0, 21: 13.0})["status"] == "below bar"        # below 18 at the trained placement
     assert A.bar_status(19.0, {7: 10.0, 21: 10.4})["status"] == "below bar"        # adjusted 19.76
+
+
+def test_pageset_allow_fewer(monkeypatch):
+    """Amendment 7: with allow_fewer, a set takes every page the held-out text supplies (>= 4), else it raises."""
+    import pytest
+    full = C.text_stream_s("test", 10 ** 5)
+    monkeypatch.setattr(C, "text_stream_s", lambda split, need: full[:30000])
+    with pytest.raises(ValueError):
+        C.PageSet("latin_p24", "natural", 50)
+    ps = C.PageSet("latin_p24", "shuffled", 50, allow_fewer=True)
+    assert 4 <= len(ps.pages) < 50

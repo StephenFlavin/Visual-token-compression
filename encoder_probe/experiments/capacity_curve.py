@@ -104,7 +104,8 @@ def with_image(page, img: np.ndarray):
 class PageSet:
     """Pages of one (encoding, text set): content rendered at ``inner`` px, upscaled x f, pasted on S x S."""
 
-    def __init__(self, name: str, text_set: str, n: int, seed: int = 0, margin: int = 0, split: str = "test"):
+    def __init__(self, name: str, text_set: str, n: int, seed: int = 0, margin: int = 0, split: str = "test",
+                 allow_fewer: bool = False):
         self.name, self.text_set = name, text_set
         base, self.f = parse_encoding(name)
         self.inner = (S - margin) // self.f
@@ -114,6 +115,9 @@ class PageSet:
         pos, segs, pages = 0, [], []
         for _ in range(n):
             if len(text) - pos < cap:
+                if allow_fewer and len(pages) >= 4:   # amendment 7: all held-out pages that fit, capped at n
+                    print(f"[cap] {name}/{text_set}: {len(pages)} of {n} {split} pages fit the text", flush=True)
+                    break
                 raise ValueError(f"{name}: only {len(pages)} of {n} {split} pages fit the text")
             pg, used = self.enc.render(text, pos)
             pages.append(pg)
@@ -126,7 +130,7 @@ class PageSet:
                 starts.append(cur)
                 cur += len(parts[-1]) + 1
             stream = " ".join(parts)
-            pages = [self.enc.render(stream, starts[i])[0] for i in range(n)]
+            pages = [self.enc.render(stream, starts[i])[0] for i in range(len(segs))]
         elif text_set != "natural":
             raise KeyError(text_set)
         assert len({tuple(p.refs) for p in pages}) == len(pages), f"{name}/{text_set}: repeated pages"
@@ -458,6 +462,8 @@ def main(argv=None) -> int:
     ap.add_argument("--encodings", nargs="+", default=["latin_p16"])
     ap.add_argument("--texts", nargs="+", default=["natural", "shuffled"], choices=["natural", "shuffled"])
     ap.add_argument("--pages", type=int, default=32)
+    ap.add_argument("--allow-fewer", action="store_true",
+                    help="use every held-out page that fits when fewer than --pages fit (PLAN_3090 amendment 7)")
     ap.add_argument("--window-chars", type=int, default=2000)
     ap.add_argument("--window", default="top", choices=["top", "mid"])
     ap.add_argument("--arms", nargs="+", default=["real", "swap", "blank"], choices=["real", "swap", "blank"])
@@ -528,7 +534,7 @@ def main(argv=None) -> int:
         key = (e, t)
         if key not in sets:
             sets.clear()
-            sets[key] = PageSet(e, t, a.pages, a.seed, margin)
+            sets[key] = PageSet(e, t, a.pages, a.seed, margin, allow_fewer=a.allow_fewer)
         ps = sets[key]
         t1 = time.time()
         samples = []
