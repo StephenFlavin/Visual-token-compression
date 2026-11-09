@@ -1,0 +1,58 @@
+W1109 10:15:34.727000 20900 .venv\Lib\site-packages\torch\distributed\elastic\multiprocessing\redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Loading weights:   0%|          | 0/824 [00:00<?, ?it/s]Loading weights:   4%|▍         | 35/824 [00:00<00:02, 276.11it/s]Loading weights:   8%|▊         | 63/824 [00:00<00:03, 206.43it/s]Loading weights:  10%|█         | 85/824 [00:00<00:03, 186.14it/s]Loading weights:  13%|█▎        | 108/824 [00:00<00:04, 156.98it/s]Loading weights:  15%|█▌        | 125/824 [00:00<00:04, 149.96it/s]Loading weights:  17%|█▋        | 141/824 [00:00<00:04, 137.63it/s]Loading weights:  20%|██        | 166/824 [00:01<00:04, 155.47it/s]Loading weights:  24%|██▍       | 201/824 [00:01<00:03, 198.81it/s]Loading weights:  27%|██▋       | 222/824 [00:01<00:03, 200.22it/s]Loading weights:  29%|██▉       | 243/824 [00:01<00:03, 185.99it/s]Loading weights:  33%|███▎      | 270/824 [00:01<00:02, 187.52it/s]Loading weights:  36%|███▋      | 299/824 [00:01<00:02, 192.46it/s]Loading weights:  39%|███▊      | 319/824 [00:01<00:02, 182.43it/s]Loading weights:  41%|████      | 339/824 [00:01<00:02, 181.88it/s]Loading weights:  44%|████▍     | 362/824 [00:02<00:02, 183.84it/s]Loading weights:  47%|████▋     | 386/824 [00:02<00:02, 192.58it/s]Loading weights:  49%|████▉     | 406/824 [00:02<00:02, 141.94it/s]Loading weights:  58%|█████▊    | 477/824 [00:02<00:01, 257.68it/s]Loading weights:  64%|██████▍   | 529/824 [00:02<00:00, 315.66it/s]Loading weights:  70%|███████   | 577/824 [00:02<00:00, 354.31it/s]Loading weights:  77%|███████▋  | 634/824 [00:02<00:00, 395.52it/s]Loading weights:  82%|████████▏ | 677/824 [00:02<00:00, 380.74it/s]Loading weights:  89%|████████▉ | 735/824 [00:03<00:00, 420.58it/s]Loading weights:  96%|█████████▌| 793/824 [00:03<00:00, 440.00it/s]Loading weights: 100%|██████████| 824/824 [00:03<00:00, 255.16it/s]
+[ft] latin_p8 S=448 pitch=8 lines/page=55 train=100 test=4 px2/char=29.60 chars/token=26.5 device=cuda bf16=True trainable={'trainable': 351943808, 'lora': 0, 'vision': 351943808, 'total': 3754622976} fair_hash=0c6cd14f3816 pages=28s
+[ft] step 1 loss 3.1312 ema 3.1312 lr 1.60e-06 (4.44 s/step)
+[ft] step 10 loss 3.1460 ema 3.1488 lr 8.80e-06 (3.91 s/step)
+[ft] step 20 loss 2.7451 ema 3.0574 lr 1.68e-05 (3.89 s/step)
+[ft] step 30 loss 2.8967 ema 2.9660 lr 2.00e-05 (3.89 s/step)
+[ft] step 40 loss 2.6768 ema 2.8778 lr 2.00e-05 (3.87 s/step)
+[ft] step 50 loss 2.8792 ema 2.8179 lr 1.99e-05 (3.88 s/step)
+[ft] step 60 loss 2.7036 ema 2.7488 lr 1.97e-05 (3.90 s/step)
+[ft] step 70 loss 2.6238 ema 2.7129 lr 1.96e-05 (3.92 s/step)
+[ft] step 80 loss 2.5760 ema 2.6691 lr 1.93e-05 (3.93 s/step)
+[ft] step 90 loss 2.5157 ema 2.6268 lr 1.91e-05 (3.93 s/step)
+[ft] step 100 loss 2.5137 ema 2.6037 lr 1.88e-05 (3.93 s/step)
+[ft] step 110 loss 2.6688 ema 2.5897 lr 1.85e-05 (3.94 s/step)
+[ft] step 120 loss 2.5564 ema 2.5705 lr 1.81e-05 (3.94 s/step)
+[ft] step 130 loss 2.4933 ema 2.5504 lr 1.77e-05 (3.95 s/step)
+[ft] step 140 loss 2.5011 ema 2.5367 lr 1.72e-05 (3.95 s/step)
+[ft] step 150 loss 2.5002 ema 2.5301 lr 1.68e-05 (3.96 s/step)
+[ft] step 160 loss 2.6243 ema 2.5188 lr 1.63e-05 (3.96 s/step)
+[ft] step 170 loss 2.4673 ema 2.4959 lr 1.57e-05 (3.96 s/step)
+[ft] step 180 loss 2.4755 ema 2.4894 lr 1.52e-05 (3.96 s/step)
+[ft] step 190 loss 2.3932 ema 2.4698 lr 1.46e-05 (3.96 s/step)
+[ft] step 200 loss 2.5576 ema 2.4681 lr 1.40e-05 (3.96 s/step)
+[ft] step 210 loss 2.4262 ema 2.4502 lr 1.34e-05 (3.96 s/step)
+[ft] step 220 loss 2.4799 ema 2.4267 lr 1.28e-05 (3.96 s/step)
+[ft] step 230 loss 2.4701 ema 2.4181 lr 1.21e-05 (3.95 s/step)
+[ft] step 240 loss 2.3928 ema 2.4166 lr 1.15e-05 (3.95 s/step)
+[ft] step 250 loss 2.3469 ema 2.4040 lr 1.08e-05 (3.95 s/step)
+[ft] step 250 val_loss 2.8586
+[ft] step 260 loss 2.3107 ema 2.3791 lr 1.02e-05 (3.98 s/step)
+[ft] step 270 loss 2.4376 ema 2.3853 lr 9.50e-06 (3.97 s/step)
+[ft] step 280 loss 2.4087 ema 2.3807 lr 8.85e-06 (3.97 s/step)
+[ft] step 290 loss 2.4015 ema 2.3705 lr 8.19e-06 (3.97 s/step)
+[ft] step 300 loss 2.2203 ema 2.3485 lr 7.55e-06 (3.96 s/step)
+[ft] step 310 loss 2.1834 ema 2.3280 lr 6.91e-06 (3.96 s/step)
+[ft] step 320 loss 2.2782 ema 2.3142 lr 6.29e-06 (3.96 s/step)
+[ft] step 330 loss 2.3048 ema 2.3183 lr 5.68e-06 (3.96 s/step)
+[ft] step 340 loss 2.2430 ema 2.2950 lr 5.10e-06 (3.95 s/step)
+[ft] step 350 loss 2.3634 ema 2.2879 lr 4.53e-06 (3.95 s/step)
+[ft] step 360 loss 2.2850 ema 2.3044 lr 3.99e-06 (3.95 s/step)
+[ft] step 370 loss 2.3712 ema 2.3117 lr 3.47e-06 (3.95 s/step)
+[ft] step 380 loss 2.3264 ema 2.2927 lr 2.99e-06 (3.95 s/step)
+[ft] step 390 loss 2.2646 ema 2.3027 lr 2.53e-06 (3.94 s/step)
+[ft] step 400 loss 2.3690 ema 2.3013 lr 2.11e-06 (3.94 s/step)
+[ft] step 410 loss 2.2992 ema 2.3071 lr 1.72e-06 (3.94 s/step)
+[ft] step 420 loss 2.2515 ema 2.2976 lr 1.37e-06 (3.94 s/step)
+[ft] step 430 loss 2.3075 ema 2.2954 lr 1.05e-06 (3.93 s/step)
+[ft] step 440 loss 2.3925 ema 2.2966 lr 7.77e-07 (3.93 s/step)
+[ft] step 450 loss 2.3143 ema 2.2824 lr 5.42e-07 (3.93 s/step)
+[ft] step 460 loss 2.2400 ema 2.2907 lr 3.48e-07 (3.93 s/step)
+[ft] step 470 loss 2.2571 ema 2.2868 lr 1.96e-07 (3.93 s/step)
+[ft] step 480 loss 2.2706 ema 2.2877 lr 8.74e-08 (3.93 s/step)
+[ft] step 490 loss 2.2963 ema 2.2749 lr 2.19e-08 (3.93 s/step)
+[ft] step 500 loss 2.3206 ema 2.2741 lr 0.00e+00 (3.93 s/step)
+[ft] step 500 val_loss 2.9402
+[ft] eval clean: cer 0.8860 (11658 chars, 8 windows) cloze 0.0 mc 0.5
+[ft] TEST latin_p8 clean cer=0.8860 cloze=0.0 chars/token=26.5
