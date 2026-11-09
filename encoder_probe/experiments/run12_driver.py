@@ -105,6 +105,10 @@ def arm(enc: str, S: int, extra: list[str]) -> None:
     ft = [PY, "encoder_probe/experiments/finetune_qwen.py", "--encoding", enc] + R + extra + ["--steps", str(S)]
     run(f"ft__{enc}", ft + ["--run-name", "r12"])
     run(f"ftblind__{enc}", ft + ["--run-name", "r12", "--blind-images"])
+    # both training runs done: the 12000-page train cache (~1.2 GB) is not needed again (capacity curves use test)
+    for f in (ROOT / "encoder_probe" / "cache" / "pages").glob(f"ps_{enc}_shuffled_train_n12000_*.pkl.gz"):
+        f.unlink()
+        log(f"deleted train page cache {f.name}")
     cap = [PY, "encoder_probe/experiments/capacity_curve.py", "--device", "cuda", "--encodings", enc,
            "--texts", "natural", "shuffled"]
     main = ["--pages", "200", "--allow-fewer", "--shifts", "7", "--cer-pages", "4"]   # amendment 7
