@@ -135,6 +135,38 @@ calls drew on a subscription quota, so they are not amounts billed.
   tier for prompts up to 100k tokens ($0.008-0.023) but lose 11-53 points; at low effort it barely reasons over text
   (39%, marked *).
 
+## Where this could be used
+
+The result supports one pattern: **large amounts of reference text that the model reads and looks things up in, but
+does not need to quote exactly or reason across as a whole.** Only English prose was tested; the uses below are
+candidates to test, ordered from closest to the test to furthest from it.
+
+* **RAG with more context per call.** Retrieved passages rendered at 2.2x let Opus or Sonnet (high effort) see about
+  twice as many passages for the same tokens with no measurable loss, or the same passages for about half the price. A
+  hybrid fits the result better still: send the top few passages as text and the long tail as pages. The tail is there
+  for lookups, which survive denser pages (Opus 98% and Sonnet 97% at 4.2x).
+* **Long-document Q&A** (reports, contracts, manuals, filings). The test is closest to this. At 2.2x, Opus and Sonnet
+  answer as well from pages as from text, at about half the cost.
+* **Agent memory and long conversations.** Instead of summarising older turns, which loses details, render them as
+  pages: the details stay findable at about half the tokens. Untested on dialogue.
+* **Codebase exploration.** A model could read a large part of a repository as pages to find where things are and how
+  they connect, then fetch the files it will change as text. Not tested, and code differs from prose: exact
+  identifiers, symbols and indentation all matter, and a page reader may confuse `l`, `1` and `I`. It needs its own
+  test (questions with exact answers about a real repository) before use.
+
+**Where not to use it**
+
+* **Counting and aggregation over the whole input** ("how many errors are in this log?"): counts are the first thing
+  to fail (Opus 28% at 4.2x), and even text is not perfect on them.
+* **Chains of facts** (three-hop questions) beyond 2.2x.
+* **Text to copy or edit exactly** (code changes, quotations): the model sees pixels, not characters. Only exact
+  numbers were tested.
+* **Haiku 5.5**, which loses accuracy even at 2.2x.
+* **Latency-sensitive calls:** pages save tokens, not time. Page calls took slightly longer than text calls (median
+  Opus 2.2x: 28 s against 22 s at low effort, 42 s against 37 s at high).
+* **Very long inputs through the CLI:** requests above ~175k image tokens may silently lose their earliest pages
+  (Limits).
+
 ## How the test works
 
 * **Calls:** headless Claude Code (`claude -p`, no tools, isolated environment; [`vbpe/claude_eval.py`](../vbpe/claude_eval.py)).
