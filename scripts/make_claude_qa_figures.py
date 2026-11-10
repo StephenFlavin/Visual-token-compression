@@ -169,8 +169,9 @@ def fig_verdict():
     note = ("  * " + ", ".join(sorted(set(flagged))) + " effort: the model barely reasoned over the text, so there "
             "is no text baseline.") if flagged else ""
     header(fig, H_in, "Reading page images instead of text: accuracy change in points (image − text)",
-           "Same 3 documents (~245k text tokens each) and questions in every cell; columns: how many fewer input tokens "
-           "the pages use. Worst = 95% bound.\n✓ lossless (pre-registered): the worst case is within 2 points." + note)
+           "Same 3 documents (~240k tokens of text each) and 120 questions in every cell; columns: how many fewer input "
+           "tokens the pages use. Worst = the losing end of the 95% interval.\n✓ lossless (pre-registered): the worst "
+           "case is within 2 points." + note)
     loss_legend(fig, [0.70, 0.10 / H_in, 0.25, 0.16 / H_in])
     save(fig, "claude_qa_verdict.png")
     plt.close(fig)
@@ -179,35 +180,42 @@ def fig_verdict():
 
 # ------------------------------------------------------------------------------------------- 2. pages
 def fig_pages():
-    """The same passage rendered as the QA pages are (DejaVu Sans, 1932-px page, chars = area / budget x 0.97),
-    cropped to 31 x 7 vision tokens at actual pixels, with the 28-px token grid."""
-    from vbpe import corpus
+    """The first page of document 1 exactly as the test sent it (the experiment's own document with its inserted
+    facts, and its page geometry: 1932 x 1876 px, 4,626 tokens), cropped to 31 x 6 vision tokens at actual pixels,
+    with the 28-px token grid."""
+    sys.path.insert(0, str(ROOT / "experiments"))
+    import claude_qa_render as Q
+    from vbpe import metrics
     from vbpe.layout import render_page
     from vbpe.schemes import get_scheme
     sch = get_scheme("latin")
-    text = " ".join(corpus.read_paragraphs("test")[:300])
+    doc, _ = Q.make_questions(Q.build_document(700000, 0), 40, 40, 0, 40)
     P, cw, ch, pad = 28, 31 * 28, 6 * 28, 24
     crops = []
     for b, lab in BUDGETS:
-        n = int(1932 * 1932 / b * 0.97)
-        img, info = render_page(sch.encode(text[:n]), 1932, 1932)
+        first = Q.chunk(doc, int(1932 * 1932 / b * 0.97))[0]
+        n = len(metrics.normalize(first))
+        H = min(1932, max(2 * P, int(np.ceil(n * b / 1932 / P)) * P))
+        img, info = render_page(sch.encode(first), 1932, H)
         crop = img.convert("RGB").crop((0, 0, cw, ch))
         d = ImageDraw.Draw(crop, "RGBA")
         for x in range(0, cw + 1, P):
             d.line([(x, 0), (x, ch)], fill=(57, 135, 229, 70), width=1)
         for y in range(0, ch + 1, P):
             d.line([(0, y), (cw, y)], fill=(57, 135, 229, 70), width=1)
-        crops.append((b, lab, info["em"], crop))
-    head = 78
+        crops.append((b, lab, info["em"], crop, H))
+    head = 98
     row_h = 46 + ch + 14
     out = Image.new("RGB", (cw + 2 * pad, head + row_h * len(crops) + 8), M.SURFACE)
     d = ImageDraw.Draw(out)
-    d.text((pad, 14), "What the model sees: the same passage at the three densities (actual pixels)",
+    d.text((pad, 14), "What the model sees: the top of the first test page at each density (actual pixels)",
            font=M.ui(19, "Bold"), fill=M.INK_1)
-    d.text((pad, 44), "Each blue square is one vision token (28 x 28 px). As text, the same passage costs one token "
-           "per ~2.9 characters.", font=M.ui(14), fill=M.INK_2)
+    d.text((pad, 44), "Each blue square is one vision token (28 x 28 px); a full page is 1932 x 1876 px (4,626 tokens).",
+           font=M.ui(14), fill=M.INK_2)
+    d.text((pad, 64), "As text, Claude's tokenizer takes ~2.9 characters per token. Document 1, as sent to the models.",
+           font=M.ui(14), fill=M.INK_2)
     y = head
-    for b, lab, em, crop in crops:
+    for b, lab, em, crop, _ in crops:
         cpt = 784 / b
         d.text((pad, y), f"{lab} fewer tokens than text", font=M.ui(16, "Bold"), fill=M.INK_1)
         d.text((pad + 250, y + 2), f"{b:g} px² per character  ·  ~{cpt:.1f} characters per vision token  ·  "
@@ -216,7 +224,7 @@ def fig_pages():
         d.rectangle([pad - 1, y + 27, pad + cw, y + 28 + ch], outline=M.AXIS)
         y += row_h
     out.save(M.OUT / "claude_qa_pages.png", optimize=True)
-    print("claude_qa_pages.png", [round(e, 1) for _, _, e, _ in crops])
+    print("claude_qa_pages.png", [(round(e, 2), H) for _, _, e, _, H in crops])
 
 
 # ------------------------------------------------------------------------------------------- 3. breakdown
@@ -288,7 +296,7 @@ def fig_breakdown():
 # ------------------------------------------------------------------------------------------- 4. cost
 def call_cost(model: str, u: dict) -> float:
     """List price as if uncached (every input token written to the 5-minute cache once, as the first call of a
-    document is); reproduces the logged cost of every uncached v2 call of both models."""
+    document is); reproduces the logged cost of every uncached v2 call of all three models."""
     tok = u["input_tokens"] + u["cache_creation_input_tokens"] + u["cache_read_input_tokens"]
     pin, pout = MODELS[model]["price"](tok)
     return tok * pin * CACHE_WRITE + u["output_tokens"] * pout
@@ -336,7 +344,7 @@ def fig_cost():
             y += 0.6
         ys.append(y)
         y += 1
-    TOP, BOT, ROW = 1.95, 0.65, 0.5
+    TOP, BOT, ROW = 2.15, 0.65, 0.5
     H_in = TOP + BOT + ROW * (y + 0.6)
     fig, (axc, axa) = plt.subplots(1, 2, figsize=(10.4, H_in), dpi=150, sharey=True)
     fig.subplots_adjust(left=0.20, right=0.985, top=1 - TOP / H_in, bottom=BOT / H_in, wspace=0.08)
@@ -388,11 +396,11 @@ def fig_cost():
     star = ("\n* Haiku at low effort answered from text almost without reasoning: what you get at that setting, but "
             "not a fair reading comparison.") if flagged_any else ""
     header(fig, H_in, "Cost per call and accuracy, at low and high effort",
-           "One call = a ~245k-token document plus 120 questions, mean of 3 documents. In each row low effort (light bar, "
+           "One call = a ~240k-token document plus 120 questions, mean of 3 documents. In each row low effort (light bar, "
            "hollow dot) sits above high effort (solid, filled).\n✓ = no measurable loss vs the same model reading text "
            "at that effort (pre-registered). List prices as if uncached: Opus \\$4 / \\$20, Sonnet \\$2 / \\$10 "
            "per million\ninput / output tokens; Haiku \\$0.10 / \\$0.50 up to 100k-token prompts, \\$0.50 / \\$2.50 "
-           "above. Not amounts billed." + star)
+           "above. Input is priced as a cache write (1.25x),\nas on a document's first call. Not amounts billed." + star)
     save(fig, "claude_qa_cost.png")
     plt.close(fig)
     print("claude_qa_cost.png", {e: {m: {k: round(v, 3) for k, v in c.items()} for m, c in C[e].items()} for e in C})
@@ -436,7 +444,8 @@ def fig_curve():
     axs[0].set_ylabel("accuracy change vs text (points)")
     axs[0].text(4.9, 3.2, "within 2 points", ha="right", va="bottom", fontsize=7.5, color=M.INK_2)
     header(fig, H_in, "How fast accuracy falls as the pages get denser: Opus holds longest, Haiku drops first",
-           "High effort, same 3 documents and questions for every model; bars are 95% intervals. The shaded band is "
+           "High effort, same 3 documents (~240k tokens of text each) and 120 questions for every model; 95% intervals. "
+           "The shaded band is "
            "the pre-registered lossless margin (2 points).\nEach model is compared with itself reading text "
            "(Opus and Sonnet 99.7%, Haiku 98.1%).")
     save(fig, "claude_qa_curve.png")
@@ -492,10 +501,10 @@ def fig_effort():
                   loc="upper left", frameon=False, fontsize=8.5)
     note = (" " + ", ".join(skipped) + " is left out: at low effort it barely reasoned over the text (appendix A3).") \
         if skipped else ""
-    header(fig, H_in, "High effort roughly halves the loss once the pages are dense",
+    header(fig, H_in, "High effort narrows the loss once the pages are dense",
            "Accuracy change vs the same model reading text, at low (hollow) and high (filled) effort; same documents "
-           "and questions. Shaded: within 2 points.\nAt 2.2x both efforts are near zero; the gap opens at 2.9x and "
-           "4.2x." + note)
+           "and questions. Shaded: within 2 points.\nAt 2.2x both efforts are within 0.3 points of text; the gap opens at "
+           "2.9x and 4.2x." + note)
     save(fig, "claude_qa_effort.png")
     plt.close(fig)
     print("claude_qa_effort.png")
@@ -542,7 +551,7 @@ def fig_position():
             ax.plot(x, y_, ls="none", marker=spec["marker"], ms=7 if spec["marker"] != "D" else 6,
                     color=spec["colour"], mec=M.SURFACE, mew=1.3, zorder=4, label=m)
         ax.axhline(np.mean(txt) * 100, color=M.INK_2, lw=1, ls=(0, (4, 3)), zorder=2)
-        ax.text(0, np.mean(txt) * 100 + 1.2, f"all three models reading text: {np.mean(txt) * 100:.1f}%", fontsize=7.8,
+        ax.text(0, np.mean(txt) * 100 + 1.2, f"the three models reading text (pooled): {np.mean(txt) * 100:.1f}%", fontsize=7.8,
                 color=M.INK_2, va="bottom")
         ax.set_xticks(range(5), ["first", "second", "third", "fourth", "last"])
         ax.set_xlim(-0.3, 4.3)
@@ -556,10 +565,10 @@ def fig_position():
                  fontweight="bold", color=M.INK_1)
     axs[0].set_ylabel("single-fact lookups answered from pages")
     axs[0].legend(loc="lower right", frameon=False, fontsize=8.5)
-    header(fig, H_in, "Depth does not matter: a fact on the last pages is found as often as one on the first",
-           "Single-fact lookups only (240 per model and panel, 42-52 per fifth), high effort, 3 documents; bars are 95% "
-           "intervals. Multi-step questions are left out:\nthey need facts in several places, so their position mixes "
-           "with their difficulty (counted that way, accuracy seems to fall towards the end).")
+    header(fig, H_in, "No depth effect: a fact on the last pages is found about as often as one on the first",
+           "Single-fact lookups only (240 per model and panel, 42-52 per fifth, so only large trends would show), high "
+           "effort, 3 documents; 95% intervals. 2.2x is left out (every\nmodel at 98-100%). Multi-step questions are left "
+           "out: they need facts in several places, so their position mixes with their difficulty.")
     save(fig, "claude_qa_position.png")
     plt.close(fig)
     print("claude_qa_position.png")
@@ -617,8 +626,8 @@ def fig_engagement():
               loc="lower right", bbox_to_anchor=(1.0, 1.0), ncol=2, frameon=False, fontsize=8.5)
     header(fig, H_in, "Haiku at low effort hardly reasons over text, but works through pages: its low row is excluded",
            "Output tokens per call for the same 120 questions (shaded row: excluded from the comparison). Opus and "
-           "Sonnet spend similar effort on text and pages;\nHaiku at low effort answered from text with 400-800 tokens "
-           "(one call declined 80 of 120 questions) against thousands on pages.")
+           "Sonnet spend thousands of output tokens on both;\nHaiku at low effort answered from text with 424-821 tokens "
+           "(one call declined 80 of 120 questions) against 0.8-15k on pages.")
     save(fig, "claude_qa_engagement.png")
     plt.close(fig)
     print("claude_qa_engagement.png")

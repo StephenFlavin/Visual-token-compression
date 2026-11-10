@@ -1,27 +1,48 @@
 # Claude QA: can Claude answer questions from page images as well as from text?
 
-*2026-11-10.* Each long document (~245k text tokens) is given to Claude three ways: as text, as rendered page
-images, and not at all. Every arm gets the same 120 questions, scored automatically. The question: how many fewer
-input tokens can pages use before the answers get worse?
+*2026-11-10.* Each long document (~240k tokens of text) is given to Claude three ways: as text, as rendered page
+images at three densities, and not at all. Every arm gets the same 120 questions, scored automatically. The question:
+how many fewer input tokens can pages use before the answers get worse? Three models were tested: Opus 5.5,
+Sonnet 5.5 and Haiku 5.5.
 
 ## The answer
 
-* **Opus 5.5: pages at 2.2x fewer tokens lose nothing measurable**, at low and high effort, multi-step questions
-  included; at 2.9x it is still lossless at high effort.
-* **Sonnet 5.5: lossless at 2.2x at high effort**; at low effort the estimate is the same (-0.3 points) but the
-  worst case is 2.2 points, just outside the margin. At 2.9x it starts to lose (-1.7 to -3.1 points).
+* **Opus 5.5: pages with 2.2x fewer tokens lose nothing measurable, at low and high effort.** On multi-step questions
+  alone no loss was seen either (0.0 and +0.8 points), but with 120 of them a loss up to about 3 points cannot be
+  excluded. At 2.9x Opus is still lossless at high effort.
+* **Sonnet 5.5: lossless at 2.2x at high effort.** At low effort the estimate is the same (-0.3 points) but the worst
+  case is 2.2 points, just outside the margin. At 2.9x it is no longer shown lossless (-1.7 points at high effort,
+  borderline; -3.1 at low effort, a measurable loss).
 * **Haiku 5.5 is not lossless at any density tested.** It loses multi-step accuracy already at 2.2x; for Haiku, text
   is the better input.
-* **Past ~3x, single facts survive but connecting them fails** for every model: at 4.2x, two- and three-hop
-  questions and counts across the document break down.
-* **Cost:** at 2.2x, pages cost about half of reading text for Opus ($0.68 vs $1.34) and Sonnet ($0.37 vs $0.67),
-  for the same answers.
+* **Denser pages break the links between facts first.** Past ~3x, Opus and Sonnet still find single facts but lose
+  chains and counts (Opus at 4.2x, high effort: three-hop 67%, counts 28%). Haiku loses single facts too (56-66%).
+* **Cost:** at list price, 2.2x pages cost about half as much as text for the same answers (Opus $0.68 vs $1.34,
+  Sonnet $0.37 vs $0.67 per call at high effort; not amounts billed).
+
+**Terms used throughout**
+
+* **Nx fewer tokens:** input tokens of the text call ÷ input tokens of the page call (both include ~6k tokens of
+  instructions and questions): measured 2.19x, 2.87x and 4.15x, shown as 2.2x, 2.9x and 4.2x. For the document alone
+  the savings are 2.26x, 3.0x and 4.5x.
+* **px² per character:** page area ÷ characters on the page; lower means smaller type and denser pages
+  (117.6, 88.2 and 58.8 px² here).
+* **Effort:** the Claude Code `--effort low|high` setting, which controls how much the model reasons before answering.
+* **Lossless:** the pre-registered test. The upper 95% bound of the accuracy loss (text − image) is below 2 points:
+  no loss larger than 2 points can be shown. This is a non-inferiority margin, not a claim of zero loss.
+* **Worst:** that bound, the losing end of the 95% interval.
+* **Loss:** the 95% interval excludes 0 and the exact McNemar test rejects (p < 0.05).
+* **Lookups:** single-fact questions (invented facts and numbers in quoted sentences). **Multi-step:** two-hop,
+  three-hop, sums, largest-of-three and counts across the document. (In the result files: `needle` and `number` are
+  the lookups, `complex` the multi-step questions.)
+* **Phase 1:** this repo's earlier transcription test, where Claude read pages of natural text aloud
+  ([RESULTS.md](RESULTS.md)).
 
 ![Accuracy change from reading page images instead of text, per model, effort and token saving](img/claude_qa_verdict.png)
 
 *How to read it:* each cell compares page images with text on the same 3 documents and questions. The big number is
-the accuracy change in points (negative = worse than text). "Worst" is the 95% bound. ✓ marks the pre-registered
-verdict: the worst case is within 2 points. Darker cells lose more. Numbers: [A1](#a1-opus-55),
+the accuracy change in points (image − text: negative = worse than text); "worst" is the losing end of the 95%
+interval; ✓ marks the pre-registered lossless verdict. Darker cells lose more. Numbers: [A1](#a1-opus-55),
 [A2](#a2-sonnet-55) and [A3](#a3-haiku-55).
 
 ## How fast it falls
@@ -31,18 +52,21 @@ verdict: the worst case is within 2 points. Darker cells lose more. Numbers: [A1
 *How to read it:* each line starts at 0 (the model reading text) and shows the accuracy change as the pages get denser,
 at high effort; the grey band is the 2-point lossless margin.
 
-* **Opus and Sonnet stay in the band to 2.2x** (Opus to 2.9x), then fall. Haiku leaves it at the first step.
-* **Multi-step questions fall about twice as fast** as the overall score: at 4.2x, -20 (Opus), -35 (Sonnet) and
-  -81 points (Haiku).
+* **By point estimate, Opus and Sonnet stay within 2 points up to 2.9x;** by the pre-registered worst case, Opus is
+  lossless to 2.9x and Sonnet to 2.2x. Haiku leaves the band at the first step.
+* **Multi-step questions lose about 2.5 times as many points as the overall score** for Opus and Sonnet (1.5 times for
+  Haiku): at 4.2x, -20, -35 and -81 points.
 
 ## What the pages look like
 
-![The same passage at the three densities, actual pixels, with the vision-token grid](img/claude_qa_pages.png)
+![The top of the first test page at the three densities, actual pixels, with the vision-token grid](img/claude_qa_pages.png)
 
-*Crops of the real pages at actual pixels.* Pages are 1932 x 1932 px, the largest these models read without
-downscaling (4,764 tokens each; checked for all three). As text, the same passage costs one token per ~2.9 characters. At 2.2x a vision
-token carries ~6.7 characters, at 4.2x ~13.3 (font size 13.9 px down to 9.9 px). Phase 1's densest readable setting
-(29.4 px² per character, 3% transcription error) would be 7.8x; it fails this test outright ([A5](#a5-earlier-exploratory-runs)).
+*The top of the first test page of document 1, exactly as sent, at actual pixels.* Pages are 1932 px wide and 1876 px
+tall (4,626 tokens each; 1932 px is the largest side these models read without downscaling, checked for all three);
+23-24, 18 and 12 pages per document at the three densities. A vision token carries ~6.7 characters at 2.2x and ~13.3
+at 4.2x; the font shrinks from 13.8 px to 9.8 px. As text, Claude's tokenizer takes ~2.9 characters per token.
+Phase 1's densest readable setting (29.4 px² per character, 3% transcription error) would be ~8.5x on these pages; in
+the exploratory runs that density failed outright ([A5](#a5-earlier-exploratory-runs)).
 
 ## Where it breaks
 
@@ -51,22 +75,25 @@ token carries ~6.7 characters, at 4.2x ~13.3 (font size 13.9 px down to 9.9 px).
 *How to read it:* columns are question types, one block of rows per model: the grey row is the model reading text,
 the blue rows the same model reading pages. Shading is points lost against the grey row.
 
-* **Lookups and sums survive the longest.** Opus keeps 98-100% on them even at 4.2x.
-* **Chains and counts fail first.** At 4.2x, Opus gets 67% of three-hop and 28% of count questions right. Wrong two-hop
-  answers are usually another club's boat count: the facts are read, the link between them is lost.
-* **Sonnet sits between them:** its first loss is counting (89% at 2.2x, 72% at 2.9x); at 4.2x three-hop is at 42%.
-* **Haiku fails the same way at lower densities:** three-hop falls to 67% already at 2.2x, and at 4.2x even single
+* **Lookups and sums survive the longest.** Opus keeps 98-100% on them even at 4.2x. (Sums and largest-of-three add
+  up facts that are also asked as separate questions in the same call, so they partly reuse that work.)
+* **Chains and counts fail first.** At 4.2x, Opus gets 67% of three-hop and 28% of count questions right. Wrong
+  two-hop answers are usually another club's boat count: the facts are read, the link between them is lost.
+* **Sonnet sits between Opus and Haiku:** its first loss is counting (89% at 2.2x, 72% at 2.9x); at 4.2x three-hop is
+  at 42%.
+* **Haiku fails the same way with fewer tokens saved:** three-hop falls to 67% already at 2.2x, and at 4.2x even single
   lookups drop to 56-66%.
 
 ![Single-fact lookups by where the fact sits in the document](img/claude_qa_position.png)
 
-*How to read it:* only single-fact lookups, grouped by the fifth of the document their fact is in; the dashed line
-is the models reading text.
+*How to read it:* only single-fact lookups, grouped by the fifth of the document their fact is in; the dashed line is
+the models reading text. 2.2x is left out (near 100% everywhere).
 
-* **Depth does not matter.** A fact on the last pages is found as often as one on the first, at both densities and for
-  every model (Haiku at 4.2x is low everywhere, 53-65%, not low at the end).
-* **So the loss is about connecting facts, not about reaching them.** Counting all questions makes accuracy appear to
-  fall towards the end, but that is because multi-step questions, placed by their latest fact, cluster there.
+* **No depth effect is visible:** a fact on the last pages is found about as often as one on the first, at both
+  densities and for every model (Haiku at 4.2x is low everywhere, 53-65%, not low at the end). With 42-52 questions
+  per fifth only large trends would show.
+* **So the loss is about connecting facts, not reaching them.** Counting all questions makes accuracy appear to fall
+  towards the end, but that is because multi-step questions, placed by their latest fact, cluster there.
 
 ## Does effort help?
 
@@ -74,9 +101,12 @@ is the models reading text.
 
 *How to read it:* hollow dots are low effort, filled dots high effort, for the same model, pages and questions.
 
-* **At 2.2x effort does not matter:** both are within the margin for Opus and Sonnet.
-* **Once the pages are dense, high effort roughly halves the loss:** at 4.2x, Opus -15.3 -> -8.1 points and Sonnet
-  -21.7 -> -13.9; on multi-step questions -37.5 -> -20.0 and -46.7 -> -35.0. It also makes Opus's 2.9x lossless.
+* **At 2.2x effort changes little for Opus and Sonnet:** their estimates are within 0.3 points of text at both
+  efforts, but only Opus (both efforts) and Sonnet at high effort are shown lossless (Sonnet at low effort: worst
+  case 2.2 points).
+* **Once the pages are dense, high effort narrows the loss:** by about half for Opus (4.2x: -15.3 -> -8.1 points;
+  multi-step -37.5 -> -20.0) and by a quarter to a third for Sonnet (-21.7 -> -13.9; multi-step -46.7 -> -35.0). It
+  also makes Opus's 2.9x lossless.
 * High effort costs more output tokens: see the cost figure below and [A4](#a4-cost).
 
 ## What it costs
@@ -84,10 +114,11 @@ is the models reading text.
 ![List-price cost per call and accuracy, per model, input form and effort](img/claude_qa_cost.png)
 
 *How to read it:* one row per option, low effort (light bar, hollow dot) above high effort (solid bar, filled dot).
-The bar is the list-price cost of one call (a ~245k-token document plus 120 questions), the dot its accuracy with a
+The bar is the list-price cost of one call (a ~240k-token document plus 120 questions), the dot its accuracy with a
 95% interval; ✓ marks no measurable loss against the same model reading text at that effort. Costs are list prices
-as if nothing came from the prompt cache (see [A4](#a4-cost)); these calls drew on a subscription quota, so they are
-not amounts billed.
+with every input token priced as a cache write (1.25x the base input price), as on the first call of a document; a call
+without caching would pay ~20% less for input, and the ratios between options barely change ([A4](#a4-cost)). These
+calls drew on a subscription quota, so they are not amounts billed.
 
 * **Opus:** 2.2x pages cost $0.63 (low effort) or $0.68 (high) against $1.29-1.34 for text, with no measurable loss at
   either effort; 2.9x pages at high effort ($0.55) are lossless too.
@@ -95,17 +126,21 @@ not amounts billed.
   lossless option of the three models. At low effort ($0.34) the worst case is just outside the margin.
 * **Effort is cheap where it is not needed and worth it where it is:** for Opus and Sonnet, high effort adds 3-9% to
   the cost of text and 2.2x calls; on 4.2x pages it adds 37% (Opus) to 96% (Sonnet), and buys back 7-8 points.
-* **Haiku:** reading text at high effort costs $0.18 (98% right). Its 2.9x pages drop below Haiku's 100k-token price
-  tier ($0.016-0.023) but lose 11 points; at low effort it barely reasons over text (39%, marked *).
+* **Haiku:** reading text at high effort costs $0.18 (98% right). Its 2.9x and 4.2x pages fall into Haiku's cheaper
+  tier for prompts up to 100k tokens ($0.008-0.023) but lose 11-53 points; at low effort it barely reasons over text
+  (39%, marked *).
 
 ## How the test works
 
-* **Calls:** headless Claude Code (`claude -p`, no tools, isolated environment; `vbpe/claude_eval.py`). The image arm
-  cannot see the source text. Input tokens come from the CLI's usage report.
-* **Documents:** 3 non-overlapping ~700k-character documents (held-out WikiText-103 test and validation text), each
-  with invented facts inserted between paragraphs.
+* **Calls:** headless Claude Code (`claude -p`, no tools, isolated environment; [`vbpe/claude_eval.py`](../vbpe/claude_eval.py)).
+  One call per arm: the document (as text, or as page images in order), then all 120 questions. The system prompt
+  asks for a number per question and a best guess when unsure, so there is no abstaining. The image arm cannot see
+  the source text. Input tokens come from the CLI's usage report.
+* **Documents:** 3 non-overlapping documents of ~700k characters (held-out WikiText-103 test and validation text;
+  ~240k tokens each; the text call is ~243-248k tokens with the questions), with invented facts inserted between
+  paragraphs.
 * **Pages:** the same document string rendered as DejaVu Sans Latin (Phase 1's renderer) at 117.6, 88.2 and 58.8 px²
-  per character.
+  per character (see "What the pages look like").
 * **Questions (120 per document, exact numeric answers):**
   * 40 invented facts ("How many tonnes of granite did Pavo Dekbry use to rebuild the bridge at Rimosk?"), which only
     the document can answer;
@@ -113,20 +148,33 @@ not amounts billed.
   * 40 multi-step questions over invented facts: 10 two-hop (person -> chairs a rowing club -> how many boats),
     8 three-hop (person -> club -> town of its boathouse -> lamp posts), 10 sums, 6 largest-of-three, 6 counts across
     the whole document. A chain's facts are at least 1/8 of the document apart.
-* **Pre-registered** (committed before any call): each image answer is paired with the same document's text answer
-  and pooled over the 3 documents (360 pairs). Paired difference with Newcombe's score interval; **lossless = the
-  upper 95% bound of (text - image) is below 2 points**. The Sonnet and Haiku suites were registered the same way
-  before their runs.
-* **Reproduce:** `experiments/claude_qa_render.py` (one run per document, density and effort; see `results/claude_qa/
-  summary.md` for the commands), `experiments/analyse_claude_qa.py results/claude_qa/qav2_d*`, figures
-  `scripts/make_claude_qa_figures.py`.
+* **Scoring:** an answer is correct if it equals the expected number after removing commas.
+* **Pairing:** each page call is paired, question by question, with the text call of the same document and effort (one
+  text call per document and effort, shared by the three densities), pooled over the 3 documents: 360 pairs.
+* **Pre-registered** (in [`results/claude_qa/summary.md`](../results/claude_qa/summary.md), committed before any call,
+  the same for each model): (1) lossless at 2.2x at each effort, by Newcombe's paired score interval with a 2-point
+  margin; (2) a loss on multi-step questions at ~4x at low effort; (3) the effect of effort, reported without a
+  threshold. The Sonnet and Haiku suites were registered the same way before their runs.
+* **Engagement check** (added after the Haiku run): a call that leaves questions unanswered or says it did not look
+  things up is not a reading measurement, and its rows are marked "not comparable".
+* **Reproduce:** [`experiments/claude_qa_render.py`](../experiments/claude_qa_render.py) (one run per document,
+  density, effort and model; the commands are in `results/claude_qa/summary.md`), then
+  [`experiments/analyse_claude_qa.py`](../experiments/analyse_claude_qa.py):
+  ```bash
+  python3 experiments/analyse_claude_qa.py results/claude_qa/qav2_d*                                              # Opus
+  python3 experiments/analyse_claude_qa.py results/claude_qa/qav2s_d* --out results/claude_qa/analysis_v2_sonnet  # Sonnet
+  python3 experiments/analyse_claude_qa.py results/claude_qa/qav2h_d* --out results/claude_qa/analysis_v2_haiku   # Haiku
+  python3 scripts/make_claude_qa_figures.py                                                                       # figures
+  ```
 
 ## Limits
 
 * **Ceiling:** text scores 98-100%, so losses below ~1 point cannot show.
-* **Length:** ~245k text tokens per document. Through the CLI, a request with more than ~175k image tokens silently
-  loses its earliest pages (seen at ~345k: ~145-157k delivered; not bytes or image count; not documented). Longer
-  documents need a direct API test.
+* **One call per arm and document:** the intervals cover question-to-question variation, not run-to-run variation of
+  the model, and each document's text call is shared by its three densities.
+* **Length:** ~240k tokens of text per document. Through the CLI, a request with many image tokens silently loses
+  its earliest pages: ~175k image tokens arrived whole, ~345k arrived as ~145-157k; nothing in between was tested,
+  and the vision docs do not mention it. Longer documents need a direct API test.
 * **Scope:** three models (Opus, Sonnet and Haiku 5.5), one font and layout, English Wikipedia.
 * **Questions:** planted facts and numbers with exact answers, not open-ended understanding or summaries.
 
@@ -134,116 +182,137 @@ not amounts billed.
 
 ## Data
 
+The tables use the same sign as the figures: **image − text** in accuracy points, negative = pages worse.
+
 ### A1. Opus 5.5
 
-Pooled over 3 documents, 360 paired questions per row (`results/claude_qa/analysis_v2/summary.md` has every question
-type).
+[analysis_v2/summary.md](../results/claude_qa/analysis_v2/summary.md) has every question type; no call flagged by the
+engagement check.
 
-| effort | fewer tokens than text | text | image | text - image (95% CI) | multi-step: text / image | verdict |
-|---|---|---|---|---|---|---|
-| low | 2.2x | 100.0% | 99.7% | +0.3 (-0.8 to +1.6) | 100% / 100% | **lossless** |
-| high | 2.2x | 99.7% | 99.7% | 0.0 (-1.3 to +1.3) | 99% / 100% | **lossless** |
-| low | 2.9x | 100.0% | 98.9% | +1.1 (-0.1 to +2.8) | 100% / 98% | not shown below 2 points |
-| high | 2.9x | 99.7% | 100.0% | -0.3 (-1.6 to +0.8) | 99% / 100% | **lossless** |
-| low | 4.2x | 100.0% | 84.7% | +15.3 (+11.8 to +19.4) | 100% / 62.5% | loss |
-| high | 4.2x | 99.7% | 91.7% | +8.1 (+5.5 to +11.3) | 99% / 79% | loss |
+| effort | fewer tokens | text | image | image − text (95% CI) | lookups: text / image | multi-step: text / image | verdict |
+|---|---|---|---|---|---|---|---|
+| high | 2.2x (2.19x) | 99.7% | 99.7% | 0.0 (−1.3 to +1.3) | 100.0% / 99.6% | 99.2% / 100.0% | **lossless** |
+| high | 2.9x (2.87x) | 99.7% | 100.0% | +0.3 (−0.8 to +1.6) | 100.0% / 100.0% | 99.2% / 100.0% | **lossless** |
+| high | 4.2x (4.15x) | 99.7% | 91.7% | −8.1 (−11.3 to −5.5) | 100.0% / 97.9% | 99.2% / 79.2% | loss |
+| low | 2.2x (2.19x) | 100.0% | 99.7% | −0.3 (−1.6 to +0.8) | 100.0% / 99.6% | 100.0% / 100.0% | **lossless** |
+| low | 2.9x (2.87x) | 100.0% | 98.9% | −1.1 (−2.8 to +0.1) | 100.0% / 99.2% | 100.0% / 98.3% | not shown lossless |
+| low | 4.2x (4.15x) | 100.0% | 84.7% | −15.3 (−19.4 to −11.8) | 100.0% / 95.8% | 100.0% / 62.5% | loss |
 
-No document: 5.0% (low) and 6.9% (high), from years and other guessable numbers. Pre-registered verdicts:
-(1) lossless at 2.2x: PASS at both efforts; (2) a loss on multi-step questions at ~4x, low effort: PASS (+37.5
-points, CI +28.8 to +46.4); (3) high effort halves the gap at 4.2x and makes 2.9x lossless.
+No document: 6.9% (high effort), 5.0% (low), from years and other guessable numbers. Pre-registered verdicts:
+(1) lossless at 2.2x: **PASS** at both efforts; (2) a loss on multi-step questions at ~4x, low effort: **PASS**
+(−37.5 points, CI −46.4 to −28.8); (3) effort: high effort narrows the 4.2x loss from −15.3 to −8.1 points and makes
+2.9x lossless.
 
 ### A2. Sonnet 5.5
 
-`analysis_v2_sonnet/summary.md`; no call flagged by the engagement check.
+[analysis_v2_sonnet/summary.md](../results/claude_qa/analysis_v2_sonnet/summary.md); no call flagged by the engagement
+check.
 
-| effort | fewer tokens than text | text | image | text - image (95% CI) | multi-step: text / image | verdict |
-|---|---|---|---|---|---|---|
-| high | 2.2x | 99.7% | 99.4% | +0.3 (-1.1 to +1.7) | 99% / 98% | **lossless** |
-| low | 2.2x | 98.9% | 98.6% | +0.3 (-1.6 to +2.2) | 97.5% / 96.7% | not shown below 2 points |
-| high | 2.9x | 99.7% | 98.1% | +1.7 (0.0 to +3.7) | 99% / 95% | not shown below 2 points |
-| low | 2.9x | 98.9% | 95.8% | +3.1 (+0.8 to +5.7) | 97.5% / 90% | loss |
-| high | 4.2x | 99.7% | 85.8% | +13.9 (+10.6 to +17.8) | 99% / 64% | loss |
-| low | 4.2x | 98.9% | 77.2% | +21.7 (+17.5 to +26.2) | 97.5% / 51% | loss |
+| effort | fewer tokens | text | image | image − text (95% CI) | lookups: text / image | multi-step: text / image | verdict |
+|---|---|---|---|---|---|---|---|
+| high | 2.2x (2.19x) | 99.7% | 99.4% | −0.3 (−1.7 to +1.1) | 100.0% / 100.0% | 99.2% / 98.3% | **lossless** |
+| high | 2.9x (2.87x) | 99.7% | 98.1% | −1.7 (−3.7 to 0.0) | 100.0% / 99.6% | 99.2% / 95.0% | not shown lossless |
+| high | 4.2x (4.15x) | 99.7% | 85.8% | −13.9 (−17.8 to −10.6) | 100.0% / 96.7% | 99.2% / 64.2% | loss |
+| low | 2.2x (2.19x) | 98.9% | 98.6% | −0.3 (−2.2 to +1.6) | 99.6% / 99.6% | 97.5% / 96.7% | not shown lossless |
+| low | 2.9x (2.87x) | 98.9% | 95.8% | −3.1 (−5.7 to −0.8) | 99.6% / 98.8% | 97.5% / 90.0% | loss |
+| low | 4.2x (4.15x) | 98.9% | 77.2% | −21.7 (−26.2 to −17.5) | 99.6% / 90.4% | 97.5% / 50.8% | loss |
 
-No document: 1.9% at both efforts. Pre-registered verdicts: (1) lossless at 2.2x: PASS at high effort, not shown at
-low effort (worst case 2.2 points); (2) a loss on multi-step questions at ~4x, low effort: PASS (+46.7 points, CI
-+37.4 to +55.4); (3) high effort narrows the gap (4.2x: 21.7 -> 13.9 points; 2.9x: 3.1 -> 1.7).
+At 2.9x and high effort the interval only just reaches 0 (its upper end is −0.04 points) and the McNemar test does
+not reject (p = 0.07): borderline, not a shown loss. No document: 1.9% at both efforts. Pre-registered verdicts:
+(1) lossless at 2.2x: **PASS** at high effort, not shown at low effort (worst case −2.2 points); (2) a loss on
+multi-step questions at ~4x, low effort: **PASS** (−46.7 points, CI −55.4 to −37.4); (3) effort: high effort narrows
+the 4.2x loss from −21.7 to −13.9 points and the 2.9x loss from −3.1 to −1.7.
 
 ### A3. Haiku 5.5
 
-High effort (`analysis_v2_haiku/summary.md`):
+[analysis_v2_haiku/summary.md](../results/claude_qa/analysis_v2_haiku/summary.md).
 
-| fewer tokens | text | image | text - image (95% CI) | lookups: text / image | multi-step: text / image |
-|---|---|---|---|---|---|
-| 2.2x | 98.1% | 92.2% | +5.8 (+3.0 to +9.0) | 99.2% / 99.2% | 95.8% / 78.3% |
-| 2.9x | 98.1% | 86.9% | +11.1 (+7.9 to +14.9) | 99.2% / 98.8% | 95.8% / 63.3% |
-| 4.2x | 98.1% | 45.6% | +52.5 (+47.1 to +57.6) | 99.2% / 60.8% | 95.8% / 15.0% |
+| effort | fewer tokens | text | image | image − text (95% CI) | lookups: text / image | multi-step: text / image | verdict |
+|---|---|---|---|---|---|---|---|
+| high | 2.2x (2.19x) | 98.1% | 92.2% | −5.8 (−9.0 to −3.0) | 99.2% / 99.2% | 95.8% / 78.3% | loss |
+| high | 2.9x (2.87x) | 98.1% | 86.9% | −11.1 (−14.9 to −7.9) | 99.2% / 98.8% | 95.8% / 63.3% | loss |
+| high | 4.2x (4.15x) | 98.1% | 45.6% | −52.5 (−57.6 to −47.1) | 99.2% / 60.8% | 95.8% / 15.0% | loss |
+| low | 2.2x (2.19x) | 39.2% | 88.3% | +49.2 (+43.7 to +54.1) | 58.8% / 97.5% | 0.0% / 70.0% | not comparable* |
+| low | 2.9x (2.87x) | 39.2% | 80.8% | +41.7 (+36.2 to +46.7) | 58.8% / 97.1% | 0.0% / 48.3% | not comparable* |
+| low | 4.2x (4.15x) | 39.2% | 14.4% | −24.7 (−30.1 to −19.2) | 58.8% / 20.4% | 0.0% / 2.5% | not comparable* |
 
-Verdict (1), lossless at 2.2x: **FAIL**. **Low effort is excluded** (decided after the run, from the model's own
-output): Haiku answered the text arm with 400-800 output tokens, i.e. without reasoning (33-45% correct; one call
-declined 80 of 120 questions: "I haven't worked those out ... I can go through them in batches"), but spent 8-15k
-output tokens on its 2.2x and 2.9x page calls (0.8-2.3k on the 4.2x pages), which therefore "won" by up to 49 points. That measures how much Haiku chooses to
-think per input type, not how well it reads. Opus used ~3k output tokens on both arms at low effort and none of its
-calls was flagged. `analyse_claude_qa.py` now flags unanswered questions and such phrases and marks the row invalid.
+No document: 0.6% (high effort), 0.3% (low). Pre-registered verdicts: (1) lossless at 2.2x: **FAIL** at high effort
+(−5.8 points, worst −9.0); not evaluable at low effort; (2) a loss on multi-step questions at ~4x, low effort: not
+evaluable (at high effort: −80.8 points, CI −86.4 to −72.1); (3) effort: at low effort Haiku does not reason over
+long text (below).
+
+\* **Low effort is excluded** (decided after the run, from the model's own output). Haiku answered the text arm with
+424-821 output tokens, i.e. without reasoning (33-45% correct; one call declined 80 of 120 questions: "I haven't
+worked those out ... I can go through them in batches"), but spent 8-15k output tokens on its 2.2x and 2.9x page calls
+(0.8-2.3k on the 4.2x pages), which therefore "won" by up to 49 points. That measures how much Haiku chooses to think
+per input type, not how well it reads. Opus used ~3-4k output tokens on both arms at low effort, and no Opus or
+Sonnet call was flagged.
 
 ![Output tokens per call, text vs pages, per model and effort](img/claude_qa_engagement.png)
 
+*How to read it:* one mark per call on a log scale (squares: text, 3 per row; circles: pages, 9 per row: 3 densities
+x 3 documents). The shaded row is Haiku at low effort, the excluded one: 424-821 output tokens on text against
+0.8-15k on pages. Opus and Sonnet spend thousands of output tokens on both.
+
 ### A4. Cost
 
-Per call, list price as if uncached (every input token written to the 5-minute prompt cache once, as the first call
-of a document is), mean of the 3 documents. Recomputed from each call's logged tokens; this reproduces the logged
-cost of all 63 uncached calls of the three models exactly.
+Per call, list price with every input token priced as a cache write (1.25x the base input price, as on the first call
+of a document), mean of the 3 documents. Recomputed from each call's logged tokens; this reproduces the logged cost of
+all 63 uncached calls of the three models exactly.
 
 | option | Opus low | Opus high | Sonnet low | Sonnet high | Haiku low | Haiku high |
 |---|---|---|---|---|---|---|
-| text (~247k tokens) | $1.29 | $1.34 | $0.66 | $0.67 | $0.16 | $0.18 |
-| pages, 2.2x (~112k) | $0.63 | $0.68 | $0.34 | $0.37 | $0.10 | $0.13 |
+| text (~246k input tokens) | $1.29 | $1.34 | $0.66 | $0.67 | $0.16 | $0.18 |
+| pages, 2.2x (~112k) | $0.63 | $0.68 | $0.34 | $0.37 | $0.097 | $0.13 |
 | pages, 2.9x (~86k) | $0.51 | $0.55 | $0.29 | $0.34 | $0.016 | $0.023 |
-| pages, 4.2x (~59k) | $0.37 | $0.50 | $0.20 | $0.40 | $0.008 | $0.012 |
+| pages, 4.2x (~59k) | $0.36 | $0.50 | $0.20 | $0.40 | $0.008 | $0.012 |
 
 Prices: Opus 5.5 $4 / $20 and Sonnet 5.5 $2 / $10 per million input / output tokens; Haiku 5.5 $0.10 / $0.50 for
-prompts up to 100k tokens, $0.50 / $2.50 above (its 2.9x and 4.2x pages fall in the cheaper tier); cache writes
-1.25x. High effort adds thinking tokens (Opus 4.2x pages: 9-12k output tokens vs
-3-4k at low effort).
+prompts up to 100k tokens, $0.50 / $2.50 above (its 2.9x and 4.2x pages fall in the cheaper tier). High effort adds
+thinking tokens (Opus 4.2x pages: 9-12k output tokens against ~3-4k at low effort).
 
 Total spend of all QA experiments, from the CLI's `total_cost_usd` (list price; some calls read their document from
-the cache, so the logged figures are lower than the table above):
+the prompt cache, so logged figures can be lower than the table above):
 
 | experiment | calls (cached repeats excluded) | list-price cost |
 |---|---|---|
-| 500k chars, 80 questions, 4 densities | 5 | $2.27 |
+| 500k chars, 80 questions, 4 densities | 6 | $2.27 |
 | 781k tokens, 80 questions, small pages | 5 (one arm lost pages) | $6.14 |
 | 783k tokens, 100 questions, first attempt (count questions leaked; discarded) | 3 | $4.49 |
-| 783k tokens, 100 questions, 1932-px pages | 5 (one arm lost pages) | $6.17 |
+| 783k tokens, 100 questions, 1932-px pages | 5 (one arm lost pages) | $6.18 |
 | 700k chars, 100 questions | 5 | $3.15 |
-| **v2 pre-registered, Opus 5.5: 3 documents x 2 efforts** | 30 | **$11.47** |
+| **v2 pre-registered, Opus 5.5: 3 documents x 2 efforts** | 30 | **$11.48** |
 | v2, Haiku 5.5 | 30 | $1.24 |
 | v2, Sonnet 5.5 | 30 | $10.05 |
-| **Total** | 113 | **$44.99** |
+| **Total** | 114 | **$45.00** |
 
 Not counted: eight small probes (large-page and payload tests), under ~$0.35 together, and the first attempt of one
-Sonnet call that timed out and was retried (the no-document arm at high effort on document 3; the retry spent 129,627
-output tokens and $1.58 before answering, and the timed-out attempt's spend is not logged).
+Sonnet call that timed out after 30 minutes and was retried: the no-document arm at high effort on document 3. The
+retry used 114,591 input and 129,627 output tokens (the CLI apparently ran several internal turns; every other
+no-document call used ~6k input tokens) and cost $1.58, included above; the timed-out attempt's spend is not logged.
 
 ### A5. Earlier exploratory runs
 
 Same harness before the pre-registered design; one document and one call per arm, so "no loss detected" rather than
-lossless (with 100 questions and no disagreement, a gap up to 3.7 points cannot be excluded).
+lossless (with 100 questions and no disagreement, a gap up to 3.7 points cannot be excluded). Densities are given as
+token savings, like the rest of this document; the page sizes differ from v2, so the same px² per character gives a
+slightly different saving.
 
 | document | questions | result |
 |---|---|---|
 | 500k chars (175k tokens), small pages | 80 simple | 7.8x fewer tokens (Phase 1's 3% CER density): 33-42% vs 100%; 4.3x: 85-95%; 2.2x and 1.5x: 100% |
-| 2.3M chars (781k tokens), small pages | 80 simple | 4.5x: 97% / 93% (4 misses); 8.7x: 20% / 57%; the 4x arm lost pages |
-| 2.3M chars (783k tokens), 1932-px pages | 100 incl. 20 multi-step | 4.4x: lookups 90-95%, multi-step 60% vs 80% from text; 8.6x fails; 4x lost pages |
+| 2.3M chars (781k tokens), small pages | 80 simple | 4.5x: 97% / 93% (4 misses); 8.7x: 20% / 57%; the 117.6 px²/char arm (~2.3x fewer tokens) lost pages |
+| 2.3M chars (783k tokens), 1932-px pages | 100 incl. 20 multi-step | 4.4x: lookups 90-95%, multi-step 60% vs 80% from text; 8.6x fails; the 117.6 px²/char arm lost pages |
 | 700k chars (245k tokens), 1932-px pages | 100 incl. 20 multi-step | 2.2x and 1.5x: 100% on all; 4.2x: lookups 97%, multi-step 70% |
 
 ### A6. Problems found on the way
 
-* The first count questions leaked: they counted fact types that the 40 needle questions enumerate, and the
+* The first count questions leaked: they counted fact types that the 40 invented-fact questions enumerate, and the
   no-document arm got 3 of 3 by counting questions. Replaced with fact types no other question mentions (rows kept as
   `qa800kc_v1_countleak`).
 * A sentence opening with a double quote broke the anchor lookup (fixed; earlier question sets unchanged).
 * The first analysis used a bootstrap interval, which collapses to zero width when text and image never disagree;
   replaced with Newcombe's score interval before the v2 runs.
-* Pages were silently dropped above ~175k image tokens (Limits); every run now checks input tokens against the
-  image-token formula.
+* Pages were silently dropped somewhere between ~175k and ~345k image tokens per request (Limits); every run now
+  checks input tokens against the image-token formula.
+* Haiku at low effort did not engage with the text (A3); the engagement check was added after that run.

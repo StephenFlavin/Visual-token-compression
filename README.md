@@ -25,10 +25,10 @@ RGB overlays and learned glyph alphabets) and compares them with plain text rend
    | Qwen2.5-VL-3B, frozen | 16 px Latin | 6.8 | ~1.5x | 98% of the information recovered, 1.5% transcription error: near-lossless |
    | Qwen2.5-VL-3B, frozen | 8 px Latin | 28.1 | ~3.4x in information | only 52% of the information recovered; it cannot read the page out (76% error) |
    | Claude (Phase 1) | Latin at 29.4 px²/char | ~27 | 7.8x fewer input tokens | 3% transcription error, but answering questions over a long document fails (20-42% vs 100% from text) |
-   | Claude, QA test (pre-registered) | Latin at 117.6 px²/char | ~7 | **2.2x fewer** | **lossless**: gap to text at most 1.6 points (95% bound) at low and high effort, multi-step questions included |
+   | Claude, QA test (pre-registered) | Latin at 117.6 px²/char | ~7 | **2.2x fewer** | **lossless**: gap to text at most 1.6 points (95% bound) at low and high effort; no multi-step loss seen either (120 questions bound it to ~3 points) |
    | Claude, QA test (pre-registered) | Latin at 88.2 px²/char | ~9 | 2.9x fewer | lossless at high effort; within 2.8 points at low effort |
    | Claude, QA test (pre-registered) | Latin at 58.8 px²/char | ~13 | 4.2x fewer | loses 15 points (low effort) / 8 (high); multi-step questions 38 / 20 |
-   | Claude Sonnet 5.5, same test | Latin at 117.6 px²/char | ~7 | 2.2x fewer | **lossless at high effort** (worst case 1.7 points); at low effort -0.3 points, worst case 2.2; 2.9x loses 1.7-3.1 |
+   | Claude Sonnet 5.5, same test | Latin at 117.6 px²/char | ~7 | 2.2x fewer | **lossless at high effort** (worst case 1.7 points); at low effort -0.3 points, worst case 2.2; 2.9x: -1.7 at high effort (borderline), -3.1 at low effort (a loss) |
    | Claude Haiku 5.5, same test, high effort | Latin at 117.6 px²/char | ~7 | 2.2x fewer | **not lossless**: loses 5.8 points (multi-step 18); lookups unchanged |
 
    Sources: Run 0 in [PLAN_3090.md](docs/PLAN_3090.md), Phase 1 in [RESULTS.md](docs/RESULTS.md), the Claude QA test
