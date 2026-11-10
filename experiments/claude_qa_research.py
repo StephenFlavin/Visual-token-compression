@@ -296,7 +296,8 @@ def main(argv=None) -> int:
              "timeout": 600.0, "meta": (b["k"], i)} for b in built for i, s in enumerate(b["src"])]
     recs = CE.transcribe_many(jobs, workers=8)
     bad = [r["meta"] for r in recs if r.get("error") or not r.get("text")]
-    assert not bad, f"notes failed: {bad}"
+    errs = sorted({str(r.get("error"))[:200] for r in recs if r.get("error")})
+    assert not bad, f"notes failed ({len(bad)}): {bad[:5]} ...; errors: {errs[:3]}"
     for b in built:
         rs = [r for r in recs if r["meta"][0] == b["k"]]
         b["notes"] = "\n\n".join(r["text"].strip() for r in rs)
