@@ -30,6 +30,7 @@ RGB overlays and learned glyph alphabets) and compares them with plain text rend
    | Claude, QA test, 800k-token document | Latin at 58.8 px²/char | ~13 | 4.5x fewer (175k vs 781k tokens) | 93-97% vs 100% from text (4 misses in 80, p = 0.125) |
    | Claude, 800k tokens, 100 questions incl. 20 multi-step | Latin at 58.8 px²/char, 1932-px pages | ~13 | 4.4x fewer | simple lookups 90-95%, multi-step 60% vs 80% from text (two-hop 3/8 vs 7/8); 4x could not be measured (the CLI drops pages above ~176k image tokens) |
    | Claude, 245k tokens, 100 questions incl. 20 multi-step | Latin at 117.6 px²/char, 1932-px pages | ~7 | **2.2x fewer** | **100% on all 100, same as text** (4.2x: lookups 97%, multi-step 70%) |
+   | **Claude, pre-registered: 3 documents x 120 questions (40 multi-step), low and high effort** | Latin at 117.6 / 88.2 / 58.8 px²/char | ~7 / ~9 / ~13 | 2.2x / 2.9x / 4.2x fewer | **2.2x lossless at both efforts** (text - image upper bound < 1.6 points); 2.9x lossless at high effort; 4.2x loses 8-15 points (multi-step 20-38) |
 
    Sources: Run 0 in [PLAN_3090.md](docs/PLAN_3090.md), Phase 1 in [RESULTS.md](docs/RESULTS.md), the Claude QA test
    in [results/claude_qa/summary.md](results/claude_qa/summary.md) (one 500k-char document, 80 exact-answer questions;

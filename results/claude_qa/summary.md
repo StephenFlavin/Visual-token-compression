@@ -116,3 +116,32 @@ Addresses the limits of the runs above: ceiling (text at 100%), one document, on
      questions is above 0, at low effort.
   3. **Effort:** reported, no threshold: does high effort narrow the image gap at 58.8 and 88.2?
 * Cost estimate: ~$6 at low effort, ~$10-20 at high (thinking tokens), list price, from the subscription quota.
+
+## v2 results (2026-11-10): all 30 calls complete, no arm lost pages; $11.48 at list price
+
+Pooled over 3 documents, 360 paired questions per row; tables per question kind in `analysis_v2/summary.md`
+(`python3 experiments/analyse_claude_qa.py results/claude_qa/qav2_*`).
+
+| effort | image px²/char | fewer tokens than text | text | image | text - image (95% CI) | complex: text / image | verdict |
+|---|---|---|---|---|---|---|---|
+| low | 117.6 | 2.19x | 100.0% | 99.7% | +0.3 (-0.8 to +1.6) | 100% / 100% | **lossless** |
+| high | 117.6 | 2.19x | 99.7% | 99.7% | 0.0 (-1.3 to +1.3) | 99% / 100% | **lossless** |
+| low | 88.2 | 2.87x | 100.0% | 98.9% | +1.1 (-0.1 to +2.8) | 100% / 98% | loss < 2.8 points, not excluded below 2 |
+| high | 88.2 | 2.87x | 99.7% | 100.0% | -0.3 (-1.6 to +0.8) | 99% / 100% | **lossless** |
+| low | 58.8 | 4.15x | 100.0% | 84.7% | +15.3 (+11.8 to +19.4) | 100% / 62.5% | loss |
+| high | 58.8 | 4.15x | 99.7% | 91.7% | +8.1 (+5.5 to +11.3) | 99% / 79% | loss |
+
+No document: 5.0% (low), 6.9% (high) of 360.
+
+**Pre-registered verdicts:**
+1. Lossless at 2.2x: **PASS at both efforts** (upper bounds 1.6 and 1.3 points).
+2. Loss on complex questions at ~4x, low effort: **PASS** (text - image on complex +37.5, CI +28.8 to +46.4).
+3. Effort: **high effort halves the gap at 4.2x** (15.3 -> 8.1 points; complex 37.5 -> 20.0) and makes 2.9x lossless
+   (upper bound 0.8 points; at low effort 2.8).
+
+**Where it breaks at 4.2x (low / high effort, image):** counting over the whole document 17% / 28% (text 100% / 94%),
+three-hop 38% / 67%, two-hop 53% / 90%; sums stay at 100% and largest-of-three at 94%; simple lookups 93-98%.
+
+Still open: text scores 99.7-100%, so these questions cannot show losses below ~1 point; documents are capped at
+~250k text tokens by the page-dropping limit; one model (Opus 5.5), one font and layout; questions are about
+planted facts and numbers, not open-ended understanding.
