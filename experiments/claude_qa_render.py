@@ -63,8 +63,9 @@ def invented(rng, used: set) -> tuple[str, str]:
             return who, place
 
 
-def build_document(n_chars: int, offset: int):
-    paras = corpus.read_paragraphs("test")[offset:]
+def build_document(n_chars: int, offset: int, splits=("test", "val", "train")):
+    """Held-out test text first, then validation, then train (only if a very long document needs it)."""
+    paras = [p for sp in splits for p in corpus.read_paragraphs(sp)][offset:]
     out, total = [], 0
     for p in paras:
         out.append(p)
