@@ -104,6 +104,22 @@ Typical single calls at low effort (v2 documents):
 At 2.2x the image call costs about half the text call for the same answers. High effort adds thinking: an uncached
 4.2x image call cost $0.48-0.53 at high effort (9-12k output tokens) against $0.36 at low.
 
+![Cost per call vs accuracy](img/claude_qa_cost.png)
+
+Cost per call as if uncached (every input token written to the cache once, as the first call of a document is;
+recomputed from each call's logged tokens, which reproduces the logged cost of all 18 uncached calls exactly), mean of
+the 3 v2 documents:
+
+| arm | low effort | high effort | accuracy, all / multi-step (low; high) |
+|---|---|---|---|
+| text | $1.29 | $1.34 | 100% / 100%; 99.7% / 99% |
+| image, 2.2x fewer tokens | $0.63 | $0.68 | 99.7% / 100%; 99.7% / 100% |
+| image, 2.9x | $0.51 | $0.55 | 98.9% / 98%; 100% / 100% |
+| image, 4.2x | $0.37 | $0.50 | 84.7% / 62.5%; 91.7% / 79% |
+
+The cheapest lossless option is the 2.9x pages at high effort ($0.55, 41% of text's cost) or the 2.2x pages at
+either effort ($0.63-0.68, about half). Going to 4.2x saves another ~$0.05-0.18 and costs 8-15 points of accuracy.
+
 ## Limits
 
 * **Ceiling:** text scores 99.7-100%, so these questions cannot show losses below ~1 point.

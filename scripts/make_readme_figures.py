@@ -14,7 +14,8 @@ Charts (need only matplotlib; every number is read from encoder_probe/results/*/
 6. readme_r3_1.png     R3-1 short budget: CER and MC accuracy per arm next to its blind control
 7. claude_qa_saving.png  Claude QA v2: accuracy from page images vs from text, by token saving and effort
 8. claude_qa_kinds.png   Claude QA v2 at ~4x fewer tokens: accuracy per question type
-   (7-8 read results/claude_qa/analysis_v2/summary.json, written by experiments/analyse_claude_qa.py)
+9. claude_qa_cost.png    Claude QA v2: list-price cost per call vs accuracy, by effort
+   (7-9 read results/claude_qa/analysis_v2/summary.json, written by experiments/analyse_claude_qa.py)
 
     python3 scripts/make_readme_figures.py                 # all
     python3 scripts/make_readme_figures.py --only charts   # just the charts
@@ -868,6 +869,89 @@ def chart_claude_qa_kinds():
     print("claude_qa_kinds.png")
 
 
+# list prices (Claude Opus 5.5, per token) and the CLI's 5-minute prompt-cache write / read multipliers
+QA_PRICE_IN, QA_PRICE_OUT, QA_CACHE_WRITE = 4e-6, 20e-6, 1.25
+
+
+def _qa_uncached_cost(u: dict) -> float:
+    """List-price cost of a call as if nothing came from the prompt cache (every input token written once, as the
+    first call of a document is). Equals the logged total_cost_usd on every uncached v2 call."""
+    tok = u["input_tokens"] + u["cache_creation_input_tokens"] + u["cache_read_input_tokens"]
+    return tok * QA_PRICE_IN * QA_CACHE_WRITE + u["output_tokens"] * QA_PRICE_OUT
+
+
+def chart_claude_qa_cost():
+    """Cost per call vs accuracy, all questions and multi-step only, one line per effort: text and the three image
+    densities. Costs are list price, as if uncached, averaged over the 3 documents."""
+    plt = chart_style()
+    res = _qa_rows()
+    cost = {}
+    for f in sorted((ROOT / "results" / "claude_qa").glob("qav2_*/runs.jsonl")):
+        for line in f.read_text().splitlines():
+            r = json.loads(line)
+            if r.get("cached") or r["arm"] == "none":
+                continue
+            key = (r["effort"], "text" if r["arm"] == "text" else r["budget"])
+            cost.setdefault(key, []).append(_qa_uncached_cost(r["usage"]))
+    cost = {k: float(np.mean(v)) for k, v in cost.items()}
+    lab = {"text": "text", 117.6: "2.2x", 88.2: "2.9x", 58.8: "4.2x"}
+    fig, axs = plt.subplots(1, 2, figsize=(10.4, 5.0), dpi=150, sharey=True)
+    for ax, (title, kinds, sub) in zip(axs, [("All questions", ("all",), "360 per point"),
+                                             ("Multi-step questions", ("complex",), "120 per point")]):
+        where = {}
+        for e, (elab, col, mk) in EFFORT.items():
+            pts = []
+            for b in ("text", 117.6, 88.2, 58.8):
+                r = res[f"{e}/117.6"] if b == "text" else res[f"{e}/{b}"]
+                j = 0 if b == "text" else 1
+                k_ = sum(r["kinds"][k][j] for k in kinds)
+                n = sum(r["kinds"][k][2] for k in kinds)
+                pts.append((cost[(e, b)], k_ / n, *wilson(k_, n), lab[b]))
+            pts.sort()
+            x = np.array([p_[0] for p_ in pts])
+            y = np.array([p_[1] for p_ in pts]) * 100
+            lo = np.array([p_[2] for p_ in pts]) * 100
+            hi = np.array([p_[3] for p_ in pts]) * 100
+            ax.plot(x, y, color=col, lw=2, zorder=2)
+            ax.errorbar(x, y, yerr=[y - lo, hi - y], fmt="none", ecolor=col, elinewidth=1.2, capsize=0, zorder=2)
+            ax.plot(x, y, ls="none", marker=mk, ms=8, color=col, mec=SURFACE, mew=1.5, zorder=3, label=elab)
+            for xi, yi, p_ in zip(x, y, pts):
+                where.setdefault(p_[4], []).append((e, xi, yi))
+        for name, ps in where.items():   # one label above a pair that sits at the top, else one per point
+            if all(yi >= 95 for _, _, yi in ps):
+                ax.text(np.mean([xi for _, xi, _ in ps]), 102.5, name, ha="center", va="bottom", fontsize=8,
+                        color=INK_2)
+            else:
+                for e, xi, yi in ps:
+                    if yi >= 95:
+                        ax.text(xi, 102.5, name, ha="center", va="bottom", fontsize=8, color=INK_2)
+                    elif e == "low":
+                        ax.text(xi, yi - 4.5, name, ha="center", va="top", fontsize=8, color=INK_2)
+                    else:
+                        ax.text(xi + 0.025, yi, name, ha="left", va="center", fontsize=8, color=INK_2)
+        ax.set_xlim(0.25, 1.45)
+        ax.set_ylim(0, 108)
+        ax.set_xticks([0.4, 0.6, 0.8, 1.0, 1.2, 1.4], ["$0.40", "$0.60", "$0.80", "$1.00", "$1.20", "$1.40"])
+        ax.set_yticks([0, 25, 50, 75, 100], ["0%", "25%", "50%", "75%", "100%"])
+        ax.grid(axis="y", color=GRID, lw=0.8)
+        ax.set_axisbelow(True)
+        ax.set_title(title, loc="left", fontsize=10.5, fontweight="bold", pad=16)
+        ax.text(0, 1.015, sub, transform=ax.transAxes, fontsize=8, color=INK_2, va="bottom")
+        ax.set_xlabel("cost per call: one ~245k-token document plus 120 questions")
+    axs[0].set_ylabel("questions answered correctly")
+    axs[0].legend(loc="lower right", frameon=False, fontsize=8.5)
+    fig.suptitle("Page images at 2.2x fewer tokens cost half as much as text for the same answers",
+                 x=0.02, ha="left", fontsize=12, fontweight="bold")
+    fig.text(0.02, 0.86, "Claude Opus 5.5 list price (\\$4 / \\$20 per million input / output tokens), as if uncached, "
+             "mean of 3 documents; 95% Wilson intervals.\nHigh effort adds thinking tokens: ~4-8 cents per call more. "
+             "Calls drew on a subscription quota, so these are list prices, not amounts billed.",
+             fontsize=8.5, color=INK_2, linespacing=1.4)
+    fig.subplots_adjust(left=0.08, right=0.97, top=0.72, bottom=0.13, wspace=0.08)
+    save_small(fig, "claude_qa_cost.png")
+    plt.close(fig)
+    print("claude_qa_cost.png", {f"{k[0]}/{k[1]}": round(v, 3) for k, v in cost.items()})
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--only", choices=["demos", "charts"], help="draw only the demo figures or only the charts")
@@ -883,3 +967,4 @@ if __name__ == "__main__":
         chart_r3_1()
         chart_claude_qa_saving()
         chart_claude_qa_kinds()
+        chart_claude_qa_cost()
