@@ -15,6 +15,7 @@ overview is the top-level [README.md](../README.md); how to run things and the g
 
 ## Results
 * [RESULTS.md](RESULTS.md): cross-project summary: Phases 1-2 (KILL), learned glyphs (qualified GO), frozen encoders, round 3.
+* [CLAUDE_QA.md](CLAUDE_QA.md): can Claude answer questions from page images as well as from text? Pre-registered: 2.2x fewer tokens lossless, 4.2x loses multi-step questions; charts and cost table.
 * [CONTEXT_BUDGET.md](CONTEXT_BUDGET.md): chars per context position per encoding, turned into context, KV and
   compute on Qwen2.5-VL-3B; potential vs measured (chart `img/ctx_budget.png`).
 * [learned_glyphs/RESULTS.md](../learned_glyphs/RESULTS.md): learned glyph alphabet, full report.

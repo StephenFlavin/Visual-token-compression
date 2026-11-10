@@ -12,9 +12,12 @@ also shows the real 1:1 pixels ("actual size").
 Charts (need only matplotlib; every number is read from encoder_probe/results/*/runs.jsonl):
 5. readme_density.png  chars per vision token vs whether the code is read, per encoder and stage
 6. readme_r3_1.png     R3-1 short budget: CER and MC accuracy per arm next to its blind control
+7. claude_qa_saving.png  Claude QA v2: accuracy from page images vs from text, by token saving and effort
+8. claude_qa_kinds.png   Claude QA v2 at ~4x fewer tokens: accuracy per question type
+   (7-8 read results/claude_qa/analysis_v2/summary.json, written by experiments/analyse_claude_qa.py)
 
-    python3 scripts/make_readme_figures.py                 # all six
-    python3 scripts/make_readme_figures.py --only charts   # just the two charts
+    python3 scripts/make_readme_figures.py                 # all
+    python3 scripts/make_readme_figures.py --only charts   # just the charts
 """
 from __future__ import annotations
 
@@ -750,6 +753,121 @@ def chart_r3_1():
                                for a in arms})
 
 
+# --------------------------------------------------------------------------- charts 7-8: Claude QA v2
+QA_SUMMARY = ROOT / "results" / "claude_qa" / "analysis_v2" / "summary.json"
+EFFORT = {"low": ("low effort", "#2a78d6", "o"), "high": ("high effort", "#eb6834", "s")}   # validated slots 1-2
+
+
+def wilson(k: int, n: int) -> tuple[float, float]:
+    z = 1.96
+    p = k / n
+    d = 1 + z * z / n
+    c = (p + z * z / (2 * n)) / d
+    h = z * np.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d
+    return c - h, c + h
+
+
+def _qa_rows() -> dict:
+    return json.loads(QA_SUMMARY.read_text())
+
+
+def chart_claude_qa_saving():
+    """Accuracy vs token saving, simple lookups and multi-step questions side by side, one line per effort.
+    x = 1 is the text arm; each image point is paired with its document's text answers."""
+    plt = chart_style()
+    res = _qa_rows()
+    fig, axs = plt.subplots(1, 2, figsize=(10.4, 5.0), dpi=150, sharey=True)
+    panels = [("Simple lookups", ("needle", "number"), "240 questions per point"),
+              ("Multi-step questions", ("complex",), "120 per point: two-hop, three-hop, sums, largest-of-three, counts")]
+    for ax, (title, kinds, sub) in zip(axs, panels):
+        for e, (lab, col, mk) in EFFORT.items():
+            pts = sorted((r["saving"], r) for k, r in res.items() if k.startswith(e + "/") and "saving" in r)
+            t_k = sum(pts[0][1]["kinds"][k][0] for k in kinds)
+            n = sum(pts[0][1]["kinds"][k][2] for k in kinds)
+            xs, ys, los, his = [1.0], [t_k / n], *[[v] for v in wilson(t_k, n)]
+            for sav, r in pts:
+                i_k = sum(r["kinds"][k][1] for k in kinds)
+                lo, hi = wilson(i_k, n)
+                xs.append(sav), ys.append(i_k / n), los.append(lo), his.append(hi)
+            dx = -0.035 if e == "low" else 0.035
+            x = np.array(xs) + dx
+            y = np.array(ys) * 100
+            ax.plot(x, y, color=col, lw=2, zorder=2)
+            ax.errorbar(x, y, yerr=[y - np.array(los) * 100, np.array(his) * 100 - y], fmt="none", ecolor=col,
+                        elinewidth=1.2, capsize=0, zorder=2)
+            ax.plot(x, y, ls="none", marker=mk, ms=8, color=col, mec=SURFACE, mew=1.5, zorder=3, label=lab)
+            if kinds == ("complex",):   # the two lookup lines coincide: the legend names them there
+                ax.text(x[-1] + 0.08, y[-1], lab, color=INK_2, fontsize=8.5, va="center")
+        ax.set_xticks([1, 2.19, 2.87, 4.15], ["text", "2.2x", "2.9x", "4.2x"])
+        ax.set_xlim(0.7, 4.9)
+        ax.set_ylim(0, 104)
+        ax.set_yticks([0, 25, 50, 75, 100], ["0%", "25%", "50%", "75%", "100%"])
+        ax.grid(axis="y", color=GRID, lw=0.8)
+        ax.set_axisbelow(True)
+        ax.set_title(title, loc="left", fontsize=10.5, fontweight="bold", pad=16)
+        ax.text(0, 1.015, sub, transform=ax.transAxes, fontsize=8, color=INK_2, va="bottom")
+        ax.set_xlabel("fewer input tokens than the same document as text")
+    axs[0].set_ylabel("questions answered correctly")
+    axs[0].legend(loc="lower left", frameon=False, fontsize=8.5)
+    fig.suptitle("Claude answers as well from page images at 2.2x fewer tokens; at 4.2x multi-step questions fail",
+                 x=0.02, ha="left", fontsize=12, fontweight="bold")
+    fig.text(0.02, 0.86, "Claude Opus 5.5, 3 documents of ~700k characters (~245k text tokens), DejaVu Sans pages "
+             "of 1932 px; pre-registered, 95% Wilson intervals.\nAt 2.2x fewer tokens the accuracy gap to text is at "
+             "most 1.6 points (95% bound) at both efforts; at 2.9x it is lossless at high effort.",
+             fontsize=8.5, color=INK_2, linespacing=1.4)
+    fig.subplots_adjust(left=0.08, right=0.97, top=0.72, bottom=0.13, wspace=0.08)
+    save_small(fig, "claude_qa_saving.png")
+    plt.close(fig)
+    print("claude_qa_saving.png")
+
+
+def chart_claude_qa_kinds():
+    """At 58.8 px²/char (~4.2x fewer tokens): accuracy per question type, text vs image at both efforts."""
+    plt = chart_style()
+    from matplotlib.lines import Line2D
+    res = _qa_rows()
+    low, high = res["low/58.8"]["kinds"], res["high/58.8"]["kinds"]
+    rows_ = [("needle", "Invented fact, looked up"), ("number", "Number in a quoted sentence"), ("sum", "Sum of two facts"),
+             ("max", "Largest of three facts"), ("two_hop", "Two-hop chain"), ("three_hop", "Three-hop chain"),
+             ("count", "Count across the whole document")]
+    fig, ax = plt.subplots(figsize=(9.6, 4.4), dpi=150)
+    for i, (k, lab) in enumerate(rows_):
+        y = i
+        n = low[k][2]
+        ax.axhline(y, color=GRID, lw=0.6, zorder=0)
+        t = low[k][0] / n * 100
+        ax.plot(t, y, marker="|", ms=14, mew=2.2, color=INK_2, ls="none", zorder=3)
+        for e, d, dy in (("low", low, -0.14), ("high", high, 0.14)):
+            _, col, mk = EFFORT[e]
+            v = d[k][1] / n * 100
+            lo, hi = wilson(d[k][1], n)
+            ax.plot([lo * 100, hi * 100], [y + dy] * 2, color=col, lw=1.2, zorder=2)
+            ax.plot(v, y + dy, marker=mk, ms=8, color=col, mec=SURFACE, mew=1.5, ls="none", zorder=3)
+        ax.text(101.5, y, f"n = {n}", fontsize=8, color=INK_2, va="center")
+    ax.set_yticks(range(len(rows_)), [lab for _, lab in rows_], fontsize=9)
+    ax.set_ylim(len(rows_) - 0.5, -0.6)
+    ax.set_xlim(0, 100)
+    ax.set_xticks([0, 25, 50, 75, 100], ["0%", "25%", "50%", "75%", "100%"])
+    ax.tick_params(axis="y", length=0)
+    ax.spines["left"].set_visible(False)
+    ax.set_xlabel("questions answered correctly")
+    ax.axhline(1.5, color=AXIS, lw=0.8, ls=(0, (3, 3)))
+    ax.text(1, 1.62, "multi-step", fontsize=8, color=INK_2, va="top")
+    ax.text(1, 1.38, "lookups", fontsize=8, color=INK_2, va="bottom")
+    handles = [Line2D([], [], marker="|", ms=12, mew=2.2, color=INK_2, ls="none", label="from text (low effort)")]
+    handles += [Line2D([], [], marker=mk, ms=7.5, color=col, ls="none", label=f"from images, {lab}")
+                for lab, col, mk in EFFORT.values()]
+    ax.legend(handles=handles, loc="lower left", bbox_to_anchor=(0, 1.0), ncol=3, frameon=False, fontsize=8.5)
+    fig.suptitle("At 4.2x fewer tokens single facts survive; tying facts together across the document fails",
+                 x=0.02, ha="left", fontsize=12, fontweight="bold")
+    fig.text(0.02, 0.905, "Claude Opus 5.5, images at 58.8 px²/char, pooled over 3 documents; 95% Wilson intervals. "
+             "Text scores 94-100% on every type at both efforts.", fontsize=8.5, color=INK_2)
+    fig.subplots_adjust(left=0.27, right=0.93, top=0.76, bottom=0.12)
+    save_small(fig, "claude_qa_kinds.png")
+    plt.close(fig)
+    print("claude_qa_kinds.png")
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--only", choices=["demos", "charts"], help="draw only the demo figures or only the charts")
@@ -763,3 +881,5 @@ if __name__ == "__main__":
     if args.only != "demos":
         chart_density()
         chart_r3_1()
+        chart_claude_qa_saving()
+        chart_claude_qa_kinds()
