@@ -93,8 +93,8 @@ not amounts billed.
   either effort; 2.9x pages at high effort ($0.55) are lossless too.
 * **Sonnet:** 2.2x pages at high effort cost $0.37 against $0.67 for text, with no measurable loss: the cheapest
   lossless option of the three models. At low effort ($0.34) the worst case is just outside the margin.
-* **Effort is cheap where it is not needed and worth it where it is:** on text and 2.2x pages high effort adds 4-10%
-  to the cost; on 4.2x pages it adds 37% (Opus) to 100% (Sonnet), and buys back 7-9 points.
+* **Effort is cheap where it is not needed and worth it where it is:** for Opus and Sonnet, high effort adds 3-9% to
+  the cost of text and 2.2x calls; on 4.2x pages it adds 37% (Opus) to 96% (Sonnet), and buys back 7-8 points.
 * **Haiku:** reading text at high effort costs $0.18 (98% right). Its 2.9x pages drop below Haiku's 100k-token price
   tier ($0.016-0.023) but lose 11 points; at low effort it barely reasons over text (39%, marked *).
 
