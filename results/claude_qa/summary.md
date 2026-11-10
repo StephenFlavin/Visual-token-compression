@@ -190,3 +190,22 @@ vs 4,764) and transcribes their first line exactly at 117.6 and 58.8 px²/char; 
 million input / output tokens. Verdicts as before: (1) lossless at 2.2x at each effort; (2) a loss on multi-step
 questions at ~4x, low effort; (3) the effort effect, reported. Rows flagged by the engagement check are reported as
 not comparable.
+
+## v2 with Sonnet 5.5: results (2026-11-10); 30 calls, $10.05 at list price, no arm lost pages, no call flagged
+
+Analysis `analysis_v2_sonnet/summary.md`.
+
+| effort | image px²/char | fewer tokens | text | image | text - image (95% CI) | multi-step: text / image | verdict |
+|---|---|---|---|---|---|---|---|
+| high | 117.6 | 2.19x | 99.7% | 99.4% | +0.3 (-1.1 to +1.7) | 99.2% / 98.3% | lossless |
+| low | 117.6 | 2.19x | 98.9% | 98.6% | +0.3 (-1.6 to +2.2) | 97.5% / 96.7% | not shown below 2 points |
+| high | 88.2 | 2.87x | 99.7% | 98.1% | +1.7 (0.0 to +3.7) | 99.2% / 95.0% | not shown below 2 points |
+| low | 88.2 | 2.87x | 98.9% | 95.8% | +3.1 (+0.8 to +5.7) | 97.5% / 90.0% | loss |
+| high | 58.8 | 4.15x | 99.7% | 85.8% | +13.9 (+10.6 to +17.8) | 99.2% / 64.2% | loss |
+| low | 58.8 | 4.15x | 98.9% | 77.2% | +21.7 (+17.5 to +26.2) | 97.5% / 50.8% | loss |
+
+No document 1.9% at both efforts. Pre-registered verdicts: (1) lossless at 2.2x: PASS at high effort, not shown at
+low (worst case 2.2 points); (2) loss on multi-step at ~4x, low effort: PASS (+46.7, CI +37.4 to +55.4); (3) high effort
+narrows the gap. The no-document arm at high effort on document 3 timed out once (30 min) and its retry spent 129,627
+output tokens ($1.58) before answering; the timed-out attempt's spend is not logged. Sonnet 2.2x pages: $0.37 per call
+vs $0.67 for text (list price, as if uncached).

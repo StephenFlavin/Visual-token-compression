@@ -316,9 +316,9 @@ def fig_cost():
             r = S[m][f"high/{b}"]
             a = r["kinds"]["all"]
             lo, hi = M.wilson(a[1], a[2])
-            rows_.append((m, f"{lab} fewer tokens (pages)", c[b], a[1] / a[2], lo, hi, bool(r.get("lossless"))))
+            rows_.append((m, f"{lab} pages", c[b], a[1] / a[2], lo, hi, bool(r.get("lossless"))))
     n_rows = 4 * len(MODELS)
-    H_in = 2.2 + 0.36 * n_rows
+    H_in = 2.45 + 0.36 * n_rows
     fig, (axc, axa) = plt.subplots(1, 2, figsize=(10.4, H_in), dpi=150, sharey=True,
                                    gridspec_kw={"width_ratios": [1.0, 1.0]})
     ys, y = [], 0.0
@@ -337,8 +337,10 @@ def fig_cost():
                  mec=M.SURFACE, mew=1.5, zorder=3)
         note = "  ✓" if ok else ""
         axa.text(hi * 100 + 1.5, yy, f"{acc * 100:.1f}%{note}", va="center", fontsize=8.5, color=M.INK_1)
-    labels = [f"{m}: {lab}" for m, lab, *_ in rows_]
-    axc.set_yticks(ys, labels, fontsize=9)
+    axc.set_yticks(ys, [lab for _, lab, *_ in rows_], fontsize=9)
+    for m in MODELS:
+        yy = [v for v, r in zip(ys, rows_) if r[0] == m]
+        block_label(fig, axc, (yy[0] + yy[-1]) / 2, m)
     axc.set_ylim(ys[-1] + 0.7, -0.9)
     axc.tick_params(axis="y", length=0)
     axc.set_xlim(0, 1.6)
@@ -355,14 +357,12 @@ def fig_cost():
         ax.set_axisbelow(True)
         ax.spines["left"].set_visible(False)
     axa.spines["bottom"].set_bounds(40, 100)
-    fig.suptitle("Opus reading 2.2-2.9x denser pages costs half as much as Opus reading text, for the same answers",
-                 x=0.02, ha="left", fontsize=12, fontweight="bold")
-    fig.text(0.02, 1 - 0.58 / H_in, "One call = a ~245k-token document plus 120 questions, high effort, mean of 3 documents. "
-             "✓ = no measurable loss vs the same model reading text (pre-registered).\nList prices as if uncached: "
-             "Opus \\$4 / \\$20 per million input / output tokens; Haiku \\$0.10 / \\$0.50 up to 100k-token prompts, "
-             "\\$0.50 / \\$2.50 above. Not amounts billed.",
-             fontsize=8.5, color=M.INK_2, linespacing=1.45)
-    fig.subplots_adjust(left=0.235, right=0.985, top=1 - 1.25 / H_in, bottom=0.6 / H_in, wspace=0.08)
+    header(fig, H_in, "Pages at 2.2x fewer tokens halve the cost for Opus and Sonnet, with no measurable loss",
+           "One call = a ~245k-token document plus 120 questions, high effort, mean of 3 documents. ✓ = no measurable "
+           "loss vs the same model reading text\n(pre-registered). List prices as if uncached: Opus \\$4 / \\$20 and "
+           "Sonnet \\$2 / \\$10 per million input / output tokens; Haiku \\$0.10 / \\$0.50 up to 100k-token\n"
+           "prompts, \\$0.50 / \\$2.50 above. Calls drew on a subscription quota, so these are not amounts billed.")
+    fig.subplots_adjust(left=0.20, right=0.985, top=1 - 1.6 / H_in, bottom=0.6 / H_in, wspace=0.08)
     save(fig, "claude_qa_cost.png")
     plt.close(fig)
     print("claude_qa_cost.png", {m: {k: round(v, 3) for k, v in costs(m).items()} for m in MODELS})
