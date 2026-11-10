@@ -251,7 +251,7 @@ def fig_breakdown():
         ys.append(y)
         y += 1
     xs = [j + (0.3 if j >= N_LOOKUP else 0) for j in range(len(KINDS))]
-    TOP, BOT, ROW = 1.15, 0.75, 0.40
+    TOP, BOT, ROW = 1.35, 0.75, 0.40
     H_in = TOP + BOT + ROW * (y + 1.75)
     fig, ax = plt.subplots(figsize=(10.4, H_in), dpi=150)
     fig.subplots_adjust(left=0.24, right=0.985, top=1 - TOP / H_in, bottom=BOT / H_in)
@@ -265,6 +265,9 @@ def fig_breakdown():
                                    facecolor=NEUTRAL if w == 0 else loss_colour(loss), lw=0))
             ax.text(xx + 0.5, yy + 0.5, f"{acc:.0f}%", ha="center", va="center", fontsize=9,
                     fontweight="normal" if w == 0 else "bold", color=M.INK_1 if w == 0 else ink_on(loss))
+            if w == 1 and ic > tc:   # pages ahead of text: say by how many questions, so it is not read as a gain
+                ax.text(xx + 1 - 2 * G - 0.04, yy + 2 * G + 0.04, f"+{ic - tc} q", ha="right", va="top",
+                        fontsize=6.5, color=M.INK_2)
     n_of = {k: S[next(iter(MODELS))][f"high/{BUDGETS[0][0]}"]["kinds"][k][2] for k, _ in KINDS}
     for xx, (k, name) in zip(xs, KINDS):
         ax.text(xx + 0.5, -0.12, f"{name}\n({n_of[k]})", ha="center", va="bottom", fontsize=8.3, color=M.INK_2,
@@ -286,7 +289,8 @@ def fig_breakdown():
     header(fig, H_in, "Where it breaks: chains and counts fail first, and smaller models fail at lower densities",
            "Accuracy per question type at high effort (questions per type in brackets, pooled over 3 documents). Grey "
            "rows: the model reading text;\nblue rows: the same model reading pages with 2.2x, 2.9x and 4.2x fewer "
-           "tokens, shaded by points lost against its text row.")
+           "tokens, shaded by points lost against its text row.\n'+1 q': pages got 1-2 more questions right than text "
+           "(Opus counts: text answered 11 for 12 once). Within noise: no type is better read from pages.")
     loss_legend(fig, [0.70, 0.10 / H_in, 0.25, 0.16 / H_in])
     save(fig, "claude_qa_breakdown.png")
     plt.close(fig)

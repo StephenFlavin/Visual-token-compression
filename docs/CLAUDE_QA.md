@@ -73,12 +73,16 @@ the exploratory runs that density failed outright ([A5](#a5-earlier-exploratory-
 ![Accuracy per question type, each model at high effort](img/claude_qa_breakdown.png)
 
 *How to read it:* columns are question types, one block of rows per model: the grey row is the model reading text,
-the blue rows the same model reading pages. Shading is points lost against the grey row.
+the blue rows the same model reading pages. Shading is points lost against the grey row. A small "+1 q" marks the
+four cells where pages got 1-2 more questions right than text; that is noise, not a gain (see the counts bullet).
 
 * **Lookups and sums survive the longest.** Opus keeps 98-100% on them even at 4.2x. (Sums and largest-of-three add
   up facts that are also asked as separate questions in the same call, so they partly reuse that work.)
 * **Chains and counts fail first.** At 4.2x, Opus gets 67% of three-hop and 28% of count questions right. Wrong
-  two-hop answers are usually another club's boat count: the facts are read, the link between them is lost.
+  two-hop answers are usually another club's boat count: the facts are read, the link between them is lost. Opus's
+  wrong counts are all too low (10 for 12, 5 for 7): occurrences are missed. Text is not perfect
+  on counts either: Opus and Sonnet each answered 11 for 12 once from text (17 of 18), which is why Opus's 2.2x and
+  2.9x pages, with 18 of 18, appear to beat text by one question.
 * **Sonnet sits between Opus and Haiku:** its first loss is counting (89% at 2.2x, 72% at 2.9x); at 4.2x three-hop is
   at 42%.
 * **Haiku fails the same way with fewer tokens saved:** three-hop falls to 67% already at 2.2x, and at 4.2x even single
