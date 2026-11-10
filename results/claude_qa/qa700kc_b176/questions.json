@@ -1,0 +1,999 @@
+[
+ {
+  "id": "N01",
+  "kind": "needle",
+  "fact": "The parish archive of Brykel holds 516 letters written by Maren Quentor.",
+  "question": "How many letters written by Maren Quentor does the parish archive of Brykel hold?",
+  "answer": "516",
+  "pos": 0.02081867237954183
+ },
+ {
+  "id": "N02",
+  "kind": "needle",
+  "fact": "In the survey of Ellhal, Anselm Morvar recorded 8,955 species of moth.",
+  "question": "How many species of moth did Anselm Morvar record in the survey of Ellhal?",
+  "answer": "8955",
+  "pos": 0.04247275363509057
+ },
+ {
+  "id": "N03",
+  "kind": "needle",
+  "fact": "The bridge at Rudmir was rebuilt by Anselm Brywen using 5,382 tonnes of granite.",
+  "question": "How many tonnes of granite did Anselm Brywen use to rebuild the bridge at Rudmir?",
+  "answer": "5382",
+  "pos": 0.0701743455845809
+ },
+ {
+  "id": "N04",
+  "kind": "needle",
+  "fact": "The parish archive of Kelhal holds 146 letters written by Brita Lunpel.",
+  "question": "How many letters written by Brita Lunpel does the parish archive of Kelhal hold?",
+  "answer": "146",
+  "pos": 0.09660300095859628
+ },
+ {
+  "id": "N05",
+  "kind": "needle",
+  "fact": "In the survey of Lunlen, Fenna Astquen recorded 7,183 species of moth.",
+  "question": "How many species of moth did Fenna Astquen record in the survey of Lunlen?",
+  "answer": "7183",
+  "pos": 0.12739418980206474
+ },
+ {
+  "id": "N06",
+  "kind": "needle",
+  "fact": "The bridge at Morquen was rebuilt by Alma Quenell using 5,361 tonnes of granite.",
+  "question": "How many tonnes of granite did Alma Quenell use to rebuild the bridge at Morquen?",
+  "answer": "5361",
+  "pos": 0.1549740102882727
+ },
+ {
+  "id": "N07",
+  "kind": "needle",
+  "fact": "The parish archive of Gavvel holds 394 letters written by Quilla Morkel.",
+  "question": "How many letters written by Quilla Morkel does the parish archive of Gavvel hold?",
+  "answer": "394",
+  "pos": 0.18561652467075687
+ },
+ {
+  "id": "N08",
+  "kind": "needle",
+  "fact": "In the survey of Varfal, Viggo Vartis recorded 6,384 species of moth.",
+  "question": "How many species of moth did Viggo Vartis record in the survey of Varfal?",
+  "answer": "6384",
+  "pos": 0.1995423658496179
+ },
+ {
+  "id": "N09",
+  "kind": "needle",
+  "fact": "The bridge at Oskast was rebuilt by Sabine Sundwen using 9,772 tonnes of granite.",
+  "question": "How many tonnes of granite did Sabine Sundwen use to rebuild the bridge at Oskast?",
+  "answer": "9772",
+  "pos": 0.2149393762185996
+ },
+ {
+  "id": "N10",
+  "kind": "needle",
+  "fact": "The parish archive of Astfal holds 6,416 letters written by Nora Halrud.",
+  "question": "How many letters written by Nora Halrud does the parish archive of Astfal hold?",
+  "answer": "6416",
+  "pos": 0.23454316585981272
+ },
+ {
+  "id": "N11",
+  "kind": "needle",
+  "fact": "In the survey of Mirast, Kasimir Quenfal recorded 5,723 species of moth.",
+  "question": "How many species of moth did Kasimir Quenfal record in the survey of Mirast?",
+  "answer": "5723",
+  "pos": 0.2550305065834467
+ },
+ {
+  "id": "N12",
+  "kind": "needle",
+  "fact": "The bridge at Bryast was rebuilt by Maren Mirquen using 4,214 tonnes of granite.",
+  "question": "How many tonnes of granite did Maren Mirquen use to rebuild the bridge at Bryast?",
+  "answer": "4214",
+  "pos": 0.2715645225921463
+ },
+ {
+  "id": "N13",
+  "kind": "needle",
+  "fact": "The parish archive of Zarmor holds 5,263 letters written by Matthis Gavmir.",
+  "question": "How many letters written by Matthis Gavmir does the parish archive of Zarmor hold?",
+  "answer": "5263",
+  "pos": 0.29070529748343693
+ },
+ {
+  "id": "N14",
+  "kind": "needle",
+  "fact": "In the survey of Deksund, Maren Rimfal recorded 7,084 species of moth.",
+  "question": "How many species of moth did Maren Rimfal record in the survey of Deksund?",
+  "answer": "7084",
+  "pos": 0.3217017986777885
+ },
+ {
+  "id": "N15",
+  "kind": "needle",
+  "fact": "The bridge at Rimosk was rebuilt by Pavo Dekbry using 3,296 tonnes of granite.",
+  "question": "How many tonnes of granite did Pavo Dekbry use to rebuild the bridge at Rimosk?",
+  "answer": "3296",
+  "pos": 0.34679379985019276
+ },
+ {
+  "id": "N16",
+  "kind": "needle",
+  "fact": "The parish archive of Dramir holds 589 letters written by Zelda Zarsund.",
+  "question": "How many letters written by Zelda Zarsund does the parish archive of Dramir hold?",
+  "answer": "589",
+  "pos": 0.37433680570796657
+ },
+ {
+  "id": "N17",
+  "kind": "needle",
+  "fact": "In the survey of Halvel, Gisli Morast recorded 3,183 species of moth.",
+  "question": "How many species of moth did Gisli Morast record in the survey of Halvel?",
+  "answer": "3183",
+  "pos": 0.39268606608792184
+ },
+ {
+  "id": "N18",
+  "kind": "needle",
+  "fact": "The bridge at Dekbak was rebuilt by Jutta Falrim using 4,479 tonnes of granite.",
+  "question": "How many tonnes of granite did Jutta Falrim use to rebuild the bridge at Dekbak?",
+  "answer": "4479",
+  "pos": 0.414157490148547
+ },
+ {
+  "id": "N19",
+  "kind": "needle",
+  "fact": "The parish archive of Mirdra holds 623 letters written by Fenna Zareby.",
+  "question": "How many letters written by Fenna Zareby does the parish archive of Mirdra hold?",
+  "answer": "623",
+  "pos": 0.4357648451449293
+ },
+ {
+  "id": "N20",
+  "kind": "needle",
+  "fact": "In the survey of Rudell, Matthis Dekvel recorded 998 species of moth.",
+  "question": "How many species of moth did Matthis Dekvel record in the survey of Rudell?",
+  "answer": "998",
+  "pos": 0.46126888696634716
+ },
+ {
+  "id": "N21",
+  "kind": "needle",
+  "fact": "The bridge at Zarkel was rebuilt by Liesl Wendek using 6,624 tonnes of granite.",
+  "question": "How many tonnes of granite did Liesl Wendek use to rebuild the bridge at Zarkel?",
+  "answer": "6624",
+  "pos": 0.48134985082995746
+ },
+ {
+  "id": "N22",
+  "kind": "needle",
+  "fact": "The parish archive of Oskpel holds 3,654 letters written by Bertil Zarell.",
+  "question": "How many letters written by Bertil Zarell does the parish archive of Oskpel hold?",
+  "answer": "3654",
+  "pos": 0.5103626099306044
+ },
+ {
+  "id": "N23",
+  "kind": "needle",
+  "fact": "In the survey of Brywen, Fenna Tortis recorded 9,094 species of moth.",
+  "question": "How many species of moth did Fenna Tortis record in the survey of Brywen?",
+  "answer": "9094",
+  "pos": 0.5331947592960476
+ },
+ {
+  "id": "N24",
+  "kind": "needle",
+  "fact": "The bridge at Gavpel was rebuilt by Henrik Velnor using 4,958 tonnes of granite.",
+  "question": "How many tonnes of granite did Henrik Velnor use to rebuild the bridge at Gavpel?",
+  "answer": "4958",
+  "pos": 0.5649431284788053
+ },
+ {
+  "id": "N25",
+  "kind": "needle",
+  "fact": "The parish archive of Pelwen holds 9,752 letters written by Niels Lenvel.",
+  "question": "How many letters written by Niels Lenvel does the parish archive of Pelwen hold?",
+  "answer": "9752",
+  "pos": 0.5973046028197173
+ },
+ {
+  "id": "N26",
+  "kind": "needle",
+  "fact": "In the survey of Varnor, Ivo Wenpel recorded 7,454 species of moth.",
+  "question": "How many species of moth did Ivo Wenpel record in the survey of Varnor?",
+  "answer": "7454",
+  "pos": 0.6190195698069073
+ },
+ {
+  "id": "N27",
+  "kind": "needle",
+  "fact": "The bridge at Velbry was rebuilt by Joram Velgav using 7,726 tonnes of granite.",
+  "question": "How many tonnes of granite did Joram Velgav use to rebuild the bridge at Velbry?",
+  "answer": "7726",
+  "pos": 0.6423005744497983
+ },
+ {
+  "id": "N28",
+  "kind": "needle",
+  "fact": "The parish archive of Kelosk holds 7,003 letters written by Elof Morvel.",
+  "question": "How many letters written by Elof Morvel does the parish archive of Kelosk hold?",
+  "answer": "7003",
+  "pos": 0.6640169573842357
+ },
+ {
+  "id": "N29",
+  "kind": "needle",
+  "fact": "In the survey of Elltis, Floris Ithith recorded 7,176 species of moth.",
+  "question": "How many species of moth did Floris Ithith record in the survey of Elltis?",
+  "answer": "7176",
+  "pos": 0.6951196546221474
+ },
+ {
+  "id": "N30",
+  "kind": "needle",
+  "fact": "The bridge at Falrud was rebuilt by Jutta Rudith using 262 tonnes of granite.",
+  "question": "How many tonnes of granite did Jutta Rudith use to rebuild the bridge at Falrud?",
+  "answer": "262",
+  "pos": 0.7233777138398931
+ },
+ {
+  "id": "N31",
+  "kind": "needle",
+  "fact": "The parish archive of Morrud holds 9,385 letters written by Ivo Tisquen.",
+  "question": "How many letters written by Ivo Tisquen does the parish archive of Morrud hold?",
+  "answer": "9385",
+  "pos": 0.7298174419213838
+ },
+ {
+  "id": "N32",
+  "kind": "needle",
+  "fact": "In the survey of Bryrud, Odile Rimbak recorded 8,734 species of moth.",
+  "question": "How many species of moth did Odile Rimbak record in the survey of Bryrud?",
+  "answer": "8734",
+  "pos": 0.7374720527412031
+ },
+ {
+  "id": "N33",
+  "kind": "needle",
+  "fact": "The bridge at Dragav was rebuilt by Niels Asthal using 2,369 tonnes of granite.",
+  "question": "How many tonnes of granite did Niels Asthal use to rebuild the bridge at Dragav?",
+  "answer": "2369",
+  "pos": 0.7664706523693753
+ },
+ {
+  "id": "N34",
+  "kind": "needle",
+  "fact": "The parish archive of Bakith holds 2,696 letters written by Nora Zarhal.",
+  "question": "How many letters written by Nora Zarhal does the parish archive of Bakith hold?",
+  "answer": "2696",
+  "pos": 0.7947952611077521
+ },
+ {
+  "id": "N35",
+  "kind": "needle",
+  "fact": "In the survey of Tornor, Floris Vellun recorded 9,132 species of moth.",
+  "question": "How many species of moth did Floris Vellun record in the survey of Tornor?",
+  "answer": "9132",
+  "pos": 0.8304275735903183
+ },
+ {
+  "id": "N36",
+  "kind": "needle",
+  "fact": "The bridge at Halmir was rebuilt by Henrik Fallen using 6,067 tonnes of granite.",
+  "question": "How many tonnes of granite did Henrik Fallen use to rebuild the bridge at Halmir?",
+  "answer": "6067",
+  "pos": 0.8681200893179524
+ },
+ {
+  "id": "N37",
+  "kind": "needle",
+  "fact": "The parish archive of Ithmir holds 274 letters written by Maren Bryvar.",
+  "question": "How many letters written by Maren Bryvar does the parish archive of Ithmir hold?",
+  "answer": "274",
+  "pos": 0.8912071091879401
+ },
+ {
+  "id": "N38",
+  "kind": "needle",
+  "fact": "In the survey of Bakbry, Kasimir Morosk recorded 9,113 species of moth.",
+  "question": "How many species of moth did Kasimir Morosk record in the survey of Bakbry?",
+  "answer": "9113",
+  "pos": 0.9125015398426316
+ },
+ {
+  "id": "N39",
+  "kind": "needle",
+  "fact": "The bridge at Gavquen was rebuilt by Zelda Kellen using 765 tonnes of granite.",
+  "question": "How many tonnes of granite did Zelda Kellen use to rebuild the bridge at Gavquen?",
+  "answer": "765",
+  "pos": 0.9313846123348829
+ },
+ {
+  "id": "N40",
+  "kind": "needle",
+  "fact": "The parish archive of Dravel holds 9,471 letters written by Jutta Torrim.",
+  "question": "How many letters written by Jutta Torrim does the parish archive of Dravel hold?",
+  "answer": "9471",
+  "pos": 0.9552277480350192
+ },
+ {
+  "id": "S01",
+  "kind": "number",
+  "answer": "2000",
+  "anchors": [
+   "He had a guest-starring role on the television series The"
+  ],
+  "question": "Find the sentence that begins \"He had a guest-starring role on the television series The\". What number does that sentence contain?",
+  "pos": 9.203657108550764e-05
+ },
+ {
+  "id": "S02",
+  "kind": "number",
+  "answer": "758",
+  "anchors": [
+   "However, his advice continued to be unappreciated, and in the"
+  ],
+  "question": "Find the sentence that begins \"However, his advice continued to be unappreciated, and in the\". What number does that sentence contain?",
+  "pos": 0.016954552341197977
+ },
+ {
+  "id": "S03",
+  "kind": "number",
+  "answer": "7500",
+  "anchors": [
+   "\"Kiss You\" has received a gold certification from the Recording"
+  ],
+  "question": "Find the sentence that begins \"\"Kiss You\" has received a gold certification from the Recording\". What number does that sentence contain?",
+  "pos": 0.04181575411226479
+ },
+ {
+  "id": "S04",
+  "kind": "number",
+  "answer": "305",
+  "anchors": [
+   "The sides of the conning tower were"
+  ],
+  "question": "Find the sentence that begins \"The sides of the conning tower were\". What number does that sentence contain?",
+  "pos": 0.06362558956503517
+ },
+ {
+  "id": "S05",
+  "kind": "number",
+  "answer": "14",
+  "anchors": [
+   "The sisters were selected for conversion and detached from the"
+  ],
+  "question": "Find the sentence that begins \"The sisters were selected for conversion and detached from the\". What number does that sentence contain?",
+  "pos": 0.07726682534715487
+ },
+ {
+  "id": "S06",
+  "kind": "number",
+  "answer": "31",
+  "anchors": [
+   "The eleventh tropical storm, fifth hurricane, and the third major"
+  ],
+  "question": "Find the sentence that begins \"The eleventh tropical storm, fifth hurricane, and the third major\". What number does that sentence contain?",
+  "pos": 0.09873116967154272
+ },
+ {
+  "id": "S07",
+  "kind": "number",
+  "answer": "300",
+  "anchors": [
+   "Combined fire from all weapons inflicted an estimated"
+  ],
+  "question": "Find the sentence that begins \"Combined fire from all weapons inflicted an estimated\". What number does that sentence contain?",
+  "pos": 0.15600057204268797
+ },
+ {
+  "id": "S08",
+  "kind": "number",
+  "answer": "2015",
+  "anchors": [
+   "Kid Bass (Kurt Blankenship) - bass ("
+  ],
+  "question": "Find the sentence that begins \"Kid Bass (Kurt Blankenship) - bass (\". What number does that sentence contain?",
+  "pos": 0.19909351057217012
+ },
+ {
+  "id": "S09",
+  "kind": "number",
+  "answer": "1876",
+  "anchors": [
+   "The third Royal Navy ship to combine turrets and masts"
+  ],
+  "question": "Find the sentence that begins \"The third Royal Navy ship to combine turrets and masts\". What number does that sentence contain?",
+  "pos": 0.23858286335684278
+ },
+ {
+  "id": "S10",
+  "kind": "number",
+  "answer": "26",
+  "anchors": [
+   "That brings us to the reference to swimming in fire"
+  ],
+  "question": "Find the sentence that begins \"That brings us to the reference to swimming in fire\". What number does that sentence contain?",
+  "pos": 0.2770668935958122
+ },
+ {
+  "id": "S11",
+  "kind": "number",
+  "answer": "1868",
+  "anchors": [
+   "Another group called Microsauria was named by Cope in"
+  ],
+  "question": "Find the sentence that begins \"Another group called Microsauria was named by Cope in\". What number does that sentence contain?",
+  "pos": 0.3170249249193972
+ },
+ {
+  "id": "S12",
+  "kind": "number",
+  "answer": "1154",
+  "anchors": [
+   "Symphorian obtained a hearing on the charges at a royal"
+  ],
+  "question": "Find the sentence that begins \"Symphorian obtained a hearing on the charges at a royal\". What number does that sentence contain?",
+  "pos": 0.3597086546943607
+ },
+ {
+  "id": "S13",
+  "kind": "number",
+  "answer": "11",
+  "anchors": [
+   "Born in Macclesfield, Cheshire, Amos began his career with Crewe"
+  ],
+  "question": "Find the sentence that begins \"Born in Macclesfield, Cheshire, Amos began his career with Crewe\". What number does that sentence contain?",
+  "pos": 0.3826639914703338
+ },
+ {
+  "id": "S14",
+  "kind": "number",
+  "answer": "2008",
+  "anchors": [
+   "He also pitched two innings out of the bullpen for"
+  ],
+  "question": "Find the sentence that begins \"He also pitched two innings out of the bullpen for\". What number does that sentence contain?",
+  "pos": 0.4011236957355917
+ },
+ {
+  "id": "S15",
+  "kind": "number",
+  "answer": "180",
+  "anchors": [
+   "The deal was the richest in MLB history for a"
+  ],
+  "question": "Find the sentence that begins \"The deal was the richest in MLB history for a\". What number does that sentence contain?",
+  "pos": 0.4151118385933414
+ },
+ {
+  "id": "S16",
+  "kind": "number",
+  "answer": "22800",
+  "anchors": [
+   "One of her paintings sold at a charity auction for"
+  ],
+  "question": "Find the sentence that begins \"One of her paintings sold at a charity auction for\". What number does that sentence contain?",
+  "pos": 0.4340529649227388
+ },
+ {
+  "id": "S17",
+  "kind": "number",
+  "answer": "1953",
+  "anchors": [
+   "When pressed again by Brausen in"
+  ],
+  "question": "Find the sentence that begins \"When pressed again by Brausen in\". What number does that sentence contain?",
+  "pos": 0.44873209003725356
+ },
+ {
+  "id": "S18",
+  "kind": "number",
+  "answer": "1911",
+  "anchors": [
+   "When Harriet Monroe started her Poetry magazine in"
+  ],
+  "question": "Find the sentence that begins \"When Harriet Monroe started her Poetry magazine in\". What number does that sentence contain?",
+  "pos": 0.4701652835221971
+ },
+ {
+  "id": "S19",
+  "kind": "number",
+  "answer": "1969",
+  "anchors": [
+   "On their arrival in Mogadishu, the crew of the helicopters"
+  ],
+  "question": "Find the sentence that begins \"On their arrival in Mogadishu, the crew of the helicopters\". What number does that sentence contain?",
+  "pos": 0.5002371711639512
+ },
+ {
+  "id": "S20",
+  "kind": "number",
+  "answer": "25",
+  "anchors": [
+   "In Canada and Spain, the compact-disc version of the album"
+  ],
+  "question": "Find the sentence that begins \"In Canada and Spain, the compact-disc version of the album\". What number does that sentence contain?",
+  "pos": 0.5303699445373463
+ },
+ {
+  "id": "S21",
+  "kind": "number",
+  "answer": "90000",
+  "anchors": [
+   "It was also certified gold and platinum by the Mexican"
+  ],
+  "question": "Find the sentence that begins \"It was also certified gold and platinum by the Mexican\". What number does that sentence contain?",
+  "pos": 0.5368096726188369
+ },
+ {
+  "id": "S22",
+  "kind": "number",
+  "answer": "66",
+  "anchors": [
+   "Though the number of tropical storms was below average, the"
+  ],
+  "question": "Find the sentence that begins \"Though the number of tropical storms was below average, the\". What number does that sentence contain?",
+  "pos": 0.5472310443602113
+ },
+ {
+  "id": "S23",
+  "kind": "number",
+  "answer": "41",
+  "anchors": [
+   "The erratic and slow movement of Linfa off the western"
+  ],
+  "question": "Find the sentence that begins \"The erratic and slow movement of Linfa off the western\". What number does that sentence contain?",
+  "pos": 0.562465220795734
+ },
+ {
+  "id": "S24",
+  "kind": "number",
+  "answer": "15",
+  "anchors": [
+   "Koni originated from a tropical depression situated within the monsoon"
+  ],
+  "question": "Find the sentence that begins \"Koni originated from a tropical depression situated within the monsoon\". What number does that sentence contain?",
+  "pos": 0.5712964837782004
+ },
+ {
+  "id": "S25",
+  "kind": "number",
+  "answer": "24",
+  "anchors": [
+   "Towards the end of September, the monsoon trough spawned a"
+  ],
+  "question": "Find the sentence that begins \"Towards the end of September, the monsoon trough spawned a\". What number does that sentence contain?",
+  "pos": 0.5893483952361871
+ },
+ {
+  "id": "S26",
+  "kind": "number",
+  "answer": "13",
+  "anchors": [
+   "According to the PAGASA in its post-storm report, a total"
+  ],
+  "question": "Find the sentence that begins \"According to the PAGASA in its post-storm report, a total\". What number does that sentence contain?",
+  "pos": 0.5993138319638763
+ },
+ {
+  "id": "S27",
+  "kind": "number",
+  "answer": "24",
+  "anchors": [
+   "The system moved eastward and crossed Palawan before dissipating on"
+  ],
+  "question": "Find the sentence that begins \"The system moved eastward and crossed Palawan before dissipating on\". What number does that sentence contain?",
+  "pos": 0.6067022447011714
+ },
+ {
+  "id": "S28",
+  "kind": "number",
+  "answer": "1801",
+  "anchors": [
+   "After hostilities of the War of the Second Coalition ended"
+  ],
+  "question": "Find the sentence that begins \"After hostilities of the War of the Second Coalition ended\". What number does that sentence contain?",
+  "pos": 0.6277913630049798
+ },
+ {
+  "id": "S29",
+  "kind": "number",
+  "answer": "1806",
+  "anchors": [
+   "Prussian worries about growing French influence in Central Europe sparked"
+  ],
+  "question": "Find the sentence that begins \"Prussian worries about growing French influence in Central Europe sparked\". What number does that sentence contain?",
+  "pos": 0.6605209836302339
+ },
+ {
+  "id": "S30",
+  "kind": "number",
+  "answer": "2007",
+  "anchors": [
+   "Lesnar continued to possess the physical IWGP Championship belt until"
+  ],
+  "question": "Find the sentence that begins \"Lesnar continued to possess the physical IWGP Championship belt until\". What number does that sentence contain?",
+  "pos": 0.6924675854276373
+ },
+ {
+  "id": "S31",
+  "kind": "number",
+  "answer": "16",
+  "anchors": [
+   "After further diagnosis, Lesnar underwent surgery on November"
+  ],
+  "question": "Find the sentence that begins \"After further diagnosis, Lesnar underwent surgery on November\". What number does that sentence contain?",
+  "pos": 0.717747907583955
+ },
+ {
+  "id": "S32",
+  "kind": "number",
+  "answer": "1967",
+  "anchors": [
+   "The events of The Web of Fear are alluded to"
+  ],
+  "question": "Find the sentence that begins \"The events of The Web of Fear are alluded to\". What number does that sentence contain?",
+  "pos": 0.7519076349291531
+ },
+ {
+  "id": "S33",
+  "kind": "number",
+  "answer": "20",
+  "anchors": [
+   "By the outbreak of war in the Pacific, No."
+  ],
+  "question": "Find the sentence that begins \"By the outbreak of war in the Pacific, No.\". What number does that sentence contain?",
+  "pos": 0.7712282351208724
+ },
+ {
+  "id": "S34",
+  "kind": "number",
+  "answer": "1941",
+  "anchors": [
+   "A report on the tank written in January"
+  ],
+  "question": "Find the sentence that begins \"A report on the tank written in January\". What number does that sentence contain?",
+  "pos": 0.7945276470779805
+ },
+ {
+  "id": "S35",
+  "kind": "number",
+  "answer": "16",
+  "anchors": [
+   "Buchanan summed up the game as being a \"good platformer"
+  ],
+  "question": "Find the sentence that begins \"Buchanan summed up the game as being a \"good platformer\". What number does that sentence contain?",
+  "pos": 0.8279779848521963
+ },
+ {
+  "id": "S36",
+  "kind": "number",
+  "answer": "1939",
+  "anchors": [
+   "After its discovery it remained half-buried until it was excavated"
+  ],
+  "question": "Find the sentence that begins \"After its discovery it remained half-buried until it was excavated\". What number does that sentence contain?",
+  "pos": 0.8745314984544936
+ },
+ {
+  "id": "S37",
+  "kind": "number",
+  "answer": "19",
+  "anchors": [
+   "Butler was nationally ranked for a school and league record"
+  ],
+  "question": "Find the sentence that begins \"Butler was nationally ranked for a school and league record\". What number does that sentence contain?",
+  "pos": 0.9005934234914144
+ },
+ {
+  "id": "S38",
+  "kind": "number",
+  "answer": "2004",
+  "anchors": [
+   "Brad says that the cause really hit home for them"
+  ],
+  "question": "Find the sentence that begins \"Brad says that the cause really hit home for them\". What number does that sentence contain?",
+  "pos": 0.9297661846310253
+ },
+ {
+  "id": "S39",
+  "kind": "number",
+  "answer": "1997",
+  "anchors": [
+   "After several years as a television screenwriter, Ball revived the"
+  ],
+  "question": "Find the sentence that begins \"After several years as a television screenwriter, Ball revived the\". What number does that sentence contain?",
+  "pos": 0.9443334499129901
+ },
+ {
+  "id": "S40",
+  "kind": "number",
+  "answer": "405",
+  "anchors": [
+   "The inside of the Burnhams' home was shot at a"
+  ],
+  "question": "Find the sentence that begins \"The inside of the Burnhams' home was shot at a\". What number does that sentence contain?",
+  "pos": 0.9955043674892848
+ },
+ {
+  "id": "C01",
+  "kind": "complex",
+  "sub": "two_hop",
+  "answer": "243",
+  "anchors": [
+   "The bridge at Dekbak was rebuilt by Jutta Falrim using 4,479 tonnes of granite.",
+   "Jutta Falrim chairs the Mirpel Rowing Club.",
+   "The Mirpel Rowing Club owns 243 boats."
+  ],
+  "question": "How many boats does the rowing club chaired by the person who rebuilt the bridge at Dekbak own?",
+  "pos": 0.9386611652396278
+ },
+ {
+  "id": "C02",
+  "kind": "complex",
+  "sub": "two_hop",
+  "answer": "16",
+  "anchors": [
+   "The bridge at Velbry was rebuilt by Joram Velgav using 7,726 tonnes of granite.",
+   "Joram Velgav chairs the Tisdra Rowing Club.",
+   "The Tisdra Rowing Club owns 16 boats."
+  ],
+  "question": "How many boats does the rowing club chaired by the person who rebuilt the bridge at Velbry own?",
+  "pos": 0.9358759970038556
+ },
+ {
+  "id": "C03",
+  "kind": "complex",
+  "sub": "two_hop",
+  "answer": "189",
+  "anchors": [
+   "The bridge at Gavpel was rebuilt by Henrik Velnor using 4,958 tonnes of granite.",
+   "Henrik Velnor chairs the Dekmir Rowing Club.",
+   "The Dekmir Rowing Club owns 189 boats."
+  ],
+  "question": "How many boats does the rowing club chaired by the person who rebuilt the bridge at Gavpel own?",
+  "pos": 0.5649431284788053
+ },
+ {
+  "id": "C04",
+  "kind": "complex",
+  "sub": "two_hop",
+  "answer": "297",
+  "anchors": [
+   "The bridge at Falrud was rebuilt by Jutta Rudith using 262 tonnes of granite.",
+   "Jutta Rudith chairs the Baksund Rowing Club.",
+   "The Baksund Rowing Club owns 297 boats."
+  ],
+  "question": "How many boats does the rowing club chaired by the person who rebuilt the bridge at Falrud own?",
+  "pos": 0.7233777138398931
+ },
+ {
+  "id": "C05",
+  "kind": "complex",
+  "sub": "two_hop",
+  "answer": "297",
+  "anchors": [
+   "The bridge at Zarkel was rebuilt by Liesl Wendek using 6,624 tonnes of granite.",
+   "Liesl Wendek chairs the Dekrim Rowing Club.",
+   "The Dekrim Rowing Club owns 297 boats."
+  ],
+  "question": "How many boats does the rowing club chaired by the person who rebuilt the bridge at Zarkel own?",
+  "pos": 0.6241283074757766
+ },
+ {
+  "id": "C06",
+  "kind": "complex",
+  "sub": "two_hop",
+  "answer": "203",
+  "anchors": [
+   "The bridge at Oskast was rebuilt by Sabine Sundwen using 9,772 tonnes of granite.",
+   "Sabine Sundwen chairs the Dekhal Rowing Club.",
+   "The Dekhal Rowing Club owns 203 boats."
+  ],
+  "question": "How many boats does the rowing club chaired by the person who rebuilt the bridge at Oskast own?",
+  "pos": 0.3591068771141862
+ },
+ {
+  "id": "C07",
+  "kind": "complex",
+  "sub": "two_hop",
+  "answer": "50",
+  "anchors": [
+   "The bridge at Bryast was rebuilt by Maren Mirquen using 4,214 tonnes of granite.",
+   "Maren Mirquen chairs the Deknor Rowing Club.",
+   "The Deknor Rowing Club owns 50 boats."
+  ],
+  "question": "How many boats does the rowing club chaired by the person who rebuilt the bridge at Bryast own?",
+  "pos": 0.922346621054286
+ },
+ {
+  "id": "C08",
+  "kind": "complex",
+  "sub": "two_hop",
+  "answer": "337",
+  "anchors": [
+   "The bridge at Gavquen was rebuilt by Zelda Kellen using 765 tonnes of granite.",
+   "Zelda Kellen chairs the Ellfal Rowing Club.",
+   "The Ellfal Rowing Club owns 337 boats."
+  ],
+  "question": "How many boats does the rowing club chaired by the person who rebuilt the bridge at Gavquen own?",
+  "pos": 0.9313846123348829
+ },
+ {
+  "id": "C09",
+  "kind": "complex",
+  "sub": "sum",
+  "answer": "7438",
+  "anchors": [
+   "The bridge at Falrud was rebuilt by Jutta Rudith using 262 tonnes of granite.",
+   "In the survey of Elltis, Floris Ithith recorded 7,176 species of moth."
+  ],
+  "question": "What is the number of tonnes of granite Jutta Rudith used to rebuild the bridge at Falrud plus the number of moth species Floris Ithith recorded in the survey of Elltis? Give the sum.",
+  "pos": 0.7233777138398931
+ },
+ {
+  "id": "C10",
+  "kind": "complex",
+  "sub": "sum",
+  "answer": "7149",
+  "anchors": [
+   "In the survey of Varfal, Viggo Vartis recorded 6,384 species of moth.",
+   "The bridge at Gavquen was rebuilt by Zelda Kellen using 765 tonnes of granite."
+  ],
+  "question": "What is the number of moth species Viggo Vartis recorded in the survey of Varfal plus the number of tonnes of granite Zelda Kellen used to rebuild the bridge at Gavquen? Give the sum.",
+  "pos": 0.9313846123348829
+ },
+ {
+  "id": "C11",
+  "kind": "complex",
+  "sub": "sum",
+  "answer": "15737",
+  "anchors": [
+   "In the survey of Bryrud, Odile Rimbak recorded 8,734 species of moth.",
+   "The parish archive of Kelosk holds 7,003 letters written by Elof Morvel."
+  ],
+  "question": "What is the number of moth species Odile Rimbak recorded in the survey of Bryrud plus the number of letters written by Elof Morvel that the parish archive of Kelosk holds? Give the sum.",
+  "pos": 0.7374720527412031
+ },
+ {
+  "id": "C12",
+  "kind": "complex",
+  "sub": "sum",
+  "answer": "12609",
+  "anchors": [
+   "In the survey of Ellhal, Anselm Morvar recorded 8,955 species of moth.",
+   "The parish archive of Oskpel holds 3,654 letters written by Bertil Zarell."
+  ],
+  "question": "What is the number of moth species Anselm Morvar recorded in the survey of Ellhal plus the number of letters written by Bertil Zarell that the parish archive of Oskpel holds? Give the sum.",
+  "pos": 0.5103626099306044
+ },
+ {
+  "id": "C13",
+  "kind": "complex",
+  "sub": "sum",
+  "answer": "3928",
+  "anchors": [
+   "The parish archive of Ithmir holds 274 letters written by Maren Bryvar.",
+   "The parish archive of Oskpel holds 3,654 letters written by Bertil Zarell."
+  ],
+  "question": "What is the number of letters written by Maren Bryvar that the parish archive of Ithmir holds plus the number of letters written by Bertil Zarell that the parish archive of Oskpel holds? Give the sum.",
+  "pos": 0.8912071091879401
+ },
+ {
+  "id": "C14",
+  "kind": "complex",
+  "sub": "sum",
+  "answer": "10366",
+  "anchors": [
+   "In the survey of Halvel, Gisli Morast recorded 3,183 species of moth.",
+   "In the survey of Lunlen, Fenna Astquen recorded 7,183 species of moth."
+  ],
+  "question": "What is the number of moth species Gisli Morast recorded in the survey of Halvel plus the number of moth species Fenna Astquen recorded in the survey of Lunlen? Give the sum.",
+  "pos": 0.39268606608792184
+ },
+ {
+  "id": "C15",
+  "kind": "complex",
+  "sub": "max",
+  "answer": "3654",
+  "anchors": [
+   "The parish archive of Bakith holds 2,696 letters written by Nora Zarhal.",
+   "The parish archive of Oskpel holds 3,654 letters written by Bertil Zarell.",
+   "The parish archive of Dramir holds 589 letters written by Zelda Zarsund."
+  ],
+  "question": "Which of these three numbers is the largest: the number of letters written by Nora Zarhal that the parish archive of Bakith holds; the number of letters written by Bertil Zarell that the parish archive of Oskpel holds; the number of letters written by Zelda Zarsund that the parish archive of Dramir holds? Answer with that number.",
+  "pos": 0.7947952611077521
+ },
+ {
+  "id": "C16",
+  "kind": "complex",
+  "sub": "max",
+  "answer": "9132",
+  "anchors": [
+   "In the survey of Ellhal, Anselm Morvar recorded 8,955 species of moth.",
+   "In the survey of Varfal, Viggo Vartis recorded 6,384 species of moth.",
+   "In the survey of Tornor, Floris Vellun recorded 9,132 species of moth."
+  ],
+  "question": "Which of these three numbers is the largest: the number of moth species Anselm Morvar recorded in the survey of Ellhal; the number of moth species Viggo Vartis recorded in the survey of Varfal; the number of moth species Floris Vellun recorded in the survey of Tornor? Answer with that number.",
+  "pos": 0.8304275735903183
+ },
+ {
+  "id": "C17",
+  "kind": "complex",
+  "sub": "max",
+  "answer": "5361",
+  "anchors": [
+   "The bridge at Rimosk was rebuilt by Pavo Dekbry using 3,296 tonnes of granite.",
+   "The bridge at Morquen was rebuilt by Alma Quenell using 5,361 tonnes of granite.",
+   "The bridge at Dekbak was rebuilt by Jutta Falrim using 4,479 tonnes of granite."
+  ],
+  "question": "Which of these three numbers is the largest: the number of tonnes of granite Pavo Dekbry used to rebuild the bridge at Rimosk; the number of tonnes of granite Alma Quenell used to rebuild the bridge at Morquen; the number of tonnes of granite Jutta Falrim used to rebuild the bridge at Dekbak? Answer with that number.",
+  "pos": 0.414157490148547
+ },
+ {
+  "id": "C18",
+  "kind": "complex",
+  "sub": "count",
+  "answer": "11",
+  "anchors": [
+   "Nora Quenmor keeps the lighthouse at Morosk.",
+   "Cosmo Sundbak keeps the lighthouse at Weneby.",
+   "Anselm Vareby keeps the lighthouse at Tisith.",
+   "Cora Astkel keeps the lighthouse at Velosk.",
+   "Cosmo Wenwen keeps the lighthouse at Gavmor.",
+   "Sabine Ebyosk keeps the lighthouse at Pelnor.",
+   "Gisli Sundosk keeps the lighthouse at Peltor.",
+   "Floris Norrud keeps the lighthouse at Zarfal.",
+   "Alma Morith keeps the lighthouse at Oskfal.",
+   "Dagny Dekwen keeps the lighthouse at Brygav.",
+   "Sabine Lundek keeps the lighthouse at Lenvel."
+  ],
+  "question": "How many different lighthouses does the document say someone keeps?",
+  "pos": 0.7708459293640556
+ },
+ {
+  "id": "C19",
+  "kind": "complex",
+  "sub": "count",
+  "answer": "9",
+  "anchors": [
+   "Wenna Oskosk restored the windmill at Falith.",
+   "Gisli Kelwen restored the windmill at Sundosk.",
+   "Jutta Kelith restored the windmill at Wenlen.",
+   "Sabine Gavell restored the windmill at Pelast.",
+   "Joram Tistis restored the windmill at Dekzar.",
+   "Anselm Gavzar restored the windmill at Brydek.",
+   "Liesl Oskfal restored the windmill at Mirlen.",
+   "Yorick Zarkel restored the windmill at Gavgav.",
+   "Wenna Ellpel restored the windmill at Quenvar."
+  ],
+  "question": "How many different windmills does the document say someone restored?",
+  "pos": 0.8950613175955516
+ },
+ {
+  "id": "C20",
+  "kind": "complex",
+  "sub": "count",
+  "answer": "12",
+  "anchors": [
+   "Matthis Bakrud built the observatory at Ebylen.",
+   "Alma Bakvar built the observatory at Astnor.",
+   "Fenna Gavast built the observatory at Falpel.",
+   "Viggo Astell built the observatory at Bakoth.",
+   "Quilla Halquen built the observatory at Mirmor.",
+   "Viggo Velhal built the observatory at Haltis.",
+   "Cora Deklen built the observatory at Lunmir.",
+   "Viggo Ebyrim built the observatory at Norhal.",
+   "Katja Wenosk built the observatory at Pellun.",
+   "Zelda Bryosk built the observatory at Othrim.",
+   "Floris Dratis built the observatory at Kelwen.",
+   "Pavo Tisell built the observatory at Othrud."
+  ],
+  "question": "How many different observatories does the document say someone built?",
+  "pos": 0.9416261587758287
+ }
+]

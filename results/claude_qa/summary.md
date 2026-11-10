@@ -73,3 +73,22 @@ mentions (5-12 facts each). Pages: 1932 x 1932 px (high-resolution tier, 4,764 t
   limit: 7 noise pages of 26 MB (33k tokens) arrived whole, and 122 / 38 pages at ~175k image tokens arrived whole.
   Something between the CLI and the model drops the earliest images once a request carries somewhere between ~176k
   and ~342k image tokens; it is not in the vision docs (600 images, 128 MB per request). The script now flags it.
+
+## 700k chars (245k tokens), 100 questions incl. 20 complex, 1932-px pages (2026-11-10)
+
+`--chars 700000 --page-px 1932 --n-complex 20`; sized so the least dense rendering (~159k image tokens) stays under the
+page-dropping cap. Every image arm arrived complete (input tokens >= the image-token formula). Rows: `qa700kc_b176`,
+`qa700kc_b118`, `qa700kc_b59`.
+
+| Arm | px²/char | pages | input tokens | fewer than text | invented facts (40) | numbers (40) | complex (20): two-hop / sum / max / count | text-only / image-only correct (p) |
+|---|---|---|---|---|---|---|---|---|
+| text | - | - | 245,285 | 1x | 100% | 100% | 100%: 8/8, 6/6, 3/3, 3/3 | |
+| image | 176.4 | 35 | 164,070 | 1.5x | 100% | 100% | 100%: 8/8, 6/6, 3/3, 3/3 | 0 / 0 (1) |
+| image | 117.6 | 23 | 111,040 | **2.2x** | **100%** | **100%** | **100%: 8/8, 6/6, 3/3, 3/3** | 0 / 0 (1) |
+| image | 58.8 | 12 | 57,947 | 4.2x | 97% | 97% | 70%: 6/8, 5/6, 3/3, 0/3 | 8 / 0 (0.008) |
+| no document | - | - | 4,797 | - | 0% | 7% | 0% | |
+
+* **2.2x is lossless here on all 100 questions, multi-step included**; 1.5x too. At 4.2x lookups stay at 97% but
+  multi-step questions drop (two-hop 6/8, counts 0/3).
+* Text gets the counts right at this length (3/3) but not at 800k tokens (0/3).
+* Ceiling: text scores 100%, so a loss smaller than 1 question in 100 at 2.2x would not show.
