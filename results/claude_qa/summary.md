@@ -209,3 +209,30 @@ low (worst case 2.2 points); (2) loss on multi-step at ~4x, low effort: PASS (+4
 narrows the gap. The no-document arm at high effort on document 3 timed out once (30 min) and its retry spent 129,627
 output tokens ($1.58) before answering; the timed-out attempt's spend is not logged. Sonnet 2.2x pages: $0.37 per call
 vs $0.67 for text (list price, as if uncached).
+
+## Deep-research variant: pre-registered (2026-11-10, written and committed before any call)
+
+Question (user): can a research orchestrator keep its sources as page images, with short text notes, instead of as
+full text? Script `experiments/claude_qa_research.py` (design in its docstring); rows in `results/claude_qa/research/`.
+
+* **Corpora:** 3, made of consecutive real Wikipedia articles (WikiText-103 test + validation, articles > 2,000
+  chars), 34-50 sources each (36, 50, 34; 686k-829k chars), each with a visible header `[Source k: Title]`, invented facts planted inside them.
+* **Questions:** 120 per corpus, exact numbers. Lookups (60): 30 invented facts, 30 numbers in real sentences.
+  Synthesis (60): 12 each of citation (which source contains a sentence; answer = source number), conflict (two
+  sources disagree on a reservoir's capacity; answer = the difference), chain (needle person -> rowing club in another
+  source -> boats in a third), source count (how many sources mention an institute, 3-9), total (sum of a trust's
+  grants over 2-4 sources).
+* **Arms**, Opus 5.5 at high effort, one call per arm and corpus: `text`; `pages` (2.2x: 117.6 px²/char, 1932-px
+  pages); `notes` (per-source notes only); `notes_pages` (notes as text + the 2.2x pages); `none`. Notes: one call per
+  source, Opus 5.5 at low effort, the source as text, at most 250 words, never seeing a question.
+* **Analysis:** each arm paired with `text` question by question, pooled over the 3 corpora (360 pairs); Newcombe
+  95% interval for arm - text; exact McNemar; lossless = lower bound above -2 points. Arms that lose pages or fail the
+  engagement check are excluded and reported.
+
+Predictions:
+1. **notes_pages vs text, all questions: lossless** (primary).
+2. **pages vs text: lossless on lookups**; on synthesis, within 3 points (point estimate).
+3. **notes vs text: a loss of at least 10 points** (250-word notes cannot hold every detail of ~16k-char sources).
+4. **notes_pages - notes >= 10 points** (the pages recover what the notes drop).
+5. Reported without a threshold: tokens and list-price cost per corpus (notes calls included), latency, and accuracy
+   per question type.

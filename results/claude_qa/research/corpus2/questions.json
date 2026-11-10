@@ -1,0 +1,1808 @@
+[
+ {
+  "id": "N01",
+  "kind": "needle",
+  "answer": "8885",
+  "anchors": [
+   "The parish archive of Quenosk holds 8,885 letters written by Odile Tortis."
+  ],
+  "srcs": [
+   26
+  ],
+  "question": "How many letters written by Odile Tortis does the parish archive of Quenosk hold?",
+  "pos": 0.7921776154475613
+ },
+ {
+  "id": "N02",
+  "kind": "needle",
+  "answer": "5224",
+  "anchors": [
+   "In the survey of Morrim, Quilla Zarkel recorded 5,224 species of moth."
+  ],
+  "srcs": [
+   4
+  ],
+  "question": "How many species of moth did Quilla Zarkel record in the survey of Morrim?",
+  "pos": 0.11413989214829683
+ },
+ {
+  "id": "N03",
+  "kind": "needle",
+  "answer": "8682",
+  "anchors": [
+   "The bridge at Zarith was rebuilt by Viggo Varvar using 8,682 tonnes of granite."
+  ],
+  "srcs": [
+   21
+  ],
+  "question": "How many tonnes of granite did Viggo Varvar use to rebuild the bridge at Zarith?",
+  "pos": 0.6753786259920562
+ },
+ {
+  "id": "N04",
+  "kind": "needle",
+  "answer": "5010",
+  "anchors": [
+   "The parish archive of Rudmir holds 5,010 letters written by Katja Torwen."
+  ],
+  "srcs": [
+   20
+  ],
+  "question": "How many letters written by Katja Torwen does the parish archive of Rudmir hold?",
+  "pos": 0.5364200060971074
+ },
+ {
+  "id": "N05",
+  "kind": "needle",
+  "answer": "7053",
+  "anchors": [
+   "In the survey of Falbry, Henrik Rimlun recorded 7,053 species of moth."
+  ],
+  "srcs": [
+   27
+  ],
+  "question": "How many species of moth did Henrik Rimlun record in the survey of Falbry?",
+  "pos": 0.8045964604687188
+ },
+ {
+  "id": "N06",
+  "kind": "needle",
+  "answer": "6710",
+  "anchors": [
+   "The bridge at Halnor was rebuilt by Tobin Nornor using 6,710 tonnes of granite."
+  ],
+  "srcs": [
+   27
+  ],
+  "question": "How many tonnes of granite did Tobin Nornor use to rebuild the bridge at Halnor?",
+  "pos": 0.8005881228931796
+ },
+ {
+  "id": "N07",
+  "kind": "needle",
+  "answer": "8043",
+  "anchors": [
+   "The parish archive of Velvel holds 8,043 letters written by Katja Sundoth."
+  ],
+  "srcs": [
+   21
+  ],
+  "question": "How many letters written by Katja Sundoth does the parish archive of Velvel hold?",
+  "pos": 0.7218595885765297
+ },
+ {
+  "id": "N08",
+  "kind": "needle",
+  "answer": "4077",
+  "anchors": [
+   "In the survey of Lunosk, Henrik Tordek recorded 4,077 species of moth."
+  ],
+  "srcs": [
+   12
+  ],
+  "question": "How many species of moth did Henrik Tordek record in the survey of Lunosk?",
+  "pos": 0.30588662589286886
+ },
+ {
+  "id": "N09",
+  "kind": "needle",
+  "answer": "3143",
+  "anchors": [
+   "The bridge at Ebysund was rebuilt by Joram Sundquen using 3,143 tonnes of granite."
+  ],
+  "srcs": [
+   25
+  ],
+  "question": "How many tonnes of granite did Joram Sundquen use to rebuild the bridge at Ebysund?",
+  "pos": 0.759492452277007
+ },
+ {
+  "id": "N10",
+  "kind": "needle",
+  "answer": "147",
+  "anchors": [
+   "The parish archive of Astfal holds 147 letters written by Kasimir Ebybak."
+  ],
+  "srcs": [
+   2
+  ],
+  "question": "How many letters written by Kasimir Ebybak does the parish archive of Astfal hold?",
+  "pos": 0.027305705754765007
+ },
+ {
+  "id": "N11",
+  "kind": "needle",
+  "answer": "2997",
+  "anchors": [
+   "In the survey of Bakrud, Odile Oskwen recorded 2,997 species of moth."
+  ],
+  "srcs": [
+   9
+  ],
+  "question": "How many species of moth did Odile Oskwen record in the survey of Bakrud?",
+  "pos": 0.24460777950059148
+ },
+ {
+  "id": "N12",
+  "kind": "needle",
+  "answer": "5259",
+  "anchors": [
+   "The bridge at Bakoth was rebuilt by Joram Ebybak using 5,259 tonnes of granite."
+  ],
+  "srcs": [
+   27
+  ],
+  "question": "How many tonnes of granite did Joram Ebybak use to rebuild the bridge at Bakoth?",
+  "pos": 0.820231602561952
+ },
+ {
+  "id": "N13",
+  "kind": "needle",
+  "answer": "3207",
+  "anchors": [
+   "The parish archive of Velwen holds 3,207 letters written by Lorcan Falrim."
+  ],
+  "srcs": [
+   10
+  ],
+  "question": "How many letters written by Lorcan Falrim does the parish archive of Velwen hold?",
+  "pos": 0.26998662428836695
+ },
+ {
+  "id": "N14",
+  "kind": "needle",
+  "answer": "2765",
+  "anchors": [
+   "In the survey of Bryquen, Elof Norast recorded 2,765 species of moth."
+  ],
+  "srcs": [
+   26
+  ],
+  "question": "How many species of moth did Elof Norast record in the survey of Bryquen?",
+  "pos": 0.7960590515059709
+ },
+ {
+  "id": "N15",
+  "kind": "needle",
+  "answer": "2108",
+  "anchors": [
+   "The bridge at Rimgav was rebuilt by Fenna Ithtor using 2,108 tonnes of granite."
+  ],
+  "srcs": [
+   2
+  ],
+  "question": "How many tonnes of granite did Fenna Ithtor use to rebuild the bridge at Rimgav?",
+  "pos": 0.04240115174066581
+ },
+ {
+  "id": "N16",
+  "kind": "needle",
+  "answer": "9393",
+  "anchors": [
+   "The parish archive of Rudsund holds 9,393 letters written by Dagny Lunoth."
+  ],
+  "srcs": [
+   9
+  ],
+  "question": "How many letters written by Dagny Lunoth does the parish archive of Rudsund hold?",
+  "pos": 0.2602808461851508
+ },
+ {
+  "id": "N17",
+  "kind": "needle",
+  "answer": "9002",
+  "anchors": [
+   "In the survey of Ithrim, Joram Norlen recorded 9,002 species of moth."
+  ],
+  "srcs": [
+   24
+  ],
+  "question": "How many species of moth did Joram Norlen record in the survey of Ithrim?",
+  "pos": 0.7585997657427167
+ },
+ {
+  "id": "N18",
+  "kind": "needle",
+  "answer": "4146",
+  "anchors": [
+   "The bridge at Velfal was rebuilt by Anselm Lunhal using 4,146 tonnes of granite."
+  ],
+  "srcs": [
+   16
+  ],
+  "question": "How many tonnes of granite did Anselm Lunhal use to rebuild the bridge at Velfal?",
+  "pos": 0.4428731670388625
+ },
+ {
+  "id": "N19",
+  "kind": "needle",
+  "answer": "5768",
+  "anchors": [
+   "The parish archive of Dekvel holds 5,768 letters written by Alma Ellosk."
+  ],
+  "srcs": [
+   14
+  ],
+  "question": "How many letters written by Alma Ellosk does the parish archive of Dekvel hold?",
+  "pos": 0.3668474891732585
+ },
+ {
+  "id": "N20",
+  "kind": "needle",
+  "answer": "2871",
+  "anchors": [
+   "In the survey of Othkel, Quilla Wenvar recorded 2,871 species of moth."
+  ],
+  "srcs": [
+   7
+  ],
+  "question": "How many species of moth did Quilla Wenvar record in the survey of Othkel?",
+  "pos": 0.20336041051911471
+ },
+ {
+  "id": "N21",
+  "kind": "needle",
+  "answer": "4143",
+  "anchors": [
+   "The bridge at Kelpel was rebuilt by Alma Tisosk using 4,143 tonnes of granite."
+  ],
+  "srcs": [
+   0
+  ],
+  "question": "How many tonnes of granite did Alma Tisosk use to rebuild the bridge at Kelpel?",
+  "pos": 0.010486149501656284
+ },
+ {
+  "id": "N22",
+  "kind": "needle",
+  "answer": "7579",
+  "anchors": [
+   "The parish archive of Luntor holds 7,579 letters written by Viggo Tishal."
+  ],
+  "srcs": [
+   19
+  ],
+  "question": "How many letters written by Viggo Tishal does the parish archive of Luntor hold?",
+  "pos": 0.5184772984854961
+ },
+ {
+  "id": "N23",
+  "kind": "needle",
+  "answer": "5555",
+  "anchors": [
+   "In the survey of Astrim, Elof Lenbak recorded 5,555 species of moth."
+  ],
+  "srcs": [
+   17
+  ],
+  "question": "How many species of moth did Elof Lenbak record in the survey of Astrim?",
+  "pos": 0.4763095288452983
+ },
+ {
+  "id": "N24",
+  "kind": "needle",
+  "answer": "7076",
+  "anchors": [
+   "The bridge at Dravar was rebuilt by Bertil Falbry using 7,076 tonnes of granite."
+  ],
+  "srcs": [
+   32
+  ],
+  "question": "How many tonnes of granite did Bertil Falbry use to rebuild the bridge at Dravar?",
+  "pos": 0.9612862854467298
+ },
+ {
+  "id": "N25",
+  "kind": "needle",
+  "answer": "8613",
+  "anchors": [
+   "The parish archive of Tortis holds 8,613 letters written by Elof Quenbry."
+  ],
+  "srcs": [
+   21
+  ],
+  "question": "How many letters written by Elof Quenbry does the parish archive of Tortis hold?",
+  "pos": 0.6964355260067885
+ },
+ {
+  "id": "N26",
+  "kind": "needle",
+  "answer": "196",
+  "anchors": [
+   "In the survey of Dekpel, Rasmus Mornor recorded 196 species of moth."
+  ],
+  "srcs": [
+   20
+  ],
+  "question": "How many species of moth did Rasmus Mornor record in the survey of Dekpel?",
+  "pos": 0.6072281353791219
+ },
+ {
+  "id": "N27",
+  "kind": "needle",
+  "answer": "7737",
+  "anchors": [
+   "The bridge at Mormir was rebuilt by Sabine Morrud using 7,737 tonnes of granite."
+  ],
+  "srcs": [
+   24
+  ],
+  "question": "How many tonnes of granite did Sabine Morrud use to rebuild the bridge at Mormir?",
+  "pos": 0.7546453977779107
+ },
+ {
+  "id": "N28",
+  "kind": "needle",
+  "answer": "6881",
+  "anchors": [
+   "The parish archive of Ebyfal holds 6,881 letters written by Osric Sundpel."
+  ],
+  "srcs": [
+   16
+  ],
+  "question": "How many letters written by Osric Sundpel does the parish archive of Ebyfal hold?",
+  "pos": 0.41838700878537743
+ },
+ {
+  "id": "N29",
+  "kind": "needle",
+  "answer": "2560",
+  "anchors": [
+   "In the survey of Ebyhal, Odile Lenlun recorded 2,560 species of moth."
+  ],
+  "srcs": [
+   17
+  ],
+  "question": "How many species of moth did Odile Lenlun record in the survey of Ebyhal?",
+  "pos": 0.47646268584873047
+ },
+ {
+  "id": "N30",
+  "kind": "needle",
+  "answer": "9296",
+  "anchors": [
+   "The bridge at Lenosk was rebuilt by Viggo Norvar using 9,296 tonnes of granite."
+  ],
+  "srcs": [
+   9
+  ],
+  "question": "How many tonnes of granite did Viggo Norvar use to rebuild the bridge at Lenosk?",
+  "pos": 0.2636721798325775
+ },
+ {
+  "id": "C01",
+  "kind": "conflict",
+  "answer": "792",
+  "anchors": [
+   "The Rimbry reservoir holds 7,231 megalitres of water.",
+   "A later survey by Niels Halvel put the capacity of the Rimbry reservoir at 8,023 megalitres."
+  ],
+  "srcs": [
+   27,
+   6
+  ],
+  "question": "The sources give two different capacities for the Rimbry reservoir. What is the difference between them, in megalitres?",
+  "pos": 0.8176162643985816
+ },
+ {
+  "id": "C02",
+  "kind": "conflict",
+  "answer": "261",
+  "anchors": [
+   "The Ithgav reservoir holds 8,968 megalitres of water.",
+   "A later survey by Bertil Othlun put the capacity of the Ithgav reservoir at 9,229 megalitres."
+  ],
+  "srcs": [
+   26,
+   31
+  ],
+  "question": "The sources give two different capacities for the Ithgav reservoir. What is the difference between them, in megalitres?",
+  "pos": 0.9410024636397981
+ },
+ {
+  "id": "C03",
+  "kind": "conflict",
+  "answer": "127",
+  "anchors": [
+   "The Falfal reservoir holds 3,496 megalitres of water.",
+   "A later survey by Ilse Bryfal put the capacity of the Falfal reservoir at 3,623 megalitres."
+  ],
+  "srcs": [
+   28,
+   17
+  ],
+  "question": "The sources give two different capacities for the Falfal reservoir. What is the difference between them, in megalitres?",
+  "pos": 0.8226427313874128
+ },
+ {
+  "id": "C04",
+  "kind": "conflict",
+  "answer": "133",
+  "anchors": [
+   "The Othoth reservoir holds 2,764 megalitres of water.",
+   "A later survey by Fenna Mirdek put the capacity of the Othoth reservoir at 2,631 megalitres."
+  ],
+  "srcs": [
+   25,
+   8
+  ],
+  "question": "The sources give two different capacities for the Othoth reservoir. What is the difference between them, in megalitres?",
+  "pos": 0.789479134910899
+ },
+ {
+  "id": "C05",
+  "kind": "conflict",
+  "answer": "693",
+  "anchors": [
+   "The Drarud reservoir holds 6,469 megalitres of water.",
+   "A later survey by Dagny Halquen put the capacity of the Drarud reservoir at 5,776 megalitres."
+  ],
+  "srcs": [
+   24,
+   0
+  ],
+  "question": "The sources give two different capacities for the Drarud reservoir. What is the difference between them, in megalitres?",
+  "pos": 0.7448535600251469
+ },
+ {
+  "id": "C06",
+  "kind": "conflict",
+  "answer": "572",
+  "anchors": [
+   "The Dekbry reservoir holds 8,872 megalitres of water.",
+   "A later survey by Yorick Pelwen put the capacity of the Dekbry reservoir at 9,444 megalitres."
+  ],
+  "srcs": [
+   16,
+   0
+  ],
+  "question": "The sources give two different capacities for the Dekbry reservoir. What is the difference between them, in megalitres?",
+  "pos": 0.4590159152006138
+ },
+ {
+  "id": "C07",
+  "kind": "conflict",
+  "answer": "452",
+  "anchors": [
+   "The Lenrim reservoir holds 3,488 megalitres of water.",
+   "A later survey by Joram Quengav put the capacity of the Lenrim reservoir at 3,940 megalitres."
+  ],
+  "srcs": [
+   4,
+   11
+  ],
+  "question": "The sources give two different capacities for the Lenrim reservoir. What is the difference between them, in megalitres?",
+  "pos": 0.29804936323152526
+ },
+ {
+  "id": "C08",
+  "kind": "conflict",
+  "answer": "647",
+  "anchors": [
+   "The Rudrim reservoir holds 7,955 megalitres of water.",
+   "A later survey by Cosmo Draell put the capacity of the Rudrim reservoir at 8,602 megalitres."
+  ],
+  "srcs": [
+   7,
+   11
+  ],
+  "question": "The sources give two different capacities for the Rudrim reservoir. What is the difference between them, in megalitres?",
+  "pos": 0.2987159608559872
+ },
+ {
+  "id": "C09",
+  "kind": "conflict",
+  "answer": "549",
+  "anchors": [
+   "The Kelbry reservoir holds 396 megalitres of water.",
+   "A later survey by Tobin Keldra put the capacity of the Kelbry reservoir at -153 megalitres."
+  ],
+  "srcs": [
+   31,
+   14
+  ],
+  "question": "The sources give two different capacities for the Kelbry reservoir. What is the difference between them, in megalitres?",
+  "pos": 0.9500751927954946
+ },
+ {
+  "id": "C10",
+  "kind": "conflict",
+  "answer": "324",
+  "anchors": [
+   "The Dekosk reservoir holds 8,992 megalitres of water.",
+   "A later survey by Greta Morwen put the capacity of the Dekosk reservoir at 8,668 megalitres."
+  ],
+  "srcs": [
+   6,
+   32
+  ],
+  "question": "The sources give two different capacities for the Dekosk reservoir. What is the difference between them, in megalitres?",
+  "pos": 0.9634275662185244
+ },
+ {
+  "id": "C11",
+  "kind": "conflict",
+  "answer": "827",
+  "anchors": [
+   "The Rimlun reservoir holds 7,896 megalitres of water.",
+   "A later survey by Quilla Nortor put the capacity of the Rimlun reservoir at 8,723 megalitres."
+  ],
+  "srcs": [
+   31,
+   5
+  ],
+  "question": "The sources give two different capacities for the Rimlun reservoir. What is the difference between them, in megalitres?",
+  "pos": 0.9194598371284667
+ },
+ {
+  "id": "C12",
+  "kind": "conflict",
+  "answer": "200",
+  "anchors": [
+   "The Vargav reservoir holds 3,769 megalitres of water.",
+   "A later survey by Ulla Asttis put the capacity of the Vargav reservoir at 3,569 megalitres."
+  ],
+  "srcs": [
+   1,
+   19
+  ],
+  "question": "The sources give two different capacities for the Vargav reservoir. What is the difference between them, in megalitres?",
+  "pos": 0.51526829460406
+ },
+ {
+  "id": "H01",
+  "kind": "chain",
+  "answer": "293",
+  "anchors": [
+   "Elof Quenbry chairs the Bryfal Rowing Club.",
+   "The Bryfal Rowing Club owns 293 boats."
+  ],
+  "srcs": [
+   21,
+   5,
+   9
+  ],
+  "question": "How many boats does the rowing club chaired by the person whose letters the parish archive of Tortis holds own?",
+  "pos": 0.24668779747101321
+ },
+ {
+  "id": "H02",
+  "kind": "chain",
+  "answer": "444",
+  "anchors": [
+   "Joram Norlen chairs the Zarmor Rowing Club.",
+   "The Zarmor Rowing Club owns 444 boats."
+  ],
+  "srcs": [
+   24,
+   31,
+   5
+  ],
+  "question": "How many boats does the rowing club chaired by the person who recorded moth species in the survey of Ithrim own?",
+  "pos": 0.9195386035873746
+ },
+ {
+  "id": "H03",
+  "kind": "chain",
+  "answer": "158",
+  "anchors": [
+   "Anselm Lunhal chairs the Torquen Rowing Club.",
+   "The Torquen Rowing Club owns 158 boats."
+  ],
+  "srcs": [
+   16,
+   1,
+   5
+  ],
+  "question": "How many boats does the rowing club chaired by the person who rebuilt the bridge at Velfal own?",
+  "pos": 0.13205926154986136
+ },
+ {
+  "id": "H04",
+  "kind": "chain",
+  "answer": "142",
+  "anchors": [
+   "Viggo Tishal chairs the Tisrud Rowing Club.",
+   "The Tisrud Rowing Club owns 142 boats."
+  ],
+  "srcs": [
+   19,
+   14,
+   32
+  ],
+  "question": "How many boats does the rowing club chaired by the person whose letters the parish archive of Luntor holds own?",
+  "pos": 0.9614744497652322
+ },
+ {
+  "id": "H05",
+  "kind": "chain",
+  "answer": "355",
+  "anchors": [
+   "Elof Norast chairs the Ithosk Rowing Club.",
+   "The Ithosk Rowing Club owns 355 boats."
+  ],
+  "srcs": [
+   26,
+   30,
+   0
+  ],
+  "question": "How many boats does the rowing club chaired by the person who recorded moth species in the survey of Bryquen own?",
+  "pos": 0.888840105547055
+ },
+ {
+  "id": "H06",
+  "kind": "chain",
+  "answer": "210",
+  "anchors": [
+   "Lorcan Falrim chairs the Falell Rowing Club.",
+   "The Falell Rowing Club owns 210 boats."
+  ],
+  "srcs": [
+   10,
+   6,
+   20
+  ],
+  "question": "How many boats does the rowing club chaired by the person whose letters the parish archive of Velwen holds own?",
+  "pos": 0.6656918101845032
+ },
+ {
+  "id": "H07",
+  "kind": "chain",
+  "answer": "181",
+  "anchors": [
+   "Elof Lenbak chairs the Wenquen Rowing Club.",
+   "The Wenquen Rowing Club owns 181 boats."
+  ],
+  "srcs": [
+   17,
+   11,
+   29
+  ],
+  "question": "How many boats does the rowing club chaired by the person who recorded moth species in the survey of Astrim own?",
+  "pos": 0.8771812109905466
+ },
+ {
+  "id": "H08",
+  "kind": "chain",
+  "answer": "334",
+  "anchors": [
+   "Katja Sundoth chairs the Kelsund Rowing Club.",
+   "The Kelsund Rowing Club owns 334 boats."
+  ],
+  "srcs": [
+   21,
+   5,
+   16
+  ],
+  "question": "How many boats does the rowing club chaired by the person whose letters the parish archive of Velvel holds own?",
+  "pos": 0.4518598365450114
+ },
+ {
+  "id": "H09",
+  "kind": "chain",
+  "answer": "291",
+  "anchors": [
+   "Quilla Wenvar chairs the Brybak Rowing Club.",
+   "The Brybak Rowing Club owns 291 boats."
+  ],
+  "srcs": [
+   7,
+   11,
+   32
+  ],
+  "question": "How many boats does the rowing club chaired by the person who recorded moth species in the survey of Othkel own?",
+  "pos": 0.9554940334407377
+ },
+ {
+  "id": "H10",
+  "kind": "chain",
+  "answer": "109",
+  "anchors": [
+   "Viggo Norvar chairs the Lunvel Rowing Club.",
+   "The Lunvel Rowing Club owns 109 boats."
+  ],
+  "srcs": [
+   9,
+   4,
+   14
+  ],
+  "question": "How many boats does the rowing club chaired by the person who rebuilt the bridge at Lenosk own?",
+  "pos": 0.37184332476140325
+ },
+ {
+  "id": "H11",
+  "kind": "chain",
+  "answer": "314",
+  "anchors": [
+   "Joram Ebybak chairs the Ebybry Rowing Club.",
+   "The Ebybry Rowing Club owns 314 boats."
+  ],
+  "srcs": [
+   27,
+   14,
+   19
+  ],
+  "question": "How many boats does the rowing club chaired by the person who rebuilt the bridge at Bakoth own?",
+  "pos": 0.5133253886176632
+ },
+ {
+  "id": "H12",
+  "kind": "chain",
+  "answer": "95",
+  "anchors": [
+   "Fenna Ithtor chairs the Rudlen Rowing Club.",
+   "The Rudlen Rowing Club owns 95 boats."
+  ],
+  "srcs": [
+   2,
+   15,
+   6
+  ],
+  "question": "How many boats does the rowing club chaired by the person who rebuilt the bridge at Rimgav own?",
+  "pos": 0.41786627497370804
+ },
+ {
+  "id": "M01",
+  "kind": "source_count",
+  "answer": "6",
+  "anchors": [
+   "Matthis Kelmir was a fellow of the Pelmir Institute.",
+   "Henrik Sundbak was a fellow of the Pelmir Institute.",
+   "Cora Torsund was a fellow of the Pelmir Institute.",
+   "Zelda Astpel was a fellow of the Pelmir Institute.",
+   "Dmitri Tortis was a fellow of the Pelmir Institute.",
+   "Cosmo Veloth was a fellow of the Pelmir Institute."
+  ],
+  "srcs": [
+   1,
+   11,
+   14,
+   18,
+   26,
+   33
+  ],
+  "question": "How many different sources mention the Pelmir Institute?",
+  "pos": 0.99718045249872
+ },
+ {
+  "id": "M02",
+  "kind": "source_count",
+  "answer": "7",
+  "anchors": [
+   "Viggo Zardek was a fellow of the Othbry Institute.",
+   "Katja Rudell was a fellow of the Othbry Institute.",
+   "Yorick Nordek was a fellow of the Othbry Institute.",
+   "Gisli Brynor was a fellow of the Othbry Institute.",
+   "Anselm Rudmir was a fellow of the Othbry Institute.",
+   "Cora Morbak was a fellow of the Othbry Institute.",
+   "Odile Gavquen was a fellow of the Othbry Institute."
+  ],
+  "srcs": [
+   0,
+   4,
+   9,
+   10,
+   18,
+   24,
+   28
+  ],
+  "question": "How many different sources mention the Othbry Institute?",
+  "pos": 0.8308869540864476
+ },
+ {
+  "id": "M03",
+  "kind": "source_count",
+  "answer": "5",
+  "anchors": [
+   "Wenna Rimell was a fellow of the Rudvel Institute.",
+   "Alma Morrim was a fellow of the Rudvel Institute.",
+   "Quilla Kelgav was a fellow of the Rudvel Institute.",
+   "Quilla Ebyvel was a fellow of the Rudvel Institute.",
+   "Liesl Ithith was a fellow of the Rudvel Institute."
+  ],
+  "srcs": [
+   2,
+   16,
+   24,
+   31,
+   33
+  ],
+  "question": "How many different sources mention the Rudvel Institute?",
+  "pos": 0.9997695351757878
+ },
+ {
+  "id": "M04",
+  "kind": "source_count",
+  "answer": "9",
+  "anchors": [
+   "Yorick Bakquen was a fellow of the Torbry Institute.",
+   "Bertil Quenell was a fellow of the Torbry Institute.",
+   "Gisli Rimbry was a fellow of the Torbry Institute.",
+   "Gisli Oskoth was a fellow of the Torbry Institute.",
+   "Kasimir Quengav was a fellow of the Torbry Institute.",
+   "Niels Astlen was a fellow of the Torbry Institute.",
+   "Ulla Morkel was a fellow of the Torbry Institute.",
+   "Ilse Gavvar was a fellow of the Torbry Institute.",
+   "Fenna Torhal was a fellow of the Torbry Institute."
+  ],
+  "srcs": [
+   1,
+   8,
+   10,
+   13,
+   17,
+   27,
+   28,
+   30,
+   32
+  ],
+  "question": "How many different sources mention the Torbry Institute?",
+  "pos": 0.9544831972180854
+ },
+ {
+  "id": "M05",
+  "kind": "source_count",
+  "answer": "9",
+  "anchors": [
+   "Edda Itheby was a fellow of the Ithwen Institute.",
+   "Dagny Rimfal was a fellow of the Ithwen Institute.",
+   "Matthis Pelell was a fellow of the Ithwen Institute.",
+   "Jutta Velwen was a fellow of the Ithwen Institute.",
+   "Dmitri Halosk was a fellow of the Ithwen Institute.",
+   "Bertil Pelrud was a fellow of the Ithwen Institute.",
+   "Dagny Ebymir was a fellow of the Ithwen Institute.",
+   "Lorcan Drasund was a fellow of the Ithwen Institute.",
+   "Hedda Wenbry was a fellow of the Ithwen Institute."
+  ],
+  "srcs": [
+   2,
+   3,
+   6,
+   9,
+   11,
+   23,
+   25,
+   29,
+   31
+  ],
+  "question": "How many different sources mention the Ithwen Institute?",
+  "pos": 0.9373296128336817
+ },
+ {
+  "id": "M06",
+  "kind": "source_count",
+  "answer": "6",
+  "anchors": [
+   "Niels Rimdra was a fellow of the Bakgav Institute.",
+   "Matthis Oskith was a fellow of the Bakgav Institute.",
+   "Hedda Peloth was a fellow of the Bakgav Institute.",
+   "Hedda Bakvar was a fellow of the Bakgav Institute.",
+   "Niels Mirast was a fellow of the Bakgav Institute.",
+   "Niels Bakoth was a fellow of the Bakgav Institute."
+  ],
+  "srcs": [
+   9,
+   21,
+   26,
+   31,
+   32,
+   33
+  ],
+  "question": "How many different sources mention the Bakgav Institute?",
+  "pos": 0.9937293146880484
+ },
+ {
+  "id": "M07",
+  "kind": "source_count",
+  "answer": "6",
+  "anchors": [
+   "Cora Luntor was a fellow of the Oskvar Institute.",
+   "Odile Kelmor was a fellow of the Oskvar Institute.",
+   "Ilse Oskoth was a fellow of the Oskvar Institute.",
+   "Dagny Tiseby was a fellow of the Oskvar Institute.",
+   "Floris Rimvar was a fellow of the Oskvar Institute.",
+   "Matthis Rimmir was a fellow of the Oskvar Institute."
+  ],
+  "srcs": [
+   7,
+   8,
+   20,
+   24,
+   30,
+   31
+  ],
+  "question": "How many different sources mention the Oskvar Institute?",
+  "pos": 0.9501510419781467
+ },
+ {
+  "id": "M08",
+  "kind": "source_count",
+  "answer": "9",
+  "anchors": [
+   "Anselm Halzar was a fellow of the Vardra Institute.",
+   "Ulla Ithpel was a fellow of the Vardra Institute.",
+   "Wenna Rudsund was a fellow of the Vardra Institute.",
+   "Odile Halsund was a fellow of the Vardra Institute.",
+   "Nora Quenast was a fellow of the Vardra Institute.",
+   "Brita Kelhal was a fellow of the Vardra Institute.",
+   "Viggo Othpel was a fellow of the Vardra Institute.",
+   "Joram Wenvel was a fellow of the Vardra Institute.",
+   "Brita Dralun was a fellow of the Vardra Institute."
+  ],
+  "srcs": [
+   0,
+   16,
+   19,
+   21,
+   27,
+   29,
+   30,
+   32,
+   33
+  ],
+  "question": "How many different sources mention the Vardra Institute?",
+  "pos": 0.9819449772525384
+ },
+ {
+  "id": "M09",
+  "kind": "source_count",
+  "answer": "6",
+  "anchors": [
+   "Bertil Quendra was a fellow of the Tormor Institute.",
+   "Bertil Lunmir was a fellow of the Tormor Institute.",
+   "Dmitri Drarud was a fellow of the Tormor Institute.",
+   "Elof Ellith was a fellow of the Tormor Institute.",
+   "Maren Othell was a fellow of the Tormor Institute.",
+   "Tobin Astsund was a fellow of the Tormor Institute."
+  ],
+  "srcs": [
+   3,
+   14,
+   16,
+   21,
+   30,
+   31
+  ],
+  "question": "How many different sources mention the Tormor Institute?",
+  "pos": 0.9357761632274411
+ },
+ {
+  "id": "M10",
+  "kind": "source_count",
+  "answer": "7",
+  "anchors": [
+   "Pavo Bryoth was a fellow of the Varnor Institute.",
+   "Alma Tisfal was a fellow of the Varnor Institute.",
+   "Anselm Lenith was a fellow of the Varnor Institute.",
+   "Niels Rudrim was a fellow of the Varnor Institute.",
+   "Katja Varmor was a fellow of the Varnor Institute.",
+   "Lorcan Zardek was a fellow of the Varnor Institute.",
+   "Ivo Velbak was a fellow of the Varnor Institute."
+  ],
+  "srcs": [
+   0,
+   5,
+   15,
+   19,
+   26,
+   27,
+   28
+  ],
+  "question": "How many different sources mention the Varnor Institute?",
+  "pos": 0.8227214978463208
+ },
+ {
+  "id": "M11",
+  "kind": "source_count",
+  "answer": "7",
+  "anchors": [
+   "Dagny Lenbry was a fellow of the Astpel Institute.",
+   "Edda Lenrim was a fellow of the Astpel Institute.",
+   "Greta Sundwen was a fellow of the Astpel Institute.",
+   "Alma Brytis was a fellow of the Astpel Institute.",
+   "Floris Quenoth was a fellow of the Astpel Institute.",
+   "Jutta Othfal was a fellow of the Astpel Institute.",
+   "Nora Kelbry was a fellow of the Astpel Institute."
+  ],
+  "srcs": [
+   10,
+   11,
+   14,
+   19,
+   24,
+   29,
+   30
+  ],
+  "question": "How many different sources mention the Astpel Institute?",
+  "pos": 0.910782398905438
+ },
+ {
+  "id": "M12",
+  "kind": "source_count",
+  "answer": "6",
+  "anchors": [
+   "Joram Norell was a fellow of the Torzar Institute.",
+   "Alma Falquen was a fellow of the Torzar Institute.",
+   "Ilse Torlen was a fellow of the Torzar Institute.",
+   "Greta Kelpel was a fellow of the Torzar Institute.",
+   "Rasmus Rimvel was a fellow of the Torzar Institute.",
+   "Wenna Mirbak was a fellow of the Torzar Institute."
+  ],
+  "srcs": [
+   6,
+   7,
+   17,
+   18,
+   21,
+   22
+  ],
+  "question": "How many different sources mention the Torzar Institute?",
+  "pos": 0.7306157932584663
+ },
+ {
+  "id": "T01",
+  "kind": "total",
+  "answer": "6422",
+  "anchors": [
+   "The Sundosk Trust gave Hedda Mirell a grant of 1,204 crowns.",
+   "The Sundosk Trust gave Maren Morbak a grant of 1,309 crowns.",
+   "The Sundosk Trust gave Tobin Faltor a grant of 3,909 crowns."
+  ],
+  "srcs": [
+   4,
+   13,
+   33
+  ],
+  "question": "What is the total, in crowns, of all the grants the Sundosk Trust gave according to the sources?",
+  "pos": 0.9942573416903574
+ },
+ {
+  "id": "T02",
+  "kind": "total",
+  "answer": "3940",
+  "anchors": [
+   "The Oskrim Trust gave Matthis Mirbak a grant of 181 crowns.",
+   "The Oskrim Trust gave Wenna Wenast a grant of 295 crowns.",
+   "The Oskrim Trust gave Ivo Bryast a grant of 3,464 crowns."
+  ],
+  "srcs": [
+   1,
+   20,
+   28
+  ],
+  "question": "What is the total, in crowns, of all the grants the Oskrim Trust gave according to the sources?",
+  "pos": 0.8422599555698826
+ },
+ {
+  "id": "T03",
+  "kind": "total",
+  "answer": "4557",
+  "anchors": [
+   "The Lundra Trust gave Dagny Ellwen a grant of 1,701 crowns.",
+   "The Lundra Trust gave Niels Ithwen a grant of 1,604 crowns.",
+   "The Lundra Trust gave Gisli Faltor a grant of 1,252 crowns."
+  ],
+  "srcs": [
+   8,
+   13,
+   20
+  ],
+  "question": "What is the total, in crowns, of all the grants the Lundra Trust gave according to the sources?",
+  "pos": 0.5365279453185738
+ },
+ {
+  "id": "T04",
+  "kind": "total",
+  "answer": "4422",
+  "anchors": [
+   "The Tormir Trust gave Tobin Sundkel a grant of 2,166 crowns.",
+   "The Tormir Trust gave Rasmus Ithnor a grant of 2,256 crowns."
+  ],
+  "srcs": [
+   27,
+   33
+  ],
+  "question": "What is the total, in crowns, of all the grants the Tormir Trust gave according to the sources?",
+  "pos": 0.9888793429126961
+ },
+ {
+  "id": "T05",
+  "kind": "total",
+  "answer": "6756",
+  "anchors": [
+   "The Wenbak Trust gave Joram Astlun a grant of 1,577 crowns.",
+   "The Wenbak Trust gave Tobin Pelsund a grant of 1,265 crowns.",
+   "The Wenbak Trust gave Lorcan Ebyvel a grant of 3,914 crowns."
+  ],
+  "srcs": [
+   0,
+   12,
+   32
+  ],
+  "question": "What is the total, in crowns, of all the grants the Wenbak Trust gave according to the sources?",
+  "pos": 0.9593871386041708
+ },
+ {
+  "id": "T06",
+  "kind": "total",
+  "answer": "5304",
+  "anchors": [
+   "The Wenzar Trust gave Maren Pelell a grant of 3,538 crowns.",
+   "The Wenzar Trust gave Viggo Velosk a grant of 1,766 crowns."
+  ],
+  "srcs": [
+   5,
+   23
+  ],
+  "question": "What is the total, in crowns, of all the grants the Wenzar Trust gave according to the sources?",
+  "pos": 0.7418283445478294
+ },
+ {
+  "id": "T07",
+  "kind": "total",
+  "answer": "4153",
+  "anchors": [
+   "The Bryvar Trust gave Ulla Rimsund a grant of 1,614 crowns.",
+   "The Bryvar Trust gave Floris Lendra a grant of 749 crowns.",
+   "The Bryvar Trust gave Dmitri Baktis a grant of 1,790 crowns."
+  ],
+  "srcs": [
+   5,
+   16,
+   29
+  ],
+  "question": "What is the total, in crowns, of all the grants the Bryvar Trust gave according to the sources?",
+  "pos": 0.8726740191752568
+ },
+ {
+  "id": "T08",
+  "kind": "total",
+  "answer": "7557",
+  "anchors": [
+   "The Lentor Trust gave Odile Zarhal a grant of 1,749 crowns.",
+   "The Lentor Trust gave Lorcan Lunbry a grant of 1,206 crowns.",
+   "The Lentor Trust gave Bertil Drakel a grant of 2,209 crowns.",
+   "The Lentor Trust gave Ivo Varoth a grant of 2,393 crowns."
+  ],
+  "srcs": [
+   8,
+   16,
+   22,
+   31
+  ],
+  "question": "What is the total, in crowns, of all the grants the Lentor Trust gave according to the sources?",
+  "pos": 0.9265502770683124
+ },
+ {
+  "id": "T09",
+  "kind": "total",
+  "answer": "5038",
+  "anchors": [
+   "The Asttor Trust gave Hedda Gavbak a grant of 3,146 crowns.",
+   "The Asttor Trust gave Maren Peldra a grant of 857 crowns.",
+   "The Asttor Trust gave Henrik Rudoth a grant of 1,035 crowns."
+  ],
+  "srcs": [
+   13,
+   20,
+   24
+  ],
+  "question": "What is the total, in crowns, of all the grants the Asttor Trust gave according to the sources?",
+  "pos": 0.7535587123726062
+ },
+ {
+  "id": "T10",
+  "kind": "total",
+  "answer": "7637",
+  "anchors": [
+   "The Weneby Trust gave Edda Norrud a grant of 3,733 crowns.",
+   "The Weneby Trust gave Nora Wenbak a grant of 3,904 crowns."
+  ],
+  "srcs": [
+   16,
+   32
+  ],
+  "question": "What is the total, in crowns, of all the grants the Weneby Trust gave according to the sources?",
+  "pos": 0.9779483087820225
+ },
+ {
+  "id": "T11",
+  "kind": "total",
+  "answer": "7249",
+  "anchors": [
+   "The Tisosk Trust gave Ulla Pelkel a grant of 2,196 crowns.",
+   "The Tisosk Trust gave Dagny Dekkel a grant of 1,086 crowns.",
+   "The Tisosk Trust gave Cora Sunddra a grant of 3,783 crowns.",
+   "The Tisosk Trust gave Ulla Wenlun a grant of 184 crowns."
+  ],
+  "srcs": [
+   1,
+   5,
+   11,
+   31
+  ],
+  "question": "What is the total, in crowns, of all the grants the Tisosk Trust gave according to the sources?",
+  "pos": 0.9458145108238243
+ },
+ {
+  "id": "T12",
+  "kind": "total",
+  "answer": "4667",
+  "anchors": [
+   "The Pelrud Trust gave Ivo Rimrim a grant of 2,111 crowns.",
+   "The Pelrud Trust gave Cora Rimwen a grant of 2,556 crowns."
+  ],
+  "srcs": [
+   6,
+   33
+  ],
+  "question": "What is the total, in crowns, of all the grants the Pelrud Trust gave according to the sources?",
+  "pos": 0.9889683198384995
+ },
+ {
+  "id": "S01",
+  "kind": "number",
+  "answer": "2008",
+  "anchors": [
+   "Tropical Storm Josephine was the tenth tropical storm of the"
+  ],
+  "srcs": [
+   0
+  ],
+  "question": "Find the sentence that begins \"Tropical Storm Josephine was the tenth tropical storm of the\". What number does that sentence contain?",
+  "pos": 6.418007762872117e-05
+ },
+ {
+  "id": "S02",
+  "kind": "number",
+  "answer": "1989",
+  "anchors": [
+   "The German courts had approved such publications in"
+  ],
+  "srcs": [
+   2
+  ],
+  "question": "Find the sentence that begins \"The German courts had approved such publications in\". What number does that sentence contain?",
+  "pos": 0.04159744213217887
+ },
+ {
+  "id": "S03",
+  "kind": "number",
+  "answer": "1997",
+  "anchors": [
+   "Alan Cowell, writing in the New York Times, wrote in"
+  ],
+  "srcs": [
+   2
+  ],
+  "question": "Find the sentence that begins \"Alan Cowell, writing in the New York Times, wrote in\". What number does that sentence contain?",
+  "pos": 0.07185543145786505
+ },
+ {
+  "id": "S04",
+  "kind": "number",
+  "answer": "13",
+  "anchors": [
+   "The ship participated in the action of"
+  ],
+  "srcs": [
+   3
+  ],
+  "question": "Find the sentence that begins \"The ship participated in the action of\". What number does that sentence contain?",
+  "pos": 0.09791400161325377
+ },
+ {
+  "id": "S05",
+  "kind": "number",
+  "answer": "1898",
+  "anchors": [
+   "He served four consecutive terms and was Speaker of the"
+  ],
+  "srcs": [
+   5
+  ],
+  "question": "Find the sentence that begins \"He served four consecutive terms and was Speaker of the\". What number does that sentence contain?",
+  "pos": 0.12577107258037462
+ },
+ {
+  "id": "S06",
+  "kind": "number",
+  "answer": "1930",
+  "anchors": [
+   "The head of the Jockey Club, James B. Brown, had"
+  ],
+  "srcs": [
+   5
+  ],
+  "question": "Find the sentence that begins \"The head of the Jockey Club, James B. Brown, had\". What number does that sentence contain?",
+  "pos": 0.14629994559279783
+ },
+ {
+  "id": "S07",
+  "kind": "number",
+  "answer": "25",
+  "anchors": [
+   "The Natives continued to push, with Elliot coming within five-yards"
+  ],
+  "srcs": [
+   6
+  ],
+  "question": "Find the sentence that begins \"The Natives continued to push, with Elliot coming within five-yards\". What number does that sentence contain?",
+  "pos": 0.16704469704815403
+ },
+ {
+  "id": "S08",
+  "kind": "number",
+  "answer": "1909",
+  "anchors": [
+   "Her first operatic performance came in"
+  ],
+  "srcs": [
+   7
+  ],
+  "question": "Find the sentence that begins \"Her first operatic performance came in\". What number does that sentence contain?",
+  "pos": 0.2010236722381781
+ },
+ {
+  "id": "S09",
+  "kind": "number",
+  "answer": "27",
+  "anchors": [
+   "Moultrie's delaying tactics so angered Lee that he decided on"
+  ],
+  "srcs": [
+   8
+  ],
+  "question": "Find the sentence that begins \"Moultrie's delaying tactics so angered Lee that he decided on\". What number does that sentence contain?",
+  "pos": 0.22574467123025915
+ },
+ {
+  "id": "S10",
+  "kind": "number",
+  "answer": "1646",
+  "anchors": [
+   "Hu retired from public life and went into seclusion in"
+  ],
+  "srcs": [
+   9
+  ],
+  "question": "Find the sentence that begins \"Hu retired from public life and went into seclusion in\". What number does that sentence contain?",
+  "pos": 0.24897202477934452
+ },
+ {
+  "id": "S11",
+  "kind": "number",
+  "answer": "1587",
+  "anchors": [
+   "Spanish dollars were the accepted currency across most of the"
+  ],
+  "srcs": [
+   10
+  ],
+  "question": "Find the sentence that begins \"Spanish dollars were the accepted currency across most of the\". What number does that sentence contain?",
+  "pos": 0.27388702264243964
+ },
+ {
+  "id": "S12",
+  "kind": "number",
+  "answer": "1.42",
+  "anchors": [
+   "In total the sculpture cost \u00a3"
+  ],
+  "srcs": [
+   11
+  ],
+  "question": "Find the sentence that begins \"In total the sculpture cost \u00a3\". What number does that sentence contain?",
+  "pos": 0.29437359514915307
+ },
+ {
+  "id": "S13",
+  "kind": "number",
+  "answer": "70",
+  "anchors": [
+   "The attack was resumed the following day, and the Australians"
+  ],
+  "srcs": [
+   12
+  ],
+  "question": "Find the sentence that begins \"The attack was resumed the following day, and the Australians\". What number does that sentence contain?",
+  "pos": 0.32448280338579083
+ },
+ {
+  "id": "S14",
+  "kind": "number",
+  "answer": "25",
+  "anchors": [
+   "He also tried a case against Andranik Soghojan, an alleged"
+  ],
+  "srcs": [
+   15
+  ],
+  "question": "Find the sentence that begins \"He also tried a case against Andranik Soghojan, an alleged\". What number does that sentence contain?",
+  "pos": 0.3925326479678983
+ },
+ {
+  "id": "S15",
+  "kind": "number",
+  "answer": "1919",
+  "anchors": [
+   "The roadways were also used for the Theodore Roosevelt International"
+  ],
+  "srcs": [
+   16
+  ],
+  "question": "Find the sentence that begins \"The roadways were also used for the Theodore Roosevelt International\". What number does that sentence contain?",
+  "pos": 0.43821719413452437
+ },
+ {
+  "id": "S16",
+  "kind": "number",
+  "answer": "1996",
+  "anchors": [
+   "However, after the strong media attention, Carey did not visit"
+  ],
+  "srcs": [
+   17
+  ],
+  "question": "Find the sentence that begins \"However, after the strong media attention, Carey did not visit\". What number does that sentence contain?",
+  "pos": 0.4655345689943128
+ },
+ {
+  "id": "S17",
+  "kind": "number",
+  "answer": "65",
+  "anchors": [
+   "Other donations and income amounted to \u00a3"
+  ],
+  "srcs": [
+   18
+  ],
+  "question": "Find the sentence that begins \"Other donations and income amounted to \u00a3\". What number does that sentence contain?",
+  "pos": 0.4845187442292629
+ },
+ {
+  "id": "S18",
+  "kind": "number",
+  "answer": "1804",
+  "anchors": [
+   "The New South Wales Corps subsequently was involved in putting"
+  ],
+  "srcs": [
+   20
+  ],
+  "question": "Find the sentence that begins \"The New South Wales Corps subsequently was involved in putting\". What number does that sentence contain?",
+  "pos": 0.5307094378262791
+ },
+ {
+  "id": "S19",
+  "kind": "number",
+  "answer": "50",
+  "anchors": [
+   "The Australians were then assigned to guard duties, but soon"
+  ],
+  "srcs": [
+   20
+  ],
+  "question": "Find the sentence that begins \"The Australians were then assigned to guard duties, but soon\". What number does that sentence contain?",
+  "pos": 0.5523570862828212
+ },
+ {
+  "id": "S20",
+  "kind": "number",
+  "answer": "1912",
+  "anchors": [
+   "Enlistment and organisation was primarily regionally based and was undertaken"
+  ],
+  "srcs": [
+   20
+  ],
+  "question": "Find the sentence that begins \"Enlistment and organisation was primarily regionally based and was undertaken\". What number does that sentence contain?",
+  "pos": 0.5748799176161186
+ },
+ {
+  "id": "S21",
+  "kind": "number",
+  "answer": "15",
+  "anchors": [
+   "The British Commonwealth force withdrew to Singapore at the end"
+  ],
+  "srcs": [
+   20
+  ],
+  "question": "Find the sentence that begins \"The British Commonwealth force withdrew to Singapore at the end\". What number does that sentence contain?",
+  "pos": 0.6061954195845507
+ },
+ {
+  "id": "S22",
+  "kind": "number",
+  "answer": "1971",
+  "anchors": [
+   "During this period Australia continued to retain forces in Malaysia"
+  ],
+  "srcs": [
+   20
+  ],
+  "question": "Find the sentence that begins \"During this period Australia continued to retain forces in Malaysia\". What number does that sentence contain?",
+  "pos": 0.6476703361139838
+ },
+ {
+  "id": "S23",
+  "kind": "number",
+  "answer": "1930",
+  "anchors": [
+   "The News reported that both Churchill's birth parents were listed"
+  ],
+  "srcs": [
+   21
+  ],
+  "question": "Find the sentence that begins \"The News reported that both Churchill's birth parents were listed\". What number does that sentence contain?",
+  "pos": 0.6876326449047582
+ },
+ {
+  "id": "S24",
+  "kind": "number",
+  "answer": "2004",
+  "anchors": [
+   "Driving rain, strong winds and choppy water resulted in the"
+  ],
+  "srcs": [
+   23
+  ],
+  "question": "Find the sentence that begins \"Driving rain, strong winds and choppy water resulted in the\". What number does that sentence contain?",
+  "pos": 0.74377562644861
+ },
+ {
+  "id": "S25",
+  "kind": "number",
+  "answer": "25000",
+  "anchors": [
+   "Kong and Saeed then chose a willing participant and if"
+  ],
+  "srcs": [
+   25
+  ],
+  "question": "Find the sentence that begins \"Kong and Saeed then chose a willing participant and if\". What number does that sentence contain?",
+  "pos": 0.7746083191966988
+ },
+ {
+  "id": "S26",
+  "kind": "number",
+  "answer": "1970",
+  "anchors": [
+   "While acknowledging that in subsequent years Starr might have chosen"
+  ],
+  "srcs": [
+   27
+  ],
+  "question": "Find the sentence that begins \"While acknowledging that in subsequent years Starr might have chosen\". What number does that sentence contain?",
+  "pos": 0.8070396793329939
+ },
+ {
+  "id": "S27",
+  "kind": "number",
+  "answer": "2001",
+  "anchors": [
+   "The set's massive video screen displayed a video that Hot"
+  ],
+  "srcs": [
+   28
+  ],
+  "question": "Find the sentence that begins \"The set's massive video screen displayed a video that Hot\". What number does that sentence contain?",
+  "pos": 0.8507681917700719
+ },
+ {
+  "id": "S28",
+  "kind": "number",
+  "answer": "2006",
+  "anchors": [
+   "The final conspirator was convicted in"
+  ],
+  "srcs": [
+   31
+  ],
+  "question": "Find the sentence that begins \"The final conspirator was convicted in\". What number does that sentence contain?",
+  "pos": 0.9211868646719304
+ },
+ {
+  "id": "S29",
+  "kind": "number",
+  "answer": "00",
+  "anchors": [
+   "He is sedated and taken to meet M, who informs"
+  ],
+  "srcs": [
+   32
+  ],
+  "question": "Find the sentence that begins \"He is sedated and taken to meet M, who informs\". What number does that sentence contain?",
+  "pos": 0.9563283744499111
+ },
+ {
+  "id": "S30",
+  "kind": "number",
+  "answer": "1993",
+  "anchors": [
+   "Ayola has undertaken the following roles from her screen and"
+  ],
+  "srcs": [
+   33
+  ],
+  "question": "Find the sentence that begins \"Ayola has undertaken the following roles from her screen and\". What number does that sentence contain?",
+  "pos": 0.99984538435844
+ },
+ {
+  "id": "R01",
+  "kind": "citation",
+  "answer": "1",
+  "anchors": [
+   "However, the convection decreased once more and the low became"
+  ],
+  "srcs": [
+   0
+  ],
+  "question": "Which source contains the sentence that begins \"However, the convection decreased once more and the low became\"? Answer with the source number.",
+  "pos": 0.005415923368987312
+ },
+ {
+  "id": "R02",
+  "kind": "citation",
+  "answer": "4",
+  "anchors": [
+   "Although many ships on both sides were hit, Russian casualties"
+  ],
+  "srcs": [
+   3
+  ],
+  "question": "Which source contains the sentence that begins \"Although many ships on both sides were hit, Russian casualties\"? Answer with the source number.",
+  "pos": 0.09762810854018038
+ },
+ {
+  "id": "R03",
+  "kind": "citation",
+  "answer": "7",
+  "anchors": [
+   "Ellison scored a converted try late in the match, but"
+  ],
+  "srcs": [
+   6
+  ],
+  "question": "Which source contains the sentence that begins \"Ellison scored a converted try late in the match, but\"? Answer with the source number.",
+  "pos": 0.1718348646602613
+ },
+ {
+  "id": "R04",
+  "kind": "citation",
+  "answer": "10",
+  "anchors": [
+   "This bias towards academia was likely a consequence of the"
+  ],
+  "srcs": [
+   9
+  ],
+  "question": "Which source contains the sentence that begins \"This bias towards academia was likely a consequence of the\"? Answer with the source number.",
+  "pos": 0.2524217039518883
+ },
+ {
+  "id": "R05",
+  "kind": "citation",
+  "answer": "13",
+  "anchors": [
+   "Additionally, the Japanese began to concentrate their artillery with increasing"
+  ],
+  "srcs": [
+   12
+  ],
+  "question": "Which source contains the sentence that begins \"Additionally, the Japanese began to concentrate their artillery with increasing\"? Answer with the source number.",
+  "pos": 0.31706125259090595
+ },
+ {
+  "id": "R06",
+  "kind": "citation",
+  "answer": "16",
+  "anchors": [
+   "Nosek's friend Jan Jebav\u00fd testified that Nosek climbed the stage,"
+  ],
+  "srcs": [
+   15
+  ],
+  "question": "Which source contains the sentence that begins \"Nosek's friend Jan Jebav\u00fd testified that Nosek climbed the stage,\"? Answer with the source number.",
+  "pos": 0.4006966455698972
+ },
+ {
+  "id": "R07",
+  "kind": "citation",
+  "answer": "19",
+  "anchors": [
+   "Final work was done to the cap and a new"
+  ],
+  "srcs": [
+   18
+  ],
+  "question": "Which source contains the sentence that begins \"Final work was done to the cap and a new\"? Answer with the source number.",
+  "pos": 0.4937344199214961
+ },
+ {
+  "id": "R08",
+  "kind": "citation",
+  "answer": "22",
+  "anchors": [
+   "Churchill is particularly outspoken about New Age exploitations of shamanism"
+  ],
+  "srcs": [
+   21
+  ],
+  "question": "Which source contains the sentence that begins \"Churchill is particularly outspoken about New Age exploitations of shamanism\"? Answer with the source number.",
+  "pos": 0.6976389024623271
+ },
+ {
+  "id": "R09",
+  "kind": "citation",
+  "answer": "25",
+  "anchors": [
+   "Five miles East in Missouri was a grog shop that"
+  ],
+  "srcs": [
+   24
+  ],
+  "question": "Which source contains the sentence that begins \"Five miles East in Missouri was a grog shop that\"? Answer with the source number.",
+  "pos": 0.7514626493827773
+ },
+ {
+  "id": "R10",
+  "kind": "citation",
+  "answer": "28",
+  "anchors": [
+   "Further aligning himself with Britain's glam rock movement, Starr made"
+  ],
+  "srcs": [
+   27
+  ],
+  "question": "Which source contains the sentence that begins \"Further aligning himself with Britain's glam rock movement, Starr made\"? Answer with the source number.",
+  "pos": 0.8113339099816066
+ },
+ {
+  "id": "R11",
+  "kind": "citation",
+  "answer": "31",
+  "anchors": [
+   "Gordon encouraged the actors to improvise, though Aniston claimed to"
+  ],
+  "srcs": [
+   30
+  ],
+  "question": "Which source contains the sentence that begins \"Gordon encouraged the actors to improvise, though Aniston claimed to\"? Answer with the source number.",
+  "pos": 0.8981710136513943
+ },
+ {
+  "id": "R12",
+  "kind": "citation",
+  "answer": "34",
+  "anchors": [
+   "We're not going to tiptoe around Martha's disability or anything."
+  ],
+  "srcs": [
+   33
+  ],
+  "question": "Which source contains the sentence that begins \"We're not going to tiptoe around Martha's disability or anything.\"? Answer with the source number.",
+  "pos": 0.9904794689390304
+ }
+]
