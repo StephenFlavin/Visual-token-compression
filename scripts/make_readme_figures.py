@@ -495,6 +495,11 @@ def fig_moonshot():
 # --------------------------------------------------------------------------- charts: shared data and style
 RES = ROOT / "encoder_probe" / "results"
 TEXT_CPT = 4.33        # chars per text token, Qwen tokenizer on held-out WikiText (docs/CONTEXT_BUDGET.md)
+# DeepSeek-OCR (arXiv 2510.18234): ~97% OCR precision at <= 10x compression (text tokens per vision token, Fox
+# benchmark). Converted to chars per vision token with TEXT_CPT (Qwen's tokenizer on WikiText; DeepSeek's own
+# chars per token on Fox are not published), so the x position is approximate.
+DEEPSEEK_OCR_RATIO = 10
+DEEPSEEK_OCR_CPT = DEEPSEEK_OCR_RATIO * TEXT_CPT
 PROBE_FLOOR = 0.73     # unigram-level CER of this text, "about 72-75%" (encoder_probe/RESULTS.md)
 READ_CER = 0.05        # "read": CER below 5%
 PARTLY_GAP = 0.25      # "partly read": CER at least 25 points below the floor (probe floor or the arm's blind run)
@@ -621,7 +626,11 @@ def chart_density():
         ax.axvline(x, color=GRID, lw=0.8, zorder=0)
     ax.axvline(TEXT_CPT, color=INK_2, lw=1.2, ls=(0, (4, 3)), zorder=1)
     ax.text(TEXT_CPT * 1.08, -1.05, f"plain text tokens: {TEXT_CPT} chars/token", color=INK_2, fontsize=8.5,
-            va="center")
+            va="center", zorder=2, bbox=dict(facecolor=SURFACE, edgecolor="none", pad=1.0))
+    ax.axvline(DEEPSEEK_OCR_CPT, color=INK_1, lw=1.4, ls=(0, (1, 2.5)), zorder=1)
+    ax.text(DEEPSEEK_OCR_CPT * 1.08, -0.5, f"DeepSeek-OCR: ~97% precision at {DEEPSEEK_OCR_RATIO}x\n"
+            f"compression ≈ {DEEPSEEK_OCR_CPT:.0f} chars/token", color=INK_1, fontsize=8.5, va="center",
+            linespacing=1.15)
     fill = {"read": "full", "partly": "left", "lost": "none"}
     for (g, label, points), yy in zip(strips, ys):
         ax.axhline(yy, color=GRID, lw=0.6, zorder=0)
