@@ -24,9 +24,13 @@ RGB overlays and learned glyph alphabets) and compares them with plain text rend
    |---|---|---|---|---|
    | Qwen2.5-VL-3B, frozen | 16 px Latin | 6.8 | ~1.5x | 98% of the information recovered, 1.5% transcription error: near-lossless |
    | Qwen2.5-VL-3B, frozen | 8 px Latin | 28.1 | ~3.4x in information | only 52% of the information recovered; it cannot read the page out (76% error) |
-   | Claude (Phase 1) | Latin at 29.4 px²/char | ~27 | ~6x (assuming ~4 chars per Claude text token, not measured) | 3% transcription error; whether it *answers questions* as well as from text is not yet tested |
+   | Claude (Phase 1) | Latin at 29.4 px²/char | ~27 | 7.8x fewer input tokens (measured) | 3% transcription error, but question answering over a 500k-char document collapses: 33-42% vs 100% from text |
+   | Claude, QA test | Latin at 58.8 px²/char | ~13 | 4.3x fewer | 85-95% vs 100% from text |
+   | Claude, QA test | Latin at 117.6 px²/char | ~7 | **2.2x fewer** | **100%, same as text** (also at 1.5x) |
 
-   Sources: Run 0 in [PLAN_3090.md](docs/PLAN_3090.md), Phase 1 in [RESULTS.md](docs/RESULTS.md).
+   Sources: Run 0 in [PLAN_3090.md](docs/PLAN_3090.md), Phase 1 in [RESULTS.md](docs/RESULTS.md), the Claude QA test
+   in [results/claude_qa/summary.md](results/claude_qa/summary.md) (one 500k-char document, 80 exact-answer questions;
+   Claude's tokenizer measured 2.87 chars per token on it).
 
 **Context.** For more context on a local GPU, text-side compressors and the model's own architecture (linear
 attention, KV quantization) are the stronger routes: a learned text encoder matches or beats DeepSeek-OCR's vision
