@@ -42,3 +42,34 @@ Same design, document 2,303,133 chars (held-out test + validation text, then a l
   every question about the rest was right. The CLI or API dropped the earliest images silently (no error or warning).
   The 122-page run (17 MB of PNG) was complete; the 243-page one (30 MB) was not. Mechanism not established. Check
   `input_tokens` against the image-token formula before trusting any many-image call.
+
+## 800k tokens, 100 questions incl. 20 complex, 1932-px pages (2026-11-10)
+
+`--chars 2300000 --page-px 1932 --n-complex 20`. Same 40 invented facts and 40 number questions as above, plus 20
+complex questions over invented facts (the prior cannot answer them; the no-document arm scores 0/20):
+8 two-hop (the person who rebuilt bridge X chairs rowing club Y, which owns N boats; the three facts at least 1/8
+of the document apart), 6 sums of two facts, 3 largest-of-three, 3 counts of a fact type no other question
+mentions (5-12 facts each). Pages: 1932 x 1932 px (high-resolution tier, 4,764 tokens each; a probe page cost
+4,772 tokens and its first line came back exact). Rows: `qa800kc_b29`, `qa800kc_b59`, `qa800kc_b118`.
+
+| Arm | px²/char | pages | input tokens | fewer than text | invented facts (40) | numbers (40) | complex (20): two-hop / sum / max / count |
+|---|---|---|---|---|---|---|---|
+| text | - | - | 782,989 | 1x | 100% | 100% | 80%: 7/8, 6/6, 3/3, 0/3 |
+| image | 29.4 | 19 | 91,509 | 8.6x | 0% | 38% | 0% |
+| image | 58.8 | 38 | 178,094 | 4.4x | 95% | 90% | 60%: 3/8, 5/6, 3/3, 1/3 |
+| image | 117.6 | 75 | 147,781 (expected 346,467) | **invalid** | 40% | 57% | pages dropped |
+| no document | - | - | 4,804 | - | 0% | 23% | 0% |
+
+* 58.8 px²/char vs text: text-only correct 11, image-only 1 (exact McNemar p = 0.006). Simple lookups stay close
+  (95% / 90%), but **two-hop drops from 7/8 to 3/8**: the image arm finds the boat facts but links the wrong club
+  (its wrong answers are other clubs' boat counts). Small counts per type: 8 two-hop, 3 counts.
+* Counting over the whole document is hard even from text (0/3; answers 7, 6, 8 for 9, 11, 12).
+* Large pages vs Phase 1's small pages: 58.8 about the same (95/90 vs 97/93 on the simple 80); 29.4 worse (0/38 vs
+  20/57).
+* **The first version of the 3 count questions leaked** (they counted needle types that the 40 needle questions
+  enumerate): the no-document arm scored 3/3. Kept as `qa800kc_v1_countleak`; replaced before the runs above.
+* **4x could not be measured through the CLI.** Both attempts lost their earliest pages: 243 small pages (342k image
+  tokens, 29.7 MB) arrived as ~157k tokens, 75 large pages (346k tokens, 27.3 MB) as ~143k. Not a byte or image-count
+  limit: 7 noise pages of 26 MB (33k tokens) arrived whole, and 122 / 38 pages at ~175k image tokens arrived whole.
+  Something between the CLI and the model drops the earliest images once a request carries somewhere between ~176k
+  and ~342k image tokens; it is not in the vision docs (600 images, 128 MB per request). The script now flags it.

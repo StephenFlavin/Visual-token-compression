@@ -1,0 +1,4 @@
+[qa] document 2,305,268 chars (3902 paragraphs + 40 needles); 100 questions; 38 pages, 173,235 image tokens, px²/char 58.9, em 9.73; text ~576,317 tokens (estimate)
+[qa] image: complex 0.60, needle 0.95, number 0.90, count 0.33, max 1.00, sum 0.83, two_hop 0.38; input tokens 178,094, output 3,162, $0.95, 48s, error None
+[qa] text: complex 0.80, needle 1.00, number 1.00, count 0.00, max 1.00, sum 1.00, two_hop 0.88; input tokens 782,989, output 669, $3.93, 0s, error None
+[qa] text vs image (paired, exact McNemar): text-only correct 11, image-only 1, p = 0.00635; tokens text 782,989 vs image 178,094 (4.4x)

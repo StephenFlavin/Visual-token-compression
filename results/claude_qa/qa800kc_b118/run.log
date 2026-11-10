@@ -1,0 +1,5 @@
+[qa] document 2,305,268 chars (3902 paragraphs + 40 needles); 100 questions; 75 pages, 346,467 image tokens, px²/char 117.8, em 13.75; text ~576,317 tokens (estimate)
+[qa] WARNING image: input tokens 147,781 < image tokens 346,467: pages were dropped, this arm is invalid
+[qa] image: complex 0.10, needle 0.40, number 0.57, count 0.00, max 0.33, sum 0.00, two_hop 0.12; input tokens 147,781, output 1,632, $0.77, 28s, error None
+[qa] text: complex 0.80, needle 1.00, number 1.00, count 0.00, max 1.00, sum 1.00, two_hop 0.88; input tokens 782,989, output 669, $3.93, 0s, error None
+[qa] text vs image (paired, exact McNemar): text-only correct 56, image-only 1, p = 8.05e-16; tokens text 782,989 vs image 147,781 (5.3x)
