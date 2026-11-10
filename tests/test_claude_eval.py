@@ -227,3 +227,15 @@ def test_transcribe_many_isolates_bad_jobs(fake, capsys):
     assert res[0]["error"] is None and res[2]["error"] is None and "meta" not in res[2]
     assert res[1]["error"].startswith("ValueError") and res[1]["meta"] == 2
     assert "3/3" in capsys.readouterr().err
+
+
+def test_hires_bounds():
+    from PIL import Image
+    from vbpe import claude_eval as ce
+    ce.check_image_bounds(Image.new("L", (1932, 1932)), hires=True)          # 69 x 69 = 4761 tokens
+    with pytest.raises(ValueError):
+        ce.check_image_bounds(Image.new("L", (1932, 1932)))                  # standard tier
+    with pytest.raises(ValueError):
+        ce.check_image_bounds(Image.new("L", (1960, 1960)), hires=True)      # 70 x 70 = 4900 tokens
+    with pytest.raises(ValueError):
+        ce.check_image_bounds(Image.new("L", (2604, 28)), hires=True)        # long edge

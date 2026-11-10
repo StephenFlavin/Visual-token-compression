@@ -81,9 +81,17 @@ def png_bytes(img: Image.Image) -> bytes:
     return buf.getvalue()
 
 
-def check_image_bounds(img: Image.Image) -> None:
-    """Raise ValueError if the API would downsample this image (long edge / area limits)."""
+def check_image_bounds(img: Image.Image, hires: bool = False) -> None:
+    """Raise ValueError if the API would downsample this image (long edge / area limits). ``hires``: the
+    high-resolution tier of Claude 4.7+ models (long edge <= 2576 px, <= 4784 visual tokens)."""
     W, H = img.size
+    if hires:
+        P = config.CLAUDE_PATCH
+        tok = -(-W // P) * -(-H // P)
+        if max(W, H) > config.CLAUDE_HIRES_MAX_EDGE or tok > config.CLAUDE_HIRES_MAX_TOKENS:
+            raise ValueError(f"image {W}x{H} ({tok} visual tokens) exceeds the high-resolution tier "
+                             f"(edge<={config.CLAUDE_HIRES_MAX_EDGE}, tokens<={config.CLAUDE_HIRES_MAX_TOKENS})")
+        return
     if max(W, H) > config.CLAUDE_MAX_EDGE or W * H > config.CLAUDE_MAX_AREA:
         raise ValueError(
             f"image {W}x{H} exceeds Claude no-resize limits "
@@ -224,7 +232,7 @@ _sleep = time.sleep  # patched in tests
 # --------------------------------------------------------------------------- public API
 def transcribe(images: list[Image.Image], system: str, prompt: str, model: str = DEFAULT_MODEL,
                max_retries: int = 5, *, timeout: float = DEFAULT_TIMEOUT, use_cache: bool = True,
-               effort: str | None = DEFAULT_EFFORT, cache_dir: Path | None = None) -> dict:
+               effort: str | None = DEFAULT_EFFORT, cache_dir: Path | None = None, hires: bool = False) -> dict:
     """Send ``images`` (in order) followed by ``prompt`` to Claude; return text + accounting.
 
     Keys: text, model (served), input_tokens (incl. cache creation/read), output_tokens,
@@ -232,7 +240,7 @@ def transcribe(images: list[Image.Image], system: str, prompt: str, model: str =
     ``use_cache=False`` bypasses the read but still stores a successful result.
     """
     for img in images:
-        check_image_bounds(img)
+        check_image_bounds(img, hires)
     pngs = [png_bytes(img) for img in images]
     key = cache_key(model, system, prompt, pngs, effort)
     cdir = Path(cache_dir) if cache_dir is not None else CACHE_DIR

@@ -22,3 +22,7 @@ CLAUDE_PATCH = 28
 CLAUDE_PX_PER_TOKEN = 784
 CLAUDE_MAX_EDGE = 1568
 CLAUDE_MAX_AREA = 1_150_000
+# High-resolution tier (Claude 4.7 and later, incl. Opus 5.5; vision docs 2026-11): images up to a 2576-px long edge
+# and 4784 visual tokens (ceil(W/28) x ceil(H/28)) are not downscaled. Opt in per call (claude_eval.transcribe(hires=True)).
+CLAUDE_HIRES_MAX_EDGE = 2576
+CLAUDE_HIRES_MAX_TOKENS = 4784
