@@ -147,3 +147,12 @@ three-hop 38% / 67%, two-hop 53% / 90%; sums stay at 100% and largest-of-three a
 Still open: text scores 99.7-100%, so these questions cannot show losses below ~1 point; documents are capped at
 ~250k text tokens by the page-dropping limit; one model (Opus 5.5), one font and layout; questions are about
 planted facts and numbers, not open-ended understanding.
+
+## v2 with Claude Haiku 5.5: pre-registered (2026-11-10, before any Haiku suite call)
+
+The same suite (same 3 documents, same 360 questions, same densities, effort low and high, same analysis and verdict
+rules) with `--model claude-haiku-5-5`. Rows `qav2h_*`, analysis `analysis_v2_haiku/`. A one-page probe showed Haiku
+reads 1932-px pages without downscaling (4,774 tokens vs 4,764) and transcribes their first line exactly at 117.6 and
+58.8 px²/char. Verdicts as for Opus: (1) lossless at 2.2x at each effort; (2) a loss on multi-step questions at ~4x,
+low effort; (3) the effort effect, reported. Also reported: Haiku's text-arm accuracy (Opus scored 99.7-100%, so a
+lower Haiku ceiling would make the image comparison more sensitive).

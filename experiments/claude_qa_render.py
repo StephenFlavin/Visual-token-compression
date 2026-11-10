@@ -381,6 +381,7 @@ def main(argv=None) -> int:
                     help="square pages of this side (e.g. 1932, high-resolution tier); 0 = Phase 1's <= 1.15 MP pages")
     ap.add_argument("--arms", nargs="+", default=["none", "image", "text"])
     ap.add_argument("--effort", default="low")
+    ap.add_argument("--model", default=None, help="Claude model id (default: vbpe.claude_eval.DEFAULT_MODEL)")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--run-name", default="qa500k")
     ap.add_argument("--dry-run", action="store_true")
@@ -412,7 +413,7 @@ def main(argv=None) -> int:
         imgs = pages if arm == "image" else []
         rec = claude_eval.transcribe(imgs, SYSTEM_NONE if arm == "none" else SYSTEM,
                                      prompt_for(arm, doc, qs, len(pages)), effort=a.effort, timeout=1800.0,
-                                     hires=hires)
+                                     hires=hires, **({"model": a.model} if a.model else {}))
         ans = parse_answers(rec.get("text", ""))
         per = [{"id": q["id"], "kind": q["kind"], "sub": q.get("sub"), "pos": q["pos"], "answer": q["answer"],
                 "given": ans.get(q["id"]),
