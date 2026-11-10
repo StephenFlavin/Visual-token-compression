@@ -236,3 +236,30 @@ Predictions:
 4. **notes_pages - notes >= 10 points** (the pages recover what the notes drop).
 5. Reported without a threshold: tokens and list-price cost per corpus (notes calls included), latency, and accuracy
    per question type.
+
+## Deep-research variant: results (2026-11-10); 15 arm calls + 120 note calls, $17.89 at list price, no arm lost pages, no call flagged
+
+The first attempt lost 55 of 120 note calls to transient errors (not cached, so the re-run repeated only those; the
+error text was not logged then). Notes ran over the 250-word limit: median ~380 words per source (max 461), which
+favours the notes arms. Full tables: `results/claude_qa/research/summary.md`.
+
+| arm | input tokens | fewer tokens | $ per corpus (list, incl. notes) | all | lookups | synthesis | arm - text (95% CI) | verdict |
+|---|---|---|---|---|---|---|---|---|
+| text | 272,627 | 1.00x | 1.48 | 99.4% | 99.4% | 99.4% | - | reference |
+| pages (2.2x) | 122,404 | 2.23x | 0.77 | 99.7% | 99.4% | 100.0% | +0.3 (-0.8 to +1.6) | lossless |
+| notes + pages | 163,656 | 1.67x | 3.27 | 99.4% | 99.4% | 99.4% | 0.0 (-1.3 to +1.3) | lossless |
+| notes only | 46,349 | 5.88x | 2.70 | 70.3% | 70.6% | 70.0% | -29.2 (-34.1 to -24.5) | loss |
+| none | 5,060 | - | 0.07 | 6.9% | 12.2% | 1.7% | -92.5 | loss |
+
+Per type, notes only: invented facts 89%, numbers in sentences 52%, citation 97%, conflict 75%, chain 75%, source
+count 28%, total 75%; pages: 99-100% on every type.
+
+Verdicts:
+1. notes_pages vs text lossless: **PASS** (0.0, worst -1.3).
+2. pages vs text lossless on lookups: **not shown** by the bound (0.0, worst -2.1 with 180 questions); synthesis within
+   3 points: **PASS** (+0.6). On all 360 questions pages are lossless (+0.3, worst -0.8).
+3. notes vs text, a loss of at least 10 points: **PASS** (-29.2).
+4. notes_pages - notes >= 10 points: **PASS** (+29.2).
+5. Cost and latency: pages $0.77 per corpus vs $1.48 for text; the notes cost $2.33 per corpus to write (more than
+   the text call), so notes + pages ($3.27) is the most expensive arm unless the notes are reused across many
+   queries. Median latency: text 42 s, pages 56 s, notes + pages 46 s (5 calls in parallel).

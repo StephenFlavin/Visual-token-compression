@@ -145,6 +145,7 @@ candidates to test, ordered from closest to the test to furthest from it.
   twice as many passages for the same tokens with no measurable loss, or the same passages for about half the price. A
   hybrid fits the result better still: send the top few passages as text and the long tail as pages. The tail is there
   for lookups, which survive denser pages (Opus 98% and Sonnet 97% at 4.2x).
+* **Deep research: tested, and it holds at 2.2x** ([below](#tested-deep-research-sources)).
 * **Long-document Q&A** (reports, contracts, manuals, filings). The test is closest to this. At 2.2x, Opus and Sonnet
   answer as well from pages as from text, at about half the cost.
 * **Agent memory and long conversations.** Instead of summarising older turns, which loses details, render them as
@@ -153,6 +154,36 @@ candidates to test, ordered from closest to the test to furthest from it.
   they connect, then fetch the files it will change as text. Not tested, and code differs from prose: exact
   identifiers, symbols and indentation all matter, and a page reader may confuse `l`, `1` and `I`. It needs its own
   test (questions with exact answers about a real repository) before use.
+
+### Tested: deep-research sources
+
+A research orchestrator usually holds many fetched sources, or drops them and keeps notes. The test
+([`experiments/claude_qa_research.py`](../experiments/claude_qa_research.py), pre-registered) used 3 corpora of
+34-50 real Wikipedia articles each (~270k tokens of text), each article a labelled source with invented facts
+planted in it, and 120 questions per corpus: 60 lookups and 60 that need several sources (which source says this,
+two sources that disagree, chains across sources, how many sources mention something, totals across sources).
+Opus 5.5, high effort, one call per arm and corpus, 360 paired questions:
+
+| what the orchestrator gets | input tokens | accuracy | vs text (95% CI) | list price per corpus |
+|---|---|---|---|---|
+| all sources as text | 273k | 99.4% | (reference) | $1.48 |
+| **all sources as 2.2x pages** | **122k** | **99.7%** | **+0.3 (−0.8 to +1.6): lossless** | **$0.77** |
+| notes per source + the pages | 164k | 99.4% | 0.0 (−1.3 to +1.3): lossless | $3.27 (notes $2.33) |
+| notes per source only | 46k | 70.3% | −29.2 (−34.1 to −24.5) | $2.70 (notes $2.33) |
+| nothing | 5k | 6.9% | −92.5 | $0.07 |
+
+* **Pages carry the whole job at 2.2x:** cross-source questions scored 100% from pages (99.4% from text), and every
+  question type was at 99-100%.
+* **Notes alone, the usual way to save context, lose 29 points**, even though they ran over their 250-word limit
+  (~380 words per source). They lose most on the questions a summary drops: numbers in passing sentences (52%) and
+  how many sources mention something (28%).
+* **Notes add nothing on top of the pages here** and cost more to write than the text call itself; they would pay off
+  only if reused across many queries.
+* Pre-registered verdicts: notes + pages lossless, PASS; notes lose at least 10 points, PASS; pages recover at least 10
+  points over notes, PASS; pages lossless on lookups alone, not shown (0.0, worst −2.1 with 180 questions), though
+  lossless on all 360 questions. Details in [`results/claude_qa/research/summary.md`](../results/claude_qa/research/summary.md).
+* **Limits:** encyclopedia articles, not mixed web pages with tables; questions with exact answers, not a written
+  report; Opus only. Page calls were slower (median 56 s against 42 s for text).
 
 **Where not to use it**
 
@@ -321,7 +352,8 @@ the prompt cache, so logged figures can be lower than the table above):
 | **v2 pre-registered, Opus 5.5: 3 documents x 2 efforts** | 30 | **$11.48** |
 | v2, Haiku 5.5 | 30 | $1.24 |
 | v2, Sonnet 5.5 | 30 | $10.05 |
-| **Total** | 114 | **$45.00** |
+| Deep-research variant, Opus 5.5: 120 note calls + 15 arms (55 note calls failed once and were retried) | 135 | $17.89 |
+| **Total** | 249 | **$62.89** |
 
 Not counted: eight small probes (large-page and payload tests), under ~$0.35 together, and the first attempt of one
 Sonnet call that timed out after 30 minutes and was retried: the no-document arm at high effort on document 3. The

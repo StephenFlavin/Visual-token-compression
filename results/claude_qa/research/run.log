@@ -1,0 +1,320 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[dr] corpus 0: 36 sources, 828,663 chars, 120 questions (60 lookups), 27 pages, 124,557 image tokens
+[dr] corpus 1: 50 sources, 825,938 chars, 120 questions (60 lookups), 27 pages, 124,143 image tokens
+[dr] corpus 2: 34 sources, 685,571 chars, 120 questions (60 lookups), 23 pages, 103,086 image tokens
+[claude] 1/120  new cost $0.0359  cached 0  errors 0  10s
+[claude] 2/120  new cost $0.0841  cached 0  errors 0  10s
+[claude] 3/120  new cost $0.1981  cached 0  errors 0  10s
+[claude] 4/120  new cost $0.2437  cached 0  errors 0  10s
+[claude] 5/120  new cost $0.3078  cached 0  errors 0  10s
+[claude] 6/120  new cost $0.3955  cached 0  errors 0  11s
+[claude] 7/120  new cost $0.4418  cached 0  errors 0  11s
+[claude] 8/120  new cost $0.4871  cached 0  errors 0  12s
+[claude] 9/120  new cost $0.5073  cached 0  errors 0  17s
+[claude] 10/120  new cost $0.5462  cached 0  errors 0  19s
+[claude] 11/120  new cost $0.6485  cached 0  errors 0  20s
+[claude] 12/120  new cost $0.7670  cached 0  errors 0  20s
+[claude] 13/120  new cost $0.8061  cached 0  errors 0  21s
+[claude] 14/120  new cost $0.8600  cached 0  errors 0  21s
+[claude] 15/120  new cost $0.8969  cached 0  errors 0  21s
+[claude] 16/120  new cost $0.9447  cached 0  errors 0  21s
+[claude] 17/120  new cost $1.0297  cached 0  errors 0  27s
+[claude] 18/120  new cost $1.0643  cached 0  errors 0  28s
+[claude] 19/120  new cost $1.1209  cached 0  errors 0  29s
+[claude] 20/120  new cost $1.1552  cached 0  errors 0  30s
+[claude] 21/120  new cost $1.2120  cached 0  errors 0  30s
+[claude] 22/120  new cost $1.2676  cached 0  errors 0  30s
+[claude] 23/120  new cost $1.3314  cached 0  errors 0  31s
+[claude] 24/120  new cost $1.4545  cached 0  errors 0  32s
+[claude] 25/120  new cost $1.5387  cached 0  errors 0  37s
+[claude] 26/120  new cost $1.5835  cached 0  errors 0  37s
+[claude] 27/120  new cost $1.6128  cached 0  errors 0  37s
+[claude] 28/120  new cost $1.6517  cached 0  errors 0  39s
+[claude] 29/120  new cost $1.7756  cached 0  errors 0  40s
+[claude] 30/120  new cost $1.8423  cached 0  errors 0  40s
+[claude] 31/120  new cost $1.9187  cached 0  errors 0  41s
+[claude] 32/120  new cost $1.9573  cached 0  errors 0  41s
+[claude] 33/120  new cost $2.0560  cached 0  errors 0  45s
+[claude] 34/120  new cost $2.1390  cached 0  errors 0  47s
+[claude] 35/120  new cost $2.1787  cached 0  errors 0  47s
+[claude] 36/120  new cost $2.3236  cached 0  errors 0  49s
+[claude] 37/120  new cost $2.3858  cached 0  errors 0  49s
+[claude] 38/120  new cost $2.4324  cached 0  errors 0  51s
+[claude] 39/120  new cost $2.5400  cached 0  errors 0  51s
+[claude] 40/120  new cost $2.6608  cached 0  errors 0  51s
+[claude] 41/120  new cost $2.6960  cached 0  errors 0  54s
+[claude] 42/120  new cost $2.7663  cached 0  errors 0  57s
+[claude] 43/120  new cost $2.7992  cached 0  errors 0  57s
+[claude] 44/120  new cost $2.8479  cached 0  errors 0  58s
+[claude] 45/120  new cost $2.8819  cached 0  errors 0  59s
+[claude] 46/120  new cost $2.9206  cached 0  errors 0  59s
+[claude] 47/120  new cost $2.9601  cached 0  errors 0  61s
+[claude] 48/120  new cost $3.0466  cached 0  errors 0  62s
+[claude] 49/120  new cost $3.0954  cached 0  errors 0  64s
+[claude] 50/120  new cost $3.1416  cached 0  errors 0  65s
+[claude] 51/120  new cost $3.1784  cached 0  errors 0  67s
+[claude] 52/120  new cost $3.2085  cached 0  errors 0  68s
+[claude] 53/120  new cost $3.2404  cached 0  errors 0  68s
+[claude] 54/120  new cost $3.2741  cached 0  errors 0  68s
+[claude] 55/120  new cost $3.2977  cached 0  errors 0  69s
+[claude] 56/120  new cost $3.3801  cached 0  errors 0  69s
+[claude] 57/120  new cost $3.4312  cached 0  errors 0  73s
+[claude] 58/120  new cost $3.4772  cached 0  errors 0  76s
+[claude] 59/120  new cost $3.5535  cached 0  errors 0  76s
+[claude] 60/120  new cost $3.6049  cached 0  errors 0  76s
+[claude] 61/120  new cost $3.6447  cached 0  errors 0  77s
+[claude] 62/120  new cost $3.7090  cached 0  errors 0  78s
+[claude] 63/120  new cost $3.7411  cached 0  errors 0  78s
+[claude] 64/120  new cost $3.7834  cached 0  errors 0  80s
+[claude] 65/120  new cost $3.9051  cached 0  errors 0  83s
+[claude] 66/120  new cost $3.9051  cached 0  errors 1  125s
+[claude] 67/120  new cost $3.9051  cached 0  errors 2  126s
+[claude] 68/120  new cost $3.9051  cached 0  errors 3  128s
+[claude] 69/120  new cost $3.9051  cached 0  errors 4  145s
+[claude] 70/120  new cost $3.9051  cached 0  errors 5  150s
+[claude] 71/120  new cost $3.9051  cached 0  errors 6  150s
+[claude] 72/120  new cost $3.9051  cached 0  errors 7  157s
+[claude] 73/120  new cost $3.9051  cached 0  errors 8  169s
+[claude] 74/120  new cost $3.9051  cached 0  errors 9  180s
+[claude] 75/120  new cost $3.9051  cached 0  errors 10  193s
+[claude] 76/120  new cost $3.9051  cached 0  errors 11  195s
+[claude] 77/120  new cost $3.9051  cached 0  errors 12  195s
+[claude] 78/120  new cost $3.9051  cached 0  errors 13  197s
+[claude] 79/120  new cost $3.9051  cached 0  errors 14  208s
+[claude] 80/120  new cost $3.9051  cached 0  errors 15  222s
+[claude] 81/120  new cost $3.9051  cached 0  errors 16  236s
+[claude] 82/120  new cost $3.9051  cached 0  errors 17  252s
+[claude] 83/120  new cost $3.9051  cached 0  errors 18  253s
+[claude] 84/120  new cost $3.9051  cached 0  errors 19  260s
+[claude] 85/120  new cost $3.9051  cached 0  errors 20  265s
+[claude] 86/120  new cost $3.9051  cached 0  errors 21  269s
+[claude] 87/120  new cost $3.9051  cached 0  errors 22  284s
+[claude] 88/120  new cost $3.9051  cached 0  errors 23  291s
+[claude] 89/120  new cost $3.9051  cached 0  errors 24  302s
+[claude] 90/120  new cost $3.9051  cached 0  errors 25  319s
+[claude] 91/120  new cost $3.9051  cached 0  errors 26  320s
+[claude] 92/120  new cost $3.9051  cached 0  errors 27  322s
+[claude] 93/120  new cost $3.9051  cached 0  errors 28  324s
+[claude] 94/120  new cost $3.9051  cached 0  errors 29  333s
+[claude] 95/120  new cost $3.9051  cached 0  errors 30  359s
+[claude] 96/120  new cost $3.9051  cached 0  errors 31  365s
+[claude] 97/120  new cost $3.9051  cached 0  errors 32  370s
+[claude] 98/120  new cost $3.9051  cached 0  errors 33  374s
+[claude] 99/120  new cost $3.9051  cached 0  errors 34  376s
+[claude] 100/120  new cost $3.9051  cached 0  errors 35  377s
+[claude] 101/120  new cost $3.9051  cached 0  errors 36  380s
+[claude] 102/120  new cost $3.9051  cached 0  errors 37  388s
+[claude] 103/120  new cost $3.9051  cached 0  errors 38  412s
+[claude] 104/120  new cost $3.9051  cached 0  errors 39  422s
+[claude] 105/120  new cost $3.9051  cached 0  errors 40  433s
+[claude] 106/120  new cost $3.9051  cached 0  errors 41  433s
+[claude] 107/120  new cost $3.9051  cached 0  errors 42  434s
+[claude] 108/120  new cost $3.9051  cached 0  errors 43  438s
+[claude] 109/120  new cost $3.9051  cached 0  errors 44  443s
+[claude] 110/120  new cost $3.9051  cached 0  errors 45  455s
+[claude] 111/120  new cost $3.9051  cached 0  errors 46  475s
+[claude] 112/120  new cost $3.9051  cached 0  errors 47  492s
+[claude] 113/120  new cost $3.9051  cached 0  errors 48  496s
+[claude] 114/120  new cost $3.9051  cached 0  errors 49  505s
+[claude] 115/120  new cost $3.9051  cached 0  errors 50  507s
+[claude] 116/120  new cost $3.9051  cached 0  errors 51  514s
+[claude] 117/120  new cost $3.9051  cached 0  errors 52  516s
+[claude] 118/120  new cost $3.9051  cached 0  errors 53  517s
+[claude] 119/120  new cost $3.9051  cached 0  errors 54  540s
+[claude] 120/120  new cost $3.9051  cached 0  errors 55  546s
+Traceback (most recent call last):
+  File "/home/user/visual-bpe/experiments/claude_qa_research.py", line 408, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/home/user/visual-bpe/experiments/claude_qa_research.py", line 299, in main
+    assert not bad, f"notes failed: {bad}"
+           ^^^^^^^
+AssertionError: notes failed: [(1, 29), (1, 30), (1, 31), (1, 32), (1, 33), (1, 34), (1, 35), (1, 36), (1, 37), (1, 38), (1, 39), (1, 40), (1, 41), (1, 42), (1, 43), (1, 44), (1, 45), (1, 46), (1, 47), (1, 48), (1, 49), (2, 0), (2, 1), (2, 2), (2, 3), (2, 4), (2, 5), (2, 6), (2, 7), (2, 8), (2, 9), (2, 10), (2, 11), (2, 12), (2, 13), (2, 14), (2, 15), (2, 16), (2, 17), (2, 18), (2, 19), (2, 20), (2, 21), (2, 22), (2, 23), (2, 24), (2, 25), (2, 26), (2, 27), (2, 28), (2, 29), (2, 30), (2, 31), (2, 32), (2, 33)]
+=== restart Tue Nov 10 23:04:10 UTC 2026
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[dr] corpus 0: 36 sources, 828,663 chars, 120 questions (60 lookups), 27 pages, 124,557 image tokens
+[dr] corpus 1: 50 sources, 825,938 chars, 120 questions (60 lookups), 27 pages, 124,143 image tokens
+[dr] corpus 2: 34 sources, 685,571 chars, 120 questions (60 lookups), 23 pages, 103,086 image tokens
+[claude] 1/120  new cost $0.0000  cached 1  errors 0  0s
+[claude] 2/120  new cost $0.0000  cached 2  errors 0  0s
+[claude] 3/120  new cost $0.0000  cached 3  errors 0  0s
+[claude] 4/120  new cost $0.0000  cached 4  errors 0  0s
+[claude] 5/120  new cost $0.0000  cached 5  errors 0  0s
+[claude] 6/120  new cost $0.0000  cached 6  errors 0  0s
+[claude] 7/120  new cost $0.0000  cached 7  errors 0  0s
+[claude] 8/120  new cost $0.0000  cached 8  errors 0  0s
+[claude] 9/120  new cost $0.0000  cached 9  errors 0  0s
+[claude] 10/120  new cost $0.0000  cached 10  errors 0  0s
+[claude] 11/120  new cost $0.0000  cached 11  errors 0  0s
+[claude] 12/120  new cost $0.0000  cached 12  errors 0  0s
+[claude] 13/120  new cost $0.0000  cached 13  errors 0  0s
+[claude] 14/120  new cost $0.0000  cached 14  errors 0  0s
+[claude] 15/120  new cost $0.0000  cached 15  errors 0  0s
+[claude] 16/120  new cost $0.0000  cached 16  errors 0  0s
+[claude] 17/120  new cost $0.0000  cached 17  errors 0  0s
+[claude] 18/120  new cost $0.0000  cached 18  errors 0  0s
+[claude] 19/120  new cost $0.0000  cached 19  errors 0  0s
+[claude] 20/120  new cost $0.0000  cached 20  errors 0  0s
+[claude] 21/120  new cost $0.0000  cached 21  errors 0  0s
+[claude] 22/120  new cost $0.0000  cached 22  errors 0  0s
+[claude] 23/120  new cost $0.0000  cached 23  errors 0  0s
+[claude] 24/120  new cost $0.0000  cached 24  errors 0  0s
+[claude] 25/120  new cost $0.0000  cached 25  errors 0  0s
+[claude] 26/120  new cost $0.0000  cached 26  errors 0  0s
+[claude] 27/120  new cost $0.0000  cached 27  errors 0  0s
+[claude] 28/120  new cost $0.0000  cached 28  errors 0  0s
+[claude] 29/120  new cost $0.0000  cached 29  errors 0  0s
+[claude] 30/120  new cost $0.0000  cached 30  errors 0  0s
+[claude] 31/120  new cost $0.0000  cached 31  errors 0  0s
+[claude] 32/120  new cost $0.0000  cached 32  errors 0  0s
+[claude] 33/120  new cost $0.0000  cached 33  errors 0  0s
+[claude] 34/120  new cost $0.0000  cached 34  errors 0  0s
+[claude] 35/120  new cost $0.0000  cached 35  errors 0  0s
+[claude] 36/120  new cost $0.0000  cached 36  errors 0  0s
+[claude] 37/120  new cost $0.0000  cached 37  errors 0  0s
+[claude] 38/120  new cost $0.0000  cached 38  errors 0  0s
+[claude] 39/120  new cost $0.0000  cached 39  errors 0  0s
+[claude] 40/120  new cost $0.0000  cached 40  errors 0  0s
+[claude] 41/120  new cost $0.0000  cached 41  errors 0  0s
+[claude] 42/120  new cost $0.0000  cached 42  errors 0  0s
+[claude] 43/120  new cost $0.0000  cached 43  errors 0  0s
+[claude] 44/120  new cost $0.0000  cached 44  errors 0  0s
+[claude] 45/120  new cost $0.0000  cached 45  errors 0  0s
+[claude] 46/120  new cost $0.0000  cached 46  errors 0  0s
+[claude] 47/120  new cost $0.0000  cached 47  errors 0  0s
+[claude] 48/120  new cost $0.0000  cached 48  errors 0  0s
+[claude] 49/120  new cost $0.0000  cached 49  errors 0  0s
+[claude] 50/120  new cost $0.0000  cached 50  errors 0  0s
+[claude] 51/120  new cost $0.0000  cached 51  errors 0  0s
+[claude] 52/120  new cost $0.0000  cached 52  errors 0  0s
+[claude] 53/120  new cost $0.0000  cached 53  errors 0  0s
+[claude] 54/120  new cost $0.0000  cached 54  errors 0  0s
+[claude] 55/120  new cost $0.0000  cached 55  errors 0  0s
+[claude] 56/120  new cost $0.0000  cached 56  errors 0  0s
+[claude] 57/120  new cost $0.0000  cached 57  errors 0  0s
+[claude] 58/120  new cost $0.0000  cached 58  errors 0  0s
+[claude] 59/120  new cost $0.0000  cached 59  errors 0  0s
+[claude] 60/120  new cost $0.0000  cached 60  errors 0  0s
+[claude] 61/120  new cost $0.0000  cached 61  errors 0  0s
+[claude] 62/120  new cost $0.0000  cached 62  errors 0  0s
+[claude] 63/120  new cost $0.0000  cached 63  errors 0  0s
+[claude] 64/120  new cost $0.0000  cached 64  errors 0  0s
+[claude] 65/120  new cost $0.0000  cached 65  errors 0  0s
+[claude] 66/120  new cost $0.0327  cached 65  errors 0  9s
+[claude] 67/120  new cost $0.0787  cached 65  errors 0  10s
+[claude] 68/120  new cost $0.1263  cached 65  errors 0  10s
+[claude] 69/120  new cost $0.1814  cached 65  errors 0  10s
+[claude] 70/120  new cost $0.2383  cached 65  errors 0  11s
+[claude] 71/120  new cost $0.2762  cached 65  errors 0  11s
+[claude] 72/120  new cost $0.3178  cached 65  errors 0  11s
+[claude] 73/120  new cost $0.3603  cached 65  errors 0  11s
+[claude] 74/120  new cost $0.4138  cached 65  errors 0  18s
+[claude] 75/120  new cost $0.4515  cached 65  errors 0  19s
+[claude] 76/120  new cost $0.4858  cached 65  errors 0  19s
+[claude] 77/120  new cost $0.5161  cached 65  errors 0  19s
+[claude] 78/120  new cost $0.5606  cached 65  errors 0  19s
+[claude] 79/120  new cost $0.5940  cached 65  errors 0  19s
+[claude] 80/120  new cost $0.5940  cached 66  errors 0  19s
+[claude] 81/120  new cost $0.6512  cached 66  errors 0  20s
+[claude] 82/120  new cost $0.6992  cached 66  errors 0  21s
+[claude] 83/120  new cost $0.7345  cached 66  errors 0  27s
+[claude] 84/120  new cost $0.8488  cached 66  errors 0  28s
+[claude] 85/120  new cost $0.9375  cached 66  errors 0  29s
+[claude] 86/120  new cost $0.9797  cached 66  errors 0  29s
+[claude] 87/120  new cost $1.0687  cached 66  errors 0  29s
+[claude] 88/120  new cost $1.1452  cached 66  errors 0  30s
+[claude] 89/120  new cost $1.2227  cached 66  errors 0  30s
+[claude] 90/120  new cost $1.2800  cached 66  errors 0  31s
+[claude] 91/120  new cost $1.3190  cached 66  errors 0  36s
+[claude] 92/120  new cost $1.3973  cached 66  errors 0  37s
+[claude] 93/120  new cost $1.4546  cached 66  errors 0  38s
+[claude] 94/120  new cost $1.5127  cached 66  errors 0  39s
+[claude] 95/120  new cost $1.5572  cached 66  errors 0  40s
+[claude] 96/120  new cost $1.6100  cached 66  errors 0  40s
+[claude] 97/120  new cost $1.6495  cached 66  errors 0  41s
+[claude] 98/120  new cost $1.7038  cached 66  errors 0  41s
+[claude] 99/120  new cost $1.7630  cached 66  errors 0  44s
+[claude] 100/120  new cost $1.8259  cached 66  errors 0  47s
+[claude] 101/120  new cost $1.8849  cached 66  errors 0  48s
+[claude] 102/120  new cost $1.9215  cached 66  errors 0  48s
+[claude] 103/120  new cost $1.9881  cached 66  errors 0  48s
+[claude] 104/120  new cost $2.0295  cached 66  errors 0  49s
+[claude] 105/120  new cost $2.0779  cached 66  errors 0  50s
+[claude] 106/120  new cost $2.1610  cached 66  errors 0  51s
+[claude] 107/120  new cost $2.3575  cached 66  errors 0  55s
+[claude] 108/120  new cost $2.4433  cached 66  errors 0  56s
+[claude] 109/120  new cost $2.4722  cached 66  errors 0  57s
+[claude] 110/120  new cost $2.5123  cached 66  errors 0  57s
+[claude] 111/120  new cost $2.5521  cached 66  errors 0  57s
+[claude] 112/120  new cost $2.6134  cached 66  errors 0  57s
+[claude] 113/120  new cost $2.6475  cached 66  errors 0  59s
+[claude] 114/120  new cost $2.6991  cached 66  errors 0  60s
+[claude] 115/120  new cost $2.7655  cached 66  errors 0  65s
+[claude] 116/120  new cost $2.8288  cached 66  errors 0  66s
+[claude] 117/120  new cost $2.9041  cached 66  errors 0  66s
+[claude] 118/120  new cost $2.9519  cached 66  errors 0  66s
+[claude] 119/120  new cost $3.0037  cached 66  errors 0  67s
+[claude] 120/120  new cost $3.0651  cached 66  errors 0  68s
+[dr] corpus 0: notes 13,329 words, $2.32
+[dr] corpus 1: notes 18,985 words, $2.67
+[dr] corpus 2: notes 12,935 words, $2.01
+[claude] 1/15  new cost $0.0675  cached 0  errors 0  20s
+[claude] 2/15  new cost $0.1371  cached 0  errors 0  21s
+[claude] 3/15  new cost $1.6994  cached 0  errors 0  40s
+[claude] 4/15  new cost $2.6431  cached 0  errors 0  46s
+[claude] 5/15  new cost $3.4144  cached 0  errors 0  50s
+[claude] 6/15  new cost $3.7690  cached 0  errors 0  57s
+[claude] 7/15  new cost $4.7950  cached 0  errors 0  69s
+[claude] 8/15  new cost $4.8655  cached 0  errors 0  71s
+[claude] 9/15  new cost $5.3164  cached 0  errors 0  89s
+[claude] 10/15  new cost $6.9015  cached 0  errors 0  93s
+[claude] 11/15  new cost $7.2024  cached 0  errors 0  97s
+[claude] 12/15  new cost $8.0437  cached 0  errors 0  115s
+[claude] 13/15  new cost $8.8821  cached 0  errors 0  117s
+[claude] 14/15  new cost $9.5747  cached 0  errors 0  130s
+[claude] 15/15  new cost $10.8778  cached 0  errors 0  131s
+[dr] corpus 0 none: 0.100, input 5,046, $0.07, 20s
+[dr] corpus 0 notes: 0.817, input 41,931, $0.35, 57s
+[dr] corpus 0 notes_pages: 1.000, input 166,533, $0.94, 43s
+[dr] corpus 0 pages: 1.000, input 129,687, $0.77, 47s
+[dr] corpus 0 text: 0.992, input 290,056, $1.56, 40s
+[dr] corpus 1 none: 0.067, input 5,075, $0.07, 21s
+[dr] corpus 1 notes: 0.658, input 56,590, $0.45, 69s
+[dr] corpus 1 notes_pages: 0.992, input 180,778, $1.03, 46s
+[dr] corpus 1 pages: 1.000, input 129,298, $0.84, 72s
+[dr] corpus 1 text: 1.000, input 290,999, $1.59, 47s
+[dr] corpus 2 none: 0.042, input 5,059, $0.07, 21s
+[dr] corpus 2 notes: 0.633, input 40,525, $0.30, 40s
+[dr] corpus 2 notes_pages: 0.992, input 143,657, $0.84, 46s
+[dr] corpus 2 pages: 0.992, input 108,227, $0.69, 56s
+[dr] corpus 2 text: 0.992, input 236,827, $1.30, 42s
+# Claude QA, deep-research variant: results
+
+3 corpora x 120 questions; arms paired with `text` question by question (Newcombe 95% interval for arm - text, exact McNemar). Lossless = lower bound of (arm - text) above -2 points.
+
+| arm | input tokens (mean) | fewer tokens | list-price $ per corpus (incl. notes) | all | lookups | synthesis | arm - text, all (95% CI) | McNemar p | verdict |
+|---|---|---|---|---|---|---|---|---|---|
+| none | 5,060 | 53.88x | 0.07 | 6.9% | 12.2% | 1.7% | -92.5 (-94.7 to -89.1) | 1.1e-100 | loss |
+| notes | 46,349 | 5.88x | 2.70 | 70.3% | 70.6% | 70.0% | -29.2 (-34.1 to -24.5) | 1.3e-30 | loss |
+| notes_pages | 163,656 | 1.67x | 3.27 | 99.4% | 99.4% | 99.4% | -0.0 (-1.3 to +1.3) | 1 | lossless |
+| pages | 122,404 | 2.23x | 0.77 | 99.7% | 99.4% | 100.0% | +0.3 (-0.8 to +1.6) | 1 | lossless |
+| text | 272,627 | 1.00x | 1.48 | 99.4% | 99.4% | 99.4% | - | - | reference |
+
+Per question type (accuracy, pooled; n per type in brackets):
+
+| arm | needle (90) | number (90) | citation (36) | conflict (36) | chain (36) | source_count (36) | total (36) |
+|---|---|---|---|---|---|---|---|
+| none | 0% | 24% | 6% | 0% | 0% | 3% | 0% |
+| notes | 89% | 52% | 97% | 75% | 75% | 28% | 75% |
+| notes_pages | 100% | 99% | 100% | 100% | 100% | 97% | 100% |
+| pages | 100% | 99% | 100% | 100% | 100% | 100% | 100% |
+| text | 100% | 99% | 100% | 100% | 100% | 97% | 100% |
+
+Arm - text by group (points, 95% CI):
+
+| arm | lookups | synthesis |
+|---|---|---|
+| none | -87.2 (-91.2 to -81.2) | -97.8 (-99.0 to -93.8) |
+| notes | -28.9 (-35.9 to -22.5) | -29.4 (-36.5 to -22.6) |
+| notes_pages | -0.0 (-2.1 to +2.1) | -0.0 (-2.6 to +2.6) |
+| pages | -0.0 (-2.1 to +2.1) | +0.6 (-1.6 to +3.1) |
