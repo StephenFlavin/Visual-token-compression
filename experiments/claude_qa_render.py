@@ -193,7 +193,7 @@ def make_questions(paras: list[str], n_needles: int, n_number: int, seed: int, n
     qs = list(needles.values())
     for k, j in enumerate(pick):
         c = cands[j]
-        qs.append({"id": f"S{k + 1:02d}", "kind": "number", "answer": c["answer"],
+        qs.append({"id": f"S{k + 1:02d}", "kind": "number", "answer": c["answer"], "anchors": [c["opening"]],
                    "question": f'Find the sentence that begins "{c["opening"]}". What number does that sentence '
                                "contain?"})
     qs += complex_qs
