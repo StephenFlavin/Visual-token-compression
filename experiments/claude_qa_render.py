@@ -82,15 +82,21 @@ def norm_num(s: str) -> str:
 NP = ["the number of letters written by {who} that the parish archive of {place} holds",
       "the number of moth species {who} recorded in the survey of {place}",
       "the number of tonnes of granite {who} used to rebuild the bridge at {place}"]
-COUNT_Q = ["How many different parish archives does the document say hold letters written by someone?",
-           "How many different surveys does the document mention in which someone recorded species of moth?",
-           "How many different bridges does the document say were rebuilt using tonnes of granite?"]
+# count questions use fact types that no other question mentions (counting the needle questions in the prompt
+# answered the first version without the document: the no-document arm scored 3/3)
+COUNT_FACTS = [("{who} keeps the lighthouse at {place}.",
+                "How many different lighthouses does the document say someone keeps?"),
+               ("{who} restored the windmill at {place}.",
+                "How many different windmills does the document say someone restored?"),
+               ("{who} built the observatory at {place}.",
+                "How many different observatories does the document say someone built?")]
 
 
 def make_complex(needles: list[dict], n_paras: int, rng, used: set) -> tuple[list[dict], dict]:
     """20 harder questions with exact answers, all over invented facts (so the prior cannot answer them):
     8 two-hop (bridge needle -> who chairs a rowing club -> how many boats; 2 extra facts placed far apart),
-    6 sums of two needles, 3 largest-of-three (same template), 3 counts over the whole document.
+    6 sums of two needles, 3 largest-of-three (same template), 3 counts over the whole document (5-12 facts each
+    of a type no other question mentions).
     -> (questions, {paragraph index: [extra facts]})."""
     qs, extra = [], {}
     bridges = [x for x in needles if x["t"] == 2]
@@ -130,10 +136,14 @@ def make_complex(needles: list[dict], n_paras: int, rng, used: set) -> tuple[lis
                    "anchors": [x["fact"] for x in tri],
                    "question": "Which of these three numbers is the largest: " + "; ".join(np_(x) for x in tri)
                                + "? Answer with that number."})
-    for k in range(3):
-        group = [x for x in needles if x["t"] == k]
-        qs.append({"id": f"C{len(qs) + 1:02d}", "kind": "complex", "sub": "count", "answer": str(len(group)),
-                   "anchors": [x["fact"] for x in group], "question": COUNT_Q[k]})
+    for fact, q in COUNT_FACTS:
+        facts = []
+        for _ in range(int(rng.integers(5, 13))):
+            who, place = invented(rng, used)
+            facts.append(fact.format(who=who, place=place))
+            extra.setdefault(free_index([]), []).append(facts[-1])
+        qs.append({"id": f"C{len(qs) + 1:02d}", "kind": "complex", "sub": "count", "answer": str(len(facts)),
+                   "anchors": facts, "question": q})
     return qs, extra
 
 
