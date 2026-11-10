@@ -147,8 +147,87 @@ def make_complex(needles: list[dict], n_paras: int, rng, used: set) -> tuple[lis
     return qs, extra
 
 
+HEAD = ["the person whose letters the parish archive of {place} holds",
+        "the person who recorded moth species in the survey of {place}",
+        "the person who rebuilt the bridge at {place}"]
+COUNT_FACTS_V2 = COUNT_FACTS + [("{who} owns the foundry at {place}.",
+                                 "How many different foundries does the document say someone owns?"),
+                                ("{who} founded the library at {place}.",
+                                 "How many different libraries does the document say someone founded?"),
+                                ("{who} runs the ferry at {place}.",
+                                 "How many different ferries does the document say someone runs?")]
+
+
+def make_complex_v2(needles: list[dict], n_paras: int, rng, used: set) -> tuple[list[dict], dict]:
+    """40 harder questions (v2, 2026-11-10), all over invented facts:
+    10 two-hop (needle person -> chairs rowing club -> boats), 8 three-hop (needle person -> chairs club -> the
+    club's boathouse stands in town -> lamp posts), 10 sums of two needles, 6 largest-of-three (2 per template),
+    6 counts (6 fact types no other question mentions, 5-12 facts each). Chain facts are >= 1/8 of the document
+    apart. -> (questions, {paragraph index: [extra facts]})."""
+    qs, extra = [], {}
+    far = max(3, n_paras // 8)
+    taken = {x["at"] for x in needles}
+
+    def free_index(chain: list[int]) -> int:
+        for _ in range(100000):
+            i = int(rng.integers(1, n_paras - 1))
+            if all(abs(i - j) >= 3 for j in taken) and all(abs(i - j) >= far for j in chain):
+                taken.add(i)
+                chain.append(i)
+                return i
+        raise RuntimeError("no free paragraph for an extra fact")
+
+    def place_facts(head, facts):
+        chain = [head["at"]]
+        for f in facts:
+            extra.setdefault(free_index(chain), []).append(f)
+
+    head = lambda x: HEAD[x["t"]].format(place=x["place"])  # noqa: E731
+    heads = [needles[int(i)] for i in rng.choice(len(needles), 18, replace=False)]
+    for x in heads[:10]:
+        _, club = invented(rng, used)
+        m = int(rng.integers(12, 480))
+        fs = [f"{x['who']} chairs the {club} Rowing Club.", f"The {club} Rowing Club owns {m} boats."]
+        place_facts(x, fs)
+        qs.append({"id": f"C{len(qs) + 1:02d}", "kind": "complex", "sub": "two_hop", "answer": str(m),
+                   "anchors": [x["fact"]] + fs,
+                   "question": f"How many boats does the rowing club chaired by {head(x)} own?"})
+    for x in heads[10:]:
+        _, club = invented(rng, used)
+        _, town = invented(rng, used)
+        m = int(rng.integers(40, 900))
+        fs = [f"{x['who']} chairs the {club} Rowing Club.",
+              f"The boathouse of the {club} Rowing Club stands in {town}.", f"The town of {town} has {m} lamp posts."]
+        place_facts(x, fs)
+        qs.append({"id": f"C{len(qs) + 1:02d}", "kind": "complex", "sub": "three_hop", "answer": str(m),
+                   "anchors": [x["fact"]] + fs,
+                   "question": f"How many lamp posts are there in the town where the boathouse of the rowing club "
+                               f"chaired by {head(x)} stands?"})
+    np_ = lambda x: NP[x["t"]].format(who=x["who"], place=x["place"])  # noqa: E731
+    for _ in range(10):
+        a, b = (needles[int(i)] for i in rng.choice(len(needles), 2, replace=False))
+        qs.append({"id": f"C{len(qs) + 1:02d}", "kind": "complex", "sub": "sum", "answer": str(a["n"] + b["n"]),
+                   "anchors": [a["fact"], b["fact"]], "question": f"What is {np_(a)} plus {np_(b)}? Give the sum."})
+    for k in (0, 1, 2, 0, 1, 2):
+        group = [x for x in needles if x["t"] == k]
+        tri = [group[int(i)] for i in rng.choice(len(group), 3, replace=False)]
+        qs.append({"id": f"C{len(qs) + 1:02d}", "kind": "complex", "sub": "max", "answer": str(max(x["n"] for x in tri)),
+                   "anchors": [x["fact"] for x in tri],
+                   "question": "Which of these three numbers is the largest: " + "; ".join(np_(x) for x in tri)
+                               + "? Answer with that number."})
+    for fact, q in COUNT_FACTS_V2:
+        facts = []
+        for _ in range(int(rng.integers(5, 13))):
+            who, place = invented(rng, used)
+            facts.append(fact.format(who=who, place=place))
+            extra.setdefault(free_index([]), []).append(facts[-1])
+        qs.append({"id": f"C{len(qs) + 1:02d}", "kind": "complex", "sub": "count", "answer": str(len(facts)),
+                   "anchors": facts, "question": q})
+    return qs, extra
+
+
 def make_questions(paras: list[str], n_needles: int, n_number: int, seed: int, n_complex: int = 0):
-    assert n_complex in (0, 20), "the complex set is fixed at 20 questions"
+    assert n_complex in (0, 20, 40), "complex sets: 20 (v1) or 40 (v2)"
     rng = np.random.default_rng(seed)
     used: set = set()
     # needles: inserted before evenly spaced paragraphs
@@ -165,8 +244,8 @@ def make_questions(paras: list[str], n_needles: int, n_number: int, seed: int, n
                            "who": who, "place": place, "n": n, "t": k % len(TEMPLATES), "at": int(i)}
     complex_qs, extra = [], {}
     if n_complex:   # its own RNG stream: the needles and number questions are the same as without it
-        complex_qs, extra = make_complex(list(needles.values()), len(paras), np.random.default_rng([seed, 1]),
-                                         set(used))
+        mk = make_complex if n_complex == 20 else make_complex_v2
+        complex_qs, extra = mk(list(needles.values()), len(paras), np.random.default_rng([seed, 1]), set(used))
     doc_paras = []
     for i, p in enumerate(paras):
         if i in needles:
@@ -295,8 +374,9 @@ def main(argv=None) -> int:
     ap.add_argument("--budget", type=float, default=29.4, help="px²/char (Phase 1: Claude's 3%% CER point)")
     ap.add_argument("--n-needles", type=int, default=40)
     ap.add_argument("--n-number", type=int, default=40)
-    ap.add_argument("--n-complex", type=int, default=0, choices=[0, 20],
-                    help="20 harder questions over the invented facts (two-hop, sums, largest-of-three, counts)")
+    ap.add_argument("--n-complex", type=int, default=0, choices=[0, 20, 40],
+                    help="harder questions over the invented facts: 20 (v1: two-hop, sums, largest-of-three, counts) "
+                         "or 40 (v2: adds three-hop)")
     ap.add_argument("--page-px", type=int, default=0,
                     help="square pages of this side (e.g. 1932, high-resolution tier); 0 = Phase 1's <= 1.15 MP pages")
     ap.add_argument("--arms", nargs="+", default=["none", "image", "text"])

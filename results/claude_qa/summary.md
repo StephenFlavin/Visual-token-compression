@@ -92,3 +92,27 @@ page-dropping cap. Every image arm arrived complete (input tokens >= the image-t
   multi-step questions drop (two-hop 6/8, counts 0/3).
 * Text gets the counts right at this length (3/3) but not at 800k tokens (0/3).
 * Ceiling: text scores 100%, so a loss smaller than 1 question in 100 at 2.2x would not show.
+
+## v2: pre-registered (2026-11-10, written and committed before any v2 call)
+
+Addresses the limits of the runs above: ceiling (text at 100%), one document, one call per arm, low effort only,
+"lossless" undefined.
+
+* **Documents:** 3 non-overlapping 700k-char documents (paragraph offsets 0, 1150, 2480 of test + val (+ a little
+  train); seeds 0, 1, 2, so different invented facts). Sized so every image arm stays under the page-dropping cap.
+* **Questions:** 120 per document, 360 per arm: 40 invented facts, 40 numbers in real sentences, 40 complex
+  (v2: 10 two-hop, 8 three-hop [person -> chairs a rowing club -> its boathouse stands in town -> lamp posts], 10 sums,
+  6 largest-of-three, 6 counts over fact types no other question mentions). Exact answers, scored automatically.
+* **Arms per document and effort:** text, no document, images at 117.6 (~2.2x fewer tokens), 88.2 (~3x) and 58.8
+  (~4.2x) px²/char on 1932-px pages. **Effort low and high** (`--effort`). 30 calls in all.
+* **Analysis:** `experiments/analyse_claude_qa.py`, pooled over the 3 documents per (effort, density), each image
+  answer paired with the same document's text answer. Paired difference text - image with Newcombe's score
+  interval (95%); exact McNemar; per-kind accuracy with Wilson intervals. Arms that lost pages are excluded and
+  listed.
+* **Pre-registered verdicts:**
+  1. **Lossless at 2.2x:** at 117.6 px²/char the upper 95% bound of (text - image) is below 2 points, at each effort.
+     (With 360 questions this needs at most ~2 net text-only errors.)
+  2. **Loss at ~4x on complex questions:** at 58.8 px²/char the lower 95% bound of (text - image) on the 120 complex
+     questions is above 0, at low effort.
+  3. **Effort:** reported, no threshold: does high effort narrow the image gap at 58.8 and 88.2?
+* Cost estimate: ~$6 at low effort, ~$10-20 at high (thinking tokens), list price, from the subscription quota.
