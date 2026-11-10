@@ -67,6 +67,7 @@ So architectural KV compression alone gets within 2x of the moonshot's bytes per
 | DeepSeek-OCR (Fox, prose) | Trained 16x conv compressor | 10.5x (~42–47 chars) | 96.5% precision |
 | DeepSeek-OCR | same | 11.8x / 19.7x | 93.8% / 59.1% |
 | TextHawk2 | Trained 16x resampler | 183 words in 32 tokens (~30+ chars, single demo) | "accurate recovery" (no metric) |
+| Optical Context Compression Is Just (Bad) Autoencoding (Lee, Yang, Berg-Kirkpatrick, UCSD; arXiv 2512.03643 v2, Apr 2026; row added 2026-11-10) | DeepSeek-OCR's vision encoder vs mean pooling vs a learned hierarchical text encoder (13-92M), all into DeepSeek-OCR's decoder, trained 1 epoch on 500k Wikipedia segments; 1k-token contexts | vision 2.3-12.8x; text encoders up to 83-100x | Reconstruction perplexity at ~8-15x: vision 1.06-1.14, hierarchical 1.00-1.01. LM: vision about equal to truncation, behind the hierarchical encoder at every ratio. QA recall: vision beats truncation but never the best text encoder. Single runs, English Wikipedia only |
 
 **Capacity-law evidence.** "How Much Information Can a Vision Token Hold?" (arXiv 2602.02539) tested DeepSeek-OCR, with Qwen2.5-VL and InternVL3.5 as transfer checks. It used block-shuffled text to remove language priors. Findings:
 - Three phases: stable, then unstable, then collapse.

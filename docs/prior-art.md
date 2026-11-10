@@ -42,7 +42,13 @@
   - Vision: 1.06 at 8.6× and 1.14 at 12.8×.
   - Parameter-free mean pooling: 1.16 at 9.8×.
   - A learned hierarchical encoder: 1.00 at 7.9× and 1.01 at 15.4×.
-  - For language modelling, vision scores about the same as truncation, or slightly worse.
+  - For language modelling, vision scores about the same as truncation, or slightly worse, and behind the
+    hierarchical encoder at every ratio.
+  - Factual recall (answer log-likelihood, 9,794 generated QA pairs): every compressor beats truncation, and vision
+    never beats the best text encoder (at ~9×: vision −2.23, hierarchical −2.08, truncation −2.95; full context −1.07).
+  - Setup: all encoders feed DeepSeek-OCR's own 3B MoE decoder, trained one epoch on 500k 2,000-token Wikipedia
+    segments, scored on 1k-token contexts. Stated limits: single runs, English Wikipedia only, no contexts beyond
+    1k, only DeepSeek-OCR's encoder tested. UC San Diego; preprint, v2 April 2026.
 - **C3** (text-side latent compression): 98% at 20× and about 93% at 40×.
 - **"Visual Merit or Linguistic Crutch?"** (Jan 2026) tested DeepSeek-OCR on random-letter text:
 
@@ -101,7 +107,7 @@
 1. DeepSeek-OCR. Wei, Sun, Li (DeepSeek-AI), 2025-10. https://arxiv.org/abs/2510.18234
 2. DeepSeek-OCR 2. Wei, Sun, Li, 2026-01. https://arxiv.org/abs/2601.20552
 3. Glyph. Cheng et al. (Tsinghua/Zhipu), 2025-10. https://arxiv.org/abs/2510.17800 ; config: https://github.com/thu-coai/Glyph/blob/main/config/config_en.json
-4. Optical Context Compression Is Just (Bad) Autoencoding. Lee, Yang, Berg-Kirkpatrick, 2025-12. https://arxiv.org/abs/2512.03643
+4. Optical Context Compression Is Just (Bad) Autoencoding. Lee, Yang, Berg-Kirkpatrick (UC San Diego), 2025-12, v2 2026-04. https://arxiv.org/abs/2512.03643
 5. Context Cascade Compression. Liu, Qiu, 2025-11. https://arxiv.org/abs/2511.15244
 6. Visual Merit or Linguistic Crutch? Liang et al., 2026-01. https://arxiv.org/abs/2601.03714
 7. VTCBench. Zhao et al., 2025-12. https://arxiv.org/abs/2512.15649
