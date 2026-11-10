@@ -81,17 +81,22 @@ is the models reading text.
 
 ## What it costs
 
-![List-price cost per call and accuracy, per model and input form](img/claude_qa_cost.png)
+![List-price cost per call and accuracy, per model, input form and effort](img/claude_qa_cost.png)
 
-*How to read it:* one row per option; the bar is the list-price cost of one call (a ~245k-token document plus 120
-questions), the dot its accuracy with a 95% interval. Costs are list prices as if nothing came from the prompt
-cache (see [A4](#a4-cost)); these calls drew on a subscription quota, so they are not amounts billed.
+*How to read it:* one row per option, low effort (light bar, hollow dot) above high effort (solid bar, filled dot).
+The bar is the list-price cost of one call (a ~245k-token document plus 120 questions), the dot its accuracy with a
+95% interval; ✓ marks no measurable loss against the same model reading text at that effort. Costs are list prices
+as if nothing came from the prompt cache (see [A4](#a4-cost)); these calls drew on a subscription quota, so they are
+not amounts billed.
 
-* **Opus:** 2.2x pages cost $0.68 and 2.9x $0.55 against $1.34 for text, with no measurable loss.
-* **Sonnet:** 2.2x pages cost $0.37 against $0.67 for text, with no measurable loss at high effort: the cheapest
-  lossless option of the three models.
-* **Haiku:** reading text costs $0.18 (98% right). Its 2.9x pages drop below Haiku's 100k-token price tier ($0.023)
-  but lose 11 points.
+* **Opus:** 2.2x pages cost $0.63 (low effort) or $0.68 (high) against $1.29-1.34 for text, with no measurable loss at
+  either effort; 2.9x pages at high effort ($0.55) are lossless too.
+* **Sonnet:** 2.2x pages at high effort cost $0.37 against $0.67 for text, with no measurable loss: the cheapest
+  lossless option of the three models. At low effort ($0.34) the worst case is just outside the margin.
+* **Effort is cheap where it is not needed and worth it where it is:** on text and 2.2x pages high effort adds 4-10%
+  to the cost; on 4.2x pages it adds 37% (Opus) to 100% (Sonnet), and buys back 7-9 points.
+* **Haiku:** reading text at high effort costs $0.18 (98% right). Its 2.9x pages drop below Haiku's 100k-token price
+  tier ($0.016-0.023) but lose 11 points; at low effort it barely reasons over text (39%, marked *).
 
 ## How the test works
 

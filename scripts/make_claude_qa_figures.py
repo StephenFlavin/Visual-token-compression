@@ -6,7 +6,7 @@
                             28-px vision-token grid
 3. claude_qa_breakdown.png  accuracy per question type (columns) for each model reading text and pages (row blocks),
                             high effort, shaded by points lost vs the same model reading text
-4. claude_qa_cost.png       list-price cost per call and accuracy, one row per model x input form, high effort
+4. claude_qa_cost.png       list-price cost per call and accuracy, one row per model x input form, both efforts
 5. claude_qa_curve.png      accuracy change vs token saving, one line per model (high effort), lossless band shaded
 6. claude_qa_effort.png     low vs high effort, accuracy change per model and density (models with a valid low row)
 7. claude_qa_position.png   single-fact lookups by where the fact sits in the document (does depth matter?)
@@ -305,71 +305,97 @@ def costs(model: str, effort: str = "high") -> dict:
     return {k: float(np.mean(v)) for k, v in out.items()}
 
 
+def tint(hex_colour: str, amount: float = 0.55) -> tuple:
+    """Blend a colour towards the surface (white): the low-effort shade of a model's colour."""
+    import matplotlib.colors as mc
+    r, g, b_ = mc.to_rgb(hex_colour)
+    return (r + (1 - r) * amount, g + (1 - g) * amount, b_ + (1 - b_) * amount)
+
+
 def fig_cost():
-    """One row per option (model x input form), two aligned panels: list-price cost per call (bar) and accuracy on
-    all 360 questions (dot, 95% Wilson interval). High effort."""
+    """One row per option (model x input form), both efforts in each row: list-price cost per call (light bar = low
+    effort, solid bar = high) and accuracy on all 360 questions (hollow dot = low, filled = high; 95% Wilson
+    interval). Costs as if uncached, mean of 3 documents."""
     plt = M.chart_style()
     S = summaries()
-    rows_ = []   # (model, label, cost, acc, lo, hi, lossless)
+    C = {e: {m: costs(m, e) for m in MODELS} for e in ("low", "high")}
+    rows_ = []   # (model, label, {effort: (cost, acc, lo, hi, lossless, flagged)})
     for m in MODELS:
-        c = costs(m)
-        first = S[m][f"high/{BUDGETS[0][0]}"]["kinds"]["all"]
-        lo, hi = M.wilson(first[0], first[2])
-        rows_.append((m, "text", c["text"], first[0] / first[2], lo, hi, None))
-        for b, lab in BUDGETS:
-            r = S[m][f"high/{b}"]
-            a = r["kinds"]["all"]
-            lo, hi = M.wilson(a[1], a[2])
-            rows_.append((m, f"{lab} pages", c[b], a[1] / a[2], lo, hi, bool(r.get("lossless"))))
-    n_rows = 4 * len(MODELS)
-    H_in = 2.45 + 0.36 * n_rows
-    fig, (axc, axa) = plt.subplots(1, 2, figsize=(10.4, H_in), dpi=150, sharey=True,
-                                   gridspec_kw={"width_ratios": [1.0, 1.0]})
+        for key, lab in [("text", "text")] + [(b, f"{l_} pages") for b, l_ in BUDGETS]:
+            per = {}
+            for e in ("low", "high"):
+                r = S[m][f"{e}/{BUDGETS[0][0] if key == 'text' else key}"]
+                k, n = (r["kinds"]["all"][0] if key == "text" else r["kinds"]["all"][1]), r["kinds"]["all"][2]
+                lo, hi = M.wilson(k, n)
+                per[e] = (C[e][m][key], k / n, lo, hi, key != "text" and bool(r.get("lossless")),
+                          bool(r.get("disengaged")))
+            rows_.append((m, lab, per))
     ys, y = [], 0.0
     for i, r in enumerate(rows_):
         if i and rows_[i - 1][0] != r[0]:
-            y += 0.7
+            y += 0.6
         ys.append(y)
         y += 1
-    for yy, (m, lab, cost, acc, lo, hi, ok) in zip(ys, rows_):
+    TOP, BOT, ROW = 1.95, 0.65, 0.5
+    H_in = TOP + BOT + ROW * (y + 0.6)
+    fig, (axc, axa) = plt.subplots(1, 2, figsize=(10.4, H_in), dpi=150, sharey=True)
+    fig.subplots_adjust(left=0.20, right=0.985, top=1 - TOP / H_in, bottom=BOT / H_in, wspace=0.08)
+    D = 0.21                                       # low effort above, high effort below the row centre
+    flagged_any = False
+    for yy, (m, lab, per) in zip(ys, rows_):
         col = MODELS[m]["colour"]
-        axc.barh(yy, cost, height=0.62, color=col, lw=0)
-        axc.text(cost + 0.02, yy, f"${cost:.2f}" if cost >= 0.1 else f"${cost:.3f}", va="center", fontsize=8.5,
-                 color=M.INK_1)
-        axa.plot([lo * 100, hi * 100], [yy, yy], color=col, lw=1.4, zorder=2)
-        axa.plot(acc * 100, yy, marker=MODELS[m]["marker"], ms=8 if MODELS[m]["marker"] == "o" else 7, color=col,
-                 mec=M.SURFACE, mew=1.5, zorder=3)
-        note = "  ✓" if ok else ""
-        axa.text(hi * 100 + 1.5, yy, f"{acc * 100:.1f}%{note}", va="center", fontsize=8.5, color=M.INK_1)
-    axc.set_yticks(ys, [lab for _, lab, *_ in rows_], fontsize=9)
+        mk = MODELS[m]["marker"]
+        for e, dy in (("low", -D), ("high", D)):
+            cost, acc, lo, hi, ok, flag = per[e]
+            flagged_any |= flag
+            axc.barh(yy + dy, cost, height=0.38, color=tint(col) if e == "low" else col, lw=0)
+            axc.text(cost + 0.02, yy + dy, f"${cost:.2f}" if cost >= 0.1 else f"${cost:.3f}", va="center",
+                     fontsize=7.8, color=M.INK_1)
+            axa.plot([lo * 100, hi * 100], [yy + dy] * 2, color=tint(col) if e == "low" else col, lw=1.3, zorder=2)
+            axa.plot(acc * 100, yy + dy, marker=mk, ms=6.5, ls="none", zorder=3,
+                     **({"mfc": M.SURFACE, "mec": col, "mew": 1.5} if e == "low" else
+                        {"color": col, "mec": M.SURFACE, "mew": 1.0}))
+            note = ("  ✓" if ok else "") + ("*" if flag else "")
+            axa.text(hi * 100 + 1.5, yy + dy, f"{acc * 100:.1f}%{note}", va="center", fontsize=7.8, color=M.INK_1)
+    axc.set_yticks(ys, [lab for _, lab, _ in rows_], fontsize=9)
     for m in MODELS:
         yy = [v for v, r in zip(ys, rows_) if r[0] == m]
         block_label(fig, axc, (yy[0] + yy[-1]) / 2, m)
-    axc.set_ylim(ys[-1] + 0.7, -0.9)
+    axc.set_ylim(ys[-1] + 0.7, -0.75)
     axc.tick_params(axis="y", length=0)
     axc.set_xlim(0, 1.6)
     axc.set_xticks([0, 0.5, 1.0, 1.5], ["$0", "$0.50", "$1.00", "$1.50"])
     axc.set_xlabel("list-price cost per call")
-    axc.set_title("Cost of one call", loc="left", fontsize=10.5, fontweight="bold")
-    axa.set_xlim(40, 113)
-    axa.set_xticks([40, 60, 80, 100], ["40%", "60%", "80%", "100%"])
+    axa.set_xlim(0, 116)
+    axa.set_xticks([0, 25, 50, 75, 100], ["0%", "25%", "50%", "75%", "100%"])
     axa.set_xlabel("questions answered correctly (all 360)")
-    axa.set_title("What it gets right", loc="left", fontsize=10.5, fontweight="bold")
     axa.tick_params(axis="y", length=0)
-    for ax in (axc, axa):
+    for ax, title in ((axc, "Cost of one call"), (axa, "What it gets right")):
         ax.grid(axis="x", color=M.GRID, lw=0.8)
         ax.set_axisbelow(True)
         ax.spines["left"].set_visible(False)
-    axa.spines["bottom"].set_bounds(40, 100)
-    header(fig, H_in, "Pages at 2.2x fewer tokens halve the cost for Opus and Sonnet, with no measurable loss",
-           "One call = a ~245k-token document plus 120 questions, high effort, mean of 3 documents. ✓ = no measurable "
-           "loss vs the same model reading text\n(pre-registered). List prices as if uncached: Opus \\$4 / \\$20 and "
-           "Sonnet \\$2 / \\$10 per million input / output tokens; Haiku \\$0.10 / \\$0.50 up to 100k-token\n"
-           "prompts, \\$0.50 / \\$2.50 above. Calls drew on a subscription quota, so these are not amounts billed.")
-    fig.subplots_adjust(left=0.20, right=0.985, top=1 - 1.6 / H_in, bottom=0.6 / H_in, wspace=0.08)
+        fig.text(ax.get_position().x0, 1 - (TOP - 0.18) / H_in, title, ha="left", va="bottom", fontsize=10.5,
+                 fontweight="bold", color=M.INK_1)
+    axa.spines["bottom"].set_bounds(0, 100)
+    from matplotlib.patches import Patch
+    from matplotlib.lines import Line2D
+    axc.legend(handles=[Patch(facecolor=tint(M.INK_2), label="low effort"), Patch(facecolor=M.INK_2, label="high effort")],
+               loc="lower right", frameon=False, fontsize=8.5)
+    axa.legend(handles=[Line2D([], [], marker="o", ms=6.5, mfc=M.SURFACE, mec=M.INK_2, mew=1.5, ls="none",
+                               label="low effort"),
+                        Line2D([], [], marker="o", ms=6.5, color=M.INK_2, ls="none", label="high effort")],
+               loc="lower right", frameon=False, fontsize=8.5)
+    star = ("\n* Haiku at low effort answered from text almost without reasoning: what you get at that setting, but "
+            "not a fair reading comparison.") if flagged_any else ""
+    header(fig, H_in, "Cost per call and accuracy, at low and high effort",
+           "One call = a ~245k-token document plus 120 questions, mean of 3 documents. In each row low effort (light bar, "
+           "hollow dot) sits above high effort (solid, filled).\n✓ = no measurable loss vs the same model reading text "
+           "at that effort (pre-registered). List prices as if uncached: Opus \\$4 / \\$20, Sonnet \\$2 / \\$10 "
+           "per million\ninput / output tokens; Haiku \\$0.10 / \\$0.50 up to 100k-token prompts, \\$0.50 / \\$2.50 "
+           "above. Not amounts billed." + star)
     save(fig, "claude_qa_cost.png")
     plt.close(fig)
-    print("claude_qa_cost.png", {m: {k: round(v, 3) for k, v in costs(m).items()} for m in MODELS})
+    print("claude_qa_cost.png", {e: {m: {k: round(v, 3) for k, v in c.items()} for m, c in C[e].items()} for e in C})
 
 
 # ------------------------------------------------------------------------------------------- 5. curve
