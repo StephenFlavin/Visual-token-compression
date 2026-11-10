@@ -23,16 +23,17 @@
    1.0
   ],
   "lossless": true,
+  "disengaged": [],
   "kinds": {
-   "needle": [
-    120,
-    120,
-    120
-   ],
    "all": [
     359,
     359,
     360
+   ],
+   "needle": [
+    120,
+    120,
+    120
    ],
    "number": [
     120,
@@ -95,16 +96,17 @@
    3.725290298461914e-09
   ],
   "lossless": false,
+  "disengaged": [],
   "kinds": {
-   "needle": [
-    120,
-    117,
-    120
-   ],
    "all": [
     359,
     330,
     360
+   ],
+   "needle": [
+    120,
+    117,
+    120
    ],
    "number": [
     120,
@@ -167,16 +169,17 @@
    1.0
   ],
   "lossless": true,
+  "disengaged": [],
   "kinds": {
-   "needle": [
-    120,
-    120,
-    120
-   ],
    "all": [
     359,
     360,
     360
+   ],
+   "needle": [
+    120,
+    120,
+    120
    ],
    "number": [
     120,
@@ -243,16 +246,17 @@
    1.0
   ],
   "lossless": true,
+  "disengaged": [],
   "kinds": {
-   "needle": [
-    120,
-    120,
-    120
-   ],
    "all": [
     360,
     359,
     360
+   ],
+   "needle": [
+    120,
+    120,
+    120
    ],
    "number": [
     120,
@@ -315,16 +319,17 @@
    5.551115123125783e-17
   ],
   "lossless": false,
+  "disengaged": [],
   "kinds": {
-   "needle": [
-    120,
-    118,
-    120
-   ],
    "all": [
     360,
     305,
     360
+   ],
+   "needle": [
+    120,
+    118,
+    120
    ],
    "number": [
     120,
@@ -387,16 +392,17 @@
    0.125
   ],
   "lossless": false,
+  "disengaged": [],
   "kinds": {
-   "needle": [
-    120,
-    120,
-    120
-   ],
    "all": [
     360,
     356,
     360
+   ],
+   "needle": [
+    120,
+    120,
+    120
    ],
    "number": [
     120,

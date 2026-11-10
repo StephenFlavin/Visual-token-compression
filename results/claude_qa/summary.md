@@ -156,3 +156,27 @@ reads 1932-px pages without downscaling (4,774 tokens vs 4,764) and transcribes 
 58.8 px²/char. Verdicts as for Opus: (1) lossless at 2.2x at each effort; (2) a loss on multi-step questions at ~4x,
 low effort; (3) the effort effect, reported. Also reported: Haiku's text-arm accuracy (Opus scored 99.7-100%, so a
 lower Haiku ceiling would make the image comparison more sensitive).
+
+## v2 with Haiku 5.5: results (2026-11-10); 30 calls, $1.24 at list price, no arm lost pages
+
+Analysis `analysis_v2_haiku/summary.md`. **High effort (valid):**
+
+| image px²/char | fewer tokens | text | image | text - image (95% CI) | lookups: text / image | multi-step: text / image |
+|---|---|---|---|---|---|---|
+| 117.6 | 2.19x | 98.1% | 92.2% | +5.8 (+3.0 to +9.0) | 99.2% / 99.2% | 95.8% / 78.3% |
+| 88.2 | 2.87x | 98.1% | 86.9% | +11.1 (+7.9 to +14.9) | 99.2% / 98.8% | 95.8% / 63.3% |
+| 58.8 | 4.15x | 98.1% | 45.6% | +52.5 (+47.1 to +57.6) | 99.2% / 60.8% | 95.8% / 15.0% |
+
+**Low effort: not comparable (post hoc, from the model's own output).** The text arm answered with 400-800 output
+tokens (no reasoning; 33-45% correct, one call declined 80 of 120 questions: "I haven't worked those out ... I can go
+through them in batches"), while the image arms spent 8-15k output tokens; one low-effort image call guessed "with no
+lookup performed". The comparison measures how much Haiku chooses to think per input type, not reading.
+`analyse_claude_qa.py` now flags unanswered questions and such phrases (added after this run) and marks the row
+invalid. Opus did not do this (~3k output tokens on both arms at low effort; no flags on any Opus call).
+
+**Pre-registered verdicts (Haiku):** (1) lossless at 2.2x: **FAIL** at high effort (+5.8 points); not evaluable at
+low effort. (2) loss on multi-step questions at ~4x, low effort: not evaluable; at high effort +80.8 points.
+(3) effort: at low effort Haiku does not reason over long text at all.
+
+Haiku keeps single lookups at 2.2x and 2.9x (99%) but loses multi-step accuracy already at 2.2x (three-hop 100% ->
+67%, counts 78% -> 17%); at 4.2x even lookups fall to 61%. Opus at the same densities: lossless at 2.2x.

@@ -19,6 +19,18 @@ from pathlib import Path
 
 
 MARGIN = 0.02      # pre-registered: "no measurable loss" = upper 95% bound of (text - image) < 2 points
+# Added after the Haiku suite (2026-11-10, post hoc): a call that leaves questions unanswered or says it did not look
+# things up in the document is not a reading measurement. Haiku at low effort did both ("I haven't worked those out",
+# "My best guesses are below, with no lookup performed").
+import re  # noqa: E402
+DISENGAGED = re.compile(r"no lookup|haven't worked|not going to guess|can't answer these|cannot answer these|"
+                        r"in batches|from memory alone|without (?:looking|checking)", re.I)
+
+
+def engagement(r: dict) -> tuple[int, str | None]:
+    """-> (unanswered questions, the first disengagement phrase in the reply, if any)."""
+    m = DISENGAGED.search(r.get("raw", ""))
+    return sum(p["given"] is None for p in r["per_question"]), (m.group(0) if m else None)
 
 
 def wilson(k: int, n: int) -> tuple[float, float]:
@@ -97,7 +109,12 @@ def main(argv=None) -> int:
             continue
         pairs, cpairs, kinds = [], [], defaultdict(lambda: [0, 0, 0])   # kind -> [text correct, image correct, n]
         tok_t = tok_i = 0
+        flags = []
         for doc, t, i in entries:
+            for arm, r in (("text", t), ("image", i)):
+                un, phrase = engagement(r)
+                if un or phrase:
+                    flags.append(f"{doc} {arm}: {un} unanswered" + (f', says "{phrase}"' if phrase else ""))
             tq = {p["id"]: p for p in t["per_question"]}
             tok_t += t["input_tokens"]
             tok_i += i["input_tokens"]
@@ -116,12 +133,13 @@ def main(argv=None) -> int:
         r = {"effort": effort, "budget": budget, "docs": len(entries), "n": len(pairs),
              "tokens_text": tok_t, "tokens_image": tok_i, "saving": tok_t / tok_i,
              "text_minus_image": d, "complex_text_minus_image": dc, "mcnemar": [n10, n01, pm],
-             "lossless": d[2] < MARGIN, "kinds": {k: v for k, v in kinds.items()}}
+             "lossless": d[2] < MARGIN and not flags, "disengaged": flags, "kinds": {k: v for k, v in kinds.items()}}
         res[f"{effort}/{budget}"] = r
         md += [f"## effort {effort}, image at {budget} px²/char: {len(entries)} documents, {len(pairs)} paired questions, "
                f"{r['saving']:.2f}x fewer input tokens", "",
                f"* text - image: {d[0]:+.3f} (95% CI {d[1]:+.3f} to {d[2]:+.3f}); McNemar text-only {n10}, image-only "
-               f"{n01}, p = {pm:.3g}; **{'LOSSLESS' if r['lossless'] else 'loss not excluded'}** (margin {MARGIN:.0%})",
+               f"{n01}, p = {pm:.3g}; **{'INVALID: a call did not engage' if flags else ('LOSSLESS' if r['lossless'] else 'loss not excluded')}** (margin {MARGIN:.0%})",
+               *([f"* not engaged: {'; '.join(flags)}"] if flags else []),
                f"* complex only: text - image {dc[0]:+.3f} (95% CI {dc[1]:+.3f} to {dc[2]:+.3f})", "",
                "| kind | n | text | image |", "|---|---|---|---|"]
         for k in ["all", "needle", "number", "complex", "two_hop", "three_hop", "sum", "max", "count"]:

@@ -3,7 +3,7 @@
 *2026-11-10. Script `experiments/claude_qa_render.py`, analysis `experiments/analyse_claude_qa.py`, rows and per-run
 notes in `results/claude_qa/` (`summary.md` there has every run in order, including the failed and discarded ones).*
 
-**Answer, for Claude Opus 5.5 on documents of ~245k text tokens:** giving it the document as page images instead of
+**Answer, for Claude Opus 5.5 on documents of ~245k text tokens** (Haiku 5.5: see its section; it is not lossless): giving it the document as page images instead of
 text uses **2.2x fewer input tokens with no measurable loss** (accuracy gap at most 1.6 points, 95% bound, at both
 low and high effort). At **2.9x** it is lossless at high effort and within 2.8 points at low effort. At **4.2x**
 single facts survive but questions that tie facts together across the document fail: 15 points lost overall at low
@@ -61,6 +61,33 @@ At 4.2x the dense pages keep single facts (lookups 93-98%, sums 100%) but lose t
 over the document: two-hop 53% / 90% (low / high effort), three-hop 38% / 67%, counting 17% / 28%. Wrong two-hop
 answers are usually another club's boat count: the facts are found, the link between them is not.
 
+## Haiku 5.5: the same suite
+
+Same documents, questions, densities, efforts and verdict rules, with `--model claude-haiku-5-5` (pre-registered as a
+rerun before any Haiku call; rows `results/claude_qa/qav2h_*`, analysis `analysis_v2_haiku/`). A probe showed Haiku
+reads 1932-px pages at full size and transcribes them exactly at 117.6 and 58.8 px²/char.
+
+![Opus vs Haiku at high effort](img/claude_qa_models.png)
+
+**High effort** (valid; 360 paired questions per row):
+
+| fewer tokens | text | image | text - image (95% CI) | lookups: text / image | multi-step: text / image |
+|---|---|---|---|---|---|
+| 2.2x | 98.1% | 92.2% | +5.8 (+3.0 to +9.0) | 99.2% / 99.2% | 95.8% / 78.3% |
+| 2.9x | 98.1% | 86.9% | +11.1 (+7.9 to +14.9) | 99.2% / 98.8% | 95.8% / 63.3% |
+| 4.2x | 98.1% | 45.6% | +52.5 (+47.1 to +57.6) | 99.2% / 60.8% | 95.8% / 15.0% |
+
+* **Lossless at 2.2x: FAIL for Haiku** (Opus: pass). Haiku keeps single lookups at 2.2x and 2.9x but loses
+  multi-step accuracy already at 2.2x: three-hop 100% -> 67%, counts 78% -> 17%. At 4.2x even lookups fall to 61%.
+* **Low effort is not comparable** (excluded after the fact, from the model's own output). Haiku answered the text
+  arm with 400-800 output tokens, i.e. without reasoning (33-45% correct; one call declined 80 of 120 questions with
+  "I haven't worked those out ... I can go through them in batches"), but spent 8-15k output tokens on the image
+  arms, so images "won" by up to 49 points. One low-effort image call also guessed "with no lookup performed". This
+  measures how much Haiku chooses to think per input type, not how well it reads. Opus used ~3k output tokens on both
+  arms at low effort and no Opus call was flagged. `analyse_claude_qa.py` now flags unanswered questions and such
+  phrases and marks the row invalid (rule added after this run).
+* **So for Haiku, images do not buy context for free:** the cheapest lossless option is text.
+
 ## Earlier, exploratory runs (same harness, before v2)
 
 | document | questions | result |
@@ -87,9 +114,11 @@ prompt cache at a tenth of the price, so high-effort costs below are not compara
 | 783k tokens, 100 questions, 1932-px pages | 5 (one arm lost pages) | $6.17 |
 | 700k chars, 100 questions | 5 | $3.15 |
 | **v2, pre-registered: 3 documents x 2 efforts** | 30 | **$11.47** (low $8.52, high $2.95) |
-| **Total** | 53 | **$33.70** |
+| v2 with Haiku 5.5 | 30 | $1.24 |
+| **Total** | 83 | **$34.94** |
 
-Not counted: four small probes (one large page, three noise-page payload tests), under ~$0.25 together.
+Not counted: six small probes (two large pages for Opus, two for Haiku, three noise-page payload tests), under ~$0.30
+together.
 
 Typical single calls at low effort (v2 documents):
 
@@ -120,13 +149,26 @@ the 3 v2 documents:
 The cheapest lossless option is the 2.9x pages at high effort ($0.55, 41% of text's cost) or the 2.2x pages at
 either effort ($0.63-0.68, about half). Going to 4.2x saves another ~$0.05-0.18 and costs 8-15 points of accuracy.
 
+**Haiku 5.5**, same basis (its price has a tier: $0.10 / $0.50 per million input / output tokens for prompts up to
+100k tokens, $0.50 / $2.50 above; the formula reproduces all 20 uncached Haiku calls exactly):
+
+| arm | prompt tokens | high effort | accuracy, high effort (all / multi-step) |
+|---|---|---|---|
+| text | ~247k (upper tier) | $0.18 | 98.1% / 95.8% |
+| image, 2.2x | ~112k (upper tier) | $0.13 | 92.2% / 78.3% |
+| image, 2.9x | ~86k (lower tier) | $0.023 | 86.9% / 63.3% |
+| image, 4.2x | ~59k (lower tier) | $0.012 | 45.6% / 15.0% |
+
+A Haiku text call costs about 7x less than an Opus one. Pages below 100k tokens drop into Haiku's cheap tier (2.9x:
+8x cheaper than text), but every Haiku image arm loses accuracy.
+
 ## Limits
 
 * **Ceiling:** text scores 99.7-100%, so these questions cannot show losses below ~1 point.
 * **Length:** ~245k text tokens per document. Through the CLI, a request with more than ~175k image tokens silently
   loses its earliest pages (seen at ~345k: delivered ~145-157k; not bytes or image count; not documented). The script
   compares input tokens with the image-token formula and drops such arms; longer documents need a direct API test.
-* **Scope:** one model, one font and layout, English Wikipedia text.
+* **Scope:** two models (Opus 5.5, Haiku 5.5), one font and layout, English Wikipedia text.
 * **Question type:** planted facts and numbers with exact answers, not open-ended understanding or summarisation of
   the real text.
 

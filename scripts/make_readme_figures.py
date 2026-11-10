@@ -15,7 +15,8 @@ Charts (need only matplotlib; every number is read from encoder_probe/results/*/
 7. claude_qa_saving.png  Claude QA v2: accuracy from page images vs from text, by token saving and effort
 8. claude_qa_kinds.png   Claude QA v2 at ~4x fewer tokens: accuracy per question type
 9. claude_qa_cost.png    Claude QA v2: list-price cost per call vs accuracy, by effort
-   (7-9 read results/claude_qa/analysis_v2/summary.json, written by experiments/analyse_claude_qa.py)
+10. claude_qa_models.png Claude QA v2, high effort: Opus 5.5 vs Haiku 5.5
+   (7-10 read results/claude_qa/analysis_v2/summary.json, written by experiments/analyse_claude_qa.py)
 
     python3 scripts/make_readme_figures.py                 # all
     python3 scripts/make_readme_figures.py --only charts   # just the charts
@@ -952,6 +953,60 @@ def chart_claude_qa_cost():
     print("claude_qa_cost.png", {f"{k[0]}/{k[1]}": round(v, 3) for k, v in cost.items()})
 
 
+QA_HAIKU_SUMMARY = ROOT / "results" / "claude_qa" / "analysis_v2_haiku" / "summary.json"
+MODELS = {"Opus 5.5": (QA_SUMMARY, "#6250d6", "o"), "Haiku 5.5": (QA_HAIKU_SUMMARY, "#1baf7a", "D")}   # validated
+
+
+def chart_claude_qa_models():
+    """High effort, Opus vs Haiku: accuracy vs token saving, simple lookups and multi-step questions. Each model's
+    text arm is its own x = 1 point. (Haiku at low effort is not comparable: it barely reasons over text.)"""
+    plt = chart_style()
+    fig, axs = plt.subplots(1, 2, figsize=(10.4, 5.0), dpi=150, sharey=True)
+    panels = [("Simple lookups", ("needle", "number"), "240 questions per point"),
+              ("Multi-step questions", ("complex",), "120 per point: two-hop, three-hop, sums, largest-of-three, counts")]
+    for ax, (title, kinds, sub) in zip(axs, panels):
+        for m, (path, col, mk) in MODELS.items():
+            res = json.loads(path.read_text())
+            pts = sorted((r["saving"], r) for k, r in res.items() if k.startswith("high/") and "saving" in r)
+            t_k = sum(pts[0][1]["kinds"][k][0] for k in kinds)
+            n = sum(pts[0][1]["kinds"][k][2] for k in kinds)
+            xs, ys, los, his = [1.0], [t_k / n], *[[v] for v in wilson(t_k, n)]
+            for sav, r in pts:
+                i_k = sum(r["kinds"][k][1] for k in kinds)
+                lo, hi = wilson(i_k, n)
+                xs.append(sav), ys.append(i_k / n), los.append(lo), his.append(hi)
+            dx = -0.035 if m.startswith("Opus") else 0.035
+            x = np.array(xs) + dx
+            y = np.array(ys) * 100
+            ax.plot(x, y, color=col, lw=2, zorder=2)
+            ax.errorbar(x, y, yerr=[y - np.array(los) * 100, np.array(his) * 100 - y], fmt="none", ecolor=col,
+                        elinewidth=1.2, capsize=0, zorder=2)
+            ax.plot(x, y, ls="none", marker=mk, ms=8 if mk == "o" else 7, color=col, mec=SURFACE, mew=1.5, zorder=3,
+                    label=m)
+            ax.text(x[-1] + 0.08, y[-1], m, color=INK_2, fontsize=8.5, va="center")
+        ax.set_xticks([1, 2.19, 2.87, 4.15], ["text", "2.2x", "2.9x", "4.2x"])
+        ax.set_xlim(0.7, 4.95)
+        ax.set_ylim(0, 104)
+        ax.set_yticks([0, 25, 50, 75, 100], ["0%", "25%", "50%", "75%", "100%"])
+        ax.grid(axis="y", color=GRID, lw=0.8)
+        ax.set_axisbelow(True)
+        ax.set_title(title, loc="left", fontsize=10.5, fontweight="bold", pad=16)
+        ax.text(0, 1.015, sub, transform=ax.transAxes, fontsize=8, color=INK_2, va="bottom")
+        ax.set_xlabel("fewer input tokens than the same document as text")
+    axs[0].set_ylabel("questions answered correctly")
+    axs[0].legend(loc="lower left", frameon=False, fontsize=8.5)
+    fig.suptitle("Haiku reads dense pages much worse than Opus: even 2.2x fewer tokens costs it multi-step accuracy",
+                 x=0.02, ha="left", fontsize=12, fontweight="bold")
+    fig.text(0.02, 0.86, "High effort, same 3 documents and 360 questions per point for both models; 95% Wilson "
+             "intervals. Haiku from text: 98% overall (multi-step 96%).\nHaiku at low effort is not comparable: it "
+             "spends 400-800 output tokens on the text arm against 8-15k on images.",
+             fontsize=8.5, color=INK_2, linespacing=1.4)
+    fig.subplots_adjust(left=0.08, right=0.96, top=0.72, bottom=0.13, wspace=0.1)
+    save_small(fig, "claude_qa_models.png")
+    plt.close(fig)
+    print("claude_qa_models.png")
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--only", choices=["demos", "charts"], help="draw only the demo figures or only the charts")
@@ -968,3 +1023,4 @@ if __name__ == "__main__":
         chart_claude_qa_saving()
         chart_claude_qa_kinds()
         chart_claude_qa_cost()
+        chart_claude_qa_models()

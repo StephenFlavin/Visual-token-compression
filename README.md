@@ -28,6 +28,7 @@ RGB overlays and learned glyph alphabets) and compares them with plain text rend
    | Claude, QA test (pre-registered) | Latin at 117.6 px²/char | ~7 | **2.2x fewer** | **lossless**: gap to text at most 1.6 points (95% bound) at low and high effort, multi-step questions included |
    | Claude, QA test (pre-registered) | Latin at 88.2 px²/char | ~9 | 2.9x fewer | lossless at high effort; within 2.8 points at low effort |
    | Claude, QA test (pre-registered) | Latin at 58.8 px²/char | ~13 | 4.2x fewer | loses 15 points (low effort) / 8 (high); multi-step questions 38 / 20 |
+   | Claude Haiku 5.5, same test, high effort | Latin at 117.6 px²/char | ~7 | 2.2x fewer | **not lossless**: loses 5.8 points (multi-step 18); lookups unchanged |
 
    Sources: Run 0 in [PLAN_3090.md](docs/PLAN_3090.md), Phase 1 in [RESULTS.md](docs/RESULTS.md), the Claude QA test
    in [docs/CLAUDE_QA.md](docs/CLAUDE_QA.md) (Claude Opus 5.5; 3 documents of ~245k text tokens, 360 paired questions
