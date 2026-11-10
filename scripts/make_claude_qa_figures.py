@@ -43,21 +43,22 @@ ALL_MODELS = {
 MODELS = {m: v for m, v in ALL_MODELS.items() if v["summary"].exists()}
 BUDGETS = [(117.6, "2.2x"), (88.2, "2.9x"), (58.8, "4.2x")]
 CACHE_WRITE = 1.25
-# "points lost" in 8 discrete bands of the validated sequential blue ramp (steps 100-700, near-surface tint for ~0).
-# Discrete bands: every cell matches a legend swatch exactly, and the 64-colour PNG cannot shift them.
-LOSS_RAMP = ["#f3f7fd", "#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#256abf", "#184f95", "#0d366b"]
-LOSS_EDGES = [2, 5, 10, 20, 30, 45, 60]          # band i covers [edge i-1, edge i)
-LOSS_LABELS = ["<2", "2-5", "5-10", "10-20", "20-30", "30-45", "45-60", "60+"]
+# "points lost" on a continuous green -> yellow -> red scale (user's choice). Anchors are evenly spaced on the scale
+# but not in points, so the small losses that decide the verdicts get most of the colour range. The red end is much
+# darker than the green end, and every cell prints its number, so the scale never carries meaning by hue alone.
+LOSS_STOPS = [(0, "#7cc576"), (2, "#c6e48b"), (5, "#fbe38b"), (10, "#fdb863"), (20, "#f4743f"), (40, "#d73027"),
+              (60, "#a50026")]
 NEUTRAL = "#f0efec"
 
 
-def save(fig, name: str) -> None:
-    """150 dpi PNG quantised to 256 colours (the discrete loss bands keep their exact shade)."""
+def save(fig, name: str, quantise: bool = True) -> None:
+    """150 dpi PNG, quantised to 256 colours unless it holds a colour gradient (quantising would band it)."""
     import io
     buf = io.BytesIO()
     fig.savefig(buf, dpi=150, format="png")
     buf.seek(0)
-    Image.open(buf).convert("RGB").quantize(256, method=Image.Quantize.MEDIANCUT).save(M.OUT / name, optimize=True)
+    im = Image.open(buf).convert("RGB")
+    (im.quantize(256, method=Image.Quantize.MEDIANCUT) if quantise else im).save(M.OUT / name, optimize=True)
 
 
 def header(fig, H_in: float, title: str, sub: str) -> None:
@@ -77,16 +78,26 @@ def summaries() -> dict:
     return {m: json.loads(v["summary"].read_text()) for m, v in MODELS.items()}
 
 
-def band(loss: float) -> int:
-    return int(np.searchsorted(LOSS_EDGES, max(0.0, loss), side="right"))
+def loss_pos(loss: float) -> float:
+    """Position 0..1 on the loss scale: piecewise linear between the anchors (gains count as 0, 60+ as 1)."""
+    xs = [a for a, _ in LOSS_STOPS]
+    return float(np.interp(max(0.0, loss), xs, np.linspace(0, 1, len(xs))))
 
 
-def loss_colour(loss: float) -> str:
-    return LOSS_RAMP[band(loss)]
+def loss_cmap():
+    from matplotlib.colors import LinearSegmentedColormap
+    return LinearSegmentedColormap.from_list("loss", [c for _, c in LOSS_STOPS], N=512)
+
+
+def loss_colour(loss: float) -> tuple:
+    return loss_cmap()(loss_pos(loss))
 
 
 def ink_on(loss: float) -> str:
-    return "#ffffff" if band(loss) >= 5 else M.INK_1      # white on steps 500-700 only
+    """Dark or white text, whichever has the higher contrast on that cell (WCAG relative luminance)."""
+    lin = [c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4 for c in loss_colour(loss)[:3]]
+    lum = 0.2126 * lin[0] + 0.7152 * lin[1] + 0.0722 * lin[2]
+    return "#ffffff" if 1.05 / (lum + 0.05) > (lum + 0.05) / 0.05 else M.INK_1
 
 
 def fmt_pts(v: float) -> str:
@@ -94,15 +105,30 @@ def fmt_pts(v: float) -> str:
 
 
 def loss_legend(fig, rect) -> None:
-    from matplotlib.patches import Rectangle
+    """A continuous colour bar with the anchors as ticks."""
     ax = fig.add_axes(rect)
-    for i, (c, lab) in enumerate(zip(LOSS_RAMP, LOSS_LABELS)):
-        ax.add_patch(Rectangle((i + 0.04, 0), 0.92, 1, facecolor=c, lw=0))
-        ax.text(i + 0.5, -0.35, lab, ha="center", va="top", fontsize=7.5, color=M.INK_2)
-    ax.set_xlim(0, len(LOSS_RAMP))
+    ax.imshow(np.linspace(0, 1, 512)[None, :], cmap=loss_cmap(), aspect="auto", extent=(0, 1, 0, 1))
+    for i, (a, _) in enumerate(LOSS_STOPS):
+        x = i / (len(LOSS_STOPS) - 1)
+        ax.plot([x, x], [0, -0.18], color=M.AXIS, lw=0.8, clip_on=False)
+        ax.text(x, -0.35, "0" if a == 0 else f"{a}+" if a == LOSS_STOPS[-1][0] else f"{a}", ha="center", va="top",
+                fontsize=7.5, color=M.INK_2)
+    ax.set_xlim(0, 1)
     ax.set_ylim(-1.4, 1)
     ax.axis("off")
-    ax.text(0, 1.25, "shading: accuracy points lost vs reading text", fontsize=8, color=M.INK_2, va="bottom")
+    ax.text(0, 1.25, "accuracy points lost vs reading text", fontsize=8, color=M.INK_2,
+            va="bottom")
+
+
+def loss_background(ax, lo: float, hi: float, vertical: bool) -> None:
+    """The loss scale as a soft wash behind a chart whose axis is the accuracy change (points, negative = loss)."""
+    v = np.linspace(hi, lo, 400)
+    img = np.array([loss_colour(-x) for x in v])[:, None, :] if vertical else \
+        np.array([loss_colour(-x) for x in v[::-1]])[None, :, :]
+    img[..., 3] = 0.42
+    ext = (*ax.get_xlim(), lo, hi) if vertical else (lo, hi, *ax.get_ylim())
+    ax.imshow(img, aspect="auto", extent=ext, origin="upper" if vertical else "lower", zorder=0,
+              interpolation="bilinear")
 
 
 # ------------------------------------------------------------------------------------------- 1. verdict
@@ -170,10 +196,10 @@ def fig_verdict():
             "is no text baseline.") if flagged else ""
     header(fig, H_in, "Reading page images instead of text: accuracy change in points (image − text)",
            "Same 3 documents (~240k tokens of text each) and 120 questions in every cell; columns: how many fewer input "
-           "tokens the pages use. Worst = the losing end of the 95% interval.\n✓ lossless (pre-registered): the worst "
-           "case is within 2 points." + note)
+           "tokens the pages use.\nWorst = the losing end of the 95% interval. ✓ lossless (pre-registered): the worst "
+           "case is within 2 points. Green = no loss, red = large loss.\n" + note.strip())
     loss_legend(fig, [0.70, 0.10 / H_in, 0.25, 0.16 / H_in])
-    save(fig, "claude_qa_verdict.png")
+    save(fig, "claude_qa_verdict.png", quantise=False)
     plt.close(fig)
     print("claude_qa_verdict.png")
 
@@ -288,11 +314,11 @@ def fig_breakdown():
     ax.set_ylim(y, -1.75)
     header(fig, H_in, "Where it breaks: chains and counts fail first, and smaller models fail at lower densities",
            "Accuracy per question type at high effort (questions per type in brackets, pooled over 3 documents). Grey "
-           "rows: the model reading text;\nblue rows: the same model reading pages with 2.2x, 2.9x and 4.2x fewer "
+           "rows: the model reading text;\ncoloured rows: the same model reading pages with 2.2x, 2.9x and 4.2x fewer "
            "tokens, shaded by points lost against its text row.\n'+1 q': pages got 1-2 more questions right than text "
            "(Opus counts: text answered 11 for 12 once). Within noise: no type is better read from pages.")
     loss_legend(fig, [0.70, 0.10 / H_in, 0.25, 0.16 / H_in])
-    save(fig, "claude_qa_breakdown.png")
+    save(fig, "claude_qa_breakdown.png", quantise=False)
     plt.close(fig)
     print("claude_qa_breakdown.png")
 
@@ -416,12 +442,14 @@ def fig_curve():
     questions and multi-step questions; 95% Newcombe intervals; the pre-registered +-2-point band shaded."""
     plt = M.chart_style()
     S = summaries()
-    H_in = 5.3
+    H_in = 5.5
     fig, axs = plt.subplots(1, 2, figsize=(10.4, H_in), dpi=150, sharey=True)
-    fig.subplots_adjust(left=0.08, right=0.95, top=1 - 1.45 / H_in, bottom=0.62 / H_in, wspace=0.08)
+    fig.subplots_adjust(left=0.08, right=0.95, top=1 - 1.65 / H_in, bottom=0.62 / H_in, wspace=0.08)
     for ax, (title, key, sub) in zip(axs, [("All questions", "text_minus_image", "360 per point"),
                                            ("Multi-step questions", "complex_text_minus_image", "120 per point")]):
-        ax.axhspan(-2, 2, color="#ebeae5", lw=0, zorder=0)
+        ax.set_xlim(0.8, 4.95)
+        loss_background(ax, -90, 6, vertical=True)
+        ax.axhspan(-2, 2, facecolor="none", edgecolor=M.AXIS, lw=0.8, ls=(0, (3, 2)), zorder=1)
         ax.axhline(0, color=M.AXIS, lw=0.8, zorder=1)
         for m, spec in MODELS.items():
             pts = sorted((r["saving"], r) for k, r in S[m].items() if k.startswith("high/") and "saving" in r)
@@ -443,16 +471,15 @@ def fig_curve():
         ax.set_axisbelow(True)
         ax.set_xlabel("fewer input tokens than the same document as text")
         x0 = ax.get_position().x0
-        fig.text(x0, 1 - 1.12 / H_in, title, ha="left", va="top", fontsize=10.5, fontweight="bold", color=M.INK_1)
-        fig.text(x0, 1 - 1.34 / H_in, sub, ha="left", va="top", fontsize=8, color=M.INK_2)
+        fig.text(x0, 1 - 1.32 / H_in, title, ha="left", va="top", fontsize=10.5, fontweight="bold", color=M.INK_1)
+        fig.text(x0, 1 - 1.54 / H_in, sub, ha="left", va="top", fontsize=8, color=M.INK_2)
     axs[0].set_ylabel("accuracy change vs text (points)")
     axs[0].text(4.9, 3.2, "within 2 points", ha="right", va="bottom", fontsize=7.5, color=M.INK_2)
     header(fig, H_in, "How fast accuracy falls as the pages get denser: Opus holds longest, Haiku drops first",
-           "High effort, same 3 documents (~240k tokens of text each) and 120 questions for every model; 95% intervals. "
-           "The shaded band is "
-           "the pre-registered lossless margin (2 points).\nEach model is compared with itself reading text "
-           "(Opus and Sonnet 99.7%, Haiku 98.1%).")
-    save(fig, "claude_qa_curve.png")
+           "High effort, same 3 documents (~240k tokens of text each) and 120 questions for every model; 95% intervals.\n"
+           "Each model is compared with itself reading text (Opus and Sonnet 99.7%, Haiku 98.1%). Dashed band: the "
+           "pre-registered lossless margin (2 points).\nBackground: points lost, green = none, red = large.")
+    save(fig, "claude_qa_curve.png", quantise=False)
     plt.close(fig)
     print("claude_qa_curve.png")
 
@@ -471,12 +498,14 @@ def fig_effort():
             y += 0.6
         ys.append(y)
         y += 1
-    H_in = 2.2 + 0.42 * y
+    H_in = 2.4 + 0.42 * y
     fig, axs = plt.subplots(1, 2, figsize=(10.4, H_in), dpi=150, sharey=True)
-    fig.subplots_adjust(left=0.2, right=0.97, top=1 - 1.6 / H_in, bottom=0.62 / H_in, wspace=0.1)
+    fig.subplots_adjust(left=0.2, right=0.97, top=1 - 1.8 / H_in, bottom=0.62 / H_in, wspace=0.1)
     for ax, (title, key) in zip(axs, [("All questions (360 per point)", "text_minus_image"),
                                       ("Multi-step questions (120 per point)", "complex_text_minus_image")]):
-        ax.axvspan(-2, 2, color="#ebeae5", lw=0, zorder=0)
+        ax.set_ylim(ys[-1] + 0.7, -0.7)
+        loss_background(ax, -52, 6, vertical=False)
+        ax.axvspan(-2, 2, facecolor="none", edgecolor=M.AXIS, lw=0.8, ls=(0, (3, 2)), zorder=1)
         ax.axvline(0, color=M.AXIS, lw=0.8, zorder=1)
         for yy, (m, b, lab) in zip(ys, rows):
             col = MODELS[m]["colour"]
@@ -492,7 +521,7 @@ def fig_effort():
         ax.spines["left"].set_visible(False)
         ax.tick_params(axis="y", length=0)
         x0 = ax.get_position().x0
-        fig.text(x0, 1 - 1.22 / H_in, title, ha="left", va="top", fontsize=10.5, fontweight="bold", color=M.INK_1)
+        fig.text(x0, 1 - 1.42 / H_in, title, ha="left", va="top", fontsize=10.5, fontweight="bold", color=M.INK_1)
     axs[0].set_yticks(ys, [f"{lab} pages" for _, _, lab in rows], fontsize=9)
     axs[0].set_ylim(ys[-1] + 0.7, -0.7)
     for m in ms:
@@ -507,9 +536,9 @@ def fig_effort():
         if skipped else ""
     header(fig, H_in, "High effort narrows the loss once the pages are dense",
            "Accuracy change vs the same model reading text, at low (hollow) and high (filled) effort; same documents "
-           "and questions. Shaded: within 2 points.\nAt 2.2x both efforts are within 0.3 points of text; the gap opens at "
+           "and questions.\nDashed band: within 2 points; background: points lost, green = none, red = large.\nAt 2.2x both efforts are within 0.3 points of text; the gap opens at "
            "2.9x and 4.2x." + note)
-    save(fig, "claude_qa_effort.png")
+    save(fig, "claude_qa_effort.png", quantise=False)
     plt.close(fig)
     print("claude_qa_effort.png")
 

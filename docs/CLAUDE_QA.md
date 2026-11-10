@@ -42,7 +42,7 @@ Sonnet 5.5 and Haiku 5.5.
 
 *How to read it:* each cell compares page images with text on the same 3 documents and questions. The big number is
 the accuracy change in points (image − text: negative = worse than text); "worst" is the losing end of the 95%
-interval; ✓ marks the pre-registered lossless verdict. Darker cells lose more. Numbers: [A1](#a1-opus-55),
+interval; ✓ marks the pre-registered lossless verdict. Colour runs from green (no loss) through yellow to red (large loss). Numbers: [A1](#a1-opus-55),
 [A2](#a2-sonnet-55) and [A3](#a3-haiku-55).
 
 ## How fast it falls
@@ -50,7 +50,8 @@ interval; ✓ marks the pre-registered lossless verdict. Darker cells lose more.
 ![Accuracy change against token saving, one line per model](img/claude_qa_curve.png)
 
 *How to read it:* each line starts at 0 (the model reading text) and shows the accuracy change as the pages get denser,
-at high effort; the grey band is the 2-point lossless margin.
+at high effort; the dashed band is the 2-point lossless margin, and the background runs from green (no loss)
+to red (large loss).
 
 * **By point estimate, Opus and Sonnet stay within 2 points up to 2.9x;** by the pre-registered worst case, Opus is
   lossless to 2.9x and Sonnet to 2.2x. Haiku leaves the band at the first step.
@@ -73,7 +74,7 @@ the exploratory runs that density failed outright ([A5](#a5-earlier-exploratory-
 ![Accuracy per question type, each model at high effort](img/claude_qa_breakdown.png)
 
 *How to read it:* columns are question types, one block of rows per model: the grey row is the model reading text,
-the blue rows the same model reading pages. Shading is points lost against the grey row. A small "+1 q" marks the
+the coloured rows the same model reading pages, from green (no loss against the grey row) to red. A small "+1 q" marks the
 four cells where pages got 1-2 more questions right than text; that is noise, not a gain (see the counts bullet).
 
 * **Lookups and sums survive the longest.** Opus keeps 98-100% on them even at 4.2x. (Sums and largest-of-three add
