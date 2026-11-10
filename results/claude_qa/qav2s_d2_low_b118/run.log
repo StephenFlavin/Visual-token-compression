@@ -1,0 +1,3 @@
+[qa] document 707,419 chars (1185 paragraphs + 40 needles); 120 questions; 23 pages, 106,329 image tokens, px²/char 117.8, em 13.76; text ~176,855 tokens (estimate)
+[qa] none: complex 0.00, needle 0.00, number 0.10, count 0.00, max 0.00, sum 0.00, three_hop 0.00, two_hop 0.00; input tokens 6,051, output 908, $0.02, 7s, error None
+[qa] text: complex 0.95, needle 1.00, number 0.97, count 0.83, max 1.00, sum 1.00, three_hop 0.88, two_hop 1.00; input tokens 242,773, output 4,347, $0.65, 31s, error None

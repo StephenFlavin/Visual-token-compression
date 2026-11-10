@@ -4,11 +4,12 @@
                             and multi-step questions; worst case (95% bound) and the pre-registered lossless mark
 2. claude_qa_pages.png      what the model sees: the same passage at the three densities, actual pixels, with the
                             28-px vision-token grid
-3. claude_qa_breakdown.png  accuracy per question type, both models at high effort, shaded by points lost vs text
-4. claude_qa_cost.png       list-price cost per call vs accuracy, both models at high effort
+3. claude_qa_breakdown.png  accuracy per question type (columns) for each model reading text and pages (row blocks),
+                            high effort, shaded by points lost vs the same model reading text
+4. claude_qa_cost.png       list-price cost per call and accuracy, one row per model x input form, high effort
 
-Numbers come from results/claude_qa/analysis_v2{,_haiku}/summary.json (experiments/analyse_claude_qa.py) and the
-calls' token counts in results/claude_qa/qav2*_*/runs.jsonl.
+Numbers come from results/claude_qa/analysis_v2{,_sonnet,_haiku}/summary.json (experiments/analyse_claude_qa.py) and
+the calls' token counts in results/claude_qa/qav2*_*/runs.jsonl. Models missing a summary are skipped.
 
     python3 scripts/make_claude_qa_figures.py
 """
@@ -26,11 +27,16 @@ import make_readme_figures as M  # noqa: E402
 
 ROOT = M.ROOT
 QA = ROOT / "results" / "claude_qa"
-MODELS = {"Opus 5.5": {"summary": QA / "analysis_v2" / "summary.json", "runs": "qav2_d*", "colour": "#6250d6",
-                       "marker": "o", "price": lambda tok: (4e-6, 20e-6)},
-          "Haiku 5.5": {"summary": QA / "analysis_v2_haiku" / "summary.json", "runs": "qav2h_d*",
-                        "colour": "#1baf7a", "marker": "D",
-                        "price": lambda tok: (0.1e-6, 0.5e-6) if tok <= 100_000 else (0.5e-6, 2.5e-6)}}
+# model colours: validated categorical slots (violet, orange, aqua) - all pairs pass; aqua is < 3:1 on white, so every
+# figure names the model next to its marks
+ALL_MODELS = {
+    "Opus 5.5": {"summary": QA / "analysis_v2" / "summary.json", "runs": "qav2_d*", "colour": "#6250d6",
+                 "marker": "o", "price": lambda tok: (4e-6, 20e-6)},
+    "Sonnet 5.5": {"summary": QA / "analysis_v2_sonnet" / "summary.json", "runs": "qav2s_d*", "colour": "#eb6834",
+                   "marker": "s", "price": lambda tok: (2e-6, 10e-6)},
+    "Haiku 5.5": {"summary": QA / "analysis_v2_haiku" / "summary.json", "runs": "qav2h_d*", "colour": "#1baf7a",
+                  "marker": "D", "price": lambda tok: (0.1e-6, 0.5e-6) if tok <= 100_000 else (0.5e-6, 2.5e-6)}}
+MODELS = {m: v for m, v in ALL_MODELS.items() if v["summary"].exists()}
 BUDGETS = [(117.6, "2.2x"), (88.2, "2.9x"), (58.8, "4.2x")]
 CACHE_WRITE = 1.25
 # "points lost" in 8 discrete bands of the validated sequential blue ramp (steps 100-700, near-surface tint for ~0).
@@ -48,6 +54,19 @@ def save(fig, name: str) -> None:
     fig.savefig(buf, dpi=150, format="png")
     buf.seek(0)
     Image.open(buf).convert("RGB").quantize(256, method=Image.Quantize.MEDIANCUT).save(M.OUT / name, optimize=True)
+
+
+def header(fig, H_in: float, title: str, sub: str) -> None:
+    """Title 0.2 in from the top, subtitle (up to two lines) below it; fixed in inches whatever the figure height."""
+    fig.text(0.02, 1 - 0.18 / H_in, title, ha="left", va="top", fontsize=12, fontweight="bold", color=M.INK_1)
+    fig.text(0.02, 1 - 0.50 / H_in, sub, ha="left", va="top", fontsize=8.5, color=M.INK_2, linespacing=1.45)
+
+
+def block_label(fig, ax, y_mid: float, text: str) -> None:
+    """A bold model name at the figure's left edge, vertically centred on a block of rows (data y)."""
+    import matplotlib.transforms as mt
+    ax.text(0.02, y_mid, text, transform=mt.blended_transform_factory(fig.transFigure, ax.transData), ha="left",
+            va="center", fontsize=9.5, fontweight="bold", color=M.INK_1)
 
 
 def summaries() -> dict:
@@ -87,19 +106,30 @@ def fig_verdict():
     plt = M.chart_style()
     from matplotlib.patches import Rectangle
     S = summaries()
-    rows = [("Opus 5.5", "high"), ("Opus 5.5", "low"), ("Haiku 5.5", "high"), ("Haiku 5.5", "low")]
+    rows = [(m, e) for m in MODELS for e in ("high", "low")]
+    ys, y = [], 0.0
+    for i, (m, e) in enumerate(rows):
+        if i and rows[i - 1][0] != m:
+            y += 0.3
+        ys.append(y)
+        y += 1
     panels = [("All questions", "360 per cell", "text_minus_image", True),
               ("Multi-step questions", "120 per cell: two-hop, three-hop, sums, largest-of-three, counts",
                "complex_text_minus_image", False)]
-    fig, axs = plt.subplots(1, 2, figsize=(10.4, 4.9), dpi=150)
-    W, H, G = 1.0, 1.0, 0.035
+    TOP, BOT, ROW = 2.05, 0.75, 0.6           # inches: header block, legend strip, one row
+    H_in = TOP + BOT + ROW * y
+    fig, axs = plt.subplots(1, 2, figsize=(10.4, H_in), dpi=150)
+    fig.subplots_adjust(left=0.20, right=0.985, top=1 - TOP / H_in, bottom=BOT / H_in, wspace=0.05)
+    G = 0.035
+    flagged = []
     for pi, (ax, (title, sub, key, verdict)) in enumerate(zip(axs, panels)):
-        for i, (m, e) in enumerate(rows):
+        for yy, (m, e) in zip(ys, rows):
             for j, (b, lab) in enumerate(BUDGETS):
                 r = S[m][f"{e}/{b}"]
-                x0, y0 = j * W + G, i * H + G
-                w, h = W - 2 * G, H - 2 * G
+                x0, y0, w, h = j + G, yy + G, 1 - 2 * G, 1 - 2 * G
                 if r.get("disengaged"):
+                    if pi == 0 and j == 0:
+                        flagged.append(f"{m} {e}")
                     ax.add_patch(Rectangle((x0, y0), w, h, facecolor=NEUTRAL, edgecolor="#c3c2b7", hatch="////",
                                            lw=0))
                     if j == 1:
@@ -110,32 +140,34 @@ def fig_verdict():
                 change, worst, loss = -d, -hi, max(0.0, d)
                 ax.add_patch(Rectangle((x0, y0), w, h, facecolor=loss_colour(loss), lw=0))
                 ink = ink_on(loss)
-                ax.text(x0 + w / 2, y0 + h * 0.40, fmt_pts(change), ha="center", va="center", fontsize=12.5,
+                ax.text(x0 + w / 2, y0 + h * 0.40, fmt_pts(change), ha="center", va="center", fontsize=12,
                         fontweight="bold", color=ink)
                 tick = "✓ " if (verdict and r.get("lossless")) else ""
-                ax.text(x0 + w / 2, y0 + h * 0.72, f"{tick}worst {fmt_pts(worst)}", ha="center", va="center",
-                        fontsize=8, color=ink)
-        ax.set_xlim(0, 3 * W)
-        ax.set_ylim(4 * H, 0)
-        ax.set_xticks([(j + 0.5) * W for j in range(3)], [f"{lab} fewer" for _, lab in BUDGETS], fontsize=9)
+                ax.text(x0 + w / 2, y0 + h * 0.74, f"{tick}worst {fmt_pts(worst)}", ha="center", va="center",
+                        fontsize=7.8, color=ink)
+        ax.set_xlim(0, 3)
+        ax.set_ylim(y, 0)
+        ax.set_xticks([j + 0.5 for j in range(3)], [f"{lab} fewer" for _, lab in BUDGETS], fontsize=9)
         ax.xaxis.tick_top()
         ax.tick_params(axis="both", length=0)
         if pi == 0:
-            ax.set_yticks([(i + 0.5) * H for i in range(4)], [f"{m}\n{e} effort" for m, e in rows], fontsize=9)
+            ax.set_yticks([yy + 0.5 for yy in ys], [f"{e} effort" for _, e in rows], fontsize=8.5)
+            for m in MODELS:
+                yy = [v for v, r in zip(ys, rows) if r[0] == m]
+                block_label(fig, ax, (yy[0] + yy[-1] + 1) / 2, m)
         else:
             ax.set_yticks([])
-        for s in ax.spines.values():
-            s.set_visible(False)
-        ax.set_title(title, loc="left", fontsize=10.5, fontweight="bold", pad=34)
-        ax.text(0, 1.115, sub, transform=ax.transAxes, fontsize=8, color=M.INK_2, va="bottom")
-    fig.suptitle("Reading page images instead of text: accuracy change in points (image − text)",
-                 x=0.02, ha="left", fontsize=12, fontweight="bold")
-    fig.text(0.02, 0.885, "Same 3 documents (~245k text tokens each) and questions in every cell; columns: how many "
-             "fewer input tokens the pages use. Worst = 95% bound.\n✓ lossless (pre-registered): the worst case is "
-             "within 2 points.  * Haiku at low effort barely reasoned over the text (400-800 output tokens), so it "
-             "has no text baseline.", fontsize=8.5, color=M.INK_2, linespacing=1.45)
-    loss_legend(fig, [0.70, 0.045, 0.25, 0.03])
-    fig.subplots_adjust(left=0.11, right=0.985, top=0.70, bottom=0.12, wspace=0.05)
+        for s_ in ax.spines.values():
+            s_.set_visible(False)
+        x0 = ax.get_position().x0
+        fig.text(x0, 1 - 1.18 / H_in, title, ha="left", va="top", fontsize=10.5, fontweight="bold", color=M.INK_1)
+        fig.text(x0, 1 - 1.42 / H_in, sub, ha="left", va="top", fontsize=8, color=M.INK_2)
+    note = ("  * " + ", ".join(sorted(set(flagged))) + " effort: the model barely reasoned over the text, so there "
+            "is no text baseline.") if flagged else ""
+    header(fig, H_in, "Reading page images instead of text: accuracy change in points (image − text)",
+           "Same 3 documents (~245k text tokens each) and questions in every cell; columns: how many fewer input tokens "
+           "the pages use. Worst = 95% bound.\n✓ lossless (pre-registered): the worst case is within 2 points." + note)
+    loss_legend(fig, [0.70, 0.10 / H_in, 0.25, 0.16 / H_in])
     save(fig, "claude_qa_verdict.png")
     plt.close(fig)
     print("claude_qa_verdict.png")
@@ -184,65 +216,66 @@ def fig_pages():
 
 
 # ------------------------------------------------------------------------------------------- 3. breakdown
-KINDS = [("needle", "Invented fact, looked up"), ("number", "Number in a quoted sentence"),
-         ("sum", "Sum of two facts"), ("max", "Largest of three facts"), ("two_hop", "Two-hop chain"),
-         ("three_hop", "Three-hop chain"), ("count", "Count across the whole document")]
+KINDS = [("needle", "Invented\nfact"), ("number", "Number in\na sentence"), ("sum", "Sum of\ntwo facts"),
+         ("max", "Largest\nof three"), ("two_hop", "Two-hop\nchain"), ("three_hop", "Three-hop\nchain"),
+         ("count", "Count across\nthe document")]
+N_LOOKUP = 2
 
 
 def fig_breakdown():
+    """Columns: question types (lookups | multi-step). Rows: one block per model (text, then pages at each density),
+    high effort. Cell = accuracy; shading = points lost vs the same model reading text on that question type."""
     plt = M.chart_style()
     from matplotlib.patches import Rectangle
     S = summaries()
-    cols = []   # (model, label, kinds-dict, which: 0 text / 1 image)
+    rows = []    # (model, label, kinds dict, which: 0 text / 1 image)
     for m in MODELS:
-        first = S[m][f"high/{BUDGETS[0][0]}"]["kinds"]
-        cols.append((m, "text", first, 0))
-        for b, lab in BUDGETS:
-            cols.append((m, lab, S[m][f"high/{b}"]["kinds"], 1))
-    fig, ax = plt.subplots(figsize=(10.4, 5.4), dpi=150)
-    G, gapx = 0.035, 0.45
-    xs = []
-    x = 0.0
-    for ci, (m, lab, kd, w) in enumerate(cols):
-        if ci and cols[ci - 1][0] != m:
-            x += gapx
-        xs.append(x)
-        x += 1
-    for ri, (k, name) in enumerate(KINDS):
-        yb = ri + (0.35 if ri >= 2 else 0)
-        for ci, (m, lab, kd, w) in enumerate(cols):
+        rows.append((m, "text", S[m][f"high/{BUDGETS[0][0]}"]["kinds"], 0))
+        rows += [(m, f"{lab} pages", S[m][f"high/{b}"]["kinds"], 1) for b, lab in BUDGETS]
+    ys, y = [], 0.0
+    for i, r in enumerate(rows):
+        if i and rows[i - 1][0] != r[0]:
+            y += 0.35
+        ys.append(y)
+        y += 1
+    xs = [j + (0.3 if j >= N_LOOKUP else 0) for j in range(len(KINDS))]
+    TOP, BOT, ROW = 1.15, 0.75, 0.40
+    H_in = TOP + BOT + ROW * (y + 1.75)
+    fig, ax = plt.subplots(figsize=(10.4, H_in), dpi=150)
+    fig.subplots_adjust(left=0.24, right=0.985, top=1 - TOP / H_in, bottom=BOT / H_in)
+    G = 0.035
+    for yy, (m, lab, kd, w) in zip(ys, rows):
+        for xx, (k, _) in zip(xs, KINDS):
             tc, ic, n = kd[k]
             acc = (tc if w == 0 else ic) / n * 100
             loss = 0 if w == 0 else max(0.0, (tc - ic) / n * 100)
-            fill = NEUTRAL if w == 0 else loss_colour(loss)
-            ax.add_patch(Rectangle((xs[ci] + G, yb + G), 1 - 2 * G, 1 - 2 * G, facecolor=fill, lw=0))
-            ax.text(xs[ci] + 0.5, yb + 0.5, f"{acc:.0f}%", ha="center", va="center", fontsize=9.5,
-                    fontweight="bold" if w else "normal", color=M.INK_1 if w == 0 else ink_on(loss))
-    n_of = {k: S["Opus 5.5"]["high/117.6"]["kinds"][k][2] for k, _ in KINDS}
-    ax.set_yticks([ri + (0.35 if ri >= 2 else 0) + 0.5 for ri in range(len(KINDS))],
-                  [f"{name} ({n_of[k]})" for k, name in KINDS], fontsize=9)
+            ax.add_patch(Rectangle((xx + G, yy + G), 1 - 2 * G, 1 - 2 * G,
+                                   facecolor=NEUTRAL if w == 0 else loss_colour(loss), lw=0))
+            ax.text(xx + 0.5, yy + 0.5, f"{acc:.0f}%", ha="center", va="center", fontsize=9,
+                    fontweight="normal" if w == 0 else "bold", color=M.INK_1 if w == 0 else ink_on(loss))
+    n_of = {k: S[next(iter(MODELS))][f"high/{BUDGETS[0][0]}"]["kinds"][k][2] for k, _ in KINDS}
+    for xx, (k, name) in zip(xs, KINDS):
+        ax.text(xx + 0.5, -0.12, f"{name}\n({n_of[k]})", ha="center", va="bottom", fontsize=8.3, color=M.INK_2,
+                linespacing=1.15)
+    ax.text((xs[0] + xs[N_LOOKUP - 1] + 1) / 2, -1.55, "Lookups", ha="center", va="bottom", fontsize=10,
+            fontweight="bold", color=M.INK_1)
+    ax.text((xs[N_LOOKUP] + xs[-1] + 1) / 2, -1.55, "Multi-step questions", ha="center", va="bottom", fontsize=10,
+            fontweight="bold", color=M.INK_1)
+    ax.set_yticks([yy + 0.5 for yy in ys], [r[1] for r in rows], fontsize=8.5)
+    for m in MODELS:
+        yy = [v for v, r in zip(ys, rows) if r[0] == m]
+        block_label(fig, ax, (yy[0] + yy[-1] + 1) / 2, m)
     ax.set_xticks([])
     ax.tick_params(axis="both", length=0)
     for s_ in ax.spines.values():
         s_.set_visible(False)
-    ax.set_xlim(0, x)
-    ax.set_ylim(len(KINDS) + 0.35, -1.25)
-    for ci, c in enumerate(cols):
-        ax.text(xs[ci] + 0.5, -0.22, c[1] if c[1] == "text" else f"{c[1]} pages", ha="center", va="bottom",
-                fontsize=9, color=M.INK_2)
-    for m in MODELS:
-        c0 = [i for i, c in enumerate(cols) if c[0] == m]
-        ax.text((xs[c0[0]] + xs[c0[-1]] + 1) / 2, -0.78, f"{m}, high effort", ha="center", va="bottom",
-                fontsize=10, fontweight="bold", color=M.INK_1)
-    ax.axhline(2.175, color=M.AXIS, lw=0.8, ls=(0, (3, 3)))
-    fig.suptitle("Where it breaks: chains and counts fail first, and Haiku fails at lower densities",
-                 x=0.02, ha="left", fontsize=12, fontweight="bold")
-    fig.text(0.02, 0.885, "Accuracy per question type (questions in brackets, pooled over 3 documents). Columns: the "
-             "model reading text, then page images at 2.2x, 2.9x and 4.2x fewer tokens.\nShading: points lost vs the "
-             "same model reading text. Lookups above the dashed line, multi-step questions below.",
-             fontsize=8.5, color=M.INK_2, linespacing=1.45)
-    loss_legend(fig, [0.70, 0.04, 0.25, 0.03])
-    fig.subplots_adjust(left=0.25, right=0.985, top=0.80, bottom=0.12)
+    ax.set_xlim(0, xs[-1] + 1)
+    ax.set_ylim(y, -1.75)
+    header(fig, H_in, "Where it breaks: chains and counts fail first, and smaller models fail at lower densities",
+           "Accuracy per question type at high effort (questions per type in brackets, pooled over 3 documents). Grey "
+           "rows: the model reading text;\nblue rows: the same model reading pages with 2.2x, 2.9x and 4.2x fewer "
+           "tokens, shaded by points lost against its text row.")
+    loss_legend(fig, [0.70, 0.10 / H_in, 0.25, 0.16 / H_in])
     save(fig, "claude_qa_breakdown.png")
     plt.close(fig)
     print("claude_qa_breakdown.png")
@@ -284,7 +317,9 @@ def fig_cost():
             a = r["kinds"]["all"]
             lo, hi = M.wilson(a[1], a[2])
             rows_.append((m, f"{lab} fewer tokens (pages)", c[b], a[1] / a[2], lo, hi, bool(r.get("lossless"))))
-    fig, (axc, axa) = plt.subplots(1, 2, figsize=(10.4, 5.3), dpi=150, sharey=True,
+    n_rows = 4 * len(MODELS)
+    H_in = 2.2 + 0.36 * n_rows
+    fig, (axc, axa) = plt.subplots(1, 2, figsize=(10.4, H_in), dpi=150, sharey=True,
                                    gridspec_kw={"width_ratios": [1.0, 1.0]})
     ys, y = [], 0.0
     for i, r in enumerate(rows_):
@@ -322,12 +357,12 @@ def fig_cost():
     axa.spines["bottom"].set_bounds(40, 100)
     fig.suptitle("Opus reading 2.2-2.9x denser pages costs half as much as Opus reading text, for the same answers",
                  x=0.02, ha="left", fontsize=12, fontweight="bold")
-    fig.text(0.02, 0.885, "One call = a ~245k-token document plus 120 questions, high effort, mean of 3 documents. "
+    fig.text(0.02, 1 - 0.58 / H_in, "One call = a ~245k-token document plus 120 questions, high effort, mean of 3 documents. "
              "✓ = no measurable loss vs the same model reading text (pre-registered).\nList prices as if uncached: "
              "Opus \\$4 / \\$20 per million input / output tokens; Haiku \\$0.10 / \\$0.50 up to 100k-token prompts, "
              "\\$0.50 / \\$2.50 above. Not amounts billed.",
              fontsize=8.5, color=M.INK_2, linespacing=1.45)
-    fig.subplots_adjust(left=0.235, right=0.985, top=0.76, bottom=0.11, wspace=0.08)
+    fig.subplots_adjust(left=0.235, right=0.985, top=1 - 1.25 / H_in, bottom=0.6 / H_in, wspace=0.08)
     save(fig, "claude_qa_cost.png")
     plt.close(fig)
     print("claude_qa_cost.png", {m: {k: round(v, 3) for k, v in costs(m).items()} for m in MODELS})
