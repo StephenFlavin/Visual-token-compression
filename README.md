@@ -7,6 +7,32 @@ of text. A page image that carries 30-300 characters per vision token, and is st
 same model hold millions. This repo tests codes for doing that (glyphs for frequent letter chunks, colour pixels,
 RGB overlays and learned glyph alphabets) and compares them with plain text rendered equally densely.
 
+## Goals (2026-11-10)
+
+1. **Can a learned glyph alphabet beat Latin through a trained vision encoder?** Stage A on the RTX 3090: the 7x7
+   and 4x7 alphabets against 8-px Latin, gates A1 (learnable at all) and A2 (matches Latin at 28 chars/token).
+   Stage C (the dense 2x7 and BPE alphabets against 6- and 5-px Latin) only if both pass.
+   [PLAN_3090.md](docs/PLAN_3090.md) amendments 3-4.
+2. **How many bits per vision token can the pipe carry at all?** Random bits painted as colour blocks (96, 294 and
+   1176 bits per token offered), read through the same trained encoder into the frozen LLM; the information
+   recovered is exact because the source is uniform. The result is a floor on the pipe's capacity, not a ceiling.
+   Amendment 6.
+3. **Already found, with no training:** rendering plain Latin text as an image gives more text per token, with a
+   loss that grows with density.
+
+   | Reader | Rendering | Chars per vision token | Text tokens' worth per vision token (at 4.33 chars) | Quality |
+   |---|---|---|---|---|
+   | Qwen2.5-VL-3B, frozen | 16 px Latin | 6.8 | ~1.5x | 98% of the information recovered, 1.5% transcription error: near-lossless |
+   | Qwen2.5-VL-3B, frozen | 8 px Latin | 28.1 | ~3.4x in information | only 52% of the information recovered; it cannot read the page out (76% error) |
+   | Claude (Phase 1) | Latin at 29.4 px²/char | ~27 | ~6x (assuming ~4 chars per Claude text token, not measured) | 3% transcription error; whether it *answers questions* as well as from text is not yet tested |
+
+   Sources: Run 0 in [PLAN_3090.md](docs/PLAN_3090.md), Phase 1 in [RESULTS.md](docs/RESULTS.md).
+
+**Context.** For more context on a local GPU, text-side compressors and the model's own architecture (linear
+attention, KV quantization) are the stronger routes: a learned text encoder matches or beats DeepSeek-OCR's vision
+encoder at every compression ratio tested ([prior-art.md](docs/prior-art.md)). This repo answers the two questions
+above; it does not claim that images beat text-side compression.
+
 > **Status (2026-11-06)**
 >
 > | | Result |
