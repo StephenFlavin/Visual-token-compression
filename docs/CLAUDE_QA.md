@@ -24,6 +24,17 @@ the accuracy change in points (negative = worse than text). "Worst" is the 95% b
 verdict: the worst case is within 2 points. Darker cells lose more. Numbers: [A1](#a1-opus-55),
 [A2](#a2-sonnet-55) and [A3](#a3-haiku-55).
 
+## How fast it falls
+
+![Accuracy change against token saving, one line per model](img/claude_qa_curve.png)
+
+*How to read it:* each line starts at 0 (the model reading text) and shows the accuracy change as the pages get denser,
+at high effort; the grey band is the 2-point lossless margin.
+
+* **Opus and Sonnet stay in the band to 2.2x** (Opus to 2.9x), then fall. Haiku leaves it at the first step.
+* **Multi-step questions fall about twice as fast** as the overall score: at 4.2x, -20 (Opus), -35 (Sonnet) and
+  -81 points (Haiku).
+
 ## What the pages look like
 
 ![The same passage at the three densities, actual pixels, with the vision-token grid](img/claude_qa_pages.png)
@@ -46,6 +57,27 @@ the blue rows the same model reading pages. Shading is points lost against the g
 * **Sonnet sits between them:** its first loss is counting (89% at 2.2x, 72% at 2.9x); at 4.2x three-hop is at 42%.
 * **Haiku fails the same way at lower densities:** three-hop falls to 67% already at 2.2x, and at 4.2x even single
   lookups drop to 56-66%.
+
+![Single-fact lookups by where the fact sits in the document](img/claude_qa_position.png)
+
+*How to read it:* only single-fact lookups, grouped by the fifth of the document their fact is in; the dashed line
+is the models reading text.
+
+* **Depth does not matter.** A fact on the last pages is found as often as one on the first, at both densities and for
+  every model (Haiku at 4.2x is low everywhere, 53-65%, not low at the end).
+* **So the loss is about connecting facts, not about reaching them.** Counting all questions makes accuracy appear to
+  fall towards the end, but that is because multi-step questions, placed by their latest fact, cluster there.
+
+## Does effort help?
+
+![Accuracy change at low and high effort](img/claude_qa_effort.png)
+
+*How to read it:* hollow dots are low effort, filled dots high effort, for the same model, pages and questions.
+
+* **At 2.2x effort does not matter:** both are within the margin for Opus and Sonnet.
+* **Once the pages are dense, high effort roughly halves the loss:** at 4.2x, Opus -15.3 -> -8.1 points and Sonnet
+  -21.7 -> -13.9; on multi-step questions -37.5 -> -20.0 and -46.7 -> -35.0. It also makes Opus's 2.9x lossless.
+* High effort costs more output tokens: see the cost figure below and [A4](#a4-cost).
 
 ## What it costs
 
@@ -145,9 +177,11 @@ High effort (`analysis_v2_haiku/summary.md`):
 Verdict (1), lossless at 2.2x: **FAIL**. **Low effort is excluded** (decided after the run, from the model's own
 output): Haiku answered the text arm with 400-800 output tokens, i.e. without reasoning (33-45% correct; one call
 declined 80 of 120 questions: "I haven't worked those out ... I can go through them in batches"), but spent 8-15k
-output tokens on the image arms, which therefore "won" by up to 49 points. That measures how much Haiku chooses to
+output tokens on its 2.2x and 2.9x page calls (0.8-2.3k on the 4.2x pages), which therefore "won" by up to 49 points. That measures how much Haiku chooses to
 think per input type, not how well it reads. Opus used ~3k output tokens on both arms at low effort and none of its
 calls was flagged. `analyse_claude_qa.py` now flags unanswered questions and such phrases and marks the row invalid.
+
+![Output tokens per call, text vs pages, per model and effort](img/claude_qa_engagement.png)
 
 ### A4. Cost
 

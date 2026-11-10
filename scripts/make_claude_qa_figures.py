@@ -7,6 +7,10 @@
 3. claude_qa_breakdown.png  accuracy per question type (columns) for each model reading text and pages (row blocks),
                             high effort, shaded by points lost vs the same model reading text
 4. claude_qa_cost.png       list-price cost per call and accuracy, one row per model x input form, high effort
+5. claude_qa_curve.png      accuracy change vs token saving, one line per model (high effort), lossless band shaded
+6. claude_qa_effort.png     low vs high effort, accuracy change per model and density (models with a valid low row)
+7. claude_qa_position.png   single-fact lookups by where the fact sits in the document (does depth matter?)
+8. claude_qa_engagement.png output tokens per call, text vs pages, per model and effort (the Haiku exclusion)
 
 Numbers come from results/claude_qa/analysis_v2{,_sonnet,_haiku}/summary.json (experiments/analyse_claude_qa.py) and
 the calls' token counts in results/claude_qa/qav2*_*/runs.jsonl. Models missing a summary are skipped.
@@ -368,9 +372,239 @@ def fig_cost():
     print("claude_qa_cost.png", {m: {k: round(v, 3) for k, v in costs(m).items()} for m in MODELS})
 
 
+# ------------------------------------------------------------------------------------------- 5. curve
+def fig_curve():
+    """Accuracy change (image - text, points) vs the measured token saving, one line per model at high effort, for all
+    questions and multi-step questions; 95% Newcombe intervals; the pre-registered +-2-point band shaded."""
+    plt = M.chart_style()
+    S = summaries()
+    H_in = 5.3
+    fig, axs = plt.subplots(1, 2, figsize=(10.4, H_in), dpi=150, sharey=True)
+    fig.subplots_adjust(left=0.08, right=0.95, top=1 - 1.45 / H_in, bottom=0.62 / H_in, wspace=0.08)
+    for ax, (title, key, sub) in zip(axs, [("All questions", "text_minus_image", "360 per point"),
+                                           ("Multi-step questions", "complex_text_minus_image", "120 per point")]):
+        ax.axhspan(-2, 2, color="#ebeae5", lw=0, zorder=0)
+        ax.axhline(0, color=M.AXIS, lw=0.8, zorder=1)
+        for m, spec in MODELS.items():
+            pts = sorted((r["saving"], r) for k, r in S[m].items() if k.startswith("high/") and "saving" in r)
+            x = np.array([1.0] + [sv for sv, _ in pts])
+            ch = np.array([0.0] + [-100 * r[key][0] for _, r in pts])
+            lo = np.array([0.0] + [-100 * r[key][2] for _, r in pts])
+            hi = np.array([0.0] + [-100 * r[key][1] for _, r in pts])
+            ax.plot(x, ch, color=spec["colour"], lw=2, zorder=3)
+            ax.errorbar(x[1:], ch[1:], yerr=[ch[1:] - lo[1:], hi[1:] - ch[1:]], fmt="none", ecolor=spec["colour"],
+                        elinewidth=1.2, capsize=0, zorder=3)
+            ax.plot(x, ch, ls="none", marker=spec["marker"], ms=7.5 if spec["marker"] != "D" else 6.5,
+                    color=spec["colour"], mec=M.SURFACE, mew=1.4, zorder=4)
+            ax.text(x[-1] + 0.1, ch[-1], m, fontsize=8.5, color=M.INK_2, va="center")
+        ax.set_xticks([1, 2.19, 2.87, 4.15], ["text", "2.2x", "2.9x", "4.2x"])
+        ax.set_xlim(0.8, 4.95)
+        ax.set_ylim(-90, 6)
+        ax.set_yticks([0, -20, -40, -60, -80], ["0", "−20", "−40", "−60", "−80"])
+        ax.grid(axis="y", color=M.GRID, lw=0.8)
+        ax.set_axisbelow(True)
+        ax.set_xlabel("fewer input tokens than the same document as text")
+        x0 = ax.get_position().x0
+        fig.text(x0, 1 - 1.12 / H_in, title, ha="left", va="top", fontsize=10.5, fontweight="bold", color=M.INK_1)
+        fig.text(x0, 1 - 1.34 / H_in, sub, ha="left", va="top", fontsize=8, color=M.INK_2)
+    axs[0].set_ylabel("accuracy change vs text (points)")
+    axs[0].text(4.9, 3.2, "within 2 points", ha="right", va="bottom", fontsize=7.5, color=M.INK_2)
+    header(fig, H_in, "How fast accuracy falls as the pages get denser: Opus holds longest, Haiku drops first",
+           "High effort, same 3 documents and questions for every model; bars are 95% intervals. The shaded band is "
+           "the pre-registered lossless margin (2 points).\nEach model is compared with itself reading text "
+           "(Opus and Sonnet 99.7%, Haiku 98.1%).")
+    save(fig, "claude_qa_curve.png")
+    plt.close(fig)
+    print("claude_qa_curve.png")
+
+
+# ------------------------------------------------------------------------------------------- 6. effort
+def fig_effort():
+    """Accuracy change at low vs high effort for each model x density (models whose low-effort rows are valid)."""
+    plt = M.chart_style()
+    S = summaries()
+    ms = [m for m in MODELS if not any(S[m][f"low/{b}"].get("disengaged") for b, _ in BUDGETS)]
+    skipped = [m for m in MODELS if m not in ms]
+    rows = [(m, b, lab) for m in ms for b, lab in BUDGETS]
+    ys, y = [], 0.0
+    for i, r in enumerate(rows):
+        if i and rows[i - 1][0] != r[0]:
+            y += 0.6
+        ys.append(y)
+        y += 1
+    H_in = 2.2 + 0.42 * y
+    fig, axs = plt.subplots(1, 2, figsize=(10.4, H_in), dpi=150, sharey=True)
+    fig.subplots_adjust(left=0.2, right=0.97, top=1 - 1.6 / H_in, bottom=0.62 / H_in, wspace=0.1)
+    for ax, (title, key) in zip(axs, [("All questions (360 per point)", "text_minus_image"),
+                                      ("Multi-step questions (120 per point)", "complex_text_minus_image")]):
+        ax.axvspan(-2, 2, color="#ebeae5", lw=0, zorder=0)
+        ax.axvline(0, color=M.AXIS, lw=0.8, zorder=1)
+        for yy, (m, b, lab) in zip(ys, rows):
+            col = MODELS[m]["colour"]
+            lo_e, hi_e = (-100 * S[m][f"{e}/{b}"][key][0] for e in ("low", "high"))
+            ax.plot([lo_e, hi_e], [yy, yy], color=col, lw=2, zorder=2)
+            ax.plot(lo_e, yy, marker="o", ms=8, mfc=M.SURFACE, mec=col, mew=1.8, ls="none", zorder=3)
+            ax.plot(hi_e, yy, marker="o", ms=8, color=col, mec=M.SURFACE, mew=1.2, ls="none", zorder=3)
+        ax.set_xlim(-52, 6)
+        ax.set_xticks([0, -10, -20, -30, -40, -50], ["0", "−10", "−20", "−30", "−40", "−50"])
+        ax.grid(axis="x", color=M.GRID, lw=0.8)
+        ax.set_axisbelow(True)
+        ax.set_xlabel("accuracy change vs text (points)")
+        ax.spines["left"].set_visible(False)
+        ax.tick_params(axis="y", length=0)
+        x0 = ax.get_position().x0
+        fig.text(x0, 1 - 1.22 / H_in, title, ha="left", va="top", fontsize=10.5, fontweight="bold", color=M.INK_1)
+    axs[0].set_yticks(ys, [f"{lab} pages" for _, _, lab in rows], fontsize=9)
+    axs[0].set_ylim(ys[-1] + 0.7, -0.7)
+    for m in ms:
+        yy = [v for v, r in zip(ys, rows) if r[0] == m]
+        block_label(fig, axs[0], (yy[0] + yy[-1]) / 2, m)
+    from matplotlib.lines import Line2D
+    axs[1].legend(handles=[Line2D([], [], marker="o", ms=7, mfc=M.SURFACE, mec=M.INK_2, mew=1.6, ls="none",
+                                  label="low effort"),
+                           Line2D([], [], marker="o", ms=7, color=M.INK_2, ls="none", label="high effort")],
+                  loc="upper left", frameon=False, fontsize=8.5)
+    note = (" " + ", ".join(skipped) + " is left out: at low effort it barely reasoned over the text (appendix A3).") \
+        if skipped else ""
+    header(fig, H_in, "High effort roughly halves the loss once the pages are dense",
+           "Accuracy change vs the same model reading text, at low (hollow) and high (filled) effort; same documents "
+           "and questions. Shaded: within 2 points.\nAt 2.2x both efforts are near zero; the gap opens at 2.9x and "
+           "4.2x." + note)
+    save(fig, "claude_qa_effort.png")
+    plt.close(fig)
+    print("claude_qa_effort.png")
+
+
+# ------------------------------------------------------------------------------------------- 7. position
+def per_question(model: str, effort: str, budget: float) -> list[tuple[dict, dict]]:
+    """(image answer, text answer) per question, pooled over the 3 documents."""
+    out = []
+    pre = MODELS[model]["runs"].rstrip("*")
+    for f in sorted(QA.glob(f"{pre}*_{effort}_b{int(round(budget))}/runs.jsonl")):
+        rows = {json.loads(x)["arm"]: json.loads(x) for x in f.read_text().splitlines() if x.strip()}
+        tq = {p["id"]: p for p in rows["text"]["per_question"]}
+        out += [(p, tq[p["id"]]) for p in rows["image"]["per_question"]]
+    return out
+
+
+def fig_position():
+    """Single-fact lookups (invented facts and numbers in quoted sentences) by the fifth of the document the fact sits
+    in, image arm at 2.9x and 4.2x, high effort. Multi-step questions are left out: each needs facts in several
+    places, and the latest of them sits late more often, which mixes question type into position."""
+    plt = M.chart_style()
+    H_in = 4.9
+    fig, axs = plt.subplots(1, 2, figsize=(10.4, H_in), dpi=150, sharey=True)
+    fig.subplots_adjust(left=0.08, right=0.95, top=1 - 1.5 / H_in, bottom=0.62 / H_in, wspace=0.08)
+    edges = [0.2, 0.4, 0.6, 0.8]
+    for ax, (b, lab) in zip(axs, BUDGETS[1:]):
+        txt = []
+        for m, spec in MODELS.items():
+            qs = [(i, t) for i, t in per_question(m, "high", b) if i["kind"] in ("needle", "number")]
+            fifth = np.digitize([i["pos"] for i, _ in qs], edges)
+            ok = np.array([i["correct"] for i, _ in qs])
+            txt += [t["correct"] for _, t in qs]
+            ys, los, his = [], [], []
+            for k in range(5):
+                sel = ok[fifth == k]
+                lo, hi = M.wilson(int(sel.sum()), len(sel))
+                ys.append(sel.mean() * 100), los.append(lo * 100), his.append(hi * 100)
+            x = np.arange(5)
+            y_ = np.array(ys)
+            ax.plot(x, y_, color=spec["colour"], lw=2, zorder=3)
+            ax.errorbar(x, y_, yerr=[np.maximum(0, y_ - np.array(los)), np.maximum(0, np.array(his) - y_)], fmt="none",
+                        ecolor=spec["colour"], elinewidth=1.1, capsize=0, zorder=3)
+            ax.plot(x, y_, ls="none", marker=spec["marker"], ms=7 if spec["marker"] != "D" else 6,
+                    color=spec["colour"], mec=M.SURFACE, mew=1.3, zorder=4, label=m)
+        ax.axhline(np.mean(txt) * 100, color=M.INK_2, lw=1, ls=(0, (4, 3)), zorder=2)
+        ax.text(0, np.mean(txt) * 100 + 1.2, f"all three models reading text: {np.mean(txt) * 100:.1f}%", fontsize=7.8,
+                color=M.INK_2, va="bottom")
+        ax.set_xticks(range(5), ["first", "second", "third", "fourth", "last"])
+        ax.set_xlim(-0.3, 4.3)
+        ax.set_ylim(40, 104)
+        ax.set_yticks([40, 60, 80, 100], ["40%", "60%", "80%", "100%"])
+        ax.grid(axis="y", color=M.GRID, lw=0.8)
+        ax.set_axisbelow(True)
+        ax.set_xlabel("fifth of the document the fact is in")
+        x0 = ax.get_position().x0
+        fig.text(x0, 1 - 1.17 / H_in, f"Pages with {lab} fewer tokens", ha="left", va="top", fontsize=10.5,
+                 fontweight="bold", color=M.INK_1)
+    axs[0].set_ylabel("single-fact lookups answered from pages")
+    axs[0].legend(loc="lower right", frameon=False, fontsize=8.5)
+    header(fig, H_in, "Depth does not matter: a fact on the last pages is found as often as one on the first",
+           "Single-fact lookups only (240 per model and panel, 42-52 per fifth), high effort, 3 documents; bars are 95% "
+           "intervals. Multi-step questions are left out:\nthey need facts in several places, so their position mixes "
+           "with their difficulty (counted that way, accuracy seems to fall towards the end).")
+    save(fig, "claude_qa_position.png")
+    plt.close(fig)
+    print("claude_qa_position.png")
+
+
+# ------------------------------------------------------------------------------------------- 8. engagement
+def fig_engagement():
+    """Output tokens per call (log scale), text arm vs page arms, per model and effort. Shows why Haiku's low-effort
+    rows are not comparable: it answered the text arm almost without reasoning."""
+    plt = M.chart_style()
+    rows = [(m, e) for m in MODELS for e in ("high", "low")]
+    ys, y = [], 0.0
+    for i, r in enumerate(rows):
+        if i and rows[i - 1][0] != r[0]:
+            y += 0.5
+        ys.append(y)
+        y += 1
+    H_in = 2.0 + 0.42 * y
+    fig, ax = plt.subplots(figsize=(10.4, H_in), dpi=150)
+    fig.subplots_adjust(left=0.2, right=0.97, top=1 - 1.3 / H_in, bottom=0.62 / H_in)
+    TEXT_C, PAGE_C = M.INK_2, "#2a78d6"
+    for yy, (m, e) in zip(ys, rows):
+        pre = MODELS[m]["runs"].rstrip("*")
+        t, pg = [], []
+        for f in sorted(QA.glob(f"{pre}*_{e}_b*/runs.jsonl")):
+            for line in f.read_text().splitlines():
+                r = json.loads(line)
+                if r.get("cached") or r["arm"] == "none":
+                    continue
+                (t if r["arm"] == "text" else pg).append(r["output_tokens"])
+        rng = np.random.default_rng(0)
+        ax.plot(pg, yy + rng.uniform(-0.12, 0.12, len(pg)), ls="none", marker="o", ms=6, color=PAGE_C, alpha=0.85,
+                mec=M.SURFACE, mew=0.8, zorder=3)
+        ax.plot(t, [yy - 0.28] * len(t), ls="none", marker="s", ms=6.5, color=TEXT_C, mec=M.SURFACE, mew=0.8,
+                zorder=3)
+        if m.startswith("Haiku") and e == "low":
+            ax.axhspan(yy - 0.5, yy + 0.4, color="#ebeae5", lw=0, zorder=0)
+    ax.set_xscale("log")
+    ax.set_xlim(250, 40000)
+    ax.set_xticks([300, 1000, 3000, 10000, 30000], ["300", "1k", "3k", "10k", "30k"])
+    ax.set_yticks(ys, [f"{e} effort" for _, e in rows], fontsize=9)
+    ax.set_ylim(ys[-1] + 0.7, -0.7)
+    for m in MODELS:
+        yy = [v for v, r in zip(ys, rows) if r[0] == m]
+        block_label(fig, ax, (yy[0] + yy[-1]) / 2, m)
+    ax.grid(axis="x", color=M.GRID, lw=0.8)
+    ax.set_axisbelow(True)
+    ax.spines["left"].set_visible(False)
+    ax.tick_params(axis="y", length=0)
+    ax.set_xlabel("output tokens per call (reasoning + answers, log scale)")
+    from matplotlib.lines import Line2D
+    ax.legend(handles=[Line2D([], [], marker="s", ms=6.5, color=TEXT_C, ls="none", label="reading text (3 calls)"),
+                       Line2D([], [], marker="o", ms=6, color=PAGE_C, ls="none",
+                              label="reading pages (9 calls: 3 densities x 3 documents)")],
+              loc="lower right", bbox_to_anchor=(1.0, 1.0), ncol=2, frameon=False, fontsize=8.5)
+    header(fig, H_in, "Haiku at low effort hardly reasons over text, but works through pages: its low row is excluded",
+           "Output tokens per call for the same 120 questions (shaded row: excluded from the comparison). Opus and "
+           "Sonnet spend similar effort on text and pages;\nHaiku at low effort answered from text with 400-800 tokens "
+           "(one call declined 80 of 120 questions) against thousands on pages.")
+    save(fig, "claude_qa_engagement.png")
+    plt.close(fig)
+    print("claude_qa_engagement.png")
+
+
 if __name__ == "__main__":
     M.OUT.mkdir(parents=True, exist_ok=True)
     fig_verdict()
     fig_pages()
     fig_breakdown()
     fig_cost()
+    fig_curve()
+    fig_effort()
+    fig_position()
+    fig_engagement()

@@ -169,7 +169,7 @@ Analysis `analysis_v2_haiku/summary.md`. **High effort (valid):**
 
 **Low effort: not comparable (post hoc, from the model's own output).** The text arm answered with 400-800 output
 tokens (no reasoning; 33-45% correct, one call declined 80 of 120 questions: "I haven't worked those out ... I can go
-through them in batches"), while the image arms spent 8-15k output tokens; one low-effort image call guessed "with no
+through them in batches"), while the 2.2x and 2.9x image arms spent 8-15k output tokens (the 4.2x ones 0.8-2.3k); one low-effort image call guessed "with no
 lookup performed". The comparison measures how much Haiku chooses to think per input type, not reading.
 `analyse_claude_qa.py` now flags unanswered questions and such phrases (added after this run) and marks the row
 invalid. Opus did not do this (~3k output tokens on both arms at low effort; no flags on any Opus call).
