@@ -35,3 +35,4 @@ venv/
 *.egg-info/
 .ipynb_checkpoints/
 .DS_Store
+results/claude_qa/research/run.log
