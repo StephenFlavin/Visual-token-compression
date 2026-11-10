@@ -27,6 +27,7 @@ RGB overlays and learned glyph alphabets) and compares them with plain text rend
    | Claude (Phase 1) | Latin at 29.4 px²/char | ~27 | 7.8x fewer input tokens (measured) | 3% transcription error, but question answering over a 500k-char document collapses: 33-42% vs 100% from text |
    | Claude, QA test | Latin at 58.8 px²/char | ~13 | 4.3x fewer | 85-95% vs 100% from text |
    | Claude, QA test | Latin at 117.6 px²/char | ~7 | **2.2x fewer** | **100%, same as text** (also at 1.5x) |
+   | Claude, QA test, 800k-token document | Latin at 58.8 px²/char | ~13 | 4.5x fewer (175k vs 781k tokens) | 93-97% vs 100% from text (4 misses in 80, p = 0.125) |
 
    Sources: Run 0 in [PLAN_3090.md](docs/PLAN_3090.md), Phase 1 in [RESULTS.md](docs/RESULTS.md), the Claude QA test
    in [results/claude_qa/summary.md](results/claude_qa/summary.md) (one 500k-char document, 80 exact-answer questions;

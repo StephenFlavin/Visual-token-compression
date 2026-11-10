@@ -62,6 +62,7 @@ model+prompt+image bytes), so re-runs are free.
 - Send images as base64 in `--input-format stream-json`; no tools needed. `vbpe/claude_eval.py` does this correctly.
 - **Run the child CLI with a clean env** (`env -i` + PATH/HOME/proxy/CA vars) in an empty temp dir. Otherwise it reuses the parent session id, adds an extra haiku summary call and ~830 cached tokens per call.
 - Image tokens = `ceil(W/28)*ceil(H/28)+3` (not W·H/750). No downscaling up to 1568×1568. Use canvas sides that are multiples of 28.
+- **Many-image calls can silently lose pages:** a 243-page request (30 MB PNG) delivered only ~112 pages (input tokens 161k vs ~345k expected; the earliest pages were dropped, no error). 122 pages (17 MB) arrived complete. Compare `input_tokens` with the image-token formula after every many-image call (`experiments/claude_qa_render.py`).
 - Use `--effort low`: adaptive thinking doubles cost with no CER gain. 8 concurrent calls: no rate limiting. `total_cost_usd` is list price; on this runner calls draw from the user's subscription quota.
 - **Claude cannot score non-natural text.** Substitution, quadrant pages and even word-scrambled English get refused or cut off by safety classifiers; `subst*_legend` (cipher key in prompt) gets a hard API AUP error. Do NOT reword/disguise prompts to get past this: that is classifier evasion. Use Claude only for natural Latin; use PP-OCR (Phase 1b) or trained readers for everything else.
 - Below ~18 px²/char Claude hallucinates fluent English or refuses; the base OCR prompt says "never refuse, give best guess".
