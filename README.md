@@ -34,7 +34,7 @@ RGB overlays and learned glyph alphabets) and compares them with plain text rend
    in [docs/CLAUDE_QA.md](docs/CLAUDE_QA.md) (Claude Opus 5.5; 3 documents of ~245k text tokens, 360 paired questions
    per point; Claude's tokenizer gives ~2.9 chars per token on this text, so its text-token column is not 4.33).
 
-   ![Claude: accuracy from page images vs from text by token saving](docs/img/claude_qa_saving.png)
+   ![Claude: accuracy change from reading page images instead of text](docs/img/claude_qa_verdict.png)
 
 **Context.** For more context on a local GPU, text-side compressors and the model's own architecture (linear
 attention, KV quantization) are the stronger routes: a learned text encoder matches or beats DeepSeek-OCR's vision
