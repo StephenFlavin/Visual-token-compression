@@ -180,3 +180,13 @@ low effort. (2) loss on multi-step questions at ~4x, low effort: not evaluable; 
 
 Haiku keeps single lookups at 2.2x and 2.9x (99%) but loses multi-step accuracy already at 2.2x (three-hop 100% ->
 67%, counts 78% -> 17%); at 4.2x even lookups fall to 61%. Opus at the same densities: lossless at 2.2x.
+
+## v2 with Claude Sonnet 5.5: pre-registered (2026-11-10, before any Sonnet suite call)
+
+The same suite (same 3 documents, 360 questions, densities 117.6 / 88.2 / 58.8 px²/char, effort low and high, same
+analysis, verdict rules and the engagement check added after the Haiku run) with `--model claude-sonnet-5-5`. Rows
+`qav2s_*`, analysis `analysis_v2_sonnet/`. A probe showed Sonnet reads 1932-px pages without downscaling (4,772 tokens
+vs 4,764) and transcribes their first line exactly at 117.6 and 58.8 px²/char; logged costs match $2 / $10 per
+million input / output tokens. Verdicts as before: (1) lossless at 2.2x at each effort; (2) a loss on multi-step
+questions at ~4x, low effort; (3) the effort effect, reported. Rows flagged by the engagement check are reported as
+not comparable.
