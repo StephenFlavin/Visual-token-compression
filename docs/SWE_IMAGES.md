@@ -110,3 +110,5 @@ Measured against the text arm's $10.61 over the 79 tasks:
 5. **Reading-heavy work** (large-diff review, repository Q&A, log triage, long sessions): where reading is most of the
    input, as in the document tests (~95%), pages halve the cost; untested for coding.
 6. **Context room, not money:** 2.9x more code per context window means fewer compactions in long sessions.
+7. **Compaction archives (tested):** keeping the pre-compaction transcript as indexed page images restored recall from
+   37% to 100% at 31% lower cost than normal compaction ([results/compaction](../results/compaction/README.md)).

@@ -148,8 +148,12 @@ candidates to test, ordered from closest to the test to furthest from it.
 * **Deep research: tested, and it holds at 2.2x** ([below](#tested-deep-research-sources)).
 * **Long-document Q&A** (reports, contracts, manuals, filings). The test is closest to this. At 2.2x, Opus and Sonnet
   answer as well from pages as from text, at about half the cost.
-* **Agent memory and long conversations.** Instead of summarising older turns, which loses details, render them as
-  pages: the details stay findable at about half the tokens. Untested on dialogue.
+* **Context compaction: tested, and it is the strongest result so far.** After `/compact`, Claude Code keeps a
+  summary and the path of the raw transcript; on 3 long sessions Opus then answered 37% of the questions about what
+  it had read. Adding an archive of the transcript as page images with an index (a PreCompact hook renders it; a
+  SessionStart hook points to it) brought it to 100%, 63 points better and 31% cheaper than normal compaction, and
+  2.2x cheaper than the same archive as text at the same accuracy. Details:
+  [results/compaction](../results/compaction/README.md).
 * **Coding agents: tested, no accuracy lost but no money saved** ([below](#tested-coding-agents)). Claude Code with
   file contents and command output shown as pages at 2.9x solved every SWE-bench task it solved from text, but
   coding spends little on reading, so the total cost did not fall.
