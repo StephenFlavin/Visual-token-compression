@@ -25,3 +25,26 @@ Predictions:
    hook log).
 4. Reported without a threshold: total input tokens (incl. cache reads) and list-price cost per task by arm, turns,
    wall time, and for every task vbhook fails but text resolves, the cause (misread, edit failure, other).
+
+## Results (2026-11-11): 50 tasks x 2 arms, all runs complete, $11.86 at list price
+
+| | text | vbhook (pages at 88.2) |
+|---|---|---|
+| resolved | **50/50** | **50/50** |
+| list-price cost (sum) | $5.78 | $6.08 |
+| input tokens incl. cache reads (sum / median per task) | 3,451,101 / 50,770 | 3,371,578 / 54,118 |
+| output tokens (sum) | 146,034 | 158,785 |
+| turns (median) | 6.5 | 7.0 |
+| wall time (median) | 31 s | 32 s |
+
+* Per task, vbhook/text input tokens: median 1.05, geometric mean 1.04; cost: median 1.01, geometric mean 1.06. vbhook used less input on 21 of 50 tasks.
+* What the vbhook arm saw as images: 126 views (2.5 per task) costing 39,468 tokens against 123,300 for the same content as text (3.12x fewer).
+* One vbhook run took 20 minutes (django__django-15128): the model ran Django's whole test suite before and after its change; not the hooks.
+
+Pre-registered verdicts:
+1. text resolves >= 80%: **PASS** (100%).
+2. vbhook within 10 points of text: **PASS** (100% vs 100%; no discordant task, McNemar p = 1). With every task solved by both arms the comparison has no power to find a small difference: it rules out a large one.
+3. content seen as images >= 2x fewer tokens than as text: **PASS** (3.12x).
+4. Totals: no saving overall. The agent reads little on these tasks (median 6.5 turns, ~30 s, targeted `grep`/`sed` of a few dozen lines that stay text below the size threshold), so the file content that became images is a few percent of the input; the rest is Claude Code's system prompt and tool definitions and the conversation, re-read (from the prompt cache) on every turn. Small differences in the number of turns move the total more than the images save.
+
+Conclusion: reading code and command output as page images at 2.9x density did not cost Opus 5.5 any task (50/50, the same as text) on the hardest Django tasks recent Opus models solve, and the images themselves cost 3x fewer tokens than the text they replaced; but on tasks this short, file reading is too small a share of an agent's input for the total to fall. The saving needs work dominated by reading: large files, many files, long outputs.
