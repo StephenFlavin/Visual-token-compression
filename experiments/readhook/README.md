@@ -57,3 +57,11 @@ Measured on the 4 library files (11,725 lines), as for Java:
 | minified, comments kept | 147,188 (1.28x) | 51,717 (3.63x) | 38,736 (4.85x) |
 | minified, comments stripped | 135,271 (1.39x) | 46,332 (4.05x) | 34,731 (5.41x) |
 | minified, comments + docstrings stripped | 83,838 (2.24x) | 27,273 (6.89x) | 20,439 (9.19x) |
+
+## Command output as images (2026-11-11)
+
+`bash_output_hook.py` (PostToolUse on Bash) replaces long command output with a rendered image through
+`updatedToolOutput` (`stdout` = `data:image/png;base64,...`, `isImage: true`). Checked with Haiku 5.5: the tool result
+reached the model as an image and it read a printed value and a numbered line correctly. Rewriting the command in a
+PreToolUse hook to a wrapper that prints the data URI works too. Output under 800 characters stays text (an image
+costs at least ~140 tokens).
