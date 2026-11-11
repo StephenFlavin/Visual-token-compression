@@ -15,3 +15,7 @@ first scorer took the first number on the answer's first line. The model often s
 wrong and the text arms looked worse than they were (e.g. "total" questions 22-33% from text vs 89% from pages). The
 fix reads the whole answer and takes the number after the last `=`/arrow, else after "total" / "difference" /
 "answer", else the only number, else the last.
+
+**Free-text scoring (added during stage B, applied to every arm):** at low effort the model sometimes reasons before
+answering on the answer line. Primary score: the candidate after the last "answer:" (else the last line) equals the
+gold answer or starts with a gold answer of at most 4 words; the strict first-line exact match is kept as `em_strict`.

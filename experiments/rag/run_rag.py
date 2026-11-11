@@ -239,10 +239,20 @@ def score(q: dict, text: str) -> dict:
         ok = n is not None and Q.norm_num(n) == q["answer"]
         return {"pred": pred, "raw": raw[:500], "em": ok, "f1": float(ok)}
     gold = q["answer"]
-    if norm(gold).startswith("insufficient"):
-        ok = norm(pred).startswith("insufficient")
-        return {"pred": pred, "raw": raw[:500], "em": ok, "f1": float(ok)}
-    return {"pred": pred, "raw": raw[:500], "em": norm(pred) == norm(gold), "f1": f1(pred, gold)}
+    # The answer candidate: after the last "answer:" if any, else the last line (at low effort the model sometimes
+    # reasons first). Lenient match: equal, or starts with a short (<= 4 word) gold answer. em_strict = first line
+    # equal. Both apply to every arm alike (added during stage B).
+    m = re.findall(r"answer\s*[:：]\s*(.+)", raw, flags=re.I)
+    cand = m[-1].strip() if m else (raw.splitlines()[-1].strip() if raw else "")
+    g = norm(gold)
+    if g.startswith("insufficient"):
+        ok = norm(cand).startswith("insufficient")
+        strict = norm(pred).startswith("insufficient")
+    else:
+        c = norm(cand)
+        ok = c == g or (len(g.split()) <= 4 and (c + " ").startswith(g + " "))
+        strict = norm(pred) == g
+    return {"pred": pred, "raw": raw[:500], "cand": cand[:200], "em": ok, "em_strict": strict, "f1": f1(cand, gold)}
 
 
 def recall(q: dict, ranked: list[str], k: int) -> float:
