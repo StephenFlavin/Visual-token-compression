@@ -13,6 +13,8 @@ for p in (os.path.dirname(HERE), os.path.abspath(os.path.join(HERE, "..", "..", 
 
 CACHE = os.environ.get("VBHOOK_CACHE") or os.path.join(os.environ.get("CLAUDE_PROJECT_DIR", "/tmp"), ".vbhook")
 LOG = os.environ.get("VBHOOK_LOG")
+BASH_READ_NOTE = (" Claude Code does not count a file printed by a shell command as read: use the Read tool on a file "
+                  "before you Edit or Write it.")
 
 FORMAT_NOTE = ("It is minified: §<n> marks the start of original line n; each » before a line is one level of "
                "indentation where indentation matters; other whitespace (indentation, blank lines, line breaks inside "

@@ -75,7 +75,8 @@ if res is None and mixed is not None:                 # compound command that pr
             buf = io.BytesIO()
             page.image.save(buf, format="PNG")
             note = ("The command's output is shown as an image: each file it printed starts with ▶ <path> and is "
-                    "minified with its own line numbers (" + ", ".join(sorted(set(kinds))) + "). " + common.FORMAT_NOTE)
+                    "minified with its own line numbers (" + ", ".join(sorted(set(kinds))) + "). " + common.FORMAT_NOTE
+                    + common.BASH_READ_NOTE)
             common.log({"tool": "Bash", "cmd": cmd[:120], "decision": "image", "kind": "mixed:" + "+".join(kinds),
                         "image_tokens": page.tokens, "text_tokens": round(t_tok)})
             common.emit({"hookSpecificOutput": {"hookEventName": "PostToolUse", "additionalContext": note,
@@ -115,7 +116,7 @@ if not policy.use_image(page.tokens, t_tok):
 buf = io.BytesIO()
 page.image.save(buf, format="PNG")
 note = (f"The command's output is shown as an image ({m.kind}). " + common.FORMAT_NOTE + " " + common.legend(m.kind)
-        + saved_note)
+        + saved_note + (common.BASH_READ_NOTE if path else ""))
 common.log({"tool": "Bash", "cmd": cmd[:120], "decision": "image", "kind": m.kind, "image_tokens": page.tokens,
             "text_tokens": round(t_tok)})
 common.emit({"hookSpecificOutput": {"hookEventName": "PostToolUse", "additionalContext": note,

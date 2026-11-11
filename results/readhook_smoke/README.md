@@ -32,3 +32,23 @@ Predictions, written before the run (a smoke test, not a powered comparison):
 Predictions: 1 (text 6/6) PASS; 2 (image >= 5/6, comparable speedups) PASS; 3 (<= 2 failed Edits) PASS (0); 4 (image read tokens below text on every task) PASS per read, but not per run on graph_hops (re-reads).
 
 Limits: small single-page files (~2-4k chars), so this tests reading and editing from pages, not long-context savings; 3 runs per arm; Opus 5.5 only.
+
+## Full hook set at 88.2 px²/char (2.9x), 2026-11-11
+
+`experiments/readhook/vbhook/` (minifiers for 40+ file and output kinds; Read, Edit/Write and Bash hooks; installer).
+Same 6 tasks x 3 runs, Opus 5.5 high effort; Bash no longer restricted to pytest (file dumps and long output are
+converted to images instead of blocked). Three iterations, each fixing what the previous run exposed:
+
+| arm | equivalent | failed Edits | image views | image tokens vs the same content as text | cost |
+|---|---|---|---|---|---|
+| v1: first full set | 18/18 | 0 | 7 | 1,656 vs 3,800 (2.29x fewer) | $1.88 |
+| v2: compound commands, output sniffing fixed | 18/18 | 2 | 34 | 10,695 vs 27,408 (2.56x fewer) | $2.02 |
+| v3: edit-safe code flows | 18/18 | 1 | 32 | 10,350 vs 27,231 (2.63x fewer) | $2.09 |
+
+* v1: models read code with compound commands (`ls && cat a.py && cat test*.py`) whose output had no minifier and stayed text, and Python output was taken for a Dockerfile; only 7 views were images.
+* v2: every run saw its code as images (file contents inside compound output are minified by their own kind). 2 Edits failed because the dense flow drops spaces around operators and the model copied that spacing; Claude Code checks old_string before any hook runs, so the whitespace-insensitive matcher cannot help.
+* v3: edit-safe flows (spaces kept inside lines, every line tagged; +6.8% page tokens). The one failed Edit was a real misread (`iv`/`ov` swapped in a symmetric condition), recovered after the model checked the lines; 7 Write calls were refused by Claude Code because the file had only been printed by a shell command (a note now tells the model to Read first).
+* Failed calls: PostToolUse does not run for a failed Bash call, so a command that exits non-zero leaked its output as text in v1. `bash_pre_hook.py` appends `echo "[exit code $?]"` so the call succeeds (code 0 is stripped again); the installer allows only that exact line, so permission rules still apply to the command itself.
+* Reads that stayed text (14 in v3) were small partial reads where text was cheaper (the policy works as intended).
+
+Conclusion: at 2.9x density with the full hook set, 54/54 runs across the three iterations produced equivalent refactors; the content seen as images cost 2.6x fewer tokens than the same content as text (small files; larger files gain more). One content misread in 24 v3 Edits vs none in 24 at 2.2x (117.6).

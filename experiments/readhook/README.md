@@ -65,3 +65,21 @@ Measured on the 4 library files (11,725 lines), as for Java:
 reached the model as an image and it read a printed value and a numbered line correctly. Rewriting the command in a
 PreToolUse hook to a wrapper that prints the data URI works too. Output under 800 characters stays text (an image
 costs at least ~140 tokens).
+
+## vbhook: the full hook set (2026-11-11)
+
+`vbhook/` supersedes the prototypes above. Install for a project with
+`python3 experiments/readhook/vbhook/install.py [--budget 88.2] > .claude/settings.local.json` (hooks: Read and
+Edit/Write PreToolUse; Bash PreToolUse (exit-code line) and PostToolUse (output to image); plus one allow rule for
+that exact `echo` line). Contract and rules for minifiers: `vbhook/SPEC.md`. Families, each checked on real files:
+
+| family | kinds | savings as pages at 88.2 vs text |
+|---|---|---|
+| `python_family.py` | Python, shell, Makefile, Dockerfile | 3.5-4.8x (Python ~3.25x in the default edit-safe mode) |
+| `brace.py` | JS, TS/TSX, Java, Kotlin, Scala, C, C++, C#, Go, Rust, Swift, PHP, Dart | 3.6-4.4x dense, ~3.6x overall edit-safe |
+| `config_docs.py` | YAML, TOML, INI, JSON(L), XML/SVG/HTML, Markdown/RST/text, CSV/TSV, SQL; lock files and digit/hash-heavy files stay text | 2.7-5.5x |
+| `outputs.py` | pytest, tracebacks, compiler/linter diagnostics, logs, git diff/log/status, grep, find, listings | 3.8-8x on large outputs; text below ~300 chars |
+
+Policy (`policy.py`): an image only when it costs at most 0.8x the text tokens of the same lines or output. Tests:
+`cd experiments/readhook && python3 -m pytest -q vbhook/tests` (333 tests). Results with Opus:
+`results/readhook_smoke/README.md`.
