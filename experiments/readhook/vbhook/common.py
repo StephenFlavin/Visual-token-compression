@@ -42,3 +42,35 @@ def shift_tags(flow: str, first_line: int) -> str:
         return flow
     import re
     return re.sub(r"§(\d+) ", lambda m: f"§{int(m.group(1)) + first_line - 1} ", flow)
+
+
+def legend(kind: str) -> str:
+    """Extra notation of a kind (e.g. the caret brackets of tracebacks, the grep and diff layouts)."""
+    try:
+        from vbhook.minify.outputs import LEGENDS
+        return LEGENDS.get(kind, "")
+    except Exception:  # noqa: BLE001
+        return ""
+
+
+def minify_output(text: str, hint: str | None):
+    """Minify command output: the kind from the command line first, then sniffing."""
+    from vbhook.minify import minify
+    return (minify(text, None, hint) if hint else None) or minify(text, None, None)
+
+
+def output_window(text: str, start: int, hint: str | None, budget: float):
+    """The most output lines from `start` (1-based) whose flow fits one page -> (flow, minifier, n lines), or None.
+    Output is paged by output line, because some kinds' § tags are file line numbers (grep, git diff)."""
+    from vbhook import render
+    lines = text.split("\n")
+    cap = int(render.page_chars(budget) * 0.95)
+    lo, hi, best = 1, len(lines) - start + 1, None
+    while lo <= hi:
+        mid = (lo + hi) // 2
+        res = minify_output("\n".join(lines[start - 1:start - 1 + mid]), hint)
+        if res and len(res[0]) <= cap:
+            best, lo = (res[0], res[1], mid), mid + 1
+        else:
+            hi = mid - 1
+    return best

@@ -38,44 +38,59 @@ def file_dump(c: str):
     return None
 
 
+budget = render.DEFAULT_BUDGET
 res, path, first = None, None, 1
 fd = file_dump(cmd)
 if fd and not cmd.strip().startswith("nl"):
     path, first = fd
     res = minify(text, path)
-if res is None:
+saved_note = ""
+if res is not None:                                   # a file dump: tags are the file's line numbers
+    flow, m = res
+    flow = common.shift_tags(flow, first)
+    pages = render.render(flow, budget)
+    page, n_pages = pages[0], len(pages)
+    if n_pages > 1 and pages[1].first_line:
+        saved_note = (f" Only the first of {n_pages} pages is shown; Read {path} with offset={pages[1].first_line} "
+                      "for the rest.")
+    shown_frac = page.chars / max(1, len(flow))
+else:
     hint = None
     try:
         from vbhook.minify.outputs import kind_for_command
         hint = kind_for_command(cmd)
     except Exception:  # noqa: BLE001
         pass
-    res = minify(text, None, hint)
-if res is None:
-    common.log({"tool": "Bash", "cmd": cmd[:120], "decision": "text", "why": "no minifier", "chars": len(text)})
-    sys.exit(0)
-flow, m = res
-flow = common.shift_tags(flow, first)
-pages = render.render(flow)
-t_tok = policy.text_tokens(text, m.cpt)
-first_page = pages[0]
-covered = first_page.chars / max(1, len(flow))
-if not policy.use_image(first_page.tokens, t_tok * min(1.0, covered)):
-    common.log({"tool": "Bash", "cmd": cmd[:120], "decision": "text", "kind": m.kind,
-                "image_tokens": first_page.tokens, "text_tokens": round(t_tok)})
+    full = common.minify_output(text, hint)
+    if full is None:
+        common.log({"tool": "Bash", "cmd": cmd[:120], "decision": "text", "why": "no minifier", "chars": len(text)})
+        sys.exit(0)
+    m = full[1]
+    win = common.output_window(text, 1, m.kind, budget)
+    if win is None:
+        sys.exit(0)
+    flow, m, n = win
+    pages = render.render(flow, budget)
+    page, n_pages = pages[0], 1
+    total = text.count("\n") + 1
+    shown_frac = n / total
+    if n < total:
+        saved = common.cache_path(cmd + text, f".{m.kind}.txt")
+        saved = os.path.join(os.path.dirname(saved), "out_" + os.path.basename(saved))
+        open(saved, "w").write(text)
+        saved_note = (f" Only output lines 1-{n} of {total} are shown; the full output is saved at {saved}: Read it "
+                      f"with offset={n + 1} for the next lines.")
+t_tok = policy.text_tokens(text, m.cpt) * min(1.0, shown_frac)
+if not policy.use_image(page.tokens, t_tok):
+    common.log({"tool": "Bash", "cmd": cmd[:120], "decision": "text", "kind": m.kind, "image_tokens": page.tokens,
+                "text_tokens": round(t_tok)})
     sys.exit(0)
 buf = io.BytesIO()
-first_page.image.save(buf, format="PNG")
-note = f"The command's output is shown as an image ({m.kind}). " + common.FORMAT_NOTE
-if len(pages) > 1:
-    saved = common.cache_path(cmd + text, f".{m.kind}.txt")
-    saved = saved.replace(os.path.basename(saved), "out_" + os.path.basename(saved))
-    open(saved, "w").write(text)
-    nl = pages[1].first_line
-    note += (f" Only the first of {len(pages)} pages is shown; the full output is saved at {saved}: Read it "
-             + (f"with offset={nl} " if nl else "") + "for the rest.")
-common.log({"tool": "Bash", "cmd": cmd[:120], "decision": "image", "kind": m.kind, "pages": len(pages),
-            "image_tokens": first_page.tokens, "text_tokens": round(t_tok)})
+page.image.save(buf, format="PNG")
+note = (f"The command's output is shown as an image ({m.kind}). " + common.FORMAT_NOTE + " " + common.legend(m.kind)
+        + saved_note)
+common.log({"tool": "Bash", "cmd": cmd[:120], "decision": "image", "kind": m.kind, "image_tokens": page.tokens,
+            "text_tokens": round(t_tok)})
 common.emit({"hookSpecificOutput": {"hookEventName": "PostToolUse", "additionalContext": note,
              "updatedToolOutput": {"stdout": "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode(),
                                    "stderr": "", "interrupted": bool(r.get("interrupted")), "isImage": True}}})

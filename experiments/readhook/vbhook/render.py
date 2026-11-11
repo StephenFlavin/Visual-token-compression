@@ -82,3 +82,8 @@ def page_tokens(flow: str, budget: float = DEFAULT_BUDGET) -> int:
     per_page = int(W * W / budget * 0.97)
     full, rem = divmod(len(flow), per_page)
     return full * vision_tokens(W, W) + (vision_tokens(W, _height(rem, budget)) if rem else 0)
+
+
+def page_chars(budget: float = DEFAULT_BUDGET) -> int:
+    """Flow characters that fit on one full page (render() may still need slightly fewer)."""
+    return int(W * W / budget * 0.97)

@@ -19,6 +19,25 @@ hint = None
 base = os.path.basename(p)
 if os.path.dirname(os.path.abspath(p)) == os.path.abspath(common.CACHE) and base.count(".") >= 2:
     hint = base.split(".")[-2]                      # saved command output: out_<hash>.<kind>.txt
+if hint:                                             # saved command output: page by output line
+    budget = render.DEFAULT_BUDGET
+    start = max(1, int(ti.get("offset") or 1))
+    win = common.output_window(text, start, hint, budget)
+    if win is None:
+        sys.exit(0)
+    flow, m, n = win
+    pg = render.render(flow, budget)[0]
+    total = text.count("\n") + 1
+    out = common.cache_path(f"{p}:{start}:{budget}", f".o{start}.png")
+    pg.image.save(out)
+    more = f" Read it with offset={start + n} for the next lines." if start + n <= total else ""
+    common.log({"tool": "Read", "path": p, "decision": "image", "kind": m.kind, "image_tokens": pg.tokens,
+                "lines": [start, start + n - 1]})
+    common.emit({"hookSpecificOutput": {
+        "hookEventName": "PreToolUse", "permissionDecision": "allow", "updatedInput": {"file_path": out},
+        "additionalContext": (f"This Read shows output lines {start}-{start + n - 1} of {total} of a saved command "
+                              f"output as an image ({m.kind}). " + common.FORMAT_NOTE + " " + common.legend(m.kind)
+                              + more)}})
 res = minify(text, p, hint)
 if res is None:
     common.log({"tool": "Read", "path": p, "decision": "text", "why": "no minifier"})
@@ -49,4 +68,4 @@ common.log({"tool": "Read", "path": p, "decision": "image", "kind": m.kind, "pag
 common.emit({"hookSpecificOutput": {
     "hookEventName": "PreToolUse", "permissionDecision": "allow", "updatedInput": {"file_path": out},
     "additionalContext": (f"This Read shows {base} lines {a}-{b} of {len(lines)} as an image (page {k + 1} of "
-                          f"{len(pages)}). " + common.FORMAT_NOTE + nxt)}})
+                          f"{len(pages)}). " + common.FORMAT_NOTE + " " + common.legend(m.kind) + nxt)}})

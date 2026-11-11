@@ -110,4 +110,20 @@ def test_bash_cat_of_big_file_becomes_image(tmp_path):
     from PIL import Image
     im = Image.open(io.BytesIO(base64.b64decode(o["stdout"].split(",", 1)[1])))
     assert im.size[0] == render.W
-    assert "saved at" in out["additionalContext"]          # 400 functions do not fit on one page
+    assert f"Read {f} with offset=" in out["additionalContext"]   # 400 functions do not fit on one page
+
+
+def test_bash_long_grep_output_pages_by_output_line(tmp_path):
+    lines = [f"src/pkg/module_{i % 40}.py:{i}:    value_{i} = compute_something(alpha, beta, gamma_{i})"
+             for i in range(1, 4001)]
+    text = "\n".join(lines)
+    ev = {"tool_name": "Bash", "tool_input": {"command": "grep -rn compute_something src"},
+          "tool_response": {"stdout": text, "stderr": "", "interrupted": False, "isImage": False}}
+    out = run("bash_hook.py", ev, tmp_path)
+    ctx = out["additionalContext"]
+    assert out["updatedToolOutput"]["isImage"] and "(grep)" in ctx and "»path" in ctx
+    saved = ctx.split("saved at ")[1].split(":")[0]
+    nxt = int(ctx.split("offset=")[1].split(" ")[0])
+    assert 1 < nxt < 4001 and os.path.isfile(saved)
+    out2 = run("read_hook.py", {"tool_name": "Read", "tool_input": {"file_path": saved, "offset": nxt}}, tmp_path)
+    assert f"output lines {nxt}-" in out2["additionalContext"] and out2["updatedInput"]["file_path"].endswith(".png")
