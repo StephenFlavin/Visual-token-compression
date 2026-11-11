@@ -28,10 +28,11 @@ PROMPT = ("`{t}.py` contains a slow function `{fn}`. Refactor `{fn}` for perform
 
 def settings(arm: str, work: Path) -> dict:
     env = f"READHOOK_LOG={work}/hook.jsonl READHOOK_CACHE={work}/.cache"
+    guard = {"matcher": "Bash", "hooks": [{"type": "command", "command": f"python3 {HERE}/bash_guard_hook.py"}]}
     if arm == "text":
-        return {"hooks": {"PreToolUse": [{"matcher": "Read", "hooks": [
+        return {"hooks": {"PreToolUse": [guard, {"matcher": "Read", "hooks": [
             {"type": "command", "command": f"{env} python3 {HERE}/log_read_hook.py"}]}]}}
-    return {"hooks": {"PreToolUse": [
+    return {"hooks": {"PreToolUse": [guard,
         {"matcher": "Read", "hooks": [{"type": "command", "command": f"{env} python3 {HERE}/img_read_hook.py"}]},
         {"matcher": "Edit|Write", "hooks": [{"type": "command", "command": f"{env} python3 {HERE}/img_edit_hook.py"}]}]}}
 

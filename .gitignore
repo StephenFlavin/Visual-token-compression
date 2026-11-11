@@ -35,3 +35,5 @@ venv/
 *.egg-info/
 .ipynb_checkpoints/
 .DS_Store
+results/readhook_smoke/run.log
+results/readhook_smoke/runs.jsonl
