@@ -41,7 +41,8 @@ ENV_BROKEN: dict[str, set] = {}
 
 
 def sh(cmd, cwd=None, timeout=3600, env=None, check=False):
-    p = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, timeout=timeout, env=env, shell=isinstance(cmd, str))
+    p = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, timeout=timeout, env=env, shell=isinstance(cmd, str),
+                       stdin=subprocess.DEVNULL)
     if check and p.returncode:
         raise RuntimeError(f"{cmd}: {p.stderr[-800:]}")
     return p
@@ -198,7 +199,8 @@ def run_one(t, arm: str, model: str, effort: str) -> dict:
            "--setting-sources", "project,local", "--strict-mcp-config", "--no-session-persistence", "--max-turns", "250"]
     t0 = time.time()
     try:
-        stdout = subprocess.run(cmd, capture_output=True, text=True, env=env, cwd=repo, timeout=7200).stdout
+        stdout = subprocess.run(cmd, capture_output=True, text=True, env=env, cwd=repo, timeout=7200,
+                                stdin=subprocess.DEVNULL).stdout   # no inherited stdin: `grep -r` without a path reads it
     except subprocess.TimeoutExpired as e:
         stdout = (e.stdout.decode() if isinstance(e.stdout, bytes) else e.stdout) or ""
     (base / "stream.jsonl").write_text(stdout)

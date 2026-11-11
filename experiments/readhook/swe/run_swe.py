@@ -185,7 +185,8 @@ def run_one(t, arm: str, model: str, effort: str) -> dict:
            "--no-session-persistence", "--max-turns", "250"]
     t0 = time.time()
     try:
-        p = subprocess.run(cmd, capture_output=True, text=True, env=CE.build_env(), cwd=repo, timeout=5400)
+        p = subprocess.run(cmd, capture_output=True, text=True, env=CE.build_env(), cwd=repo, timeout=5400,
+                           stdin=subprocess.DEVNULL)   # no inherited stdin: `grep -r` without a path reads it
         stdout = p.stdout
     except subprocess.TimeoutExpired as e:
         stdout = (e.stdout or b"").decode() if isinstance(e.stdout, bytes) else (e.stdout or "")
