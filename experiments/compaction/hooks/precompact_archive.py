@@ -85,9 +85,14 @@ def entry_flows(transcript: list[dict], cwd: str) -> list[tuple[str, str]]:
                     rel = os.path.relpath(path, cwd) if path.startswith("/") else path
                     raw = LINE_NO.sub("", body)
                     res = minify(raw.rstrip("\n"), path) if raw.strip() else None
-                    flow = res[0] if res else _one_line(raw)
-                    if res and inp.get("offset"):
-                        flow = shift_tags(flow, int(inp["offset"]))
+                    if res:
+                        flow = res[0]
+                        if inp.get("offset"):
+                            flow = shift_tags(flow, int(inp["offset"]))
+                    else:                                    # no minifier (or it refused the file): keep a line tag on
+                        first = int(inp.get("offset") or 1)  # every line so line numbers stay quotable
+                        flow = " ".join(f"§{first + i} {' '.join(x.split())}"
+                                        for i, x in enumerate(raw.rstrip(chr(10)).split(chr(10))) if x.strip())
                     out.append((f"Read {rel}", f"▶ Read {rel} {flow}"))
                 elif name == "Bash":
                     cmd = _one_line(inp.get("command", ""))

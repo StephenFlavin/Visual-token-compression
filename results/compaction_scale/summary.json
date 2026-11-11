@@ -1,10 +1,16 @@
 {
  "sessions": [
   "code:0",
+  "code:1",
+  "code:2",
   "logs:0",
-  "research:0"
+  "logs:1",
+  "logs:2",
+  "research:0",
+  "research:1",
+  "research:2"
  ],
- "n_questions": 120,
+ "n_questions": 360,
  "arms": {
   "D": {
    "acc": 1.0,
@@ -15,10 +21,10 @@
    },
    "task": 1.0,
    "compaction_cost": 0.0,
-   "answer_cost": 0.6609999999999999,
-   "after_reading_cost": 0.6609999999999999,
-   "cost_per_correct": 0.004896296296296295,
-   "answer_cost_per_correct": 0.004896296296296295,
+   "answer_cost": 2.001,
+   "after_reading_cost": 2.001,
+   "cost_per_correct": 0.00494074074074074,
+   "answer_cost_per_correct": 0.00494074074074074,
    "reads": {
     "archive": 0,
     "transcript": 0,
@@ -35,164 +41,273 @@
      "acc": 1.0,
      "answer_cost": 0.22569999999999996
     },
+    "code:1": {
+     "acc": 1.0,
+     "answer_cost": 0.2163
+    },
+    "code:2": {
+     "acc": 1.0,
+     "answer_cost": 0.2086
+    },
     "logs:0": {
      "acc": 1.0,
      "answer_cost": 0.2294
     },
+    "logs:1": {
+     "acc": 1.0,
+     "answer_cost": 0.2358
+    },
+    "logs:2": {
+     "acc": 1.0,
+     "answer_cost": 0.2238
+    },
     "research:0": {
      "acc": 1.0,
      "answer_cost": 0.2059
+    },
+    "research:1": {
+     "acc": 1.0,
+     "answer_cost": 0.2052
+    },
+    "research:2": {
+     "acc": 1.0,
+     "answer_cost": 0.2503
     }
    }
   },
   "A": {
-   "acc": 0.7083333333333334,
+   "acc": 0.7833333333333333,
    "by_kind": {
-    "research": 0.475,
-    "code": 0.725,
-    "logs": 0.925
+    "research": 0.5416666666666666,
+    "code": 0.8333333333333334,
+    "logs": 0.975
    },
-   "task": 0.6,
-   "compaction_cost": 4.241,
-   "answer_cost": 4.6039,
-   "after_reading_cost": 8.844899999999999,
-   "cost_per_correct": 0.09409468085106382,
-   "answer_cost_per_correct": 0.04897765957446809,
+   "task": 0.8,
+   "compaction_cost": 13.0163,
+   "answer_cost": 15.559000000000001,
+   "after_reading_cost": 28.5753,
+   "cost_per_correct": 0.08985943396226415,
+   "answer_cost_per_correct": 0.048927672955974846,
    "reads": {
     "archive": 0,
-    "transcript": 43,
-    "all": 43
+    "transcript": 160,
+    "all": 160
    },
    "per_turn": {
-    "turn1": 0.7666666666666667,
-    "turn2": 0.7333333333333333,
-    "turn3": 0.6333333333333333,
-    "turn4": 0.7
+    "turn1": 0.7888888888888889,
+    "turn2": 0.8,
+    "turn3": 0.7666666666666667,
+    "turn4": 0.7777777777777778
    },
    "per_session": {
     "code:0": {
      "acc": 0.725,
      "answer_cost": 1.0895
     },
+    "code:1": {
+     "acc": 0.875,
+     "answer_cost": 2.1537
+    },
+    "code:2": {
+     "acc": 0.9,
+     "answer_cost": 1.7669
+    },
     "logs:0": {
      "acc": 0.925,
      "answer_cost": 2.2691000000000003
     },
+    "logs:1": {
+     "acc": 1.0,
+     "answer_cost": 2.5761
+    },
+    "logs:2": {
+     "acc": 1.0,
+     "answer_cost": 1.9734999999999998
+    },
     "research:0": {
      "acc": 0.475,
      "answer_cost": 1.2453
+    },
+    "research:1": {
+     "acc": 0.625,
+     "answer_cost": 1.4300000000000002
+    },
+    "research:2": {
+     "acc": 0.525,
+     "answer_cost": 1.0549
     }
    }
   },
   "B": {
-   "acc": 0.9833333333333333,
+   "acc": 0.9611111111111111,
    "by_kind": {
-    "research": 0.975,
-    "code": 0.975,
+    "research": 0.9666666666666667,
+    "code": 0.9166666666666666,
     "logs": 1.0
    },
    "task": 1.0,
-   "compaction_cost": 4.241,
-   "answer_cost": 1.2248,
-   "after_reading_cost": 5.4658,
-   "cost_per_correct": 0.041096240601503756,
-   "answer_cost_per_correct": 0.009209022556390977,
+   "compaction_cost": 13.0163,
+   "answer_cost": 3.7495000000000003,
+   "after_reading_cost": 16.7658,
+   "cost_per_correct": 0.04287928388746803,
+   "answer_cost_per_correct": 0.009589514066496165,
    "reads": {
-    "archive": 26,
+    "archive": 79,
     "transcript": 1,
-    "all": 27
+    "all": 80
    },
    "per_turn": {
-    "turn1": 0.9666666666666667,
-    "turn2": 0.9666666666666667,
-    "turn3": 1,
-    "turn4": 1
+    "turn1": 0.9777777777777777,
+    "turn2": 0.9222222222222223,
+    "turn3": 0.9555555555555556,
+    "turn4": 0.9888888888888889
    },
    "per_session": {
     "code:0": {
      "acc": 0.975,
      "answer_cost": 0.4102
     },
+    "code:1": {
+     "acc": 0.975,
+     "answer_cost": 0.42910000000000004
+    },
+    "code:2": {
+     "acc": 0.8,
+     "answer_cost": 0.42719999999999997
+    },
     "logs:0": {
      "acc": 1.0,
      "answer_cost": 0.34420000000000006
     },
+    "logs:1": {
+     "acc": 1.0,
+     "answer_cost": 0.34720000000000006
+    },
+    "logs:2": {
+     "acc": 1.0,
+     "answer_cost": 0.3398
+    },
     "research:0": {
      "acc": 0.975,
      "answer_cost": 0.4704
+    },
+    "research:1": {
+     "acc": 0.975,
+     "answer_cost": 0.4372
+    },
+    "research:2": {
+     "acc": 0.95,
+     "answer_cost": 0.5442
     }
    }
   }
  },
  "diffs": {
   "B-A": {
-   "diff": 0.2749999999999999,
-   "lo": 0.19221548790291104,
-   "hi": 0.3618975748753931,
-   "p": 2.0954757928848267e-09
+   "diff": 0.1777777777777778,
+   "lo": 0.13395051515788886,
+   "hi": 0.22372124402509416,
+   "p": 1.933200757632093e-14
   },
   "B-D": {
-   "diff": -0.01666666666666672,
-   "lo": -0.058737126812913876,
-   "hi": 0.016624248921824382,
-   "p": 0.5
+   "diff": -0.03888888888888886,
+   "lo": -0.06421089969052085,
+   "hi": -0.020064274577226284,
+   "p": 0.0001220703125
   },
   "A-D": {
-   "diff": -0.29166666666666663,
-   "lo": -0.37844401921348436,
-   "hi": -0.21156416663495414,
-   "p": 5.820766091346741e-11
+   "diff": -0.21666666666666667,
+   "lo": -0.26209584334123215,
+   "hi": -0.17583197138524367,
+   "p": 6.617444900424222e-24
   },
   "task B-A": {
-   "diff": 0.4,
-   "lo": 0.11316030581448205,
-   "hi": 0.642535572434923
+   "diff": 0.19999999999999996,
+   "lo": 0.07968887621944326,
+   "hi": 0.33823251313929437
   }
  },
  "hooks": {
-  "note_delivered": 3,
+  "note_delivered": 9,
   "errors": 0,
   "pages": [
    7,
+   8,
    7,
-   8
+   7,
+   7,
+   7,
+   8,
+   8,
+   11
   ],
   "image_tokens": [
    32430,
+   33534,
+   31188,
    32430,
-   35811
+   32499,
+   32223,
+   35811,
+   34914,
+   47127
   ],
   "render_seconds": [
    12.3,
+   12.5,
+   10.8,
    11.9,
-   13.0
+   11.6,
+   11.5,
+   13.0,
+   12.3,
+   16.4
   ],
-  "archive_opened": 3
+  "archive_opened": 9
  },
  "verdicts": {
   "1. A loses >= 30 points vs D (pooled)": {
    "pass": false,
-   "value": "-29.2"
+   "value": "-21.7"
   },
   "2a. B within 5 points of D (pooled)": {
    "pass": true,
-   "value": "-1.7"
+   "value": "-3.9"
   },
   "2b. B within 10 points of D in each kind": {
    "pass": true,
-   "value": "research -2.5, code -2.5, logs +0.0"
+   "value": "research -3.3, code -8.3, logs +0.0"
   },
   "3. B at most half of A per correct answer": {
    "pass": true,
-   "value": "$0.0411 vs $0.0941 (2.29x)"
+   "value": "$0.0429 vs $0.0899 (2.10x)"
   },
   "4. hooks work unaided in every B session": {
    "pass": true,
-   "value": "3/3 notes, 3/3 opened"
+   "value": "9/9 notes, 9/9 opened"
   },
   "5. task items: B beats A by >= 30 points": {
-   "pass": true,
-   "value": "+40.0"
+   "pass": false,
+   "value": "+20.0"
   }
+ },
+ "post_hoc_fix": {
+  "sessions": [
+   "code:0",
+   "code:1",
+   "code:2"
+  ],
+  "code_acc_B": 0.9166666666666666,
+  "code_acc_Bfix": 1,
+  "code_acc_D": 1.0,
+  "pooled_acc": 0.9888888888888889,
+  "pooled_vs_D": {
+   "diff": -0.011111111111111072,
+   "lo": -0.028216957693370515,
+   "hi": 0.0014378613159018155,
+   "p": 0.125
+  },
+  "task_Bfix": 1,
+  "answer_cost_Bfix": 1.1185
  }
 }

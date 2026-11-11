@@ -1,0 +1,21 @@
+[scale] code:2 Bfix fork: cost $0.029, reads 0 (archive 0), 2s
+[scale] code:1 Bfix fork: cost $0.749, reads 0 (archive 0), 2s
+[scale] code:0 Bfix fork: cost $0.733, reads 0 (archive 0), 2s
+[scale] code:0 Bfix compact: cost $0.775, reads 0 (archive 0), 32s
+[scale] code:2 Bfix compact: cost $0.093, reads 0 (archive 0), 37s
+[scale] code:1 Bfix compact: cost $0.099, reads 0 (archive 0), 39s
+[scale] code:0 Bfix turn1: cost $0.233, 10/10 correct, reads 7 (archive 7), 24s
+[scale] code:2 Bfix turn1: cost $0.202, 10/10 correct, reads 6 (archive 6), 21s
+[scale] code:1 Bfix turn1: cost $0.238, 10/10 correct, reads 7 (archive 7), 21s
+[scale] code:1 Bfix turn2: cost $0.023, 10/10 correct, reads 0 (archive 0), 6s
+[scale] code:2 Bfix turn2: cost $0.080, 10/10 correct, reads 2 (archive 2), 10s
+[scale] code:0 Bfix turn2: cost $0.068, 10/10 correct, reads 1 (archive 1), 13s
+[scale] code:2 Bfix turn3: cost $0.021, 10/10 correct, reads 0 (archive 0), 5s
+[scale] code:1 Bfix turn3: cost $0.060, 10/10 correct, reads 1 (archive 1), 8s
+[scale] code:0 Bfix turn3: cost $0.021, 10/10 correct, reads 0 (archive 0), 6s
+[scale] code:1 Bfix turn4: cost $0.021, 10/10 correct, reads 0 (archive 0), 4s
+[scale] code:2 Bfix turn4: cost $0.026, 10/10 correct, reads 0 (archive 0), 6s
+[scale] code:0 Bfix turn4: cost $0.021, 10/10 correct, reads 0 (archive 0), 5s
+[scale] code:1 Bfix task: cost $0.036, 5/5 correct, reads 0 (archive 0), 7s
+[scale] code:2 Bfix task: cost $0.035, 5/5 correct, reads 0 (archive 0), 7s
+[scale] code:0 Bfix task: cost $0.034, 5/5 correct, reads 0 (archive 0), 7s

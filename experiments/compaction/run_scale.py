@@ -133,11 +133,11 @@ def run_session(name: str, a) -> None:
     mat = json.loads((d / "material.json").read_text())
     qs, task = mat["questions"], mat["task"]
     turns = [qs[i:i + 10] for i in range(0, 40, 10)]
-    for arm in ARMS:
+    for arm in a.arms:
         sk = f"{arm}_sid"
-        if arm in ("A", "B") and sk not in st:
+        if arm in ("A", "B", "Bfix") and sk not in st:
             sp = proj / ".claude" / "settings.json"
-            if arm == "B":
+            if arm.startswith("B"):
                 sp.parent.mkdir(parents=True, exist_ok=True)
                 sp.write_text(json.dumps(hooks_settings()))
             # fork first (a one-line turn), then compact that session: with --fork-session on /compact itself the
@@ -158,7 +158,7 @@ def run_session(name: str, a) -> None:
                 return
             st[sk] = r["session_id"]
             extra = {}
-            if arm == "B":
+            if arm.startswith("B"):
                 latest = proj / ".claude" / "compact_archive" / "LATEST"
                 meta = json.loads((Path(latest.read_text().strip()) / "meta.json").read_text()) if latest.exists() else {}
                 tr = json.dumps(RC.transcript(r["session_id"]))
@@ -195,7 +195,7 @@ def run_session(name: str, a) -> None:
             log_row({"session": name, "kind": kind, "arm": arm, "step": step, **keep(r), "scores": sc,
                      "archive_reads": sum("compact_archive" in p for p in r["read_paths"]),
                      "transcript_reads": sum(p.endswith(".jsonl") for p in r["read_paths"])})
-        if arm == "B":
+        if arm.startswith("B"):
             shutil.rmtree(proj / ".claude", ignore_errors=True)       # B's hooks and archive leave with B
         elif arm == "A":
             pass
@@ -205,6 +205,8 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--sessions", nargs="+", default=["research:0", "code:0", "logs:0"])
     ap.add_argument("--parallel", type=int, default=3)
+    ap.add_argument("--arms", nargs="+", default=ARMS, help="Bfix: arm B again with the fixed PreCompact hook "
+                    "(post-hoc, 2026-11-11: files the minifier refuses lost their line numbers)")
     a = ap.parse_args()
     names = [f"{k}:{i}" for i in range(3) for k in ("research", "code", "logs")] if a.sessions == ["all"] else a.sessions
     OUT.mkdir(parents=True, exist_ok=True)

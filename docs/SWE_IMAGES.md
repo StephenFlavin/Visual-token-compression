@@ -111,4 +111,6 @@ Measured against the text arm's $10.61 over the 79 tasks:
    input, as in the document tests (~95%), pages halve the cost; untested for coding.
 6. **Context room, not money:** 2.9x more code per context window means fewer compactions in long sessions.
 7. **Compaction archives (tested):** keeping the pre-compaction transcript as indexed page images restored recall from
-   37% to 100% at 31% lower cost than normal compaction ([results/compaction](../results/compaction/README.md)).
+   37% to 100% at 31% lower cost than normal compaction ([results/compaction](../results/compaction/README.md)); at
+   scale, through real hooks on 9 sessions including codebase exploration and log triage, 96-99% against 78% at 2.1x
+   lower cost per correct answer ([results/compaction_scale](../results/compaction_scale/README.md)).

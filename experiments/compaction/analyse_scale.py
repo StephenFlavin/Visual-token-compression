@@ -123,6 +123,34 @@ def main() -> int:
           f"{100 * (B['task'] - A['task']):+.1f}")]
     S["verdicts"] = {n: {"pass": ok, "value": val} for n, ok, val in v}
     L += ["", "Pre-registered verdicts:", ""] + [f"* {n}: **{'PASS' if ok else 'FAIL'}** ({val})" for n, ok, val in v]
+    fix = {(s, p["id"], p["kind"]): p["correct"] for (s, a, t), r in rows.items() if a == "Bfix"
+           and (t.startswith("turn")) for p in r["scores"]}
+    fix_task = {(s, p["id"]): p["correct"] for (s, a, t), r in rows.items() if a == "Bfix" and t == "task"
+                for p in r["scores"]}
+    fs = sorted({k[0] for k in fix})
+    if fs and all((s, "Bfix", "task") in rows for s in fs):
+        ck = [k for k in keys if k[0] in fs]
+        comb = {k: (fix[k] if k in fix else per["B"][k]) for k in keys}
+        pairs = [("q", per["D"][k], comb[k]) for k in keys]
+        d, lo, hi = paired_diff_ci(pairs)
+        _, _, p = mcnemar([t for _, t, _ in pairs], [i for _, _, i in pairs])
+        S["post_hoc_fix"] = {"sessions": fs, "code_acc_B": acc("B", ck), "code_acc_Bfix": st.mean(fix[k] for k in ck),
+                             "code_acc_D": acc("D", ck), "pooled_acc": st.mean(comb.values()),
+                             "pooled_vs_D": {"diff": -d, "lo": -hi, "hi": -lo, "p": p},
+                             "task_Bfix": st.mean(fix_task.values()),
+                             "answer_cost_Bfix": sum(rows[(s, "Bfix", t)]["cost"] for s in fs
+                                                     for t in ("turn1", "turn2", "turn3", "turn4", "task"))}
+        x = S["post_hoc_fix"]
+        L += ["", "## Post hoc (not pre-registered): the hook bug and the fixed hook", "",
+              "10 of B's 14 misses were `def`-line questions on 7 files the Python minifier refused (they contain its "
+              "own marker characters § and »). For those files the first hook fell back to flowed text and dropped "
+              "the line numbers. The fixed hook keeps a §n tag on every line in that fallback. Arm `Bfix` repeats B on "
+              f"the {len(fs)} code sessions (new fork, new compaction, same questions):", "",
+              f"* code questions: D {100 * x['code_acc_D']:.1f}%, B {100 * x['code_acc_B']:.1f}%, "
+              f"Bfix {100 * x['code_acc_Bfix']:.1f}%; task items {100 * x['task_Bfix']:.0f}%; answering "
+              f"${x['answer_cost_Bfix']:.2f} for {len(fs)} sessions",
+              f"* all 360 questions with Bfix for the code sessions: {100 * x['pooled_acc']:.1f}%, vs D "
+              f"{-100 * d:+.1f} points ({-100 * hi:+.1f} to {-100 * lo:+.1f}), p = {p:.2g}"]
     (OUT / "summary.md").write_text("\n".join(L) + "\n")
     (OUT / "summary.json").write_text(json.dumps(S, indent=1, default=str))
     print("\n".join(L))

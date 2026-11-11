@@ -148,12 +148,13 @@ candidates to test, ordered from closest to the test to furthest from it.
 * **Deep research: tested, and it holds at 2.2x** ([below](#tested-deep-research-sources)).
 * **Long-document Q&A** (reports, contracts, manuals, filings). The test is closest to this. At 2.2x, Opus and Sonnet
   answer as well from pages as from text, at about half the cost.
-* **Context compaction: tested, and it is the strongest result so far.** After `/compact`, Claude Code keeps a
-  summary and the path of the raw transcript; on 3 long sessions Opus then answered 37% of the questions about what
-  it had read. Adding an archive of the transcript as page images with an index (a PreCompact hook renders it; a
-  SessionStart hook points to it) brought it to 100%, 63 points better and 31% cheaper than normal compaction, and
-  2.2x cheaper than the same archive as text at the same accuracy. Details:
-  [results/compaction](../results/compaction/README.md).
+* **Context compaction: tested twice, and it is the strongest result so far.** After `/compact`, Claude Code keeps a
+  summary and the path of the raw transcript. A PreCompact hook that renders the whole transcript as page images with
+  an index, and a SessionStart hook that tells the model where it is, keep almost everything: on 3 research sessions,
+  100% against 37% for normal compaction at 31% lower cost ([results/compaction](../results/compaction/README.md));
+  at scale, on 9 sessions of research reading, codebase exploration and log triage with the real hooks and nothing in
+  the prompt, 96.1% (98.9% after fixing a hook bug) against 78.3% for normal compaction and 100% without compaction,
+  at 2.1x lower cost per correct answer ([results/compaction_scale](../results/compaction_scale/README.md)).
 * **Coding agents: tested, no accuracy lost but no money saved** ([below](#tested-coding-agents)). Claude Code with
   file contents and command output shown as pages at 2.9x solved every SWE-bench task it solved from text, but
   coding spends little on reading, so the total cost did not fall.

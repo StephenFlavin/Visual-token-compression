@@ -1,0 +1,298 @@
+{
+ "kind": "code",
+ "files": [
+  "code/encoder_probe/experiments/analyse_stage0.py",
+  "code/scripts/build_data.py",
+  "code/experiments/erb/build_bm25.py",
+  "code/encoder_probe/ep/g2lite.py",
+  "code/learned_glyphs/experiments/train_joint.py",
+  "code/scripts/make_claude_qa_figures.py",
+  "code/encoder_probe/experiments/run12_driver.py",
+  "code/experiments/readhook/vbhook/render.py",
+  "code/learned_glyphs/lg/alphabet.py",
+  "code/encoder_probe/ep/geom.py",
+  "code/experiments/erb/judge.py",
+  "code/learned_glyphs/experiments/calibrate_channel.py",
+  "code/experiments/phase2_driver.py",
+  "code/encoder_probe/experiments/analyse_colour.py",
+  "code/learned_glyphs/lg/glyphs.py",
+  "code/experiments/erb/erb_common.py",
+  "code/experiments/readhook/vbhook/minify/brace.py",
+  "code/vbpe/crnn/data.py",
+  "code/experiments/readhook/vbhook/minify/outputs.py"
+ ],
+ "questions": [
+  {
+   "id": "L01",
+   "kind": "def",
+   "question": "On which line of code/learned_glyphs/lg/glyphs.py does the top-level `class GlyphBank` statement start?",
+   "answer": "181"
+  },
+  {
+   "id": "W02",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `_erode`? Answer with the file's number in the reading order (1 = code/encoder_probe/experiments/analyse_stage0.py, 19 = code/experiments/readhook/vbhook/minify/outputs.py).",
+   "answer": "15"
+  },
+  {
+   "id": "L03",
+   "kind": "def",
+   "question": "On which line of code/experiments/erb/judge.py does the top-level `class DetRandom` statement start?",
+   "answer": "35"
+  },
+  {
+   "id": "K04",
+   "kind": "const",
+   "question": "In code/experiments/readhook/vbhook/minify/brace.py, what number is the module-level constant MAX_UNTAGGED set to?",
+   "answer": "8"
+  },
+  {
+   "id": "W05",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `kind_for_command`? Answer with the file's number in the reading order (1 = code/encoder_probe/experiments/analyse_stage0.py, 19 = code/experiments/readhook/vbhook/minify/outputs.py).",
+   "answer": "19"
+  },
+  {
+   "id": "W06",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `write_md`? Answer with the file's number in the reading order (1 = code/encoder_probe/experiments/analyse_stage0.py, 19 = code/experiments/readhook/vbhook/minify/outputs.py).",
+   "answer": "14"
+  },
+  {
+   "id": "L07",
+   "kind": "def",
+   "question": "On which line of code/encoder_probe/experiments/analyse_colour.py does the top-level `def auc` statement start?",
+   "answer": "139"
+  },
+  {
+   "id": "L08",
+   "kind": "def",
+   "question": "On which line of code/encoder_probe/ep/g2lite.py does the top-level `def precompute` statement start?",
+   "answer": "121"
+  },
+  {
+   "id": "K09",
+   "kind": "const",
+   "question": "In code/vbpe/crnn/data.py, what number is the module-level constant MAX_EXPAND set to?",
+   "answer": "16"
+  },
+  {
+   "id": "L10",
+   "kind": "def",
+   "question": "On which line of code/experiments/phase2_driver.py does the top-level `def _cpu_ticks` statement start?",
+   "answer": "29"
+  },
+  {
+   "id": "L11",
+   "kind": "def",
+   "question": "On which line of code/encoder_probe/experiments/run12_driver.py does the top-level `def sanity` statement start?",
+   "answer": "93"
+  },
+  {
+   "id": "L12",
+   "kind": "def",
+   "question": "On which line of code/experiments/readhook/vbhook/render.py does the top-level `def _height` statement start?",
+   "answer": "53"
+  },
+  {
+   "id": "K13",
+   "kind": "const",
+   "question": "In code/encoder_probe/experiments/analyse_colour.py, what number is the module-level constant CHARS_PER_TEXT_TOKEN set to?",
+   "answer": "4.33"
+  },
+  {
+   "id": "L14",
+   "kind": "def",
+   "question": "On which line of code/experiments/readhook/vbhook/minify/outputs.py does the top-level `def _flow_lines` statement start?",
+   "answer": "287"
+  },
+  {
+   "id": "W15",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `extract_document_content`? Answer with the file's number in the reading order (1 = code/encoder_probe/experiments/analyse_stage0.py, 19 = code/experiments/readhook/vbhook/minify/outputs.py).",
+   "answer": "16"
+  },
+  {
+   "id": "L16",
+   "kind": "def",
+   "question": "On which line of code/experiments/readhook/vbhook/render.py does the top-level `class Page` statement start?",
+   "answer": "42"
+  },
+  {
+   "id": "K17",
+   "kind": "const",
+   "question": "In code/scripts/make_claude_qa_figures.py, what number is the module-level constant CACHE_WRITE set to?",
+   "answer": "1.25"
+  },
+  {
+   "id": "K18",
+   "kind": "const",
+   "question": "In code/learned_glyphs/lg/alphabet.py, what number is the module-level constant MASTER_N set to?",
+   "answer": "3000"
+  },
+  {
+   "id": "L19",
+   "kind": "def",
+   "question": "On which line of code/scripts/build_data.py does the top-level `class _Box` statement start?",
+   "answer": "58"
+  },
+  {
+   "id": "W20",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `_int4_to_long`? Answer with the file's number in the reading order (1 = code/encoder_probe/experiments/analyse_stage0.py, 19 = code/experiments/readhook/vbhook/minify/outputs.py).",
+   "answer": "3"
+  },
+  {
+   "id": "L21",
+   "kind": "def",
+   "question": "On which line of code/experiments/readhook/vbhook/render.py does the top-level `def render_one` statement start?",
+   "answer": "97"
+  },
+  {
+   "id": "K22",
+   "kind": "const",
+   "question": "In code/learned_glyphs/lg/alphabet.py, what number is the module-level constant N_CHARS set to?",
+   "answer": "95"
+  },
+  {
+   "id": "W23",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `_evaluate`? Answer with the file's number in the reading order (1 = code/encoder_probe/experiments/analyse_stage0.py, 19 = code/experiments/readhook/vbhook/minify/outputs.py).",
+   "answer": "12"
+  },
+  {
+   "id": "W24",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `eval_batches`? Answer with the file's number in the reading order (1 = code/encoder_probe/experiments/analyse_stage0.py, 19 = code/experiments/readhook/vbhook/minify/outputs.py).",
+   "answer": "18"
+  },
+  {
+   "id": "L25",
+   "kind": "def",
+   "question": "On which line of code/experiments/readhook/vbhook/render.py does the top-level `def page_tokens` statement start?",
+   "answer": "80"
+  },
+  {
+   "id": "L26",
+   "kind": "def",
+   "question": "On which line of code/experiments/readhook/vbhook/minify/outputs.py does the top-level `def _find_expand` statement start?",
+   "answer": "680"
+  },
+  {
+   "id": "L27",
+   "kind": "def",
+   "question": "On which line of code/experiments/readhook/vbhook/minify/outputs.py does the top-level `def sniff_find` statement start?",
+   "answer": "394"
+  },
+  {
+   "id": "W28",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `_resize_cell`? Answer with the file's number in the reading order (1 = code/encoder_probe/experiments/analyse_stage0.py, 19 = code/experiments/readhook/vbhook/minify/outputs.py).",
+   "answer": "15"
+  },
+  {
+   "id": "K29",
+   "kind": "const",
+   "question": "In code/learned_glyphs/lg/glyphs.py, what number is the module-level constant LINE_SPACING set to?",
+   "answer": "1.2"
+  },
+  {
+   "id": "K30",
+   "kind": "const",
+   "question": "In code/scripts/make_claude_qa_figures.py, what number is the module-level constant N_LOOKUP set to?",
+   "answer": "2"
+  },
+  {
+   "id": "L31",
+   "kind": "def",
+   "question": "On which line of code/experiments/erb/erb_common.py does the top-level `def official_top10` statement start?",
+   "answer": "90"
+  },
+  {
+   "id": "W32",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `em_for_height`? Answer with the file's number in the reading order (1 = code/encoder_probe/experiments/analyse_stage0.py, 19 = code/experiments/readhook/vbhook/minify/outputs.py).",
+   "answer": "15"
+  },
+  {
+   "id": "W33",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `Lexer`? Answer with the file's number in the reading order (1 = code/encoder_probe/experiments/analyse_stage0.py, 19 = code/experiments/readhook/vbhook/minify/outputs.py).",
+   "answer": "17"
+  },
+  {
+   "id": "L34",
+   "kind": "def",
+   "question": "On which line of code/encoder_probe/ep/geom.py does the top-level `def pages_digest` statement start?",
+   "answer": "322"
+  },
+  {
+   "id": "L35",
+   "kind": "def",
+   "question": "On which line of code/scripts/make_claude_qa_figures.py does the top-level `def ink_on` statement start?",
+   "answer": "96"
+  },
+  {
+   "id": "W36",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `_status_expand`? Answer with the file's number in the reading order (1 = code/encoder_probe/experiments/analyse_stage0.py, 19 = code/experiments/readhook/vbhook/minify/outputs.py).",
+   "answer": "19"
+  },
+  {
+   "id": "L37",
+   "kind": "def",
+   "question": "On which line of code/encoder_probe/ep/geom.py does the top-level `class StreamPage` statement start?",
+   "answer": "181"
+  },
+  {
+   "id": "L38",
+   "kind": "def",
+   "question": "On which line of code/experiments/readhook/vbhook/minify/outputs.py does the top-level `def gitdiff_flow` statement start?",
+   "answer": "479"
+  },
+  {
+   "id": "L39",
+   "kind": "def",
+   "question": "On which line of code/learned_glyphs/experiments/train_joint.py does the top-level `def add_config_args` statement start?",
+   "answer": "51"
+  },
+  {
+   "id": "W40",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `norm_sep`? Answer with the file's number in the reading order (1 = code/encoder_probe/experiments/analyse_stage0.py, 19 = code/experiments/readhook/vbhook/minify/outputs.py).",
+   "answer": "19"
+  }
+ ],
+ "task": [
+  {
+   "id": "K41",
+   "kind": "const",
+   "question": "In code/encoder_probe/ep/geom.py, what number is the module-level constant MIN_TEST_PAGES set to?",
+   "answer": "4"
+  },
+  {
+   "id": "K42",
+   "kind": "const",
+   "question": "In code/vbpe/crnn/data.py, what number is the module-level constant CODE_VERSION set to?",
+   "answer": "1"
+  },
+  {
+   "id": "L43",
+   "kind": "def",
+   "question": "On which line of code/learned_glyphs/experiments/calibrate_channel.py does the top-level `def pixel_stats` statement start?",
+   "answer": "108"
+  },
+  {
+   "id": "L44",
+   "kind": "def",
+   "question": "On which line of code/encoder_probe/experiments/analyse_stage0.py does the top-level `def curves` statement start?",
+   "answer": "54"
+  },
+  {
+   "id": "L45",
+   "kind": "def",
+   "question": "On which line of code/vbpe/crnn/data.py does the top-level `class PhaseOffset` statement start?",
+   "answer": "145"
+  }
+ ]
+}

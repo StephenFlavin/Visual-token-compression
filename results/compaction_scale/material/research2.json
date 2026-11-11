@@ -1,0 +1,295 @@
+{
+ "kind": "research",
+ "files": [
+  "sources/source_01.txt",
+  "sources/source_02.txt",
+  "sources/source_03.txt",
+  "sources/source_04.txt",
+  "sources/source_05.txt",
+  "sources/source_06.txt",
+  "sources/source_07.txt",
+  "sources/source_08_part1.txt",
+  "sources/source_08_part2.txt",
+  "sources/source_09.txt",
+  "sources/source_10.txt",
+  "sources/source_11_part1.txt",
+  "sources/source_11_part2.txt",
+  "sources/source_12.txt",
+  "sources/source_13.txt",
+  "sources/source_14.txt"
+ ],
+ "questions": [
+  {
+   "id": "N07",
+   "kind": "needle",
+   "question": "How many letters written by Gisli Wenvar does the parish archive of Lenosk hold?",
+   "answer": "7565"
+  },
+  {
+   "id": "S20",
+   "kind": "number",
+   "question": "Find the sentence that begins \"A number of modern historians find this an unlikely motive\". What number does that sentence contain?",
+   "answer": "62"
+  },
+  {
+   "id": "S02",
+   "kind": "number",
+   "question": "Find the sentence that begins \"Final consolidated figures (not including BBC iPlayer viewers) showed that\". What number does that sentence contain?",
+   "answer": "9.87"
+  },
+  {
+   "id": "N10",
+   "kind": "needle",
+   "question": "How many letters written by Osric Astvel does the parish archive of Velpel hold?",
+   "answer": "472"
+  },
+  {
+   "id": "S07",
+   "kind": "number",
+   "question": "Find the sentence that begins \"The monument was found lying on its back, facing the\". What number does that sentence contain?",
+   "answer": "1946"
+  },
+  {
+   "id": "N01",
+   "kind": "needle",
+   "question": "How many letters written by Floris Wengav does the parish archive of Bryith hold?",
+   "answer": "735"
+  },
+  {
+   "id": "S10",
+   "kind": "number",
+   "question": "Find the sentence that begins \"On Selection Sunday, the Bulldogs were seeded fifth in the\". What number does that sentence contain?",
+   "answer": "18"
+  },
+  {
+   "id": "C04",
+   "kind": "conflict",
+   "question": "The sources give two different capacities for the Quenhal reservoir. What is the difference between them, in megalitres?",
+   "answer": "578"
+  },
+  {
+   "id": "C02",
+   "kind": "conflict",
+   "question": "The sources give two different capacities for the Norsund reservoir. What is the difference between them, in megalitres?",
+   "answer": "221"
+  },
+  {
+   "id": "N16",
+   "kind": "needle",
+   "question": "How many letters written by Henrik Pelmir does the parish archive of Faldra hold?",
+   "answer": "9250"
+  },
+  {
+   "id": "S01",
+   "kind": "number",
+   "question": "Find the sentence that begins \"\"The Snowmen\" is an episode of the British science fiction\". What number does that sentence contain?",
+   "answer": "2012"
+  },
+  {
+   "id": "S12",
+   "kind": "number",
+   "question": "Find the sentence that begins \"It did not have any evidence of significant amount of\". What number does that sentence contain?",
+   "answer": "10"
+  },
+  {
+   "id": "H01",
+   "kind": "chain",
+   "question": "How many boats does the rowing club chaired by the person whose letters the parish archive of Quenfal holds own?",
+   "answer": "442"
+  },
+  {
+   "id": "N30",
+   "kind": "needle",
+   "question": "How many tonnes of granite did Jutta Pelhal use to rebuild the bridge at Velzar?",
+   "answer": "831"
+  },
+  {
+   "id": "S28",
+   "kind": "number",
+   "question": "Find the sentence that begins \"Violence came to a head on Saturday,\". What number does that sentence contain?",
+   "answer": "19"
+  },
+  {
+   "id": "N21",
+   "kind": "needle",
+   "question": "How many tonnes of granite did Dmitri Dekvar use to rebuild the bridge at Miroth?",
+   "answer": "8857"
+  },
+  {
+   "id": "H03",
+   "kind": "chain",
+   "question": "How many boats does the rowing club chaired by the person who recorded moth species in the survey of Wenkel own?",
+   "answer": "249"
+  },
+  {
+   "id": "T04",
+   "kind": "total",
+   "question": "What is the total, in crowns, of all the grants the Ebytis Trust gave according to the sources?",
+   "answer": "3690"
+  },
+  {
+   "id": "C03",
+   "kind": "conflict",
+   "question": "The sources give two different capacities for the Zarnor reservoir. What is the difference between them, in megalitres?",
+   "answer": "129"
+  },
+  {
+   "id": "N23",
+   "kind": "needle",
+   "question": "How many species of moth did Dmitri Bakmor record in the survey of Zartor?",
+   "answer": "4112"
+  },
+  {
+   "id": "T01",
+   "kind": "total",
+   "question": "What is the total, in crowns, of all the grants the Brylen Trust gave according to the sources?",
+   "answer": "8415"
+  },
+  {
+   "id": "C01",
+   "kind": "conflict",
+   "question": "The sources give two different capacities for the Drapel reservoir. What is the difference between them, in megalitres?",
+   "answer": "76"
+  },
+  {
+   "id": "N09",
+   "kind": "needle",
+   "question": "How many tonnes of granite did Joram Lunell use to rebuild the bridge at Rudsund?",
+   "answer": "7173"
+  },
+  {
+   "id": "R01",
+   "kind": "citation",
+   "question": "Which source contains the sentence that begins \"At her funeral, the Doctor reads Clara's full name on\"? Answer with the source number.",
+   "answer": "1"
+  },
+  {
+   "id": "N27",
+   "kind": "needle",
+   "question": "How many tonnes of granite did Anselm Tordra use to rebuild the bridge at Kelvar?",
+   "answer": "6498"
+  },
+  {
+   "id": "R04",
+   "kind": "citation",
+   "question": "Which source contains the sentence that begins \"Donald succeeds and receives the Sphinx Tear, which is the\"? Answer with the source number.",
+   "answer": "4"
+  },
+  {
+   "id": "R02",
+   "kind": "citation",
+   "question": "Which source contains the sentence that begins \"Its prime responsibility in early 1942 was maritime reconnaissance as\"? Answer with the source number.",
+   "answer": "2"
+  },
+  {
+   "id": "M04",
+   "kind": "source_count",
+   "question": "How many different sources mention the Astgav Institute?",
+   "answer": "4"
+  },
+  {
+   "id": "N19",
+   "kind": "needle",
+   "question": "How many letters written by Nora Varast does the parish archive of Bryfal hold?",
+   "answer": "2880"
+  },
+  {
+   "id": "T03",
+   "kind": "total",
+   "question": "What is the total, in crowns, of all the grants the Baktor Trust gave according to the sources?",
+   "answer": "8687"
+  },
+  {
+   "id": "H04",
+   "kind": "chain",
+   "question": "How many boats does the rowing club chaired by the person whose letters the parish archive of Faldra holds own?",
+   "answer": "468"
+  },
+  {
+   "id": "S06",
+   "kind": "number",
+   "question": "Find the sentence that begins \"The game was also ported to the Sega Saturn and\". What number does that sentence contain?",
+   "answer": "1998"
+  },
+  {
+   "id": "R03",
+   "kind": "citation",
+   "question": "Which source contains the sentence that begins \"Several were also used for propaganda purposes, appearing in photographs\"? Answer with the source number.",
+   "answer": "3"
+  },
+  {
+   "id": "N05",
+   "kind": "needle",
+   "question": "How many species of moth did Sabine Sundzar record in the survey of Zarsund?",
+   "answer": "3760"
+  },
+  {
+   "id": "M03",
+   "kind": "source_count",
+   "question": "How many different sources mention the Ebytor Institute?",
+   "answer": "5"
+  },
+  {
+   "id": "T02",
+   "kind": "total",
+   "question": "What is the total, in crowns, of all the grants the Noroth Trust gave according to the sources?",
+   "answer": "7595"
+  },
+  {
+   "id": "H02",
+   "kind": "chain",
+   "question": "How many boats does the rowing club chaired by the person who recorded moth species in the survey of Othwen own?",
+   "answer": "376"
+  },
+  {
+   "id": "S14",
+   "kind": "number",
+   "question": "Find the sentence that begins \"The inside of the Burnhams' home was shot at a\". What number does that sentence contain?",
+   "answer": "405"
+  },
+  {
+   "id": "M02",
+   "kind": "source_count",
+   "question": "How many different sources mention the Falnor Institute?",
+   "answer": "6"
+  },
+  {
+   "id": "M01",
+   "kind": "source_count",
+   "question": "How many different sources mention the Varrud Institute?",
+   "answer": "5"
+  }
+ ],
+ "task": [
+  {
+   "id": "N22",
+   "kind": "needle",
+   "question": "How many letters written by Maren Torbry does the parish archive of Quenith hold?",
+   "answer": "3468"
+  },
+  {
+   "id": "N08",
+   "kind": "needle",
+   "question": "How many species of moth did Pavo Ebylun record in the survey of Bakgav?",
+   "answer": "326"
+  },
+  {
+   "id": "N25",
+   "kind": "needle",
+   "question": "How many letters written by Floris Zarpel does the parish archive of Ithvar hold?",
+   "answer": "3291"
+  },
+  {
+   "id": "S04",
+   "kind": "number",
+   "question": "Find the sentence that begins \"Further delays were caused by the bombing raids of the\". What number does that sentence contain?",
+   "answer": "1941"
+  },
+  {
+   "id": "S30",
+   "kind": "number",
+   "question": "Find the sentence that begins \"Nationalists gained a majority on the council for the first\". What number does that sentence contain?",
+   "answer": "1923"
+  }
+ ]
+}
