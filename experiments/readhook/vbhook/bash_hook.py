@@ -15,6 +15,14 @@ r = ev.get("tool_response") or {}
 if not isinstance(r, dict) or r.get("isImage"):
     sys.exit(0)
 text = (r.get("stdout") or "") + (("\n" + r["stderr"]) if r.get("stderr") else "")
+EXIT0 = re.compile(r"\n?\[exit code 0\]\n?$")             # added by bash_pre_hook; only non-zero codes matter
+if EXIT0.search(r.get("stdout") or ""):
+    r = dict(r, stdout=EXIT0.sub("", r["stdout"]))
+    text = (r.get("stdout") or "") + (("\n" + r["stderr"]) if r.get("stderr") else "")
+    if len(text) < 400:
+        common.emit({"hookSpecificOutput": {"hookEventName": "PostToolUse", "updatedToolOutput": {
+            "stdout": r["stdout"], "stderr": r.get("stderr") or "", "interrupted": bool(r.get("interrupted")),
+            "isImage": False}}})
 if len(text) < 400:                                   # an image costs >= ~140 tokens: short output stays text
     sys.exit(0)
 

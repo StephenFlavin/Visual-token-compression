@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import json
 import shutil
 import subprocess
@@ -29,6 +30,11 @@ PROMPT = ("`{t}.py` contains a slow function `{fn}`. Refactor `{fn}` for perform
 def settings(arm: str, work: Path) -> dict:
     env = f"READHOOK_LOG={work}/hook.jsonl READHOOK_CACHE={work}/.cache"
     guard = {"matcher": "Bash", "hooks": [{"type": "command", "command": f"python3 {HERE}/bash_guard_hook.py"}]}
+    if arm == "vbhook":                    # the full hook set (Read, Edit/Write, Bash output), no Bash guard
+        sys.path.insert(0, str(HERE.parent))
+        from vbhook.install import settings as vb_settings
+        return vb_settings(budget=float(os.environ.get("VBHOOK_BUDGET", "88.2")), cache=f"{work}/.cache",
+                           log=f"{work}/hook.jsonl")
     if arm == "text":
         return {"hooks": {"PreToolUse": [guard, {"matcher": "Read", "hooks": [
             {"type": "command", "command": f"{env} python3 {HERE}/log_read_hook.py"}]}]}}
@@ -85,7 +91,14 @@ def run_one(task: str, arm: str, rep: int, model: str, effort: str) -> dict:
            "output_tokens": u.get("output_tokens"), "tools": tools, "tool_errors": errors, "bash_output_chars": bash_chars,
            "reads": [h for h in hook if "path" in h], "edit_hook": [h for h in hook if "tool" in h],
            "final": (res.get("result") or "")[-300:], "is_error": res.get("is_error"), "workdir": str(work)}
-    row["read_tokens"] = sum(h.get("vision_tokens") or h.get("read_text_tokens_est", 0) for h in row["reads"])
+    if arm == "vbhook":
+        row["reads"] = [h for h in hook if h.get("tool") == "Read"]
+        row["edit_hook"] = [h for h in hook if h.get("tool") in ("Edit", "Write")]
+        row["bash_hook"] = [h for h in hook if h.get("tool") == "Bash"]
+        row["read_tokens"] = sum(h.get("image_tokens", 0) if h.get("decision") == "image" else h.get("text_tokens", 0)
+                                 for h in row["reads"])
+    else:
+        row["read_tokens"] = sum(h.get("vision_tokens") or h.get("read_text_tokens_est", 0) for h in row["reads"])
     (base / "stream.jsonl").write_text(p.stdout)
     return row
 

@@ -127,3 +127,25 @@ def test_bash_long_grep_output_pages_by_output_line(tmp_path):
     assert 1 < nxt < 4001 and os.path.isfile(saved)
     out2 = run("read_hook.py", {"tool_name": "Read", "tool_input": {"file_path": saved, "offset": nxt}}, tmp_path)
     assert f"output lines {nxt}-" in out2["additionalContext"] and out2["updatedInput"]["file_path"].endswith(".png")
+
+
+def test_bash_pre_hook_appends_exit_line(tmp_path):
+    out = run("bash_pre_hook.py", {"tool_name": "Bash", "tool_input": {"command": "pytest -q"}}, tmp_path)
+    assert out["updatedInput"]["command"] == 'pytest -q\necho "[exit code $?]"'
+    assert "permissionDecision" not in out                      # never grants permission
+    assert run("bash_pre_hook.py", {"tool_name": "Bash", "tool_input": {"command": "sleep 5", "run_in_background": True}},
+               tmp_path) is None
+
+
+def test_bash_hook_strips_exit_zero(tmp_path):
+    ev = {"tool_name": "Bash", "tool_input": {"command": 'echo hi\necho "[exit code $?]"'},
+          "tool_response": {"stdout": "hi\n[exit code 0]", "stderr": "", "interrupted": False, "isImage": False}}
+    out = run("bash_hook.py", ev, tmp_path)
+    assert out["updatedToolOutput"]["stdout"] == "hi" and not out["updatedToolOutput"]["isImage"]
+
+
+def test_install_allows_only_the_exit_line():
+    from vbhook.install import settings
+    s = settings()
+    assert s["permissions"]["allow"] == ['Bash(echo "[exit code $?]")']
+    assert [h["matcher"] for h in s["hooks"]["PreToolUse"]] == ["Read", "Edit|Write", "Bash"]
