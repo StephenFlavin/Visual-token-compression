@@ -225,6 +225,8 @@ def run_one(t, arm: str, model: str, effort: str) -> dict:
             "wall_s": round(time.time() - t0),
             "input_tokens": u.get("input_tokens", 0) + u.get("cache_creation_input_tokens", 0) + u.get("cache_read_input_tokens", 0),
             "output_tokens": u.get("output_tokens"), "tools": {k: tl.count(k) for k in set(tl)},
+            "uncached_input": u.get("input_tokens", 0), "cache_write": u.get("cache_creation_input_tokens", 0),
+            "cache_read": u.get("cache_read_input_tokens", 0),
             "image_views": len(img), "image_tokens": sum(h["image_tokens"] for h in img),
             "image_text_tokens": sum(h.get("text_tokens", 0) for h in img),
             "kinds": sorted({h.get("kind", "") for h in img}), "final": (res.get("result") or "")[-300:]}

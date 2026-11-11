@@ -48,3 +48,23 @@ Pre-registered verdicts:
 4. Totals: no saving overall. The agent reads little on these tasks (median 6.5 turns, ~30 s, targeted `grep`/`sed` of a few dozen lines that stay text below the size threshold), so the file content that became images is a few percent of the input; the rest is Claude Code's system prompt and tool definitions and the conversation, re-read (from the prompt cache) on every turn. Small differences in the number of turns move the total more than the images save.
 
 Conclusion: reading code and command output as page images at 2.9x density did not cost Opus 5.5 any task (50/50, the same as text) on the hardest Django tasks recent Opus models solve, and the images themselves cost 3x fewer tokens than the text they replaced; but on tasks this short, file reading is too small a share of an agent's input for the total to fall. The saving needs work dominated by reading: large files, many files, long outputs.
+
+### Caching (added 2026-11-11 on review): warm vs cold, and what the token totals mean
+
+The "input tokens" above add uncached input, cache writes and cache reads as if they cost the same. Split from each
+run's usage record (`stream.jsonl`):
+
+| | text | vbhook |
+|---|---|---|
+| uncached input | 636 | 660 |
+| cache writes (1.25x input price) | 451,201 | 463,075 |
+| cache reads (0.1x input price) | 2,999,264 | 2,907,843 |
+| output | 146,034 | 158,785 |
+| cost (CLI, list price) | $5.78 | $6.08 |
+
+* Warm vs cold is the same for both arms: the first call of every run (100/100) read the start of Claude Code's system
+  prompt (~3.4k tokens) from a warm cache; median first-call write ~3.5k in both arms.
+* 87% of input is cache reads at 0.1x, so the 3.1x saving on image content saves mostly the cheapest category (plus
+  one cache write per image). Output tokens, about half the cost at $20/M, are not reduced by images; the vbhook arm
+  wrote 8.7% more output, which is most of its 5% higher cost. Dollar savings need image savings that are large next
+  to output and cache writes: long-context reading (large files kept in context over many turns).
