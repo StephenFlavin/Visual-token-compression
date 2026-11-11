@@ -9,11 +9,11 @@ output as text, once through the vbhook hooks, which show file contents and long
 
 ## The answer
 
-* **Images cost no tasks.** Django: 50/50 resolved with text and 50/50 with images. Rust and Java: 26/26 and 26/26 so
-  far (ruff still running). Every task was one recent Opus models solve, so this rules out a large accuracy loss, not
-  a small one.
-* **Images were 3.1x cheaper than the text they replaced** (85k image tokens for 265k tokens of text).
-* **But the total did not fall: $10.55 with images against $10.37 with text** over the 76 finished tasks. The reason is
+* **Images cost no tasks.** Django: 50/50 resolved with text and 50/50 with images. Rust and Java: 28/29 with text and
+  29/29 with images (the one difference, a ruff task the text arm missed, is not significant: p = 1). Every task was
+  one recent Opus models solve, so this rules out a large accuracy loss, not a small one.
+* **Images were 3.1x cheaper than the text they replaced** (88k image tokens for 275k tokens of text).
+* **But the total did not fall: $10.82 with images against $10.61 with text** over all 79 tasks. The reason is
   the one you suspected: **coding is not dominated by reading.** File contents and command output are about 17% of
   what the agent costs; even if all of it were 3.1x cheaper, the run would cost at most 12% less. The image arm then
   spent that saving on more output and more calls.
@@ -27,7 +27,7 @@ is the only slice page images can shrink.
 
 Every API call in an agent run re-sends the whole conversation. New content is paid once as a cache write ($5 per
 million tokens) and then on every later call as a cache read ($0.20 per million, 0.05x the input price); output costs
-$20 per million (prices fitted exactly from the CLI's own cost, 100 runs). Across the 76 text-arm runs:
+$20 per million (prices fitted exactly from the CLI's own cost, 100 runs). Across the 79 text-arm runs:
 
 | slice | share of cost | what it is |
 |---|---|---|
@@ -52,12 +52,13 @@ Three things keep the tool-result slice small:
 *How to read it:* the grey bars are the two arms' total cost over the same tasks; the steps between them are the
 change in each slice. The y axis does not start at zero.
 
-* **Tool results: −$0.73.** The images did what they should.
-* **Output: +$0.49** (263k output tokens against 239k, +10%). The model reasons a little more when it reads images,
+* **Tool results: −$0.75.** The images did what they should.
+* **Output: +$0.52** (270k output tokens against 244k, +11%). The model reasons a little more when it reads images,
   and it re-checks exact text before editing: Claude Code requires an Edit's `old_string` to match the file exactly,
   so the agent sometimes prints lines again (e.g. `sed -n ... | cat -A`) before it edits.
-* **Re-read context: +$0.72.** More calls (median 7 against 6), each re-sending the conversation, plus the hooks'
-  short format notes.
+* **Re-read context: +$0.74.** More calls (median 7 against 6; Rust and Java 11 against 8), each re-sending the
+  conversation, plus the hooks' short format notes. In Rust and Java the image arm also made twice as many edit calls
+  (37 against 18), none of which failed.
 
 ## Where page images do pay off
 
@@ -77,7 +78,7 @@ were lossless (99.7% against 99.4% from text, 360 questions). For coding agents 
 
 * **Tasks:** SWE-bench Verified Django tasks that both newest Opus leaderboard submissions solved (hardest first, 50
   of 56 valid), and SWE-bench Multilingual Rust and Java tasks both Opus submissions solved (47 selected; valid here:
-  ripgrep 2, bat 5, axum 3, tokio 8, coreutils 2, ruff 4, Lucene 4, Druid 1). Choosing solvable tasks isolates the
+  ripgrep 2, bat 5, axum 3, tokio 8, coreutils 2, ruff 4, Lucene 4, Druid 1: 29 tasks). Choosing solvable tasks isolates the
   effect of images on reading, but leaves no room to see a small loss.
 * **No Docker:** each task was graded with its own test command in a local environment. The gold patch had to pass
   and the unpatched code to fail; tests that fail even with the gold patch here were left out for both arms. Some
