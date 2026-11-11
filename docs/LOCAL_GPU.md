@@ -5,8 +5,14 @@ For any other GPU machine (rented, cloud, unknown hardware) start from [GPU_RUNN
 Runbook for the user's PC with an RTX 3090 (24 GB, Ampere, native bf16) and a Ryzen 9 5900X (12 cores / 24 threads,
 AVX2 only). Sections 1-7 were written for Linux before the PC turned out to be **Windows 11**: there, use Git Bash,
 the venv's `python` (not `python3`) and `PYTHONUTF8=1` (section 8; AGENTS.md has the Windows gotchas). Round 2 (sections
-4-7) ran here on 2026-11-04; round 3 (section 8) has not run on this PC yet. Times are **estimates** unless marked
-measured.
+4-7) ran here on 2026-11-04; Runs 1-2 of PLAN_3090 have been running here since 2026-11-09 (HANDOFF.md). Times are
+**estimates** unless marked measured.
+
+**Current work (2026-11-11): section 9, Test B (text slots against page pixels).** The goals were reframed
+([REVIEW_2026-11-11.md](REVIEW_2026-11-11.md)): this PC's job is now to compare the two ways of packing text into a
+context position of a model we can train, slots made from the tokens and vision tokens made from a page, at the
+same budget. The prompt is at the top of [HANDOFF.md](HANDOFF.md). Sections 4-8 are earlier rounds, kept for their
+setup notes and measured speeds.
 
 ## 1. Setup
 
@@ -344,5 +350,60 @@ nohup python scripts/job_queue.py results/queue_gpu_r3_2.txt --cores 1 --log-dir
 git add encoder_probe/results/round3_qwen_tp*/runs.jsonl encoder_probe/results/round3_ft*/runs.jsonl encoder_probe/results/round3_lc_*/runs.jsonl
 git add -f results/queue_logs/gpu_r3_0 results/queue_logs/gpu_r3_1 results/queue_logs/gpu_r3_2   # optional
 git commit -m "Round 3 GPU: <what ran>"
+git pull --rebase origin claude/validation-harness && git push origin claude/validation-harness
+```
+
+## 9. Test B on the 3090: text slots against page pixels (docs/TEXT_SLOTS.md)
+
+**Why this runs before the remaining image arms.** It needs about one evening of GPU time and decides what the
+other arms are for: if slots made from the text tokens carry more per position than vision tokens at the same
+budget, the dense glyph arms (Stage C) and the colour overlay (Run 4) are dropped; the Latin arms stay, as the
+image side of the comparison. Design, gates, rules and predictions are pre-registered in
+[TEXT_SLOTS.md](TEXT_SLOTS.md); the session prompt is at the top of [HANDOFF.md](HANDOFF.md).
+
+**Nothing here has run on a GPU.** The code passed its tests on the tiny CPU model only, so the smoke is the first
+real run: read its log before queueing anything.
+
+### Setup
+Same venv, weights and data as section 8 (`. .venv/env.sh`, `python`, `PYTHONUTF8=1`; `data/train.txt` and
+`data/test.txt` from `scripts/build_data.py`). No pages are rendered and no vision tower runs.
+```bash
+cd /c/git/visual-bpe-run && . .venv/env.sh
+git fetch origin claude/sharp-mendel-kkhg4g && git merge origin/claude/sharp-mendel-kkhg4g
+python -m pytest -q encoder_probe/tests/test_text_slots.py encoder_probe/tests/test_text_compress.py   # tiny model, ~20 s
+```
+
+### GPU job limits
+* **One job at a time**, and not while the Runs 1-2 driver is training (17.9 GB per run): stop the driver at a
+  checkpoint first (HANDOFF.md prompt, step 0).
+* **Memory (estimate):** Stage 0 peaked at 10.1 GB at batch 4 with two passes through the LLM. Test B makes one
+  pass at batch 8 over at most 969 positions (ratio 1; 729 at ratio 2), so expect 10-18 GB. If `nvidia-smi` shows more than 20 GB
+  in the smoke, use `--batch-size 4` and twice the steps for every arm. Windows pages GPU memory instead of
+  raising an error: a sudden slowdown means the job no longer fits.
+* **Time (estimate):** 1-2 s/step. The LoRA ladder is 12,000 steps and the frozen-reader arms 5,750, plus ~5 min
+  of evaluation per arm (two text sets, real and blind, 64 windows each): 6-10 h in all, so two power-on
+  stretches. Every arm checkpoints every 500 steps and resumes exactly with the same command.
+* **Disk:** a checkpoint is up to ~2 GB (written next to the old one), each finished arm keeps ~0.2-0.7 GB in
+  `encoder_probe/cache/ts_encoders/`, about 4 GB for all nine arms. The next ratio needs the previous arm's file,
+  so do not delete them before the ladder is done.
+
+### Smoke, then the arms
+```bash
+python encoder_probe/experiments/text_slots.py --ratio 1 --smoke     # 20 steps at the longest sequence: s/step, peak GiB, loss falls
+```
+Then the runbook block of [TEXT_SLOTS.md](TEXT_SLOTS.md), one command at a time, checking gates G1 and G2 with
+`analyse_slots.py` after the third arm.
+
+### What to look at
+* `[ts] step N val_loss X blind Y`: the gap between the two is what the slots carry. At ratio 1 after 250 steps
+  the validation loss should be near 0.
+* `[ts] TEST ... read shuffled` and `read natural`: CER, bits per slot, recovered fraction, each next to its blind
+  control and the unmodified LLM's prior.
+* A loss that stops falling far above 0 at ratio 2 is the Stage 0 failure again: stop and report (gate G2).
+
+### Sending results back
+```bash
+python encoder_probe/experiments/analyse_slots.py encoder_probe/results/tb
+git add encoder_probe/results/tb docs/TEXT_SLOTS.md && git commit -m "Test B: <arms>"
 git pull --rebase origin claude/validation-harness && git push origin claude/validation-harness
 ```

@@ -1,12 +1,64 @@
-# Hand-off (current state, 2026-11-07)
+# Hand-off (current state, 2026-11-11)
 
-Nothing is running. Everything is on `claude/validation-harness`. Read [AGENTS.md](../AGENTS.md) first (gotchas), then
-**[PLAN_3090.md](PLAN_3090.md) (the current plan: review, ladder, amendments 1-6, CPU results of Run 0/0b, the
-aligned banks, the min-distance banks and Run 0b at 6 px)**. The prompt for the 3090 (Runs 1-2) is the next section. The colour-gist line
-([COLOUR_GIST.md](COLOUR_GIST.md)) is parked; its old GPU prompt is further down. Older session notes:
-[history/HANDOFF_2026-11.md](history/HANDOFF_2026-11.md).
+**The goals were reframed on 2026-11-11** ([REVIEW_2026-11-11.md](REVIEW_2026-11-11.md), README "Goals"). Read
+[AGENTS.md](../AGENTS.md) first (gotchas), then this page.
 
-## 3090 session state (Runs 1-2 in progress since 2026-11-09)
+| Goal | Why | State |
+|---|---|---|
+| 1. Page images as cheaper context for Claude, stretched from the text side | The vision encoder is the only compressor a user can reach on a closed model; 2.2x is measured lossless; denser rendering is exhausted | **Test A** (prune the text, then render it): [results/claude_qa/prune](../results/claude_qa/prune/README.md) |
+| 2. Text slots against page pixels on a model we can train | Once the reader is trained, pixels are optional; the glyph runs were never compared with a text-side compressor | **Test B**, pre-registered in [TEXT_SLOTS.md](TEXT_SLOTS.md); code and tests are on `claude/sharp-mendel-kkhg4g`; **the 3090 prompt is the next section** |
+| 3. Close the original idea (braille-like glyphs, then BPE and the RGB overlay) with a fair test | Stage A (is a glyph alphabet learnable through a trained ViT at all) and the channel capacity are the last untested links, already queued | Runs 1-2 driver on the 3090 since 2026-11-09 ([PLAN_3090.md](PLAN_3090.md)); **Stage C and colour Run 4 are held until Test B is in** |
+
+Branches: the 3090 PC works on `claude/validation-harness`; the review, Test A and Test B are on
+`claude/sharp-mendel-kkhg4g` (one commit line ahead of it) and are merged in by step 1 of the prompt. Parked:
+the colour-gist line ([COLOUR_GIST.md](COLOUR_GIST.md)) and Stage 0 ([OWN_ENCODER.md](OWN_ENCODER.md), replaced by
+Test B). Older session notes: [history/HANDOFF_2026-11.md](history/HANDOFF_2026-11.md).
+
+## Prompt for the 3090 (2026-11-11): Test B first, then the image arms with Stage C held
+Order and reasons: Test B takes about one evening of GPU time and decides whether the remaining image arms are a
+comparison (Latin, Stages A-B) or a dead end (Stage C). The Latin arms of Runs 1-2 are the image side of Test B's
+comparison, so they resume right after it.
+```text
+Work in /c/git/visual-bpe-run (Git Bash; `. .venv/env.sh`; `python`, not `python3`; PYTHONUTF8=1). Read AGENTS.md
+(gotchas, especially GPU runners and Windows), docs/HANDOFF.md, docs/TEXT_SLOTS.md and docs/LOCAL_GPU.md section 9.
+TEXT_SLOTS.md is pre-registered: do not change its arms, gates, rules or predictions after seeing data; if
+something must change, write a dated amendment in it first. One GPU job at a time. Keep >= 10 GB of disk free.
+
+0. State. Show: tail of results/r12_logs/driver.log, results/r12_logs/done.txt, whether results/r12_logs/STOP
+   exists, nvidia-smi, free disk. If the Runs 1-2 driver is running: wait for the current run's next checkpoint
+   (every 250 steps, ~16 min), then stop the driver process first and its python child second (the run resumes
+   exactly from the checkpoint). If that leaves a STOP file, it comes from the kill: delete it. Commit and push
+   any finished r12 rows on claude/validation-harness as the driver does.
+1. Code. git fetch origin claude/sharp-mendel-kkhg4g && git merge origin/claude/sharp-mendel-kkhg4g
+   (into claude/validation-harness). If it conflicts, stop and report; do not resolve by hand. Then:
+   python -m pytest -q encoder_probe/tests/test_text_slots.py encoder_probe/tests/test_text_compress.py
+2. Smoke. python encoder_probe/experiments/text_slots.py --ratio 1 --smoke   (ratio 1 = the longest sequence)
+   Check: device cuda, bf16 True, the loss falls, a row is written. Record s/step and peak GiB (nvidia-smi and the
+   row). If nvidia-smi shows more than 20 GB: use --batch-size 4 and twice the steps for EVERY arm, and write
+   that as a dated line under "Results" in docs/TEXT_SLOTS.md before the first arm.
+3. Gates. Run arms L0, L1, L2 exactly as in the TEXT_SLOTS.md runbook (one at a time; the same command resumes
+   after a power-off). Then: python encoder_probe/experiments/analyse_slots.py encoder_probe/results/tb
+   Commit and push encoder_probe/results/tb. G1 FAIL: stop and report. G2 FAIL: apply the pre-registered rule
+   (one rerun of L2 at 3000 steps only if the validation loss was still falling; otherwise stop and report).
+4. Ladder. L3, L4, L5, then F2, F4, F8. Commit and push the rows after each arm.
+5. Analysis and write-up. Run analyse_slots.py with one --image per finished trained Latin arm of Runs 1-2
+   (name:chars per token:upper CI of bits per token on natural:on shuffled, from
+   encoder_probe/results/analysis_run12/summary.md; "-" where missing). Add a dated "Results" section to
+   docs/TEXT_SLOTS.md: the table, G1 and G2, each prediction as PASS / FAIL / not evaluable, the win lines, two
+   sample outputs each of L4 and L5, s/step, peak VRAM, problems. One line in AGENTS.md "Findings" and one row in
+   the docs/HANDOFF.md table. Commit, push.
+6. Image arms, Stage C held. Resume the driver without stage C (finished steps are skipped):
+   nohup python encoder_probe/experiments/run12_driver.py --steps 6000 --stages A B chan >> results/r12_logs/driver.out 2>&1 &
+   When it logs "all requested stages done": do step 7 of the Runs 1-2 prompt below (write-up), rerun
+   analyse_slots.py with the trained latin_p8, latin_p6 and latin_p5 numbers, and update the win lines in
+   docs/TEXT_SLOTS.md. Stage C runs only if TEXT_SLOTS.md's rule says so (the text arms lost) and gates A1 and A2
+   passed; otherwise it stays held.
+
+Stop and ask if the smoke fails, a gate fails, the merge conflicts, or a result would change the plan. Report
+failures as plainly as successes. No pull requests, no Claude API calls, no model IDs in commits.
+```
+
+## 3090 session state: Runs 1-2 (in progress since 2026-11-09; now step 6 of the prompt above)
 Steps 0-2 of the prompt below are done (PLAN_3090 "Results (RTX 3090 ...)": S = 6000, 3.93 s/step, 17.9 GB;
 amendment 7: page counts). Steps 3-6 run under `encoder_probe/experiments/run12_driver.py`, which records finished
 steps in `results/r12_logs/done.txt` and resumes after a power-off (the PC is on in 6-7 h stretches). After a
@@ -14,11 +66,12 @@ restart, in Git Bash:
 ```bash
 cd /c/git/visual-bpe-run && . .venv/env.sh && git pull --rebase origin claude/validation-harness
 cat results/r12_logs/driver.log | tail; ls results/r12_logs/STOP 2>/dev/null   # a STOP file = a failed check: read it first
-nohup python encoder_probe/experiments/run12_driver.py --steps 6000 --stages A chan B C >> results/r12_logs/driver.out 2>&1 &
+nohup python encoder_probe/experiments/run12_driver.py --steps 6000 --stages A B chan >> results/r12_logs/driver.out 2>&1 &
 ```
-Then do step 7 (write-up) when the driver logs "all requested stages done".
+Then do step 7 (write-up) when the driver logs "all requested stages done". Stage C is held (2026-11-11): it was
+`--stages A chan B C` before the reframing.
 
-## Prompt for the 3090: PLAN_3090 Runs 1-2 (amendment 4: stage A learnability, B Latin, C dense glyphs; amendment 5: the bar; amendment 6: channel capacity)
+## Earlier prompt, still the reference for the driver's steps: PLAN_3090 Runs 1-2 (amendment 4: stage A learnability, B Latin, C dense glyphs; amendment 5: the bar; amendment 6: channel capacity)
 ```text
 Pull branch claude/validation-harness (git pull --rebase origin claude/validation-harness). Read AGENTS.md
 (gotchas, especially GPU runners), docs/PLAN_3090.md (the ladder, amendments 1-6 and the Results sections;
@@ -120,7 +173,7 @@ losses equal its blind run's to 3 decimals. No arm is near 3% CER, so G3 can't b
 * R3-1: `encoder_probe/results/round3_ft_gpu3h/` and `round3_ft_gpu3h_blind/` (one row per eval cond, clean and
   jpeg75); logs `results/queue_logs/gpu3h_{1,2}/`. The LoRA adapters were lost with the instance; nothing depends on them.
 
-## Current direction (2026-11-06): gist through colour channels
+## Earlier direction (2026-11-06, parked): gist through colour channels
 User's plan, one variable at a time:
 1. Latin in 2, then 3 colour channels (no BPE, no glyphs, large font).
 2. Learned glyphs without BPE in a "pure" VLM.
@@ -158,6 +211,10 @@ table and curves `analyse_stage0.py`, rows `encoder_probe/results/stage0/runs.js
   No D3 or D10. Next: a recipe amendment (faster slot learning), not a density conclusion.
 
 ## Open items, in priority order
+**As of 2026-11-11:** (1) Test B and then the held-back image arms (the prompt at the top); (2) Test A's follow-ups
+in its README; (3) after a Test B win, the use test: needles and chains from slots (`longctx_bench.py`) against
+tokens and page images at equal context positions. The list below is the earlier one; all of it is parked.
+
 1. **Colour gist A1 on a GPU** (the prompt below):
    * 1 and 2 streams at 16 px with blinds (headline, ~2.3 h on a 4090);
    * 1 stream at 12 px with blind (equal-density bar, +1.2 h);

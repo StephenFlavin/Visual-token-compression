@@ -20,6 +20,7 @@ import numpy as np
 # Qwen2.5-VL-3B, docs/PLAN_3090.md Results.
 IMAGE_REF = {"latin_p8 frozen (Run 0)": (28.1, 13.10, 26.40)}
 G1_CER, G2_CER = 0.01, 0.03
+BUDGET_SAMPLES = 48000   # the Runs 1-2 image arms: 6000 steps x batch 8
 
 
 def bits_ci(row: dict, text: str = "natural", n_boot: int = 2000, seed: int = 0) -> tuple[float, float, float]:
@@ -67,7 +68,8 @@ def gates(rows: list[dict]) -> list[str]:
 
 def compare(rows: list[dict], image: dict) -> list[str]:
     """Pre-registered win rule: a text arm beats an image arm on a text set when it carries at least as many
-    chars per position and the lower end of its bits-per-slot interval is above the image arm's upper end."""
+    chars per position and the lower end of its bits-per-slot interval is above the image arm's upper end. A win
+    with more than BUDGET_SAMPLES training samples is marked: it is not a same-budget win."""
     out = []
     for name, (cpt, nat, shuf) in image.items():
         for text, ref in (("natural", nat), ("shuffled", shuf)):
@@ -79,8 +81,9 @@ def compare(rows: list[dict], image: dict) -> list[str]:
                 if e["chars_per_slot"] >= cpt:
                     b, lo, hi = bits_ci(r, text)
                     if lo > ref:
+                        over = "" if r["cum_samples"] <= BUDGET_SAMPLES else ", OVER the image arms' budget"
                         wins.append(f"ratio {r['ratio']} {r['decoder']} ({e['chars_per_slot']:.0f} chars/slot, "
-                                    f"{b:.1f} bits, {r['cum_samples']} samples)")
+                                    f"{b:.1f} bits, {r['cum_samples']} samples{over})")
             out.append(f"* vs **{name}** ({cpt:.1f} chars/token, {ref:.1f} bits upper bound, {text} text): "
                        + ("TEXT WINS with " + "; ".join(wins) if wins else "no text arm wins"))
     return out

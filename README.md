@@ -7,49 +7,74 @@ of text. A page image that carries 30-300 characters per vision token, and is st
 same model hold millions. This repo tests codes for doing that (glyphs for frequent letter chunks, colour pixels,
 RGB overlays and learned glyph alphabets) and compares them with plain text rendered equally densely.
 
-## Goals (2026-11-10)
+## Where the idea came from
 
-1. **Can a learned glyph alphabet beat Latin through a trained vision encoder?** Stage A on the RTX 3090: the 7x7
-   and 4x7 alphabets against 8-px Latin, gates A1 (learnable at all) and A2 (matches Latin at 28 chars/token).
-   Stage C (the dense 2x7 and BPE alphabets against 6- and 5-px Latin) only if both pass.
-   [PLAN_3090.md](docs/PLAN_3090.md) amendments 3-4.
-2. **How many bits per vision token can the pipe carry at all?** Random bits painted as colour blocks (96, 294 and
-   1176 bits per token offered), read through the same trained encoder into the frozen LLM; the information
-   recovered is exact because the source is uniform. The result is a floor on the pipe's capacity, not a ceiling.
-   Amendment 6.
-3. **Already found, with no training:** rendering plain Latin text as an image gives more text per token, with a
-   loss that grows with density.
+Braille is built to be read at very low resolution: a cell is six dots. The starting idea was that a model could
+read text drawn as compact, purpose-built glyphs at far fewer pixels than Latin letters need. Two extensions
+followed: one glyph per frequent chunk of letters instead of per letter (byte-pair encoding, hence the name), and
+three glyph streams on the same pixels, one per colour channel (the RGB overlay). Together they are the
+"moonshot" below.
 
-   | Reader | Rendering | Chars per vision token | Text tokens' worth per vision token (at 4.33 chars) | Quality |
-   |---|---|---|---|---|
-   | Qwen2.5-VL-3B, frozen | 16 px Latin | 6.8 | ~1.5x | 98% of the information recovered, 1.5% transcription error: near-lossless |
-   | Qwen2.5-VL-3B, frozen | 8 px Latin | 28.1 | ~3.4x in information | only 52% of the information recovered; it cannot read the page out (76% error) |
-   | Claude (Phase 1) | Latin at 29.4 px²/char | ~27 | 7.8x fewer input tokens | 3% transcription error, but answering questions over a long document fails (20-42% vs 100% from text) |
-   | Claude, QA test (pre-registered) | Latin at 117.6 px²/char | ~7 | **2.2x fewer** | **lossless**: gap to text at most 1.6 points (95% bound) at low and high effort; no multi-step loss seen either (120 questions bound it to ~3 points) |
-   | Claude, QA test (pre-registered) | Latin at 88.2 px²/char | ~9 | 2.9x fewer | lossless at high effort; within 2.8 points at low effort |
-   | Claude, QA test (pre-registered) | Latin at 58.8 px²/char | ~13 | 4.2x fewer | loses 15 points (low effort) / 8 (high); multi-step questions 38 / 20 |
-   | Claude Sonnet 5.5, same test | Latin at 117.6 px²/char | ~7 | 2.2x fewer | **lossless at high effort** (worst case 1.7 points); at low effort -0.3 points, worst case 2.2; 2.9x: -1.7 at high effort (borderline), -3.1 at low effort (a loss) |
-   | Claude Haiku 5.5, same test, high effort | Latin at 117.6 px²/char | ~7 | 2.2x fewer | **not lossless**: loses 5.8 points (multi-step 18); lookups unchanged |
-   | Claude Opus 5.5, deep-research sources (pre-registered) | Latin at 117.6 px²/char | ~7 | 2.2x fewer | **lossless**: 99.7% vs 99.4% from text on 360 questions, 60 of them across sources; notes-only summaries lose 29 points |
-   | Claude Opus 5.5, RAG (pre-registered; BM25, 308 questions, 3 datasets) | retrieved passages at 88.2 px²/char | ~9 | 2.2-2.6x fewer context tokens | **same accuracy at 27-43% lower cost**; or **+8.8 points on MultiHop-RAG** (p = 0.001) with 14 paged passages for the price of 5 as text |
-   | Claude Code + Opus 5.5, context compaction (pre-registered) | session transcript at 88.2 px²/char, opened on demand | ~9 | 2.2x cheaper than a text archive | **100% vs 37% for normal compaction** (360 questions), at 31% lower cost; at scale with real hooks (9 research, code and log sessions): **96-99% vs 78%**, 2.1x cheaper per correct answer |
-   | Claude Code + Opus 5.5, coding agents (SWE-bench, pre-registered) | minified code and output at 88.2 px²/char | ~9 | 3.1x fewer on what became images | **no task lost** (Django 50/50 both; Rust/Java 28/29 text, 29/29 pages), but **no total saving**: reading is ~17% of an agent's cost |
+**What happened to it (2026-11-11).** The premise holds for raw pixels: learned glyphs need 0.57x Latin's pixels
+and the moonshot page reads at 1.07% error. It fails at the reader: every pretrained vision encoder tested loses
+the dense codes, and Claude, the one reader where savings are worth money, cannot be trained and refuses coded
+pages. What did work was the plainest version: ordinary Latin text rendered small.
 
-   Sources: Run 0 in [PLAN_3090.md](docs/PLAN_3090.md), Phase 1 in [RESULTS.md](docs/RESULTS.md), the Claude QA test
-   in [docs/CLAUDE_QA.md](docs/CLAUDE_QA.md) (Claude Opus 5.5; 3 documents of ~245k text tokens, 360 paired questions
-   per point; Claude's tokenizer gives ~2.9 chars per token on this text, so its text-token column is not 4.33); the
-   deep-research variant in [CLAUDE_QA.md](docs/CLAUDE_QA.md#tested-deep-research-sources); context compaction in [results/compaction](results/compaction/README.md) and, at scale, [results/compaction_scale](results/compaction_scale/README.md); RAG in
-   [results/rag](results/rag/README.md); coding agents in
-   [docs/SWE_IMAGES.md](docs/SWE_IMAGES.md) (hooks in [experiments/readhook/vbhook](experiments/readhook/vbhook/)).
+## Goals (reframed 2026-11-11)
 
-   ![Claude: accuracy change from reading page images instead of text](docs/img/claude_qa_verdict.png)
+Review and reasons: [docs/REVIEW_2026-11-11.md](docs/REVIEW_2026-11-11.md).
 
-**Context.** For more context on a local GPU, text-side compressors and the model's own architecture (linear
-attention, KV quantization) are the stronger routes: a learned text encoder matches or beats DeepSeek-OCR's vision
-encoder at every compression ratio tested ([prior-art.md](docs/prior-art.md)). This repo answers the two questions
-above; it does not claim that images beat text-side compression.
+1. **Use page images as cheaper context for Claude, and stretch them from the text side.**
+   * *Why:* a closed model takes only text tokens and images, so its vision encoder is the only compressor a user
+     can reach. It is measured: 2.2x fewer tokens with no loss on Opus and Sonnet. Rendering denser is exhausted
+     (4.2x loses 8-15 points) and the encoder cannot be trained.
+   * *Next:* prune the text before rendering it (Test A, running; [results/claude_qa/prune](results/claude_qa/prune/README.md)),
+     and keep the hooks honest with a self-test per model release.
+2. **Find the best way to pack text into one context position of a model we can train: slots made from the text
+   tokens against vision tokens made from a rendered page.**
+   * *Why:* once the reader is trained, pixels are optional, and published text encoders match or beat the vision
+     path. The glyph runs here were only ever compared with Latin pixels, never with this.
+   * *Next:* Test B on the RTX 3090, same LLM, text and budget as the image arms
+     ([docs/TEXT_SLOTS.md](docs/TEXT_SLOTS.md)).
+3. **Close the original idea with a fair test.**
+   * *Why:* the last untested link is whether a glyph alphabet is learnable through a *trained* vision encoder at
+     all (Stage A), and how many bits per vision token that pipe carries (channel capacity). Both are queued on
+     the 3090 and cost only GPU time. Either way they matter only if pixels beat goal 2's text slots.
+   * *Held until Test B is in:* the dense alphabets (Stage C) and the colour overlay (Run 4).
+     [PLAN_3090.md](docs/PLAN_3090.md) amendments 3-6.
 
-> **Status (2026-11-06)**
+**The yardstick changes with the goals:** not characters per vision token, but answers kept per input token (goal
+1) and bits recovered per context position against the best text-side alternative (goals 2-3).
+
+## What is established without training
+
+Rendering plain Latin text as an image gives more text per token, with a loss that grows with density.
+
+| Reader | Rendering | Chars per vision token | Text tokens' worth per vision token (at 4.33 chars) | Quality |
+|---|---|---|---|---|
+| Qwen2.5-VL-3B, frozen | 16 px Latin | 6.8 | ~1.5x | 98% of the information recovered, 1.5% transcription error: near-lossless |
+| Qwen2.5-VL-3B, frozen | 8 px Latin | 28.1 | ~3.4x in information | only 52% of the information recovered; it cannot read the page out (76% error) |
+| Claude (Phase 1) | Latin at 29.4 px²/char | ~27 | 7.8x fewer input tokens | 3% transcription error, but answering questions over a long document fails (20-42% vs 100% from text) |
+| Claude, QA test (pre-registered) | Latin at 117.6 px²/char | ~7 | **2.2x fewer** | **lossless**: gap to text at most 1.6 points (95% bound) at low and high effort; no multi-step loss seen either (120 questions bound it to ~3 points) |
+| Claude, QA test (pre-registered) | Latin at 88.2 px²/char | ~9 | 2.9x fewer | lossless at high effort; within 2.8 points at low effort |
+| Claude, QA test (pre-registered) | Latin at 58.8 px²/char | ~13 | 4.2x fewer | loses 15 points (low effort) / 8 (high); multi-step questions 38 / 20 |
+| Claude Sonnet 5.5, same test | Latin at 117.6 px²/char | ~7 | 2.2x fewer | **lossless at high effort** (worst case 1.7 points); at low effort -0.3 points, worst case 2.2; 2.9x: -1.7 at high effort (borderline), -3.1 at low effort (a loss) |
+| Claude Haiku 5.5, same test, high effort | Latin at 117.6 px²/char | ~7 | 2.2x fewer | **not lossless**: loses 5.8 points (multi-step 18); lookups unchanged |
+| Claude Opus 5.5, deep-research sources (pre-registered) | Latin at 117.6 px²/char | ~7 | 2.2x fewer | **lossless**: 99.7% vs 99.4% from text on 360 questions, 60 of them across sources; notes-only summaries lose 29 points |
+| Claude Opus 5.5, RAG (pre-registered; BM25, 308 questions, 3 datasets) | retrieved passages at 88.2 px²/char | ~9 | 2.2-2.6x fewer context tokens | **same accuracy at 27-43% lower cost**; or **+8.8 points on MultiHop-RAG** (p = 0.001) with 14 paged passages for the price of 5 as text |
+| Claude Code + Opus 5.5, context compaction (pre-registered) | session transcript at 88.2 px²/char, opened on demand | ~9 | 2.2x cheaper than a text archive | **100% vs 37% for normal compaction** (360 questions), at 31% lower cost; at scale with real hooks (9 research, code and log sessions): **96-99% vs 78%**, 2.1x cheaper per correct answer |
+| Claude Code + Opus 5.5, coding agents (SWE-bench, pre-registered) | minified code and output at 88.2 px²/char | ~9 | 3.1x fewer on what became images | **no task lost** (Django 50/50 both; Rust/Java 28/29 text, 29/29 pages), but **no total saving**: reading is ~17% of an agent's cost |
+
+Sources: Run 0 in [PLAN_3090.md](docs/PLAN_3090.md), Phase 1 in [RESULTS.md](docs/RESULTS.md), the Claude QA test
+in [docs/CLAUDE_QA.md](docs/CLAUDE_QA.md) (Claude Opus 5.5; 3 documents of ~245k text tokens, 360 paired questions
+per point; Claude's tokenizer gives ~2.9 chars per token on this text, so its text-token column is not 4.33); the
+deep-research variant in [CLAUDE_QA.md](docs/CLAUDE_QA.md#tested-deep-research-sources); context compaction in [results/compaction](results/compaction/README.md) and, at scale, [results/compaction_scale](results/compaction_scale/README.md); RAG in
+[results/rag](results/rag/README.md); coding agents in
+[docs/SWE_IMAGES.md](docs/SWE_IMAGES.md) (hooks in [experiments/readhook/vbhook](experiments/readhook/vbhook/)).
+
+![Claude: accuracy change from reading page images instead of text](docs/img/claude_qa_verdict.png)
+
+> **Status of the dense codes (2026-11-06; the Now row 2026-11-11)**
 >
 > | | Result |
 > |---|---|
@@ -59,7 +84,7 @@ above; it does not claim that images beat text-side compression.
 > | | **Qwen2.5-VL-3B, raw pixels and frozen:** the moonshot code (322 chars/token) reads from raw pixels at 1.07% CER, but its pixel detail collapses (linearly) at the ViT's 2x2 merger. A CPU probe's verdict: "the ViT output is the wall at this budget". |
 > | **Open** | **R3-1, LoRA fine-tune of Qwen's LLM (1000 steps):** Latin at 28 chars/token is read (55% CER vs 88.5% blind). Latin at 72 chars/token gets the gist but not the words (val loss 10% below blind, MC above blind at p = 0.02). Learned glyphs (107) and the moonshot (322) are not read at all: their losses equal the blind runs'. Gate G3 is undecidable: no arm is near 3% CER. [Analysis](docs/ANALYSIS.md). |
 > | **Open** | **Own encoder, Stage 0** (text compressor into frozen Qwen): inconclusive, its 4x positive control failed (64% CER at 8000 steps); the decoder keeps the gist, not the words. [OWN_ENCODER.md](docs/OWN_ENCODER.md) |
-> | **Now** | **Gist through colour channels** ([COLOUR_GIST.md](docs/COLOUR_GIST.md)): Latin in 2-3 colour channels, then glyphs without BPE, then merge. Untrained, Qwen reads the overlay as one blended text (2-stream info per vision token 0.51x one stream's). A CPU fine-tune with the vision encoder frozen reached 0.72x. Both streams survive inside the encoder to block 16, then blend. **Next (GPU):** train the encoder from block 16, against the > 1x headline. |
+> | **Now (2026-11-11)** | **Reframed** (goals above): Test A (pruned text, then pages, on Claude) and Test B (text slots against page pixels on the 3090). The colour-gist line is parked: its CPU fine-tune reached 0.72x of one stream's information per vision token, against the > 1x it needed ([COLOUR_GIST.md](docs/COLOUR_GIST.md)). |
 
 **Terms.**
 * **CER:** character error rate (edit distance / reference characters).

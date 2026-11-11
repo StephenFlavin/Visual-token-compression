@@ -20,7 +20,7 @@ page? No pixels and no vision tower: the encoder reads the LLM's own (frozen) to
   measure as capacity_curve.py's bits per vision token. Per-window losses are stored so analyse_slots.py can
   bootstrap.
 
-    python3 encoder_probe/experiments/text_slots.py --ratio 4 --smoke                    # GPU: s/step, peak memory
+    python3 encoder_probe/experiments/text_slots.py --ratio 1 --smoke    # GPU: s/step, peak memory (longest sequence)
     python3 encoder_probe/experiments/text_slots.py --ratio 1 --steps 0 --run-name tb    # the untrained reader
     python3 encoder_probe/experiments/text_slots.py --ratio 1 --steps 250 --run-name tb  # gate G1
     python3 encoder_probe/experiments/text_slots.py --ratio 2 --steps 1000 --run-name tb \\
