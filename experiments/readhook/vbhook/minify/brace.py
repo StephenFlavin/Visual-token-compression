@@ -52,7 +52,7 @@ import os
 import re
 from dataclasses import dataclass
 
-from .base import register, tag
+from .base import LEVEL, register, tag
 
 MAX_UNTAGGED = 8            # force a tag after this many untagged line joins in a row
 
@@ -704,8 +704,19 @@ def _continues(L: Lang, src: str, last_code: Tok | None, t: Tok, tt: str) -> boo
     return False
 
 
+def _indent_unit(src: str) -> int:
+    """Spaces per indentation level (gcd of the space-indented lines; 4 if unclear)."""
+    import math
+    g = 0
+    for line in src.split("\n"):
+        n = len(line) - len(line.lstrip(" "))
+        if n and line.strip() and not line.lstrip().startswith("*"):    # skip the ` * ` of block comments
+            g = math.gcd(g, n)
+    return g if g in (2, 3, 4, 8) else 4
+
+
 def brace_flow(src: str, lang: Lang | str, policy: str = "stmt", cap: int | None = MAX_UNTAGGED,
-               join_comments: bool = True, keep_spaces: bool = False) -> str:
+               join_comments: bool = True, keep_spaces: bool = False, levels: bool = False) -> str:
     """policy: "stmt" (tag statement starts, see module doc), "all" (tag every line that starts with a token),
     "first" (tag only where needed for correctness: after line comments and around directives)."""
     L = LANGS[lang] if isinstance(lang, str) else lang
@@ -715,7 +726,20 @@ def brace_flow(src: str, lang: Lang | str, policy: str = "stmt", cap: int | None
     nls = [k for k, ch in enumerate(src) if ch == "\n"]
     texts = [src[t.s:t.e] for t in toks]
     gaps: list[str | None] = [None] * len(toks)       # separator before token k (None: no whitespace in source)
-    gaps[0] = tag(bisect.bisect_left(nls, toks[0].s) + 1)
+    unit = _indent_unit(src) if levels else 0
+
+    def lv(pos: int) -> str:
+        """`»` per indentation level of the line starting at token position `pos` (edit-safe mode: indentation is
+        cosmetic in these languages, but Claude Code's Edit needs it verbatim, so the reader must be able to see it)."""
+        if not levels:
+            return ""
+        i = bisect.bisect_left(nls, pos)
+        lead = src[(nls[i - 1] + 1 if i else 0):pos]
+        if lead.strip():
+            return ""
+        return LEVEL * (lead.count("\t") + (len(lead.replace("\t", "")) // unit if unit else 0))
+
+    gaps[0] = tag(bisect.bisect_left(nls, toks[0].s) + 1) + lv(toks[0].s)
     last_code = toks[0] if toks[0].kind != "c" else None
     since = 0
     for k in range(1, len(toks)):
@@ -736,7 +760,7 @@ def brace_flow(src: str, lang: Lang | str, policy: str = "stmt", cap: int | None
                 if not need and cap is not None and since >= cap and not (p.pp and p.pp == t.pp):
                     need = True
                 if need:
-                    gaps[k] = " " + tag(bisect.bisect_left(nls, t.s) + 1)
+                    gaps[k] = " " + tag(bisect.bisect_left(nls, t.s) + 1) + lv(t.s)
                     since = 0
                 else:
                     gaps[k] = _gap(p, t, texts[k - 1], texts[k])
@@ -797,7 +821,7 @@ def _make(name):
     def fn(text: str) -> str:
         # Edit-safe by default (see python_family.minify_python): spaces kept inside lines, every line tagged
         safe = os.environ.get("VBHOOK_TIGHT", "0") != "1"
-        return brace_flow(text, name, policy="all" if safe else "stmt", keep_spaces=safe)
+        return brace_flow(text, name, policy="all" if safe else "stmt", keep_spaces=safe, levels=safe)
     fn.__name__ = f"minify_{name}"
     return fn
 

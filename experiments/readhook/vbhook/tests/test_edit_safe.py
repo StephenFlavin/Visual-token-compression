@@ -58,3 +58,12 @@ def test_dense_mode_is_shorter(monkeypatch):
     monkeypatch.setenv("VBHOOK_TIGHT", "1")
     dense = minify(JAVA, "A.java")[0]
     assert len(dense) < len(safe)
+
+
+def test_brace_levels_show_indentation(monkeypatch):
+    monkeypatch.delenv("VBHOOK_TIGHT", raising=False)
+    flow, _ = minify(JAVA, "A.java")
+    lv = {int(m.group(1)): len(m.group(2)) for m in re.finditer(r"§(\d+) (»*)", flow)}
+    for no, line in enumerate(JAVA.splitlines(), 1):
+        if line.strip() and not line.strip().startswith("b);"):            # continuation line: its own indent
+            assert lv[no] == (len(line) - len(line.lstrip())) // 4, (no, line)
