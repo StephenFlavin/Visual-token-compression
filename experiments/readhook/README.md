@@ -38,3 +38,22 @@ Java tokenizes worse than prose (2.4 vs 2.9 chars/token), so pages save more tha
 minified text: 2.9-3.0x either way. Stripping comments is a separate, lossy text-level saving (these files are
 mostly Javadoc). Not tested: accuracy of reading and editing from minified pages; Edit needs a whitespace-insensitive
 match to the real file.
+
+## Minified Python (2026-11-11)
+
+`pymin.py`: each logical line becomes `§<line> <depth><code>`, the block depth from Python's tokenizer shown as one
+`»` per level; continuation lines (inside brackets, after a backslash, inside multi-line strings) are joined with a
+space; blank lines dropped; comments and docstrings optionally stripped. `reconstruct()` rebuilds code with 4 spaces
+per level, and `same_ast()` checks it: all 119 files tried (this repo's 115 + requests `sessions.py`, Django
+`query.py`, Flask `app.py`, pandas `groupby.py`) rebuild to the same AST from the comment-stripped form (whitespace
+inside strings collapsed on both sides). With comments kept the form is for reading only: an end-of-line comment
+inside brackets swallows the joined continuation if rebuilt.
+
+Measured on the 4 library files (11,725 lines), as for Java:
+
+| form | text tokens | pages at 117.6 px²/char | pages at 88.2 |
+|---|---|---|---|
+| Read text (original, with line numbers) | 187,867 (1.00x) | - | - |
+| minified, comments kept | 147,188 (1.28x) | 51,717 (3.63x) | 38,736 (4.85x) |
+| minified, comments stripped | 135,271 (1.39x) | 46,332 (4.05x) | 34,731 (5.41x) |
+| minified, comments + docstrings stripped | 83,838 (2.24x) | 27,273 (6.89x) | 20,439 (9.19x) |
