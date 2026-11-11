@@ -58,13 +58,13 @@ run's usage record (`stream.jsonl`):
 |---|---|---|
 | uncached input | 636 | 660 |
 | cache writes (1.25x input price) | 451,201 | 463,075 |
-| cache reads (0.1x input price) | 2,999,264 | 2,907,843 |
+| cache reads (0.05x input price) | 2,999,264 | 2,907,843 |
 | output | 146,034 | 158,785 |
 | cost (CLI, list price) | $5.78 | $6.08 |
 
 * Warm vs cold is the same for both arms: the first call of every run (100/100) read the start of Claude Code's system
   prompt (~3.4k tokens) from a warm cache; median first-call write ~3.5k in both arms.
-* 87% of input is cache reads at 0.1x, so the 3.1x saving on image content saves mostly the cheapest category (plus
+* 87% of input is cache reads at 0.05x (prices fitted exactly from the CLI costs: input $4, output $20, cache write $5, cache read $0.20 per million), so the 3.1x saving on image content saves mostly the cheapest category (plus
   one cache write per image). Output tokens, about half the cost at $20/M, are not reduced by images; the vbhook arm
   wrote 8.7% more output, which is most of its 5% higher cost. Dollar savings need image savings that are large next
   to output and cache writes: long-context reading (large files kept in context over many turns).
