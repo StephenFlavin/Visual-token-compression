@@ -181,6 +181,8 @@ class Slots(nn.Module):
 class Compressor:
     """Encoder = LLM + LoRA over [text][memory]; decoder = the same LLM with the adapter disabled."""
 
+    dec_off = True   # the decoder pass runs with the adapter off (text_slots.py's reader keeps it on)
+
     def __init__(self, pm, tok, m: int, dev, autocast: bool, switch: AdapterSwitch):
         self.pm, self.tok, self.m, self.dev, self.autocast, self.sw = pm, tok, m, dev, autocast, switch
         hf = Q.hf_model(pm)
@@ -208,7 +210,7 @@ class Compressor:
         """Mean CE of reconstructing ids (+ eos) from the slots with the frozen decoder."""
         B, L = ids.shape
         tgt = torch.cat([ids, torch.full((B, 1), self.tok.eos, dtype=ids.dtype, device=ids.device)], 1)
-        with self.sw.state(True), self.ac():
+        with self.sw.state(self.dec_off), self.ac():
             pre = self.prefix(mem)
             inp = torch.cat([pre, self.emb(tgt[:, :-1])], 1)
             h = self.lm(inputs_embeds=inp, use_cache=False).last_hidden_state[:, pre.shape[1] - 1:]
@@ -231,7 +233,7 @@ class Compressor:
         B = mem.shape[0]
         out_ids = []
         done = torch.zeros(B, dtype=torch.bool, device=mem.device)
-        with self.sw.state(True), self.ac():
+        with self.sw.state(self.dec_off), self.ac():
             o = self.lm(inputs_embeds=self.prefix(mem), use_cache=True)
             past, h = o.past_key_values, o.last_hidden_state[:, -1]
             for _ in range(max_new):
