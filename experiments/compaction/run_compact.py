@@ -61,8 +61,16 @@ def claude(args: list[str], prompt: str, cwd: Path, tools: str, effort: str, tim
     res = next((e for e in ev if e.get("type") == "result"), {})
     reads = [c for e in ev if e.get("type") == "assistant" for c in e["message"]["content"]
              if c.get("type") == "tool_use" and c["name"] == "Read"]
-    u = (res.get("modelUsage") or {}).get(MODEL) or {}
-    return {"session_id": res.get("session_id"), "result": res.get("result", ""), "cost": res.get("total_cost_usd") or 0.0,
+    # res["usage"] covers this invocation only; total_cost_usd and modelUsage of a resumed or forked session include
+    # the whole session history, so the cost of this step is computed from usage (Opus 5.5 list prices, fitted exactly
+    # from the CLI's own costs: input $4, output $20, cache write $5, cache read $0.20 per million).
+    uu = res.get("usage") or {}
+    u = {"outputTokens": uu.get("output_tokens", 0), "cacheReadInputTokens": uu.get("cache_read_input_tokens", 0),
+         "cacheCreationInputTokens": uu.get("cache_creation_input_tokens", 0), "inputTokens": uu.get("input_tokens", 0)}
+    step_cost = (u["inputTokens"] * 4 + u["outputTokens"] * 20 + u["cacheCreationInputTokens"] * 5
+                 + u["cacheReadInputTokens"] * 0.2) / 1e6
+    return {"session_id": res.get("session_id"), "result": res.get("result", ""), "cost": round(step_cost, 4),
+            "cli_session_total": res.get("total_cost_usd"),
             "turns": res.get("num_turns"), "is_error": res.get("is_error"), "wall_s": round(time.time() - t0),
             "reads": len(reads), "read_paths": [r["input"].get("file_path", "") for r in reads],
             "output_tokens": u.get("outputTokens", 0), "cache_read": u.get("cacheReadInputTokens", 0),
