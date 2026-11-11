@@ -150,10 +150,9 @@ candidates to test, ordered from closest to the test to furthest from it.
   answer as well from pages as from text, at about half the cost.
 * **Agent memory and long conversations.** Instead of summarising older turns, which loses details, render them as
   pages: the details stay findable at about half the tokens. Untested on dialogue.
-* **Codebase exploration.** A model could read a large part of a repository as pages to find where things are and how
-  they connect, then fetch the files it will change as text. Not tested, and code differs from prose: exact
-  identifiers, symbols and indentation all matter, and a page reader may confuse `l`, `1` and `I`. It needs its own
-  test (questions with exact answers about a real repository) before use.
+* **Coding agents: tested, no accuracy lost but no money saved** ([below](#tested-coding-agents)). Claude Code with
+  file contents and command output shown as pages at 2.9x solved every SWE-bench task it solved from text, but
+  coding spends little on reading, so the total cost did not fall.
 
 ### Tested: deep-research sources
 
@@ -185,13 +184,33 @@ Opus 5.5, high effort, one call per arm and corpus, 360 paired questions:
 * **Limits:** encyclopedia articles, not mixed web pages with tables; questions with exact answers, not a written
   report; Opus only. Page calls were slower (median 56 s against 42 s for text).
 
+### Tested: coding agents
+
+Hooks for Claude Code ([`experiments/readhook/vbhook/`](../experiments/readhook/vbhook/)) show file contents and long
+command output as minified pages at 88.2 px² per character (2.9x for prose): minifiers for 40+ languages and output
+kinds, edit-safe for code (spaces kept, indentation as `»`), and an image only when it costs fewer tokens than the text.
+Opus 5.5 at high effort, text vs pages, same tasks:
+
+| test | text | pages | details |
+|---|---|---|---|
+| refactor-for-performance smoke tests (6 tasks x 3) | 18/18 equivalent | 54/54 over 3 hook iterations | [results/readhook_smoke](../results/readhook_smoke/README.md) |
+| SWE-bench Verified, 50 hardest Django tasks recent Opus models solve | 50/50 resolved, $5.78 | 50/50, $6.08 | [results/readhook_swe](../results/readhook_swe/README.md) |
+| SWE-bench Multilingual, 29 Rust and Java tasks | 28/29, $4.83 | 29/29, $4.75 | [results/readhook_swe_ml](../results/readhook_swe_ml/README.md) |
+
+* **No task lost**, and no failed edit in the final hook version: the model edits exactly from page images.
+* **The images were 3.1x cheaper than the text they replaced**, but the total cost did not fall ($10.82 against
+  $10.61 over the 79 tasks). File contents and command output are only ~17% of what a coding agent costs; output (46%)
+  and the re-read starting context and conversation (37%) are untouched, and the image arm made more calls (mostly
+  extra Reads and smaller Edits the hooks' notes induced). Full analysis, figures and the remaining levers:
+  [SWE_IMAGES.md](SWE_IMAGES.md).
+
 **Where not to use it**
 
 * **Counting and aggregation over the whole input** ("how many errors are in this log?"): counts are the first thing
   to fail (Opus 28% at 4.2x), and even text is not perfect on them.
 * **Chains of facts** (three-hop questions) beyond 2.2x.
-* **Text to copy or edit exactly** (code changes, quotations): the model sees pixels, not characters. Only exact
-  numbers were tested.
+* **Text to copy exactly** (quotations, hashes, long literals): the model sees pixels, not characters. Code edits
+  worked in the coding tests above, but only because the pages keep spacing and show indentation explicitly.
 * **Haiku 5.5**, which loses accuracy even at 2.2x.
 * **Latency-sensitive calls:** pages save tokens, not time. Page calls took slightly longer than text calls (median
   Opus 2.2x: 28 s against 22 s at low effort, 42 s against 37 s at high).

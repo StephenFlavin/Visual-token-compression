@@ -92,3 +92,21 @@ were lossless (99.7% against 99.4% from text, 360 questions). For coding agents 
   Edit's `old_string` before hooks run (so code pages are edit-safe: spaces kept, indentation shown as `»`); it does
   not run PostToolUse for failed commands (so every command gets an exit-code line); compound commands that print
   several files are split per file. The harness also had to stop test processes that outlived their test run.
+
+## Remaining levers (2026-11-11)
+
+Measured against the text arm's $10.61 over the 79 tasks:
+
+1. **Remove the overhead the hooks add (~12%, the quick win).** The image arm made 85 more tool calls (633 against
+   548), almost all Reads (+55) and Edits (+43). The Bash-image note ("use the Read tool on a file before you Edit or
+   Write it", added after Write refusals in the smoke tests) makes the model re-read files it has seen, and exact
+   `old_string` matching against `»`-levels probably makes it edit in smaller pieces. Narrowing the note to Write and
+   returning narrow line ranges as text would put the image arm near −7% instead of +2%.
+2. **More of the tool results (up to ~5% more):** short outputs stay text by design; the ceiling is 12%.
+3. **The rest of the input (up to ~25%), outside what Claude Code hooks reach:** the starting context (20%) and the
+   agent's own messages (17%) are re-read every call; rendering older turns as pages needs an agent loop of one's own
+   (Agent SDK or API). Tool definitions must stay text; instructions as images are untested.
+4. **Output (46%): not reachable with images**, except through fewer turns.
+5. **Reading-heavy work** (large-diff review, repository Q&A, log triage, long sessions): where reading is most of the
+   input, as in the document tests (~95%), pages halve the cost; untested for coding.
+6. **Context room, not money:** 2.9x more code per context window means fewer compactions in long sessions.

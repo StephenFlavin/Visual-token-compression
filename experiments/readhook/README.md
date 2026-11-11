@@ -83,3 +83,10 @@ that exact `echo` line). Contract and rules for minifiers: `vbhook/SPEC.md`. Fam
 Policy (`policy.py`): an image only when it costs at most 0.8x the text tokens of the same lines or output. Tests:
 `cd experiments/readhook && python3 -m pytest -q vbhook/tests` (333 tests). Results with Opus:
 `results/readhook_smoke/README.md`.
+
+## Results with Opus 5.5 (2026-11-11)
+
+Smoke tests (6 refactors x 3 runs per arm): [results/readhook_smoke](../../results/readhook_smoke/README.md).
+SWE-bench Verified, Django: [results/readhook_swe](../../results/readhook_swe/README.md); SWE-bench Multilingual,
+Rust and Java: [results/readhook_swe_ml](../../results/readhook_swe_ml/README.md); harnesses in `swe/`. Summary,
+cost anatomy and remaining levers: [docs/SWE_IMAGES.md](../../docs/SWE_IMAGES.md).
