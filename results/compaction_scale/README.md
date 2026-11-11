@@ -46,7 +46,7 @@ Budget: ~$6-7 per session, ~$60 for 9; one session of each kind first as a pilot
 | D: no compaction (reference) | 100.0% | 100% | 100% | 100% | 100% | $0.22 | $0.005 |
 | A: normal compaction | **78.3%** | 54.2% | 83.3% | 97.5% | 80% | $3.18 | $0.090 |
 | **B: compaction + page archive (hooks)** | **96.1%** | 96.7% | 91.7% | 100% | 100% | **$1.86** | **$0.043** |
-| B with the fixed hook (post hoc, code re-run) | **98.9%** | 96.7% | **100%** | 100% | 100% | - | - |
+| B with the fixed hook (post hoc, code re-run) | **98.9%** | 96.7% | **100%** | 100% | 100% | **$1.85** | **$0.041** |
 
 Costs: compaction (~$1.45 per session) is charged at A's cold-cache cost to both compacting arms; answering cost
 A $1.73 and B $0.42 per session on average. Reading (shared by all arms) cost ~$1 per session. Full tables, per-turn
@@ -74,7 +74,9 @@ Pre-registered verdicts:
 the hook fell back to flowed text without line numbers, so the model had to count lines. The fix keeps a §n tag on
 every line in the fallback (`hooks/precompact_archive.py`). Re-running B on the 3 code sessions with it (arm `Bfix`,
 new fork and compaction, same questions; $3.60): code 100% (was 91.7%), all 360 questions 98.9%, no significant
-difference from no compaction. The other 4 misses: two research answers that gave the two values instead of the
+difference from no compaction. The cost barely moves: answering the code sessions cost $0.37 per session with the fix
+against $0.42 without, so the whole arm comes to $1.85 per session after reading and $0.041 per correct answer, 2.2x
+cheaper than normal compaction (compaction charged at the same cold-cache cost as the other arms). The other 4 misses: two research answers that gave the two values instead of the
 difference, one misread number, one chain.
 
 What this adds to the first test: the archive works through real hooks with nothing in the prompt, on code and

@@ -42,3 +42,4 @@ Pre-registered verdicts:
 
 * code questions: D 100.0%, B 91.7%, Bfix 100.0%; task items 100%; answering $1.12 for 3 sessions
 * all 360 questions with Bfix for the code sessions: 98.9%, vs D -1.1 points (-2.8 to +0.1), p = 0.12
+* cost with the fixed hook (B for research and logs, Bfix for code; compaction charged as above): $1.85 per session after reading, $0.0414 per correct answer (2.17x cheaper than normal compaction)

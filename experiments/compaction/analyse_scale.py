@@ -140,6 +140,14 @@ def main() -> int:
                              "task_Bfix": st.mean(fix_task.values()),
                              "answer_cost_Bfix": sum(rows[(s, "Bfix", t)]["cost"] for s in fs
                                                      for t in ("turn1", "turn2", "turn3", "turn4", "task"))}
+        steps = ("turn1", "turn2", "turn3", "turn4", "task")
+        c_ans = sum(rows[(s, "Bfix" if s in fs else "B", t)]["cost"] for s in sessions for t in steps)
+        n_ok = sum(comb.values()) + sum(fix_task.get((s, q), task["B"].get((s, q, kd), False)) if s in fs else
+                                        task["B"][(s, q, kd)] for (s, q, kd) in task["B"])
+        S["post_hoc_fix"].update({"answer_cost": c_ans, "after_reading_per_session": (sum(comp.values()) + c_ans) /
+                                  len(sessions), "cost_per_correct": (sum(comp.values()) + c_ans) / n_ok,
+                                  "vs_A_per_correct": S["arms"]["A"]["cost_per_correct"] /
+                                  ((sum(comp.values()) + c_ans) / n_ok)})
         x = S["post_hoc_fix"]
         L += ["", "## Post hoc (not pre-registered): the hook bug and the fixed hook", "",
               "10 of B's 14 misses were `def`-line questions on 7 files the Python minifier refused (they contain its "
@@ -150,7 +158,10 @@ def main() -> int:
               f"Bfix {100 * x['code_acc_Bfix']:.1f}%; task items {100 * x['task_Bfix']:.0f}%; answering "
               f"${x['answer_cost_Bfix']:.2f} for {len(fs)} sessions",
               f"* all 360 questions with Bfix for the code sessions: {100 * x['pooled_acc']:.1f}%, vs D "
-              f"{-100 * d:+.1f} points ({-100 * hi:+.1f} to {-100 * lo:+.1f}), p = {p:.2g}"]
+              f"{-100 * d:+.1f} points ({-100 * hi:+.1f} to {-100 * lo:+.1f}), p = {p:.2g}",
+              f"* cost with the fixed hook (B for research and logs, Bfix for code; compaction charged as above): "
+              f"${x['after_reading_per_session']:.2f} per session after reading, ${x['cost_per_correct']:.4f} per "
+              f"correct answer ({x['vs_A_per_correct']:.2f}x cheaper than normal compaction)"]
     (OUT / "summary.md").write_text("\n".join(L) + "\n")
     (OUT / "summary.json").write_text(json.dumps(S, indent=1, default=str))
     print("\n".join(L))

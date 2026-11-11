@@ -308,6 +308,10 @@
    "p": 0.125
   },
   "task_Bfix": 1,
-  "answer_cost_Bfix": 1.1185
+  "answer_cost_Bfix": 1.1185,
+  "answer_cost": 3.6015,
+  "after_reading_per_session": 1.8464222222222222,
+  "cost_per_correct": 0.04144089775561097,
+  "vs_A_per_correct": 2.168375658562982
  }
 }

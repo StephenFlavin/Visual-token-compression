@@ -154,7 +154,7 @@ candidates to test, ordered from closest to the test to furthest from it.
   100% against 37% for normal compaction at 31% lower cost ([results/compaction](../results/compaction/README.md));
   at scale, on 9 sessions of research reading, codebase exploration and log triage with the real hooks and nothing in
   the prompt, 96.1% (98.9% after fixing a hook bug) against 78.3% for normal compaction and 100% without compaction,
-  at 2.1x lower cost per correct answer ([results/compaction_scale](../results/compaction_scale/README.md)).
+  at 2.1x (2.2x with the fix) lower cost per correct answer ([results/compaction_scale](../results/compaction_scale/README.md)).
 * **Coding agents: tested, no accuracy lost but no money saved** ([below](#tested-coding-agents)). Claude Code with
   file contents and command output shown as pages at 2.9x solved every SWE-bench task it solved from text, but
   coding spends little on reading, so the total cost did not fall.
