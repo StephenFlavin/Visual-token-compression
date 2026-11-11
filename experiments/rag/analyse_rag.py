@@ -42,8 +42,8 @@ def main() -> int:
         if not qs:
             continue
         L += [f"## {ds} ({len(qs)} questions with all arms)", "",
-              "| arm | passages | recall of evidence | accuracy (EM) | F1 | vs top-5 text (95% CI), p | context tokens | $ per question | $ per correct |",
-              "|---|---|---|---|---|---|---|---|---|"]
+              "| arm | passages | recall of evidence | accuracy | strict first-line | F1 | vs top-5 text (95% CI), p | context tokens | $ per question | $ per correct |",
+              "|---|---|---|---|---|---|---|---|---|---|"]
         J[ds] = {}
         for arm in ARMS:
             R = [by[(ds, q)][arm] for q in qs]
@@ -57,12 +57,13 @@ def main() -> int:
                 d, lo, hi = paired_diff_ci(pairs)
                 _, _, p = mcnemar([t for _, t, _ in pairs], [i for _, _, i in pairs])
                 cmp = f"{-100 * d:+.1f} ({-100 * hi:+.1f} to {-100 * lo:+.1f}), p={p:.2g}"
-            J[ds][arm] = {"n": len(R), "em": ok / len(R), "em_ci": wilson(ok, len(R)), "f1": st.mean(r["f1"] for r in R),
+            strict = sum(bool(r.get("em_strict", r["em"])) for r in R) / len(R)
+            J[ds][arm] = {"n": len(R), "em": ok / len(R), "em_strict": strict, "em_ci": wilson(ok, len(R)), "f1": st.mean(r["f1"] for r in R),
                           "passages": st.mean(r["n_passages"] for r in R), "recall": st.mean(r["recall_used"] for r in R),
                           "context_tokens": st.mean(ctx), "cost_per_q": st.mean(c), "cost_per_correct": sum(c) / max(1, ok),
                           "vs_T5": cmp}
             x = J[ds][arm]
-            L.append(f"| {LABEL[arm]} | {x['passages']:.1f} | {x['recall']:.2f} | {100 * x['em']:.1f}% | {x['f1']:.3f} | "
+            L.append(f"| {LABEL[arm]} | {x['passages']:.1f} | {x['recall']:.2f} | {100 * x['em']:.1f}% | {100 * x['em_strict']:.1f}% | {x['f1']:.3f} | "
                      f"{cmp} | {x['context_tokens']:,.0f} | ${x['cost_per_q']:.4f} | ${x['cost_per_correct']:.4f} |")
         types = sorted({by[(ds, q)]["T5"]["type"] for q in qs})
         L += ["", "Accuracy by question type:", "", "| type | n | " + " | ".join(LABEL[a] for a in ARMS) + " |",
