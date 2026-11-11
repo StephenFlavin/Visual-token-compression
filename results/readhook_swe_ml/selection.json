@@ -1,0 +1,242 @@
+{
+ "source": "SWE-bench/experiments evaluation/multilingual 20260213_mini-v2.0.0a0_claude-4-6-opus and 20260213_mini-v2.0.0a0_claude-4-5-opus (both resolved); Lombok (Ant) left out",
+ "ranked": [
+  "google__gson-2158",
+  "burntsushi__ripgrep-2209",
+  "burntsushi__ripgrep-2576",
+  "sharkdp__bat-1892",
+  "astral-sh__ruff-15356",
+  "sharkdp__bat-562",
+  "tokio-rs__tokio-6551",
+  "astral-sh__ruff-15330",
+  "apache__lucene-13494",
+  "google__gson-2479",
+  "nushell__nushell-12901",
+  "reactivex__rxjava-7597",
+  "sharkdp__bat-2835",
+  "tokio-rs__axum-734",
+  "javaparser__javaparser-4561",
+  "nushell__nushell-13605",
+  "sharkdp__bat-2201",
+  "tokio-rs__tokio-4867",
+  "astral-sh__ruff-15543",
+  "tokio-rs__tokio-6603",
+  "javaparser__javaparser-4538",
+  "sharkdp__bat-2393",
+  "uutils__coreutils-6682",
+  "google__gson-2311",
+  "tokio-rs__axum-691",
+  "tokio-rs__tokio-6752",
+  "astral-sh__ruff-15626",
+  "apache__druid-15402",
+  "apache__lucene-11760",
+  "tokio-rs__axum-1934",
+  "apache__druid-13704",
+  "uutils__coreutils-6731",
+  "nushell__nushell-12950",
+  "sharkdp__bat-2650",
+  "google__gson-2134",
+  "nushell__nushell-13246",
+  "tokio-rs__tokio-6724",
+  "nushell__nushell-13831",
+  "apache__druid-16875",
+  "tokio-rs__tokio-7139",
+  "tokio-rs__axum-682",
+  "tokio-rs__tokio-6838",
+  "apache__lucene-12626",
+  "astral-sh__ruff-15443",
+  "apache__lucene-13301",
+  "apache__lucene-13170",
+  "tokio-rs__tokio-4898"
+ ],
+ "meta": {
+  "google__gson-2158": {
+   "repo": "google/gson",
+   "opus_steps": 61.0
+  },
+  "burntsushi__ripgrep-2209": {
+   "repo": "burntsushi/ripgrep",
+   "opus_steps": 55.0
+  },
+  "burntsushi__ripgrep-2576": {
+   "repo": "burntsushi/ripgrep",
+   "opus_steps": 54.5
+  },
+  "sharkdp__bat-1892": {
+   "repo": "sharkdp/bat",
+   "opus_steps": 54.0
+  },
+  "astral-sh__ruff-15356": {
+   "repo": "astral-sh/ruff",
+   "opus_steps": 48.0
+  },
+  "sharkdp__bat-562": {
+   "repo": "sharkdp/bat",
+   "opus_steps": 47.0
+  },
+  "tokio-rs__tokio-6551": {
+   "repo": "tokio-rs/tokio",
+   "opus_steps": 44.0
+  },
+  "astral-sh__ruff-15330": {
+   "repo": "astral-sh/ruff",
+   "opus_steps": 41.5
+  },
+  "apache__lucene-13494": {
+   "repo": "apache/lucene",
+   "opus_steps": 40.0
+  },
+  "google__gson-2479": {
+   "repo": "google/gson",
+   "opus_steps": 37.5
+  },
+  "nushell__nushell-12901": {
+   "repo": "nushell/nushell",
+   "opus_steps": 37.5
+  },
+  "reactivex__rxjava-7597": {
+   "repo": "reactivex/rxjava",
+   "opus_steps": 36.5
+  },
+  "sharkdp__bat-2835": {
+   "repo": "sharkdp/bat",
+   "opus_steps": 35.5
+  },
+  "tokio-rs__axum-734": {
+   "repo": "tokio-rs/axum",
+   "opus_steps": 35.0
+  },
+  "javaparser__javaparser-4561": {
+   "repo": "javaparser/javaparser",
+   "opus_steps": 31.5
+  },
+  "nushell__nushell-13605": {
+   "repo": "nushell/nushell",
+   "opus_steps": 29.5
+  },
+  "sharkdp__bat-2201": {
+   "repo": "sharkdp/bat",
+   "opus_steps": 28.5
+  },
+  "tokio-rs__tokio-4867": {
+   "repo": "tokio-rs/tokio",
+   "opus_steps": 28.0
+  },
+  "astral-sh__ruff-15543": {
+   "repo": "astral-sh/ruff",
+   "opus_steps": 27.0
+  },
+  "tokio-rs__tokio-6603": {
+   "repo": "tokio-rs/tokio",
+   "opus_steps": 26.5
+  },
+  "javaparser__javaparser-4538": {
+   "repo": "javaparser/javaparser",
+   "opus_steps": 26.0
+  },
+  "sharkdp__bat-2393": {
+   "repo": "sharkdp/bat",
+   "opus_steps": 26.0
+  },
+  "uutils__coreutils-6682": {
+   "repo": "uutils/coreutils",
+   "opus_steps": 25.5
+  },
+  "google__gson-2311": {
+   "repo": "google/gson",
+   "opus_steps": 24.0
+  },
+  "tokio-rs__axum-691": {
+   "repo": "tokio-rs/axum",
+   "opus_steps": 23.0
+  },
+  "tokio-rs__tokio-6752": {
+   "repo": "tokio-rs/tokio",
+   "opus_steps": 22.5
+  },
+  "astral-sh__ruff-15626": {
+   "repo": "astral-sh/ruff",
+   "opus_steps": 22.0
+  },
+  "apache__druid-15402": {
+   "repo": "apache/druid",
+   "opus_steps": 20.5
+  },
+  "apache__lucene-11760": {
+   "repo": "apache/lucene",
+   "opus_steps": 20.0
+  },
+  "tokio-rs__axum-1934": {
+   "repo": "tokio-rs/axum",
+   "opus_steps": 20.0
+  },
+  "apache__druid-13704": {
+   "repo": "apache/druid",
+   "opus_steps": 19.5
+  },
+  "uutils__coreutils-6731": {
+   "repo": "uutils/coreutils",
+   "opus_steps": 19.5
+  },
+  "nushell__nushell-12950": {
+   "repo": "nushell/nushell",
+   "opus_steps": 18.0
+  },
+  "sharkdp__bat-2650": {
+   "repo": "sharkdp/bat",
+   "opus_steps": 18.0
+  },
+  "google__gson-2134": {
+   "repo": "google/gson",
+   "opus_steps": 17.5
+  },
+  "nushell__nushell-13246": {
+   "repo": "nushell/nushell",
+   "opus_steps": 17.0
+  },
+  "tokio-rs__tokio-6724": {
+   "repo": "tokio-rs/tokio",
+   "opus_steps": 16.5
+  },
+  "nushell__nushell-13831": {
+   "repo": "nushell/nushell",
+   "opus_steps": 15.5
+  },
+  "apache__druid-16875": {
+   "repo": "apache/druid",
+   "opus_steps": 15.0
+  },
+  "tokio-rs__tokio-7139": {
+   "repo": "tokio-rs/tokio",
+   "opus_steps": 15.0
+  },
+  "tokio-rs__axum-682": {
+   "repo": "tokio-rs/axum",
+   "opus_steps": 14.0
+  },
+  "tokio-rs__tokio-6838": {
+   "repo": "tokio-rs/tokio",
+   "opus_steps": 11.5
+  },
+  "apache__lucene-12626": {
+   "repo": "apache/lucene",
+   "opus_steps": 11.0
+  },
+  "astral-sh__ruff-15443": {
+   "repo": "astral-sh/ruff",
+   "opus_steps": 10.5
+  },
+  "apache__lucene-13301": {
+   "repo": "apache/lucene",
+   "opus_steps": 8.5
+  },
+  "apache__lucene-13170": {
+   "repo": "apache/lucene",
+   "opus_steps": 7.5
+  },
+  "tokio-rs__tokio-4898": {
+   "repo": "tokio-rs/tokio",
+   "opus_steps": 7.5
+  }
+ }
+}
