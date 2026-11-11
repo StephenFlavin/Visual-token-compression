@@ -301,6 +301,7 @@ def main() -> int:
     ap.add_argument("--dry-run", action="store_true", help="build retrieval and contexts, print stats, no calls")
     a = ap.parse_args()
     if a.analyse:
+        sys.path.insert(0, str(Path(__file__).parent))
         from analyse_rag import main as am
         return am()
     if a.dry_run:
