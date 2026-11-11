@@ -1,0 +1,300 @@
+{
+ "kind": "code",
+ "files": [
+  "code/experiments/readhook/swe/run_swe.py",
+  "code/encoder_probe/experiments/channel_capacity.py",
+  "code/encoder_probe/experiments/zeroshot_colour.py",
+  "code/experiments/analyse_claude_qa.py",
+  "code/learned_glyphs/lg/channel.py",
+  "code/encoder_probe/ep/deepencoder.py",
+  "code/learned_glyphs/lg/transfer.py",
+  "code/experiments/phase1_sweep.py",
+  "code/experiments/readhook/smoke/checks.py",
+  "code/encoder_probe/experiments/analyse_r3.py",
+  "code/encoder_probe/experiments/text_compress.py",
+  "code/experiments/readhook/swe/analyse.py",
+  "code/experiments/claude_qa_render.py",
+  "code/vbpe/analysis.py",
+  "code/encoder_probe/ep/encoders.py",
+  "code/experiments/readhook/smoke/run_smoke.py",
+  "code/encoder_probe/ep/pages.py",
+  "code/experiments/readhook/pymin.py",
+  "code/experiments/readhook/smoke/pymin.py",
+  "code/experiments/erb/run_erb.py",
+  "code/encoder_probe/experiments/longctx_bench.py"
+ ],
+ "questions": [
+  {
+   "id": "L01",
+   "kind": "def",
+   "question": "On which line of code/encoder_probe/experiments/analyse_r3.py does the top-level `def fisher_greater` statement start?",
+   "answer": "47"
+  },
+  {
+   "id": "L02",
+   "kind": "def",
+   "question": "On which line of code/experiments/erb/run_erb.py does the top-level `def page_images` statement start?",
+   "answer": "80"
+  },
+  {
+   "id": "L03",
+   "kind": "def",
+   "question": "On which line of code/vbpe/analysis.py does the top-level `def _usable` statement start?",
+   "answer": "83"
+  },
+  {
+   "id": "L04",
+   "kind": "def",
+   "question": "On which line of code/encoder_probe/ep/pages.py does the top-level `def get_encoding` statement start?",
+   "answer": "154"
+  },
+  {
+   "id": "L05",
+   "kind": "def",
+   "question": "On which line of code/experiments/claude_qa_render.py does the top-level `def make_questions` statement start?",
+   "answer": "229"
+  },
+  {
+   "id": "K06",
+   "kind": "const",
+   "question": "In code/experiments/erb/run_erb.py, what number is the module-level constant MAX_DOCS set to?",
+   "answer": "50"
+  },
+  {
+   "id": "W07",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `source_row`? Answer with the file's number in the reading order (1 = code/experiments/readhook/swe/run_swe.py, 21 = code/encoder_probe/experiments/longctx_bench.py).",
+   "answer": "7"
+  },
+  {
+   "id": "W08",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `looks_like_refusal`? Answer with the file's number in the reading order (1 = code/experiments/readhook/swe/run_swe.py, 21 = code/encoder_probe/experiments/longctx_bench.py).",
+   "answer": "8"
+  },
+  {
+   "id": "K09",
+   "kind": "const",
+   "question": "In code/experiments/readhook/swe/analyse.py, what number is the module-level constant CPT set to?",
+   "answer": "2.6"
+  },
+  {
+   "id": "K10",
+   "kind": "const",
+   "question": "In code/encoder_probe/experiments/analyse_r3.py, what number is the module-level constant CHARS_PER_TEXT_TOKEN set to?",
+   "answer": "4.33"
+  },
+  {
+   "id": "K11",
+   "kind": "const",
+   "question": "In code/encoder_probe/experiments/text_compress.py, what number is the module-level constant CHARS_PER_TEXT_TOKEN set to?",
+   "answer": "4.33"
+  },
+  {
+   "id": "L12",
+   "kind": "def",
+   "question": "On which line of code/learned_glyphs/lg/channel.py does the top-level `def pil_resample` statement start?",
+   "answer": "143"
+  },
+  {
+   "id": "L13",
+   "kind": "def",
+   "question": "On which line of code/vbpe/analysis.py does the top-level `def _q` statement start?",
+   "answer": "341"
+  },
+  {
+   "id": "W14",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `scheme_style`? Answer with the file's number in the reading order (1 = code/experiments/readhook/swe/run_swe.py, 21 = code/encoder_probe/experiments/longctx_bench.py).",
+   "answer": "14"
+  },
+  {
+   "id": "L15",
+   "kind": "def",
+   "question": "On which line of code/experiments/phase1_sweep.py does the top-level `def read_done` statement start?",
+   "answer": "238"
+  },
+  {
+   "id": "L16",
+   "kind": "def",
+   "question": "On which line of code/experiments/erb/run_erb.py does the top-level `def gold_recall` statement start?",
+   "answer": "123"
+  },
+  {
+   "id": "L17",
+   "kind": "def",
+   "question": "On which line of code/encoder_probe/experiments/analyse_r3.py does the top-level `def write_md` statement start?",
+   "answer": "128"
+  },
+  {
+   "id": "W18",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `geometry`? Answer with the file's number in the reading order (1 = code/experiments/readhook/swe/run_swe.py, 21 = code/encoder_probe/experiments/longctx_bench.py).",
+   "answer": "2"
+  },
+  {
+   "id": "W19",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `CLIPAttention`? Answer with the file's number in the reading order (1 = code/experiments/readhook/swe/run_swe.py, 21 = code/encoder_probe/experiments/longctx_bench.py).",
+   "answer": "6"
+  },
+  {
+   "id": "L20",
+   "kind": "def",
+   "question": "On which line of code/encoder_probe/ep/deepencoder.py does the top-level `class LayerNorm2d` statement start?",
+   "answer": "47"
+  },
+  {
+   "id": "W21",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `build`? Answer with the file's number in the reading order (1 = code/experiments/readhook/swe/run_swe.py, 21 = code/encoder_probe/experiments/longctx_bench.py).",
+   "answer": "11"
+  },
+  {
+   "id": "L22",
+   "kind": "def",
+   "question": "On which line of code/vbpe/analysis.py does the top-level `def main` statement start?",
+   "answer": "844"
+  },
+  {
+   "id": "L23",
+   "kind": "def",
+   "question": "On which line of code/experiments/claude_qa_render.py does the top-level `def render_pages` statement start?",
+   "answer": "299"
+  },
+  {
+   "id": "W24",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `est_output_tokens`? Answer with the file's number in the reading order (1 = code/experiments/readhook/swe/run_swe.py, 21 = code/encoder_probe/experiments/longctx_bench.py).",
+   "answer": "8"
+  },
+  {
+   "id": "W25",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `plot_p_bars`? Answer with the file's number in the reading order (1 = code/experiments/readhook/swe/run_swe.py, 21 = code/encoder_probe/experiments/longctx_bench.py).",
+   "answer": "14"
+  },
+  {
+   "id": "W26",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `make_pages`? Answer with the file's number in the reading order (1 = code/experiments/readhook/swe/run_swe.py, 21 = code/encoder_probe/experiments/longctx_bench.py).",
+   "answer": "17"
+  },
+  {
+   "id": "L27",
+   "kind": "def",
+   "question": "On which line of code/encoder_probe/ep/deepencoder.py does the top-level `def _win_part` statement start?",
+   "answer": "91"
+  },
+  {
+   "id": "W28",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `Block`? Answer with the file's number in the reading order (1 = code/experiments/readhook/swe/run_swe.py, 21 = code/encoder_probe/experiments/longctx_bench.py).",
+   "answer": "6"
+  },
+  {
+   "id": "L29",
+   "kind": "def",
+   "question": "On which line of code/experiments/erb/run_erb.py does the top-level `def build_job` statement start?",
+   "answer": "103"
+  },
+  {
+   "id": "K30",
+   "kind": "const",
+   "question": "In code/experiments/analyse_claude_qa.py, what number is the module-level constant MARGIN set to?",
+   "answer": "0.02"
+  },
+  {
+   "id": "L31",
+   "kind": "def",
+   "question": "On which line of code/experiments/readhook/swe/analyse.py does the top-level `def main` statement start?",
+   "answer": "96"
+  },
+  {
+   "id": "W32",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `jpeg_qtable`? Answer with the file's number in the reading order (1 = code/experiments/readhook/swe/run_swe.py, 21 = code/encoder_probe/experiments/longctx_bench.py).",
+   "answer": "5"
+  },
+  {
+   "id": "K33",
+   "kind": "const",
+   "question": "In code/encoder_probe/ep/pages.py, what number is the module-level constant PATCH set to?",
+   "answer": "16"
+  },
+  {
+   "id": "K34",
+   "kind": "const",
+   "question": "In code/experiments/phase1_sweep.py, what number is the module-level constant CALL_OVERHEAD_USD set to?",
+   "answer": "0.013"
+  },
+  {
+   "id": "K35",
+   "kind": "const",
+   "question": "In code/encoder_probe/ep/encoders.py, what number is the module-level constant GRID set to?",
+   "answer": "14"
+  },
+  {
+   "id": "L36",
+   "kind": "def",
+   "question": "On which line of code/experiments/readhook/swe/run_swe.py does the top-level `def run_tests` statement start?",
+   "answer": "113"
+  },
+  {
+   "id": "L37",
+   "kind": "def",
+   "question": "On which line of code/encoder_probe/experiments/longctx_bench.py does the top-level `def render_document` statement start?",
+   "answer": "74"
+  },
+  {
+   "id": "W38",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `_abs_pos_sam`? Answer with the file's number in the reading order (1 = code/experiments/readhook/swe/run_swe.py, 21 = code/encoder_probe/experiments/longctx_bench.py).",
+   "answer": "6"
+  },
+  {
+   "id": "L39",
+   "kind": "def",
+   "question": "On which line of code/experiments/erb/run_erb.py does the top-level `def pages_note` statement start?",
+   "answer": "90"
+  },
+  {
+   "id": "K40",
+   "kind": "const",
+   "question": "In code/encoder_probe/experiments/channel_capacity.py, what number is the module-level constant TOKEN set to?",
+   "answer": "28"
+  }
+ ],
+ "task": [
+  {
+   "id": "K41",
+   "kind": "const",
+   "question": "In code/experiments/erb/run_erb.py, what number is the module-level constant CPT set to?",
+   "answer": "2.9"
+  },
+  {
+   "id": "K42",
+   "kind": "const",
+   "question": "In code/vbpe/analysis.py, what number is the module-level constant DEFAULT_TEXT_TOKENS_PER_CHAR set to?",
+   "answer": "0.25"
+  },
+  {
+   "id": "L43",
+   "kind": "def",
+   "question": "On which line of code/experiments/readhook/smoke/checks.py does the top-level `def bench` statement start?",
+   "answer": "152"
+  },
+  {
+   "id": "L44",
+   "kind": "def",
+   "question": "On which line of code/encoder_probe/experiments/zeroshot_colour.py does the top-level `def passages` statement start?",
+   "answer": "39"
+  },
+  {
+   "id": "L45",
+   "kind": "def",
+   "question": "On which line of code/learned_glyphs/lg/transfer.py does the top-level `def bank_scheme_name` statement start?",
+   "answer": "105"
+  }
+ ]
+}
