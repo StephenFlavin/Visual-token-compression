@@ -141,10 +141,10 @@ The result supports one pattern: **large amounts of reference text that the mode
 does not need to quote exactly or reason across as a whole.** Only English prose was tested; the uses below are
 candidates to test, ordered from closest to the test to furthest from it.
 
-* **RAG with more context per call.** Retrieved passages rendered at 2.2x let Opus or Sonnet (high effort) see about
-  twice as many passages for the same tokens with no measurable loss, or the same passages for about half the price. A
-  hybrid fits the result better still: send the top few passages as text and the long tail as pages. The tail is there
-  for lookups, which survive denser pages (Opus 98% and Sonnet 97% at 4.2x).
+* **RAG: tested** ([results/rag](../results/rag/README.md); Opus 5.5, BM25, 308 questions on planted facts,
+  MultiHop-RAG and HotpotQA). The same top-5 passages as pages at 2.9x answered as well as text and cost 27-43% less per
+  question; the same budget as pages carried 11-14 passages instead of 5 and gained 8.8 points on MultiHop-RAG
+  (p = 0.001), more than top-15 as text at 2.5x the price. Mixing a text head with paged tails did worse than all pages.
 * **Deep research: tested, and it holds at 2.2x** ([below](#tested-deep-research-sources)).
 * **Long-document Q&A** (reports, contracts, manuals, filings). The test is closest to this. At 2.2x, Opus and Sonnet
   answer as well from pages as from text, at about half the cost.

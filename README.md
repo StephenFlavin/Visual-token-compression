@@ -31,13 +31,15 @@ RGB overlays and learned glyph alphabets) and compares them with plain text rend
    | Claude Sonnet 5.5, same test | Latin at 117.6 px²/char | ~7 | 2.2x fewer | **lossless at high effort** (worst case 1.7 points); at low effort -0.3 points, worst case 2.2; 2.9x: -1.7 at high effort (borderline), -3.1 at low effort (a loss) |
    | Claude Haiku 5.5, same test, high effort | Latin at 117.6 px²/char | ~7 | 2.2x fewer | **not lossless**: loses 5.8 points (multi-step 18); lookups unchanged |
    | Claude Opus 5.5, deep-research sources (pre-registered) | Latin at 117.6 px²/char | ~7 | 2.2x fewer | **lossless**: 99.7% vs 99.4% from text on 360 questions, 60 of them across sources; notes-only summaries lose 29 points |
+   | Claude Opus 5.5, RAG (pre-registered; BM25, 308 questions, 3 datasets) | retrieved passages at 88.2 px²/char | ~9 | 2.2-2.6x fewer context tokens | **same accuracy at 27-43% lower cost**; or **+8.8 points on MultiHop-RAG** (p = 0.001) with 14 paged passages for the price of 5 as text |
    | Claude Code + Opus 5.5, context compaction (pre-registered) | session transcript at 88.2 px²/char, opened on demand | ~9 | 2.2x cheaper than a text archive | **100% vs 37% for normal compaction** (360 questions), at 31% lower cost |
    | Claude Code + Opus 5.5, coding agents (SWE-bench, pre-registered) | minified code and output at 88.2 px²/char | ~9 | 3.1x fewer on what became images | **no task lost** (Django 50/50 both; Rust/Java 28/29 text, 29/29 pages), but **no total saving**: reading is ~17% of an agent's cost |
 
    Sources: Run 0 in [PLAN_3090.md](docs/PLAN_3090.md), Phase 1 in [RESULTS.md](docs/RESULTS.md), the Claude QA test
    in [docs/CLAUDE_QA.md](docs/CLAUDE_QA.md) (Claude Opus 5.5; 3 documents of ~245k text tokens, 360 paired questions
    per point; Claude's tokenizer gives ~2.9 chars per token on this text, so its text-token column is not 4.33); the
-   deep-research variant in [CLAUDE_QA.md](docs/CLAUDE_QA.md#tested-deep-research-sources); context compaction in [results/compaction](results/compaction/README.md); coding agents in
+   deep-research variant in [CLAUDE_QA.md](docs/CLAUDE_QA.md#tested-deep-research-sources); context compaction in [results/compaction](results/compaction/README.md); RAG in
+   [results/rag](results/rag/README.md); coding agents in
    [docs/SWE_IMAGES.md](docs/SWE_IMAGES.md) (hooks in [experiments/readhook/vbhook](experiments/readhook/vbhook/)).
 
    ![Claude: accuracy change from reading page images instead of text](docs/img/claude_qa_verdict.png)
