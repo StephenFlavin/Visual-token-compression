@@ -1,0 +1,304 @@
+{
+ "kind": "code",
+ "files": [
+  "code/vbpe/crnn/model.py",
+  "code/vbpe/readers/rapidocr_reader.py",
+  "code/encoder_probe/ep/rgb_overlay.py",
+  "code/encoder_probe/experiments/quick_linear_readout.py",
+  "code/encoder_probe/experiments/analyse.py",
+  "code/encoder_probe/experiments/analyse_run12.py",
+  "code/encoder_probe/experiments/finetune_qwen.py",
+  "code/encoder_probe/experiments/analyse_g2lite.py",
+  "code/experiments/claude_qa_research.py",
+  "code/learned_glyphs/experiments/bigram_errors.py",
+  "code/experiments/readhook/vbhook/minify/base.py",
+  "code/scripts/make_swe_figures.py",
+  "code/vbpe/crnn/train.py",
+  "code/encoder_probe/experiments/make_figures.py",
+  "code/vbpe/crnn/stubs.py",
+  "code/vbpe/schemes/substitution.py",
+  "code/vbpe/layout.py",
+  "code/learned_glyphs/lg/scheme.py",
+  "code/experiments/readhook/swe/run_ml.py",
+  "code/vbpe/schemes/quadrant.py",
+  "code/vbpe/claude_eval.py",
+  "code/learned_glyphs/experiments/transfer_eval.py",
+  "code/experiments/erb/analyse_erb.py",
+  "code/vbpe/dictionary.py",
+  "code/encoder_probe/experiments/run_g2lite.py"
+ ],
+ "questions": [
+  {
+   "id": "L01",
+   "kind": "def",
+   "question": "On which line of code/experiments/readhook/vbhook/minify/base.py does the top-level `def minify` statement start?",
+   "answer": "89"
+  },
+  {
+   "id": "L02",
+   "kind": "def",
+   "question": "On which line of code/encoder_probe/ep/rgb_overlay.py does the top-level `def stream_lengths` statement start?",
+   "answer": "114"
+  },
+  {
+   "id": "W03",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `LayoutParams`? Answer with the file's number in the reading order (1 = code/vbpe/crnn/model.py, 25 = code/encoder_probe/experiments/run_g2lite.py).",
+   "answer": "17"
+  },
+  {
+   "id": "W04",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `dataset`? Answer with the file's number in the reading order (1 = code/vbpe/crnn/model.py, 25 = code/encoder_probe/experiments/run_g2lite.py).",
+   "answer": "19"
+  },
+  {
+   "id": "W05",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `evaluate`? Answer with the file's number in the reading order (1 = code/vbpe/crnn/model.py, 25 = code/encoder_probe/experiments/run_g2lite.py).",
+   "answer": "13"
+  },
+  {
+   "id": "W06",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `build_only`? Answer with the file's number in the reading order (1 = code/vbpe/crnn/model.py, 25 = code/encoder_probe/experiments/run_g2lite.py).",
+   "answer": "25"
+  },
+  {
+   "id": "K07",
+   "kind": "const",
+   "question": "In code/vbpe/dictionary.py, what number is the module-level constant MASTER_N set to?",
+   "answer": "3000"
+  },
+  {
+   "id": "L08",
+   "kind": "def",
+   "question": "On which line of code/vbpe/crnn/stubs.py does the top-level `class StubQuad` statement start?",
+   "answer": "64"
+  },
+  {
+   "id": "W09",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `substitutions`? Answer with the file's number in the reading order (1 = code/vbpe/crnn/model.py, 25 = code/encoder_probe/experiments/run_g2lite.py).",
+   "answer": "10"
+  },
+  {
+   "id": "L10",
+   "kind": "def",
+   "question": "On which line of code/vbpe/crnn/stubs.py does the top-level `def make_stub_scheme` statement start?",
+   "answer": "77"
+  },
+  {
+   "id": "L11",
+   "kind": "def",
+   "question": "On which line of code/encoder_probe/experiments/run_g2lite.py does the top-level `def main` statement start?",
+   "answer": "173"
+  },
+  {
+   "id": "K12",
+   "kind": "const",
+   "question": "In code/encoder_probe/ep/rgb_overlay.py, what number is the module-level constant EXPAND set to?",
+   "answer": "3"
+  },
+  {
+   "id": "L13",
+   "kind": "def",
+   "question": "On which line of code/encoder_probe/experiments/analyse_g2lite.py does the top-level `def load` statement start?",
+   "answer": "16"
+  },
+  {
+   "id": "W14",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `render_line`? Answer with the file's number in the reading order (1 = code/vbpe/crnn/model.py, 25 = code/encoder_probe/experiments/run_g2lite.py).",
+   "answer": "17"
+  },
+  {
+   "id": "L15",
+   "kind": "def",
+   "question": "On which line of code/vbpe/crnn/model.py does the top-level `def _conv` statement start?",
+   "answer": "32"
+  },
+  {
+   "id": "L16",
+   "kind": "def",
+   "question": "On which line of code/learned_glyphs/experiments/bigram_errors.py does the top-level `def analyse` statement start?",
+   "answer": "61"
+  },
+  {
+   "id": "W17",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `unpatch`? Answer with the file's number in the reading order (1 = code/vbpe/crnn/model.py, 25 = code/encoder_probe/experiments/run_g2lite.py).",
+   "answer": "4"
+  },
+  {
+   "id": "W18",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `prepare`? Answer with the file's number in the reading order (1 = code/vbpe/crnn/model.py, 25 = code/encoder_probe/experiments/run_g2lite.py).",
+   "answer": "9"
+  },
+  {
+   "id": "L19",
+   "kind": "def",
+   "question": "On which line of code/experiments/claude_qa_research.py does the top-level `def split_corpora` statement start?",
+   "answer": "74"
+  },
+  {
+   "id": "L20",
+   "kind": "def",
+   "question": "On which line of code/experiments/readhook/swe/run_ml.py does the top-level `def grade` statement start?",
+   "answer": "130"
+  },
+  {
+   "id": "W21",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `lr_lambda`? Answer with the file's number in the reading order (1 = code/vbpe/crnn/model.py, 25 = code/encoder_probe/experiments/run_g2lite.py).",
+   "answer": "7"
+  },
+  {
+   "id": "L22",
+   "kind": "def",
+   "question": "On which line of code/encoder_probe/experiments/quick_linear_readout.py does the top-level `def ink_scores` statement start?",
+   "answer": "156"
+  },
+  {
+   "id": "K23",
+   "kind": "const",
+   "question": "In code/encoder_probe/experiments/analyse_run12.py, what number is the module-level constant BAR_SENSITIVE_LO set to?",
+   "answer": "18.0"
+  },
+  {
+   "id": "K24",
+   "kind": "const",
+   "question": "In code/vbpe/schemes/quadrant.py, what number is the module-level constant CELL_TOP set to?",
+   "answer": "0.84"
+  },
+  {
+   "id": "W25",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `chan_readout`? Answer with the file's number in the reading order (1 = code/vbpe/crnn/model.py, 25 = code/encoder_probe/experiments/run_g2lite.py).",
+   "answer": "6"
+  },
+  {
+   "id": "K26",
+   "kind": "const",
+   "question": "In code/vbpe/dictionary.py, what number is the module-level constant MIN_COUNT set to?",
+   "answer": "5"
+  },
+  {
+   "id": "K27",
+   "kind": "const",
+   "question": "In code/experiments/claude_qa_research.py, what number is the module-level constant NOTES_WORDS set to?",
+   "answer": "250"
+  },
+  {
+   "id": "K28",
+   "kind": "const",
+   "question": "In code/vbpe/dictionary.py, what number is the module-level constant MEASURE_PX set to?",
+   "answer": "1000"
+  },
+  {
+   "id": "L29",
+   "kind": "def",
+   "question": "On which line of code/vbpe/schemes/substitution.py does the top-level `def _show` statement start?",
+   "answer": "120"
+  },
+  {
+   "id": "L30",
+   "kind": "def",
+   "question": "On which line of code/learned_glyphs/experiments/transfer_eval.py does the top-level `def expand_banks` statement start?",
+   "answer": "43"
+  },
+  {
+   "id": "L31",
+   "kind": "def",
+   "question": "On which line of code/learned_glyphs/lg/scheme.py does the top-level `def phase2_hook_installed` statement start?",
+   "answer": "300"
+  },
+  {
+   "id": "K32",
+   "kind": "const",
+   "question": "In code/vbpe/dictionary.py, what number is the module-level constant MIN_POTENTIAL set to?",
+   "answer": "10.0"
+  },
+  {
+   "id": "K33",
+   "kind": "const",
+   "question": "In code/encoder_probe/experiments/analyse_run12.py, what number is the module-level constant BAR_RECOVERED set to?",
+   "answer": "20.0"
+  },
+  {
+   "id": "W34",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `fig_g2lite`? Answer with the file's number in the reading order (1 = code/vbpe/crnn/model.py, 25 = code/encoder_probe/experiments/run_g2lite.py).",
+   "answer": "14"
+  },
+  {
+   "id": "L35",
+   "kind": "def",
+   "question": "On which line of code/vbpe/schemes/substitution.py does the top-level `def vertical_shift` statement start?",
+   "answer": "65"
+  },
+  {
+   "id": "W36",
+   "kind": "file",
+   "question": "Which file defines the top-level function or class `cache_key`? Answer with the file's number in the reading order (1 = code/vbpe/crnn/model.py, 25 = code/encoder_probe/experiments/run_g2lite.py).",
+   "answer": "21"
+  },
+  {
+   "id": "K37",
+   "kind": "const",
+   "question": "In code/vbpe/dictionary.py, what number is the module-level constant MAX_LEN set to?",
+   "answer": "20"
+  },
+  {
+   "id": "K38",
+   "kind": "const",
+   "question": "In code/vbpe/claude_eval.py, what number is the module-level constant DEFAULT_TIMEOUT set to?",
+   "answer": "300.0"
+  },
+  {
+   "id": "L39",
+   "kind": "def",
+   "question": "On which line of code/encoder_probe/experiments/run_g2lite.py does the top-level `def print_queue` statement start?",
+   "answer": "60"
+  },
+  {
+   "id": "K40",
+   "kind": "const",
+   "question": "In code/encoder_probe/experiments/make_figures.py, what number is the module-level constant LG_PB_H5_BLIND_VAL_LOSS_500 set to?",
+   "answer": "2.285"
+  }
+ ],
+ "task": [
+  {
+   "id": "K41",
+   "kind": "const",
+   "question": "In code/learned_glyphs/lg/scheme.py, what number is the module-level constant LINE_SPACING set to?",
+   "answer": "1.2"
+  },
+  {
+   "id": "K42",
+   "kind": "const",
+   "question": "In code/vbpe/schemes/quadrant.py, what number is the module-level constant CELL_BOT set to?",
+   "answer": "0.24"
+  },
+  {
+   "id": "L43",
+   "kind": "def",
+   "question": "On which line of code/experiments/readhook/swe/run_ml.py does the top-level `def select` statement start?",
+   "answer": "56"
+  },
+  {
+   "id": "L44",
+   "kind": "def",
+   "question": "On which line of code/vbpe/dictionary.py does the top-level `def text_width_em` statement start?",
+   "answer": "63"
+  },
+  {
+   "id": "L45",
+   "kind": "def",
+   "question": "On which line of code/experiments/readhook/swe/run_ml.py does the top-level `def slug` statement start?",
+   "answer": "71"
+  }
+ ]
+}

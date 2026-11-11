@@ -1,0 +1,7 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[scale] research:1 - read: cost $0.776, reads 16 (archive 0), 38s
+[scale] logs:1 - read: cost $1.018, reads 0 (archive 0), 42s
+[scale] research:1 D turn1: cost $0.035, 10/10 correct, reads 0 (archive 0), 5s
+[scale] logs:1 D turn1: cost $0.049, 10/10 correct, reads 0 (archive 0), 4s
+[scale] logs:1 D turn2: cost $0.040, 10/10 correct, reads 0 (archive 0), 4s
+[scale] research:1 D turn2: cost $0.037, 10/10 correct, reads 0 (archive 0), 5s

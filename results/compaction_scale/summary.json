@@ -1,0 +1,198 @@
+{
+ "sessions": [
+  "code:0",
+  "logs:0",
+  "research:0"
+ ],
+ "n_questions": 120,
+ "arms": {
+  "D": {
+   "acc": 1.0,
+   "by_kind": {
+    "research": 1.0,
+    "code": 1.0,
+    "logs": 1.0
+   },
+   "task": 1.0,
+   "compaction_cost": 0.0,
+   "answer_cost": 0.6609999999999999,
+   "after_reading_cost": 0.6609999999999999,
+   "cost_per_correct": 0.004896296296296295,
+   "answer_cost_per_correct": 0.004896296296296295,
+   "reads": {
+    "archive": 0,
+    "transcript": 0,
+    "all": 0
+   },
+   "per_turn": {
+    "turn1": 1,
+    "turn2": 1,
+    "turn3": 1,
+    "turn4": 1
+   },
+   "per_session": {
+    "code:0": {
+     "acc": 1.0,
+     "answer_cost": 0.22569999999999996
+    },
+    "logs:0": {
+     "acc": 1.0,
+     "answer_cost": 0.2294
+    },
+    "research:0": {
+     "acc": 1.0,
+     "answer_cost": 0.2059
+    }
+   }
+  },
+  "A": {
+   "acc": 0.7083333333333334,
+   "by_kind": {
+    "research": 0.475,
+    "code": 0.725,
+    "logs": 0.925
+   },
+   "task": 0.6,
+   "compaction_cost": 4.241,
+   "answer_cost": 4.6039,
+   "after_reading_cost": 8.844899999999999,
+   "cost_per_correct": 0.09409468085106382,
+   "answer_cost_per_correct": 0.04897765957446809,
+   "reads": {
+    "archive": 0,
+    "transcript": 43,
+    "all": 43
+   },
+   "per_turn": {
+    "turn1": 0.7666666666666667,
+    "turn2": 0.7333333333333333,
+    "turn3": 0.6333333333333333,
+    "turn4": 0.7
+   },
+   "per_session": {
+    "code:0": {
+     "acc": 0.725,
+     "answer_cost": 1.0895
+    },
+    "logs:0": {
+     "acc": 0.925,
+     "answer_cost": 2.2691000000000003
+    },
+    "research:0": {
+     "acc": 0.475,
+     "answer_cost": 1.2453
+    }
+   }
+  },
+  "B": {
+   "acc": 0.9833333333333333,
+   "by_kind": {
+    "research": 0.975,
+    "code": 0.975,
+    "logs": 1.0
+   },
+   "task": 1.0,
+   "compaction_cost": 4.241,
+   "answer_cost": 1.2248,
+   "after_reading_cost": 5.4658,
+   "cost_per_correct": 0.041096240601503756,
+   "answer_cost_per_correct": 0.009209022556390977,
+   "reads": {
+    "archive": 26,
+    "transcript": 1,
+    "all": 27
+   },
+   "per_turn": {
+    "turn1": 0.9666666666666667,
+    "turn2": 0.9666666666666667,
+    "turn3": 1,
+    "turn4": 1
+   },
+   "per_session": {
+    "code:0": {
+     "acc": 0.975,
+     "answer_cost": 0.4102
+    },
+    "logs:0": {
+     "acc": 1.0,
+     "answer_cost": 0.34420000000000006
+    },
+    "research:0": {
+     "acc": 0.975,
+     "answer_cost": 0.4704
+    }
+   }
+  }
+ },
+ "diffs": {
+  "B-A": {
+   "diff": 0.2749999999999999,
+   "lo": 0.19221548790291104,
+   "hi": 0.3618975748753931,
+   "p": 2.0954757928848267e-09
+  },
+  "B-D": {
+   "diff": -0.01666666666666672,
+   "lo": -0.058737126812913876,
+   "hi": 0.016624248921824382,
+   "p": 0.5
+  },
+  "A-D": {
+   "diff": -0.29166666666666663,
+   "lo": -0.37844401921348436,
+   "hi": -0.21156416663495414,
+   "p": 5.820766091346741e-11
+  },
+  "task B-A": {
+   "diff": 0.4,
+   "lo": 0.11316030581448205,
+   "hi": 0.642535572434923
+  }
+ },
+ "hooks": {
+  "note_delivered": 3,
+  "errors": 0,
+  "pages": [
+   7,
+   7,
+   8
+  ],
+  "image_tokens": [
+   32430,
+   32430,
+   35811
+  ],
+  "render_seconds": [
+   12.3,
+   11.9,
+   13.0
+  ],
+  "archive_opened": 3
+ },
+ "verdicts": {
+  "1. A loses >= 30 points vs D (pooled)": {
+   "pass": false,
+   "value": "-29.2"
+  },
+  "2a. B within 5 points of D (pooled)": {
+   "pass": true,
+   "value": "-1.7"
+  },
+  "2b. B within 10 points of D in each kind": {
+   "pass": true,
+   "value": "research -2.5, code -2.5, logs +0.0"
+  },
+  "3. B at most half of A per correct answer": {
+   "pass": true,
+   "value": "$0.0411 vs $0.0941 (2.29x)"
+  },
+  "4. hooks work unaided in every B session": {
+   "pass": true,
+   "value": "3/3 notes, 3/3 opened"
+  },
+  "5. task items: B beats A by >= 30 points": {
+   "pass": true,
+   "value": "+40.0"
+  }
+ }
+}

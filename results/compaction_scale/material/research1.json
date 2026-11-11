@@ -1,0 +1,295 @@
+{
+ "kind": "research",
+ "files": [
+  "sources/source_01.txt",
+  "sources/source_02.txt",
+  "sources/source_03.txt",
+  "sources/source_04.txt",
+  "sources/source_05.txt",
+  "sources/source_06.txt",
+  "sources/source_07.txt",
+  "sources/source_08.txt",
+  "sources/source_09.txt",
+  "sources/source_10_part1.txt",
+  "sources/source_10_part2.txt",
+  "sources/source_11.txt",
+  "sources/source_12.txt",
+  "sources/source_13_part1.txt",
+  "sources/source_13_part2.txt",
+  "sources/source_14.txt"
+ ],
+ "questions": [
+  {
+   "id": "M02",
+   "kind": "source_count",
+   "question": "How many different sources mention the Dekell Institute?",
+   "answer": "5"
+  },
+  {
+   "id": "H03",
+   "kind": "chain",
+   "question": "How many boats does the rowing club chaired by the person who recorded moth species in the survey of Wenzar own?",
+   "answer": "340"
+  },
+  {
+   "id": "S28",
+   "kind": "number",
+   "question": "Find the sentence that begins \"Lesnar had previously signed a non-compete clause in order to\". What number does that sentence contain?",
+   "answer": "2010"
+  },
+  {
+   "id": "T02",
+   "kind": "total",
+   "question": "What is the total, in crowns, of all the grants the Ithtis Trust gave according to the sources?",
+   "answer": "6397"
+  },
+  {
+   "id": "N03",
+   "kind": "needle",
+   "question": "How many tonnes of granite did Osric Lendra use to rebuild the bridge at Othfal?",
+   "answer": "4937"
+  },
+  {
+   "id": "M03",
+   "kind": "source_count",
+   "question": "How many different sources mention the Deklun Institute?",
+   "answer": "3"
+  },
+  {
+   "id": "N30",
+   "kind": "needle",
+   "question": "How many tonnes of granite did Viggo Lunbak use to rebuild the bridge at Wendek?",
+   "answer": "2150"
+  },
+  {
+   "id": "N23",
+   "kind": "needle",
+   "question": "How many species of moth did Hedda Tortor record in the survey of Wenzar?",
+   "answer": "4533"
+  },
+  {
+   "id": "N27",
+   "kind": "needle",
+   "question": "How many tonnes of granite did Lorcan Ebydek use to rebuild the bridge at Astmor?",
+   "answer": "2460"
+  },
+  {
+   "id": "R02",
+   "kind": "citation",
+   "question": "Which source contains the sentence that begins \"Pablo Hern\u00e1ndez scored Valencia's only goal past him after 32\"? Answer with the source number.",
+   "answer": "2"
+  },
+  {
+   "id": "C01",
+   "kind": "conflict",
+   "question": "The sources give two different capacities for the Pelnor reservoir. What is the difference between them, in megalitres?",
+   "answer": "79"
+  },
+  {
+   "id": "N19",
+   "kind": "needle",
+   "question": "How many letters written by Zelda Quentor does the parish archive of Veleby hold?",
+   "answer": "7048"
+  },
+  {
+   "id": "S18",
+   "kind": "number",
+   "question": "Find the sentence that begins \"Tracking westward, intensification was slow and the system remained a\". What number does that sentence contain?",
+   "answer": "17"
+  },
+  {
+   "id": "H04",
+   "kind": "chain",
+   "question": "How many boats does the rowing club chaired by the person who recorded moth species in the survey of Ruddek own?",
+   "answer": "245"
+  },
+  {
+   "id": "T01",
+   "kind": "total",
+   "question": "What is the total, in crowns, of all the grants the Sundmor Trust gave according to the sources?",
+   "answer": "9476"
+  },
+  {
+   "id": "N10",
+   "kind": "needle",
+   "question": "How many letters written by Kasimir Tislun does the parish archive of Brytis hold?",
+   "answer": "4531"
+  },
+  {
+   "id": "N04",
+   "kind": "needle",
+   "question": "How many letters written by Dagny Haltis does the parish archive of Quendra hold?",
+   "answer": "3726"
+  },
+  {
+   "id": "N24",
+   "kind": "needle",
+   "question": "How many tonnes of granite did Floris Sundast use to rebuild the bridge at Velnor?",
+   "answer": "7025"
+  },
+  {
+   "id": "H01",
+   "kind": "chain",
+   "question": "How many boats does the rowing club chaired by the person who rebuilt the bridge at Drafal own?",
+   "answer": "467"
+  },
+  {
+   "id": "S08",
+   "kind": "number",
+   "question": "Find the sentence that begins \"Veils or curtains appear in Bacon's earliest works, notably the\". What number does that sentence contain?",
+   "answer": "1949"
+  },
+  {
+   "id": "N26",
+   "kind": "needle",
+   "question": "How many species of moth did Liesl Mirrud record in the survey of Bryhal?",
+   "answer": "7901"
+  },
+  {
+   "id": "N06",
+   "kind": "needle",
+   "question": "How many tonnes of granite did Odile Draast use to rebuild the bridge at Lunith?",
+   "answer": "6232"
+  },
+  {
+   "id": "R01",
+   "kind": "citation",
+   "question": "Which source contains the sentence that begins \"In Brutus, NY 31B continued to the east through the\"? Answer with the source number.",
+   "answer": "1"
+  },
+  {
+   "id": "N11",
+   "kind": "needle",
+   "question": "How many species of moth did Ilse Lunnor record in the survey of Ithoth?",
+   "answer": "2116"
+  },
+  {
+   "id": "R04",
+   "kind": "citation",
+   "question": "Which source contains the sentence that begins \"Josepha Petrick began painting about 1990 or 1992 as part\"? Answer with the source number.",
+   "answer": "4"
+  },
+  {
+   "id": "M01",
+   "kind": "source_count",
+   "question": "How many different sources mention the Torrud Institute?",
+   "answer": "7"
+  },
+  {
+   "id": "S14",
+   "kind": "number",
+   "question": "Find the sentence that begins \"Independiente was nominated at the Premios Juventud of\". What number does that sentence contain?",
+   "answer": "2012"
+  },
+  {
+   "id": "N12",
+   "kind": "needle",
+   "question": "How many tonnes of granite did Sabine Elllun use to rebuild the bridge at Morrim?",
+   "answer": "2993"
+  },
+  {
+   "id": "S30",
+   "kind": "number",
+   "question": "Find the sentence that begins \"The OMG Shocking Moment of the Year (\". What number does that sentence contain?",
+   "answer": "2014"
+  },
+  {
+   "id": "M04",
+   "kind": "source_count",
+   "question": "How many different sources mention the Velgav Institute?",
+   "answer": "4"
+  },
+  {
+   "id": "T03",
+   "kind": "total",
+   "question": "What is the total, in crowns, of all the grants the Falquen Trust gave according to the sources?",
+   "answer": "8810"
+  },
+  {
+   "id": "H02",
+   "kind": "chain",
+   "question": "How many boats does the rowing club chaired by the person who rebuilt the bridge at Asthal own?",
+   "answer": "148"
+  },
+  {
+   "id": "C04",
+   "kind": "conflict",
+   "question": "The sources give two different capacities for the Ellsund reservoir. What is the difference between them, in megalitres?",
+   "answer": "197"
+  },
+  {
+   "id": "R03",
+   "kind": "citation",
+   "question": "Which source contains the sentence that begins \"His ERA was the first sub-2.00 ERA since Roger Clemens\"? Answer with the source number.",
+   "answer": "3"
+  },
+  {
+   "id": "N16",
+   "kind": "needle",
+   "question": "How many letters written by Sabine Sundtis does the parish archive of Sundlun hold?",
+   "answer": "9147"
+  },
+  {
+   "id": "S06",
+   "kind": "number",
+   "question": "Find the sentence that begins \"Their work, which used acrylic paints to create designs representing\". What number does that sentence contain?",
+   "answer": "1983"
+  },
+  {
+   "id": "N20",
+   "kind": "needle",
+   "question": "How many species of moth did Cosmo Ellmir record in the survey of Draosk?",
+   "answer": "8303"
+  },
+  {
+   "id": "T04",
+   "kind": "total",
+   "question": "What is the total, in crowns, of all the grants the Ebyosk Trust gave according to the sources?",
+   "answer": "4096"
+  },
+  {
+   "id": "C02",
+   "kind": "conflict",
+   "question": "The sources give two different capacities for the Astwen reservoir. What is the difference between them, in megalitres?",
+   "answer": "562"
+  },
+  {
+   "id": "C03",
+   "kind": "conflict",
+   "question": "The sources give two different capacities for the Mireby reservoir. What is the difference between them, in megalitres?",
+   "answer": "105"
+  }
+ ],
+ "task": [
+  {
+   "id": "S23",
+   "kind": "number",
+   "question": "Find the sentence that begins \"The final system of the year was a tropical depression\". What number does that sentence contain?",
+   "answer": "24"
+  },
+  {
+   "id": "S24",
+   "kind": "number",
+   "question": "Find the sentence that begins \"Like the wars sparked by the French Revolution (\". What number does that sentence contain?",
+   "answer": "1789"
+  },
+  {
+   "id": "S11",
+   "kind": "number",
+   "question": "Find the sentence that begins \"The security detail moved to establish a perimeter around the\". What number does that sentence contain?",
+   "answer": "130"
+  },
+  {
+   "id": "S16",
+   "kind": "number",
+   "question": "Find the sentence that begins \"The typhoon also prompted warning products in Taiwan, making it\". What number does that sentence contain?",
+   "answer": "1978"
+  },
+  {
+   "id": "S05",
+   "kind": "number",
+   "question": "Find the sentence that begins \"One of his favorite players growing up was former Texas\". What number does that sentence contain?",
+   "answer": "22"
+  }
+ ]
+}

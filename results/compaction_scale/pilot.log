@@ -1,1 +1,61 @@
 Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[scale] logs:0 - read: cost $1.012, reads 0 (archive 0), 39s
+[scale] research:0 - read: cost $0.775, reads 16 (archive 0), 38s
+[scale] logs:0 D turn1: cost $0.045, 10/10 correct, reads 0 (archive 0), 3s
+[scale] research:0 D turn1: cost $0.034, 10/10 correct, reads 0 (archive 0), 5s
+[scale] logs:0 D turn2: cost $0.037, 10/10 correct, reads 0 (archive 0), 3s
+[scale] logs:0 D turn3: cost $0.038, 10/10 correct, reads 0 (archive 0), 3s
+[scale] research:0 D turn2: cost $0.035, 10/10 correct, reads 0 (archive 0), 4s
+[scale] logs:0 D turn4: cost $0.037, 10/10 correct, reads 0 (archive 0), 3s
+[scale] research:0 D turn3: cost $0.037, 10/10 correct, reads 0 (archive 0), 5s
+[scale] logs:0 D task: cost $0.072, 5/5 correct, reads 0 (archive 0), 5s
+[scale] code:0 - read: cost $1.134, reads 21 (archive 0), 58s
+[scale] logs:0 A fork: cost $0.731, reads 0 (archive 0), 2s
+[scale] research:0 D turn4: cost $0.039, 10/10 correct, reads 0 (archive 0), 5s
+[scale] code:0 D turn1: cost $0.040, 10/10 correct, reads 0 (archive 0), 4s
+[scale] research:0 D task: cost $0.061, 5/5 correct, reads 0 (archive 0), 6s
+[scale] code:0 D turn2: cost $0.040, 10/10 correct, reads 0 (archive 0), 3s
+[scale] research:0 A fork: cost $0.570, reads 0 (archive 0), 2s
+[scale] code:0 D turn3: cost $0.039, 10/10 correct, reads 0 (archive 0), 3s
+[scale] code:0 D turn4: cost $0.035, 10/10 correct, reads 0 (archive 0), 2s
+[scale] logs:0 A compact: cost $0.764, reads 0 (archive 0), 15s
+[scale] code:0 D task: cost $0.071, 5/5 correct, reads 0 (archive 0), 5s
+[scale] code:0 A fork: cost $0.733, reads 0 (archive 0), 2s
+[scale] code:0 A compact: cost $0.789, reads 0 (archive 0), 26s
+[scale] research:0 A compact: cost $0.655, reads 0 (archive 0), 37s
+[scale] logs:0 A turn1: cost $0.889, 10/10 correct, reads 13 (archive 0), 50s
+[scale] logs:0 A turn2: cost $0.173, 10/10 correct, reads 1 (archive 0), 10s
+[scale] research:0 A turn1: cost $0.926, 5/10 correct, reads 7 (archive 0), 42s
+[scale] logs:0 A turn3: cost $0.391, 7/10 correct, reads 3 (archive 0), 15s
+[scale] code:0 A turn1: cost $0.631, 8/10 correct, reads 11 (archive 0), 50s
+[scale] research:0 A turn2: cost $0.102, 4/10 correct, reads 1 (archive 0), 16s
+[scale] logs:0 A turn4: cost $0.513, 10/10 correct, reads 4 (archive 0), 15s
+[scale] code:0 A turn2: cost $0.301, 8/10 correct, reads 2 (archive 0), 18s
+[scale] logs:0 A task: cost $0.303, 5/5 correct, reads 1 (archive 0), 10s
+[scale] logs:0 B fork: cost $0.029, reads 0 (archive 0), 2s
+[scale] research:0 A turn3: cost $0.064, 5/10 correct, reads 0 (archive 0), 13s
+[scale] code:0 A turn3: cost $0.043, 7/10 correct, reads 0 (archive 0), 5s
+[scale] code:0 A turn4: cost $0.042, 6/10 correct, reads 0 (archive 0), 5s
+[scale] research:0 A turn4: cost $0.062, 5/10 correct, reads 0 (archive 0), 10s
+[scale] code:0 A task: cost $0.073, 2/5 correct, reads 0 (archive 0), 6s
+[scale] code:0 B fork: cost $0.029, reads 0 (archive 0), 2s
+[scale] research:0 A task: cost $0.091, 2/5 correct, reads 0 (archive 0), 9s
+[scale] research:0 B fork: cost $0.023, reads 0 (archive 0), 2s
+[scale] logs:0 B compact: cost $0.078, reads 0 (archive 0), 30s
+[scale] logs:0 B turn1: cost $0.220, 10/10 correct, reads 7 (archive 7), 21s
+[scale] code:0 B compact: cost $0.096, reads 0 (archive 0), 38s
+[scale] logs:0 B turn2: cost $0.053, 10/10 correct, reads 1 (archive 1), 7s
+[scale] logs:0 B turn3: cost $0.018, 10/10 correct, reads 0 (archive 0), 4s
+[scale] logs:0 B turn4: cost $0.021, 10/10 correct, reads 0 (archive 0), 4s
+[scale] logs:0 B task: cost $0.033, 5/5 correct, reads 0 (archive 0), 9s
+[scale] research:0 B compact: cost $0.131, reads 0 (archive 0), 55s
+[scale] code:0 B turn1: cost $0.233, 10/10 correct, reads 7 (archive 7), 27s
+[scale] code:0 B turn2: cost $0.060, 9/10 correct, reads 1 (archive 0), 20s
+[scale] research:0 B turn1: cost $0.292, 9/10 correct, reads 9 (archive 9), 27s
+[scale] code:0 B turn3: cost $0.022, 10/10 correct, reads 0 (archive 0), 5s
+[scale] research:0 B turn2: cost $0.031, 10/10 correct, reads 0 (archive 0), 8s
+[scale] code:0 B turn4: cost $0.059, 10/10 correct, reads 1 (archive 1), 9s
+[scale] research:0 B turn3: cost $0.033, 10/10 correct, reads 0 (archive 0), 10s
+[scale] code:0 B task: cost $0.036, 5/5 correct, reads 0 (archive 0), 8s
+[scale] research:0 B turn4: cost $0.078, 10/10 correct, reads 1 (archive 1), 17s
+[scale] research:0 B task: cost $0.037, 5/5 correct, reads 0 (archive 0), 9s

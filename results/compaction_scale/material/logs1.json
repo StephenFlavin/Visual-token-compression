@@ -1,0 +1,294 @@
+{
+ "kind": "logs",
+ "files": [
+  "cat logs/payments_day1.log",
+  "cat logs/payments_day2.log",
+  "cat logs/payments_day3.log",
+  "cat logs/search_day1.log",
+  "cat logs/search_day2.log",
+  "cat logs/search_day3.log",
+  "cat logs/auth_day1.log",
+  "cat logs/auth_day2.log",
+  "cat logs/auth_day3.log",
+  "cat logs/ingest_day1.log",
+  "cat logs/ingest_day2.log",
+  "cat logs/ingest_day3.log",
+  "cat logs/billing_day1.log",
+  "cat logs/billing_day2.log",
+  "cat logs/billing_day3.log"
+ ],
+ "questions": [
+  {
+   "id": "G03",
+   "kind": "latency",
+   "question": "In the search log for day 2, what latency_ms did request r-63466 have?",
+   "answer": "124"
+  },
+  {
+   "id": "G09",
+   "kind": "latency",
+   "question": "In the payments log for day 3, what latency_ms did request r-92515 have?",
+   "answer": "40"
+  },
+  {
+   "id": "G08",
+   "kind": "latency",
+   "question": "In the ingest log for day 3, what latency_ms did request r-55799 have?",
+   "answer": "117"
+  },
+  {
+   "id": "G22",
+   "kind": "incident",
+   "question": "How many affected requests did incident INC-8718 (search, day 2) report?",
+   "answer": "135"
+  },
+  {
+   "id": "G12",
+   "kind": "latency",
+   "question": "In the payments log for day 1, what latency_ms did request r-35326 have?",
+   "answer": "258"
+  },
+  {
+   "id": "G05",
+   "kind": "latency",
+   "question": "In the billing log for day 1, what latency_ms did request r-44849 have?",
+   "answer": "127"
+  },
+  {
+   "id": "G23",
+   "kind": "incident",
+   "question": "How many affected requests did incident INC-9791 (billing, day 3) report?",
+   "answer": "567"
+  },
+  {
+   "id": "G15",
+   "kind": "build",
+   "question": "Which build number was deployed to payments on day 3?",
+   "answer": "57229"
+  },
+  {
+   "id": "G32",
+   "kind": "p99diff",
+   "question": "By how many milliseconds did billing's daily-summary p99 differ between day 1 and day 3? (absolute difference)",
+   "answer": "592"
+  },
+  {
+   "id": "G18",
+   "kind": "build",
+   "question": "Which build number was deployed to ingest on day 1?",
+   "answer": "65571"
+  },
+  {
+   "id": "G31",
+   "kind": "p99diff",
+   "question": "By how many milliseconds did payments's daily-summary p99 differ between day 1 and day 2? (absolute difference)",
+   "answer": "16"
+  },
+  {
+   "id": "G07",
+   "kind": "latency",
+   "question": "In the auth log for day 3, what latency_ms did request r-71186 have?",
+   "answer": "222"
+  },
+  {
+   "id": "G28",
+   "kind": "p99diff",
+   "question": "By how many milliseconds did auth's daily-summary p99 differ between day 1 and day 3? (absolute difference)",
+   "answer": "694"
+  },
+  {
+   "id": "G11",
+   "kind": "latency",
+   "question": "In the ingest log for day 2, what latency_ms did request r-39312 have?",
+   "answer": "43"
+  },
+  {
+   "id": "G04",
+   "kind": "latency",
+   "question": "In the search log for day 3, what latency_ms did request r-31348 have?",
+   "answer": "85"
+  },
+  {
+   "id": "G40",
+   "kind": "p99max",
+   "question": "On which day (1, 2 or 3) was payments's daily-summary p99 highest?",
+   "answer": "3"
+  },
+  {
+   "id": "G38",
+   "kind": "p99max",
+   "question": "On which day (1, 2 or 3) was auth's daily-summary p99 highest?",
+   "answer": "3"
+  },
+  {
+   "id": "G39",
+   "kind": "p99max",
+   "question": "On which day (1, 2 or 3) was billing's daily-summary p99 highest?",
+   "answer": "1"
+  },
+  {
+   "id": "G13",
+   "kind": "build",
+   "question": "Which build number was deployed to auth on day 3?",
+   "answer": "52585"
+  },
+  {
+   "id": "G16",
+   "kind": "build",
+   "question": "Which build number was deployed to auth on day 2?",
+   "answer": "60904"
+  },
+  {
+   "id": "G14",
+   "kind": "build",
+   "question": "Which build number was deployed to search on day 2?",
+   "answer": "58532"
+  },
+  {
+   "id": "G27",
+   "kind": "incident",
+   "question": "How many affected requests did incident INC-6794 (payments, day 1) report?",
+   "answer": "296"
+  },
+  {
+   "id": "G10",
+   "kind": "latency",
+   "question": "In the auth log for day 1, what latency_ms did request r-56429 have?",
+   "answer": "68"
+  },
+  {
+   "id": "G06",
+   "kind": "latency",
+   "question": "In the billing log for day 3, what latency_ms did request r-21196 have?",
+   "answer": "51"
+  },
+  {
+   "id": "G30",
+   "kind": "p99diff",
+   "question": "By how many milliseconds did ingest's daily-summary p99 differ between day 1 and day 3? (absolute difference)",
+   "answer": "1449"
+  },
+  {
+   "id": "G24",
+   "kind": "incident",
+   "question": "How many affected requests did incident INC-7428 (auth, day 1) report?",
+   "answer": "426"
+  },
+  {
+   "id": "G01",
+   "kind": "latency",
+   "question": "In the auth log for day 2, what latency_ms did request r-47283 have?",
+   "answer": "88"
+  },
+  {
+   "id": "G19",
+   "kind": "build",
+   "question": "Which build number was deployed to payments on day 2?",
+   "answer": "60326"
+  },
+  {
+   "id": "G33",
+   "kind": "p99diff",
+   "question": "By how many milliseconds did search's daily-summary p99 differ between day 1 and day 2? (absolute difference)",
+   "answer": "463"
+  },
+  {
+   "id": "G02",
+   "kind": "latency",
+   "question": "In the payments log for day 2, what latency_ms did request r-34263 have?",
+   "answer": "112"
+  },
+  {
+   "id": "G35",
+   "kind": "p99diff",
+   "question": "By how many milliseconds did auth's daily-summary p99 differ between day 2 and day 3? (absolute difference)",
+   "answer": "430"
+  },
+  {
+   "id": "G25",
+   "kind": "incident",
+   "question": "How many affected requests did incident INC-2867 (payments, day 2) report?",
+   "answer": "569"
+  },
+  {
+   "id": "G37",
+   "kind": "p99max",
+   "question": "On which day (1, 2 or 3) was ingest's daily-summary p99 highest?",
+   "answer": "3"
+  },
+  {
+   "id": "G20",
+   "kind": "build",
+   "question": "Which build number was deployed to billing on day 1?",
+   "answer": "66687"
+  },
+  {
+   "id": "G26",
+   "kind": "incident",
+   "question": "How many affected requests did incident INC-5718 (auth, day 3) report?",
+   "answer": "611"
+  },
+  {
+   "id": "G17",
+   "kind": "build",
+   "question": "Which build number was deployed to billing on day 2?",
+   "answer": "58003"
+  },
+  {
+   "id": "G34",
+   "kind": "p99diff",
+   "question": "By how many milliseconds did auth's daily-summary p99 differ between day 1 and day 2? (absolute difference)",
+   "answer": "264"
+  },
+  {
+   "id": "G36",
+   "kind": "p99max",
+   "question": "On which day (1, 2 or 3) was search's daily-summary p99 highest?",
+   "answer": "1"
+  },
+  {
+   "id": "G29",
+   "kind": "p99diff",
+   "question": "By how many milliseconds did payments's daily-summary p99 differ between day 1 and day 3? (absolute difference)",
+   "answer": "332"
+  },
+  {
+   "id": "G21",
+   "kind": "incident",
+   "question": "How many affected requests did incident INC-8457 (ingest, day 3) report?",
+   "answer": "288"
+  }
+ ],
+ "task": [
+  {
+   "id": "G41",
+   "kind": "latency",
+   "question": "In the search log for day 1, what latency_ms did request r-83134 have?",
+   "answer": "155"
+  },
+  {
+   "id": "G42",
+   "kind": "latency",
+   "question": "In the billing log for day 2, what latency_ms did request r-29443 have?",
+   "answer": "202"
+  },
+  {
+   "id": "G43",
+   "kind": "build",
+   "question": "Which build number was deployed to search on day 1?",
+   "answer": "51791"
+  },
+  {
+   "id": "G44",
+   "kind": "build",
+   "question": "Which build number was deployed to payments on day 1?",
+   "answer": "60602"
+  },
+  {
+   "id": "G45",
+   "kind": "incident",
+   "question": "How many affected requests did incident INC-9940 (ingest, day 2) report?",
+   "answer": "743"
+  }
+ ]
+}
