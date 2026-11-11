@@ -17,9 +17,27 @@ BASH_READ_NOTE = (" Claude Code does not count a file printed by a shell command
                   "before you Edit or Write it.")
 
 FORMAT_NOTE = ("It is minified: §<n> marks the start of original line n; each » before a line is one level of "
-               "indentation where indentation matters; other whitespace (indentation, blank lines, line breaks inside "
-               "statements, spaces around operators) is removed. When you Edit or Write, use the file's real "
-               "formatting; Edit matches old_string ignoring whitespace.")
+               "indentation where indentation matters; blank lines and other indentation are not shown. Edit's "
+               "old_string must match the file exactly, including indentation and line breaks, so copy lines as shown "
+               "and rebuild their indentation from the » levels.")
+
+
+def indent_unit(text: str) -> str:
+    import math
+    if "\n\t" in text:
+        return "\t"
+    g = 0
+    for l in text.splitlines():
+        if l.strip() and l.startswith(" "):
+            g = math.gcd(g, len(l) - len(l.lstrip(" ")))
+    return " " * (g if g in (2, 3, 4, 8) else 4)
+
+
+def format_note(text: str | None = None) -> str:
+    if text is None:
+        return FORMAT_NOTE
+    u = indent_unit(text)
+    return FORMAT_NOTE + (" In this file » is one tab." if u == "\t" else f" In this file » is {len(u)} spaces.")
 
 
 def log(rec: dict) -> None:

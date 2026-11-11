@@ -44,13 +44,13 @@ if res is None:
     sys.exit(0)
 flow, m = res
 budget = render.DEFAULT_BUDGET
-pages = render.render(flow, budget)
+plan = render.plan(flow, budget)                       # page chunks; only the page shown is rendered
 lines = text.split("\n")
 want = max(1, int(ti.get("offset") or 1))
-k = max([i for i, pg in enumerate(pages) if (pg.first_line or 1) <= want] or [0])
-pg = pages[k]
-a = pg.first_line or 1
-b = (pages[k + 1].first_line - 1) if k + 1 < len(pages) and pages[k + 1].first_line else len(lines)
+k = max([i for i, (_, fl) in enumerate(plan) if (fl or 1) <= want] or [0])
+pg = render.render_one(plan[k][0], budget)
+a = plan[k][1] or 1
+b = (plan[k + 1][1] - 1) if k + 1 < len(plan) and plan[k + 1][1] else len(lines)
 lim = ti.get("limit")
 req_hi = min(len(lines), want + int(lim) - 1) if lim else min(len(lines), want + 1999)
 span = "\n".join(lines[want - 1:req_hi])
@@ -59,13 +59,14 @@ if not policy.use_image(pg.tokens, t_tok):
     common.log({"tool": "Read", "path": p, "decision": "text", "kind": m.kind, "image_tokens": pg.tokens,
                 "text_tokens": round(t_tok)})
     sys.exit(0)
+pages = plan
 out = common.cache_path(f"{p}:{hash(text)}:{budget}:{k}", f".p{k + 1}.png")
 pg.image.save(out)
-nxt = (f" The file continues: Read it with offset={pages[k + 1].first_line} for page {k + 2} of {len(pages)}."
-       if k + 1 < len(pages) and pages[k + 1].first_line else "")
+nxt = (f" The file continues: Read it with offset={pages[k + 1][1]} for page {k + 2} of {len(pages)}."
+       if k + 1 < len(pages) and pages[k + 1][1] else "")
 common.log({"tool": "Read", "path": p, "decision": "image", "kind": m.kind, "page": k + 1, "pages": len(pages),
             "image_tokens": pg.tokens, "text_tokens": round(t_tok), "lines": [a, b]})
 common.emit({"hookSpecificOutput": {
     "hookEventName": "PreToolUse", "permissionDecision": "allow", "updatedInput": {"file_path": out},
     "additionalContext": (f"This Read shows {base} lines {a}-{b} of {len(lines)} as an image (page {k + 1} of "
-                          f"{len(pages)}). " + common.FORMAT_NOTE + " " + common.legend(m.kind) + nxt)}})
+                          f"{len(pages)}). " + common.format_note(text) + " " + common.legend(m.kind) + nxt)}})

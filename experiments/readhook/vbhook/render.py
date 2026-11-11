@@ -87,3 +87,13 @@ def page_tokens(flow: str, budget: float = DEFAULT_BUDGET) -> int:
 def page_chars(budget: float = DEFAULT_BUDGET) -> int:
     """Flow characters that fit on one full page (render() may still need slightly fewer)."""
     return int(W * W / budget * 0.97)
+
+
+def plan(flow: str, budget: float = DEFAULT_BUDGET) -> list[tuple[str, int | None]]:
+    """Split a flow into page chunks without rendering: [(chunk, first tagged line)]."""
+    return [(c, int(m.group(1)) if (m := re.search(r"§(\d+) ", c)) else None) for c in chunk(flow, page_chars(budget))]
+
+
+def render_one(chunk_text: str, budget: float = DEFAULT_BUDGET) -> Page:
+    """Render one planned chunk; if it does not fit (rare), render it as several pages and return the first."""
+    return render(chunk_text, budget)[0]

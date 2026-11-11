@@ -57,12 +57,12 @@ mixed = None
 if res is not None:                                   # a file dump: tags are the file's line numbers
     flow, m = res
     flow = common.shift_tags(flow, first)
-    pages = render.render(flow, budget)
-    page, n_pages = pages[0], len(pages)
-    if n_pages > 1 and pages[1].first_line:
-        saved_note = (f" Only the first of {n_pages} pages is shown; Read {path} with offset={pages[1].first_line} "
+    plan = render.plan(flow, budget)                  # render only the first page
+    page, n_pages = render.render_one(plan[0][0], budget), len(plan)
+    if n_pages > 1 and plan[1][1]:
+        saved_note = (f" Only the first of {n_pages} pages is shown; Read {path} with offset={plan[1][1]} "
                       "for the rest.")
-    shown_frac = page.chars / max(1, len(flow))
+    shown_frac = len(plan[0][0]) / max(1, len(flow))
 if res is None:
     mixed = common.mixed_flow(cmd, text, ev.get("cwd") or os.getcwd())
 if res is None and mixed is not None:                 # compound command that printed whole files
@@ -115,7 +115,8 @@ if not policy.use_image(page.tokens, t_tok):
     sys.exit(0)
 buf = io.BytesIO()
 page.image.save(buf, format="PNG")
-note = (f"The command's output is shown as an image ({m.kind}). " + common.FORMAT_NOTE + " " + common.legend(m.kind)
+note = (f"The command's output is shown as an image ({m.kind}). " + common.format_note(text if path else None)
+        + " " + common.legend(m.kind)
         + saved_note + (common.BASH_READ_NOTE if path else ""))
 common.log({"tool": "Bash", "cmd": cmd[:120], "decision": "image", "kind": m.kind, "image_tokens": page.tokens,
             "text_tokens": round(t_tok)})
