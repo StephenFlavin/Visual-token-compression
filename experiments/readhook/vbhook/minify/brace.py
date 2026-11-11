@@ -48,6 +48,7 @@ Flow
 from __future__ import annotations
 
 import bisect
+import os
 import re
 from dataclasses import dataclass
 
@@ -704,7 +705,7 @@ def _continues(L: Lang, src: str, last_code: Tok | None, t: Tok, tt: str) -> boo
 
 
 def brace_flow(src: str, lang: Lang | str, policy: str = "stmt", cap: int | None = MAX_UNTAGGED,
-               join_comments: bool = True) -> str:
+               join_comments: bool = True, keep_spaces: bool = False) -> str:
     """policy: "stmt" (tag statement starts, see module doc), "all" (tag every line that starts with a token),
     "first" (tag only where needed for correctness: after line comments and around directives)."""
     L = LANGS[lang] if isinstance(lang, str) else lang
@@ -741,7 +742,7 @@ def brace_flow(src: str, lang: Lang | str, policy: str = "stmt", cap: int | None
                     gaps[k] = _gap(p, t, texts[k - 1], texts[k])
                     since += 1
             else:
-                gaps[k] = _gap(p, t, texts[k - 1], texts[k])
+                gaps[k] = " " if keep_spaces else _gap(p, t, texts[k - 1], texts[k])
         if t.kind != "c":
             last_code = t
     if L.swift_ops:
@@ -794,7 +795,9 @@ def flow_tokens_match(src: str, flow: str, lang: Lang | str) -> bool:
 
 def _make(name):
     def fn(text: str) -> str:
-        return brace_flow(text, name)
+        # Edit-safe by default (see python_family.minify_python): spaces kept inside lines, every line tagged
+        safe = os.environ.get("VBHOOK_TIGHT", "0") != "1"
+        return brace_flow(text, name, policy="all" if safe else "stmt", keep_spaces=safe)
     fn.__name__ = f"minify_{name}"
     return fn
 

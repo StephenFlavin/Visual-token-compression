@@ -44,6 +44,7 @@ from __future__ import annotations
 import ast
 import io
 import keyword
+import os
 import re
 import tokenize
 from typing import NamedTuple
@@ -169,7 +170,7 @@ def _string_flow(text: str, row: int, mode: str) -> str:
     return "".join(out)
 
 
-def python_flow(src: str, cont_tags: bool = False, doc_mode: str = "smart") -> str:
+def python_flow(src: str, cont_tags: bool = False, doc_mode: str = "smart", keep_spaces: bool = False) -> str:
     """Python source -> flow. ``cont_tags``: tag every continuation line inside brackets too. ``doc_mode``:
     "smart" (default, see module doc), "lines" (every docstring line tagged) or "collapse" (one paragraph)."""
     toks, lines = _tokens(src)
@@ -210,7 +211,7 @@ def python_flow(src: str, cont_tags: bool = False, doc_mode: str = "smart") -> s
             else:
                 out.append(_sep(prev, t))
         elif t.start[1] > prev.end[1]:                        # `match (x):`, `case [a]:` keep their space
-            out.append(" " if prev_first and prev.string in _SOFT_KW else _sep(prev, t))
+            out.append(" " if keep_spaces or (prev_first and prev.string in _SOFT_KW) else _sep(prev, t))
         if tt == tokenize.STRING and "\n" in t.string:
             j = i + 1
             while j < n and toks[j].type == tokenize.COMMENT:
@@ -256,7 +257,11 @@ _PY_SHEBANG = re.compile(r"#![^\n]*\bpython[\d.]*\b")
 
 @register("python", exts=(".py", ".pyi", ".pyw"), cpt=2.9, sniff=lambda s: bool(_PY_SHEBANG.match(s)))
 def minify_python(src: str) -> str:
-    return python_flow(src)
+    # Edit-safe by default (VBHOOK_TIGHT=1 for the denser variant): Claude Code checks an Edit's old_string before any
+    # hook runs, so text copied from the image must match the file: keep one space where the source had whitespace
+    # inside a line and tag every physical line (+~7% page tokens; the smoke runs showed edits failing without it).
+    safe = os.environ.get("VBHOOK_TIGHT", "0") != "1"
+    return python_flow(src, cont_tags=safe, keep_spaces=safe)
 
 
 # ---------------------------------------------------------------------------------------------- shell scanner
