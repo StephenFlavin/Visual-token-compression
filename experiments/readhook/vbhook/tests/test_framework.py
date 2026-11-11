@@ -149,3 +149,27 @@ def test_install_allows_only_the_exit_line():
     s = settings()
     assert s["permissions"]["allow"] == ['Bash(echo "[exit code $?]")']
     assert [h["matcher"] for h in s["hooks"]["PreToolUse"]] == ["Read", "Edit|Write", "Bash"]
+
+
+SMOKE = os.path.join(os.path.dirname(HERE), "smoke", "tasks")
+
+
+def test_bash_compound_cat_becomes_mixed_image(tmp_path):
+    import shutil
+    work = tmp_path / "repo"
+    shutil.copytree(os.path.join(SMOKE, "orders"), work)
+    cmd = "ls -la && cat orders.py && ls tests 2>/dev/null; cat test*.py tests/*.py 2>/dev/null"
+    text = subprocess.run(["bash", "-c", cmd], cwd=work, capture_output=True, text=True).stdout
+    ev = {"tool_name": "Bash", "cwd": str(work), "tool_input": {"command": cmd + '\necho "[exit code $?]"'},
+          "tool_response": {"stdout": text + "[exit code 1]", "stderr": "", "interrupted": False, "isImage": False}}
+    out = run("bash_hook.py", ev, tmp_path)
+    assert out["updatedToolOutput"]["isImage"] and "▶ <path>" in out["additionalContext"]
+    log = [json.loads(l) for l in open(tmp_path / "log.jsonl")]
+    assert log[-1]["kind"].count("python") == 2                 # orders.py and test_orders.py
+
+
+def test_python_output_not_taken_for_dockerfile(tmp_path):
+    from vbhook import common
+    text = "from graph_hops import hops_from\n\n\ndef test_basic():\n    e = [('a', 'b')]\n" * 30
+    res = common.minify_output(text, None)
+    assert res is None or res[1].kind != "dockerfile"

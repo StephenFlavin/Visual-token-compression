@@ -53,10 +53,76 @@ def legend(kind: str) -> str:
         return ""
 
 
+def output_kinds() -> list[str]:
+    try:
+        from vbhook.minify.outputs import LEGENDS
+        return list(LEGENDS)
+    except Exception:  # noqa: BLE001
+        return []
+
+
 def minify_output(text: str, hint: str | None):
-    """Minify command output: the kind from the command line first, then sniffing."""
+    """Minify command output: the kind from the command line, else the first OUTPUT kind whose sniff matches (file
+    sniffers such as the Dockerfile one must not claim output), else the generic log kind."""
+    from vbhook.minify import REGISTRY, minify
+    tried = []
+    for k in ([hint] if hint else []) + [k for k in output_kinds() if REGISTRY[k].sniff and REGISTRY[k].sniff(text)] + ["log"]:
+        if k in REGISTRY and k not in tried:
+            tried.append(k)
+            res = minify(text, None, k)
+            if res:
+                return res
+    return None
+
+
+def mixed_flow(cmd: str, text: str, cwd: str) -> tuple[str, list[str]] | None:
+    """Output of a compound command that prints whole files (`ls && cat a.py && cat test*.py`): each file whose content
+    appears verbatim gets its own minifier (tags = its line numbers) under a `▶ path` header; the rest is minified as
+    output. -> (flow, kinds) or None when no file content is found."""
+    import glob, shlex
     from vbhook.minify import minify
-    return (minify(text, None, hint) if hint else None) or minify(text, None, None)
+    try:
+        toks = shlex.split(cmd.replace("\n", " ; "), posix=True)
+    except ValueError:
+        return None
+    paths = []
+    for t in toks:
+        if t.startswith("-") or len(t) > 300:
+            continue
+        cands = glob.glob(os.path.join(cwd, t)) if any(c in t for c in "*?[") else [os.path.join(cwd, t)]
+        for c in cands:
+            if os.path.isfile(c) and c not in paths:
+                paths.append(c)
+    spans = []
+    for pth in paths:
+        try:
+            body = open(pth, encoding="utf-8").read().rstrip("\n")
+        except (OSError, UnicodeDecodeError):
+            continue
+        i = text.find(body) if len(body) >= 80 else -1
+        if i >= 0 and not any(a < i + len(body) and i < b for a, b, _, _ in spans):
+            spans.append((i, i + len(body), pth, body))
+    if not spans:
+        return None
+    spans.sort()
+    parts, kinds, pos = [], [], 0
+    for a, b, pth, body in spans:
+        gap = text[pos:a].strip("\n")
+        if gap.strip():
+            g = minify_output(gap, None)
+            parts.append(g[0] if g else " ".join(gap.split()))
+            kinds.append(g[1].kind if g else "text")
+        f = minify(body, pth)
+        rel = os.path.relpath(pth, cwd)
+        parts.append(f"▶ {rel} " + (f[0] if f else " ".join(body.split())))
+        kinds.append(f[1].kind if f else "text")
+        pos = b
+    tail = text[pos:].strip("\n")
+    if tail.strip():
+        g = minify_output(tail, None)
+        parts.append(g[0] if g else " ".join(tail.split()))
+        kinds.append(g[1].kind if g else "text")
+    return " ".join(parts), kinds
 
 
 def output_window(text: str, start: int, hint: str | None, budget: float):

@@ -53,6 +53,7 @@ if fd and not cmd.strip().startswith("nl"):
     path, first = fd
     res = minify(text, path)
 saved_note = ""
+mixed = None
 if res is not None:                                   # a file dump: tags are the file's line numbers
     flow, m = res
     flow = common.shift_tags(flow, first)
@@ -62,7 +63,25 @@ if res is not None:                                   # a file dump: tags are th
         saved_note = (f" Only the first of {n_pages} pages is shown; Read {path} with offset={pages[1].first_line} "
                       "for the rest.")
     shown_frac = page.chars / max(1, len(flow))
-else:
+if res is None:
+    mixed = common.mixed_flow(cmd, text, ev.get("cwd") or os.getcwd())
+if res is None and mixed is not None:                 # compound command that printed whole files
+    flow, kinds = mixed
+    pages = render.render(flow, budget)
+    if len(pages) == 1:
+        page = pages[0]
+        t_tok = policy.text_tokens(text, 2.3)
+        if policy.use_image(page.tokens, t_tok):
+            buf = io.BytesIO()
+            page.image.save(buf, format="PNG")
+            note = ("The command's output is shown as an image: each file it printed starts with ▶ <path> and is "
+                    "minified with its own line numbers (" + ", ".join(sorted(set(kinds))) + "). " + common.FORMAT_NOTE)
+            common.log({"tool": "Bash", "cmd": cmd[:120], "decision": "image", "kind": "mixed:" + "+".join(kinds),
+                        "image_tokens": page.tokens, "text_tokens": round(t_tok)})
+            common.emit({"hookSpecificOutput": {"hookEventName": "PostToolUse", "additionalContext": note,
+                         "updatedToolOutput": {"stdout": "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode(),
+                                               "stderr": "", "interrupted": bool(r.get("interrupted")), "isImage": True}}})
+if res is None:
     hint = None
     try:
         from vbhook.minify.outputs import kind_for_command
