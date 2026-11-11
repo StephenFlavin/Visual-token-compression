@@ -214,18 +214,35 @@ def f1(pred: str, gold: str) -> float:
     return 2 * pr * rc / (pr + rc)
 
 
+NUMRE = re.compile(r"-?\d[\d,]*(?:\.\d+)?")
+
+
+def final_number(text: str) -> str | None:
+    """The answer's number when the model shows its working ("4543-3710=833", "Total 5,737", "a difference of 647"):
+    the number after the last = or arrow; else after the last 'total' / 'difference' / 'answer'; else the only
+    number; else the last number. (Added after stage A: taking the first number scored correct answers with working
+    as wrong, more often for text arms; applied to every arm alike.)"""
+    for pat in (r"(?:=|→|->)\s*\**\s*(-?\d[\d,]*(?:\.\d+)?)", r"(?:total|difference|answer)\D{0,30}?(-?\d[\d,]*(?:\.\d+)?)"):
+        hits = re.findall(pat, text, flags=re.I)
+        if hits:
+            return hits[-1]
+    nums = NUMRE.findall(text)
+    return nums[0] if len(nums) == 1 else (nums[-1] if nums else None)
+
+
 def score(q: dict, text: str) -> dict:
-    pred = (text or "").strip().splitlines()[0] if (text or "").strip() else ""
+    raw = (text or "").strip()
+    pred = raw.splitlines()[0] if raw else ""
     if q["numeric"]:
         import claude_qa_render as Q
-        m = re.search(r"-?\d[\d,]*(?:\.\d+)?", pred)
-        ok = bool(m) and Q.norm_num(m.group(0)) == q["answer"]
-        return {"pred": pred, "em": ok, "f1": float(ok)}
+        n = final_number(raw)
+        ok = n is not None and Q.norm_num(n) == q["answer"]
+        return {"pred": pred, "raw": raw[:500], "em": ok, "f1": float(ok)}
     gold = q["answer"]
     if norm(gold).startswith("insufficient"):
         ok = norm(pred).startswith("insufficient")
-        return {"pred": pred, "em": ok, "f1": float(ok)}
-    return {"pred": pred, "em": norm(pred) == norm(gold), "f1": f1(pred, gold)}
+        return {"pred": pred, "raw": raw[:500], "em": ok, "f1": float(ok)}
+    return {"pred": pred, "raw": raw[:500], "em": norm(pred) == norm(gold), "f1": f1(pred, gold)}
 
 
 def recall(q: dict, ranked: list[str], k: int) -> float:
