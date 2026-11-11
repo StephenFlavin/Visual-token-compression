@@ -1,0 +1,367 @@
+{
+ "source": "SWE-bench/experiments evaluation/verified 20260217_mini-v2.0.0_claude-4-6-opus and 20260217_mini-v2.0.0_claude-4-5-opus-high (both resolved)",
+ "ranked": [
+  "django__django-11138",
+  "django__django-15503",
+  "django__django-14631",
+  "django__django-12708",
+  "django__django-13449",
+  "django__django-14007",
+  "django__django-15268",
+  "django__django-15128",
+  "django__django-13837",
+  "django__django-13128",
+  "django__django-15161",
+  "django__django-14351",
+  "django__django-15382",
+  "django__django-16032",
+  "django__django-16950",
+  "django__django-12965",
+  "django__django-15280",
+  "django__django-13569",
+  "django__django-17084",
+  "django__django-13158",
+  "django__django-16819",
+  "django__django-13121",
+  "django__django-14017",
+  "django__django-13964",
+  "django__django-11211",
+  "django__django-11532",
+  "django__django-12754",
+  "django__django-16315",
+  "django__django-14122",
+  "django__django-13810",
+  "django__django-14434",
+  "django__django-11292",
+  "django__django-13346",
+  "django__django-11749",
+  "django__django-15037",
+  "django__django-15375",
+  "django__django-11740",
+  "django__django-12774",
+  "django__django-12858",
+  "django__django-13033",
+  "django__django-16901",
+  "django__django-11728",
+  "django__django-13279",
+  "django__django-13012",
+  "django__django-11149",
+  "django__django-12039",
+  "django__django-13343",
+  "django__django-15278",
+  "django__django-11206",
+  "django__django-14500",
+  "django__django-14311",
+  "django__django-15561",
+  "django__django-13809",
+  "django__django-14349",
+  "django__django-16877",
+  "django__django-11333",
+  "django__django-11999",
+  "django__django-16493",
+  "django__django-13568",
+  "django__django-13786"
+ ],
+ "meta": {
+  "django__django-11138": {
+   "difficulty": "1-4 hours",
+   "version": "3.0",
+   "opus_steps": 59.5
+  },
+  "django__django-15503": {
+   "difficulty": "1-4 hours",
+   "version": "4.1",
+   "opus_steps": 57.5
+  },
+  "django__django-14631": {
+   "difficulty": "1-4 hours",
+   "version": "4.0",
+   "opus_steps": 49.5
+  },
+  "django__django-12708": {
+   "difficulty": "1-4 hours",
+   "version": "3.1",
+   "opus_steps": 41.0
+  },
+  "django__django-13449": {
+   "difficulty": "1-4 hours",
+   "version": "3.2",
+   "opus_steps": 40.5
+  },
+  "django__django-14007": {
+   "difficulty": "1-4 hours",
+   "version": "4.0",
+   "opus_steps": 40.0
+  },
+  "django__django-15268": {
+   "difficulty": "1-4 hours",
+   "version": "4.1",
+   "opus_steps": 36.0
+  },
+  "django__django-15128": {
+   "difficulty": "1-4 hours",
+   "version": "4.1",
+   "opus_steps": 33.0
+  },
+  "django__django-13837": {
+   "difficulty": "1-4 hours",
+   "version": "3.2",
+   "opus_steps": 22.0
+  },
+  "django__django-13128": {
+   "difficulty": "1-4 hours",
+   "version": "3.2",
+   "opus_steps": 21.5
+  },
+  "django__django-15161": {
+   "difficulty": "15 min - 1 hour",
+   "version": "4.1",
+   "opus_steps": 65.5
+  },
+  "django__django-14351": {
+   "difficulty": "15 min - 1 hour",
+   "version": "4.0",
+   "opus_steps": 62.5
+  },
+  "django__django-15382": {
+   "difficulty": "15 min - 1 hour",
+   "version": "4.1",
+   "opus_steps": 62.5
+  },
+  "django__django-16032": {
+   "difficulty": "15 min - 1 hour",
+   "version": "4.2",
+   "opus_steps": 53.0
+  },
+  "django__django-16950": {
+   "difficulty": "15 min - 1 hour",
+   "version": "5.0",
+   "opus_steps": 52.5
+  },
+  "django__django-12965": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.2",
+   "opus_steps": 50.0
+  },
+  "django__django-15280": {
+   "difficulty": "15 min - 1 hour",
+   "version": "4.1",
+   "opus_steps": 50.0
+  },
+  "django__django-13569": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.2",
+   "opus_steps": 46.5
+  },
+  "django__django-17084": {
+   "difficulty": "15 min - 1 hour",
+   "version": "5.0",
+   "opus_steps": 43.0
+  },
+  "django__django-13158": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.2",
+   "opus_steps": 40.5
+  },
+  "django__django-16819": {
+   "difficulty": "15 min - 1 hour",
+   "version": "5.0",
+   "opus_steps": 40.5
+  },
+  "django__django-13121": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.2",
+   "opus_steps": 40.0
+  },
+  "django__django-14017": {
+   "difficulty": "15 min - 1 hour",
+   "version": "4.0",
+   "opus_steps": 40.0
+  },
+  "django__django-13964": {
+   "difficulty": "15 min - 1 hour",
+   "version": "4.0",
+   "opus_steps": 36.5
+  },
+  "django__django-11211": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.0",
+   "opus_steps": 36.0
+  },
+  "django__django-11532": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.0",
+   "opus_steps": 36.0
+  },
+  "django__django-12754": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.2",
+   "opus_steps": 34.5
+  },
+  "django__django-16315": {
+   "difficulty": "15 min - 1 hour",
+   "version": "4.2",
+   "opus_steps": 34.0
+  },
+  "django__django-14122": {
+   "difficulty": "15 min - 1 hour",
+   "version": "4.0",
+   "opus_steps": 33.5
+  },
+  "django__django-13810": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.2",
+   "opus_steps": 32.0
+  },
+  "django__django-14434": {
+   "difficulty": "15 min - 1 hour",
+   "version": "4.0",
+   "opus_steps": 31.5
+  },
+  "django__django-11292": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.0",
+   "opus_steps": 30.5
+  },
+  "django__django-13346": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.2",
+   "opus_steps": 29.5
+  },
+  "django__django-11749": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.0",
+   "opus_steps": 29.0
+  },
+  "django__django-15037": {
+   "difficulty": "15 min - 1 hour",
+   "version": "4.1",
+   "opus_steps": 29.0
+  },
+  "django__django-15375": {
+   "difficulty": "15 min - 1 hour",
+   "version": "4.1",
+   "opus_steps": 29.0
+  },
+  "django__django-11740": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.0",
+   "opus_steps": 28.5
+  },
+  "django__django-12774": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.1",
+   "opus_steps": 28.5
+  },
+  "django__django-12858": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.1",
+   "opus_steps": 28.0
+  },
+  "django__django-13033": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.2",
+   "opus_steps": 28.0
+  },
+  "django__django-16901": {
+   "difficulty": "15 min - 1 hour",
+   "version": "5.0",
+   "opus_steps": 28.0
+  },
+  "django__django-11728": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.0",
+   "opus_steps": 27.5
+  },
+  "django__django-13279": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.2",
+   "opus_steps": 27.5
+  },
+  "django__django-13012": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.2",
+   "opus_steps": 27.0
+  },
+  "django__django-11149": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.0",
+   "opus_steps": 26.5
+  },
+  "django__django-12039": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.1",
+   "opus_steps": 26.5
+  },
+  "django__django-13343": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.2",
+   "opus_steps": 26.0
+  },
+  "django__django-15278": {
+   "difficulty": "15 min - 1 hour",
+   "version": "4.1",
+   "opus_steps": 25.0
+  },
+  "django__django-11206": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.0",
+   "opus_steps": 24.0
+  },
+  "django__django-14500": {
+   "difficulty": "15 min - 1 hour",
+   "version": "4.0",
+   "opus_steps": 24.0
+  },
+  "django__django-14311": {
+   "difficulty": "15 min - 1 hour",
+   "version": "4.0",
+   "opus_steps": 23.5
+  },
+  "django__django-15561": {
+   "difficulty": "15 min - 1 hour",
+   "version": "4.1",
+   "opus_steps": 23.5
+  },
+  "django__django-13809": {
+   "difficulty": "15 min - 1 hour",
+   "version": "4.0",
+   "opus_steps": 23.0
+  },
+  "django__django-14349": {
+   "difficulty": "15 min - 1 hour",
+   "version": "4.0",
+   "opus_steps": 23.0
+  },
+  "django__django-16877": {
+   "difficulty": "15 min - 1 hour",
+   "version": "5.0",
+   "opus_steps": 23.0
+  },
+  "django__django-11333": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.0",
+   "opus_steps": 22.5
+  },
+  "django__django-11999": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.1",
+   "opus_steps": 22.5
+  },
+  "django__django-16493": {
+   "difficulty": "15 min - 1 hour",
+   "version": "5.0",
+   "opus_steps": 22.5
+  },
+  "django__django-13568": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.2",
+   "opus_steps": 22.0
+  },
+  "django__django-13786": {
+   "difficulty": "15 min - 1 hour",
+   "version": "3.2",
+   "opus_steps": 22.0
+  }
+ }
+}
