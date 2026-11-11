@@ -4,6 +4,9 @@ Start with [HANDOFF.md](HANDOFF.md) (current state and next steps), then [RESULT
 overview is the top-level [README.md](../README.md); how to run things and the gotchas are in [AGENTS.md](../AGENTS.md).
 
 ## Current status
+* [REVIEW_2026-11-11.md](REVIEW_2026-11-11.md): review of goals, methods and next steps: keep the Claude page-image
+  line, stop the dense codes after the queued runs, and two draft tests of text-side compression (prune-then-render
+  on Claude; text slots vs page pixels on the 3090).
 * [HANDOFF.md](HANDOFF.md): status table, where the rows are, open items, the prompt for the next GPU session.
 * [PLAN_3090.md](PLAN_3090.md): the current go-forward plan (user's 3090 research plan, reviewed 2026-11-06): capacity curve, trained-ViT Latin vs glyphs, colour as Run 4.
 * [COLOUR_GIST.md](COLOUR_GIST.md): (parked 2026-11-06 for PLAN_3090.md; colour returns as Run 4) gist through colour channels. Latin in 2 then 3
