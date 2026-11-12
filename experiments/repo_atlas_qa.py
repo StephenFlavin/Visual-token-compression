@@ -339,12 +339,20 @@ def clone(work: Path, full: str, sha: str) -> Path:
 def export(work: Path, name: str, sha: str) -> Path:
     """A plain copy of the pinned commit without .git (the agent's cwd: no history to read)."""
     d = work / "export" / name
-    if not d.exists():
-        d.mkdir(parents=True)
-        arch = subprocess.run(["git", "-C", str(work / "clones" / name), "archive", sha], capture_output=True,
-                              check=True).stdout
-        subprocess.run(["tar", "-x", "-C", str(d)], input=arch, check=True)
+    with _export_lock:                                  # parallel agent runs share one export per repository
+        if not d.exists():
+            tmp = d.with_name(name + ".tmp")
+            if tmp.exists():
+                subprocess.run(["rm", "-rf", str(tmp)], check=True)
+            tmp.mkdir(parents=True)
+            arch = subprocess.run(["git", "-C", str(work / "clones" / name), "archive", sha], capture_output=True,
+                                  check=True).stdout
+            subprocess.run(["tar", "-x", "-C", str(tmp)], input=arch, check=True)
+            tmp.rename(d)                               # appears only once complete
     return d
+
+
+_export_lock = threading.Lock()
 
 
 def prepare(work: Path, bench: Path) -> dict:
@@ -684,7 +692,7 @@ def run_agent(work: Path, cap: float, workers: int, n: int | None) -> None:
     done = {r["key"] for r in jl("answers.jsonl") if r["arm"] == "agent"}
     todo = [k for k in agent_subset(n) if k not in done]
     print(f"[qa] {len(todo)} agent runs to make; spent ${spent():.2f} (cap ${cap})", flush=True)
-    worst = [1.0]
+    worst = [0.25]                                       # measured agent runs: $0.045-0.082
 
     def run(key):
         bound = worst[0]
@@ -699,7 +707,7 @@ def run_agent(work: Path, cap: float, workers: int, n: int | None) -> None:
             release(bound)
         book(f"{key} agent", rec)
         if rec.get("cost_usd"):
-            worst[0] = max(worst[0] * 0.9, 0.5, rec["cost_usd"] * 2)
+            worst[0] = max(0.25, rec["cost_usd"] * 3)
         if rec.get("error"):
             print(f"[qa] ERROR agent {key}: {rec['error'][:300]}", flush=True)
             return
@@ -879,7 +887,7 @@ def analyse() -> str:
     by = {}
     for r in sp:
         w = r["what"]
-        k = ("judge" if w.startswith("judge") else "agent" if w.endswith(" agent") else
+        k = ("harness checks" if w.startswith("harness") else "judge" if w.startswith("judge") else "agent" if w.endswith(" agent") else
              w.split()[1] if len(w.split()) == 3 and w.split()[1] in ARMS else "other")
         by[k] = by.get(k, 0) + r["cost_usd"]
     L += ["", "### Spend (list price, every uncached call)", "", "| part | spent |", "|---|---|"]
