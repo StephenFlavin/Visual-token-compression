@@ -16,3 +16,4 @@
 {"what": "pytest-dev__pyfakefs-1286 atlas r1", "cost_usd": 0.16739110000000001, "input_tokens": 213811, "output_tokens": 2155, "t": "2026-11-12T20:12:33"}
 {"what": "stanfordnlp__dspy-8607 plain r1", "cost_usd": 0.0678743, "input_tokens": 101829, "output_tokens": 2915, "t": "2026-11-12T20:14:55"}
 {"what": "tobymao__sqlglot-6067 atlas r1", "cost_usd": 0.4662511, "input_tokens": 774705, "output_tokens": 2130, "t": "2026-11-12T20:15:08"}
+{"what": "stanfordnlp__dspy-8607 atlas r1", "cost_usd": 0.30813360000000006, "input_tokens": 643946, "output_tokens": 2675, "t": "2026-11-12T20:17:45"}
