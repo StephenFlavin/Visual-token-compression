@@ -279,6 +279,14 @@ at 2.2x at high effort only, and the atlas is rendered denser (2.9x), so legibil
   Sonnet plain (difference under 3 of 32); (S3) Sonnet with the atlas stays below Opus plain; (S4) the atlas
   multiplies Sonnet's cost per run by at least 3.
 
+**Result (2026-11-12, 64 runs, $11.38; [results/repo_atlas_swe_sonnet](../results/repo_atlas_swe_sonnet/README.md)):
+the atlas does not help Sonnet either.** Gate: Sonnet and Opus (high effort) each answered 20 of 20 lookups on the
+docstub and pyfakefs atlases, every page arrived, and Sonnet reads the 1932-px pages without downscaling (its input
+equals Opus's to 4 tokens). Sonnet 5.5 high: plain 14 of 32 task-runs, atlas 13 (15 of 16 tasks tie; tox-3904 goes
+to plain; McNemar 0 to 0; bootstrap -3 .. 0), median turns 7.5 vs 6 (atlas fewer on 11 of 14, p = 0.057), $0.07 vs
+$0.26 per run (3.7x). Opus in Q1: plain 19, atlas 17. S1-S4 all pass. Sonnet already works in short runs (41 s
+median), so the map has little exploration to save, and its misses are tasks Opus solves without one.
+
 **Result (2026-11-12, 2 runs, $23.14; [results/repo_atlas_port](../results/repo_atlas_port/README.md)): both arms
 port gitleaks completely, which leaves nothing to compare.** Each Rust port builds and passes all 35 hidden tests (the Go original
 passes 35 here too); atlas 99 turns, $11.20, 0.59 h; plain 102 turns, $11.32, 0.69 h. Both agents built the Go
