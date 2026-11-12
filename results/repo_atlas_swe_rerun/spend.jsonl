@@ -18,3 +18,7 @@
 {"what": "tobymao__sqlglot-6067 atlas r1", "cost_usd": 1.1217213999999998, "input_tokens": 1417721, "output_tokens": 4032, "t": "2026-11-12T18:19:46"}
 {"what": "scientific-python__docstub-123 atlas r1", "cost_usd": 0.2619508, "input_tokens": 219276, "output_tokens": 3369, "t": "2026-11-12T18:21:00"}
 {"what": "tox-dev__tox-3904 atlas r1", "cost_usd": 1.0627506, "input_tokens": 1947461, "output_tokens": 7312, "t": "2026-11-12T18:21:58"}
+{"what": "stanfordnlp__dspy-8607 plain r1", "cost_usd": 0.21894759999999996, "input_tokens": 180784, "output_tokens": 4997, "t": "2026-11-12T18:25:06"}
+{"what": "tobymao__sqlglot-5359 atlas r1", "cost_usd": 1.1077742, "input_tokens": 1569793, "output_tokens": 5495, "t": "2026-11-12T18:25:30"}
+{"what": "nesquena__hermes-webui-330_interface atlas r1", "cost_usd": 0.955889, "input_tokens": 1132421, "output_tokens": 8673, "t": "2026-11-12T18:27:14"}
+{"what": "microsoft__fabric-cicd-670 atlas r1", "cost_usd": 0.3411944, "input_tokens": 318432, "output_tokens": 1762, "t": "2026-11-12T18:27:29"}
