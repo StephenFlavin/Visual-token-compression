@@ -143,4 +143,44 @@ price), seconds, tokens. Per task and arm: resolved runs of 2.
 
 ## Results
 
-*(to be filled in after the runs)*
+**Status (2026-11-12, 19:30 UTC): stopped at 54 of 64 runs, $27.19 of the $40 cap.** The container restarted at
+~19:23 UTC and the subagent running this test was stopped and could not be resumed. Run 1 of every task and arm is
+complete (the stop rule's "full single replication"); run 2 is complete for 12 tasks in `plain` and 10 in `atlas`
+(9 tasks have all four runs). The 10 missing runs are listed at the end. This section was written by the main
+session from `runs.jsonl`; `summary.md` is the runner's own `analyse` output on the same rows (its paired tests
+cover only the 9 complete tasks).
+
+**The first test's 11-vs-8 hint does not survive.**
+
+| | plain | atlas |
+|---|---|---|
+| run 1, tasks solved of 16 | 10 | 9 |
+| run 2, solved of the runs finished | 5 of 12 | 5 of 10 |
+| the 9 tasks with all four runs: task-runs solved of 18 | 10 | 8 |
+| run 1, median turns | 11.5 | 9.5 |
+| run 1, mean cost per run | $0.25 | $0.85 |
+| first test (one run): solved of 16, median turns, cost | 8, 12.5, $0.26 | 11, 10, $0.68 |
+
+* **Solved, run 1 (16 tasks, paired):** one discordant task, in plain's favour (jsonpickle-587: plain yes, atlas
+  no; the same in both runs of both arms). The three tasks the atlas alone solved in the first test: jsonpickle-587
+  is now solved by plain twice and by the atlas never; sqlglot-5359 is solved by both arms; dspy-8607 by neither
+  (4 runs). Plain went from 8 to 10 solved with nothing changed for it except memory off and the index blocked:
+  that is the run-to-run variation the first test could not see.
+* **Turns, run 1:** the atlas is lower on 6 tasks and higher on 6 (sign test p = 1.0). The first test's "fewer
+  turns" (p = 0.006) does not repeat either. On the 9 complete tasks, mean turns: atlas lower on 5 of 8 untied.
+* **Cost:** the atlas costs more on every task; 3.4x plain in run 1 ($0.85 against $0.25), 2.5x on the 9 complete
+  tasks.
+* **Agreement between runs:** on the 9 complete tasks no task flips between run 1 and run 2 in either arm; among
+  the incomplete ones, anyio-975 flips in plain (yes, then no).
+* **Checks:** every atlas call's pages arrived; no run had a memory file before or after (two stores held only the
+  CLI's own persisted tool output); the flagged "leak suspects" are scratch files the agents wrote under `/tmp` and
+  their own run directories: no download, release or git-history command.
+
+Predictions, on what ran: **A1 FAIL** (atlas does not solve at least as many: 9 against 10 in run 1; 8 against 10
+of 18 on the complete tasks). **A2 PASS** (gap well under 19 points, and in the other direction). **A3 FAIL** (turns
+6 to 6 in run 1). **A4 PASS** (2.5-3.4x the cost).
+
+Not run (10): run 2 of pyjanitor-1593 (both arms), sqlglot-5359 (both), jsonpickle-588 (both), sqlglot-6067
+(plain), virtualenv-2940 (atlas), fromager-1124 (atlas), anyio-975 (atlas). Two runs were in flight at the restart
+and were not booked; any charge for them is not in the $27.19. `python3 experiments/repo_atlas_swe_rerun.py run
+--cap 40 --workers 2` resumes and skips finished rows.

@@ -70,9 +70,9 @@ the same model reading text, at lower cost.
 | Repo atlas: locating a bug fix | 8 SWE-bench tasks, 5 arms | every arm, even a bare file list, names the files; searching agent $0.04 per task | **Not separable** (memorised tasks); [details](#tested-a-whole-repository-as-page-images-repo-atlas) |
 | Repo atlas: questions about a repository | SWE-QA, 144 questions on requests, flask, pytest | atlas 75.4 = no code 75.6 (of 100); only the searching agent beats memory (79.1) | **Fails** on code the model knows |
 | Repo atlas: finding a security flaw | 12 fresh advisories in small libraries | atlas alone 9 of 12 against 10 for a bare file list; agent with atlas 10 against 7 for the plain agent, in half the turns, 45% dearer (p = 0.25) | **Atlas alone fails; with an agent: a hint, not settled** |
-| Repo atlas: hard coding tasks solved end to end | 16 SWE-rebench tasks (3 or more files in the fix, not located by a bare file list), Claude Code plain / with a repo map / with the atlas | solved: plain 8, map 9, atlas 11 (3 tasks to 0 for the atlas, p = 0.25); fewer turns with the atlas (median 10 against 12.5, p = 0.006) at 2.6x the cost ($0.68 against $0.26) | **A hint, not settled**: one run per task; [results/repo_atlas_swe](../results/repo_atlas_swe/README.md) |
+| Repo atlas: hard coding tasks solved end to end | 16 SWE-rebench tasks (3 or more files in the fix, not located by a bare file list), Claude Code plain / with a repo map / with the atlas | solved: plain 8, map 9, atlas 11 (3 tasks to 0 for the atlas, p = 0.25); fewer turns with the atlas (median 10 against 12.5, p = 0.006) at 2.6x the cost ($0.68 against $0.26) | **A hint that did not repeat** (next row): one run per task; [results/repo_atlas_swe](../results/repo_atlas_swe/README.md) |
 | Repo atlas: migrating C to Rust | 14 CRUST-Bench projects, Claude Code with the C files / with files and atlas / with the atlas only | identical on every project: 12 of 14 pass all tests in each arm; turns and cost the same within noise | **No effect**; pages alone were enough to translate from, but the projects are small and the tests carry much of the behaviour; [results/repo_atlas_migrate](../results/repo_atlas_migrate/README.md) |
-| Repo atlas: hard coding tasks again, auto-memory off | the same 16 tasks, plain against atlas, 2 runs each | queued | pending; [REPO_ATLAS_PLAN.md](REPO_ATLAS_PLAN.md), Q1 |
+| Repo atlas: hard coding tasks again, auto-memory off | the same 16 tasks, plain against atlas, two fresh runs each (54 of 64 runs done; run 1 complete) | run 1: plain 10 solved, atlas 9; turns 6 tasks lower, 6 higher; atlas 3.4x the cost. The earlier 11 against 8 and "fewer turns" do not repeat | **No effect; the earlier hint was noise**; [results/repo_atlas_swe_rerun](../results/repo_atlas_swe_rerun/README.md) |
 | Repo atlas: a larger port with concurrency | RepoMod-Bench, gitleaks Go to Rust (22k lines), plain against atlas | queued | pending; [REPO_ATLAS_PLAN.md](REPO_ATLAS_PLAN.md), Q2 |
 | Orchestrator reads the atlas once, workers get briefs | plan-quality test: 33 tickets x 4 planners (file list, repo map, atlas, searching agent), then 16 tickets given to workers on three tiers | atlas briefs name 50% of the fix's files, the same as file-list (48%) and scout briefs (50%), at 8x and 2.7x their cost; the planner cannot size the work or pick the worker (its choice solved 8 of 16 against 11 for always-Opus); an Opus worker with a brief solved 11 (atlas brief) or 10 (file-list brief) against 8 without (p = 0.25) | **Fails as proposed**: a brief may help, the atlas is not what makes it good; [details](#tested-an-orchestrator-that-reads-the-atlas-once-plan-quality) |
 | A local model (Qwen3.8-27B) | not run | plan and harness ready | **Planned**; [LOCAL_QWEN.md](LOCAL_QWEN.md) |
@@ -277,7 +277,7 @@ Was the 2.2x pages' passive flip in Test A chance or density? Pre-registered: th
 `experiments/repo_atlas.py` minifies every source file and renders the whole repository as pages with an index.
 It fits one request up to ~150k image tokens, about 1.3M characters of source (requests 24k tokens, bat 67k, axum
 120k; pytest is at the limit; anything Django-sized is far over), at about 3.5 times fewer tokens than the code as
-text. Plan and all results: [REPO_ATLAS_PLAN.md](REPO_ATLAS_PLAN.md). Five tests, each run by an Opus subagent with
+text. Plan and all results: [REPO_ATLAS_PLAN.md](REPO_ATLAS_PLAN.md). Five tests and one repeat, each run by an Opus subagent with
 a pre-registration (the sixth, the plan-quality test for the orchestrator use, has its own section below):
 
 | Test | Tasks | What the arms scored | Spend |
@@ -286,6 +286,7 @@ a pre-registration (the sixth, the plan-quality test for the orchestrator use, h
 | Answer questions about a repository ([SWE-QA](../results/repo_atlas_qa/README.md)) | 144 questions | judge score of 100: no code 75.6, repo map 76.1, atlas 75.4, text 75.5, searching agent 79.1 | $20.83 |
 | Find a security flaw ([fresh advisories](../results/repo_atlas_sec/README.md)) | 12 advisories | fixed file in the top 5: file list 10, atlas 9, searching agent 7, agent with atlas 10 | $20.70 |
 | Solve hard coding tasks ([SWE-rebench](../results/repo_atlas_swe/README.md)) | 16 | tasks solved: plain agent 8, with a repo map 9, with the atlas 11; median turns 12.5 / 12 / 10; cost per task $0.26 / $0.49 / $0.68 | $28.45 |
+| Hard coding tasks again, memory off ([re-run](../results/repo_atlas_swe_rerun/README.md)) | the same 16, 2 runs each (54 of 64 done) | run 1 solved: plain 10, atlas 9; median turns 11.5 / 9.5 (6 tasks lower, 6 higher); cost per run $0.25 / $0.85 | $27.19 |
 | Migrate C to Rust ([CRUST-Bench](../results/repo_atlas_migrate/README.md)) | 14 projects | all tests pass: with the C files 12, with files and atlas 12, atlas only (no C files) 12; median turns 6.5 / 6 / 6.5; cost per project $0.54 / $0.57 / $0.60 | $24.01 |
 
 * **The atlas alone has not beaten a cheaper option anywhere.** On public repositories the model answers from
@@ -294,12 +295,16 @@ a pre-registration (the sixth, the plan-quality test for the orchestrator use, h
   them away.
 * **A searching agent is cheap.** Claude Code with read-only tools found the files of a fix in ~3 turns for $0.04,
   against $0.23 for the atlas and $1.18 for the same code as text.
-* **The one hint is the atlas as a head start for an agent, and it showed twice.** In the security test the
-  agent with the atlas found 3 flaws the plain agent missed and lost none, in a median of 8 turns instead of 18,
-  at $0.67 against $0.46 per task. On the hard coding tasks it solved 3 tasks the plain agent did not and lost
-  none (11 against 8 of 16), in fewer turns on 11 of 12 untied tasks, at $0.68 against $0.26. Each is 3 to 0 with
-  one run per task (exact p = 0.25 each): the same direction twice, not yet more than noise. Fewer turns is the
-  solid part (p = 0.006); the atlas always costs more.
+* **The hint that the atlas gives an agent a head start did not repeat.** In the security test the agent with the
+  atlas found 3 flaws the plain agent missed and lost none, in a median of 8 turns instead of 18, at $0.67 against
+  $0.46 per task. On the hard coding tasks it solved 11 against 8 of 16, in fewer turns (p = 0.006), at $0.68
+  against $0.26. Each was 3 to 0 with one run per task (exact p = 0.25). **The hard coding tasks were then run
+  again, twice, with auto-memory off** ([results/repo_atlas_swe_rerun](../results/repo_atlas_swe_rerun/README.md),
+  54 of 64 runs before a container restart ended it, $27.19): in the complete first replication plain solved 10
+  and the atlas 9, turns were lower with the atlas on 6 tasks and higher on 6, and the atlas cost 3.4x. The plain
+  agent alone moved from 8 to 10 solved between the two tests, which is the size of the earlier gap. The first
+  test's runs had not shared memory (each had its own store), so the earlier result was variation between runs.
+  The security hint (12 tasks, one run) has not been repeated and should be read the same way.
 * **A migration did not need the atlas, and did not miss the source.** On 14 small C libraries the three arms
   tied on every project. The agent with the atlas still opened the C files, so the pages saved about one tool call;
   the agent with only the pages translated just as well. The atlases there were 2-13k image tokens: small enough
