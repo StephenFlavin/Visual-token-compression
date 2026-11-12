@@ -66,3 +66,11 @@
 {"what": "niconoe__pyinaturalist-643 plain", "cost_usd": 0.0957672, "input_tokens": 55696, "output_tokens": 2432}
 {"what": "niconoe__pyinaturalist-643 map", "cost_usd": 0.2367176, "input_tokens": 201908, "output_tokens": 3730}
 {"what": "niconoe__pyinaturalist-643 atlas", "cost_usd": 0.3461074, "input_tokens": 261591, "output_tokens": 2551}
+{"what": "microsoft__fabric-cicd-670 map", "cost_usd": 0.2317668, "input_tokens": 272350, "output_tokens": 3365}
+{"what": "microsoft__fabric-cicd-670 plain", "cost_usd": 0.18463640000000003, "input_tokens": 148632, "output_tokens": 4251}
+{"what": "microsoft__fabric-cicd-670 atlas", "cost_usd": 0.46063020000000016, "input_tokens": 516665, "output_tokens": 3634}
+{"what": "tobymao__sqlglot-6067 plain", "cost_usd": 0.118024, "input_tokens": 74934, "output_tokens": 2748}
+{"what": "tobymao__sqlglot-6067 atlas", "cost_usd": 1.0268854, "input_tokens": 1096009, "output_tokens": 2864}
+{"what": "tobymao__sqlglot-6067 map", "cost_usd": 0.6183206, "input_tokens": 863829, "output_tokens": 5624}
+{"what": "agronholm__anyio-975 map", "cost_usd": 0.5080094000000002, "input_tokens": 608595, "output_tokens": 6721}
+{"what": "agronholm__anyio-975 plain", "cost_usd": 0.2580878, "input_tokens": 185905, "output_tokens": 6455}
