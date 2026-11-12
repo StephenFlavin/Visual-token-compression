@@ -5,3 +5,11 @@
 {"what": "calibrate question block", "cost_usd": 0.035828, "input_tokens": 7150, "output_tokens": 4, "error": null}
 {"what": "calibrate ptext22", "cost_usd": 0.049203, "input_tokens": 9825, "output_tokens": 4, "error": null}
 {"what": "calibrate ptext15", "cost_usd": 0.07055800000000001, "input_tokens": 14096, "output_tokens": 4, "error": null}
+{"what": "d0 none", "cost_usd": 0.075528, "input_tokens": 7162, "output_tokens": 1986, "error": null}
+{"what": "d0 text", "cost_usd": 1.376563, "input_tokens": 250253, "output_tokens": 6265, "error": null}
+{"what": "d0 page118", "cost_usd": 0.712813, "input_tokens": 114239, "output_tokens": 7081, "error": null}
+{"what": "d0 page88", "cost_usd": 0.5990279999999999, "input_tokens": 87518, "output_tokens": 8072, "error": null}
+{"what": "d0 page59", "cost_usd": 0.5849580000000001, "input_tokens": 60728, "output_tokens": 14066, "error": null}
+{"what": "d0 ptext22", "cost_usd": 0.7893380000000001, "input_tokens": 115184, "output_tokens": 10671, "error": null}
+{"what": "d0 ptext15", "cost_usd": 0.9938830000000001, "input_tokens": 169337, "output_tokens": 7360, "error": null}
+{"what": "d0 ppage15", "cost_usd": 0.559198, "input_tokens": 74000, "output_tokens": 9460, "error": null}
