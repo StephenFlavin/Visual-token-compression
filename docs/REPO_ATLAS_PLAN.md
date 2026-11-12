@@ -205,3 +205,51 @@ amendments, tables and problems: [results/repo_atlas_migrate/README.md](../resul
 * A migration test that can separate the arms needs projects large enough that reading the source is real work
   (beyond what one `cat` delivers), tests that the interfaces do not give away, and code from after the model's
   training data.
+
+## Queued (2026-11-12): two more atlas tests, after the plan-quality test
+
+Both go to an Opus subagent, one at a time, each with a pre-registration before its first agent run. Lessons from
+today apply to both: Claude Code's auto-memory is shared between headless runs and must be off (or each run's store
+deleted); no package index or web for agents where a later release could leak the fix; turns and tokens summed over
+every result event; a clean stop on a usage-limit error.
+
+### Q1. Hard coding tasks again, with auto-memory off (cap $40)
+
+*Why:* atlas 11, repo map 9, plain 8 of 16 was one run per task, and those runs may have shared auto-memory. This
+repeats the comparison clean and twice.
+
+* Same 16 SWE-rebench tasks, environments rebuilt from `results/repo_atlas_swe/` records.
+* Arms: `plain` and `atlas` (the repo map changed nothing and is dropped). Two fresh runs per task and arm, auto-memory
+  off, package index blocked for every task from the start, run order shuffled. 64 runs, about $30.
+* First, free: check the first test's transcripts (if still on disk) for any read of the auto-memory store, and report it.
+* Scores: resolved per run; per task the number of resolved runs of 2 per arm; turns; cost. Tests: sign test over tasks
+  on resolved runs, exact McNemar on "resolved in both runs", sign test on turns. The first test's rows are reported
+  beside the new ones, not pooled.
+* Predictions: (A1) the atlas resolves at least as many task-runs as plain; (A2) the gap is smaller than the first
+  test's 3 of 16 (under 19 points of task-runs); (A3) fewer turns with the atlas (sign test p < 0.05); (A4) the atlas
+  costs at least twice plain.
+
+### Q2. A larger port with concurrency: Go to Rust on RepoMod-Bench (cap $50)
+
+*Why:* the C-to-Rust projects were small (atlases of 2-13k image tokens) and every arm tied. The user asked for
+something bigger and harder, with concurrency and locks, such as Java to Rust.
+
+* **No existing benchmark ports whole Java projects to Rust with runnable tests** (RepoTransBench has Java to C#, Go
+  and Python; RustRepoTrans has Java to Rust only function by function). The closest existing fit is RepoMod-Bench
+  (KDD 2026, `github.com/Modelcode-ai/mcode-benchmark`): 21 whole-repository ports graded by tests that do not depend
+  on the implementation language (they drive the built CLI or REST API), with published pass rates falling from 91%
+  under 10k lines to 15% above 50k.
+* **Project:** `gitleaks`, Go to Rust, 22.4k lines, 35 tests: a secret scanner whose Go source scans concurrently
+  (goroutines, wait groups, mutexes). If its two runs leave enough budget for both arms of a second project:
+  `jmespath`, Go to Rust, 19.3k lines, 888 tests.
+* Arms: `plain` (Claude Code with the Go repository) and `atlas` (the same, with the Go source as page images in the
+  first message). The benchmark's own prompt and rule that tests stay hidden from the agent. Each run has a budget
+  guard of $15 and a wall-clock limit; cargo may fetch crates, and every download command is logged and checked for
+  an existing Rust port.
+* Grading without Docker: build with cargo, run the benchmark's pytest suite against the binary. Scores: share of tests
+  passing; builds; whether the port is concurrent at all (threads, rayon, channels, `Mutex` / `Arc` counted) or a
+  single-threaded rewrite; `unsafe` blocks; turns; cost; hours.
+* One or two projects are an anecdote, not a measurement: the write-up must say so. Predictions: (B1) neither arm
+  passes every test on gitleaks; (B2) the two arms' test shares differ by less than 15 points; (B3) the atlas arm uses
+  fewer turns.
+
