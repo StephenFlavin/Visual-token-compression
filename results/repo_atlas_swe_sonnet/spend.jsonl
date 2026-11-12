@@ -29,3 +29,7 @@
 {"what": "jsonpickle__jsonpickle-587 plain r1", "cost_usd": 0.048492900000000005, "input_tokens": 67759, "output_tokens": 2172, "t": "2026-11-12T20:23:23"}
 {"what": "tobymao__sqlglot-5359 plain r1", "cost_usd": 0.06673050000000001, "input_tokens": 76767, "output_tokens": 3436, "t": "2026-11-12T20:27:47"}
 {"what": "tobymao__sqlglot-6067 plain r1", "cost_usd": 0.051120799999999994, "input_tokens": 71482, "output_tokens": 2213, "t": "2026-11-12T20:28:52"}
+{"what": "tox-dev__tox-3904 plain r1", "cost_usd": 0.14876050000000002, "input_tokens": 320363, "output_tokens": 3227, "t": "2026-11-12T20:31:12"}
+{"what": "pypa__virtualenv-2940 plain r1", "cost_usd": 0.046496699999999995, "input_tokens": 54989, "output_tokens": 1437, "t": "2026-11-12T20:31:55"}
+{"what": "python-wheel-build__fromager-1124 plain r1", "cost_usd": 0.0877072, "input_tokens": 134882, "output_tokens": 3386, "t": "2026-11-12T20:33:37"}
+{"what": "scientific-python__docstub-123 atlas r1", "cost_usd": 0.0897469, "input_tokens": 113665, "output_tokens": 1555, "t": "2026-11-12T20:34:04"}

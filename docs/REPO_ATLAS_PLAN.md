@@ -229,11 +229,11 @@ repeats the comparison clean and twice.
   test's 3 of 16 (under 19 points of task-runs); (A3) fewer turns with the atlas (sign test p < 0.05); (A4) the atlas
   costs at least twice plain.
 
-**Result (2026-11-12, 54 of 64 runs, $27.19; [results/repo_atlas_swe_rerun](../results/repo_atlas_swe_rerun/README.md)):
-the hint does not survive.** Run 1 of all 16 tasks: plain 10 solved, atlas 9 (one discordant task, plain's); turns
-6 tasks lower and 6 higher with the atlas; cost 3.4x. The first test's transcripts showed no shared or written
-memory (each run had its own store), so its 11 against 8 was run-to-run variation, not contamination. The run
-stopped at a container restart with 10 second runs missing; A1 and A3 fail, A2 and A4 pass.
+**Result (2026-11-12, 64 runs, $35.07; [results/repo_atlas_swe_rerun](../results/repo_atlas_swe_rerun/README.md)):
+the hint does not survive.** Task-runs solved of 32: plain 19, atlas 17 (atlas higher on 1 task, plain on 2); turns
+lower with the atlas on 10 of 15 untied tasks (p = 0.30); cost 3.1x. The first test's transcripts showed no shared or
+written memory (each run had its own store), so its 11 against 8 was run-to-run variation, not contamination. A1 and
+A3 fail, A2 and A4 pass. (A container restart interrupted the run at 54; the last 10 ran later the same day.)
 
 ### Q2. A larger port with concurrency: Go to Rust on RepoMod-Bench (cap $50)
 
