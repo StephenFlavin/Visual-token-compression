@@ -53,3 +53,5 @@
 {"what": "tox-dev__tox-3904 atlas r2", "cost_usd": 1.0210066, "input_tokens": 1737965, "output_tokens": 7099, "t": "2026-11-12T19:04:36"}
 {"what": "tobymao__sqlglot-6067 atlas r2", "cost_usd": 2.0005092, "input_tokens": 1902918, "output_tokens": 4737, "t": "2026-11-12T19:15:51"}
 {"what": "tobymao__sqlglot-6067 plain r2", "cost_usd": 0.1067144, "input_tokens": 68154, "output_tokens": 2672, "t": "2026-11-12T19:41:03"}
+{"what": "agronholm__anyio-975 atlas r2", "cost_usd": 0.513579, "input_tokens": 535863, "output_tokens": 6061, "t": "2026-11-12T19:44:46"}
+{"what": "tobymao__sqlglot-5359 plain r2", "cost_usd": 0.1929234, "input_tokens": 128179, "output_tokens": 5557, "t": "2026-11-12T19:50:30"}
