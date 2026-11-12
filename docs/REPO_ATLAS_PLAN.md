@@ -259,6 +259,14 @@ something bigger and harder, with concurrency and locks, such as Java to Rust.
   passes every test on gitleaks; (B2) the two arms' test shares differ by less than 15 points; (B3) the atlas arm uses
   fewer turns.
 
+**Result (2026-11-12, 2 runs, $23.14; [results/repo_atlas_port](../results/repo_atlas_port/README.md)): both arms
+port gitleaks completely, which leaves nothing to compare.** Each Rust port builds and passes all 35 hidden tests (the Go original
+passes 35 here too); atlas 99 turns, $11.20, 0.59 h; plain 102 turns, $11.32, 0.69 h. Both agents built the Go
+original as a local oracle and diffed outputs; neither port scans concurrently (the original uses a 40-wide
+semaphore group). B1 fails, B2 passes (0 points), B3 passes on the letter only (99 vs 102). One run per arm on a
+well-known project: an anecdote. A guard mispricing (cache reads at 2x the CLI's rate) stopped both first segments at
+about $10.7; both were resumed once and finished within minutes (amendment 1). jmespath did not fit the cap rule.
+
 ### Q3. Sonnet with the atlas on the hard coding tasks (cap $20; asked by the user 2026-11-12)
 
 *Why:* every atlas test so far used Opus, which solves these tasks about as often with or without the atlas. A
@@ -286,11 +294,3 @@ equals Opus's to 4 tokens). Sonnet 5.5 high: plain 14 of 32 task-runs, atlas 13 
 to plain; McNemar 0 to 0; bootstrap -3 .. 0), median turns 7.5 vs 6 (atlas fewer on 11 of 14, p = 0.057), $0.07 vs
 $0.26 per run (3.7x). Opus in Q1: plain 19, atlas 17. S1-S4 all pass. Sonnet already works in short runs (41 s
 median), so the map has little exploration to save, and its misses are tasks Opus solves without one.
-
-**Result (2026-11-12, 2 runs, $23.14; [results/repo_atlas_port](../results/repo_atlas_port/README.md)): both arms
-port gitleaks completely, which leaves nothing to compare.** Each Rust port builds and passes all 35 hidden tests (the Go original
-passes 35 here too); atlas 99 turns, $11.20, 0.59 h; plain 102 turns, $11.32, 0.69 h. Both agents built the Go
-original as a local oracle and diffed outputs; neither port scans concurrently (the original uses a 40-wide
-semaphore group). B1 fails, B2 passes (0 points), B3 passes on the letter only (99 vs 102). One run per arm on a
-well-known project: an anecdote. A guard mispricing (cache reads at 2x the CLI's rate) stopped both first segments at
-about $10.7; both were resumed once and finished within minutes (amendment 1). jmespath did not fit the cap rule.

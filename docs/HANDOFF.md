@@ -208,8 +208,9 @@ security, hard coding tasks, C-to-Rust migration, plan quality): the use-case ta
 work or pick the worker. **Q1, the hard coding tasks again with auto-memory off** (`results/repo_atlas_swe_rerun/`, 64 runs, $35.07): plain
 19 of 32 task-runs solved, atlas 17, turns not reliably lower (p = 0.30), 3.1x the cost: the earlier 11 against 8
 was run-to-run variation. **Q2, gitleaks Go to Rust** (`results/repo_atlas_port/`, $23.14): both arms pass 35 of 35 hidden tests at the
-same turns and cost; no effect, one run each. **Running:** Q3, Sonnet with the atlas on the
-same 16 tasks (`results/repo_atlas_swe_sonnet/`, cap $20; [REPO_ATLAS_PLAN.md](REPO_ATLAS_PLAN.md), "Queued").
+same turns and cost; no effect, one run each. **Q3, Sonnet with the atlas** on the same 16 tasks (`results/repo_atlas_swe_sonnet/`, $11.38): plain 14 of 32
+task-runs, atlas 13, 3.7x the cost; Sonnet reads the atlas (20 of 20 lookups) but gains nothing. Nothing is
+queued or running on the cloud runner.
 
 **As of 2026-11-12:** (1) the Qwen3.8-27B evening (the prompt at the top); (2) done: the 2.2x claim now carries
 the wording-sensitive limit from [results/claude_qa/repeat](../results/claude_qa/repeat/README.md).
