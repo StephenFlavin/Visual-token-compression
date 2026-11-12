@@ -22,3 +22,15 @@
 {"what": "preactjs__preact-3010 map", "cost_usd": 0.055258, "input_tokens": 9804, "output_tokens": 312, "error": null}
 {"what": "sharkdp__bat-2393 atlas", "cost_usd": 0.18355800000000003, "input_tokens": 35536, "output_tokens": 294, "error": null}
 {"what": "preactjs__preact-3010 atlas", "cost_usd": 0.197338, "input_tokens": 37836, "output_tokens": 408, "error": null}
+{"what": "psf__requests-1142 agent", "cost_usd": 0.024265600000000002, "input_tokens": 11564, "output_tokens": 338, "error": null}
+{"what": "psf__requests-1724 agent", "cost_usd": 0.044459, "input_tokens": 17239, "output_tokens": 635, "error": null}
+{"what": "gin-gonic__gin-1957 agent", "cost_usd": 0.0305014, "input_tokens": 17501, "output_tokens": 603, "error": null}
+{"what": "gin-gonic__gin-1805 agent", "cost_usd": 0.039969599999999994, "input_tokens": 12640, "output_tokens": 889, "error": null}
+{"what": "sharkdp__bat-1892 agent", "cost_usd": 0.0374738, "input_tokens": 17835, "output_tokens": 793, "error": null}
+{"what": "preactjs__preact-3689 agent", "cost_usd": 0.03448, "input_tokens": 18246, "output_tokens": 686, "error": null}
+{"what": "preactjs__preact-3010 agent", "cost_usd": 0.033066200000000004, "input_tokens": 17177, "output_tokens": 734, "error": null}
+{"what": "sharkdp__bat-2393 agent", "cost_usd": 0.0582224, "input_tokens": 28592, "output_tokens": 1170, "error": null}
+{"what": "gin-gonic__gin-1957 text", "cost_usd": 0.571883, "input_tokens": 113509, "output_tokens": 217, "error": null}
+{"what": "psf__requests-1142 text", "cost_usd": 1.725813, "input_tokens": 344679, "output_tokens": 121, "error": null}
+{"what": "gin-gonic__gin-1805 text", "cost_usd": 0.563343, "input_tokens": 111337, "output_tokens": 333, "error": null}
+{"what": "psf__requests-1724 text", "cost_usd": 1.865438, "input_tokens": 372552, "output_tokens": 134, "error": null}

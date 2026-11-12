@@ -96,3 +96,20 @@ The agent arm's cost is the least certain; the pilot measures it.
 A hook cannot put images into a session by itself. In Claude Code the atlas would be a folder of pages with its
 index, built once per commit, and a session-start note telling the model to read the pages before planning (5 to
 26 image reads for the repositories above), the same pattern as the compaction archive.
+
+## Pilot results (2026-11-12)
+
+*8 tasks (2 each from requests, gin, bat, preact), 5 arms, 36 calls, $7.49 at list price. Pre-registration, tables
+and problems: [results/repo_atlas/README.md](../results/repo_atlas/README.md).*
+
+* **Every arm found every changed source file on every task**, the file list alone included (tree, map, atlas and
+  agent 8 of 8; text 4 of 4). The primary score is at the ceiling, so the pilot cannot tell the arms apart.
+* With only the file list, the model described the real fixes in detail (`to_native_string`, `bigint` in
+  `diffChildren`, `noRoute`): these tasks look memorised, or the issues give the location away.
+* **Claude Code with Read/Grep/Glob is the cheapest reader:** 2-5 turns, $0.038 per task on average, against
+  $0.23 for the atlas (4-17 times more per task) and $1.18 for the text arm. Prediction P4 (atlas cheaper than the
+  agent on the small repositories) fails; P1-P3 pass only as ties at the ceiling.
+* All atlas pages arrived (input tokens 103-108% of the image-token formula).
+* **Before a full stage 1 (re-estimated at ~$40-45):** change the task so that it can fail: keep only tasks the
+  `tree` arm misses, score the functions or lines rather than the files, or use issues from after the model's
+  training data. As planned, it would most likely buy another tie.

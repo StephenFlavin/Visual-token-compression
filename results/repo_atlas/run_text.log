@@ -1,0 +1,6 @@
+[ra] 4 one-shot calls to make; spent so far $2.76 (cap $12.0)
+[ra] gin-gonic__gin-1957          text   all=True  first=False share=1.00 in=113,509 $0.572 4s  files=['binding/header.go', 'binding/binding.go', 'context.go', 'binding/form_mapping.go', 'README.md']
+[ra] psf__requests-1142           text   all=True  first=True  share=1.00 in=344,679 $1.726 4s  files=['requests/models.py']
+[ra] gin-gonic__gin-1805          text   all=True  first=True  share=1.00 in=111,337 $0.563 4s  files=['routergroup.go']
+[ra] psf__requests-1724           text   all=True  first=False share=1.00 in=372,552 $1.865 4s  files=['requests/models.py', 'requests/sessions.py']
+[ra] spent $7.49 list price

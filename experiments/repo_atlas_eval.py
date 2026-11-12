@@ -589,9 +589,15 @@ def analyse() -> str:
     sel = selection()
     ids = [s["id"] for s in sel]
     by = {(r["id"], r["arm"]): r for r in rows}
-    lines = ["| arm | tasks | all gold files in top 5 | first file right | mean gold share | functions named | "
-             "mean input tokens | mean cost | mean seconds | mean turns | paths not in repo | pages dropped |",
-             "|---|---|---|---|---|---|---|---|---|---|---|---|"]
+    new = {s["id"]: set(s.get("gold_new", [])) for s in sel}
+    for r in rows:                                          # a correctly named new file is not a wrong path
+        r["new_named"] = [f for f in r["files"] if f in new.get(r["id"], ())]
+        r["not_in_repo"] = [f for f in r["not_in_repo"] if f not in new.get(r["id"], ())]
+        r["first_right_or_new"] = r["first_right"] or bool(r["files"] and r["files"][0] in new.get(r["id"], ()))
+    lines = ["| arm | tasks | all gold files in top 5 | first file right (or a new file the fix creates) | "
+             "mean gold share | functions named | new files named | mean input tokens | mean cost | mean seconds | "
+             "mean turns | wrong paths | pages dropped |",
+             "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for arm in ARMS:
         rs = [by[(i, arm)] for i in ids if (i, arm) in by]
         if not rs:
@@ -599,8 +605,9 @@ def analyse() -> str:
         n = len(rs)
         fs = [r["funcs_share"] for r in rs if r["funcs_share"] is not None]
         mean = lambda k: sum(r.get(k) or 0 for r in rs) / n  # noqa: E731
-        lines.append(f"| {arm} | {n} | {sum(r['all_gold_top5'] for r in rs)} of {n} | {sum(r['first_right'] for r in rs)} of {n} | "
-                     f"{mean('gold_share'):.2f} | {sum(fs) / len(fs):.2f} | {mean('input_tokens'):,.0f} | ${mean('cost_usd'):.3f} | "
+        lines.append(f"| {arm} | {n} | {sum(r['all_gold_top5'] for r in rs)} of {n} | {sum(r['first_right'] for r in rs)} of {n} "
+                     f"({sum(r['first_right_or_new'] for r in rs)}) | {mean('gold_share'):.2f} | {sum(fs) / len(fs):.2f} | "
+                     f"{sum(len(r['new_named']) for r in rs)} of {sum(len(new[r['id']]) for r in rs)} | {mean('input_tokens'):,.0f} | ${mean('cost_usd'):.3f} | "
                      f"{mean('seconds'):.0f} | {mean('turns'):.1f} | {sum(len(r['not_in_repo']) for r in rs)} | "
                      f"{sum(not r['pages_arrived'] for r in rs)} |")
     lines += ["", "| task | gold files | " + " | ".join(ARMS) + " |", "|---|---|" + "---|" * len(ARMS)]

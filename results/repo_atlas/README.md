@@ -127,6 +127,99 @@ map, atlas, then agent, then text, so that a cap hit drops text calls (named in 
 * The file set is `repo_atlas.collect`'s: it keeps top-level files such as `README.rst`, `Makefile` and `setup.py`,
   and requests' vendored `requests/packages/` (the repository as it was).
 
-## Results
+## Results (2026-11-12)
 
-*(to follow)*
+### What the pilot shows, and what it cannot
+
+* **The harness works.** 36 calls, no errors, no refusals, no cut-offs. Every atlas call arrived whole (input
+  tokens 103-108% of the image-token formula). The agent stayed in its directory and had no permission denials.
+* **The question is too easy for these tasks.** Every arm named every scored gold file on every task, the `tree` arm
+  too (paths only, about 2k tokens). So the primary score is at the ceiling and cannot tell the arms apart.
+* **The tasks look memorised, or the issues give the answer away.** With nothing but the file list, the model wrote
+  plans that match the real fixes in detail: `to_native_string` for requests-1724, `bigint` in `diffChildren` for
+  preact-3010, `c.handlers = group.engine.noRoute` for gin-1805, the `IgnoredSuffixes` struct for bat-1892. The
+  calls used almost no thinking (0-274 thinking tokens at high effort, 2-6 seconds).
+* **The agent is the cheapest arm that reads code, not the dearest.** Claude Code needed 2-5 turns, 1-4 tool calls
+  (mostly one Grep) and $0.02-0.06 per task. The atlas cost 4-17 times more per task.
+* **8 tasks cannot decide anything statistically.** Here it does not matter: all arms tie.
+
+### Per arm
+
+| arm | tasks | all gold files in top 5 | first file right (or a file the fix creates) | gold functions named (approx.) | mean input tokens | mean cost | mean seconds | turns | wrong paths | pages dropped |
+|---|---|---|---|---|---|---|---|---|---|---|
+| tree | 8 | 8 of 8 | 7 of 8 (8) | 0.64 | 2,155 | $0.015 | 3 | 1 | 0 | 0 |
+| map | 8 | 8 of 8 | 6 of 8 (7) | 0.65 | 11,063 | $0.060 | 3 | 1 | 0 | 0 |
+| atlas | 8 | 8 of 8 | 6 of 8 (7) | 0.64 | 45,403 | $0.232 | 5 | 1 | 0 | 0 |
+| text | 4 | 4 of 4 | 2 of 4 (3) | 0.58 | 235,519 | $1.182 | 4 | 1 | 0 | n/a |
+| agent | 8 | 8 of 8 | 6 of 8 (7) | 0.55 | 17,599 | $0.038 | 10 | 3.1 (2-5) | 1 | n/a |
+
+"First file right" misses on two tasks for most arms: requests-1724 (models.py named before sessions.py, the
+gold file) and gin-1957 (the new file `binding/header.go` named first; in brackets it counts as right). "Wrong
+paths" leaves out `binding/header.go`, which every arm named correctly as a new file; the agent's one wrong path is
+a new test file it proposed (`hooks/test/browser/useErrorBoundary.test.js`), in fourth place. Seconds for one-shot
+arms are wall time per call; the agent's include start-up.
+
+### Per task (all = every scored gold file in the top 5; 1st = first file is gold)
+
+| task | gold files | tree | map | atlas | text | agent |
+|---|---|---|---|---|---|---|
+| psf__requests-1142 | 1 | all, 1st | all, 1st | all, 1st | all, 1st | all, 1st |
+| psf__requests-1724 | 1 | all, 1st | all | all | all | all |
+| gin-gonic__gin-1957 | 2 (+1 new) | all | all | all | all | all |
+| gin-gonic__gin-1805 | 1 | all, 1st | all, 1st | all, 1st | all, 1st | all, 1st |
+| sharkdp__bat-1892 | 5 (+1 new) | all, 1st | all, 1st | all, 1st | | all, 1st |
+| sharkdp__bat-2393 | 2 | all, 1st | all, 1st | all, 1st | | all, 1st |
+| preactjs__preact-3689 | 3 | all, 1st | all, 1st | all, 1st | | all, 1st |
+| preactjs__preact-3010 | 2 | all, 1st | all, 1st | all, 1st | | all, 1st |
+
+### Predictions
+
+* **P1** atlas at least as high as map on the primary score: **PASS** (8 of 8 each), but uninformative: a tie at
+  the ceiling, which the file list alone also reaches.
+* **P2** atlas and text agree on the 4 requests and gin tasks: **PASS** (4 of 4 agree), at the ceiling.
+* **P3** agent at least as high as atlas: **PASS** (8 of 8 each), at the ceiling.
+* **P4** atlas cheaper than the agent on requests and gin, dearer on bat: **FAIL.** The atlas cost more everywhere:
+  requests $0.37 and $0.42 vs agent $0.024 and $0.044; gin $0.16 and $0.16 vs $0.031 and $0.040. On bat it was
+  dearer as predicted ($0.16 and $0.18 vs $0.037 and $0.058).
+
+### Real cost
+
+| arm | calls | spent (list price) | per call |
+|---|---|---|---|
+| tree | 8 | $0.12 | $0.015 |
+| map | 8 | $0.48 | $0.060 |
+| atlas | 8 | $1.86 | $0.232 (about $5 per million image tokens) |
+| text | 4 | $4.73 | $1.18 (requests $1.73 and $1.87: 345-373k tokens with the vendored packages) |
+| agent | 8 | $0.30 | $0.038 |
+| **total** | 36 | **$7.49** | estimate was $11.30; cap $12 |
+
+The one-shot arms used far fewer output tokens than assumed (95-430, not 4,000). The agent cost a tenth of what was
+assumed: it reads Claude Code's ~10k-token system prompt from cache and stops after one or two searches.
+
+**Re-estimate of the full stage 1 (~48 tasks over the 11 repositories of the plan):** atlas about $0.35 per task
+(mean atlas near 70k image tokens) = ~$17; text on requests, gin and flask (~18 tasks; requests alone ~$1.8 each)
+= ~$18; map ~$3; tree ~$1; agent ~$0.05-0.10 per task on the larger repositories = ~$2-5. **About $40-45**, or
+about $25 without the text arm on requests. But see below: as designed, it would most likely buy another ceiling.
+
+### Problems and what to change before a full stage 1
+
+1. **Ceiling.** SWE-bench issues for these repositories usually name the API or the symptom precisely enough, and
+   the model has likely seen the fixes. A full run with this score would cost ~$40 to tie again. Options: keep only
+   tasks the `tree` arm gets wrong (a free screen at $0.015 per task); score something harder (top-1 file, the
+   functions, or the lines the fix touches); or use tasks from after the model's training data (e.g. issues fixed in
+   the last months, or SWE-bench-Live style collections), where memory cannot help.
+2. **The agent baseline is cheap.** At $0.04 per task and 3 turns, the atlas cannot win on cost for locating a
+   change; it would have to win on quality on tasks where search fails (spread-out changes, no greppable name).
+3. **requests at these base commits vendors urllib3 and chardet** (`requests/packages/`), tripling its atlas
+   (71-78k image tokens) and making the text arm cost ~$1.8 per call. Either leave vendored packages out (a change
+   to `repo_atlas`'s file set) or drop requests from the text arm.
+4. **Gold files the fix creates** (gin-1957, bat-1892) were taken out of the scored gold before the first call (see
+   the notes above). Every arm named gin's new file exactly; none named bat's.
+5. The gold function list is approximate (hunk headers plus changed declarations, including generic names such as
+   `run` and `default`); treat that column as a rough signal only.
+
+### Files
+
+`runs.jsonl` (one row per task and arm, with the full answer), `spend.jsonl` (every uncached call's cost),
+`selection.json`, `contexts.json`, `index/` (atlas indexes), `run*.log`. Clones, checkouts, page images and agent
+transcripts stayed in a scratch directory and are not committed.
