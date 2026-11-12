@@ -1,4 +1,4 @@
-"""Figures for docs/CLAUDE_QA.md (Claude answers questions from page images vs from text).
+"""Figures for docs/claude/CLAUDE_QA.md (Claude answers questions from page images vs from text).
 
 1. claude_qa_verdict.png    accuracy change (image - text, points) per model x effort x token saving, all questions
                             and multi-step questions; worst case (95% bound) and the pre-registered lossless mark

@@ -1,5 +1,5 @@
 """Provisional judge: the benchmark's own evaluator (metrics_based_eval.py), with its LLM calls sent to the Claude Code
-CLI instead of an API key (docs/ERB_PLAN.md).
+CLI instead of an API key (docs/claude/ERB_PLAN.md).
 
 Everything but the transport is theirs: prompts, citation stripping, correctness, per-fact completeness, document
 recall and the three-judge gold-document correction. Their Anthropic class is replaced by `CLILLM` before the

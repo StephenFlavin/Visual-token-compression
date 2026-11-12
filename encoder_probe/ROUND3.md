@@ -11,7 +11,7 @@ Model: Qwen2.5-VL-3B (448 px page = 256 tokens). Moonshot = `rgb3_lg_pb_h5`, thr
 | G0 | is the moonshot page (322 chars/token) readable from raw pixels? identity28, 200 pages, CPU | **1.07% CER** | pass (< 3%) |
 | Q1 | linear pixel readout of each frozen ViT block | glyph codes stay pixel-like to the last block (lg_pb_h5 final 0.65, moonshot 0.47 ink MCC); every code is at <= 0.30 after the 2x2 merger; Latin loses its readout by block 24 although Qwen reads it | pixels are lost at the merger; rgb3_lg_free_h4 dropped |
 | G2-lite | frozen / trained (LR 1e-4) / no merger, GridProbe, 500 pages, 3000 steps, CPU | moonshot 86.1 / 84.6 / **71.9%**, blind floor 99.5%; reference chars matched ~15 / 15 / **29%** | pre-registered branch: **"the ViT output is the wall at this budget"**; post hoc, the direct arm reads ~2x the merger arms |
-| R3-1 (G3) | LoRA fine-tune, the LLM as reader, **1000 steps** (5000 planned), RTX 4090, each arm vs its own blind control | latin_p8 (28): **55.0% CER vs blind 88.5%**, MC 0.88 vs 0.25, val loss 1.12 vs 2.48. latin_p5 (72): gist only (val loss 9.9% below blind, MC p = 0.02); lg_pb_h5 (107), moonshot (322): not read (loss = blind's) | latin_p8 read, latin_p5 partly; **G3 undecidable** (no arm near 3%). Analysis: [docs/ANALYSIS.md](../docs/ANALYSIS.md) |
+| R3-1 (G3) | LoRA fine-tune, the LLM as reader, **1000 steps** (5000 planned), RTX 4090, each arm vs its own blind control | latin_p8 (28): **55.0% CER vs blind 88.5%**, MC 0.88 vs 0.25, val loss 1.12 vs 2.48. latin_p5 (72): gist only (val loss 9.9% below blind, MC p = 0.02); lg_pb_h5 (107), moonshot (322): not read (loss = blind's) | latin_p8 read, latin_p5 partly; **G3 undecidable** (no arm near 3%). Analysis: [docs/background/ANALYSIS.md](../docs/background/ANALYSIS.md) |
 | R3-0, G1, G4, R3-2 | frozen-Qwen probe grid, glyph-ID probe, QA vs KV bytes | not run | - |
 
 ![R3-1: each arm against its blind control](img/r31_vs_blind.png)
@@ -25,7 +25,7 @@ Model: Qwen2.5-VL-3B (448 px page = 256 tokens). Moonshot = `rgb3_lg_pb_h5`, thr
 * **Reading of the evidence.** The moonshot's fine-tuned losses equal its blind run's to 3 decimals, and lg_pb_h5
   (107) is at its floor too, so density alone does not explain the failure. A 1000-step result is "not reached at
   this budget", not "impossible".
-* **Analysis** ([docs/ANALYSIS.md](../docs/ANALYSIS.md)): measured against its blind, latin_p5 gets the gist
+* **Analysis** ([docs/background/ANALYSIS.md](../docs/background/ANALYSIS.md)): measured against its blind, latin_p5 gets the gist
   (val loss 9.9% below blind, MC p = 0.02); the glyph codes get nothing. Q1, G2-lite and R3-1 put the glyph codes'
   loss inside the frozen ViT, upstream of R3-1's trained blocks 28-31.
 * **Next** (R3-1b stage A', proposed below): a 1000-step vision-side diagnostic (ViT blocks 8-31, LR 1e-4) on
@@ -166,7 +166,7 @@ What it shows:
   the checkpoint's own chat template and processor expansion token for token (real tokenizer, 2026-11-04), and the
   hub's old key layout (`model.layers.*`, `visual.*`, tied head) loads into transformers 5.22.1 bit for bit (test).
 
-**R3-1 short-budget results (GPU runner, RTX 4090, 2026-11-05; details and samples in docs/history/HANDOFF_2026-11.md).**
+**R3-1 short-budget results (GPU runner, RTX 4090, 2026-11-05; details and samples in docs/background/history/HANDOFF_2026-11.md).**
 1000 steps per arm (5000 planned), 1000 train / 16 test pages, one fair_hash `05dc0c9e8507`, with --blind-images
 controls. Rows: `encoder_probe/results/round3_ft_gpu3h{,_blind}/`.
 | Arm (chars/token) | CER clean | blind CER | cloze | MC | val loss (blind) |
@@ -198,7 +198,7 @@ Latin gets the identical recipe, steps and data. Memory and time figures are est
   amount of model training helps; drop that code.
 * **Stage A = R3-1 as above** (LoRA r=16 + merger + last 4 ViT blocks, 5k steps). Go to stage B for a code only if
   its held-out CER is still falling at 5k, or it plateaus well above its ceiling while Latin converges.
-* **Stage A' (proposed 2026-11-05 from docs/ANALYSIS.md, after R3-1's 1000-step rows, before any A' row):** the
+* **Stage A' (proposed 2026-11-05 from docs/background/ANALYSIS.md, after R3-1's 1000-step rows, before any A' row):** the
   same recipe with `--vision-blocks 24 --lr-vision 1e-4` (trains from block 8, where Q1's moonshot ink MCC is still
   0.86; R3-1 trained only from block 28, MCC 0.56, at 2e-5). 1000 steps, one run name, arms latin_p8 (positive
   control), lg_pb_h5, rgb3_lg_pb_h5, each with `--blind-images`. Estimated peak ~18-19 GB.
@@ -221,13 +221,13 @@ Latin gets the identical recipe, steps and data. Memory and time figures are est
   * Held-out text only (WikiText test/val), and needle facts never seen in training: random names, numbers, IDs.
   * Answers come straight from the image tokens, with no transcription in the output (KV trap above).
   * Same-recipe Latin baseline next to it, and compute/char measured (ViT + LLM prefill time on the 3090), not only
-    the estimate in docs/CONTEXT_BUDGET.md.
+    the estimate in docs/claude/CONTEXT_BUDGET.md.
   * The result repeats with a second seed.
   * Exact recall (needle accuracy) is reported separately from gist QA, because a dense code with no language prior
     fails first on exact strings.
 
 ### Re-scope after the literature report (2026-11-04)
-Source: [docs/research/2026-11-04_rgb3_lg_go_no_go_report.md](../docs/research/2026-11-04_rgb3_lg_go_no_go_report.md)
+Source: [docs/background/research/2026-11-04_rgb3_lg_go_no_go_report.md](../docs/background/research/2026-11-04_rgb3_lg_go_no_go_report.md)
 (external research task; several of its sources are recent preprints, verify before citing).
 * **Density sweep, not one extreme point.** Published go region: ~30-90 chars/token; the moonshot's 322-405 is ~7x past
   the best trained optical result at high accuracy and ~2x past the best text-side compressor (C3 ~170 at 93%).
@@ -546,7 +546,7 @@ Ways to push density past the literature's 30-90 chars/token, each testable on i
 * **Kill**: neither images nor codes keep QA accuracy within 10 points of plain text at any length that fits.
 * Fairness guard: Latin and every code get the same steps, data, LoRA config and unfrozen layers.
 
-## Runbook notes (this PC: Windows, RTX 3090, see docs/LOCAL_GPU.md and AGENTS.md gotchas)
+## Runbook notes (this PC: Windows, RTX 3090, see docs/gpu/LOCAL_GPU.md and AGENTS.md gotchas)
 * Clone at `C:\git\visual-bpe-run` (sparse: three learned_glyphs sample dirs have `:` in file names); venv `.venv`,
   `PYTHONUTF8=1 EP_PAGE_CACHE=1 EP_TRAIN_R2_CAP=400000000`, queue lines use `python`, not `python3`.
 * At most 3 GPU jobs (2 for Qwen-token jobs): Windows pages VRAM instead of OOM and jobs stall silently. Watch for
@@ -555,7 +555,7 @@ Ways to push density past the literature's 30-90 chars/token, each testable on i
 * Code built (2026-11-04, CPU-tested only): R3-1 trainer (`encoder_probe/experiments/finetune_qwen.py`,
   transformers + peft) and R3-2 benchmark (`encoder_probe/experiments/longctx_bench.py`). Weights: full
   Qwen2.5-VL-3B (~7.5 GB, into the Hugging Face cache), not just the vision tensors. Commands, in order, with VRAM
-  estimates: docs/LOCAL_GPU.md, "Round 3 on the 3090".
+  estimates: docs/gpu/LOCAL_GPU.md, "Round 3 on the 3090".
 * *(2026-11-05, measured on an RTX 4090: R3-1 1.21 s/step, peak 11.4 GB, so ~1 h 45 min per 5000-step arm plus ~7 min load+eval.)*
 * Estimates (not measured): R3-0 ~2 h; R3-1 smoke 30 min, full arms 2-4 h each; R3-2 harness ~1 day of coding,
   runs ~1-2 h per configuration.

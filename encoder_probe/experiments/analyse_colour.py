@@ -1,4 +1,4 @@
-"""Colour-gist phase A (docs/COLOUR_GIST.md): does an overlay carry more information per vision token than one
+"""Colour-gist phase A (docs/gpu/COLOUR_GIST.md): does an overlay carry more information per vision token than one
 stream? Applies the pre-registered A1/A2 gates to the finetune_qwen.py rows of the rgb<k>s_p<p> arms.
 
     python3 encoder_probe/experiments/analyse_colour.py --real colour_a1 --pitch 16

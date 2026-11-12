@@ -12,7 +12,7 @@ Rows: encoder_probe/results/<run>/runs.jsonl (existing (encoding, encoder, cond,
 
 --device auto (default) uses CUDA when available, else the CPU path (unchanged). On CUDA the probe and the
 test tokens live on the GPU, the train tokens/pixels too unless they exceed --gpu-data-gb (then each batch is
-copied over); bf16 autocast on CUDA; the batch sampling (numpy rng) is identical. Runbook: docs/LOCAL_GPU.md.
+copied over); bf16 autocast on CUDA; the batch sampling (numpy rng) is identical. Runbook: docs/gpu/LOCAL_GPU.md.
 """
 from __future__ import annotations
 

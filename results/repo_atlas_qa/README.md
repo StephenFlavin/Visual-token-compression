@@ -1,6 +1,6 @@
 # Repo atlas against SWE-QA: does the atlas help answer questions about a repository?
 
-*Pre-registered 2026-11-12, before any scored call. Plan and the earlier pilot: [docs/REPO_ATLAS_PLAN.md](../../docs/REPO_ATLAS_PLAN.md),
+*Pre-registered 2026-11-12, before any scored call. Plan and the earlier pilot: [docs/claude/REPO_ATLAS_PLAN.md](../../docs/claude/REPO_ATLAS_PLAN.md),
 [results/repo_atlas/README.md](../repo_atlas/README.md). Code: `experiments/repo_atlas_qa.py` (tests
 `tests/test_repo_atlas_qa.py`). Results go below the "Results" heading; nothing above it changes after the first
 scored call, except dated amendments.*

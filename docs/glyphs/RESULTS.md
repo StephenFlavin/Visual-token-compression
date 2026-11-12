@@ -1,6 +1,6 @@
 # Visual BPE: results so far (living document)
 
-Status: **2026-11-05.** Current hand-off and next steps: [HANDOFF.md](HANDOFF.md).
+Status: **2026-11-05.** Current hand-off and next steps: [HANDOFF.md](../HANDOFF.md).
 
 | Line of work | Verdict | Section |
 |---|---|---|
@@ -128,8 +128,8 @@ weaker than DeepSeek-OCR's own decoder (~10x compression); latin_p32 still impro
 the decisions.
 
 ## Round 3, Qwen2.5-VL-3B: can a small VLM learn to read dense codes?
-Design, gates and amendments: [encoder_probe/ROUND3.md](../encoder_probe/ROUND3.md); context arithmetic:
-[CONTEXT_BUDGET.md](CONTEXT_BUDGET.md). Densities are chars per Qwen vision token (448 px page, 256 tokens; text
+Design, gates and amendments: [encoder_probe/ROUND3.md](../../encoder_probe/ROUND3.md); context arithmetic:
+[CONTEXT_BUDGET.md](../claude/CONTEXT_BUDGET.md). Densities are chars per Qwen vision token (448 px page, 256 tokens; text
 tokens are 4.33 chars). The moonshot `rgb3_lg_pb_h5` is an RGB overlay of three learned-glyph pages (322 chars/token).
 
 | Step (2026-11-04/05) | Result | Reading |
@@ -142,11 +142,11 @@ tokens are 4.33 chars). The moonshot `rgb3_lg_pb_h5` is an RGB overlay of three 
 * latin_p8 transcribes the first line(s) of each window nearly exactly, then drifts into fluent invented text; its
   loss was still falling at 1000 steps. The moonshot's losses equal its blind run's to 3 decimals.
 * Blind floors differ by code (latin_p5 77.8%, latin_p8 88.5%, moonshot 89.9%), so each arm needs its own control.
-* Analysis against the blinds (exact tests, bits per vision token, where the information is lost): [ANALYSIS.md](ANALYSIS.md).
+* Analysis against the blinds (exact tests, bits per vision token, where the information is lost): [ANALYSIS.md](../background/ANALYSIS.md).
 * Rows: `encoder_probe/results/{round3_cpu_tp200,quick_q1,g2lite*,round3_ft_gpu3h,round3_ft_gpu3h_blind}/`.
-* Since then (2026-11-06): own-encoder Stage 0 was inconclusive ([OWN_ENCODER.md](OWN_ENCODER.md)). The current
-  direction is gist through colour channels ([COLOUR_GIST.md](COLOUR_GIST.md)). Untrained Qwen reads 2-stream
+* Since then (2026-11-06): own-encoder Stage 0 was inconclusive ([OWN_ENCODER.md](../gpu/OWN_ENCODER.md)). The current
+  direction is gist through colour channels ([COLOUR_GIST.md](../gpu/COLOUR_GIST.md)). Untrained Qwen reads 2-stream
   Latin overlays as one blended text (R(2) = 0.51); a CPU LoRA-only fine-tune reached R(2) = 0.72 against the
-  > 1 target. Next: a GPU run training the ViT from block 16. See [HANDOFF.md](HANDOFF.md).
+  > 1 target. Next: a GPU run training the ViT from block 16. See [HANDOFF.md](../HANDOFF.md).
 
-![Chars in Qwen's 32k window per encoding: potential vs read so far](img/ctx_budget.png)
+![Chars in Qwen's 32k window per encoding: potential vs read so far](../img/ctx_budget.png)

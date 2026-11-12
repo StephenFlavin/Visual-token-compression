@@ -4,8 +4,8 @@ Written 2026-11-04 for an external research task. Numbers are from this repo (cl
 numbers are preliminary.
 
 > **Status 2026-11-05:** the brief is kept as sent. The research report it asked for is
-> [research/2026-11-04_rgb3_lg_go_no_go_report.md](research/2026-11-04_rgb3_lg_go_no_go_report.md); current results are in
-> [RESULTS.md](RESULTS.md) (round 3) and [HANDOFF.md](HANDOFF.md). Each section below has a dated status line.
+> [research/2026-11-04_rgb3_lg_go_no_go_report.md](../background/research/2026-11-04_rgb3_lg_go_no_go_report.md); current results are in
+> [RESULTS.md](../glyphs/RESULTS.md) (round 3) and [HANDOFF.md](../HANDOFF.md). Each section below has a dated status line.
 
 ## What it is
 *Status 2026-11-05: unchanged. `rgb3_lg_free_h4` (405) was dropped after Q1; `rgb3_lg_pb_h5` (322) is the moonshot.*

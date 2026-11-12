@@ -1,4 +1,4 @@
-"""Table, gates and the comparison with the image arms for Test B (text_slots.py, docs/TEXT_SLOTS.md).
+"""Table, gates and the comparison with the image arms for Test B (text_slots.py, docs/gpu/TEXT_SLOTS.md).
 
     python3 encoder_probe/experiments/analyse_slots.py encoder_probe/results/tb
     python3 encoder_probe/experiments/analyse_slots.py encoder_probe/results/tb --image latin_p8_trained:27.3:14.1:15.2
@@ -17,7 +17,7 @@ from pathlib import Path
 import numpy as np
 
 # name -> (chars per vision token, upper 95% bound of bits per vision token: natural, shuffled). Run 0, frozen
-# Qwen2.5-VL-3B, docs/PLAN_3090.md Results.
+# Qwen2.5-VL-3B, docs/gpu/PLAN_3090.md Results.
 IMAGE_REF = {"latin_p8 frozen (Run 0)": (28.1, 13.10, 26.40)}
 G1_CER, G2_CER = 0.01, 0.03
 BUDGET_SAMPLES = 48000   # the Runs 1-2 image arms: 6000 steps x batch 8

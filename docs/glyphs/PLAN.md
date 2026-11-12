@@ -3,14 +3,14 @@
 > **Status (2026-11-05).** This plan (phases 1-2, kill criteria K1-K3) is finished: **K3 KILL**. Trained CRNN
 > readers favour plain Latin over substitution and quadrant packing (latin 1.73% CER at 7.5 px²/char vs subst300
 > 2.26% at 8.9); K1 (~1.19x em) and K2 (PP-OCR 0.89x vs the 0.80 bar) were negative too. Results:
-> [docs/RESULTS.md](docs/RESULTS.md). Later sub-projects, each with its own plan:
-> * Learned glyph alphabet, [learned_glyphs/PLAN.md](learned_glyphs/PLAN.md): qualified GO with raw-pixel readers
->   (0.57x Latin's px²/char at 3% CER), [learned_glyphs/RESULTS.md](learned_glyphs/RESULTS.md).
-> * Frozen-encoder probe, [encoder_probe/PLAN.md](encoder_probe/PLAN.md): dense codes are lost through frozen SigLIP
->   and DeepEncoder, [encoder_probe/RESULTS.md](encoder_probe/RESULTS.md).
-> * Round 3, fine-tuning Qwen2.5-VL-3B to read the codes, [encoder_probe/ROUND3.md](encoder_probe/ROUND3.md): at 1000
+> [docs/glyphs/RESULTS.md](RESULTS.md). Later sub-projects, each with its own plan:
+> * Learned glyph alphabet, [learned_glyphs/PLAN.md](../../learned_glyphs/PLAN.md): qualified GO with raw-pixel readers
+>   (0.57x Latin's px²/char at 3% CER), [learned_glyphs/RESULTS.md](../../learned_glyphs/RESULTS.md).
+> * Frozen-encoder probe, [encoder_probe/PLAN.md](../../encoder_probe/PLAN.md): dense codes are lost through frozen SigLIP
+>   and DeepEncoder, [encoder_probe/RESULTS.md](../../encoder_probe/RESULTS.md).
+> * Round 3, fine-tuning Qwen2.5-VL-3B to read the codes, [encoder_probe/ROUND3.md](../../encoder_probe/ROUND3.md): at 1000
 >   steps only latin_p8 (28 chars/token) is read; the glyph codes sit at their blind floors; gate G3 undecided
->   ([docs/HANDOFF.md](docs/HANDOFF.md)).
+>   ([docs/HANDOFF.md](../HANDOFF.md)).
 >
 > The plan below is the pre-registered original, unchanged.
 
@@ -58,7 +58,7 @@ CER = Levenshtein(normalise(ref), normalise(decode(output))) / len(ref); normali
 ### Phase 1 — zero-shot Claude sweep
 * Passages: ~3 000-char, sentence-shuffled from WikiText-103 **test** split (6 natural + 3 word-scrambled).
 * Schemes (main grid): `latin`, `latin_condensed`, `subst300`, `subst1000`, `quad3` (+ `quad4`, `subst300_legend` small side runs).
-* Budgets: px²/char ∈ ~{9, 13, 18, 27, 40, 60, 90}, square canvases (final grid chosen by a pilot). Prior art (docs/prior-art.md): published legible regimes are ~13–100 px²/char (Glyph's tuned setting ≈45–55; LensVLM 15× ≈13 and mostly illegible), so <9 is likely uninformative.
+* Budgets: px²/char ∈ ~{9, 13, 18, 27, 40, 60, 90}, square canvases (final grid chosen by a pilot). Prior art (docs/background/prior-art.md): published legible regimes are ~13–100 px²/char (Glyph's tuned setting ≈45–55; LensVLM 15× ≈13 and mostly illegible), so <9 is likely uninformative.
 * Pilot first (1 passage, all schemes, wide grid) → report cost/call, then main sweep.
 * Est. ~360 calls. Cost per call measured in pilot (probe: $0.013 for a tiny image; expect ~$0.03–0.10 with ~800 output tokens).
 
@@ -76,7 +76,7 @@ Predictions: (P1) quadrant needs ≥ 30 % *more* px²/char than best Latin. (P2)
 
 * **K1** – if subst1000 saves < 15 % line width vs condensed Latin at equal em → strong prior of failure.
 * **K2 (Phase 1)** – subst never achieves ≥ 20 % lower P@10 % than best Latin (natural *or* scrambled) → zero-shot negative.
-* **K3 (Phase 2, decisive)** – subst P@3 % not ≥ 30 % below best Latin (the concept doc's own bar) → **kill**. **Outcome (2026-11-03): KILLED** — converged plain DejaVu Latin beats subst300/subst1000 at every budget (docs/RESULTS.md).
+* **K3 (Phase 2, decisive)** – subst P@3 % not ≥ 30 % below best Latin (the concept doc's own bar) → **kill**. **Outcome (2026-11-03): KILLED** — converged plain DejaVu Latin beats subst300/subst1000 at every budget (docs/glyphs/RESULTS.md).
 * Quadrant killed if its Phase-2 P@3 % ≥ best Latin.
 * Context for any positive result: text-side compression (mean pooling, learned compressors, C3 at 98% @20×) already matches or beats optical compression, so RESULTS.md must state the win relative to that ceiling.
 * If subst passes but quadrant fails → idea reduces to "bigger alphabet"; next step would be *learned* glyphs (end-to-end optimised against the reader), not hand-designed ones.
@@ -120,12 +120,12 @@ All text is ASCII after corpus cleaning. Data in `data/` (git-ignored), outputs 
 
 | WP | Owner files | Depends on |
 |---|---|---|
-| A corpus + dictionary + K1 report | `vbpe/corpus.py`, `vbpe/dictionary.py`, `scripts/build_data.py`, `tests/test_corpus_dict.py`, `docs/dictionary-report.md` | — |
+| A corpus + dictionary + K1 report | `vbpe/corpus.py`, `vbpe/dictionary.py`, `scripts/build_data.py`, `tests/test_corpus_dict.py`, `docs/glyphs/dictionary-report.md` | — |
 | C substitution scheme | `vbpe/schemes/substitution.py`, `assets/cjk_symbols.txt`, `tests/test_substitution.py` | Dictionary interface (stub until A lands) |
 | D quadrant scheme | `vbpe/schemes/quadrant.py`, `tests/test_quadrant.py` | layout |
-| E1 Claude client + vision checks | `vbpe/claude_eval.py`, `scripts/check_claude_vision.py`, `tests/test_claude_eval.py`, `docs/claude-eval-notes.md` | — |
+| E1 Claude client + vision checks | `vbpe/claude_eval.py`, `scripts/check_claude_vision.py`, `tests/test_claude_eval.py`, `docs/claude/claude-eval-notes.md` | — |
 | E2 Phase-1 runner + analysis | `experiments/phase1_sweep.py`, `vbpe/analysis.py`, `tests/test_analysis.py` | E1 interface (fake transcriber for dry-run) |
 | F Phase-2 CRNN | `vbpe/crnn/*`, `experiments/phase2_train.py`, `tests/test_crnn.py` | layout, schemes, corpus interface |
-| G prior art | `docs/prior-art.md` | — |
+| G prior art | `docs/background/prior-art.md` | — |
 
-Integration (lead): merge, full tests, pilot → main Phase-1 sweep → Phase-2 grid → `docs/RESULTS.md`.
+Integration (lead): merge, full tests, pilot → main Phase-1 sweep → Phase-2 grid → `docs/glyphs/RESULTS.md`.

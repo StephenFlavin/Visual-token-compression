@@ -1,4 +1,4 @@
-"""Colour gist, CPU track (docs/COLOUR_GIST.md "S1"): a small VLM whose vision encoder is trained FROM SCRATCH.
+"""Colour gist, CPU track (docs/gpu/COLOUR_GIST.md "S1"): a small VLM whose vision encoder is trained FROM SCRATCH.
 
 Why: in Qwen2.5-VL the pretrained ViT keeps both colour streams to block 16, then its pretrained letter/word features
 blend them (A1-cpu diagnostics). An encoder with no pretrained text features is the fairest test of the overlay

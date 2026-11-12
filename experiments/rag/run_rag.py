@@ -1,4 +1,4 @@
-"""RAG with page images (docs/RAG_PLAN.md; predictions committed before any call, 2026-11-11).
+"""RAG with page images (docs/claude/RAG_PLAN.md; predictions committed before any call, 2026-11-11).
 
 One single-shot Opus call per question and arm, no tools, low effort. Retrieval: BM25 over ~1,200-character passages.
 Arms: closed (no passages), T5 (top-5 as text), P5 (same top-5 as pages at 88.2 px²/char), Pmatch (as many top-ranked

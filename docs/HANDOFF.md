@@ -1,25 +1,25 @@
 # Hand-off (current state, 2026-11-12)
 
-**The work is being wound down** ([REVIEW_2026-11-11.md](REVIEW_2026-11-11.md), README "Where it stands"). Read
+**The work is being wound down** ([REVIEW_2026-11-11.md](background/REVIEW_2026-11-11.md), README "Where it stands"). Read
 [AGENTS.md](../AGENTS.md) first (gotchas), then this page.
 
 | Item | State | Why |
 |---|---|---|
-| Page images as cheaper context for Claude | **Result.** 2.2x lossless for lookups, chains and counts ([CLAUDE_QA.md](CLAUDE_QA.md)); compressing the text instead fails (Test A, [results/claude_qa/prune](../results/claude_qa/prune/README.md): pruned text 86.0% vs pages 97.7%, and it does not stack). **Limit (repeat calls, 2026-11-12, [results/claude_qa/repeat](../results/claude_qa/repeat/README.md)):** wording-sensitive questions lose about 3 points from pages at 2.2x and 2.9x alike (97.2% / 96.2% vs text 100%, 15 calls each); about 1 page call in 6 reads every passive sentence backwards; the original questions stay within 0.7 points | The vision encoder is the only compressor a user can reach on a closed model |
+| Page images as cheaper context for Claude | **Result.** 2.2x lossless for lookups, chains and counts ([CLAUDE_QA.md](claude/CLAUDE_QA.md)); compressing the text instead fails (Test A, [results/claude_qa/prune](../results/claude_qa/prune/README.md): pruned text 86.0% vs pages 97.7%, and it does not stack). **Limit (repeat calls, 2026-11-12, [results/claude_qa/repeat](../results/claude_qa/repeat/README.md)):** wording-sensitive questions lose about 3 points from pages at 2.2x and 2.9x alike (97.2% / 96.2% vs text 100%, 15 calls each); about 1 page call in 6 reads every passive sentence backwards; the original questions stay within 0.7 points | The vision encoder is the only compressor a user can reach on a closed model |
 | Dense codes (braille-like glyphs, chunk glyphs, colour overlay) | **Negative result.** Readable from raw pixels, lost by every pretrained encoder | No reader they can be used with: Claude cannot be trained, and a trainable model does not need pixels |
-| **Local model: one evening on Qwen3.8-27B, no training** | **To run: the prompt is the next section**, plan in [LOCAL_QWEN.md](LOCAL_QWEN.md) | The one cheap unknown: does the page-image trick carry over to a local model, and how fast does it write with its built-in multi-token module |
-| Test B, text slots against page pixels ([TEXT_SLOTS.md](TEXT_SLOTS.md)) | **Built, not scheduled** (code and tests on the branch; never run on a GPU) | A replication of published work (C3, ARC-Encoder) for a payoff current local models get from their architecture |
+| **Local model: one evening on Qwen3.8-27B, no training** | **To run: the prompt is the next section**, plan in [LOCAL_QWEN.md](gpu/LOCAL_QWEN.md) | The one cheap unknown: does the page-image trick carry over to a local model, and how fast does it write with its built-in multi-token module |
+| Test B, text slots against page pixels ([TEXT_SLOTS.md](gpu/TEXT_SLOTS.md)) | **Built, not scheduled** (code and tests on the branch; never run on a GPU) | A replication of published work (C3, ARC-Encoder) for a payoff current local models get from their architecture |
 | Runs 1-2 image arms on the 3090 (Stage A, B, channel capacity) | **Stopped by step 0 of the prompt; resuming is the user's decision** (command below). Stage C and colour Run 4 are closed | They only close the original idea with a fair test; about 19 runs of ~6.8 h each |
 
 Branches: the 3090 PC works on `claude/validation-harness`; everything since the review is on
 `claude/sharp-mendel-kkhg4g` and is merged in by step 1 of the prompt. Parked earlier lines: colour gist
-([COLOUR_GIST.md](COLOUR_GIST.md)), Stage 0 ([OWN_ENCODER.md](OWN_ENCODER.md)). Older session notes:
-[history/HANDOFF_2026-11.md](history/HANDOFF_2026-11.md).
+([COLOUR_GIST.md](gpu/COLOUR_GIST.md)), Stage 0 ([OWN_ENCODER.md](gpu/OWN_ENCODER.md)). Older session notes:
+[history/HANDOFF_2026-11.md](background/history/HANDOFF_2026-11.md).
 
 ## Prompt for the 3090 (2026-11-12): page images and generation speed on Qwen3.8-27B
 ```text
 Work in /c/git/visual-bpe-run (Git Bash; `. .venv/env.sh`; `python`, not `python3`; PYTHONUTF8=1). Read AGENTS.md
-(gotchas, especially GPU runners and Windows), docs/HANDOFF.md and docs/LOCAL_QWEN.md. LOCAL_QWEN.md is
+(gotchas, especially GPU runners and Windows), docs/HANDOFF.md and docs/gpu/LOCAL_QWEN.md. LOCAL_QWEN.md is
 pre-registered: do not change its arms, checks, predictions or outcome table after seeing data; if something must
 change, write a dated amendment in it first. No training in this session.
 
@@ -38,7 +38,7 @@ change, write a dated amendment in it first. No training in this session.
    --image-max-tokens or lower --page-px to a multiple of 32, write that down as a dated amendment, rerun the
    page arms). If the text arm does not fit in memory, follow the runbook's memory steps and record which was used.
 4. Documents 1 and 2. Then the two speed runs (plain, then the server restarted with the multi-token module).
-5. Write-up. A dated "Results" section in docs/LOCAL_QWEN.md: the summary table, each prediction as PASS / FAIL /
+5. Write-up. A dated "Results" section in docs/gpu/LOCAL_QWEN.md: the summary table, each prediction as PASS / FAIL /
    not evaluable, which row of the outcome table applies, prompt-processing and generation speeds, memory used,
    the server command, problems. One line in AGENTS.md "Findings" and one row in the docs/HANDOFF.md table. Commit
    results/local_qa and the docs, push.
@@ -64,9 +64,9 @@ Then do step 7 (write-up) when the driver logs "all requested stages done". Stag
 ## Earlier prompt, still the reference for the driver's steps: PLAN_3090 Runs 1-2 (amendment 4: stage A learnability, B Latin, C dense glyphs; amendment 5: the bar; amendment 6: channel capacity)
 ```text
 Pull branch claude/validation-harness (git pull --rebase origin claude/validation-harness). Read AGENTS.md
-(gotchas, especially GPU runners), docs/PLAN_3090.md (the ladder, amendments 1-6 and the Results sections;
+(gotchas, especially GPU runners), docs/gpu/PLAN_3090.md (the ladder, amendments 1-6 and the Results sections;
 amendment 4 sets the budget, the arm order and the gates; amendment 5 which number the > 20 bar reads;
-amendment 6 the channel-capacity diagnostic) and docs/LOCAL_GPU.md section 8 (Windows RTX 3090:
+amendment 6 the channel-capacity diagnostic) and docs/gpu/LOCAL_GPU.md section 8 (Windows RTX 3090:
 Git Bash, `. .venv/env.sh`, `python` not `python3`, PYTHONUTF8=1, EP_TRAIN_R2_CAP=400000000, one finetune job at a
 time; Windows pages VRAM instead of raising OOM, so watch progress and checkpoint mtimes). Everything below is
 pre-registered: do not change it after seeing data; if something must change, add a dated amendment to PLAN_3090.md
@@ -119,7 +119,7 @@ first. Never commit adapters (encoder_probe/cache is git-ignored).
 6. Stage C, only if A1 and A2 both PASS and the banks lg_n0_pb_c2_h7md / lg_pb_c2t4_h7md exist on the branch
    (they are on the branch since 2026-11-07): lg_n0_pb_c2_h7md, then lg_pb_c2t4_h7md (Run 2 verdict).
    If A1 or A2 fails, skip stage C: the glyph line stops per amendment 4.
-7. Write the results into docs/PLAN_3090.md (Results: a "Runs 1-2" subsection with analyse_run12's tables, the gates
+7. Write the results into docs/gpu/PLAN_3090.md (Results: a "Runs 1-2" subsection with analyse_run12's tables, the gates
    and verdicts vs amendments 3-4, the > 20 recovered-chars bar table with its amendment-5 status (PASS,
    placement-sensitive pass, below bar), the channel-capacity table and its readout (amendment 6), s/step, peak
    VRAM, S, problems) and one line in
@@ -131,18 +131,18 @@ and problems.
 ## Status
 | Line of work | Verdict | Details |
 |---|---|---|
-| Phases 1-2: hand-designed glyph substitution vs Latin | **KILL**: plain Latin wins | [RESULTS.md](RESULTS.md) |
+| Phases 1-2: hand-designed glyph substitution vs Latin | **KILL**: plain Latin wins | [RESULTS.md](glyphs/RESULTS.md) |
 | Learned glyph alphabet (pixel space, own reader) | **qualified GO**: 0.57x Latin's px²/char | [learned_glyphs/RESULTS.md](../learned_glyphs/RESULTS.md) |
 | Frozen encoders (SigLIP, DeepEncoder) | dense codes lost; only sparse Latin reads | [encoder_probe/RESULTS.md](../encoder_probe/RESULTS.md) |
 | Round 3, G0: moonshot `rgb3_lg_pb_h5` (322 chars/token) from raw pixels | **1.07% CER**: the page itself is readable | ROUND3.md |
 | Round 3, Q1: linear readout of frozen Qwen ViT | glyph codes pixel-like to the last block; everything collapses linearly at the merger | ROUND3.md |
 | Round 3, G2-lite (CPU probe, 500 pages) | **"ViT output is the wall at this budget"**: no-merger arm matches ~29% of chars vs ~15% | ROUND3.md |
 | Round 3, R3-1 (LoRA fine-tune, 1000 steps, RTX 4090) | **latin_p8 (28 chars/token)** is read; latin_p5 (72) gets the gist only; the glyph codes are not read; **G3 undecidable** | below |
-| Analysis of all of the above against blind controls | glyph codes' information is lost inside the frozen ViT, upstream of R3-1's trained blocks; next: train from block 8 | [ANALYSIS.md](ANALYSIS.md) |
-| Own encoder, Stage 0: text compressor into frozen Qwen LLM (RTX 4090) | **inconclusive**: the ratio-4 positive control reached only 64% CER at 8000 steps; recipe too slow | [OWN_ENCODER.md](OWN_ENCODER.md) |
-| **Colour gist** A0/A0b: Latin in 2-3 colour channels, untrained Qwen (CPU) | reads a blend of the streams, can't pick one by colour; info per vision token R(2) = 0.51 at 16 px (below 1 at every size) | [COLOUR_GIST.md](COLOUR_GIST.md) |
-| **Colour gist** A1-cpu: 2 streams, LoRA only, vision frozen, 500 steps (CPU) | **missed** the > 1 bar: R(2) = 0.72 (0.54-0.94); one stream read (68% of a single stream's info), the other not | [COLOUR_GIST.md](COLOUR_GIST.md) |
-| **Colour gist** diagnostics (CPU) | both streams survive equally to ViT block 16, then blend in the later blocks (not a brightness problem) | [COLOUR_GIST.md](COLOUR_GIST.md) |
+| Analysis of all of the above against blind controls | glyph codes' information is lost inside the frozen ViT, upstream of R3-1's trained blocks; next: train from block 8 | [ANALYSIS.md](background/ANALYSIS.md) |
+| Own encoder, Stage 0: text compressor into frozen Qwen LLM (RTX 4090) | **inconclusive**: the ratio-4 positive control reached only 64% CER at 8000 steps; recipe too slow | [OWN_ENCODER.md](gpu/OWN_ENCODER.md) |
+| **Colour gist** A0/A0b: Latin in 2-3 colour channels, untrained Qwen (CPU) | reads a blend of the streams, can't pick one by colour; info per vision token R(2) = 0.51 at 16 px (below 1 at every size) | [COLOUR_GIST.md](gpu/COLOUR_GIST.md) |
+| **Colour gist** A1-cpu: 2 streams, LoRA only, vision frozen, 500 steps (CPU) | **missed** the > 1 bar: R(2) = 0.72 (0.54-0.94); one stream read (68% of a single stream's info), the other not | [COLOUR_GIST.md](gpu/COLOUR_GIST.md) |
+| **Colour gist** diagnostics (CPU) | both streams survive equally to ViT block 16, then blend in the later blocks (not a brightness problem) | [COLOUR_GIST.md](gpu/COLOUR_GIST.md) |
 
 **R3-1 short budget** (1000 steps, 1000 train / 16 test pages, clean, one fair_hash `05dc0c9e8507`):
 | Arm (chars/token) | CER | blind CER | cloze (blind) | MC (blind) | val loss (blind) |
@@ -171,7 +171,7 @@ User's plan, one variable at a time:
 
 The target is **gist** (a "system 1" background context), not exact copying.
 
-**Targets** (pre-registered; full table in [COLOUR_GIST.md](COLOUR_GIST.md) "At a glance"). Information per vision
+**Targets** (pre-registered; full table in [COLOUR_GIST.md](gpu/COLOUR_GIST.md) "At a glance"). Information per vision
 token is measured against each arm's own blind control:
 * **headline:** 2 streams carry > 1x the info per vision token of 1 stream at the same font, CI above 1;
 * **strong:** ≥ 1.5x, each stream's MC ≥ 0.8x the 1-stream MC, other-stream lure ≤ 15%;
@@ -188,12 +188,12 @@ token is measured against each arm's own blind control:
     collapse fix and an alignment stage. That is a bootstrap and budget limit, not an overlay result
     (COLOUR_GIST.md "S1 result").
 
-**2026-11-06: superseded by the user's 3090 plan ([PLAN_3090.md](PLAN_3090.md)); the colour A1 prompt below is parked (colour returns as Run 4).** So the GPU A1 trains the ViT from block 16 (amendment 3); the prompt below runs it. Remaining CPU options are
+**2026-11-06: superseded by the user's 3090 plan ([PLAN_3090.md](gpu/PLAN_3090.md)); the colour A1 prompt below is parked (colour returns as Run 4).** So the GPU A1 trains the ViT from block 16 (amendment 3); the prompt below runs it. Remaining CPU options are
 builds, not tests (the phase B from-scratch encoder).
 
 ## Own encoder, Stage 0 (ran 2026-11-05/06, RunPod RTX 4090)
 The text-side compression ceiling: how many chars per slot a learned encoder can pack into Qwen's frozen LLM.
-Design, amendment 1 and results: [OWN_ENCODER.md](OWN_ENCODER.md); code `encoder_probe/experiments/text_compress.py`,
+Design, amendment 1 and results: [OWN_ENCODER.md](gpu/OWN_ENCODER.md); code `encoder_probe/experiments/text_compress.py`,
 table and curves `analyse_stage0.py`, rows `encoder_probe/results/stage0/runs.jsonl`.
 * **2026-11-06: positive control failed, Stage 0 inconclusive.** Ratio 4 (17.6 chars/slot) reached CER 74.8% at
   3000 steps and **64.0% at 8000** (blind 77.8%), though its loss is 1.9 nats/token below blind: the decoder
@@ -203,7 +203,7 @@ table and curves `analyse_stage0.py`, rows `encoder_probe/results/stage0/runs.js
 ## Open items, in priority order
 **On the cloud runner (2026-11-12), each run by an Opus subagent:** six atlas tests are finished (pilot, SWE-QA,
 security, hard coding tasks, C-to-Rust migration, plan quality): the use-case table and their results are in
-[CLAUDE_QA.md](CLAUDE_QA.md). The plan-quality test ([PLAN_QUALITY_TEST.md](PLAN_QUALITY_TEST.md),
+[CLAUDE_QA.md](claude/CLAUDE_QA.md). The plan-quality test ([PLAN_QUALITY_TEST.md](claude/PLAN_QUALITY_TEST.md),
 `results/plan_quality/`, $44.25) found atlas briefs no better than file-list briefs and the planner unable to size
 work or pick the worker. **Q1, the hard coding tasks again with auto-memory off** (`results/repo_atlas_swe_rerun/`, 64 runs, $35.07): plain
 19 of 32 task-runs solved, atlas 17, turns not reliably lower (p = 0.30), 3.1x the cost: the earlier 11 against 8
@@ -228,14 +228,14 @@ Nothing else is scheduled. The list below is the earlier one; all of it is parke
 4. **Parked (earlier lines; still valid, lower priority under the user's direction):**
    * Stage A' on the glyph codes (ROUND3.md R3-1b);
    * the Latin density sweep;
-   * Stage 0 amendment 2 ([OWN_ENCODER.md](OWN_ENCODER.md));
+   * Stage 0 amendment 2 ([OWN_ENCODER.md](gpu/OWN_ENCODER.md));
    * 5000-step Latin arms.
 
 ## Prompt for the next GPU session (colour A1: parked 2026-11-07, superseded by the 3090 prompt above)
 ```text
-Pull branch claude/validation-harness. Read AGENTS.md (gotchas), docs/HANDOFF.md and docs/COLOUR_GIST.md:
-targets ("At a glance"), A0/A0b/A1-cpu results, amendments 1-3 and the A1 runbook. Mechanics: docs/GPU_RUNNER.md
-sections 0-2 (any Linux GPU) or docs/LOCAL_GPU.md section 8 (Windows RTX 3090).
+Pull branch claude/validation-harness. Read AGENTS.md (gotchas), docs/HANDOFF.md and docs/gpu/COLOUR_GIST.md:
+targets ("At a glance"), A0/A0b/A1-cpu results, amendments 1-3 and the A1 runbook. Mechanics: docs/gpu/GPU_RUNNER.md
+sections 0-2 (any Linux GPU) or docs/gpu/LOCAL_GPU.md section 8 (Windows RTX 3090).
 
 1. Setup (GPU_RUNNER.md section 1), then the CPU tests encoder_probe/tests/test_colour.py and test_round3.py.
    Note GPU, free disk and torch/transformers/peft versions in your first commit.
@@ -247,7 +247,7 @@ sections 0-2 (any Linux GPU) or docs/LOCAL_GPU.md section 8 (Windows RTX 3090).
    --blind-images run; identical flags, one fair_hash) under nohup, pushing after each arm. If time is short,
    stop after a complete arm pair (never leave an arm without its blind). Keep >= 5 GB disk free.
 4. Then: python3 encoder_probe/experiments/analyse_colour.py --real colour_a1 --pitch 16 --equal-density rgb2s_p16 rgb1s_p12
-   Add its table, the per-stream table and the verdicts as a dated "A1 results" section in docs/COLOUR_GIST.md
+   Add its table, the per-stream table and the verdicts as a dated "A1 results" section in docs/gpu/COLOUR_GIST.md
    (headline R(2) with CI; strong; equal density; A2 only if the headline passed), update the "At a glance" table
    and docs/HANDOFF.md, and give me the results table.
 

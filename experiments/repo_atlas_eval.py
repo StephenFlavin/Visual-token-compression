@@ -1,4 +1,4 @@
-"""Repo atlas, stage 1: where does the change go? (docs/REPO_ATLAS_PLAN.md, results/repo_atlas/README.md)
+"""Repo atlas, stage 1: where does the change go? (docs/claude/REPO_ATLAS_PLAN.md, results/repo_atlas/README.md)
 
 One question per SWE-bench task: the issue, then "list the files that must change, most likely first". Arms:
 

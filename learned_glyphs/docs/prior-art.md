@@ -1,6 +1,6 @@
 # Prior art: learned glyph alphabets for machine reading (WP-LG4)
 
-*Searched 2026-11-02. This adds to `../../docs/prior-art.md` ([P]), which already covers optical compression, PIXEL, FontCode and Neural Glyph. "Unverified" means seen only in an abstract or a secondary summary. "(ours)" marks our own arithmetic.*
+*Searched 2026-11-02. This adds to `../../docs/background/prior-art.md` ([P]), which already covers optical compression, PIXEL, FontCode and Neural Glyph. "Unverified" means seen only in an abstract or a secondary summary. "(ours)" marks our own arithmetic.*
 
 ## Bottom line
 

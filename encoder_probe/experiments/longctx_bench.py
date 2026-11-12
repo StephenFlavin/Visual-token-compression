@@ -3,7 +3,7 @@
     python longctx_bench.py --inputs text latin_p8 --lengths 10000 --tasks needle --depths 0.5 --run-name round3_lc_smoke
     python longctx_bench.py --inputs text latin_p8 col_b4 --adapter encoder_probe/cache/r3_adapters/<file>.pt
 
-Plan: encoder_probe/ROUND3.md (R3-2). Runbook (RTX 3090): docs/LOCAL_GPU.md, "Round 3 on the 3090".
+Plan: encoder_probe/ROUND3.md (R3-2). Runbook (RTX 3090): docs/gpu/LOCAL_GPU.md, "Round 3 on the 3090".
 
 * Documents: concatenated held-out WikiText (data/test.txt + data/val.txt, 2.06M chars, never used for training),
   ``--lengths`` chars from a seeded random offset, cut at word boundaries.

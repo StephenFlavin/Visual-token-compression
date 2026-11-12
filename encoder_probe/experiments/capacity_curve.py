@@ -1,4 +1,4 @@
-"""Capacity curve (docs/PLAN_3090.md, Run 0 / 0b): bits recovered per vision token vs chars per vision token.
+"""Capacity curve (docs/gpu/PLAN_3090.md, Run 0 / 0b): bits recovered per vision token vs chars per vision token.
 
 For each encoding (a ``get_encoding_s`` name at S = 448), text set and (optional) page shift, every test page is
 scored with Qwen2.5-VL-3B (frozen, or with a finetune_qwen.py ``--adapter``) by the teacher-forced loss of its

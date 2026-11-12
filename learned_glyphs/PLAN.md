@@ -8,8 +8,8 @@ does not read `lg_pb_h5` (107 chars/token) or its RGB overlay (322) after 1000 s
 ([encoder_probe/ROUND3.md](../encoder_probe/ROUND3.md), [results](../encoder_probe/RESULTS.md#round-3-qwen25-vl-3b-can-a-vlm-learn-to-read-the-codes-2026-11-05)). The CRNN result below stands;
 the VLM case is open.
 
-Hand-designed Visual BPE (CJK proxy glyphs, quadrant packing) looks weak (see ../PLAN.md, ../AGENTS.md,
-../docs/prior-art.md). The remaining credible version of the idea: **learn the glyphs themselves**,
+Hand-designed Visual BPE (CJK proxy glyphs, quadrant packing) looks weak (see ../docs/glyphs/PLAN.md, ../AGENTS.md,
+../docs/background/prior-art.md). The remaining credible version of the idea: **learn the glyphs themselves**,
 jointly with a reader, so each symbol (letter or frequent chain) gets a shape optimised to survive
 low-resolution rendering. This sub-project tests whether that beats ordinary typography per pixel.
 
@@ -136,4 +136,4 @@ px_per_char, cer, symbol_cer, steps, train_mode ("joint"|"transfer"|"bridge"), c
 | LG1 renderer + channel + calibration | `lg/glyphs.py`, `lg/compose.py`, `lg/channel.py`, `experiments/calibrate_channel.py`, `tests/test_render.py` | E0 tooling |
 | LG2 alphabet + joint trainer | `lg/alphabet.py`, `lg/train.py`, `experiments/train_joint.py`, `tests/test_train.py` | E1 |
 | LG3 transfer + bridge + report | `lg/transfer.py`, `lg/scheme.py`, `lg/report.py`, `experiments/transfer_eval.py`, `tests/test_transfer.py` | E2, E3, atlases/confusions |
-| LG4 prior art (learned/optimised fonts for OCR) | `docs/prior-art.md` | novelty + known pitfalls |
+| LG4 prior art (learned/optimised fonts for OCR) | `docs/background/prior-art.md` | novelty + known pitfalls |

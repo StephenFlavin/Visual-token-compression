@@ -1,4 +1,4 @@
-"""Colour-gist A0b (docs/COLOUR_GIST.md): zero-shot information per vision token of k-stream pages.
+"""Colour-gist A0b (docs/gpu/COLOUR_GIST.md): zero-shot information per vision token of k-stream pages.
 
 The UNTRAINED Qwen2.5-VL-3B-Instruct is asked "Transcribe all the <colour> text on this page." for each stream of
 each test page of rgb<k>s_p<p> (the A1 encodings). Teacher-forced loss of the true transcript with the page's own

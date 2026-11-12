@@ -1,6 +1,6 @@
-> Archived verbatim from docs/HANDOFF.md on 2026-11-05 (newest session first). Relative links point into docs/, one level up from here. Current state: [../HANDOFF.md](../HANDOFF.md).
+> Archived verbatim from docs/HANDOFF.md on 2026-11-05 (newest session first). Relative links point into docs/, one level up from here. Current state: [../HANDOFF.md](../../HANDOFF.md).
 
-# GPU runner session (2026-11-05, 10:59-13:59 UTC, 3 h, docs/GPU_RUNNER.md sections 0-5)
+# GPU runner session (2026-11-05, 10:59-13:59 UTC, 3 h, docs/gpu/GPU_RUNNER.md sections 0-5)
 
 **Status at shut-down (2026-11-05 ~15:00 UTC): instance shut off by the user; nothing running.**
 * Done and pushed: smoke; 1000-step arms latin_p8, rgb3_lg_pb_h5, latin_p5, lg_pb_h5; blind controls for latin_p8,
@@ -81,10 +81,10 @@ blind floor before spending a long run on 322 chars/token.
 
 # Handoff: cloud CPU runner -> any GPU runner (2026-11-05, morning)
 
-**For a GPU session of any hardware, start with [GPU_RUNNER.md](GPU_RUNNER.md)** (a time-boxed plan; measure, then
-size). The Windows/3090 runbook is [LOCAL_GPU.md](LOCAL_GPU.md). Read AGENTS.md first: it has the round-3 gotchas
+**For a GPU session of any hardware, start with [GPU_RUNNER.md](../../gpu/GPU_RUNNER.md)** (a time-boxed plan; measure, then
+size). The Windows/3090 runbook is [LOCAL_GPU.md](../../gpu/LOCAL_GPU.md). Read AGENTS.md first: it has the round-3 gotchas
 (merger LR collapse, probe bias, disk and memory limits). Design, pre-registrations and amendments are in
-[encoder_probe/ROUND3.md](../encoder_probe/ROUND3.md); the evidence table is in [CONTEXT_BUDGET.md](CONTEXT_BUDGET.md).
+[encoder_probe/ROUND3.md](../../../encoder_probe/ROUND3.md); the evidence table is in [CONTEXT_BUDGET.md](../../claude/CONTEXT_BUDGET.md).
 
 **State of the evidence for the moonshot (`rgb3_lg_pb_h5`, 322 chars per Qwen token):**
 | Gate | Result | Where |
@@ -103,15 +103,15 @@ size). The Windows/3090 runbook is [LOCAL_GPU.md](LOCAL_GPU.md). Read AGENTS.md 
 * **Ops:** 2 container restarts, a full disk, 2 OOM kills. All recovered from checkpoints; no finished row was lost.
 
 **GPU decision (user, 2026-11-05):** the only rentable options were a Colab T4 (Turing: no bf16, 16 GB) and a TPU
-v5e-1 (needs a torch_xla port). Neither runs R3-1 as built, so **R3-1 waits for the user's RTX 3090** (docs/LOCAL_GPU.md
-section 8, or docs/GPU_RUNNER.md, which works unchanged on any Ampere+ GPU). The CPU G2-lite runs finish here,
+v5e-1 (needs a torch_xla port). Neither runs R3-1 as built, so **R3-1 waits for the user's RTX 3090** (docs/gpu/LOCAL_GPU.md
+section 8, or docs/gpu/GPU_RUNNER.md, which works unchanged on any Ampere+ GPU). The CPU G2-lite runs finish here,
 including the blind floors.
 
 **Prompt for the next GPU session** (the user's RTX 3090, or any Ampere+ GPU). Paste into Claude Code in the repo:
 ```text
 Pull branch claude/validation-harness. Read AGENTS.md, the top section of docs/HANDOFF.md, and in
 encoder_probe/ROUND3.md: R3-1, R3-1b, both amendments and the G2-lite notes/results. Then the runbook for this
-machine: docs/LOCAL_GPU.md section 8 on the Windows RTX 3090 PC, otherwise docs/GPU_RUNNER.md (measure
+machine: docs/gpu/LOCAL_GPU.md section 8 on the Windows RTX 3090 PC, otherwise docs/gpu/GPU_RUNNER.md (measure
 s/step and peak memory in the smoke, then size the runs).
 
 Goal: R3-1 (gate G3). LoRA fine-tune Qwen2.5-VL-3B so its own LLM reads each code.
@@ -131,8 +131,8 @@ Goal: R3-1 (gate G3). LoRA fine-tune Qwen2.5-VL-3B so its own LLM reads each cod
 
 Stop and ask me if the smokes can't be made to run, if fine-tuned Latin stays near its blind floor, or if a
 result would change the plan. Record any design change as a dated amendment in ROUND3.md before running it. At
-the end, write up round 3 (encoder_probe/RESULTS.md, docs/RESULTS.md, the AGENTS.md findings bullet,
-docs/CONTEXT_BUDGET.md evidence table) and give me a results table. No PRs, no Claude API calls, no model IDs
+the end, write up round 3 (encoder_probe/RESULTS.md, docs/glyphs/RESULTS.md, the AGENTS.md findings bullet,
+docs/claude/CONTEXT_BUDGET.md evidence table) and give me a results table. No PRs, no Claude API calls, no model IDs
 in commits.
 ```
 On the 3090, R3-1 is roughly 15-25 h in total (an estimate: 2-4 h per 5000-step arm), so run it overnight.
@@ -155,14 +155,14 @@ The cloud runner is idle; nothing runs there. Everything below is on `claude/val
   85.4% / 25.8% / 25.3% (3000 pages). CPU/GPU and Linux/Windows rendering agree.
 * **Round-3 code built, CPU-tested (117 tests incl. 14 in test_round3.py on a tiny random-init Qwen2.5-VL), never run
   on GPU or with real weights:** `ep/qwen_ft.py`, `ep/r3_tasks.py`, `experiments/finetune_qwen.py` (R3-1),
-  `experiments/longctx_bench.py` (R3-2). Runbook: docs/LOCAL_GPU.md section 8. Deviation from ROUND3.md:
+  `experiments/longctx_bench.py` (R3-2). Runbook: docs/gpu/LOCAL_GPU.md section 8. Deviation from ROUND3.md:
   transcription targets are windows of whole lines up to `--max-target-chars 2000` (same for every arm; dense pages
   hold 7k-82k chars). KV verified: 36,864 B/position (36 layers x 2 KV heads x 128 x bf16); 32k window = 1.21 GB.
 * **Moonshot encodings built:** `rgb3_lg_pb_h5` (321.6 chars/Qwen token) and `rgb3_lg_free_h4` (405.5), in
   `ep/rgb_overlay.py` (notes in ROUND3.md). Their identity28 ceilings are only partial: at step 500/3000, 15.2% and
   37.0% val CER (CPU, 7.8 s/step, stopped). Re-run them locally (cloud checkpoints were deleted: not portable).
 
-**Do next, in order (commands in docs/LOCAL_GPU.md section 8):**
+**Do next, in order (commands in docs/gpu/LOCAL_GPU.md section 8):**
 1. Pull; `pip install "peft>=0.17"`; `python -m pytest -q encoder_probe/tests`; fetch the full Qwen2.5-VL-3B weights
    (~7.5 GB; the load check prints 3754622976 parameters).
 2. Smokes, one at a time: frozen qwen25vl probe, `finetune_qwen.py --encoding latin_p8 --smoke`, `longctx_bench.py` at
@@ -173,9 +173,9 @@ The cloud runner is idle; nothing runs there. Everything below is on `claude/val
 4. R3-0 (frozen Qwen probe grid) -> pick codes; R3-1 fine-tuning arms (latin_p5, latin_p8, R3-0 picks, both
    `rgb3_lg_*`; all `round3_ft` rows must share one `fair_hash`); R3-2 long-context benchmark. Decision rules and
    predictions: ROUND3.md.
-   After each step, update the Evidence table in docs/CONTEXT_BUDGET.md (context/KV/compute per encoding vs
+   After each step, update the Evidence table in docs/claude/CONTEXT_BUDGET.md (context/KV/compute per encoding vs
    the default model; user's demo goal).
-5. Write up in encoder_probe/RESULTS.md (round-3 section), AGENTS.md findings bullet, docs/RESULTS.md. Commit the
+5. Write up in encoder_probe/RESULTS.md (round-3 section), AGENTS.md findings bullet, docs/glyphs/RESULTS.md. Commit the
    `round3_*` runs.jsonl and push (git pull --rebase first).
 
 **Limits:** at most 2 Qwen-token GPU jobs; finetune/bench jobs alone on the GPU (Windows pages VRAM and stalls
@@ -191,7 +191,7 @@ open.
 
 ## Done on the local PC (Windows 11, RTX 3090, Ryzen 9 5900X, 32 GB)
 * **Round 2 finished for DeepEncoder.** Write-up: encoder_probe/RESULTS.md (round-2 section), AGENTS.md findings
-  bullet, docs/RESULTS.md. Rows: `encoder_probe/results/round2_gpu_tp{200,1000,3000,5000}/runs.jsonl`; job logs in
+  bullet, docs/glyphs/RESULTS.md. Rows: `encoder_probe/results/round2_gpu_tp{200,1000,3000,5000}/runs.jsonl`; job logs in
   `results/queue_logs/gpu_p0*`, `gpu_p1*` (force-added). Analyse with
   `python3 encoder_probe/experiments/analyse2.py encoder_probe/results/round2_gpu_tp1000/runs.jsonl encoder_probe/results/round2_gpu_tp200/runs.jsonl`
   (pass files explicitly: the cloud `round2/` 200-page rows collide with `round2_gpu_tp200`).

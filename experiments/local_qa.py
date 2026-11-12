@@ -1,6 +1,6 @@
-"""Page images against text on a LOCAL vision-language model (docs/LOCAL_QWEN.md).
+"""Page images against text on a LOCAL vision-language model (docs/gpu/LOCAL_QWEN.md).
 
-The Claude QA test (docs/CLAUDE_QA.md) pointed at an OpenAI-compatible server on this machine, e.g. llama.cpp's
+The Claude QA test (docs/claude/CLAUDE_QA.md) pointed at an OpenAI-compatible server on this machine, e.g. llama.cpp's
 llama-server running Qwen3.8-27B with its vision projector. Same documents, planted facts, questions and scoring;
 smaller documents (200k chars, 100 questions: a 24 GB card holds far less context) and the questions sent in
 batches after the document, so the server's prefix cache processes the document once per arm.
@@ -268,7 +268,7 @@ def summarise(rows: list[dict], speed: list[dict]) -> str:
                          f"{np.mean(gen):.1f} tokens/s, {np.mean([r['latency_s'] for r in rs]):.0f} s per document"
                          if pre and gen else f"* {arm}: {np.mean([r['latency_s'] for r in rs]):.0f} s per document")
     md = ["# Page images on a local model (local_qa.py)", "\n".join(out),
-          "Verdict rule (as in docs/CLAUDE_QA.md): lossless = the 95% upper bound of the loss against text is "
+          "Verdict rule (as in docs/claude/CLAUDE_QA.md): lossless = the 95% upper bound of the loss against text is "
           "below 2 points; loss = the interval excludes 0.", "## Speed", "\n".join(notes) or "(no timings returned)"]
     if speed:
         md.append("\n".join(f"* generation, {s['label']}: {s['mean_tokens_per_s']:.1f} tokens/s "

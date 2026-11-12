@@ -1,7 +1,7 @@
 # Own encoder for the moonshot: plan, costs, and Stage 0 (2026-11-05)
 
 Why this exists: Qwen2.5-VL-3B's pretrained ViT loses the glyph codes. Q1, G2-lite and R3-1 all locate the loss
-inside it ([ANALYSIS.md](ANALYSIS.md)). The remaining route for the moonshot is an encoder we train ourselves. This
+inside it ([ANALYSIS.md](../background/ANALYSIS.md)). The remaining route for the moonshot is an encoder we train ourselves. This
 page covers what that involves, what it costs, and the first experiment (Stage 0), which is pre-registered below and
 ready to run on a rented RTX 4090. Time, memory and cost figures are **estimates** unless marked measured.
 
@@ -165,7 +165,7 @@ recipe can reach.
 
 ## Prompt for the RunPod session
 ```text
-Pull branch claude/validation-harness. Read AGENTS.md (gotchas), then docs/OWN_ENCODER.md: the Stage 0 design,
+Pull branch claude/validation-harness. Read AGENTS.md (gotchas), then docs/gpu/OWN_ENCODER.md: the Stage 0 design,
 its predictions and decision rules are pre-registered there, and its runbook is for this RunPod RTX 4090 pod.
 
 1. Setup as in the runbook: repo and HF_HOME on /workspace, requirements + peft (keep the pod's CUDA torch;
@@ -181,11 +181,11 @@ its predictions and decision rules are pre-registered there, and its runbook is 
    time; after each arm commit and push encoder_probe/results/stage0/runs.jsonl. Keep >= 5 GB disk free.
 5. When all arms are done: a results table (ratio, chars/slot, CER and blind CER, loss and blind loss, prefix_frac,
    exact windows, s/step, peak memory), the val curves, D3 and D10, and which decision rule in OWN_ENCODER.md
-   applies. Add it as a dated "Stage 0 results" section at the end of docs/OWN_ENCODER.md and a line in
+   applies. Add it as a dated "Stage 0 results" section at the end of docs/gpu/OWN_ENCODER.md and a line in
    docs/HANDOFF.md. Never choose anything on test-window CER.
 
 Stop and ask me if the smoke fails, if the ratio-4 control misses 10% CER, or if a result would change the plan.
-Record design changes as dated amendments in docs/OWN_ENCODER.md before running them. No PRs, no Claude API
+Record design changes as dated amendments in docs/gpu/OWN_ENCODER.md before running them. No PRs, no Claude API
 calls, no model IDs in commits. Stop the pod (or tell me to) when finished: it bills by the hour.
 ```
 
@@ -233,7 +233,7 @@ Op split (sub / ins / del), as a share of reference chars:
 
 Hypothesis length is 95-99% of the reference in every arm.
 
-![Stage 0 val curves](../encoder_probe/img/stage0_curves.png)
+![Stage 0 val curves](../../encoder_probe/img/stage0_curves.png)
 
 Val curves (16 val windows, real / blind loss in nats per token):
 

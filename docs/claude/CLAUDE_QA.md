@@ -42,9 +42,9 @@ Sonnet 5.5 and Haiku 5.5.
   three-hop, sums, largest-of-three and counts across the document. (In the result files: `needle` and `number` are
   the lookups, `complex` the multi-step questions.)
 * **Phase 1:** this repo's earlier transcription test, where Claude read pages of natural text aloud
-  ([RESULTS.md](RESULTS.md)).
+  ([RESULTS.md](../glyphs/RESULTS.md)).
 
-![Accuracy change from reading page images instead of text, per model, effort and token saving](img/claude_qa_verdict.png)
+![Accuracy change from reading page images instead of text, per model, effort and token saving](../img/claude_qa_verdict.png)
 
 *How to read it:* each cell compares page images with text on the same 3 documents and questions. The big number is
 the accuracy change in points (image − text: negative = worse than text); "worst" is the losing end of the 95%
@@ -62,25 +62,25 @@ the same model reading text, at lower cost.
 | Text where one small word decides | 40 extra questions per document (negation, passive, "all but"), 15 calls per density | 97.2% (2.2x) and 96.2% (2.9x) against 100% from text; 1 page call in 6 reads every passive backwards | **Limit**: about 3 points lost; [details](#tested-repeat-calls-on-wording-sensitive-questions) |
 | Denser pages | 4.2x fewer tokens, and 7.8x in the exploratory runs | −8 to −15 points at 4.2x, chains and counts first; 7.8x fails outright | **Fails** beyond ~3x |
 | Deep-research sources | 3 corpora of 34-50 articles, 360 questions | 99.7% from pages against 99.4% from text at half the cost; notes alone lose 29 points | **Works**; [details](#tested-deep-research-sources) |
-| RAG | 308 questions, 3 datasets, BM25 | same passages as pages: same accuracy, 27-43% cheaper; same budget: +8.8 points on MultiHop-RAG | **Works**; [results/rag](../results/rag/README.md) |
-| Context compaction archive | transcript as pages opened on demand, real hooks, 9 sessions | 96-99% against 78% for normal compaction, 2.1x cheaper per correct answer | **Works**, the strongest result; [results/compaction_scale](../results/compaction_scale/README.md) |
+| RAG | 308 questions, 3 datasets, BM25 | same passages as pages: same accuracy, 27-43% cheaper; same budget: +8.8 points on MultiHop-RAG | **Works**; [results/rag](../../results/rag/README.md) |
+| Context compaction archive | transcript as pages opened on demand, real hooks, 9 sessions | 96-99% against 78% for normal compaction, 2.1x cheaper per correct answer | **Works**, the strongest result; [results/compaction_scale](../../results/compaction_scale/README.md) |
 | Coding agents: file contents and command output as pages | 79 SWE-bench tasks | no task lost; total cost unchanged ($10.82 against $10.61): reading is ~17% of an agent's cost | **Works, does not pay**; [details](#tested-coding-agents) |
 | Pruned text in place of pages, or under them | LLMLingua-2, 480 questions | 86.0% against 97.7% for pages at the same tokens; pruned pages no better than denser pages | **Fails**; [details](#tested-pruned-text) |
-| Coded or scrambled pages (glyph codes, substitution) | Phase 1 | refused or cut off by safety classifiers | **Not possible** on Claude; [RESULTS.md](RESULTS.md) |
+| Coded or scrambled pages (glyph codes, substitution) | Phase 1 | refused or cut off by safety classifiers | **Not possible** on Claude; [RESULTS.md](../glyphs/RESULTS.md) |
 | Repo atlas: locating a bug fix | 8 SWE-bench tasks, 5 arms | every arm, even a bare file list, names the files; searching agent $0.04 per task | **Not separable** (memorised tasks); [details](#tested-a-whole-repository-as-page-images-repo-atlas) |
 | Repo atlas: questions about a repository | SWE-QA, 144 questions on requests, flask, pytest | atlas 75.4 = no code 75.6 (of 100); only the searching agent beats memory (79.1) | **Fails** on code the model knows |
 | Repo atlas: finding a security flaw | 12 fresh advisories in small libraries | atlas alone 9 of 12 against 10 for a bare file list; agent with atlas 10 against 7 for the plain agent, in half the turns, 45% dearer (p = 0.25) | **Atlas alone fails; with an agent: a hint, not settled** |
-| Repo atlas: hard coding tasks solved end to end | 16 SWE-rebench tasks (3 or more files in the fix, not located by a bare file list), Claude Code plain / with a repo map / with the atlas | solved: plain 8, map 9, atlas 11 (3 tasks to 0 for the atlas, p = 0.25); fewer turns with the atlas (median 10 against 12.5, p = 0.006) at 2.6x the cost ($0.68 against $0.26) | **A hint that did not repeat** (next row): one run per task; [results/repo_atlas_swe](../results/repo_atlas_swe/README.md) |
-| Repo atlas: migrating C to Rust | 14 CRUST-Bench projects, Claude Code with the C files / with files and atlas / with the atlas only | identical on every project: 12 of 14 pass all tests in each arm; turns and cost the same within noise | **No effect**; pages alone were enough to translate from, but the projects are small and the tests carry much of the behaviour; [results/repo_atlas_migrate](../results/repo_atlas_migrate/README.md) |
-| Repo atlas: hard coding tasks again, auto-memory off | the same 16 tasks, plain against atlas, two fresh runs each (64 runs) | task-runs solved of 32: plain 19, atlas 17 (atlas higher on 1 task, plain on 2); turns lower with the atlas on 10 of 15 tasks (p = 0.30); atlas 3.1x the cost. The earlier 11 against 8 and "fewer turns" do not repeat | **No effect; the earlier hint was noise**; [results/repo_atlas_swe_rerun](../results/repo_atlas_swe_rerun/README.md) |
-| Repo atlas: a larger port with concurrency | RepoMod-Bench, gitleaks Go to Rust (22k lines, 35 hidden tests), Claude Code plain against atlas, one run each | both ports build and pass 35 of 35; 102 against 99 turns, $11.32 against $11.20, about 40 minutes each; neither port scans concurrently (the Go original does) | **No effect** (an anecdote: one run per arm, and both agents checked their port against the built Go original); [results/repo_atlas_port](../results/repo_atlas_port/README.md) |
-| Repo atlas for a cheaper model | the 16 hard coding tasks, Claude Code on Sonnet at high effort, plain against atlas, two runs each; first a check that Sonnet reads the pages (20 of 20 lookups) | task-runs solved of 32: plain 14, atlas 13 (15 tasks tie); turns lower with the atlas on 11 of 14 tasks (p = 0.057); atlas 3.7x the cost ($0.26 against $0.07) | **No effect**; Sonnet reads the atlas but does not solve more with it; [results/repo_atlas_swe_sonnet](../results/repo_atlas_swe_sonnet/README.md) |
+| Repo atlas: hard coding tasks solved end to end | 16 SWE-rebench tasks (3 or more files in the fix, not located by a bare file list), Claude Code plain / with a repo map / with the atlas | solved: plain 8, map 9, atlas 11 (3 tasks to 0 for the atlas, p = 0.25); fewer turns with the atlas (median 10 against 12.5, p = 0.006) at 2.6x the cost ($0.68 against $0.26) | **A hint that did not repeat** (next row): one run per task; [results/repo_atlas_swe](../../results/repo_atlas_swe/README.md) |
+| Repo atlas: migrating C to Rust | 14 CRUST-Bench projects, Claude Code with the C files / with files and atlas / with the atlas only | identical on every project: 12 of 14 pass all tests in each arm; turns and cost the same within noise | **No effect**; pages alone were enough to translate from, but the projects are small and the tests carry much of the behaviour; [results/repo_atlas_migrate](../../results/repo_atlas_migrate/README.md) |
+| Repo atlas: hard coding tasks again, auto-memory off | the same 16 tasks, plain against atlas, two fresh runs each (64 runs) | task-runs solved of 32: plain 19, atlas 17 (atlas higher on 1 task, plain on 2); turns lower with the atlas on 10 of 15 tasks (p = 0.30); atlas 3.1x the cost. The earlier 11 against 8 and "fewer turns" do not repeat | **No effect; the earlier hint was noise**; [results/repo_atlas_swe_rerun](../../results/repo_atlas_swe_rerun/README.md) |
+| Repo atlas: a larger port with concurrency | RepoMod-Bench, gitleaks Go to Rust (22k lines, 35 hidden tests), Claude Code plain against atlas, one run each | both ports build and pass 35 of 35; 102 against 99 turns, $11.32 against $11.20, about 40 minutes each; neither port scans concurrently (the Go original does) | **No effect** (an anecdote: one run per arm, and both agents checked their port against the built Go original); [results/repo_atlas_port](../../results/repo_atlas_port/README.md) |
+| Repo atlas for a cheaper model | the 16 hard coding tasks, Claude Code on Sonnet at high effort, plain against atlas, two runs each; first a check that Sonnet reads the pages (20 of 20 lookups) | task-runs solved of 32: plain 14, atlas 13 (15 tasks tie); turns lower with the atlas on 11 of 14 tasks (p = 0.057); atlas 3.7x the cost ($0.26 against $0.07) | **No effect**; Sonnet reads the atlas but does not solve more with it; [results/repo_atlas_swe_sonnet](../../results/repo_atlas_swe_sonnet/README.md) |
 | Orchestrator reads the atlas once, workers get briefs | plan-quality test: 33 tickets x 4 planners (file list, repo map, atlas, searching agent), then 16 tickets given to workers on three tiers | atlas briefs name 50% of the fix's files, the same as file-list (48%) and scout briefs (50%), at 8x and 2.7x their cost; the planner cannot size the work or pick the worker (its choice solved 8 of 16 against 11 for always-Opus); an Opus worker with a brief solved 11 (atlas brief) or 10 (file-list brief) against 8 without (p = 0.25) | **Fails as proposed**: a brief may help, the atlas is not what makes it good; [details](#tested-an-orchestrator-that-reads-the-atlas-once-plan-quality) |
-| A local model (Qwen3.8-27B) | not run | plan and harness ready | **Planned**; [LOCAL_QWEN.md](LOCAL_QWEN.md) |
+| A local model (Qwen3.8-27B) | not run | plan and harness ready | **Planned**; [LOCAL_QWEN.md](../gpu/LOCAL_QWEN.md) |
 
 ## How fast it falls
 
-![Accuracy change against token saving, one line per model](img/claude_qa_curve.png)
+![Accuracy change against token saving, one line per model](../img/claude_qa_curve.png)
 
 *How to read it:* each line starts at 0 (the model reading text) and shows the accuracy change as the pages get denser,
 at high effort; the dashed band is the 2-point lossless margin, and the background runs from green (no loss)
@@ -93,7 +93,7 @@ to red (large loss).
 
 ## What the pages look like
 
-![The top of the first test page at the three densities, actual pixels, with the vision-token grid](img/claude_qa_pages.png)
+![The top of the first test page at the three densities, actual pixels, with the vision-token grid](../img/claude_qa_pages.png)
 
 *The top of the first test page of document 1, exactly as sent, at actual pixels.* Pages are 1932 px wide and 1876 px
 tall (4,626 tokens each; 1932 px is the largest side these models read without downscaling, checked for all three);
@@ -104,7 +104,7 @@ the exploratory runs that density failed outright ([A5](#a5-earlier-exploratory-
 
 ## Where it breaks
 
-![Accuracy per question type, each model at high effort](img/claude_qa_breakdown.png)
+![Accuracy per question type, each model at high effort](../img/claude_qa_breakdown.png)
 
 *How to read it:* columns are question types, one block of rows per model: the grey row is the model reading text,
 the coloured rows the same model reading pages, from green (no loss against the grey row) to red. A small "+1 q" marks the
@@ -122,7 +122,7 @@ four cells where pages got 1-2 more questions right than text; that is noise, no
 * **Haiku fails the same way with fewer tokens saved:** three-hop falls to 67% already at 2.2x, and at 4.2x even single
   lookups drop to 56-66%.
 
-![Single-fact lookups by where the fact sits in the document](img/claude_qa_position.png)
+![Single-fact lookups by where the fact sits in the document](../img/claude_qa_position.png)
 
 *How to read it:* only single-fact lookups, grouped by the fifth of the document their fact is in; the dashed line is
 the models reading text. 2.2x is left out (near 100% everywhere).
@@ -135,7 +135,7 @@ the models reading text. 2.2x is left out (near 100% everywhere).
 
 ## Does effort help?
 
-![Accuracy change at low and high effort](img/claude_qa_effort.png)
+![Accuracy change at low and high effort](../img/claude_qa_effort.png)
 
 *How to read it:* hollow dots are low effort, filled dots high effort, for the same model, pages and questions.
 
@@ -149,7 +149,7 @@ the models reading text. 2.2x is left out (near 100% everywhere).
 
 ## What it costs
 
-![List-price cost per call and accuracy, per model, input form and effort](img/claude_qa_cost.png)
+![List-price cost per call and accuracy, per model, input form and effort](../img/claude_qa_cost.png)
 
 *How to read it:* one row per option, low effort (light bar, hollow dot) above high effort (solid bar, filled dot).
 The bar is the list-price cost of one call (a ~240k-token document plus 120 questions), the dot its accuracy with a
@@ -174,7 +174,7 @@ The result supports one pattern: **large amounts of reference text that the mode
 does not need to quote exactly or reason across as a whole.** Only English prose was tested; the uses below are
 candidates to test, ordered from closest to the test to furthest from it.
 
-* **RAG: tested** ([results/rag](../results/rag/README.md); Opus 5.5, BM25, 308 questions on planted facts,
+* **RAG: tested** ([results/rag](../../results/rag/README.md); Opus 5.5, BM25, 308 questions on planted facts,
   MultiHop-RAG and HotpotQA). The same top-5 passages as pages at 2.9x answered as well as text and cost 27-43% less per
   question; the same budget as pages carried 11-14 passages instead of 5 and gained 8.8 points on MultiHop-RAG
   (p = 0.001), more than top-15 as text at 2.5x the price. Mixing a text head with paged tails did worse than all pages.
@@ -184,10 +184,10 @@ candidates to test, ordered from closest to the test to furthest from it.
 * **Context compaction: tested twice, and it is the strongest result so far.** After `/compact`, Claude Code keeps a
   summary and the path of the raw transcript. A PreCompact hook that renders the whole transcript as page images with
   an index, and a SessionStart hook that tells the model where it is, keep almost everything: on 3 research sessions,
-  100% against 37% for normal compaction at 31% lower cost ([results/compaction](../results/compaction/README.md));
+  100% against 37% for normal compaction at 31% lower cost ([results/compaction](../../results/compaction/README.md));
   at scale, on 9 sessions of research reading, codebase exploration and log triage with the real hooks and nothing in
   the prompt, 96.1% (98.9% after fixing a hook bug) against 78.3% for normal compaction and 100% without compaction,
-  at 2.1x (2.2x with the fix) lower cost per correct answer ([results/compaction_scale](../results/compaction_scale/README.md)).
+  at 2.1x (2.2x with the fix) lower cost per correct answer ([results/compaction_scale](../../results/compaction_scale/README.md)).
 * **Coding agents: tested, no accuracy lost but no money saved** ([below](#tested-coding-agents)). Claude Code with
   file contents and command output shown as pages at 2.9x solved every SWE-bench task it solved from text, but
   coding spends little on reading, so the total cost did not fall.
@@ -198,7 +198,7 @@ candidates to test, ordered from closest to the test to furthest from it.
 ### Tested: deep-research sources
 
 A research orchestrator usually holds many fetched sources, or drops them and keeps notes. The test
-([`experiments/claude_qa_research.py`](../experiments/claude_qa_research.py), pre-registered) used 3 corpora of
+([`experiments/claude_qa_research.py`](../../experiments/claude_qa_research.py), pre-registered) used 3 corpora of
 34-50 real Wikipedia articles each (~270k tokens of text), each article a labelled source with invented facts
 planted in it, and 120 questions per corpus: 60 lookups and 60 that need several sources (which source says this,
 two sources that disagree, chains across sources, how many sources mention something, totals across sources).
@@ -221,22 +221,22 @@ Opus 5.5, high effort, one call per arm and corpus, 360 paired questions:
   only if reused across many queries.
 * Pre-registered verdicts: notes + pages lossless, PASS; notes lose at least 10 points, PASS; pages recover at least 10
   points over notes, PASS; pages lossless on lookups alone, not shown (0.0, worst −2.1 with 180 questions), though
-  lossless on all 360 questions. Details in [`results/claude_qa/research/summary.md`](../results/claude_qa/research/summary.md).
+  lossless on all 360 questions. Details in [`results/claude_qa/research/summary.md`](../../results/claude_qa/research/summary.md).
 * **Limits:** encyclopedia articles, not mixed web pages with tables; questions with exact answers, not a written
   report; Opus only. Page calls were slower (median 56 s against 42 s for text).
 
 ### Tested: coding agents
 
-Hooks for Claude Code ([`experiments/readhook/vbhook/`](../experiments/readhook/vbhook/)) show file contents and long
+Hooks for Claude Code ([`experiments/readhook/vbhook/`](../../experiments/readhook/vbhook/)) show file contents and long
 command output as minified pages at 88.2 px² per character (2.9x for prose): minifiers for 40+ languages and output
 kinds, edit-safe for code (spaces kept, indentation as `»`), and an image only when it costs fewer tokens than the text.
 Opus 5.5 at high effort, text vs pages, same tasks:
 
 | test | text | pages | details |
 |---|---|---|---|
-| refactor-for-performance smoke tests (6 tasks x 3) | 18/18 equivalent | 54/54 over 3 hook iterations | [results/readhook_smoke](../results/readhook_smoke/README.md) |
-| SWE-bench Verified, 50 hardest Django tasks recent Opus models solve | 50/50 resolved, $5.78 | 50/50, $6.08 | [results/readhook_swe](../results/readhook_swe/README.md) |
-| SWE-bench Multilingual, 29 Rust and Java tasks | 28/29, $4.83 | 29/29, $4.75 | [results/readhook_swe_ml](../results/readhook_swe_ml/README.md) |
+| refactor-for-performance smoke tests (6 tasks x 3) | 18/18 equivalent | 54/54 over 3 hook iterations | [results/readhook_smoke](../../results/readhook_smoke/README.md) |
+| SWE-bench Verified, 50 hardest Django tasks recent Opus models solve | 50/50 resolved, $5.78 | 50/50, $6.08 | [results/readhook_swe](../../results/readhook_swe/README.md) |
+| SWE-bench Multilingual, 29 Rust and Java tasks | 28/29, $4.83 | 29/29, $4.75 | [results/readhook_swe_ml](../../results/readhook_swe_ml/README.md) |
 
 * **No task lost**, and no failed edit in the final hook version: the model edits exactly from page images.
 * **The images were 3.1x cheaper than the text they replaced**, but the total cost did not fall ($10.82 against
@@ -249,7 +249,7 @@ Opus 5.5 at high effort, text vs pages, same tasks:
 
 Can deleting words from the text (LLMLingua-2, off the shelf) do what the pages do, or add to them? Pre-registered,
 same 3 documents plus 40 new questions each whose answer depends on small words ("did not", "all but", "was paid
-by"), Opus 5.5 at high effort, 480 paired questions per arm ([results/claude_qa/prune](../results/claude_qa/prune/README.md)):
+by"), Opus 5.5 at high effort, 480 paired questions per arm ([results/claude_qa/prune](../../results/claude_qa/prune/README.md)):
 
 * **No, on both counts.** Pruned text with the same tokens as 2.2x pages scored 86.0% against 97.7% for the pages and
   100% for text, and lost 3.6 points even on the original 120 questions, where the pages lost nothing. Lightly pruned
@@ -264,7 +264,7 @@ by"), Opus 5.5 at high effort, 480 paired questions per arm ([results/claude_qa/
 
 Was the 2.2x pages' passive flip in Test A chance or density? Pre-registered: the same calls repeated byte for byte,
 5 per document at 117.6 and at 88.2 px² per character, 2 per document for text (27 new calls, $16.17 at list price;
-[results/claude_qa/repeat](../results/claude_qa/repeat/README.md)):
+[results/claude_qa/repeat](../../results/claude_qa/repeat/README.md)):
 
 * **Chance, and it hits both densities.** About 1 page call in 6 (2 of 15 at 117.6, 3 of 15 at 88.2) reads every
   "A was paid n by B" sentence the wrong way round; the other calls get the passives right. Text never did (0 of 6).
@@ -283,14 +283,14 @@ a pre-registration (the sixth, the plan-quality test for the orchestrator use, h
 
 | Test | Tasks | What the arms scored | Spend |
 |---|---|---|---|
-| Locate the files of a bug fix ([pilot](../results/repo_atlas/README.md)) | 8 SWE-bench tasks | all changed files named: file list 8/8, repo map 8/8, atlas 8/8, text 4/4, searching agent 8/8 | $7.49 |
-| Answer questions about a repository ([SWE-QA](../results/repo_atlas_qa/README.md)) | 144 questions | judge score of 100: no code 75.6, repo map 76.1, atlas 75.4, text 75.5, searching agent 79.1 | $20.83 |
-| Find a security flaw ([fresh advisories](../results/repo_atlas_sec/README.md)) | 12 advisories | fixed file in the top 5: file list 10, atlas 9, searching agent 7, agent with atlas 10 | $20.70 |
-| Solve hard coding tasks ([SWE-rebench](../results/repo_atlas_swe/README.md)) | 16 | tasks solved: plain agent 8, with a repo map 9, with the atlas 11; median turns 12.5 / 12 / 10; cost per task $0.26 / $0.49 / $0.68 | $28.45 |
-| Hard coding tasks again, memory off ([re-run](../results/repo_atlas_swe_rerun/README.md)) | the same 16, 2 runs each | task-runs solved of 32: plain 19, atlas 17; run 1: 10 / 9, run 2: 9 / 8; cost per run $0.27 / $0.83 | $35.07 |
-| Hard coding tasks on Sonnet ([Q3](../results/repo_atlas_swe_sonnet/README.md)) | the same 16, 2 runs each | task-runs solved of 32: plain 14, atlas 13; median turns 7.5 / 6; cost per run $0.07 / $0.26 | $11.38 |
-| Migrate C to Rust ([CRUST-Bench](../results/repo_atlas_migrate/README.md)) | 14 projects | all tests pass: with the C files 12, with files and atlas 12, atlas only (no C files) 12; median turns 6.5 / 6 / 6.5; cost per project $0.54 / $0.57 / $0.60 | $24.01 |
-| Port a larger concurrent tool, Go to Rust ([RepoMod-Bench gitleaks](../results/repo_atlas_port/README.md)) | 1 project, 1 run per arm | hidden tests passed: plain 35 of 35, atlas 35 of 35; turns 102 / 99; cost $11.32 / $11.20 | $23.14 |
+| Locate the files of a bug fix ([pilot](../../results/repo_atlas/README.md)) | 8 SWE-bench tasks | all changed files named: file list 8/8, repo map 8/8, atlas 8/8, text 4/4, searching agent 8/8 | $7.49 |
+| Answer questions about a repository ([SWE-QA](../../results/repo_atlas_qa/README.md)) | 144 questions | judge score of 100: no code 75.6, repo map 76.1, atlas 75.4, text 75.5, searching agent 79.1 | $20.83 |
+| Find a security flaw ([fresh advisories](../../results/repo_atlas_sec/README.md)) | 12 advisories | fixed file in the top 5: file list 10, atlas 9, searching agent 7, agent with atlas 10 | $20.70 |
+| Solve hard coding tasks ([SWE-rebench](../../results/repo_atlas_swe/README.md)) | 16 | tasks solved: plain agent 8, with a repo map 9, with the atlas 11; median turns 12.5 / 12 / 10; cost per task $0.26 / $0.49 / $0.68 | $28.45 |
+| Hard coding tasks again, memory off ([re-run](../../results/repo_atlas_swe_rerun/README.md)) | the same 16, 2 runs each | task-runs solved of 32: plain 19, atlas 17; run 1: 10 / 9, run 2: 9 / 8; cost per run $0.27 / $0.83 | $35.07 |
+| Hard coding tasks on Sonnet ([Q3](../../results/repo_atlas_swe_sonnet/README.md)) | the same 16, 2 runs each | task-runs solved of 32: plain 14, atlas 13; median turns 7.5 / 6; cost per run $0.07 / $0.26 | $11.38 |
+| Migrate C to Rust ([CRUST-Bench](../../results/repo_atlas_migrate/README.md)) | 14 projects | all tests pass: with the C files 12, with files and atlas 12, atlas only (no C files) 12; median turns 6.5 / 6 / 6.5; cost per project $0.54 / $0.57 / $0.60 | $24.01 |
+| Port a larger concurrent tool, Go to Rust ([RepoMod-Bench gitleaks](../../results/repo_atlas_port/README.md)) | 1 project, 1 run per arm | hidden tests passed: plain 35 of 35, atlas 35 of 35; turns 102 / 99; cost $11.32 / $11.20 | $23.14 |
 
 * **The atlas alone has not beaten a cheaper option anywhere.** On public repositories the model answers from
   memory (with no code it already names 71% of the code entities in the reference answers), and a bare file list
@@ -302,7 +302,7 @@ a pre-registration (the sixth, the plan-quality test for the orchestrator use, h
   atlas found 3 flaws the plain agent missed and lost none, in a median of 8 turns instead of 18, at $0.67 against
   $0.46 per task. On the hard coding tasks it solved 11 against 8 of 16, in fewer turns (p = 0.006), at $0.68
   against $0.26. Each was 3 to 0 with one run per task (exact p = 0.25). **The hard coding tasks were then run
-  again, twice, with auto-memory off** ([results/repo_atlas_swe_rerun](../results/repo_atlas_swe_rerun/README.md),
+  again, twice, with auto-memory off** ([results/repo_atlas_swe_rerun](../../results/repo_atlas_swe_rerun/README.md),
   64 runs, $35.07): plain solved 19 of 32 task-runs and the atlas 17 (run 1: 10 against 9; run 2: 9 against 8),
   turns were lower with the atlas on 10 of 15 untied tasks (p = 0.30), and the atlas cost 3.1x. The plain agent
   alone moved from 8 to 10 solved between the two tests, which is the size of the earlier gap. The first test's
@@ -340,7 +340,7 @@ tickets of ~30 turns: ~$19 if every worker carries it, ~$1 if only the orchestra
 
 **The test** (2026-11-12, Opus 5.5 at high effort as planner, $44.25, run by an Opus subagent; design
 [PLAN_QUALITY_TEST.md](PLAN_QUALITY_TEST.md), pre-registration, rows and caveats
-[results/plan_quality](../results/plan_quality/README.md)). Tickets are SWE-rebench issues with a known fix, in
+[results/plan_quality](../../results/plan_quality/README.md)). Tickets are SWE-rebench issues with a known fix, in
 repositories whose atlas fits, not located by a bare file list in a closed-book screen.
 
 *Briefs against the real fix, 33 tickets, four planners with the same instruction:*
@@ -408,7 +408,7 @@ backlog with collisions, and repeat runs.
 
 ## How the test works
 
-* **Calls:** headless Claude Code (`claude -p`, no tools, isolated environment; [`vbpe/claude_eval.py`](../vbpe/claude_eval.py)).
+* **Calls:** headless Claude Code (`claude -p`, no tools, isolated environment; [`vbpe/claude_eval.py`](../../vbpe/claude_eval.py)).
   One call per arm: the document (as text, or as page images in order), then all 120 questions. The system prompt
   asks for a number per question and a best guess when unsure, so there is no abstaining. The image arm cannot see
   the source text. Input tokens come from the CLI's usage report.
@@ -427,15 +427,15 @@ backlog with collisions, and repeat runs.
 * **Scoring:** an answer is correct if it equals the expected number after removing commas.
 * **Pairing:** each page call is paired, question by question, with the text call of the same document and effort (one
   text call per document and effort, shared by the three densities), pooled over the 3 documents: 360 pairs.
-* **Pre-registered** (in [`results/claude_qa/summary.md`](../results/claude_qa/summary.md), committed before any call,
+* **Pre-registered** (in [`results/claude_qa/summary.md`](../../results/claude_qa/summary.md), committed before any call,
   the same for each model): (1) lossless at 2.2x at each effort, by Newcombe's paired score interval with a 2-point
   margin; (2) a loss on multi-step questions at ~4x at low effort; (3) the effect of effort, reported without a
   threshold. The Sonnet and Haiku suites were registered the same way before their runs.
 * **Engagement check** (added after the Haiku run): a call that leaves questions unanswered or says it did not look
   things up is not a reading measurement, and its rows are marked "not comparable".
-* **Reproduce:** [`experiments/claude_qa_render.py`](../experiments/claude_qa_render.py) (one run per document,
+* **Reproduce:** [`experiments/claude_qa_render.py`](../../experiments/claude_qa_render.py) (one run per document,
   density, effort and model; the commands are in `results/claude_qa/summary.md`), then
-  [`experiments/analyse_claude_qa.py`](../experiments/analyse_claude_qa.py):
+  [`experiments/analyse_claude_qa.py`](../../experiments/analyse_claude_qa.py):
   ```bash
   python3 experiments/analyse_claude_qa.py results/claude_qa/qav2_d*                                              # Opus
   python3 experiments/analyse_claude_qa.py results/claude_qa/qav2s_d* --out results/claude_qa/analysis_v2_sonnet  # Sonnet
@@ -462,7 +462,7 @@ The tables use the same sign as the figures: **image − text** in accuracy poin
 
 ### A1. Opus 5.5
 
-[analysis_v2/summary.md](../results/claude_qa/analysis_v2/summary.md) has every question type; no call flagged by the
+[analysis_v2/summary.md](../../results/claude_qa/analysis_v2/summary.md) has every question type; no call flagged by the
 engagement check.
 
 | effort | fewer tokens | text | image | image − text (95% CI) | lookups: text / image | multi-step: text / image | verdict |
@@ -481,7 +481,7 @@ No document: 6.9% (high effort), 5.0% (low), from years and other guessable numb
 
 ### A2. Sonnet 5.5
 
-[analysis_v2_sonnet/summary.md](../results/claude_qa/analysis_v2_sonnet/summary.md); no call flagged by the engagement
+[analysis_v2_sonnet/summary.md](../../results/claude_qa/analysis_v2_sonnet/summary.md); no call flagged by the engagement
 check.
 
 | effort | fewer tokens | text | image | image − text (95% CI) | lookups: text / image | multi-step: text / image | verdict |
@@ -501,7 +501,7 @@ the 4.2x loss from −21.7 to −13.9 points and the 2.9x loss from −3.1 to �
 
 ### A3. Haiku 5.5
 
-[analysis_v2_haiku/summary.md](../results/claude_qa/analysis_v2_haiku/summary.md).
+[analysis_v2_haiku/summary.md](../../results/claude_qa/analysis_v2_haiku/summary.md).
 
 | effort | fewer tokens | text | image | image − text (95% CI) | lookups: text / image | multi-step: text / image | verdict |
 |---|---|---|---|---|---|---|---|
@@ -524,7 +524,7 @@ worked those out ... I can go through them in batches"), but spent 8-15k output 
 per input type, not how well it reads. Opus used ~3-4k output tokens on both arms at low effort, and no Opus or
 Sonnet call was flagged.
 
-![Output tokens per call, text vs pages, per model and effort](img/claude_qa_engagement.png)
+![Output tokens per call, text vs pages, per model and effort](../img/claude_qa_engagement.png)
 
 *How to read it:* one mark per call on a log scale (squares: text, 3 per row; circles: pages, 9 per row: 3 densities
 x 3 documents). The shaded row is Haiku at low effort, the excluded one: 424-821 output tokens on text against

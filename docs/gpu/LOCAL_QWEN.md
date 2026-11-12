@@ -2,7 +2,7 @@
 
 *Pre-registered 2026-11-12, before any row. No training. Code: `experiments/local_qa.py` (tests
 `tests/test_local_qa.py`, against a mock server: it has not talked to a real model yet). The prompt for the 3090
-session is at the end and in [HANDOFF.md](HANDOFF.md).*
+session is at the end and in [HANDOFF.md](../HANDOFF.md).*
 
 ## Why this test, and why only this
 
@@ -28,7 +28,7 @@ Claude carries over **with no training**:
 
 ## Design
 
-Same test as [CLAUDE_QA.md](CLAUDE_QA.md), smaller, against a local server.
+Same test as [CLAUDE_QA.md](../claude/CLAUDE_QA.md), smaller, against a local server.
 
 * **Model:** `unsloth/Qwen3.8-27B-GGUF`: `Qwen3.8-27B-UD-Q4_K_M.gguf` (16.6 GB), `mmproj-F16.gguf` (0.9 GB, the
   vision projector), and for the speed check `MTP/mtp-Qwen3.8-27B-Q4_0.gguf` (1.4 GB). Server: llama.cpp's
@@ -124,7 +124,7 @@ under an hour of GPU time for 15 arms, plus the speed runs.
 
 ```text
 Work in /c/git/visual-bpe-run (Git Bash; `. .venv/env.sh`; `python`, not `python3`; PYTHONUTF8=1). Read AGENTS.md
-(gotchas, especially GPU runners and Windows), docs/HANDOFF.md and docs/LOCAL_QWEN.md. LOCAL_QWEN.md is
+(gotchas, especially GPU runners and Windows), docs/HANDOFF.md and docs/gpu/LOCAL_QWEN.md. LOCAL_QWEN.md is
 pre-registered: do not change its arms, checks, predictions or outcome table after seeing data; if something must
 change, write a dated amendment in it first. No training in this session.
 
@@ -143,7 +143,7 @@ change, write a dated amendment in it first. No training in this session.
    --image-max-tokens or lower --page-px to a multiple of 32, write that down as a dated amendment, rerun the
    page arms). If the text arm does not fit in memory, follow the runbook's memory steps and record which was used.
 4. Documents 1 and 2. Then the two speed runs (plain, then the server restarted with the multi-token module).
-5. Write-up. A dated "Results" section in docs/LOCAL_QWEN.md: the summary table, each prediction as PASS / FAIL /
+5. Write-up. A dated "Results" section in docs/gpu/LOCAL_QWEN.md: the summary table, each prediction as PASS / FAIL /
    not evaluable, which row of the outcome table applies, prompt-processing and generation speeds, memory used,
    the server command, problems. One line in AGENTS.md "Findings" and one row in the docs/HANDOFF.md table. Commit
    results/local_qa and the docs, push.

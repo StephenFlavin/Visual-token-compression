@@ -1,7 +1,7 @@
 # Plan quality: can an orchestrator that reads the repo atlas once write good briefs for worker agents?
 
 *Pre-registered 2026-11-12, before the first scored call (selection screens and a model-id smoke test came before
-it; $0.50). Design: [docs/PLAN_QUALITY_TEST.md](../../docs/PLAN_QUALITY_TEST.md), kept as written; this file fixes
+it; $0.50). Design: [docs/claude/PLAN_QUALITY_TEST.md](../../docs/claude/PLAN_QUALITY_TEST.md), kept as written; this file fixes
 what the design leaves open. Code: `experiments/plan_quality.py` (tests `tests/test_plan_quality.py`). Results go
 below the "Results" heading. Nothing above it changes after the first scored call, except dated amendments written
 before the runs they affect. Run by an Opus 5.5 subagent; hard cap **$45** at list price over every call.*

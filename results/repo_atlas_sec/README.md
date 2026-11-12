@@ -1,7 +1,7 @@
 # Repo atlas: does it help find a security flaw?
 
 *Pre-registered 2026-11-12, before any scored call. Code: `experiments/repo_atlas_sec.py` (tests
-`tests/test_repo_atlas_sec.py`). Plan of the atlas: [docs/REPO_ATLAS_PLAN.md](../../docs/REPO_ATLAS_PLAN.md).
+`tests/test_repo_atlas_sec.py`). Plan of the atlas: [docs/claude/REPO_ATLAS_PLAN.md](../../docs/claude/REPO_ATLAS_PLAN.md).
 Results are added below this pre-registration once the calls are in; nothing above the "Results" heading changes
 after the first call, except dated amendments.*
 

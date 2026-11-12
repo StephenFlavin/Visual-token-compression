@@ -45,7 +45,7 @@ Pre-registered verdicts:
 3. images >= 2x fewer tokens than the same content as text: **PASS** (3.15x).
 4. Reported: cost $4.75 vs $4.83; no failed Edit or Write in either arm (the `»` indentation levels for brace languages
    worked), though the image arm made twice as many edit calls and more turns. Cost anatomy and why totals do not fall:
-   `docs/SWE_IMAGES.md`.
+   `docs/claude/SWE_IMAGES.md`.
 
 Incidents, all fixed during the run and applying to both arms: an agent's `grep -r` and an orphaned `target/debug/bat`
 from bat's own tests hung `cargo test | grep` pipelines (harness now gives agents an empty stdin; `watchdog.sh` stops

@@ -2,8 +2,8 @@
 
 For a rented or borrowed Linux machine with one NVIDIA GPU, for a limited time (planned: about 3 h). Nothing here
 assumes a particular GPU or CPU: measure first, then size the run. The Windows/RTX 3090 specifics live in
-[LOCAL_GPU.md](LOCAL_GPU.md); the design is in [encoder_probe/ROUND3.md](../encoder_probe/ROUND3.md); current state
-and open items are in [HANDOFF.md](HANDOFF.md). Every time and memory figure below is an **estimate** unless it says
+[LOCAL_GPU.md](LOCAL_GPU.md); the design is in [encoder_probe/ROUND3.md](../../encoder_probe/ROUND3.md); current state
+and open items are in [HANDOFF.md](../HANDOFF.md). Every time and memory figure below is an **estimate** unless it says
 measured.
 
 ## Goal for the session
@@ -13,7 +13,7 @@ The CPU probe can't measure Latin through Qwen at feasible data sizes, so the LL
 In about 3 h: setup, smoke, then short arms at equal steps. A short result is a signal, not a verdict. Label it so.
 
 **Done once (2026-11-05, RTX 4090, 1000 steps):** latin_p8 is read (55% CER vs blind 88.5%); latin_p5 gets the
-gist only (val loss 10% below blind); lg_pb_h5 and the moonshot are not read ([ANALYSIS.md](ANALYSIS.md)). **The next session's arms and order are in [HANDOFF.md](HANDOFF.md)**
+gist only (val loss 10% below blind); lg_pb_h5 and the moonshot are not read ([ANALYSIS.md](../background/ANALYSIS.md)). **The next session's arms and order are in [HANDOFF.md](../HANDOFF.md)**
 (stage A' vision-side diagnostic with blinds, a Latin density sweep, then 5000-step Latin arms); sections 3-4 below show the
 mechanics with the first session's arms.
 
@@ -139,7 +139,7 @@ nohup scripts/autosave_results.sh 600 > results/autosave.log 2>&1 &     # commit
   git pull --rebase origin claude/validation-harness && git push origin claude/validation-harness
   ```
 * Update HANDOFF.md (status table, open items) and move the session's detailed notes (hardware, measured s/step and
-  memory, what ran, what was not run) to the top of `docs/history/HANDOFF_2026-11.md`.
+  memory, what ran, what was not run) to the top of `docs/background/history/HANDOFF_2026-11.md`.
 * Adapters (`encoder_probe/cache/r3_adapters/*.pt`, ~0.6 GB each) are git-ignored. Copy them off the machine if R3-2
   should reuse them; otherwise they're lost with the runner.
 

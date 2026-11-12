@@ -7,7 +7,7 @@
 > (1.07%), but not read by a LoRA-fine-tuned Qwen2.5-VL after 1000 steps ([ROUND3.md](ROUND3.md)). This file is
 > the pre-registered design record.
 
-Tests the user's RGB word-overlay idea (docs/IDEAS.md): put three text streams in one image, one per colour
+Tests the user's RGB word-overlay idea (docs/background/IDEAS.md): put three text streams in one image, one per colour
 channel, for up to 3x the text per pixel. It uses the unchanged probe and `run_probe.py` from PLAN.md.
 The code is in `ep/rgb_overlay.py` (registered through one lazy branch in `pages.get_encoding`) and the tests are in
 `tests/test_rgb_overlay.py`.

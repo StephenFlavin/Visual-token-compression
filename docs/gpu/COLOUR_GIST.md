@@ -10,7 +10,7 @@
   3. Only then merge the two.
 
 Every phase compares against plain single-stream Latin under the same recipe. That comparison is a **control**,
-not a goal (see [ANALYSIS.md](ANALYSIS.md)).
+not a goal (see [ANALYSIS.md](../background/ANALYSIS.md)).
 
 ## At a glance: targets and status
 **Measure.** Information per vision token = the val-loss gap vs the arm's own blind control (same targets,
@@ -76,7 +76,7 @@ characters, two different Wikipedia passages per page. For each stream the model
 Code: `encoder_probe/experiments/zeroshot_colour.py`. Rows: `encoder_probe/results/z0_colour/` and
 `z0_colour_mc/` (the rerun that records whether a wrong answer picked the other stream).
 
-![A0 pages: mono, red+cyan on white, red+green on black](../encoder_probe/img/z0_pages_p16.png)
+![A0 pages: mono, red+cyan on white, red+green on black](../../encoder_probe/img/z0_pages_p16.png)
 
 | Condition | Stream | MC correct | MC answered with the other stream's phrase | Transcription CER |
 |---|---|---|---|---|
@@ -276,7 +276,7 @@ slower, so measure in the smoke). Totals:
 rgb3s is analysed under the A2 gate only if A1's headline passes. A1-cpu numbers are not comparable (frozen ViT,
 other blind).
 
-**Prompt for the GPU session:** in [HANDOFF.md](HANDOFF.md) ("Prompt for the next GPU session").
+**Prompt for the GPU session:** in [HANDOFF.md](../HANDOFF.md) ("Prompt for the next GPU session").
 
 ### S1: small VLM with a from-scratch vision encoder (CPU; pre-registered 2026-11-06, before any S1 row)
 **Why:** in Qwen2.5-VL both streams survive to ViT block 16, then its pretrained letter and word features blend
@@ -405,12 +405,12 @@ nothing about whether Qwen's pretrained ViT can be retrained to do so (that is A
 ## Phase B: learned glyphs without BPE ("pure VLM" for glyphs)
 * **Code:** the learned **characters-only** alphabet (`lg_learned_n0_pb_h5`: 95 whole-pixel glyphs, 5 px tall),
   no chunk glyphs. In raw pixels it already needs ~0.82x Latin's area for the same accuracy (8.0 vs ~9.8
-  px²/char at ~0.6% CER, [learned_glyphs/RESULTS.md](../learned_glyphs/RESULTS.md)): a modest prior.
+  px²/char at ~0.6% CER, [learned_glyphs/RESULTS.md](../../learned_glyphs/RESULTS.md)): a modest prior.
 * **Scale:** glyphs upscaled (nearest neighbour, e.g. 3x) so tiny pixels are not the question. Latin at the same
   characters per vision token is the comparison.
 * **Model, as I read "pure VLM":** a vision encoder with no pretrained bias towards Latin. A small ViT/CNN trained
   from scratch feeds a small LLM (Qwen2.5-0.5B), with Latin trained identically as the control. The cheaper
-  alternative is Qwen with its ViT trained from block 8 (stage A' in [HANDOFF.md](HANDOFF.md)).
+  alternative is Qwen with its ViT trained from block 8 (stage A' in [HANDOFF.md](../HANDOFF.md)).
 * **Gate:** glyph pages give at least Latin's gist (MC, bits per vision token) at equal chars/token. If not, glyphs
   are dropped and the merged phase uses Latin in colour channels.
 

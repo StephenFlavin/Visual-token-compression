@@ -1,4 +1,4 @@
-"""capacity_curve.py (docs/PLAN_3090.md Run 0 / 0b): text sets, windows, shifts, rows, resume, alignment stats.
+"""capacity_curve.py (docs/gpu/PLAN_3090.md Run 0 / 0b): text sets, windows, shifts, rows, resume, alignment stats.
 TINY Qwen on the CPU, no network."""
 import json
 import sys

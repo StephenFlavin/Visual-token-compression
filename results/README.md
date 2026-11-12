@@ -1,7 +1,7 @@
 # results/
 
 Rows from every experiment are `runs.jsonl` files (one JSON object per run). Summaries, plots and the conclusions
-drawn from them are in [docs/RESULTS.md](../docs/RESULTS.md), [encoder_probe/RESULTS.md](../encoder_probe/RESULTS.md),
+drawn from them are in [docs/glyphs/RESULTS.md](../docs/glyphs/RESULTS.md), [encoder_probe/RESULTS.md](../encoder_probe/RESULTS.md),
 [encoder_probe/ROUND3.md](../encoder_probe/ROUND3.md) and [learned_glyphs/RESULTS.md](../learned_glyphs/RESULTS.md).
 Images, render caches, checkpoints and live logs are git-ignored and regenerate from the commands in
 [AGENTS.md](../AGENTS.md).
@@ -32,7 +32,7 @@ Images, render caches, checkpoints and live logs are git-ignored and regenerate 
 
 ## Note on archived paths
 
-Older docs (`encoder_probe/ROUND2.md`, `encoder_probe/ROUND3.md`, `docs/history/`) name files such
+Older docs (`encoder_probe/ROUND2.md`, `encoder_probe/ROUND3.md`, `docs/background/history/`) name files such
 as `results/queue_probe_c.txt` or `results/queue_gpu3h.txt`. Those finished queue files and logs now live in
 `results/archive/` under the same names. New queue files can still be written to `results/` while a round runs;
 move them to `archive/` when it finishes.

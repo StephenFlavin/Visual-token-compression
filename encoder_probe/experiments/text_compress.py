@@ -1,4 +1,4 @@
-"""Stage 0 of the own-encoder plan (docs/OWN_ENCODER.md): the text-side compression ceiling.
+"""Stage 0 of the own-encoder plan (docs/gpu/OWN_ENCODER.md): the text-side compression ceiling.
 
 How many characters can one input position of Qwen2.5-VL-3B's LLM carry, if a learned encoder packs them into it?
 No pixels: the encoder reads the text tokens themselves, so this bounds any pixel encoder (a rendered page carries
@@ -49,7 +49,7 @@ from encoder_probe.ep.encoders import resolve_device  # noqa: E402
 PROMPT = "\nRepeat the text exactly:\n"
 FAIR_KEYS = ["seq_tokens", "steps", "batch_size", "lr", "warmup", "weight_decay", "clip", "lora_r", "lora_alpha",
              "lora_dropout", "seed", "eval_windows", "val_windows", "tiny"]
-CHARS_PER_TEXT_TOKEN = 4.33   # Qwen tokenizer on held-out WikiText (docs/CONTEXT_BUDGET.md); the row measures its own
+CHARS_PER_TEXT_TOKEN = 4.33   # Qwen tokenizer on held-out WikiText (docs/claude/CONTEXT_BUDGET.md); the row measures its own
 
 
 def parse(argv=None):

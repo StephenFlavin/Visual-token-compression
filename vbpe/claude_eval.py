@@ -8,9 +8,9 @@ that images can be passed as base64 content blocks. Every call is a single, isol
   * the environment is a small whitelist, so variables of a *parent* Claude Code session
     (session id, remote-session URLs, effort, ...) do not leak in. Inheriting them made the
     child attach to the parent session, added ~800 prompt tokens and triggered an auxiliary
-    haiku call; see docs/claude-eval-notes.md.
+    haiku call; see docs/claude/claude-eval-notes.md.
 
-Public API (PLAN.md section 5)::
+Public API (docs/glyphs/PLAN.md section 5)::
 
     transcribe(images, system, prompt, model=DEFAULT_MODEL, max_retries=5) -> dict
     transcribe_many(jobs, workers=8, progress=True) -> list[dict]

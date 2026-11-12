@@ -1,4 +1,4 @@
-"""EnterpriseRAG-Bench answers from Opus 5.5: text against page images (docs/ERB_PLAN.md).
+"""EnterpriseRAG-Bench answers from Opus 5.5: text against page images (docs/claude/ERB_PLAN.md).
 
 One single-shot call per question and arm, no tools, effort low, the benchmark's own answer prompt
 (erb_common.ANSWER_GEN_PROMPT) and context format. Arms:

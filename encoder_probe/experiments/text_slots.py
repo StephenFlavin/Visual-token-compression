@@ -1,4 +1,4 @@
-"""Test B (docs/TEXT_SLOTS.md): text-side slots against page pixels, same reader LLM, same budget.
+"""Test B (docs/gpu/TEXT_SLOTS.md): text-side slots against page pixels, same reader LLM, same budget.
 
 Does a slot built from r text tokens carry more per context position than a vision token built from a rendered
 page? No pixels and no vision tower: the encoder reads the LLM's own (frozen) token embeddings.

@@ -1,7 +1,7 @@
 # Repo atlas on hard, fresh coding tasks: does it change what Claude Code solves?
 
 *Pre-registered 2026-11-12, before the first agent run. Code: `experiments/repo_atlas_swe.py` (tests
-`tests/test_repo_atlas_swe.py`). Plan and pilot: [docs/REPO_ATLAS_PLAN.md](../../docs/REPO_ATLAS_PLAN.md),
+`tests/test_repo_atlas_swe.py`). Plan and pilot: [docs/claude/REPO_ATLAS_PLAN.md](../../docs/claude/REPO_ATLAS_PLAN.md),
 [results/repo_atlas/README.md](../repo_atlas/README.md). Results go below the "Results" heading. Nothing above it
 changes after the first agent run, except dated amendments.*
 

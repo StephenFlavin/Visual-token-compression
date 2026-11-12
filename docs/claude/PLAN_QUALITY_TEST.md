@@ -104,7 +104,7 @@ whole tickets fit under the cap. With 17 tickets layer 3 can only show large dif
 ## Results (2026-11-12)
 
 Run by an Opus subagent, $44.25 of the $45 cap; pre-registration, tables and caveats in
-[results/plan_quality/README.md](../results/plan_quality/README.md). Layer 1 on 33 tickets with all four planners,
+[results/plan_quality/README.md](../../results/plan_quality/README.md). Layer 1 on 33 tickets with all four planners,
 layer 2 not evaluable (only one repository had 3+ tickets), layer 3 on all 16 tickets.
 
 * **Atlas briefs are no better than file-list briefs and match scouting:** fix files named, atlas 50.1%, tree 48.1%,

@@ -3,9 +3,9 @@
 *2026-11-11.* Claude Code with Opus 5.5 (high effort) solved real SWE-bench tasks twice: once reading code and command
 output as text, once through the vbhook hooks, which show file contents and long command output as page images at
 88.2 px² per character (the density where Opus answered document questions as well as from text). Details:
-[Django](../results/readhook_swe/README.md), [Rust and Java](../results/readhook_swe_ml/README.md), hooks
-[`experiments/readhook/vbhook/`](../experiments/readhook/vbhook/), analysis
-[`experiments/readhook/swe/analyse.py`](../experiments/readhook/swe/analyse.py).
+[Django](../../results/readhook_swe/README.md), [Rust and Java](../../results/readhook_swe_ml/README.md), hooks
+[`experiments/readhook/vbhook/`](../../experiments/readhook/vbhook/), analysis
+[`experiments/readhook/swe/analyse.py`](../../experiments/readhook/swe/analyse.py).
 
 ## The answer
 
@@ -18,7 +18,7 @@ output as text, once through the vbhook hooks, which show file contents and long
   what the agent costs; even if all of it were 3.1x cheaper, the run would cost at most 12% less. The image arm then
   spent that saving on more output and more calls.
 
-![Cost composition of the agent runs](img/swe_cost_anatomy.png)
+![Cost composition of the agent runs](../img/swe_cost_anatomy.png)
 
 *How to read it:* each bar is 100% of the list-price cost of one arm; the slices are what the money paid for. Orange
 is the only slice page images can shrink.
@@ -47,7 +47,7 @@ Three things keep the tool-result slice small:
 
 ## Why the image arm did not come out ahead
 
-![Cost bridge from the text arm to the image arm](img/swe_cost_bridge.png)
+![Cost bridge from the text arm to the image arm](../img/swe_cost_bridge.png)
 
 *How to read it:* the grey bars are the two arms' total cost over the same tasks; the steps between them are the
 change in each slice. The y axis does not start at zero.
@@ -88,7 +88,7 @@ were lossless (99.7% against 99.4% from text, 360 questions). For coding agents 
 * **One model, one harness:** Opus 5.5 at high effort in Claude Code. Costs are list prices (subscription quota in
   practice). Text tool-result tokens are estimated from length (2.6 characters per token).
 * **Engineering notes:** making the hooks behave took several fixes, each written up in
-  [`results/readhook_smoke/README.md`](../results/readhook_smoke/README.md) and the hooks' code: Claude Code checks an
+  [`results/readhook_smoke/README.md`](../../results/readhook_smoke/README.md) and the hooks' code: Claude Code checks an
   Edit's `old_string` before hooks run (so code pages are edit-safe: spaces kept, indentation shown as `»`); it does
   not run PostToolUse for failed commands (so every command gets an exit-code line); compound commands that print
   several files are split per file. The harness also had to stop test processes that outlived their test run.
@@ -111,6 +111,6 @@ Measured against the text arm's $10.61 over the 79 tasks:
    input, as in the document tests (~95%), pages halve the cost; untested for coding.
 6. **Context room, not money:** 2.9x more code per context window means fewer compactions in long sessions.
 7. **Compaction archives (tested):** keeping the pre-compaction transcript as indexed page images restored recall from
-   37% to 100% at 31% lower cost than normal compaction ([results/compaction](../results/compaction/README.md)); at
+   37% to 100% at 31% lower cost than normal compaction ([results/compaction](../../results/compaction/README.md)); at
    scale, through real hooks on 9 sessions including codebase exploration and log triage, 96-99% against 78% at 2.1x
-   lower cost per correct answer ([results/compaction_scale](../results/compaction_scale/README.md)).
+   lower cost per correct answer ([results/compaction_scale](../../results/compaction_scale/README.md)).

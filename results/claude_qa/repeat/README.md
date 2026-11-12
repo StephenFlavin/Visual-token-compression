@@ -1,7 +1,7 @@
 # Repeat calls on wording-sensitive questions (Claude QA)
 
 *2026-11-12.* Pre-registered below, committed before any scored call. Follows Test A
-([../prune/README.md](../prune/README.md)); the v2 test and its rules: [docs/CLAUDE_QA.md](../../../docs/CLAUDE_QA.md).
+([../prune/README.md](../prune/README.md)); the v2 test and its rules: [docs/claude/CLAUDE_QA.md](../../../docs/claude/CLAUDE_QA.md).
 
 ## Verdict
 

@@ -152,7 +152,7 @@ Best (lowest-CER) encoding per family; unigram-level CER on this text is ≈ 72-
 # Round 2: DeepSeek-OCR's DeepEncoder at its own geometry (2026-11-04)
 
 Design, encoders, geometry, pre-registered predictions (a)-(f), decision rules and the run log are in
-[ROUND2.md](ROUND2.md); the local-GPU runbook (P0/P1) is [../docs/LOCAL_GPU.md](../docs/LOCAL_GPU.md). Qwen2.5-VL was
+[ROUND2.md](ROUND2.md); the local-GPU runbook (P0/P1) is [../docs/gpu/LOCAL_GPU.md](../docs/gpu/LOCAL_GPU.md). Qwen2.5-VL was
 dropped before any of its jobs ran (user decision), so round 2 is DeepEncoder only: 512 px page (Tiny mode),
 8x8 = 64 tokens of 1280-d, so chars/token = 4096 / px²/char. (Units: the identity32 ceiling rows store `chars_per_token` per 32-px patch, 1/4 of these; every table here quotes chars per 64-px DeepEncoder token.) Rows: `results/round2_gpu_tp{200,1000,3000,5000}/`
 (RTX 3090, the rows used below) and `results/round2/` (cloud CPU, 200 pages, a cross-check only). Tables come from
@@ -302,7 +302,7 @@ Through deepencoder no family reaches 10% (only latin_p32 gets below ~70%, at 19
 # Round 3: Qwen2.5-VL-3B, can a VLM learn to read the codes? (2026-11-05)
 
 Design, gates G0-G4, pre-registered predictions, decision rules and every dated amendment are in
-[ROUND3.md](ROUND3.md); the GPU session log is [../docs/history/HANDOFF_2026-11.md](../docs/history/HANDOFF_2026-11.md) (current hand-off: [../docs/HANDOFF.md](../docs/HANDOFF.md)). Geometry: 448 px page,
+[ROUND3.md](ROUND3.md); the GPU session log is [../docs/background/history/HANDOFF_2026-11.md](../docs/background/history/HANDOFF_2026-11.md) (current hand-off: [../docs/HANDOFF.md](../docs/HANDOFF.md)). Geometry: 448 px page,
 28-px tokens, 256 vision tokens per page; Qwen text tokens hold 4.33 chars on this text. Figures:
 `python3 encoder_probe/experiments/make_figures.py`.
 
@@ -322,7 +322,7 @@ Design, gates G0-G4, pre-registered predictions, decision rules and every dated 
   ~15% for the merger arms.
 * **R3-1 (fine-tune, LLM as reader, 1000 steps):** **only latin_p8 transcribes** (55.0% CER vs blind 88.5%). latin_p5
   gets the gist only (val loss 9.9% below blind, MC 18/32 vs 9/32, p = 0.02); lg_pb_h5 and the moonshot are not
-  read (losses equal the blind runs'). Analysis: [docs/ANALYSIS.md](../docs/ANALYSIS.md). **G3 is undecidable** (no arm near 3%); the glyph codes
+  read (losses equal the blind runs'). Analysis: [docs/background/ANALYSIS.md](../docs/background/ANALYSIS.md). **G3 is undecidable** (no arm near 3%); the glyph codes
   are not read at this budget, which is "not reached yet", not "impossible".
 
 ## G0: raw-pixel ceiling of the moonshot

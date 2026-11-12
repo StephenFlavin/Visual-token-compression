@@ -1,4 +1,4 @@
-"""Repo atlas: a whole repository as page images, for one up-front read (docs/REPO_ATLAS_PLAN.md).
+"""Repo atlas: a whole repository as page images, for one up-front read (docs/claude/REPO_ATLAS_PLAN.md).
 
 Every tracked source file is minified with the coding hooks' minifiers (experiments/readhook/vbhook: only
 whitespace is removed, indentation that carries meaning is kept as ``»``), joined into one flow with a header per

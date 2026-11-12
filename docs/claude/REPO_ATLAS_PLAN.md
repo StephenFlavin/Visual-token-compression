@@ -100,7 +100,7 @@ index, built once per commit, and a session-start note telling the model to read
 ## Pilot results (2026-11-12)
 
 *8 tasks (2 each from requests, gin, bat, preact), 5 arms, 36 calls, $7.49 at list price. Pre-registration, tables
-and problems: [results/repo_atlas/README.md](../results/repo_atlas/README.md).*
+and problems: [results/repo_atlas/README.md](../../results/repo_atlas/README.md).*
 
 * **Every arm found every changed source file on every task**, the file list alone included (tree, map, atlas and
   agent 8 of 8; text 4 of 4). The primary score is at the ceiling, so the pilot cannot tell the arms apart.
@@ -119,7 +119,7 @@ and problems: [results/repo_atlas/README.md](../results/repo_atlas/README.md).*
 *SWE-QA (Peng et al., arXiv 2509.14635): all 144 questions of requests, flask and pytest, the three SWE-QA
 repositories whose atlas fits one request at the benchmark's pinned commits (20k / 36k / 141k image tokens). Opus 5.5
 at high effort, the benchmark's own judge rubric applied by Opus 5.5, 5-100 scale. $20.83 of a $22 cap.
-Pre-registration, tables and problems: [results/repo_atlas_qa/README.md](../results/repo_atlas_qa/README.md).*
+Pre-registration, tables and problems: [results/repo_atlas_qa/README.md](../../results/repo_atlas_qa/README.md).*
 
 * **The atlas adds nothing over memory.** Closed-book (no code) 75.6, map 76.1, atlas 75.4, text 75.5; atlas −
   closed-book −0.1 (−0.9 to +0.6), atlas − map −0.6 (−1.3 to +0.0), atlas − text +1.1 (+0.4 to +1.8). Closed-book
@@ -143,7 +143,7 @@ Pre-registration, tables and problems: [results/repo_atlas_qa/README.md](../resu
 fast-xml-parser, shadow, ag-psd, compose-lint, kiwi, urwid, forge; atlases 27k-118k image tokens). Opus 5.5 at high
 effort, asked to audit the vulnerable commit and report up to 5 findings (file, function, weakness class; no exploit
 code). $20.70 of a $25 cap; the usage limit ended the run during task 13, so it closed on 12 tasks. Pre-registration,
-tables and problems: [results/repo_atlas_sec/README.md](../results/repo_atlas_sec/README.md).*
+tables and problems: [results/repo_atlas_sec/README.md](../../results/repo_atlas_sec/README.md).*
 
 * **The atlas did not help find the flaw.** A gold file in the top 5 findings: file list only 10 of 12, atlas 9,
   Claude Code with Read/Grep/Glob 7, the same agent with the atlas 10. File names give the location away even for
@@ -165,7 +165,7 @@ SWE-bench-Live), each with a gold patch over at least 3 source files, an atlas o
 validation without Docker, and a closed-book screen that dropped 12 of 37 tasks as already located. Claude Code
 (Opus 5.5, high effort) solved each task once per arm: plain, with a repo map, with the atlas pages in the first
 message. Graded by the tasks' own tests. $28.45 of a $35 cap. Pre-registration, tables and problems:
-[results/repo_atlas_swe/README.md](../results/repo_atlas_swe/README.md).*
+[results/repo_atlas_swe/README.md](../../results/repo_atlas_swe/README.md).*
 
 * **The atlas arm solved the most, but not significantly so:** 11 of 16 compared tasks against 8 for plain and 9
   for the map. All 3 discordant tasks went to the atlas (exact McNemar p = 0.25). One run per arm cannot separate
@@ -186,7 +186,7 @@ message. Graded by the tasks' own tests. $28.45 of a $35 cap. Pre-registration, 
 14 C projects (the 2 largest validated ones, 3,759-3,889 C lines, then the 12 smallest, 806-1,083) x 3 arms of Claude
 Code (Opus 5.5, high effort): `plain` (C source + Rust skeleton), `atlas` (the same plus the C source as 1-3 pages in
 the first message), `atlas_only` (Rust skeleton and pages, no C files). $24.01 of a $30 cap. Pre-registration,
-amendments, tables and problems: [results/repo_atlas_migrate/README.md](../results/repo_atlas_migrate/README.md).*
+amendments, tables and problems: [results/repo_atlas_migrate/README.md](../../results/repo_atlas_migrate/README.md).*
 
 * **The atlas changes nothing in a migration:** every arm has the same outcome on every project (12 of 14 pass all
   tests; lib2bit fails its one test and Genetic 1 of 23 in every arm). Turns, cost and time differ by noise (atlas vs
@@ -229,7 +229,7 @@ repeats the comparison clean and twice.
   test's 3 of 16 (under 19 points of task-runs); (A3) fewer turns with the atlas (sign test p < 0.05); (A4) the atlas
   costs at least twice plain.
 
-**Result (2026-11-12, 64 runs, $35.07; [results/repo_atlas_swe_rerun](../results/repo_atlas_swe_rerun/README.md)):
+**Result (2026-11-12, 64 runs, $35.07; [results/repo_atlas_swe_rerun](../../results/repo_atlas_swe_rerun/README.md)):
 the hint does not survive.** Task-runs solved of 32: plain 19, atlas 17 (atlas higher on 1 task, plain on 2); turns
 lower with the atlas on 10 of 15 untied tasks (p = 0.30); cost 3.1x. The first test's transcripts showed no shared or
 written memory (each run had its own store), so its 11 against 8 was run-to-run variation, not contamination. A1 and
@@ -259,7 +259,7 @@ something bigger and harder, with concurrency and locks, such as Java to Rust.
   passes every test on gitleaks; (B2) the two arms' test shares differ by less than 15 points; (B3) the atlas arm uses
   fewer turns.
 
-**Result (2026-11-12, 2 runs, $23.14; [results/repo_atlas_port](../results/repo_atlas_port/README.md)): both arms
+**Result (2026-11-12, 2 runs, $23.14; [results/repo_atlas_port](../../results/repo_atlas_port/README.md)): both arms
 port gitleaks completely, which leaves nothing to compare.** Each Rust port builds and passes all 35 hidden tests (the Go original
 passes 35 here too); atlas 99 turns, $11.20, 0.59 h; plain 102 turns, $11.32, 0.69 h. Both agents built the Go
 original as a local oracle and diffed outputs; neither port scans concurrently (the original uses a 40-wide
@@ -287,7 +287,7 @@ at 2.2x at high effort only, and the atlas is rendered denser (2.9x), so legibil
   Sonnet plain (difference under 3 of 32); (S3) Sonnet with the atlas stays below Opus plain; (S4) the atlas
   multiplies Sonnet's cost per run by at least 3.
 
-**Result (2026-11-12, 64 runs, $11.38; [results/repo_atlas_swe_sonnet](../results/repo_atlas_swe_sonnet/README.md)):
+**Result (2026-11-12, 64 runs, $11.38; [results/repo_atlas_swe_sonnet](../../results/repo_atlas_swe_sonnet/README.md)):
 the atlas does not help Sonnet either.** Gate: Sonnet and Opus (high effort) each answered 20 of 20 lookups on the
 docstub and pyfakefs atlases, every page arrived, and Sonnet reads the 1932-px pages without downscaling (its input
 equals Opus's to 4 tokens). Sonnet 5.5 high: plain 14 of 32 task-runs, atlas 13 (15 of 16 tasks tie; tox-3904 goes

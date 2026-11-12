@@ -1,4 +1,4 @@
-"""analyse_r3.py: exact tests and the R3-1 numbers quoted in docs/ANALYSIS.md (committed rows, no torch)."""
+"""analyse_r3.py: exact tests and the R3-1 numbers quoted in docs/background/ANALYSIS.md (committed rows, no torch)."""
 import math
 import sys
 from pathlib import Path

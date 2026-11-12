@@ -15,7 +15,7 @@ does not read `lg_pb_h5` (107 chars/token) or its RGB overlay (322) after 1000 s
 the VLM case is open.
 
 Design and pre-registered criteria: `PLAN.md`. Raw rows: `results/<run>/runs.jsonl`. The round-by-round log is in
-`../docs/RESULTS.md` (history) and `../results/queue*.txt` (exact commands).
+`../docs/glyphs/RESULTS.md` (history) and `../results/queue*.txt` (exact commands).
 
 ## Setup in one paragraph
 Text → symbol ids (95 printable ASCII chars, plus N dictionary chains for N=300) → `GlyphBank` cells (4× supersampled,

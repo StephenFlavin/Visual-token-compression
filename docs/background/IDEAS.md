@@ -33,7 +33,7 @@ Go on only if it beats `latin` chars/token at 3% CER through siglip with JPEG.
 
 **Status:** built, not run (2026-11-03). Encodings `mono_p*`, `rgb3_p*`, `rgbw_p*_{chan,paint}` in
 `encoder_probe/ep/rgb_overlay.py`; design, pre-registered predictions, decision rule and the 48-command grid
-in [encoder_probe/RGB_OVERLAY.md](../encoder_probe/RGB_OVERLAY.md). Only a 300-step smoke run exists.
+in [encoder_probe/RGB_OVERLAY.md](../../encoder_probe/RGB_OVERLAY.md). Only a 300-step smoke run exists.
 
 **Status (2026-11-05): dead for frozen encoders.** From raw pixels rgb3 works (identity32: rgb3_p6 0.01% CER at
 3x mono's chars/token). Through DeepEncoder rgb3 sits at the floor (83.5%, worse than mono's 72-73%), so the SigLIP
@@ -104,7 +104,7 @@ only, so not blocked by the VLM results.
   promising and effective?"
 * Goal (user): show a local model on the RTX 3090 holding much more context than it can by default, without
   shortcutting the research (it came from DeepSeek-V4.1-Flash's long context; context and compute numbers per encoding
-  are in [CONTEXT_BUDGET.md](CONTEXT_BUDGET.md)).
+  are in [CONTEXT_BUDGET.md](../claude/CONTEXT_BUDGET.md)).
 
 **1. Bank what works (do regardless): fine-tuned Latin page images + 4-bit KV + YaRN.**
 * Latin page images, fine-tuned (Glyph replication on Qwen): prior art reports 3-4x; R3-1's Latin arm tests it.
@@ -137,7 +137,7 @@ only, so not blocked by the VLM results.
 
 **Status:** recorded; gated on G0 (moonshot identity28 ceilings), Q1 (layer-wise linear readout) and R3-1 on the 3090.
 
-**Status (2026-11-05, later): own-encoder plan written up ([OWN_ENCODER.md](OWN_ENCODER.md)).** Its Stage 0
+**Status (2026-11-05, later): own-encoder plan written up ([OWN_ENCODER.md](../gpu/OWN_ENCODER.md)).** Its Stage 0
 asks the 2b question first (text-side compression ceiling into Qwen's frozen LLM), because it caps any 2a pixel
 encoder and sets its density target. Code ready, pre-registered, to run on a rented RTX 4090.
 
@@ -145,4 +145,4 @@ encoder and sets its density target. Code ready, pre-registered, to run on a ren
 and G2-lite put the loss in the ViT output / merger ("ViT output is the wall at this budget"); R3-1 at 1000 steps
 reads latin_p8 (28 chars/token, 55% CER vs blind 88.5%) but leaves every denser code at its blind floor. Next: a
 short vision-side diagnostic (higher `--lr-vision`, more `--vision-blocks`; a light version of 2a) and the 5000-step
-Latin arms, which also size option 1 ([HANDOFF.md](HANDOFF.md)).
+Latin arms, which also size option 1 ([HANDOFF.md](../HANDOFF.md)).

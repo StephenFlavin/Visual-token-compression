@@ -9,9 +9,9 @@ the venv's `python` (not `python3`) and `PYTHONUTF8=1` (section 8; AGENTS.md has
 **estimates** unless marked measured.
 
 **Current work (2026-11-12): section 10, one evening on Qwen3.8-27B with no training.** The work is being wound
-down ([REVIEW_2026-11-11.md](REVIEW_2026-11-11.md), README "Where it stands"): this PC's last job is to measure
+down ([REVIEW_2026-11-11.md](../background/REVIEW_2026-11-11.md), README "Where it stands"): this PC's last job is to measure
 whether page images let a local model hold more text, and how fast it writes with its built-in multi-token module.
-The prompt is at the top of [HANDOFF.md](HANDOFF.md). Section 9 (Test B) is built but not scheduled. Sections 4-8
+The prompt is at the top of [HANDOFF.md](../HANDOFF.md). Section 9 (Test B) is built but not scheduled. Sections 4-8
 are earlier rounds, kept for their setup notes and measured speeds.
 
 ## 1. Setup
@@ -85,7 +85,7 @@ The first run also builds the `tr20` DeepEncoder token cache on the GPU. If anyt
 
 *Superseded 2026-11-04 evening: round 2 finished on this PC (1000-5000 pages). Only latin_p32 (8.5 chars/token) reads
 through DeepEncoder (18.9% at 1000 pages, 14.9% at 5000); every denser code sits at the floor. Results:
-[RESULTS.md](RESULTS.md) and encoder_probe/RESULTS.md. The text below is the pre-run state.*
+[RESULTS.md](../glyphs/RESULTS.md) and encoder_probe/RESULTS.md. The text below is the pre-run state.*
 
 Round 2 targets DeepSeek-OCR's DeepEncoder (512 px Tiny mode, 8x8 = 64 tokens of 1280-d); Qwen was dropped (user
 decision). Rows: `encoder_probe/results/round2/runs.jsonl` (cloud runner, fp32 probe, 200 train pages, 3000 steps).
@@ -172,7 +172,7 @@ Decision rule (RGB_OVERLAY.md): pursue RGB overlay only if rgb3 beats the best l
 encoder with jpeg75. rgb3_p5 repeats some pages under round-1 `make_pages` (RGB_OVERLAY.md caveat).
 
 ### P3: rgb6 (only if rgb3 keeps most of its 3x through the real encoder with jpeg75)
-Not built yet. Per docs/IDEAS.md: add `rgb6_p{6,8}` to `encoder_probe/ep/rgb_overlay.py`, with 2 binary-thresholded
+Not built yet. Per docs/background/IDEAS.md: add `rgb6_p{6,8}` to `encoder_probe/ep/rgb_overlay.py`, with 2 binary-thresholded
 layers per channel at ink depths 1/2 and 1/4, channel-tagged classes and 6 interleaved labels per cell (check the
 CTC frame budget), and run it with the rgb3 conditions. Predicted to work only for identity/clean.
 
@@ -222,7 +222,7 @@ git pull --rebase origin claude/validation-harness && git push origin claude/val
 ## 8. Round 3 on the 3090 (encoder_probe/ROUND3.md)
 
 **Status (2026-11-05):** `finetune_qwen.py` ran as built on a Linux RTX 4090 (smoke + 1000-step arms with blind
-controls, [GPU_RUNNER.md](GPU_RUNNER.md); results in [HANDOFF.md](HANDOFF.md)): 1.2 s/step, peak 11.4 GB at batch 4.
+controls, [GPU_RUNNER.md](GPU_RUNNER.md); results in [HANDOFF.md](../HANDOFF.md)): 1.2 s/step, peak 11.4 GB at batch 4.
 Nothing below has run on this Windows PC yet, and R3-0 (frozen Qwen probe on CUDA) and R3-2 (`longctx_bench.py`)
 have not run on any GPU. **The next arms and their order are in HANDOFF.md** (latin_p8/p6/p5 at 5000 steps with
 blinds, then a short vision-side diagnostic); the R3-1 block below is the original grid. Run the smokes first.
@@ -353,7 +353,7 @@ git commit -m "Round 3 GPU: <what ran>"
 git pull --rebase origin claude/validation-harness && git push origin claude/validation-harness
 ```
 
-## 9. Test B on the 3090: text slots against page pixels (docs/TEXT_SLOTS.md)
+## 9. Test B on the 3090: text slots against page pixels (docs/gpu/TEXT_SLOTS.md)
 
 **Not scheduled (2026-11-12).** It would repeat published work for a payoff current local models already get from
 their architecture. The section is kept so the test can be run as written if that changes.
@@ -362,7 +362,7 @@ their architecture. The section is kept so the test can be run as written if tha
 other arms are for: if slots made from the text tokens carry more per position than vision tokens at the same
 budget, the dense glyph arms (Stage C) and the colour overlay (Run 4) are dropped; the Latin arms stay, as the
 image side of the comparison. Design, gates, rules and predictions are pre-registered in
-[TEXT_SLOTS.md](TEXT_SLOTS.md); the session prompt is at the top of [HANDOFF.md](HANDOFF.md).
+[TEXT_SLOTS.md](TEXT_SLOTS.md); the session prompt is at the top of [HANDOFF.md](../HANDOFF.md).
 
 **Nothing here has run on a GPU.** The code passed its tests on the tiny CPU model only, so the smoke is the first
 real run: read its log before queueing anything.
@@ -411,17 +411,17 @@ Then the runbook block of [TEXT_SLOTS.md](TEXT_SLOTS.md), one command at a time,
 ### Sending results back
 ```bash
 python encoder_probe/experiments/analyse_slots.py encoder_probe/results/tb
-git add encoder_probe/results/tb docs/TEXT_SLOTS.md && git commit -m "Test B: <arms>"
+git add encoder_probe/results/tb docs/gpu/TEXT_SLOTS.md && git commit -m "Test B: <arms>"
 git pull --rebase origin claude/validation-harness && git push origin claude/validation-harness
 ```
 
-## 10. Qwen3.8-27B on the 3090: page images and generation speed, no training (docs/LOCAL_QWEN.md)
+## 10. Qwen3.8-27B on the 3090: page images and generation speed, no training (docs/gpu/LOCAL_QWEN.md)
 
 **What it answers.** Whether rendering a document as page images lets a local model hold about twice the text in
 the same memory without getting answers wrong, as it does on Claude, and how much faster the model writes with the
 multi-token prediction module it ships with. Design, predictions and what each outcome means are pre-registered in
 [LOCAL_QWEN.md](LOCAL_QWEN.md), which also has the full runbook; the session prompt is at the top of
-[HANDOFF.md](HANDOFF.md).
+[HANDOFF.md](../HANDOFF.md).
 
 **Nothing here has run against a real model.** `experiments/local_qa.py` passed its tests against a mock server
 only. The first real request (step 2 of the prompt) is the check.
@@ -439,6 +439,6 @@ only. The first real request (step 2 of the prompt) is the check.
 * **Sending results back:**
 ```bash
 python experiments/local_qa.py analyse
-git add results/local_qa docs/LOCAL_QWEN.md && git commit -m "Local Qwen3.8-27B: <what ran>"
+git add results/local_qa docs/gpu/LOCAL_QWEN.md && git commit -m "Local Qwen3.8-27B: <what ran>"
 git pull --rebase origin claude/validation-harness && git push origin claude/validation-harness
 ```

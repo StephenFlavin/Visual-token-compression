@@ -1,4 +1,4 @@
-"""Figures for docs/SWE_IMAGES.md from results/readhook_swe/analysis/summary.json (experiments/readhook/swe/analyse.py).
+"""Figures for docs/claude/SWE_IMAGES.md from results/readhook_swe/analysis/summary.json (experiments/readhook/swe/analyse.py).
 
     python3 scripts/make_swe_figures.py
 """

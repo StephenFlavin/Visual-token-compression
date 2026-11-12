@@ -1,4 +1,4 @@
-"""Test A (docs/REVIEW_2026-11-11.md): can extractive pruning of the *text* replace page images, or stack with them?
+"""Test A (docs/background/REVIEW_2026-11-11.md): can extractive pruning of the *text* replace page images, or stack with them?
 
 Same 3 documents as the v2 Claude QA runs (``qav2_d0/1/2``: 700k chars, offsets 0 / 1150 / 2480, seeds 0 / 1 / 2) plus
 40 planted "small-word" facts per document whose numeric answer is right only if function words are read (negation,

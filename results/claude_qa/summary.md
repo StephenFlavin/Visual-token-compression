@@ -1,6 +1,6 @@
 # Claude QA over a rendered document vs its text (2026-11-10)
 
-Write-up with charts and the cost of every run: [docs/CLAUDE_QA.md](../../docs/CLAUDE_QA.md). This file is the run log.
+Write-up with charts and the cost of every run: [docs/claude/CLAUDE_QA.md](../../docs/claude/CLAUDE_QA.md). This file is the run log.
 
 `experiments/claude_qa_render.py`, headless Claude (same model as Phase 1, effort low), one document: 503,630 chars of
 held-out WikiText-103 test text plus 40 invented facts ("needles"). 80 questions with exact numeric answers: 40 about

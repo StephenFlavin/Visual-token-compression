@@ -1,6 +1,6 @@
 # Repo atlas, stage 1 pilot: where does the change go?
 
-*Pre-registered 2026-11-12, before any scored call. Plan: [docs/REPO_ATLAS_PLAN.md](../../docs/REPO_ATLAS_PLAN.md).
+*Pre-registered 2026-11-12, before any scored call. Plan: [docs/claude/REPO_ATLAS_PLAN.md](../../docs/claude/REPO_ATLAS_PLAN.md).
 Code: `experiments/repo_atlas_eval.py` (tests `tests/test_repo_atlas_eval.py`). Results are added below this
 pre-registration once the calls are in; nothing above the "Results" heading changes after the first call, except
 dated amendments.*

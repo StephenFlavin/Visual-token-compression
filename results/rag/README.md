@@ -1,6 +1,6 @@
 # RAG with page images
 
-Plan, arms and predictions: [docs/RAG_PLAN.md](../../docs/RAG_PLAN.md), committed (9810725) before any call.
+Plan, arms and predictions: [docs/claude/RAG_PLAN.md](../../docs/claude/RAG_PLAN.md), committed (9810725) before any call.
 Harness: `experiments/rag/run_rag.py` (resumable: finished calls in `runs.jsonl`, responses cached; failed calls
 neither recorded nor cached; it stops itself when most of a batch fails, e.g. on a usage limit).
 
@@ -51,7 +51,7 @@ pages (2.6x, 2.6x, 2.2x fewer). Recall of the gold evidence: top-5 0.85 / 0.38 /
 * Chain questions in the planted set are 0% in every arm: BM25 on the question does not retrieve the intermediate
   facts (a multi-step retriever would be needed); this is a retrieval limit, not a reading one.
 
-Pre-registered verdicts (docs/RAG_PLAN.md):
+Pre-registered verdicts (docs/claude/RAG_PLAN.md):
 1. Top-5 as pages within 2 points of top-5 as text, with at least 2x fewer context tokens: **PASS** on point estimates
    (±0, +0.7, +2.0) and tokens (2.6x, 2.6x, 2.2x); the 95% bound is within 2 points only on MultiHop-RAG (the other
    sets have 60 and 100 questions).

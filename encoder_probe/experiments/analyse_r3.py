@@ -15,7 +15,7 @@ No torch, no network, no scipy. Reads the committed R3-1 rows (round3_ft_gpu3h, 
 * a crude log-step fit of the val-loss gap (the schedule is cosine to 0 at step 1000, so the late flattening is partly
   the LR decay and the fit understates what a longer schedule gives).
 The only typed-in values: the lg_pb_h5 blind val losses at steps 250/500 (job died before writing a row; logged in
-docs/history/HANDOFF_2026-11.md) and the measured 4.33 chars per Qwen text token (held-out WikiText).
+docs/background/history/HANDOFF_2026-11.md) and the measured 4.33 chars per Qwen text token (held-out WikiText).
 """
 from __future__ import annotations
 

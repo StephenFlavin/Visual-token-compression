@@ -1,8 +1,8 @@
 # Test A: pruned text against page images (Claude QA)
 
 *2026-11-12.* Pre-registered (commit 4fb07a5, before any scored call; the pre-registration is unchanged below the
-results). Design draft: [docs/REVIEW_2026-11-11.md](../../../docs/REVIEW_2026-11-11.md), "Test A". It extends the v2
-test in [docs/CLAUDE_QA.md](../../../docs/CLAUDE_QA.md) (A1, A4).
+results). Design draft: [docs/background/REVIEW_2026-11-11.md](../../../docs/background/REVIEW_2026-11-11.md), "Test A". It extends the v2
+test in [docs/claude/CLAUDE_QA.md](../../../docs/claude/CLAUDE_QA.md) (A1, A4).
 
 ## Verdict
 

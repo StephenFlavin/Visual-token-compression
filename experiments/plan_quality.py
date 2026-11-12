@@ -1,6 +1,6 @@
 """Plan-quality test: an orchestrator reads the repository once and writes a brief per ticket for worker agents.
 
-Design: docs/PLAN_QUALITY_TEST.md. Pre-registration, ticket lists, rows and results: results/plan_quality/README.md.
+Design: docs/claude/PLAN_QUALITY_TEST.md. Pre-registration, ticket lists, rows and results: results/plan_quality/README.md.
 Tickets come from SWE-rebench (the fresh-task test's source, experiments/repo_atlas_swe.py); its funnel rows are
 reused, its runner functions (checkouts, environments, grading) are imported, nothing of it is edited.
 

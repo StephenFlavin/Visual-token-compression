@@ -165,7 +165,7 @@ Changes, all decided before any non-smoke run and none tuned on results:
 *History (superseded 2026-11-04): the cloud queue below was trimmed and the grid moved to the RTX 3090; Qwen was
 dropped. See the status block at the top.*
 
-**Local GPU runbook (RTX 3090): [docs/LOCAL_GPU.md](../docs/LOCAL_GPU.md)** (`--device`, page cache, the prioritised
+**Local GPU runbook (RTX 3090): [docs/gpu/LOCAL_GPU.md](../docs/gpu/LOCAL_GPU.md)** (`--device`, page cache, the prioritised
 P0-P3 list with commands, decision rules, analysis with `experiments/analyse2.py`).
 
 `results/queue_probe_c.txt` (one command per line, logs in `results/queue_logs/probe_c/`, 94 lines), started by a
@@ -190,7 +190,7 @@ waiter only after round 1's queue (`results/queue_probe_b.txt`) has exited:
    of fp32 denormals in the backward pass. `torch.set_flush_denormal(True)` in run_probe2/run_probe: 3.1 s/step on the
    real resumed latin_p16 job. Queue restarted as probe_c6 with the 6 key deepencoder/clean runs first, then the
    3 identity32 anchors (resume from checkpoints), then the jpeg75 token build, then the rest.
-   **~13:10: cloud queue trimmed; the rest moves to the user's RTX 3090 ([docs/LOCAL_GPU.md](../docs/LOCAL_GPU.md)).**
+   **~13:10: cloud queue trimmed; the rest moves to the user's RTX 3090 ([docs/gpu/LOCAL_GPU.md](../docs/gpu/LOCAL_GPU.md)).**
    All 200-page deepencoder rows sit near the floor (latin_p32 89% with train CTC 0.04 = memorisation), so the probe
    is data-limited. The cloud finishes only the claimed jobs: rgb3_p8 and latin_p8 (200 pages) and latin_p32 with 1000
    (`round2_tp`) and 2000 (`round2_tp2000`) train pages, ~18:00 UTC; it is a CPU cross-check for the GPU sweep.

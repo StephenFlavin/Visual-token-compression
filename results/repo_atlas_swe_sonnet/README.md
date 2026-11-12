@@ -1,7 +1,7 @@
 # Sonnet with the repo atlas on the hard coding tasks (Q3)
 
 *Pre-registered 2026-11-12, after the legibility gate and the environment validation, before the first scored agent
-run. Design: `docs/REPO_ATLAS_PLAN.md`, "Queued", Q3. Code: `experiments/repo_atlas_swe_sonnet.py` (tests
+run. Design: `docs/claude/REPO_ATLAS_PLAN.md`, "Queued", Q3. Code: `experiments/repo_atlas_swe_sonnet.py` (tests
 `tests/test_repo_atlas_swe_sonnet.py`), a thin runner that imports Q1's runner `experiments/repo_atlas_swe_rerun.py`
 and the first test's `experiments/repo_atlas_swe.py` unchanged. Results go below the "Results" heading; nothing above
 it changes after the first scored run, except dated amendments.*

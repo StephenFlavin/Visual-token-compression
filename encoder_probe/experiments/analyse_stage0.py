@@ -1,4 +1,4 @@
-"""Stage 0 (docs/OWN_ENCODER.md): results table, D3/D10 and val curves from encoder_probe/results/stage0/runs.jsonl.
+"""Stage 0 (docs/gpu/OWN_ENCODER.md): results table, D3/D10 and val curves from encoder_probe/results/stage0/runs.jsonl.
 
     python3 encoder_probe/experiments/analyse_stage0.py [runs.jsonl ...] [--out encoder_probe/img/stage0_curves.png]
 

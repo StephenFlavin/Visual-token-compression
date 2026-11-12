@@ -3,7 +3,7 @@
 
 ctx_budget.png: chars that fit in Qwen2.5-VL-3B's 32k-position window per encoding (log x), potential vs measured.
 Densities are chars per Qwen vision token at 448 px / 256 tokens (rows in encoder_probe/results/; latin_p6, col_b4
-and rgb3_p8 from docs/CONTEXT_BUDGET.md). Status is the R3-1 short-budget result (1000 steps, RTX 4090, 2026-11-05,
+and rgb3_p8 from docs/claude/CONTEXT_BUDGET.md). Status is the R3-1 short-budget result (1000 steps, RTX 4090, 2026-11-05,
 encoder_probe/results/round3_ft_gpu3h{,_blind}/).
 """
 from pathlib import Path
