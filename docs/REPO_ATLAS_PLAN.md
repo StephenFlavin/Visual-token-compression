@@ -135,3 +135,25 @@ Pre-registration, tables and problems: [results/repo_atlas_qa/README.md](../resu
   message: in one message with the questions, `claude -p` never reads it from the prompt cache.
 * Like the pilot, this cannot show a benefit of the atlas on code the model already knows. The next test of the idea
   needs repositories or code from after the model's training data.
+
+## Security flaw discovery: results (2026-11-12)
+
+*12 published, already fixed flaws from the GitHub Advisory Database (published 2026-11-09 to 11-11, fixes committed
+2026-07-01 or later, after the model's training data), in 10 small libraries (filegator, zt-zip, nuxt/content,
+fast-xml-parser, shadow, ag-psd, compose-lint, kiwi, urwid, forge; atlases 27k-118k image tokens). Opus 5.5 at high
+effort, asked to audit the vulnerable commit and report up to 5 findings (file, function, weakness class; no exploit
+code). $20.70 of a $25 cap; the usage limit ended the run during task 13, so it closed on 12 tasks. Pre-registration,
+tables and problems: [results/repo_atlas_sec/README.md](../results/repo_atlas_sec/README.md).*
+
+* **The atlas did not help find the flaw.** A gold file in the top 5 findings: file list only 10 of 12, atlas 9,
+  Claude Code with Read/Grep/Glob 7, the same agent with the atlas 10. File names give the location away even for
+  flaws the model cannot know (`security.ts`, `ZipUtil.java`, `kiwi_auth/views.py`), so the score sits near its
+  ceiling and cannot separate the arms. Stricter scores (gold file first, gold function, weakness class) are flat too.
+* **One direction for a larger test:** the agent with the atlas beat the plain agent by 3 tasks to 0 (exact p =
+  0.25) in about half the turns (median 8 vs 18; fewer on 11 of 12 tasks), at $0.67 against $0.46 per task. The
+  plain agent lost one task to its 40-turn limit and one to reporting the repository's other advisory.
+* Predictions: V1 (file list at most 30%) FAIL (83%); V2 (atlas beats file list by 3) FAIL; V3 (agent at least as good
+  as the atlas) FAIL (7 vs 9); V4 (agent with atlas within 1 task of the agent, fewer turns) FAIL on tasks, PASS on
+  turns.
+* All pages arrived (102-127% of the image-token formula); no refusals; no tool call left the export.
+* A sharper test would score functions or line ranges, or use flaws in files whose names say nothing about security.

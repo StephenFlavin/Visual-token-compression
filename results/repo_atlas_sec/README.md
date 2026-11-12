@@ -188,6 +188,114 @@ tokens): ~$1-2 per task, ~$13-20 in all, so all 14 tasks should fit under the $2
 each start. All atlas pages arrived (first-turn input 104-122% of the formula). No tool call left the export; no
 permission denials. No refusals.
 
-## Results
+## Amendment 2 (2026-11-12, 11:05 UTC): closed on 12 tasks
 
-*(added after the runs)*
+At 10:18 UTC the subscription's 5-hour usage limit stopped the run (stated reset 14:10 UTC) during task 13
+(tmatens/compose-lint `8e4fac95`): its `agent` and `agent_atlas` runs failed with the usage-limit error and wrote no
+rows; their partial cost ($1.76) stays booked. Spend stood at $20.70 of $25. Task 13's pre-registered bound for all
+four arms was $4.04, which leaves $0.26 of margin; that is not a clear fit, so the test closes on the **12 tasks with
+all four arms** (tasks 1-12 of the run order). Tasks 13 and 14 were not run. Nothing else changed.
+
+## Results (12 tasks, 48 rows, $20.70 at list price)
+
+**Verdict: no, the atlas did not help find the flaw.** The file list alone already named a gold file in its top 5
+on 10 of 12 tasks; the one-shot atlas did so on 9. On code the model cannot remember, file and directory names
+still point at the flaw (`security.ts`, `ZipUtil.java`, `kiwi_auth/views.py`, `display/web.py`), and 5 guesses
+among a few dozen to a few hundred files is enough. The primary score is near its ceiling for every arm, so this
+test cannot show an atlas benefit even if one exists. One direction is worth a follow-up: the agent **with** the
+atlas found a gold file on 10 tasks against 7 for the plain agent (3 to 0 discordant, exact p = 0.25), in about half
+the turns (median 8 vs 18), at 1.5 times the cost ($0.67 vs $0.46 per task). With 12 tasks that is not significant.
+
+### Per arm
+
+| arm | tasks | gold file in top 5 | gold file first | gold function named | class match | mean input tokens | mean cost | median turns |
+|---|---|---|---|---|---|---|---|---|
+| closed (file list) | 12 | 10 | 6 | 5 | 6 | 2,695 | $0.032 | 1 |
+| atlas (pages, one call) | 12 | 9 | 5 | 5 | 5 | 64,839 | $0.417 | 1 |
+| agent (Read/Grep/Glob) | 12 | 7 | 4 | 6 | 5 | 500,901 | $0.458 | 18 |
+| agent_atlas | 12 | 10 | 6 | 7 | 7 | 630,873 | $0.672 | 8 |
+
+"Gold function named" counts only functions named in a finding about a gold file. Class match: the first finding
+on a gold file gives a weakness class in the advisory's CWE family (`FAMILY_CWES`). Mean findings: 5.0, 5.0, 4.4,
+5.0. Wrong paths (not in the repository): closed 1, others 0.
+
+### Paired tests (primary score)
+
+| pair | first only | second only | exact McNemar p |
+|---|---|---|---|
+| atlas vs closed | 1 | 2 | 1.000 |
+| agent_atlas vs agent | 3 | 0 | 0.250 |
+| agent vs atlas | 1 | 3 | 0.625 |
+| agent vs closed | 0 | 3 | 0.250 |
+| agent_atlas vs closed | 1 | 1 | 1.000 |
+
+Turns, agent_atlas − agent (paired): median −8.5; fewer on 11 of 12 tasks.
+
+### Per task
+
+`#n` = rank of the first finding on a gold file; `fn` = a gold function named; `cls` = class match.
+
+| task | repository | CWE (family) | gold files | atlas tokens | closed | atlas | agent | agent_atlas |
+|---|---|---|---|---|---|---|---|---|
+| digitalbazaar__forge@2bd5146c | digitalbazaar/forge | CWE-347 (crypto) | 1 | 117,852 | #4 cls | miss | no findings (turn limit) | miss |
+| digitalbazaar__forge@326a4d09 | digitalbazaar/forge | CWE-20, CWE-248 (other,validation) | 1 | 120,474 | not run | not run | not run | not run |
+| naturalintelligence__fast-xml-parser@56805655 | naturalintelligence/fast-xml-parser | CWE-407 (dos) | 1 | 48,852 | #3 cls | #4 cls | #2 fn cls | #1 fn cls |
+| tmatens__compose-lint@8e4fac95 | tmatens/compose-lint | CWE-200, CWE-532 (info) | 1 | 87,492 | not run | not run | not run | not run |
+| nuxt__content@d8fed0c3 | nuxt/content | CWE-400, CWE-770 (dos) | 1 | 36,915 | #1 fn | #1 fn | #1 fn | #1 fn |
+| tmatens__compose-lint@c43204ad | tmatens/compose-lint | CWE-117, CWE-150 (injection,validation) | 1 | 84,387 | #1 cls | #4 fn cls | miss | #4 cls |
+| kiwitcms__kiwi@494385fc | kiwitcms/kiwi | CWE-601 (redirect) | 1 | 102,603 | #5 | #1 fn cls | #1 fn cls | #1 fn cls |
+| filegator__filegator@d876ac38 | filegator/filegator | CWE-862 (access) | 1 | 27,738 | #1 fn | miss | #1 fn cls | #1 fn cls |
+| filegator__filegator@c6715ff7 | filegator/filegator | CWE-330, CWE-862 (access,crypto) | 2 | 27,600 | miss | #2 | miss | #2 fn cls |
+| urwid__urwid@567e3006 | urwid/urwid | CWE-116, CWE-248, CWE-775 (dos,injection,other) | 1 | 111,504 | #1 fn | #5 fn | miss | #4 |
+| gradleup__shadow@e822f993 | gradleup/shadow | CWE-22 (path) | 1 | 53,475 | miss | miss | miss | miss |
+| agamnentzar__ag-psd@e64f0c96 | agamnentzar/ag-psd | CWE-770 (dos) | 1 | 69,552 | #3 cls | #1 cls | #3 cls | #1 cls |
+| zeroturnaround__zt-zip@780a2fd9 | zeroturnaround/zt-zip | CWE-23 (path) | 1 | 35,673 | #1 fn cls | #1 | #2 fn | #2 fn |
+| zeroturnaround__zt-zip@0a9d0e1f | zeroturnaround/zt-zip | CWE-22 (path) | 2 | 34,983 | #1 fn cls | #1 fn cls | #1 fn cls | #1 fn cls |
+
+### Predictions
+
+* **V1** (`closed` gold file in top 5 on at most 30% of tasks): **FAIL.** 10 of 12 (83%).
+* **V2** (`atlas` beats `closed` by at least 3 tasks): **FAIL.** atlas 9, closed 10.
+* **V3** (`agent` at least as good as `atlas`): **FAIL.** agent 7, atlas 9 (1 to 3 discordant, p = 0.63).
+* **V4** (`agent_atlas` and `agent` within 1 task, and `agent_atlas` fewer turns): **FAIL** on the first part (10 vs
+  7), PASS on the second (median −8.5 turns, fewer on 11 of 12).
+
+### What 12 tasks can and cannot show
+
+None of the paired tests is significant; the largest split (3 to 0) gives p = 0.25. With the file-list floor at 10
+of 12, the primary score leaves almost no room above it, so "the atlas adds nothing over the file list" is the
+plain reading, not "the atlas is worse". The stricter scores (gold file first, gold function, class) are just as
+flat. The `agent_atlas` lead over `agent` is a direction for a larger test, not a finding.
+
+### Where the plain agent lost
+
+* forge `2bd5146c` (ed25519 signature check): the agent read `lib/ed25519.js` among 14 files, ran into the 40-turn
+  limit while still auditing, and wrote no FINDING lines (scored as no findings).
+* filegator `c6715ff7`: it reported the upload flaw that is the *other* filegator advisory (task 11's gold), scored a
+  miss as pre-registered. Several arms reported the sibling advisory's file in the two-task repositories
+  (agent_atlas named `lib/tls.js`, task 14's gold, on forge `2bd5146c`).
+* compose-lint `c43204ad` and urwid: it looked elsewhere; the atlas arms named the gold file at rank 4-5.
+
+### Cost and checks
+
+| arm | spent |
+|---|---|
+| closed | $0.39 |
+| atlas | $5.00 |
+| agent | $6.20 (incl. $0.71 of the failed task-13 run) |
+| agent_atlas | $9.11 (incl. $1.05 of the failed task-13 run) |
+| **total** | **$20.70 of $25** |
+
+* All 24 atlas and agent_atlas rows: pages arrived (first-turn input 102-127% of the image-token formula).
+* No refusals, no safety cut-offs, no permission denials. One agent Grep used `urwid/widget/../vterm.py`, inside its
+  export. No tool call reached outside the export.
+* One agent run (forge) hit the turn limit; no run hit the $4 budget guard.
+
+### Problems and limits
+
+* The primary score is too easy: names give the file away even on post-cutoff flaws. A sharper test would score the
+  function or line range, or pick flaws whose file name says nothing about security.
+* Gold functions are approximate (enclosing declarations of changed lines) and class families are coarse.
+* Two tasks per repository share code: a finding on the sibling advisory's flaw counts as a miss.
+* `repo_atlas.collect` drops files that contain its marker characters (`§`, `▶`): one candidate advisory lost 3 of 4
+  gold files that way (rule 5 excluded it).

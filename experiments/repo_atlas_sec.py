@@ -901,12 +901,12 @@ def analyse() -> str:
         for arm in ARMS:
             r = rows.get((t["id"], arm))
             if r is None:
-                cells.append("")
+                cells.append("not run")
                 continue
             c = (f"#{r['gold_rank']}" if r["gold_top5"] else "miss") + (" fn" if r["func_named"] else "") + \
                 (" cls" if r["class_match"] else "")
             if r["no_findings"]:
-                c = "no findings"
+                c = "no findings" + (" (turn limit)" if r.get("subtype") == "error_max_turns" else "")
             cells.append(c)
         fams = ",".join(sorted({cwe_family(c) for c in t["cwes"]}))
         L.append(f"| {t['id']} | {t['repo']} | {', '.join(t['cwes']) or 'none'} ({fams}) | {len(t['gold'])} | "
