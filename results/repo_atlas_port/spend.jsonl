@@ -1,1 +1,3 @@
 {"what": "gitleaks smoke segment 0", "cost_usd": 0.5473, "reported": 0.5473138, "tail_estimated": 0, "killed": null, "usage_limit": false, "t": "2026-11-12T19:38:17Z"}
+{"what": "smoke2 partial-messages check", "cost_usd": 0.0114062}
+{"what": "gitleaks smoke_guard segment 0", "cost_usd": 0.0656, "reported": 0.06563139999999999, "tail_estimated": 0, "killed": "guard", "usage_limit": false, "t": "2026-11-12T19:40:06Z"}

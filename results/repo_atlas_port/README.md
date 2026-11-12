@@ -1,0 +1,143 @@
+# Repo atlas, Q2: does a whole-repository port (Go to Rust) go better with the source as page images?
+
+*Pre-registration, 2026-11-12, written and pushed before the first scored agent run. Runner:
+`experiments/repo_atlas_port.py` (tests `tests/test_repo_atlas_port.py`). Plan: [docs/REPO_ATLAS_PLAN.md](../../docs/REPO_ATLAS_PLAN.md)
+(Queued, Q2). Earlier migration test: [results/repo_atlas_migrate](../repo_atlas_migrate/README.md).*
+
+**One run per arm on one project. This is an anecdote, not a measurement:** a difference of a few tests or turns
+between two single runs says nothing about the arms. The write-up will say so.
+
+## Question
+
+The C-to-Rust test (14 small CRUST-Bench projects, atlases of 2-13k image tokens) tied on every project. Does the
+atlas (the whole source repository as page images in Claude Code's first message) help when the port is large
+(a 22k-line Go repository), has no Rust skeleton or interfaces to lean on, and the original is concurrent
+(goroutines, wait groups, mutexes)?
+
+## Benchmark and project
+
+RepoMod-Bench (KDD 2026, `github.com/Modelcode-ai/mcode-benchmark`, commit `73093fc`): 21 whole-repository ports,
+graded by pytest suites that drive the built CLI and so do not depend on the implementation language. The tests stay
+hidden from the agent (`tests/` is outside `workspace/`); the agent gets `workspace/src/` (the original),
+an empty `workspace/dst/` and `workspace/prompt.md`.
+
+* **Project: `gitleaks`, Go to Rust** (benchmark id 007): a secret scanner (a defensive tool), 22,358 lines by the
+  benchmark's count, 35 tests (`test_gitleaks.py` 16, `test_gitleaks_generated.py` 19: directory and stdin scans,
+  `git` history scan, JSON / CSV / SARIF / JUnit reports, allow comments, `.gitleaksignore`, baseline, redaction,
+  custom config, exit codes). Source: `github.com/gitleaks/gitleaks` at `ca20267` (the benchmark's
+  `metadata.yml` `source_commit`; v8.30.0 is its version label). Build `cargo build --release`, run
+  `./target/release/gitleaks`.
+* The workspace's `src/` is the repository at that commit without `.git`, with the Go repository's own unit tests
+  and `testdata/` left in (RepoMod-Bench does not publish its workspaces; its line count includes the Go tests).
+* **A second project only if both its arms fit:** `jmespath` (Go to Rust, 888 tests) runs only if at least $30 of
+  the cap is left after gitleaks (two runs at the full $15 guard) and the gitleaks runs finished cleanly. Caveat if it
+  runs: the benchmark's own Rust target is `jmespath.rs`, a public crate named `jmespath`; a port that depends on it
+  is invalid.
+
+**Reference check (done, 2026-11-12):** the Go original, built here as the benchmark builds it (`go build
+-buildvcs=false -o gitleaks`, Go 1.24.7), passes **35 of 35** tests (`reference.json`). **No test is excluded.**
+
+## Arms
+
+Claude Code headless (`claude -p`, CLI 2.1.322), model `claude-opus-5-5`, `--effort high`, tools Bash, Read, Edit,
+Write (WebFetch and WebSearch off; `curl`, `wget`, `git clone` and `cargo install` denied), no settings files, no MCP,
+no slash commands, a clean environment (the `vbpe/claude_eval.py` whitelist, own `TMPDIR`), auto-memory off
+(`CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`), `CARGO_BUILD_JOBS=2`, cwd = the run's own `workspace/` in an empty run
+directory. The two arms run **in parallel** (same time of day, same machine load).
+
+1. **`plain`**: one user message, the benchmark's own prompt (`templates/v3/prompt_cli.md.j2` rendered by its
+   `generate_prompts.py` for gitleaks), with the container path `/workspace` replaced by the run's workspace path.
+2. **`atlas`**: message 1 = the 18 atlas pages + a description of them + the index (file -> page) + "Reply only OK."
+   (a context is read from the prompt cache only when it is its own first message); message 2 = the same prompt as
+   `plain`. The pages show the source at the start; the text tells the agent to use them for orientation and read
+   the files when exact text matters. The Go repository is in `src/` in both arms.
+
+Neither arm sees the benchmark's tests or expected outputs: they exist on the machine only as one XOR-scrambled tar
+(`stash/bench.bin` in the scratch directory; the benchmark clone was deleted) and are unpacked only to grade, after
+both agents have ended. Go is installed, so either agent may build and run the Go original to compare outputs (the
+prompt forbids only calling it from the port).
+
+**Guards:** each run has a **$15 budget guard** (the runner reads the stream as it arrives, prices every API message
+from its usage, and kills the process group when the run's cost reaches $15; the CLI's own `--max-budget-usd 15`
+stops it between turns as a second line) and a **2.5 h wall clock**. A killed run is graded on what it left on disk
+and marked `cut`. No turn limit (`--max-turns 500`).
+
+## The atlas
+
+`experiments/repo_atlas.py build` with **default settings, no exclusions** (the atlas fits): 88.2 px² per character,
+pages 1932 px wide, `▶path◀` header per file, a line number on every 10th line; tests, `testdata/`, vendored and
+build directories, files over 200 kB and lock/data files left out by the tool's defaults. **199 files, 18 pages,
+81,834 image tokens** (limit 150k), about 4x fewer than the same files as text (~331k tokens). It holds every Go
+source file (185, the rule generators under `cmd/generate/` included), the default rule table
+`config/gitleaks.toml` (98k characters), the README and other docs, and `.gitleaksignore` (91k characters of
+fingerprints: noise, but the default rule keeps it). Not covered by a minifier, so not in it: `go.mod`, `go.sum`,
+`.gitignore` and the `.tmpl` report templates. Sizes and index: `atlas.json`.
+
+## Grading (no Docker here)
+
+`docker` cannot reach a daemon on this runner (checked once), so the benchmark's `test.py` steps run directly: copy
+the port's source (no `target/`) to a fresh directory, `cargo build --release` (40 min limit), then the hidden
+pytest suite with `--work-dir=<that dir> --run-cmd=./target/release/gitleaks`, plus `--timeout=120` per test
+(`pytest-timeout`, in the benchmark's `tests/requirements.txt`; a hung test counts as failing) and a junit report
+for per-test outcomes. Nothing in the tests is changed, skipped or weakened.
+
+## Scores (per arm)
+
+* **Tests passed of 35** (share); builds or not.
+* **Concurrent or not:** counts in the Rust source (comments and strings stripped) of thread spawns / scopes, rayon,
+  channels, `Mutex`, `RwLock`, `Arc`, atomics and async; a port is concurrent if it spawns threads, uses rayon or
+  async. Plus one sentence, written after reading the code, on what the port does concurrently.
+* `unsafe` blocks / functions / impls; lines of Rust (non-blank, all `.rs`); Rust files; dependencies.
+* **Turns**: tool calls + closing answers of the task (what the CLI's `num_turns` counts: checked equal on all three
+  smoke runs; also defined for a killed run); the atlas arm's "OK" turn is excluded. CLI `num_turns` and API calls
+  are reported too.
+* Cost (the CLI's `total_cost_usd`, list price; a killed stretch is priced from its usage), tokens, wall-clock hours,
+  agent seconds (all summed over every result event and segment of a run).
+* **Pages arrived** (atlas): the first API call's input tokens must be at least 97% of the image-token formula.
+
+## Checks (reported, read by hand)
+
+* **Leaks:** every Bash command is logged (`commands/<arm>.txt`); commands that download or fetch anything (`cargo
+  add/install/search`, `git clone/fetch`, `curl`, `wget`, `go install/get`, URLs, crates.io) are listed and read by
+  hand for an existing Rust port of gitleaks or its releases; `Cargo.toml` and `Cargo.lock` package names are checked
+  for secret-scanner crates. The audit also lists paths outside the run's directory (toolchains and system dirs
+  allowed), filesystem-wide searches and reads of `~/.claude/`.
+* **Memory:** the run's store under `~/.claude/projects/<cwd>` is deleted before the run, checked for a `memory/`
+  directory after it, and deleted after it.
+
+## Predictions (from the design, unchanged)
+
+* **B1:** neither arm passes every test on gitleaks.
+* **B2:** the two arms' test shares differ by less than 15 points.
+* **B3:** the atlas arm uses fewer turns.
+
+## Spend and stop rules
+
+* **Hard cap $50 at list price** for every Claude call of this test (`spend.jsonl`). Spent before the scored runs:
+  **$0.62** (three smoke calls, below). A run starts only if the spend so far plus its full $15 guard stays under the
+  cap. Expected: $5-15 per run (an atlas run reads 82k more cached tokens per API call).
+* **Usage limit:** a run that ends on a usage-limit or API error is not booked as a result; the runner stops, the
+  rows and state are committed, and what remains is reported (the run can be resumed later with `--resume`).
+* **Restarts:** the stream goes to disk line by line, the CLI session id is fixed up front (`--session-id`), and the
+  run state is in the scratch directory. If a restart kills a run, `run` resumes that session once with
+  `claude -p --resume <id>` in the same directory ("The session was interrupted by a machine restart. Continue..."),
+  counting its cost against the same $15 guard and its time against the same 2.5 h; a second death leaves it cut.
+  `finish`, `grade` and `analyse` are standalone commands.
+
+## Harness smoke (2026-11-12, $0.62, before this pre-registration)
+
+* Atlas-arm smoke (two-message input, toy task): pages arrived (first call 94,318 input tokens vs 81,834 by the
+  formula), the "OK" turn cost $0.47 (cache write of the pages), the task turns $0.08; the fixed session id was used.
+* **Stream accounting:** the `assistant` events of the stream carry the output-token count at the start of each
+  message (38 output tokens where the result reports 601), so the runner adds `--include-partial-messages` and reads
+  each message's final usage from its `message_delta` event (checked: 175 = 175). Priced with cache reads at $0.40/M
+  the live estimate runs 5-10% above the CLI's figure (the CLI's figures fit $0.20/M), so the guard errs early.
+* Guard smoke (no pages, guard $0.05): the runner stopped the run at $0.066 (the CLI's own budget stop fired in the
+  same second); 10 files written; turns 11 = CLI `num_turns` 11 (10 parallel tool calls in 2 API calls).
+* No `memory/` directory was written in any smoke run; each run's store held only its session file and was deleted.
+
+## Notes
+
+* gitleaks has been public since 2018 and the model knows it well; RepoMod-Bench is from 2026. Both arms get that
+  prior alike.
+* Another test (Q1's re-run) is running agent runs in the same container at the same time; both arms share that load.

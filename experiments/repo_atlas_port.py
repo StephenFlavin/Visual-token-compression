@@ -132,11 +132,23 @@ def msg_usages(ev: list[dict]) -> list[tuple[str, dict, int]]:
     """Distinct assistant API messages in stream order: (message id, usage with each field's max over the message's
     events, index of the message's first event)."""
     out: dict[str, list] = {}
+    current = None
     for i, e in enumerate(ev):
-        if e.get("type") != "assistant":
+        if e.get("type") == "stream_event":               # --include-partial-messages: message_delta has the
+            se = e.get("event") or {}                     # message's final output_tokens (assistant events do not)
+            if se.get("type") == "message_start":
+                m = se.get("message") or {}
+                current, u = m.get("id"), m.get("usage") or {}
+            elif se.get("type") == "message_delta":
+                u = se.get("usage") or {}
+            else:
+                continue
+            mid = current
+        elif e.get("type") == "assistant":
+            m = e.get("message") or {}
+            mid, u = m.get("id"), m.get("usage") or {}
+        else:
             continue
-        m = e.get("message") or {}
-        mid, u = m.get("id"), m.get("usage") or {}
         if mid is None:
             continue
         if mid not in out:
@@ -172,8 +184,10 @@ def guard_hit(cost_so_far: float, elapsed_s: float, guard: float = GUARD, wall_s
 
 
 def task_turns(ev: list[dict], arm: str) -> dict:
-    """Turns of the task, the atlas arm's acknowledgement excluded. ``api_calls``: distinct assistant API messages
-    (always available, also for a killed run); ``cli_turns``: the sum of num_turns over the task's result events."""
+    """Turns of the task, the atlas arm's acknowledgement excluded. ``turns``: tool calls + closing answers (what the
+    CLI's num_turns counts, measured; also defined for a run killed before its result); ``cli_turns``: the sum of
+    num_turns over the task's result events; ``api_calls``: distinct assistant API messages (parallel tool calls
+    share one)."""
     msgs = msg_usages(ev)
     res = [(i, e) for i, e in enumerate(ev) if e.get("type") == "result"]
     skip_before = -1
@@ -182,7 +196,9 @@ def task_turns(ev: list[dict], arm: str) -> dict:
     calls = [m for m in msgs if m[2] > skip_before]
     task_res = [e for i, e in res if i > skip_before]
     ack_calls = len(msgs) - len(calls)
-    return {"api_calls": len(calls), "ack_calls": ack_calls,
+    tools = {c.get("id") for i, e in enumerate(ev) if i > skip_before and e.get("type") == "assistant"
+             for c in (e.get("message") or {}).get("content") or [] if isinstance(c, dict) and c.get("type") == "tool_use"}
+    return {"turns": len(tools) + len(task_res), "api_calls": len(calls), "ack_calls": ack_calls,
             "cli_turns": sum(int(e.get("num_turns") or 0) for e in task_res) if task_res else None,
             "agent_s": round(sum(int(e.get("duration_ms") or 0) for _i, e in res) / 1000),
             "n_results": len(res),
@@ -494,6 +510,7 @@ def cli_command(session: str, resume: bool, guard_left: float) -> list[str]:
            "--disallowedTools", "Bash(curl:*)", "Bash(wget:*)", "Bash(git clone:*)", "Bash(cargo install:*)",
            "WebFetch", "WebSearch",
            "--setting-sources", "", "--strict-mcp-config", "--disable-slash-commands",
+           "--include-partial-messages",              # message_delta events carry each message's real output tokens
            "--max-turns", str(MAX_TURNS), "--max-budget-usd", f"{max(0.01, guard_left):.2f}"]
     cmd += ["--resume", session] if resume else ["--session-id", session]
     return cmd
@@ -692,6 +709,14 @@ def audit(calls: list[dict], arm_dir: Path) -> dict:
             "suspect": bool(outside or searches or claude_store)}
 
 
+def transcript_line(line: str) -> str | None:
+    """Transcript for results/: token-delta events dropped (message_start/message_delta kept for usage), base64
+    images removed."""
+    if '"type":"stream_event"' in line.replace(" ", "") and not re.search(r'"type": ?"message_(start|delta)"', line):
+        return None
+    return strip_images(line)
+
+
 def strip_images(line: str) -> str:
     return re.sub(r'"data": ?"[A-Za-z0-9+/=]{200,}"', '"data": "<base64 removed>"', line)
 
@@ -717,7 +742,7 @@ def finish() -> None:
         tdir = OUT / "transcripts"
         tdir.mkdir(parents=True, exist_ok=True)
         with gzip.open(tdir / f"{arm}.jsonl.gz", "wt") as f:
-            f.write("\n".join(strip_images(l) for l in lines) + "\n")
+            f.write("\n".join(t for t in (transcript_line(l) for l in lines) if t is not None) + "\n")
         calls = tool_calls(ev)
         cmds = [str((c.get("input") or {}).get("command", "")) for c in calls if c.get("name") == "Bash"]
         (OUT / "commands").mkdir(exist_ok=True)
@@ -737,7 +762,7 @@ def finish() -> None:
         first_in = sum(first.get(k, 0) for k in USAGE_KEYS[:3])
         res = [e for e in ev if e.get("type") == "result"]
         row = {"project": PROJECT, "arm": arm, "model": MODEL, "effort": EFFORT, "session_id": st["session_id"],
-               "turns": tt["api_calls"], "cli_turns": tt["cli_turns"], "ack_calls": tt["ack_calls"],
+               "turns": tt["turns"], "api_calls": tt["api_calls"], "cli_turns": tt["cli_turns"], "ack_calls": tt["ack_calls"],
                "agent_s": tt["agent_s"], "n_results": tt["n_results"],
                "wall_s": round(sum(s.get("elapsed_s", 0) for s in st["segments"])),
                "hours": round(sum(s.get("elapsed_s", 0) for s in st["segments"]) / 3600, 2),
@@ -806,14 +831,14 @@ def analyse() -> str:
     lines = ["# Repo atlas, Q2 (gitleaks Go -> Rust): summary", "",
              "*Written by `experiments/repo_atlas_port.py analyse`. One run per arm: an anecdote, not a measurement.*", "",
              "| Arm | Tests passed | Builds | Concurrent | thread/rayon/async | Mutex / RwLock / Arc / channels | `unsafe` | "
-             "Rust lines | Turns (API calls) | CLI turns | Cost | Hours | Output tokens | Cut |",
-             "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+             "Rust lines | Turns | CLI turns | API calls | Cost | Hours | Output tokens | Cut |",
+             "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for a, r in rows.items():
         c = r["concurrency"]
         lines.append(f"| {a} | {r['n_passed']} / {r['n_tests']} ({100 * r['share']:.1f}%) | {'yes' if r['built'] else 'no'} | "
                      f"{'yes' if c['concurrent'] else 'no'} | {c['thread_spawn']} / {c['rayon']} / {c['async']} | "
                      f"{c['mutex']} / {c['rwlock']} / {c['arc']} / {c['channels']} | {r['unsafe']} | {r['rust_lines']:,} | "
-                     f"{r['turns']} | {r['cli_turns']} | ${r['cost_usd']:.2f} | {r['hours']:.2f} | {r['output_tokens']:,} | "
+                     f"{r['turns']} | {r['cli_turns']} | {r['api_calls']} | ${r['cost_usd']:.2f} | {r['hours']:.2f} | {r['output_tokens']:,} | "
                      f"{', '.join(r['cut_reason']) if r['cut'] else 'no'} |")
     if len(rows) == 2:
         p = predictions(rows)
@@ -823,7 +848,7 @@ def analyse() -> str:
                   f"* B2 (test shares differ by < 15 points): **{'PASS' if p['B2']['pass'] else 'FAIL'}** "
                   f"({p['B2']['diff_points']} points)",
                   f"* B3 (atlas uses fewer turns): **{'PASS' if p['B3']['pass'] else 'FAIL'}** "
-                  f"(plain {p['B3']['plain']}, atlas {p['B3']['atlas']} API calls)"]
+                  f"(plain {p['B3']['plain']}, atlas {p['B3']['atlas']} turns)"]
         failed = sorted(set(rows["plain"]["failed_tests"]) | set(rows["atlas"]["failed_tests"]))
         if failed:
             lines += ["", "| Failing test | plain | atlas |", "|---|---|---|"]
@@ -843,10 +868,14 @@ SMOKE_PROMPT = ("Translate the Go program in `{ws}/src/main.go` to Rust: a cargo
                 "named `hello`. Build it with `cargo build --release`, run it once, and reply DONE.")
 
 
-def smoke(guard: float = 0.60) -> None:
+SMOKE_GUARD_PROMPT = ("In `{ws}/dst/`, create ten files a1.txt ... a10.txt, one per Write tool call, each holding a "
+                      "four-line poem about a different Rust keyword. Then reply DONE.")
+
+
+def smoke(guard: float = 0.60, no_atlas: bool = False) -> None:
     """Harness check on a toy task with the atlas arm's two-message input: stream to disk, live accounting against
     the CLI's reported cost, page arrival, the guard (set low enough that it may fire), memory store."""
-    arm = "smoke"
+    arm = "smoke_guard" if no_atlas else "smoke"
     base = WORK / "runs" / arm
     shutil.rmtree(base, ignore_errors=True)
     ws = base / "workspace"
@@ -854,9 +883,13 @@ def smoke(guard: float = 0.60) -> None:
     (ws / "dst").mkdir()
     (base / "tmp").mkdir()
     (ws / "src" / "main.go").write_text('package main\n\nimport "fmt"\n\nfunc main() {\n\tfmt.Println("hello")\n}\n')
-    pngs, index, sizes = atlas_message_parts()
-    text = ATLAS_TEXT.format(n_pages=len(pngs), ws=str(ws), index=index, n_files=0)
-    msgs = messages("atlas", SMOKE_PROMPT.format(ws=ws), pngs, text)
+    if no_atlas:                                 # guard check: a cheap task that runs past a tiny guard
+        sizes = []
+        msgs = messages("plain", SMOKE_GUARD_PROMPT.format(ws=ws))
+    else:
+        pngs, index, sizes = atlas_message_parts()
+        text = ATLAS_TEXT.format(n_pages=len(pngs), ws=str(ws), index=index, n_files=0)
+        msgs = messages("atlas", SMOKE_PROMPT.format(ws=ws), pngs, text)
     st = {"arm": arm, "session_id": str(uuid.uuid4()), "workspace": str(ws), "segments": [], "status": "new",
           "store_existed_before": cli_store(ws).exists()}
     save_state(arm, st)
@@ -873,10 +906,11 @@ def smoke(guard: float = 0.60) -> None:
            "est_at_results": [round(sum(usage_cost(u) for _m, u, i in msgs_u if i < j), 4)
                               for j, e in enumerate(ev) if e.get("type") == "result"],
            "first_call_input": first_in, "image_tokens_formula": image_tokens(sizes),
-           "pages_arrived": first_in >= PAGE_ARRIVAL * image_tokens(sizes), "turns": task_turns(ev, "atlas"),
+           "pages_arrived": first_in >= PAGE_ARRIVAL * image_tokens(sizes),
+           "turns": task_turns(ev, "plain" if no_atlas else "atlas"),
            "store_files": store_files, "built": (ws / "dst" / "target" / "release" / "hello").exists(),
            "session": seg.get("cli_session") == st["session_id"]}
-    (OUT / "smoke.json").write_text(json.dumps(row, indent=1))
+    (OUT / f"{arm}.json").write_text(json.dumps(row, indent=1))
     shutil.rmtree(store, ignore_errors=True)
     print(json.dumps(row, indent=1))
 
@@ -888,6 +922,7 @@ def main(argv=None) -> int:
         sub.add_parser(name)
     s = sub.add_parser("smoke")
     s.add_argument("--guard", type=float, default=0.60)
+    s.add_argument("--no-atlas", action="store_true", help="cheap guard check without the pages")
     r = sub.add_parser("run")
     r.add_argument("--arms", nargs="+", default=list(ARMS), choices=ARMS)
     a = ap.parse_args(argv)
@@ -896,7 +931,7 @@ def main(argv=None) -> int:
     elif a.cmd == "reference":
         reference()
     elif a.cmd == "smoke":
-        smoke(a.guard)
+        smoke(a.guard, a.no_atlas)
     elif a.cmd == "run":
         run(a.arms)
     elif a.cmd == "finish":

@@ -94,14 +94,20 @@ def test_guard_hit():
     assert P.guard_hit(0.61, 1, guard=0.6, wall_s=900) == "guard"
 
 
+def tu(i):
+    return {"type": "tool_use", "id": f"tu{i}", "name": "Bash", "input": {"command": "ls"}}
+
+
 def test_task_turns_excludes_ack():
-    ev = [asst("ack"), result(0.4, turns=1), asst("t1"), asst("t1"), asst("t2"), result(2.0, turns=2, ms=5000)]
+    ev = [asst("ack"), result(0.4, turns=1), asst("t1", content=[tu(1)]), asst("t1", content=[tu(2)]), asst("t2"),
+          result(2.0, turns=3, ms=5000)]
     t = P.task_turns(ev, "atlas")
-    assert t["api_calls"] == 2 and t["ack_calls"] == 1 and t["cli_turns"] == 2 and t["agent_s"] == 6
+    assert t["api_calls"] == 2 and t["ack_calls"] == 1 and t["cli_turns"] == 3 and t["agent_s"] == 6
+    assert t["turns"] == 3                                    # 2 tool calls + 1 answer = the CLI's num_turns
     t = P.task_turns(ev, "plain")
-    assert t["api_calls"] == 3 and t["cli_turns"] == 3
-    t = P.task_turns([asst("ack"), result(0.4), asst("t1")], "atlas")   # killed mid-task
-    assert t["api_calls"] == 1 and t["cli_turns"] is None
+    assert t["api_calls"] == 3 and t["cli_turns"] == 4 and t["turns"] == 4
+    t = P.task_turns([asst("ack"), result(0.4), asst("t1", content=[tu(1)])], "atlas")   # killed mid-task
+    assert t["api_calls"] == 1 and t["cli_turns"] is None and t["turns"] == 1
 
 
 def test_limit_hit():
@@ -198,3 +204,27 @@ def test_xor_roundtrip():
 
 def test_image_tokens():
     assert P.image_tokens([(1932, 1904), (28, 28)]) == 69 * 68 + 1
+
+
+def sev(kind, mid=None, out=0, cw=0, cr=0):
+    if kind == "message_start":
+        return {"type": "stream_event", "event": {"type": "message_start", "message": {"id": mid, "usage": {
+            "input_tokens": 2, "output_tokens": out, "cache_creation_input_tokens": cw, "cache_read_input_tokens": cr}}}}
+    return {"type": "stream_event", "event": {"type": "message_delta", "usage": {"output_tokens": out}}}
+
+
+def test_msg_usages_reads_message_delta():
+    # assistant events carry the output count at the message's start; message_delta has the final count
+    ev = [sev("message_start", "a", out=10, cw=500), asst("a", out=10, cw=500), sev("message_delta", out=900),
+          sev("message_start", "b", out=3, cr=600), asst("b", out=3, cr=600), sev("message_delta", out=40)]
+    mu = P.msg_usages(ev)
+    assert [(m[0], m[1]["output_tokens"]) for m in mu] == [("a", 900), ("b", 40)]
+    assert mu[0][1]["cache_creation_input_tokens"] == 500 and mu[1][1]["cache_read_input_tokens"] == 600
+    assert mu[0][2] == 0 and mu[1][2] == 3
+
+
+def test_transcript_line_drops_token_deltas():
+    d = json.dumps({"type": "stream_event", "event": {"type": "content_block_delta", "delta": {"text": "x"}}})
+    s = json.dumps({"type": "stream_event", "event": {"type": "message_delta", "usage": {"output_tokens": 3}}})
+    a = json.dumps({"type": "assistant", "message": {"id": "a"}})
+    assert P.transcript_line(d) is None and P.transcript_line(s) == s and P.transcript_line(a) == a
