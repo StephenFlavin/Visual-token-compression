@@ -28,7 +28,12 @@ Review and reasons: [docs/REVIEW_2026-11-11.md](docs/REVIEW_2026-11-11.md).
    * *Why:* a closed model takes only text tokens and images, so its vision encoder is the only compressor a user
      can reach. It is measured: 2.2x fewer tokens with no loss on Opus and Sonnet. Rendering denser is exhausted
      (4.2x loses 8-15 points) and the encoder cannot be trained.
-   * *Next:* prune the text before rendering it (Test A, running; [results/claude_qa/prune](results/claude_qa/prune/README.md)),
+   * *Tested 2026-11-12 (Test A, [results/claude_qa/prune](results/claude_qa/prune/README.md)): pruning the text
+     does not replace pages and does not stack with them.* At the same token count as 2.2x pages, pruned text
+     scores 86.0% against 97.7% (text 100%); lightly pruned text drawn as pages (3.4x) loses 9.4 points, no better
+     than pages alone at 4.1x. The pruner deletes small words ("not", "all but", "was ... by").
+   * *Next:* repeat the 2.2x page calls on the new small-word questions (90.8%, with every passive question wrong
+     in two of three calls, while 2.9x pages scored 98.3%: one call each, so this may be call-to-call variation),
      and keep the hooks honest with a self-test per model release.
 2. **Find the best way to pack text into one context position of a model we can train: slots made from the text
    tokens against vision tokens made from a rendered page.**

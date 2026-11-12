@@ -5,7 +5,7 @@
 
 | Goal | Why | State |
 |---|---|---|
-| 1. Page images as cheaper context for Claude, stretched from the text side | The vision encoder is the only compressor a user can reach on a closed model; 2.2x is measured lossless; denser rendering is exhausted | **Test A** (prune the text, then render it): [results/claude_qa/prune](../results/claude_qa/prune/README.md) |
+| 1. Page images as cheaper context for Claude, stretched from the text side | The vision encoder is the only compressor a user can reach on a closed model; 2.2x is measured lossless; denser rendering is exhausted | **Test A ran 2026-11-12: pruning neither replaces pages nor stacks with them** (pruned text at 2.2x: 86.0% vs pages 97.7%, text 100%; pruned pages at 3.4x: −9.4 points, the same as pages alone at 4.1x). Open: 2.2x pages scored 90.8% on the new small-word questions (all passives wrong in 2 of 3 calls); repeat those calls. [results/claude_qa/prune](../results/claude_qa/prune/README.md) |
 | 2. Text slots against page pixels on a model we can train | Once the reader is trained, pixels are optional; the glyph runs were never compared with a text-side compressor | **Test B**, pre-registered in [TEXT_SLOTS.md](TEXT_SLOTS.md); code and tests are on `claude/sharp-mendel-kkhg4g`; **the 3090 prompt is the next section** |
 | 3. Close the original idea (braille-like glyphs, then BPE and the RGB overlay) with a fair test | Stage A (is a glyph alphabet learnable through a trained ViT at all) and the channel capacity are the last untested links, already queued | Runs 1-2 driver on the 3090 since 2026-11-09 ([PLAN_3090.md](PLAN_3090.md)); **Stage C and colour Run 4 are held until Test B is in** |
 
