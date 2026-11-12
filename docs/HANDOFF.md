@@ -207,8 +207,9 @@ security, hard coding tasks, C-to-Rust migration, plan quality): the use-case ta
 `results/plan_quality/`, $44.25) found atlas briefs no better than file-list briefs and the planner unable to size
 work or pick the worker. **Q1, the hard coding tasks again with auto-memory off** (`results/repo_atlas_swe_rerun/`, $27.19, stopped at 54
 of 64 runs by a container restart; run 1 complete): plain 10 solved, atlas 9, no fewer turns, 3.4x the cost: the
-earlier 11 against 8 was run-to-run variation. **Still queued** ([REPO_ATLAS_PLAN.md](REPO_ATLAS_PLAN.md), "Queued"):
-Q2 a larger port with concurrency, gitleaks Go to Rust on RepoMod-Bench (cap $50).
+earlier 11 against 8 was run-to-run variation. **Q2, gitleaks Go to Rust** (`results/repo_atlas_port/`, $23.14): both arms pass 35 of 35 hidden tests at the
+same turns and cost; no effect, one run each. **Running:** Q1's last 10 runs, and Q3, Sonnet with the atlas on the
+same 16 tasks (`results/repo_atlas_swe_sonnet/`, cap $20; [REPO_ATLAS_PLAN.md](REPO_ATLAS_PLAN.md), "Queued").
 
 **As of 2026-11-12:** (1) the Qwen3.8-27B evening (the prompt at the top); (2) done: the 2.2x claim now carries
 the wording-sensitive limit from [results/claude_qa/repeat](../results/claude_qa/repeat/README.md).

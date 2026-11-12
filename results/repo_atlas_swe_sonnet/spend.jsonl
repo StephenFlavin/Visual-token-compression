@@ -27,3 +27,5 @@
 {"what": "nesquena__hermes-webui-330_interface atlas r1", "cost_usd": 0.3763445999999999, "input_tokens": 937188, "output_tokens": 3285, "t": "2026-11-12T20:22:31"}
 {"what": "nesquena__hermes-webui-330_interface plain r1", "cost_usd": 0.1003382, "input_tokens": 163116, "output_tokens": 3089, "t": "2026-11-12T20:22:48"}
 {"what": "jsonpickle__jsonpickle-587 plain r1", "cost_usd": 0.048492900000000005, "input_tokens": 67759, "output_tokens": 2172, "t": "2026-11-12T20:23:23"}
+{"what": "tobymao__sqlglot-5359 plain r1", "cost_usd": 0.06673050000000001, "input_tokens": 76767, "output_tokens": 3436, "t": "2026-11-12T20:27:47"}
+{"what": "tobymao__sqlglot-6067 plain r1", "cost_usd": 0.051120799999999994, "input_tokens": 71482, "output_tokens": 2213, "t": "2026-11-12T20:28:52"}

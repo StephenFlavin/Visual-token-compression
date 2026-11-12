@@ -73,7 +73,7 @@ the same model reading text, at lower cost.
 | Repo atlas: hard coding tasks solved end to end | 16 SWE-rebench tasks (3 or more files in the fix, not located by a bare file list), Claude Code plain / with a repo map / with the atlas | solved: plain 8, map 9, atlas 11 (3 tasks to 0 for the atlas, p = 0.25); fewer turns with the atlas (median 10 against 12.5, p = 0.006) at 2.6x the cost ($0.68 against $0.26) | **A hint that did not repeat** (next row): one run per task; [results/repo_atlas_swe](../results/repo_atlas_swe/README.md) |
 | Repo atlas: migrating C to Rust | 14 CRUST-Bench projects, Claude Code with the C files / with files and atlas / with the atlas only | identical on every project: 12 of 14 pass all tests in each arm; turns and cost the same within noise | **No effect**; pages alone were enough to translate from, but the projects are small and the tests carry much of the behaviour; [results/repo_atlas_migrate](../results/repo_atlas_migrate/README.md) |
 | Repo atlas: hard coding tasks again, auto-memory off | the same 16 tasks, plain against atlas, two fresh runs each (54 of 64 runs done; run 1 complete) | run 1: plain 10 solved, atlas 9; turns 6 tasks lower, 6 higher; atlas 3.4x the cost. The earlier 11 against 8 and "fewer turns" do not repeat | **No effect; the earlier hint was noise**; [results/repo_atlas_swe_rerun](../results/repo_atlas_swe_rerun/README.md) |
-| Repo atlas: a larger port with concurrency | RepoMod-Bench, gitleaks Go to Rust (22k lines), plain against atlas | queued | pending; [REPO_ATLAS_PLAN.md](REPO_ATLAS_PLAN.md), Q2 |
+| Repo atlas: a larger port with concurrency | RepoMod-Bench, gitleaks Go to Rust (22k lines, 35 hidden tests), Claude Code plain against atlas, one run each | both ports build and pass 35 of 35; 102 against 99 turns, $11.32 against $11.20, about 40 minutes each; neither port scans concurrently (the Go original does) | **No effect** (an anecdote: one run per arm, and both agents checked their port against the built Go original); [results/repo_atlas_port](../results/repo_atlas_port/README.md) |
 | Repo atlas for a cheaper model | the 16 hard coding tasks, Claude Code on Sonnet, plain against atlas, after a check that Sonnet can read the pages | running | pending; [REPO_ATLAS_PLAN.md](REPO_ATLAS_PLAN.md), Q3 |
 | Orchestrator reads the atlas once, workers get briefs | plan-quality test: 33 tickets x 4 planners (file list, repo map, atlas, searching agent), then 16 tickets given to workers on three tiers | atlas briefs name 50% of the fix's files, the same as file-list (48%) and scout briefs (50%), at 8x and 2.7x their cost; the planner cannot size the work or pick the worker (its choice solved 8 of 16 against 11 for always-Opus); an Opus worker with a brief solved 11 (atlas brief) or 10 (file-list brief) against 8 without (p = 0.25) | **Fails as proposed**: a brief may help, the atlas is not what makes it good; [details](#tested-an-orchestrator-that-reads-the-atlas-once-plan-quality) |
 | A local model (Qwen3.8-27B) | not run | plan and harness ready | **Planned**; [LOCAL_QWEN.md](LOCAL_QWEN.md) |
@@ -289,6 +289,7 @@ a pre-registration (the sixth, the plan-quality test for the orchestrator use, h
 | Solve hard coding tasks ([SWE-rebench](../results/repo_atlas_swe/README.md)) | 16 | tasks solved: plain agent 8, with a repo map 9, with the atlas 11; median turns 12.5 / 12 / 10; cost per task $0.26 / $0.49 / $0.68 | $28.45 |
 | Hard coding tasks again, memory off ([re-run](../results/repo_atlas_swe_rerun/README.md)) | the same 16, 2 runs each (54 of 64 done) | run 1 solved: plain 10, atlas 9; median turns 11.5 / 9.5 (6 tasks lower, 6 higher); cost per run $0.25 / $0.85 | $27.19 |
 | Migrate C to Rust ([CRUST-Bench](../results/repo_atlas_migrate/README.md)) | 14 projects | all tests pass: with the C files 12, with files and atlas 12, atlas only (no C files) 12; median turns 6.5 / 6 / 6.5; cost per project $0.54 / $0.57 / $0.60 | $24.01 |
+| Port a larger concurrent tool, Go to Rust ([RepoMod-Bench gitleaks](../results/repo_atlas_port/README.md)) | 1 project, 1 run per arm | hidden tests passed: plain 35 of 35, atlas 35 of 35; turns 102 / 99; cost $11.32 / $11.20 | $23.14 |
 
 * **The atlas alone has not beaten a cheaper option anywhere.** On public repositories the model answers from
   memory (with no code it already names 71% of the code entities in the reference answers), and a bare file list
@@ -310,6 +311,10 @@ a pre-registration (the sixth, the plan-quality test for the orchestrator use, h
   tied on every project. The agent with the atlas still opened the C files, so the pages saved about one tool call;
   the agent with only the pages translated just as well. The atlases there were 2-13k image tokens: small enough
   that reading the files costs almost nothing.
+* **A larger port did not need it either.** gitleaks (22k lines of Go, atlas 82k image tokens) was ported to Rust
+  by both arms in about 40 minutes and $11, and both ports pass all 35 hidden tests. Both agents built the Go
+  original and compared outputs, which makes the tests close to a formality; neither port kept the original's
+  concurrent scan (the tests do not ask for it). One run per arm: an anecdote.
 * **The benchmark's tasks are not newer than the model** (created 2025-07 to 2026-05; nothing later exists in
   SWE-rebench or SWE-bench-Live), so memorised tasks were screened out instead: 12 of 37 candidates were dropped
   because a call with only the file list named every file of the fix.
