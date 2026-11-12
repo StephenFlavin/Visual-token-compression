@@ -17,6 +17,12 @@ Sonnet 5.5 and Haiku 5.5.
   is the better input.
 * **Denser pages break the links between facts first.** Past ~3x, Opus and Sonnet still find single facts but lose
   chains and counts (Opus at 4.2x, high effort: three-hop 67%, counts 28%). Haiku loses single facts too (56-66%).
+* **Exception found later (2026-11-12): wording-sensitive questions lose about 3 points from pages, at 2.2x and
+  2.9x alike** (Opus, high effort, 15 calls per density: -2.8 and -3.8 points against text at 100%; the original
+  120 questions stay within 0.7 points). In about 1 page call in 6 every "A was paid n by B" sentence is read the
+  wrong way round; text never did that in 6 calls. "Lossless" above therefore covers lookups, chains, sums and
+  counts, not sentences whose answer turns on a small word.
+  [Details](#tested-repeat-calls-on-wording-sensitive-questions).
 * **Cost:** at list price, 2.2x pages cost about half as much as text for the same answers (Opus $0.68 vs $1.34,
   Sonnet $0.37 vs $0.67 per call at high effort; not amounts billed).
 
@@ -239,6 +245,8 @@ Was the 2.2x pages' passive flip in Test A chance or density? Pre-registered: th
 
 **Where not to use it**
 
+* **Text where one small word decides the answer** (contracts, instructions, who-paid-whom): pages lose about 3
+  points on such questions at 2.2x and 2.9x, and about 1 call in 6 reads every passive sentence backwards.
 * **Counting and aggregation over the whole input** ("how many errors are in this log?"): counts are the first thing
   to fail (Opus 28% at 4.2x), and even text is not perfect on them.
 * **Chains of facts** (three-hop questions) beyond 2.2x.

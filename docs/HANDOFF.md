@@ -5,7 +5,7 @@
 
 | Item | State | Why |
 |---|---|---|
-| Page images as cheaper context for Claude | **Result.** 2.2x lossless for lookups, chains and counts ([CLAUDE_QA.md](CLAUDE_QA.md)); compressing the text instead fails (Test A, [results/claude_qa/prune](../results/claude_qa/prune/README.md): pruned text 86.0% vs pages 97.7%, and it does not stack). Last open item: repeat calls on wording-sensitive questions, [results/claude_qa/repeat](../results/claude_qa/repeat/README.md) | The vision encoder is the only compressor a user can reach on a closed model |
+| Page images as cheaper context for Claude | **Result.** 2.2x lossless for lookups, chains and counts ([CLAUDE_QA.md](CLAUDE_QA.md)); compressing the text instead fails (Test A, [results/claude_qa/prune](../results/claude_qa/prune/README.md): pruned text 86.0% vs pages 97.7%, and it does not stack). **Limit (repeat calls, 2026-11-12, [results/claude_qa/repeat](../results/claude_qa/repeat/README.md)):** wording-sensitive questions lose about 3 points from pages at 2.2x and 2.9x alike (97.2% / 96.2% vs text 100%, 15 calls each); about 1 page call in 6 reads every passive sentence backwards; the original questions stay within 0.7 points | The vision encoder is the only compressor a user can reach on a closed model |
 | Dense codes (braille-like glyphs, chunk glyphs, colour overlay) | **Negative result.** Readable from raw pixels, lost by every pretrained encoder | No reader they can be used with: Claude cannot be trained, and a trainable model does not need pixels |
 | **Local model: one evening on Qwen3.8-27B, no training** | **To run: the prompt is the next section**, plan in [LOCAL_QWEN.md](LOCAL_QWEN.md) | The one cheap unknown: does the page-image trick carry over to a local model, and how fast does it write with its built-in multi-token module |
 | Test B, text slots against page pixels ([TEXT_SLOTS.md](TEXT_SLOTS.md)) | **Built, not scheduled** (code and tests on the branch; never run on a GPU) | A replication of published work (C3, ARC-Encoder) for a payoff current local models get from their architecture |
@@ -201,8 +201,8 @@ table and curves `analyse_stage0.py`, rows `encoder_probe/results/stage0/runs.js
   No D3 or D10. Next: a recipe amendment (faster slot learning), not a density conclusion.
 
 ## Open items, in priority order
-**As of 2026-11-12:** (1) the Qwen3.8-27B evening (the prompt at the top); (2) read the repeat-call result in
-[results/claude_qa/repeat](../results/claude_qa/repeat/README.md) and fix the wording of the 2.2x claim to it.
+**As of 2026-11-12:** (1) the Qwen3.8-27B evening (the prompt at the top); (2) done: the 2.2x claim now carries
+the wording-sensitive limit from [results/claude_qa/repeat](../results/claude_qa/repeat/README.md).
 Nothing else is scheduled. The list below is the earlier one; all of it is parked.
 
 1. **Colour gist A1 on a GPU** (the prompt below):

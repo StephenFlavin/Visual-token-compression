@@ -33,9 +33,11 @@ results and one measurement left to run.
      text instead does not work.* Pruned text at the pages' token count scores 86.0% against 97.7% for pages (text
      100%), and pruning under pages does not stack. The pruner deletes small words ("not", "all but",
      "was ... by").
-   * *Last open item:* on wording-sensitive questions the 2.2x pages scored 90.8% with one call per document; the
-     repeat calls that settle whether that is the density or call-to-call variation are in
-     [results/claude_qa/repeat](results/claude_qa/repeat/README.md).
+   * *Limit found 2026-11-12 ([results/claude_qa/repeat](results/claude_qa/repeat/README.md), 15 calls per
+     density):* on questions whose answer turns on a small word, pages lose about 3 points at 2.2x (97.2%) and 2.9x
+     (96.2%) alike, against 100% from text. In about 1 page call in 6 every "A was paid n by B" sentence is read
+     the wrong way round. The original questions stay within 0.7 points. So 2.2x is lossless for looking things up
+     and connecting facts, not for wording that hinges on one word.
 2. **Result: the original idea does not survive a pretrained reader.** Braille-like glyphs, chunk glyphs and the
    colour overlay all read from raw pixels and are all lost by every vision encoder tested (sections below).
 3. **One measurement left: does the page-image trick carry over to a local model with no training?**
@@ -61,7 +63,7 @@ Rendering plain Latin text as an image gives more text per token, with a loss th
 | Qwen2.5-VL-3B, frozen | 16 px Latin | 6.8 | ~1.5x | 98% of the information recovered, 1.5% transcription error: near-lossless |
 | Qwen2.5-VL-3B, frozen | 8 px Latin | 28.1 | ~3.4x in information | only 52% of the information recovered; it cannot read the page out (76% error) |
 | Claude (Phase 1) | Latin at 29.4 px²/char | ~27 | 7.8x fewer input tokens | 3% transcription error, but answering questions over a long document fails (20-42% vs 100% from text) |
-| Claude, QA test (pre-registered) | Latin at 117.6 px²/char | ~7 | **2.2x fewer** | **lossless**: gap to text at most 1.6 points (95% bound) at low and high effort; no multi-step loss seen either (120 questions bound it to ~3 points) |
+| Claude, QA test (pre-registered) | Latin at 117.6 px²/char | ~7 | **2.2x fewer** | **lossless on lookups, chains and counts** (wording-sensitive questions: about 3 points lost, see above): gap to text at most 1.6 points (95% bound) at low and high effort; no multi-step loss seen either (120 questions bound it to ~3 points) |
 | Claude, QA test (pre-registered) | Latin at 88.2 px²/char | ~9 | 2.9x fewer | lossless at high effort; within 2.8 points at low effort |
 | Claude, QA test (pre-registered) | Latin at 58.8 px²/char | ~13 | 4.2x fewer | loses 15 points (low effort) / 8 (high); multi-step questions 38 / 20 |
 | Claude Sonnet 5.5, same test | Latin at 117.6 px²/char | ~7 | 2.2x fewer | **lossless at high effort** (worst case 1.7 points); at low effort -0.3 points, worst case 2.2; 2.9x: -1.7 at high effort (borderline), -3.1 at low effort (a loss) |
@@ -90,7 +92,7 @@ deep-research variant in [CLAUDE_QA.md](docs/CLAUDE_QA.md#tested-deep-research-s
 > | | **Qwen2.5-VL-3B, raw pixels and frozen:** the moonshot code (322 chars/token) reads from raw pixels at 1.07% CER, but its pixel detail collapses (linearly) at the ViT's 2x2 merger. A CPU probe's verdict: "the ViT output is the wall at this budget". |
 > | **Open** | **R3-1, LoRA fine-tune of Qwen's LLM (1000 steps):** Latin at 28 chars/token is read (55% CER vs 88.5% blind). Latin at 72 chars/token gets the gist but not the words (val loss 10% below blind, MC above blind at p = 0.02). Learned glyphs (107) and the moonshot (322) are not read at all: their losses equal the blind runs'. Gate G3 is undecidable: no arm is near 3% CER. [Analysis](docs/ANALYSIS.md). |
 > | **Open** | **Own encoder, Stage 0** (text compressor into frozen Qwen): inconclusive, its 4x positive control failed (64% CER at 8000 steps); the decoder keeps the gist, not the words. [OWN_ENCODER.md](docs/OWN_ENCODER.md) |
-> | **Now (2026-11-12)** | **Wound down** ("Where it stands" above): the dense codes are a negative result; Stage C, colour Run 4 and the text-compressor test are not pursued. Left: the repeat calls on Claude and one evening on a local Qwen3.8-27B ([LOCAL_QWEN.md](docs/LOCAL_QWEN.md)). |
+> | **Now (2026-11-12)** | **Wound down** ("Where it stands" above): the dense codes are a negative result; Stage C, colour Run 4 and the text-compressor test are not pursued. Left: one evening on a local Qwen3.8-27B ([LOCAL_QWEN.md](docs/LOCAL_QWEN.md)). |
 
 **Terms.**
 * **CER:** character error rate (edit distance / reference characters).
