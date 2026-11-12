@@ -353,6 +353,17 @@ def export(work: Path, name: str, sha: str) -> Path:
 
 
 _export_lock = threading.Lock()
+_stop = threading.Event()                               # set on a usage-limit error: launch nothing more
+_LIMIT = re.compile(r"hit your .{0,20}limit|usage limit|rate limit reached", re.I)
+
+
+def limit_hit(err: str | None) -> bool:
+    if err and _LIMIT.search(err):
+        if not _stop.is_set():
+            print(f"[qa] USAGE LIMIT: {err[:200]} -- stopping, nothing more is launched", flush=True)
+        _stop.set()
+        return True
+    return False
 
 
 def prepare(work: Path, bench: Path) -> dict:
@@ -695,6 +706,8 @@ def run_agent(work: Path, cap: float, workers: int, n: int | None) -> None:
     worst = [0.25]                                       # measured agent runs: $0.045-0.082
 
     def run(key):
+        if _stop.is_set():
+            return
         bound = worst[0]
         if not reserve(bound, cap):
             print(f"[qa] SKIP agent {key}: cap", flush=True)
@@ -709,6 +722,7 @@ def run_agent(work: Path, cap: float, workers: int, n: int | None) -> None:
         if rec.get("cost_usd"):
             worst[0] = max(0.25, rec["cost_usd"] * 3)
         if rec.get("error"):
+            limit_hit(rec["error"])
             print(f"[qa] ERROR agent {key}: {rec['error'][:300]}", flush=True)
             return
         ans = parse_answers(rec["text"], [q["qid"]])
@@ -738,6 +752,8 @@ def judge(cap: float, workers: int) -> None:
     print(f"[qa] {len(todo)} answers to judge; spent ${spent():.2f} (cap ${cap})", flush=True)
 
     def run(r):
+        if _stop.is_set():
+            return
         q = qs[r["key"]]
         if r["missing"] or not r["answer"].strip():
             append("judged.jsonl", {"key": r["key"], "arm": r["arm"], "scores": None, "total": 5, "unjudged": "empty"})
@@ -754,6 +770,7 @@ def judge(cap: float, workers: int) -> None:
             release(bound)
         book(f"judge {r['key']} {r['arm']}", rec)
         if rec.get("error"):
+            limit_hit(rec["error"])
             print(f"[qa] ERROR judge {r['key']} {r['arm']}: {rec['error'][:200]}", flush=True)
             return
         sc = parse_judge(rec["text"])
@@ -903,7 +920,7 @@ def main(argv=None) -> int:
     ap.add_argument("--bench", type=Path, help="a clone of github.com/peng-weihan/SWE-QA-Bench")
     ap.add_argument("--arms", nargs="+", default=["closed", "map", "atlas", "text"], choices=ARMS)
     ap.add_argument("--cap", type=float, default=22.0)
-    ap.add_argument("--workers", type=int, default=6)
+    ap.add_argument("--workers", type=int, default=3)
     ap.add_argument("--agent-n", type=int, default=None, help="seeded subset of questions for the agent arm")
     ap.add_argument("--agent-cost", type=float, default=0.07)
     ap.add_argument("--judge-cost", type=float, default=0.008)

@@ -174,6 +174,24 @@ on the largest prefix of `agent_subset` that fits what is left (72, or fewer in 
 then the judge on the agent's answers. The runner books a bound per call before making it and launches nothing that
 could take the total (`spend.jsonl`, harness checks included) over $22.
 
+## Amendments
+
+* **2026-11-12, 09:20 UTC, before the rest of the agent arm (written after arms 1-4 and their judging, after 44 of
+  the 72 agent runs).** The agent arm was cut off by the subscription's 5-hour usage limit (reset 09:10 UTC) and the
+  container restarted. Failed runs were never written as rows (the runner records an answer only after a successful
+  run), so the 44 agent rows are all complete; 4 runs that failed with the limit error had cost $0.10, which stays in
+  `spend.jsonl`. **Subset rule, unchanged:** the agent arm runs on the pre-registered `agent_subset(72)` (24 per
+  repository, 6 per repository and category); the 28 questions of it not yet answered are run now. Spent so far
+  $17.76; the remaining 28 runs (~$0.045 each, measured mean of the 44) and the judging of the 72 agent answers
+  (~$0.0094 each, measured) are estimated at ~$1.95, total ~$19.7 under the $22 cap. If the cap or the limit stops
+  it short, the agent arm is reported on the largest balanced prefix completed (multiples of 12) and the rest is
+  named. Other changes: at most 3 calls run at once (coordinator); a usage-limit error now stops the runner instead
+  of being retried; the shared `git archive` export is made atomically (a race between parallel runs crashed the
+  first agent start; the 5 runs that completed then had a complete tree: only the thread that extracted it went on
+  to run).
+* **Reservation floor.** Before the agent arm started, its per-run cost reservation was lowered from $0.50 to $0.25
+  (measured runs $0.03-0.08) so that in-flight bookings would not skip the tail of the subset under the cap.
+
 ## Results
 
 *(after the calls)*

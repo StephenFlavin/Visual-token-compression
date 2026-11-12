@@ -124,3 +124,12 @@ def test_is_test_entity():
     assert Q.is_test_entity("tests/test_utils.py") and Q.is_test_entity("test_guess_by_bom")
     assert Q.is_test_entity("TestGuessJSONUTF.test_encoded") and Q.is_test_entity("conftest.py")
     assert not Q.is_test_entity("src/requests/utils.py") and not Q.is_test_entity("_pytest.python.Metafunc")
+
+
+def test_limit_hit_sets_stop():
+    Q._stop.clear()
+    assert not Q.limit_hit("rc=1 api_error 500")
+    assert not Q._stop.is_set()
+    assert Q.limit_hit("rc=1 You've hit your 5-hour limit · resets 9:10am (UTC)")
+    assert Q._stop.is_set()
+    Q._stop.clear()
