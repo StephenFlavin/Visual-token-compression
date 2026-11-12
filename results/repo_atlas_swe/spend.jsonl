@@ -74,3 +74,4 @@
 {"what": "tobymao__sqlglot-6067 map", "cost_usd": 0.6183206, "input_tokens": 863829, "output_tokens": 5624}
 {"what": "agronholm__anyio-975 map", "cost_usd": 0.5080094000000002, "input_tokens": 608595, "output_tokens": 6721}
 {"what": "agronholm__anyio-975 plain", "cost_usd": 0.2580878, "input_tokens": 185905, "output_tokens": 6455}
+{"what": "agronholm__anyio-975 atlas", "cost_usd": 0.8321202000000001, "input_tokens": 536635, "output_tokens": 6290}
