@@ -45,3 +45,9 @@
 {"what": "tox-dev__tox-3904 plain r2", "cost_usd": 0.5670202, "input_tokens": 930503, "output_tokens": 7674, "t": "2026-11-12T18:58:14"}
 {"what": "niconoe__pyinaturalist-643 atlas r2", "cost_usd": 0.3200266, "input_tokens": 205361, "output_tokens": 2323, "t": "2026-11-12T18:58:27"}
 {"what": "MAIF__arta-50 plain r2", "cost_usd": 0.0777724, "input_tokens": 35142, "output_tokens": 1758, "t": "2026-11-12T18:58:39"}
+{"what": "scientific-python__docstub-123 plain r2", "cost_usd": 0.16555979999999998, "input_tokens": 105747, "output_tokens": 3587, "t": "2026-11-12T18:59:16"}
+{"what": "microsoft__fabric-cicd-670 plain r2", "cost_usd": 0.1324072, "input_tokens": 104822, "output_tokens": 2904, "t": "2026-11-12T18:59:25"}
+{"what": "nesquena__hermes-webui-330_interface plain r2", "cost_usd": 0.3144926, "input_tokens": 238759, "output_tokens": 5971, "t": "2026-11-12T19:00:34"}
+{"what": "pytest-dev__pyfakefs-1286 plain r2", "cost_usd": 0.2897766, "input_tokens": 280629, "output_tokens": 7142, "t": "2026-11-12T19:00:35"}
+{"what": "stanfordnlp__dspy-8607 atlas r2", "cost_usd": 0.6570880000000001, "input_tokens": 565252, "output_tokens": 3610, "t": "2026-11-12T19:03:05"}
+{"what": "tox-dev__tox-3904 atlas r2", "cost_usd": 1.0210066, "input_tokens": 1737965, "output_tokens": 7099, "t": "2026-11-12T19:04:36"}
