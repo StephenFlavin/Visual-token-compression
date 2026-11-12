@@ -1,218 +1,196 @@
 # Visual BPE
 
-**Can text be drawn densely enough that a model reads more of it per vision token than per text token?**
-A model holds a fixed number of positions in its context window, and a vision token takes one position just like a
-text token. Plain text averages about 4.3 characters per token, so Qwen2.5-VL-3B's 32k window holds ~142k characters
-of text. A page image that carries 30-300 characters per vision token, and is still read correctly, would let the
-same model hold millions. This repo tests codes for doing that (glyphs for frequent letter chunks, colour pixels,
-RGB overlays and learned glyph alphabets) and compares them with plain text rendered equally densely.
+**Claude Opus reading a long document for about a third of the input tokens was not the goal. It is where this
+ended up.** Render the document as page images of ordinary small text and Opus answers lookups, chains and counts
+as well as it does from the text, at 2.2x fewer input tokens (2.9x at high effort). Everything this repo set out to
+build (dense glyph alphabets, colour codes, layered pages) reads from raw pixels and is lost by every pretrained
+model that was asked to read it.
 
-## Where the idea came from
+This README tells that in the order it happened. The finished study is in [docs/](docs/README.md); the one run that
+is left is a prompt for a local GPU in [docs/HANDOFF.md](docs/HANDOFF.md).
 
-Braille is built to be read at very low resolution: a cell is six dots. The starting idea was that a model could
-read text drawn as compact, purpose-built glyphs at far fewer pixels than Latin letters need. Two extensions
-followed: one glyph per frequent chunk of letters instead of per letter (byte-pair encoding, hence the name), and
-three glyph streams on the same pixels, one per colour channel (the RGB overlay). Together they are the
-"moonshot" below.
+```mermaid
+flowchart LR
+    A["DeepSeek-OCR:<br/>10 text tokens' worth<br/>per vision token"] --> B["Idea: legibility is<br/>the only limit, so draw<br/>text more densely"]
+    B --> C1["1. Glyphs + BPE chunks"]
+    B --> C2["2. One colour pixel<br/>per character"]
+    B --> C3["3. RGB layers, then<br/>glyphs in RGB layers"]
+    C1 --> D["Reads from raw pixels"]
+    C2 --> D
+    C3 --> D
+    D --> E["Lost by every pretrained<br/>vision encoder; training<br/>one did not rescue it"]
+    E --> F["The limit is what a<br/>vision token can carry<br/>accurately, not legibility"]
+    B -.->|"baseline arm:<br/>plain Latin, on Claude"| G["Accident: 2.2x fewer<br/>input tokens, no<br/>measured loss"]
+```
 
-**What happened to it (2026-11-11).** The premise holds for raw pixels: learned glyphs need 0.57x Latin's pixels
-and the moonshot page reads at 1.07% error. It fails at the reader: every pretrained vision encoder tested loses
-the dense codes, and Claude, the one reader where savings are worth money, cannot be trained and refuses coded
-pages. What did work was the plainest version: ordinary Latin text rendered small.
+## 1. Where it started: DeepSeek-OCR, and a misunderstanding
 
-## Where it stands (2026-11-12)
+DeepSeek-OCR reported about 97% OCR precision while spending one vision token for every ten text tokens of the
+page. A vision token takes one position in a model's context, exactly like a text token, so a page read through
+vision holds ten times the text.
 
-Review and reasons: [docs/REVIEW_2026-11-11.md](docs/REVIEW_2026-11-11.md). This is now a finished study with two
-results and one measurement left to run.
+I took that to mean **legibility was the only limit**: if a page stays readable, the model gets its text. Under that
+belief the way to more compression is obvious: make text legible at fewer pixels. Latin letters were designed for
+paper and human eyes, not for a 14-pixel patch. So design something better.
 
-1. **Result: page images are cheaper context for Claude, with a measured map of where they are safe.**
-   * *Why it matters:* a closed model takes only text tokens and images, so its vision encoder is the only
-     compressor a user can reach. 2.2x fewer tokens with no measured loss on Opus and Sonnet for lookups, chains and
-     counts; denser rendering loses (4.2x: 8-15 points) and the encoder cannot be trained.
-   * *Tested 2026-11-12 (Test A, [results/claude_qa/prune](results/claude_qa/prune/README.md)): compressing the
-     text instead does not work.* Pruned text at the pages' token count scores 86.0% against 97.7% for pages (text
-     100%), and pruning under pages does not stack. The pruner deletes small words ("not", "all but",
-     "was ... by").
-   * *Limit found 2026-11-12 ([results/claude_qa/repeat](results/claude_qa/repeat/README.md), 15 calls per
-     density):* on questions whose answer turns on a small word, pages lose about 3 points at 2.2x (97.2%) and 2.9x
-     (96.2%) alike, against 100% from text. In about 1 page call in 6 every "A was paid n by B" sentence is read
-     the wrong way round. The original questions stay within 0.7 points. So 2.2x is lossless for looking things up
-     and connecting facts, not for wording that hinges on one word.
-2. **Result: the original idea does not survive a pretrained reader.** Braille-like glyphs, chunk glyphs and the
-   colour overlay all read from raw pixels and are all lost by every vision encoder tested (sections below).
-3. **One measurement left: does the page-image trick carry over to a local model with no training?**
-   [docs/LOCAL_QWEN.md](docs/LOCAL_QWEN.md): Qwen3.8-27B on the RTX 3090, the Claude QA test in small, plus its
-   generation speed with the multi-token module it ships with. One evening.
+That belief was wrong, and most of this repo is the work of finding out why (section 4).
 
-**Not pursued, and why.**
-* *Training a text compressor for a local model* (Test B, [docs/TEXT_SLOTS.md](docs/TEXT_SLOTS.md): built, tested
-  on a tiny model, not scheduled). It would repeat published work (C3, ARC-Encoder), and current local models get
-  the same payoff from their architecture: Qwen3.8-27B keeps a growing cache in only 16 of 64 layers and drafts
-  several tokens per pass.
-* *Training a model to write compressed output:* the same, and harder, since output must be exact.
-* *The dense alphabets and the colour overlay through a trained encoder* (Stage C, Run 4): no reader they could be
-  used with. The queued Stage A and B runs on the 3090 are stopped unless the user resumes them
-  ([docs/HANDOFF.md](docs/HANDOFF.md)).
+## 2. Three ideas for drawing text more densely
 
-## What is established without training
+### Idea 1: why Latin letters at all? Braille, then byte-pair encoding
 
-Rendering plain Latin text as an image gives more text per token, with a loss that grows with density.
-
-| Reader | Rendering | Chars per vision token | Text tokens' worth per vision token (at 4.33 chars) | Quality |
-|---|---|---|---|---|
-| Qwen2.5-VL-3B, frozen | 16 px Latin | 6.8 | ~1.5x | 98% of the information recovered, 1.5% transcription error: near-lossless |
-| Qwen2.5-VL-3B, frozen | 8 px Latin | 28.1 | ~3.4x in information | only 52% of the information recovered; it cannot read the page out (76% error) |
-| Claude (Phase 1) | Latin at 29.4 px²/char | ~27 | 7.8x fewer input tokens | 3% transcription error, but answering questions over a long document fails (20-42% vs 100% from text) |
-| Claude, QA test (pre-registered) | Latin at 117.6 px²/char | ~7 | **2.2x fewer** | **lossless on lookups, chains and counts** (wording-sensitive questions: about 3 points lost, see above): gap to text at most 1.6 points (95% bound) at low and high effort; no multi-step loss seen either (120 questions bound it to ~3 points) |
-| Claude, QA test (pre-registered) | Latin at 88.2 px²/char | ~9 | 2.9x fewer | lossless at high effort; within 2.8 points at low effort |
-| Claude, QA test (pre-registered) | Latin at 58.8 px²/char | ~13 | 4.2x fewer | loses 15 points (low effort) / 8 (high); multi-step questions 38 / 20 |
-| Claude Sonnet 5.5, same test | Latin at 117.6 px²/char | ~7 | 2.2x fewer | **lossless at high effort** (worst case 1.7 points); at low effort -0.3 points, worst case 2.2; 2.9x: -1.7 at high effort (borderline), -3.1 at low effort (a loss) |
-| Claude Haiku 5.5, same test, high effort | Latin at 117.6 px²/char | ~7 | 2.2x fewer | **not lossless**: loses 5.8 points (multi-step 18); lookups unchanged |
-| Claude Opus 5.5, deep-research sources (pre-registered) | Latin at 117.6 px²/char | ~7 | 2.2x fewer | **lossless**: 99.7% vs 99.4% from text on 360 questions, 60 of them across sources; notes-only summaries lose 29 points |
-| Claude Opus 5.5, RAG (pre-registered; BM25, 308 questions, 3 datasets) | retrieved passages at 88.2 px²/char | ~9 | 2.2-2.6x fewer context tokens | **same accuracy at 27-43% lower cost**; or **+8.8 points on MultiHop-RAG** (p = 0.001) with 14 paged passages for the price of 5 as text |
-| Claude Code + Opus 5.5, context compaction (pre-registered) | session transcript at 88.2 px²/char, opened on demand | ~9 | 2.2x cheaper than a text archive | **100% vs 37% for normal compaction** (360 questions), at 31% lower cost; at scale with real hooks (9 research, code and log sessions): **96-99% vs 78%**, 2.1x cheaper per correct answer |
-| Claude Code + Opus 5.5, coding agents (SWE-bench, pre-registered) | minified code and output at 88.2 px²/char | ~9 | 3.1x fewer on what became images | **no task lost** (Django 50/50 both; Rust/Java 28/29 text, 29/29 pages), but **no total saving**: reading is ~17% of an agent's cost |
-
-Sources: Run 0 in [PLAN_3090.md](docs/PLAN_3090.md), Phase 1 in [RESULTS.md](docs/RESULTS.md), the Claude QA test
-in [docs/CLAUDE_QA.md](docs/CLAUDE_QA.md) (Claude Opus 5.5; 3 documents of ~245k text tokens, 360 paired questions
-per point; Claude's tokenizer gives ~2.9 chars per token on this text, so its text-token column is not 4.33); the
-deep-research variant in [CLAUDE_QA.md](docs/CLAUDE_QA.md#tested-deep-research-sources); context compaction in [results/compaction](results/compaction/README.md) and, at scale, [results/compaction_scale](results/compaction_scale/README.md); RAG in
-[results/rag](results/rag/README.md); coding agents in
-[docs/SWE_IMAGES.md](docs/SWE_IMAGES.md) (hooks in [experiments/readhook/vbhook](experiments/readhook/vbhook/)).
-
-![Claude: accuracy change from reading page images instead of text](docs/img/claude_qa_verdict.png)
-
-> **Status of the dense codes (2026-11-06; the Now row 2026-11-12)**
->
-> | | Result |
-> |---|---|
-> | **Settled** | **Hand-picked chunk glyphs (Phases 1-2): KILL.** With Claude, PP-OCR and trained CRNN readers, plain Latin wins. |
-> | | **Learned glyph alphabet, pixel space: qualified GO.** With a trained reader it needs about 0.57x Latin's px²/char at 3% CER. |
-> | | **Frozen VLM encoders (SigLIP, DeepSeek-OCR's DeepEncoder): every dense code is lost.** Only low-density Latin (8.5 chars/token) reads through DeepEncoder. |
-> | | **Qwen2.5-VL-3B, raw pixels and frozen:** the moonshot code (322 chars/token) reads from raw pixels at 1.07% CER, but its pixel detail collapses (linearly) at the ViT's 2x2 merger. A CPU probe's verdict: "the ViT output is the wall at this budget". |
-> | **Open** | **R3-1, LoRA fine-tune of Qwen's LLM (1000 steps):** Latin at 28 chars/token is read (55% CER vs 88.5% blind). Latin at 72 chars/token gets the gist but not the words (val loss 10% below blind, MC above blind at p = 0.02). Learned glyphs (107) and the moonshot (322) are not read at all: their losses equal the blind runs'. Gate G3 is undecidable: no arm is near 3% CER. [Analysis](docs/ANALYSIS.md). |
-> | **Open** | **Own encoder, Stage 0** (text compressor into frozen Qwen): inconclusive, its 4x positive control failed (64% CER at 8000 steps); the decoder keeps the gist, not the words. [OWN_ENCODER.md](docs/OWN_ENCODER.md) |
-> | **Now (2026-11-12)** | **Wound down** ("Where it stands" above): the dense codes are a negative result; Stage C, colour Run 4 and the text-compressor test are not pursued. Left: one evening on a local Qwen3.8-27B ([LOCAL_QWEN.md](docs/LOCAL_QWEN.md)). |
-
-**Terms.**
-* **CER:** character error rate (edit distance / reference characters).
-* **px²/char:** image area per source character (lower is denser).
-* **Chars per vision token:** characters carried by one image token of a given encoder (higher is denser).
-* **Blind control:** the same fine-tune with the images shuffled between pages, so the image says nothing about
-  the answer. Its scores are the floor that the model's language prior reaches on its own.
-
-## The codes
-
-**1. Glyphs for frequent chunks (visual BPE).** Byte-pair encoding merges frequent letter runs (`the`, `ing`, ` of the `)
-into one token. Here each of the 300 most useful chunks gets its own glyph, and every other letter is spelled
-out. In the version that works, all 395 symbols are learned 5-px bitmaps, optimised together with a reader.
-The haiku below goes from 66 characters to 32 symbols, and its lines get 36% shorter.
+Braille is built to be read at very low resolution: six dots a cell. A model's reader could be given an alphabet
+made for small bitmaps instead of one made for pens. And once the alphabet is ours to design, there is no reason to
+stop at letters: byte-pair encoding merges frequent letter runs (`the`, `ing`, ` of the `) into single tokens, so
+each of those can have its own glyph. That is the name of the repo.
 
 ![Plain text vs learned glyphs](docs/img/glyphs.png)
 
-**2. Colour blocks.** Each of the 95 printable characters gets its own colour, and each character is drawn as one solid block
-(here 2x2 px, 60% less area than a 5-px font).
+*The haiku goes from 66 characters to 32 symbols and its lines get 36% shorter.*
+
+**The first tests said this works, in pixels.** A glyph alphabet of 395 symbols (95 characters plus 300 chunks),
+learned together with a small reader, needs **0.57x the pixels of plain Latin** for the same 3% character error
+(3.75 against 6.54 px² per character, scored in the unchanged pipeline that had been built for Latin). On a grid
+that matches a vision model's patches, the chunk alphabet carries 76 characters per vision token at 0.11% error,
+where plain Latin drawn into the same area gets 0.58%. Hand-picked glyphs (Chinese characters standing in for
+chunks) did not work: a complex glyph needs a larger font to stay legible, which cancels what it saves.
+→ [learned_glyphs/RESULTS.md](learned_glyphs/RESULTS.md), [docs/glyphs/RESULTS.md](docs/glyphs/RESULTS.md)
+
+### Idea 2: why shapes at all? One colour, one pixel, one character
+
+If the reader is a network, a character does not need a shape. Give each of the 95 printable characters its own
+colour and draw every character as one block.
 
 ![Plain text vs one colour block per character](docs/img/colour.png)
 
-**3. RGB overlay.** Three lines of text share one strip of pixels, one line per colour channel. That is 3x the text of a
-monospace line.
+From raw pixels a trained reader gets this almost perfectly, down to one pixel per character: 256 characters per
+vision token at 0.06% error. → [encoder_probe/RESULTS.md](encoder_probe/RESULTS.md)
+
+### Idea 3: layers. RGB text, then glyphs in RGB
+
+An image has three colour channels and black-on-white text uses them as one. Put a different line of text in each
+channel and the same pixels hold three lines. The idea came from fibre-optic multiplexing, where several signals
+share one fibre on different wavelengths.
 
 ![Three lines of text vs RGB overlay](docs/img/rgb.png)
 
-**The moonshot, `rgb3_lg_pb_h5` = codes 1 + 3.** It blends the learned glyph alphabet (1) with the RGB overlay (3):
-three independent streams of learned glyphs, one per colour channel, on the same pixels.
-* **Why the two combine:** each channel is an ordinary black-on-white glyph page, so the three layers never
-  occlude each other. Code 1 packs ~107 chars into each Qwen2.5-VL vision token; three layers make that **322**,
-  ~75x plain text's 4.3 chars per token.
-* **Status:** the page itself is readable (1.07% CER for a reader trained on raw pixels), but Qwen2.5-VL has not
-  learned to read it: after a 1000-step fine-tune its loss equals its blind control's. Details in
-  [docs/ANALYSIS.md](docs/ANALYSIS.md).
+Then the obvious combination: the learned glyph alphabet of idea 1, three streams of it, one per channel. This
+"moonshot" page carries **322 characters per vision token**, about 75 times plain text's 4.3, and a reader trained
+on its raw pixels reads it at 1.07% error.
 
 ![Three lines of text vs learned glyphs overlaid one per colour channel](docs/img/moonshot.png)
 
-A strip of a real moonshot page, magnified: the colour page (top) and its three channels.
+![A strip of a real moonshot page, magnified, with its three channels](docs/img/rgb3_lg_pb_h5_strip.png)
 
-![Moonshot: RGB overlay of learned whole-pixel glyphs](docs/img/rgb3_lg_pb_h5_strip.png)
+At which point it became clear what this is: a small bitmap alphabet, packed on a grid, in three colour layers. I
+had re-invented the colour QR code. 🙄
 
-## Results by stage
+## 3. What happened when a real model had to read them
+
+Every code above is readable **from raw pixels by a reader trained for it**. None is readable by a model that
+already exists.
 
 ![Chars per vision token vs whether each code is read, per encoder and stage](docs/img/readme_density.png)
 
-*Each strip is one encoder and stage. x is chars per vision token of that encoder, so one rendering sits at different x
-for different encoders. The dotted line is DeepSeek-OCR's published operating point: ~97% OCR precision at 10x
-compression (text tokens per vision token, Fox benchmark), converted at 4.33 chars per text token, so its position
-is approximate. Generated by `scripts/make_readme_figures.py` from the result rows.*
+*Each strip is one encoder and stage; x is characters per vision token for that encoder. The dotted line is
+DeepSeek-OCR's published operating point (approximate: converted at 4.33 characters per text token).*
 
-**1. Hand-picked glyphs (Phases 1-2): KILL.** Common Chinese characters stood in for frequent chunks, and a
-Hangul-style layout packed 2x2 letters per cell. A Chinese glyph needs a larger font to stay legible, which cancels
-the width it saves. With a CRNN reader trained to convergence, plain DejaVu Latin reaches 1.73% CER at 7.5 px²/char;
-substitution needs ≥1.18x its pixels and quadrant packing ≥3x. Claude scores only natural text (its safety classifiers
-refuse the coded pages). On plain English it needs 29.4 px²/char for 3% CER, about 37 vision tokens per 1k chars.
-→ [docs/RESULTS.md](docs/RESULTS.md)
+| Step | What was tried | What happened |
+|---|---|---|
+| Frozen encoders | SigLIP and DeepSeek-OCR's own DeepEncoder, a probe reading text back from their tokens | Colour codes never get below 62% error through SigLIP; through DeepEncoder colour blocks, the RGB overlay and learned glyphs sit at the floor (71-84%). Only low-density Latin (8.5 chars per token) is read. [encoder_probe/RESULTS.md](encoder_probe/RESULTS.md) |
+| A full vision-language model, frozen | Qwen2.5-VL-3B | Glyph pages stay intact through its vision transformer and collapse where it merges 2x2 patches into one token. [encoder_probe/ROUND3.md](encoder_probe/ROUND3.md) |
+| Fine-tuning that model | LoRA on the language model plus the last vision blocks, 1000 steps, every arm with a blind control | Only plain Latin at 28 chars per token is read at all (55% error against 88.5% blind). Latin at 72 gets the gist. Learned glyphs (107) and the moonshot (322) end exactly at their blind controls: not read. [docs/background/ANALYSIS.md](docs/background/ANALYSIS.md) |
+| The overlay on its own | Latin in 2 colour channels, fine-tuned | The model reads the two layers as one blended text; two layers deliver less per token than one. [docs/gpu/COLOUR_GIST.md](docs/gpu/COLOUR_GIST.md) |
+| Building the encoder ourselves | a vision encoder from scratch; a text-side compressor into a frozen model | Neither control became readable at the budget available. [docs/gpu/OWN_ENCODER.md](docs/gpu/OWN_ENCODER.md) |
+| Claude | coded and scrambled pages | Refused or cut off by safety classifiers. Claude can only be measured on natural text. [docs/glyphs/RESULTS.md](docs/glyphs/RESULTS.md) |
 
-**2. Learned glyph alphabet: qualified GO (pixel space).** Glyphs learned jointly with a reader need 0.57x the
-pixels of plain DejaVu Latin at 3% CER in the unchanged Phase-2 pipeline (3.75 vs 6.54 px²/char), and 0.63-0.74x with
-a fresh reader. Under heavy blur, noise and JPEG they get 3.5% CER where DejaVu gets 43%. There are two caveats:
-* glyphs restricted to whole pixels win by only 12-23%;
-* the densest alphabets break on degradations they never saw in training.
+![Fine-tune: error and multiple-choice accuracy per arm next to its blind control](docs/img/readme_r3_1.png)
 
-→ [learned_glyphs/RESULTS.md](learned_glyphs/RESULTS.md)
+## 4. What I finally understood
 
-**3. Frozen VLM encoders: every dense code is lost.** A small probe reads the text back from frozen encoder tokens.
-* **Raw pixels:** every code reads at 3.5% CER or better, including colour 1x1 blocks at 256 chars/token (0.06%).
-* **Through SigLIP-B/16:** no colour code gets below 62% CER.
-* **Through DeepSeek-OCR's DeepEncoder:** colour blocks (71-73%), the RGB overlay (83.5%) and learned glyphs (82%)
-  sit at the floor. Only Latin at 8.5 chars/token reads (19%).
+**The limit is not how many characters fit in a vision token. It is how much a vision token can carry accurately.**
 
-The probe is data-limited, so these CERs are upper bounds on what each encoder loses. The conclusions rest on
-comparisons made with the same probe. → [encoder_probe/RESULTS.md](encoder_probe/RESULTS.md)
+A vision token is one vector, and the encoder that makes it was trained to describe pictures and ordinary text. The
+measurement that settled it: frozen Qwen2.5-VL recovers **at most 12.6 bits per vision token** on natural text, at
+28 characters per token, and falls apart beyond that (1.7 bits at 72 characters per token). The moonshot page asks
+for about 270 bits per token. Legibility in pixels was never the constraint; the page can be perfectly crisp and
+the token still cannot hold it. → Run 0 in [docs/gpu/PLAN_3090.md](docs/gpu/PLAN_3090.md)
 
-**4. Round 3, Qwen2.5-VL-3B: can a VLM be trained to read a dense code?** → [encoder_probe/ROUND3.md](encoder_probe/ROUND3.md)
-* **G0 (raw pixels):** the moonshot reads at 1.07% CER at 322 chars/token.
-* **Q1 (linear pixel readout of the frozen ViT):** whole-pixel glyph codes stay pixel-like up to the last ViT
-  block. Every code collapses at the 2x2 merger.
-* **G2-lite (CPU probe, 500 pages):** a trained merger barely helps (84.6% vs 86.1% frozen). Skipping the merger
-  reads about 29% of the moonshot's characters, against about 15% through the merger. The pre-registered verdict:
-  "the ViT output is the wall at this budget".
-* **R3-1 (LoRA fine-tune of the LLM, plus the merger and last 4 ViT blocks):** 1000 steps on an RTX 4090, every arm
-  with a blind control. Latin p8 is read: CER 55% vs 88.5% blind, multiple-choice accuracy 0.88 vs 0.25, validation
-  loss 1.12 vs 2.48. It reads the first line of a window almost exactly, then drifts into invented text. The denser
-  arms sit at their blind floors; the moonshot's losses match its blind run to 3 decimals.
+It also explains why denser *plain text* fails the same way on Claude: at 4.2x fewer tokens it still finds single
+facts but loses chains and counts, and at 7.8x it can transcribe a page at 3% error and yet cannot answer questions
+over a document.
 
-![R3-1: CER and multiple-choice accuracy per arm next to its blind control, 1000 steps](docs/img/readme_r3_1.png)
+And for a model you can train, pixels are a detour: a compressor built on the text side reaches the same slots
+without a rendering step. That has been published by others, and current local models get much of the payoff from
+their architecture, so it was built here but not run ([docs/gpu/TEXT_SLOTS.md](docs/gpu/TEXT_SLOTS.md)).
 
-So far, no dense code is read by a VLM. The 1000-step budget is short, so this is "not reached at this budget",
-not a final no. What each code would buy in context and KV cache is in
-[docs/CONTEXT_BUDGET.md](docs/CONTEXT_BUDGET.md); none of it is a working context gain until R3-2 measures it.
+## 5. The accident: plain Latin pages on a closed model
 
-## How to run
+Every experiment had a baseline arm: plain Latin text, rendered small. On Claude that arm turned out to be the
+result. A closed model takes text tokens and images and nothing else, so its vision encoder is the only compressor
+a user can reach, and at ordinary text sizes it is a good one: a 28-pixel patch holds 7 to 9 legible characters
+where a text token holds about 2.9.
 
-Full setup, every experiment command and the known gotchas: [AGENTS.md](AGENTS.md). Quick start (CPU):
+![Claude: accuracy change from reading page images instead of text](docs/img/claude_qa_verdict.png)
 
-```bash
-pip install -r requirements.txt
-pip install --index-url https://download.pytorch.org/whl/cpu torch
-scripts/fetch_fonts.sh
-python3 scripts/build_data.py              # WikiText-103 passages and chunk dictionaries (~5 min)
-python3 -m pytest -q tests                  # fast tests, no network
-python3 scripts/make_readme_figures.py      # README figures (--only charts: just the two charts)
-```
+*Accuracy change in points from reading pages instead of text (negative = worse); ✓ marks the pre-registered
+"no loss larger than 2 points" verdict.*
 
-GPU work has its own runbooks: [docs/GPU_RUNNER.md](docs/GPU_RUNNER.md) for any Linux GPU runner (round-3
-fine-tunes, sized from a smoke run), and [docs/LOCAL_GPU.md](docs/LOCAL_GPU.md) for the local Windows RTX 3090.
-The latest run's status is in [docs/HANDOFF.md](docs/HANDOFF.md).
+| Use, tested with a pre-registration | What was measured | Result | Reference |
+|---|---|---|---|
+| Long-document Q&A | 3 documents of ~240k tokens, 360 questions per setting | **2.2x fewer tokens, no measured loss** on Opus and on Sonnet at high effort; Opus also at 2.9x at high effort; about half the list price per call | [CLAUDE_QA.md](docs/claude/CLAUDE_QA.md) |
+| Deep-research sources | 3 corpora of 34-50 articles, 360 questions | 99.7% from pages against 99.4% from text; keeping only notes loses 29 points | [CLAUDE_QA.md](docs/claude/CLAUDE_QA.md#tested-deep-research-sources) |
+| Retrieval (RAG) | 308 questions, 3 datasets | the same passages as pages: same accuracy, 27-43% cheaper; or +8.8 points on multi-hop questions for the same budget | [results/rag](results/rag/README.md) |
+| Context compaction | the session transcript kept as pages and opened on demand, real Claude Code hooks, 9 sessions | **96-99% of questions answered against 78% after normal compaction**, 2.1x cheaper per correct answer | [results/compaction_scale](results/compaction_scale/README.md) |
+| Coding agents | file contents and command output as pages, 79 SWE-bench tasks | no task lost, but no saving: reading is ~17% of an agent's cost | [SWE_IMAGES.md](docs/claude/SWE_IMAGES.md) |
+
+**Where it does not hold** (all measured, all in [CLAUDE_QA.md](docs/claude/CLAUDE_QA.md)):
+
+* **Wording that turns on one small word** (negation, passive voice, "all but"): pages lose about 3 points at 2.2x
+  and 2.9x alike. In about 1 page call in 6, every "A was paid n by B" sentence is read backwards.
+* **Denser pages:** 4.2x loses 8-15 points; chains and counts go first.
+* **Haiku:** loses 5.8 points already at 2.2x. Use text.
+* **Pruning the text instead** (deleting words a model can restore): 86.0% against 97.7% for pages at the same
+  tokens, and it does not stack with pages.
+* **A whole repository as pages (the "repo atlas")** for an agent or an orchestrator: seven tests and one repeat
+  found no arm where it beats a cheaper option. [REPO_ATLAS_PLAN.md](docs/claude/REPO_ATLAS_PLAN.md)
+
+**Using it in a harness.** The compaction result needs no change to the model: Claude Code hooks render the
+transcript to pages when the session compacts and let the agent open them when a question needs the detail
+([experiments/compaction/hooks](experiments/compaction/hooks)). The same renderer and a set of code minifiers are
+packaged as read and bash-output hooks in [experiments/readhook/vbhook](experiments/readhook/vbhook) (they work;
+for coding they do not pay). A harness that adopts this should re-run a page of planted facts whenever the model
+changes: "lossless" is per model and per release.
+
+## What is left
+
+* **The full Claude write-up, with every use case tried, worked or failed:** [docs/claude/CLAUDE_QA.md](docs/claude/CLAUDE_QA.md).
+* **One GPU run to finish:** does the page-image trick carry over to a local model with no training? Qwen3.8-27B on
+  an RTX 3090, the Claude QA test in small, one evening. Plan in [docs/gpu/LOCAL_QWEN.md](docs/gpu/LOCAL_QWEN.md);
+  **the prompt to run is at the top of [docs/HANDOFF.md](docs/HANDOFF.md)**.
+* **Stopped, not finished:** the trained-encoder runs on Latin (the fair last test of the original idea) are
+  parked in [docs/gpu/PLAN_3090.md](docs/gpu/PLAN_3090.md); the dense-glyph and colour stages after them are
+  closed.
+
+## Terms
+
+* **Vision token:** one context position produced from an image patch (28x28 px for Claude and Qwen2.5-VL).
+* **Nx fewer tokens:** input tokens of the text call divided by input tokens of the page call.
+* **px² per character:** page area per character; lower is denser. Claude's safe setting is 117.6 (2.2x).
+* **CER:** character error rate, edit distance over reference length.
+* **Blind control:** the same training run with images shuffled between pages, so the image says nothing. Its
+  score is what the model's language prior reaches alone.
 
 ## Repo map
 
 | Path | What |
 |---|---|
-| `PLAN.md` | design, pre-registered predictions and kill criteria for Phases 1-2 |
-| `vbpe/` | layout engine, rendering schemes, CRNN reader, Claude and PP-OCR readers, analysis |
-| `experiments/` | Phase 1 (Claude), 1b (PP-OCR zero-shot) and 2 (trained CRNN) drivers |
-| `learned_glyphs/` | learned glyph alphabet: plan, code, results, saved glyph banks |
-| `encoder_probe/` | frozen-encoder probe (rounds 1-2: SigLIP, DeepEncoder) and round 3 (Qwen2.5-VL) |
-| `docs/` | results, context budget, GPU runbooks, handoff, literature notes, ideas, figures; index in [docs/README.md](docs/README.md) |
-| `scripts/` | data building, fonts, job queue, figure scripts |
-| `results/` | Phase 1-2 rows and summaries; [results/README.md](results/README.md) says where every stage's rows live |
-| `tests/` | CPU tests for the core package |
+| [docs/](docs/README.md) | every write-up: `claude/` (page images on Claude), `glyphs/` (phases 1-2), `gpu/` (local-model runs and runbooks), `background/` (prior art, ideas, analysis, review), plus [HANDOFF](docs/HANDOFF.md), [FINDINGS](docs/FINDINGS.md), [RUNNING](docs/RUNNING.md), [GOTCHAS](docs/GOTCHAS.md) |
+| `vbpe/` | layout engine, rendering schemes, CRNN reader, Claude and OCR readers, analysis |
+| `learned_glyphs/` | the learned glyph alphabet: plan, code, results, saved glyph banks |
+| `encoder_probe/` | frozen-encoder probes and the Qwen2.5-VL rounds |
+| `experiments/` | drivers: `phases/` (1-2), `claude_qa/`, `rag/`, `erb/`, `compaction/`, `readhook/`, `atlas/` |
+| `results/` | rows and per-test READMEs; [results/README.md](results/README.md) says where each stage's rows live |
+| `scripts/`, `tests/` | data and figure scripts; CPU tests |
+
+Setup and how to work here: [AGENTS.md](AGENTS.md).
