@@ -53,3 +53,16 @@
 {"what": "pyjanitor-devs__pyjanitor-1593 plain", "cost_usd": 0.49817999999999996, "input_tokens": 384406, "output_tokens": 11946}
 {"what": "pyjanitor-devs__pyjanitor-1593 atlas", "cost_usd": 1.3382454, "input_tokens": 1738853, "output_tokens": 10437}
 {"what": "pyjanitor-devs__pyjanitor-1593 map", "cost_usd": 1.4450234000000002, "input_tokens": 0, "output_tokens": 0}
+{"what": "pyjanitor-devs__pyjanitor-1593 map", "cost_usd": 1.6362441999999997, "input_tokens": 153684, "output_tokens": 403}
+{"what": "scientific-python__docstub-123 map", "cost_usd": 0.2218298, "input_tokens": 180173, "output_tokens": 3982}
+{"what": "scientific-python__docstub-123 plain", "cost_usd": 0.1740804, "input_tokens": 89828, "output_tokens": 4265}
+{"what": "scientific-python__docstub-123 atlas", "cost_usd": 0.2520434, "input_tokens": 221515, "output_tokens": 2995}
+{"what": "jsonpickle__jsonpickle-588 plain", "cost_usd": 0.29282700000000006, "input_tokens": 233093, "output_tokens": 6084}
+{"what": "jsonpickle__jsonpickle-588 map", "cost_usd": 0.42455940000000003, "input_tokens": 484701, "output_tokens": 6803}
+{"what": "jsonpickle__jsonpickle-588 atlas", "cost_usd": 0.45971199999999995, "input_tokens": 418078, "output_tokens": 6853}
+{"what": "jsonpickle__jsonpickle-587 map", "cost_usd": 0.241143, "input_tokens": 212515, "output_tokens": 4527}
+{"what": "jsonpickle__jsonpickle-587 plain", "cost_usd": 0.1913736, "input_tokens": 150080, "output_tokens": 4885}
+{"what": "jsonpickle__jsonpickle-587 atlas", "cost_usd": 0.3345574, "input_tokens": 360567, "output_tokens": 4188}
+{"what": "niconoe__pyinaturalist-643 plain", "cost_usd": 0.0957672, "input_tokens": 55696, "output_tokens": 2432}
+{"what": "niconoe__pyinaturalist-643 map", "cost_usd": 0.2367176, "input_tokens": 201908, "output_tokens": 3730}
+{"what": "niconoe__pyinaturalist-643 atlas", "cost_usd": 0.3461074, "input_tokens": 261591, "output_tokens": 2551}

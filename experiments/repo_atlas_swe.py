@@ -534,6 +534,33 @@ def contaminated() -> dict[str, str]:
     return json.loads(p.read_text()) if p.exists() else {}
 
 
+def stream_totals(ev: list[dict]) -> dict:
+    """Turns and tokens over every result event of a run. A run whose agent left a background job emits a further
+    result (a new short turn) when the job ends: num_turns and usage are per result, total_cost_usd is cumulative."""
+    res = [e for e in ev if e.get("type") == "result"]
+    keys = ("input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens")
+    usage = {k: sum((r.get("usage") or {}).get(k, 0) for r in res) for k in keys}
+    return {"turns": sum(r.get("num_turns") or 0 for r in res) if res else None, "usage": usage,
+            "input_tokens": sum(usage[k] for k in keys[:3]), "output_tokens": usage["output_tokens"],
+            "cost_usd": float((res[-1].get("total_cost_usd") if res else 0) or 0.0), "results": len(res)}
+
+
+def repair(work: Path) -> int:
+    """Recompute turns, tokens and cost of stored rows from their transcripts (rows written before stream_totals)."""
+    rows, n = jl(OUT / "runs.jsonl"), 0
+    for r in rows:
+        f = work / "transcripts" / r["id"] / f"{r['arm']}.jsonl"
+        if not f.exists():
+            continue
+        tot = stream_totals([json.loads(l) for l in f.read_text().splitlines() if l.strip().startswith("{")])
+        if tot["results"] > 1 or r.get("turns") != tot["turns"]:
+            r.update({k: tot[k] for k in ("turns", "usage", "input_tokens", "output_tokens", "cost_usd")})
+            r["results"] = tot["results"]
+            n += 1
+    (OUT / "runs.jsonl").write_text("".join(json.dumps(r) + "\n" for r in rows))
+    return n
+
+
 def run_one(work: Path, t: dict, arm: str, broken: set) -> dict:
     from vbpe import claude_eval as CE
     meta = contexts(work, t)
@@ -589,20 +616,17 @@ def run_one(work: Path, t: dict, arm: str, broken: set) -> dict:
     else:
         g = {"resolved": False, "note": "patch does not apply"}
     shutil.rmtree(base, ignore_errors=True)
-    u = res.get("usage") or {}
+    tot = stream_totals(ev)
     gold = gold_files(t["patch"])
     names = [c["name"] for c in calls]
     pkg = t["repo"].split("/")[1]
     return {"id": t["instance_id"], "arm": arm, "model": MODEL, "effort": EFFORT, "resolved": bool(g.get("resolved")),
             "grade": g, "patch_applied": applied, "patch_files": patch_paths(graded_patch),
             "patch_lines": graded_patch.count("\n"), "gold": gold, "gold_touched": touched_share(graded_patch, gold),
-            "turns": res.get("num_turns"), "cost_usd": float(res.get("total_cost_usd") or 0.0),
+            "turns": tot["turns"], "cost_usd": tot["cost_usd"], "results": tot["results"],
             "subtype": res.get("subtype"), "is_error": res.get("is_error"), "rc": rc, "seconds": round(secs),
             "env_seconds": env_info["seconds"],
-            "input_tokens": u.get("input_tokens", 0) + u.get("cache_creation_input_tokens", 0) + u.get("cache_read_input_tokens", 0),
-            "output_tokens": u.get("output_tokens", 0),
-            "usage": {k: u.get(k, 0) for k in ("input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens",
-                                               "output_tokens")},
+            "input_tokens": tot["input_tokens"], "output_tokens": tot["output_tokens"], "usage": tot["usage"],
             "first_turn_input": first_in, "image_tokens_formula": meta["image_tokens_formula"] if arm == "atlas" else 0,
             "pages_arrived": arm != "atlas" or first_in >= PAGE_ARRIVAL * meta["image_tokens_formula"],
             "pages": meta["pages"] if arm == "atlas" else 0, "map_chars": meta["map_chars"] if arm == "map" else 0,
@@ -751,7 +775,7 @@ def inspect(work: Path) -> None:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("cmd", choices=["inspect", "select", "run", "analyse"])
+    ap.add_argument("cmd", choices=["inspect", "select", "run", "analyse", "repair"])
     ap.add_argument("--work", type=Path, default=DEFAULT_WORK)
     ap.add_argument("--workers", type=int, default=2)
     ap.add_argument("--min-gold", type=int, default=MIN_GOLD)
@@ -765,6 +789,8 @@ def main(argv=None) -> int:
         inspect(a.work)
     elif a.cmd == "select":
         select(a.work, a.workers, a.min_gold)
+    elif a.cmd == "repair":
+        print(f"[repair] {repair(a.work)} rows recomputed from their transcripts")
     elif a.cmd == "run":
         run(a.work, a.cap, a.ids, a.max_tasks, min(a.workers, 2))
     else:

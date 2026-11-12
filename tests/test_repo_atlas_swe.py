@@ -98,3 +98,13 @@ def test_leak_hits():
             "V=/s/ra_swe/runs/t/68c46e/venv/bin/python; $V -m pytest tests"]
     hits = S.leak_hits(cmds, "schemathesis")
     assert hits == ["pip install -U schemathesis", "curl https://example.com", "cat ../../ra_swe/ds/x", "git fetch origin"]
+
+
+def test_stream_totals_sums_turns_and_tokens_keeps_last_cost():
+    ev = [{"type": "result", "num_turns": 18, "total_cost_usd": 1.2,
+           "usage": {"input_tokens": 1, "cache_read_input_tokens": 100, "output_tokens": 10}},
+          {"type": "assistant"},
+          {"type": "result", "num_turns": 2, "total_cost_usd": 1.6, "usage": {"input_tokens": 2, "output_tokens": 5}}]
+    t = S.stream_totals(ev)
+    assert t["turns"] == 20 and t["cost_usd"] == 1.6 and t["input_tokens"] == 103 and t["output_tokens"] == 15
+    assert t["results"] == 2 and S.stream_totals([])["turns"] is None
