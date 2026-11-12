@@ -1,8 +1,9 @@
-# Plan-quality test: an orchestrator that reads the atlas once (design, queued)
+# Plan-quality test: an orchestrator that reads the atlas once (design and result)
 
-*2026-11-12. Approved by the user and queued behind the two running atlas tests (hard fresh tasks, C-to-Rust
-migration). Not run. An Opus subagent turns this design into the pre-registration in
-`results/plan_quality/README.md` before its first scored call. Spend cap: $45 at list price.*
+*2026-11-12. Run the same day by an Opus subagent for $44.25 of the $45 cap: the Results section is at the end,
+the pre-registration, tables and caveats are in `results/plan_quality/README.md`. In short: atlas briefs are no
+better than file-list briefs, and the planner can neither size the work nor pick the worker. The design below is
+as approved by the user before the run.*
 
 ## The use case
 

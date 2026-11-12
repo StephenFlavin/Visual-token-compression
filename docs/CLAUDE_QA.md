@@ -74,7 +74,7 @@ the same model reading text, at lower cost.
 | Repo atlas: migrating C to Rust | 14 CRUST-Bench projects, Claude Code with the C files / with files and atlas / with the atlas only | identical on every project: 12 of 14 pass all tests in each arm; turns and cost the same within noise | **No effect**; pages alone were enough to translate from, but the projects are small and the tests carry much of the behaviour; [results/repo_atlas_migrate](../results/repo_atlas_migrate/README.md) |
 | Repo atlas: hard coding tasks again, auto-memory off | the same 16 tasks, plain against atlas, 2 runs each | queued | pending; [REPO_ATLAS_PLAN.md](REPO_ATLAS_PLAN.md), Q1 |
 | Repo atlas: a larger port with concurrency | RepoMod-Bench, gitleaks Go to Rust (22k lines), plain against atlas | queued | pending; [REPO_ATLAS_PLAN.md](REPO_ATLAS_PLAN.md), Q2 |
-| Orchestrator reads the atlas once, workers get briefs | not tested; plan-quality test queued ([PLAN_QUALITY_TEST.md](PLAN_QUALITY_TEST.md)) | on paper ~$1 for a 20-ticket backlog against ~$19 if every worker carries the atlas | **Proposed, test queued**; [details](#proposed-not-tested-an-orchestrator-that-reads-the-atlas-once) |
+| Orchestrator reads the atlas once, workers get briefs | plan-quality test: 33 tickets x 4 planners (file list, repo map, atlas, searching agent), then 16 tickets given to workers on three tiers | atlas briefs name 50% of the fix's files, the same as file-list (48%) and scout briefs (50%), at 8x and 2.7x their cost; the planner cannot size the work or pick the worker (its choice solved 8 of 16 against 11 for always-Opus); an Opus worker with a brief solved 11 (atlas brief) or 10 (file-list brief) against 8 without (p = 0.25) | **Fails as proposed**: a brief may help, the atlas is not what makes it good; [details](#tested-an-orchestrator-that-reads-the-atlas-once-plan-quality) |
 | A local model (Qwen3.8-27B) | not run | plan and harness ready | **Planned**; [LOCAL_QWEN.md](LOCAL_QWEN.md) |
 
 ## How fast it falls
@@ -192,7 +192,7 @@ candidates to test, ordered from closest to the test to furthest from it.
   coding spends little on reading, so the total cost did not fall.
 * **A whole repository read up front (repo atlas): tested three ways so far, no gain by itself**
   ([below](#tested-a-whole-repository-as-page-images-repo-atlas)); as a one-time read for an orchestrator that
-  briefs workers it is [proposed, not tested](#proposed-not-tested-an-orchestrator-that-reads-the-atlas-once).
+  briefs workers it was [tested and did not beat a bare file list](#tested-an-orchestrator-that-reads-the-atlas-once-plan-quality).
 
 ### Tested: deep-research sources
 
@@ -278,7 +278,7 @@ Was the 2.2x pages' passive flip in Test A chance or density? Pre-registered: th
 It fits one request up to ~150k image tokens, about 1.3M characters of source (requests 24k tokens, bat 67k, axum
 120k; pytest is at the limit; anything Django-sized is far over), at about 3.5 times fewer tokens than the code as
 text. Plan and all results: [REPO_ATLAS_PLAN.md](REPO_ATLAS_PLAN.md). Five tests, each run by an Opus subagent with
-a pre-registration (the plan-quality test for the orchestrator use is the sixth, running):
+a pre-registration (the sixth, the plan-quality test for the orchestrator use, has its own section below):
 
 | Test | Tasks | What the arms scored | Spend |
 |---|---|---|---|
@@ -310,42 +310,69 @@ a pre-registration (the plan-quality test for the orchestrator use is the sixth,
 * **The existing repository-level security benchmark (VulnGym) cannot be used:** its smallest measured repository
   is 246k image tokens. Real services are mostly too large for one atlas.
 
-### Proposed, not tested: an orchestrator that reads the atlas once
+### Tested: an orchestrator that reads the atlas once (plan quality)
 
 **The use.** A backlog of tickets against one service. One orchestrator session loads the atlas, reads every
-ticket and writes a short brief per ticket (files, functions, approach, which tickets collide, an order). Worker
-subagents get their brief, not the atlas, and run in parallel; when a batch has merged the atlas is rebuilt and the
-next phase is planned.
+ticket and writes a short brief per ticket (files, functions, approach, a size S / M / L and a worker: model and
+reasoning level). Worker subagents get their brief, not the atlas, and run in parallel; when a batch has merged
+the atlas is rebuilt and the next phase is planned.
 
 **Why this shape.** A cache read costs a tenth of the input price but is charged on every turn of every session
 that carries the atlas. At Opus list prices an 80k-token atlas costs ~$0.40 to load and ~$0.03 per turn. For 20
-tickets of ~30 turns: ~$19 if every worker carries it, ~$1 if only the orchestrator does, against $1-9 for workers
-that scout by themselves (from the costs measured above). The orchestrator also sees all tickets against all the
-code, so it can spot tickets that touch the same files, which per-ticket scouting cannot.
+tickets of ~30 turns: ~$19 if every worker carries it, ~$1 if only the orchestrator does.
 
-**What is not known:** whether briefs written from the atlas are better than what a worker finds by scouting.
-Pages are weaker where one symbol decides, so workers must read the files they edit and be free to reject a brief.
+**The test** (2026-11-12, Opus 5.5 at high effort as planner, $44.25, run by an Opus subagent; design
+[PLAN_QUALITY_TEST.md](PLAN_QUALITY_TEST.md), pre-registration, rows and caveats
+[results/plan_quality](../results/plan_quality/README.md)). Tickets are SWE-rebench issues with a known fix, in
+repositories whose atlas fits, not located by a bare file list in a closed-book screen.
 
-**A test of plan quality** (queued 2026-11-12 behind the two running atlas tests; full design in
-[PLAN_QUALITY_TEST.md](PLAN_QUALITY_TEST.md); tasks: fresh, post-cutoff tickets with a known fix, so memory cannot
-write the plan). Briefs follow a fixed structure and carry a size (S / M / L) and a worker choice (model and
-reasoning level):
+*Briefs against the real fix, 33 tickets, four planners with the same instruction:*
 
-1. *The brief against the fix, no execution.* Planners with a file list, a repo map, the atlas, or search tools
-   each write a brief in a fixed form (files, functions, approach in three sentences). Scores: share of the fix's
-   files and functions named; share of named files not in the fix; paths and symbols that do not exist in the
-   repository (what a misread page would produce); the approach judged blind against the real fix by a fixed
-   rubric. Cost per brief.
-2. *Tickets that collide.* Several tickets on one commit of one repository; the planner says which pairs touch
-   the same files and gives an order. Scored against the overlap of the real fixes' files. This is the part only
-   an orchestrator can do.
-3. *Does the brief help the worker?* The same worker with the atlas brief, with a file-list brief, and with no
-   brief (scouting), graded by the ticket's own tests: resolved, turns, cost, seconds. The fresh-task test above
-   supplies the no-brief rows.
-4. *Is the work right-sized?* The brief's size against the real fix's size; and each ticket run on a cheap, a
-   middle and a top worker (Haiku low, Sonnet medium, Opus high) to find the cheapest that solves it, compared with
-   the worker the brief chose. Policies compared on tickets solved and total cost: always the top worker, always
-   the cheapest, the brief's choice.
+| planner reads | fix files named | named files not in the fix | fix functions named | names that do not exist | cost per brief |
+|---|---|---|---|---|---|
+| the file list | 48.1% | 38.2% | 44.6% | 2.5% | $0.05 |
+| the repo map | 47.6% | 35.4% | 49.2% | 0.4% | $0.16 |
+| the atlas | 50.1% | 24.7% | 50.3% | 0.4% | $0.41 |
+| the checkout, with search tools (scout) | 49.8% | 12.5% | 50.0% | 0.8% | $0.15 |
+
+*Workers on 16 tickets, graded by the ticket's own tests (Claude Code with edit tools):*
+
+| worker | solved | median turns | cost per ticket |
+|---|---|---|---|
+| Opus high, no brief (rows of the hard-coding-task test) | 8 | 12.5 | $0.26 |
+| Opus high, atlas brief | 11 | 12.5 | $0.32 |
+| Opus high, file-list brief | 10 | 15 | $0.42 |
+| Sonnet medium, atlas brief | 8 | 6 | $0.05 |
+| Haiku low, atlas brief | 8 | 8.5 | $0.01 |
+
+* **The atlas does not write a better brief.** It names the same share of the fix's files as a bare file list
+  (they tie on 21 tickets and split 6 to 6) and as a scout. It names fewer wrong files than the file list, but
+  the scout names half as many again and costs under half as much. A blind judge of the approach scored every
+  planner 5.4-5.7 of 6 and could not separate them.
+* **Reading pages did not make it invent things:** 1 of 246 named paths and functions does not exist.
+* **The planner cannot size the work.** Its S / M / L against the real fix's size: rank correlation 0.24 (scout
+  0.38; the bar was 0.3).
+* **It cannot pick the worker either.** Told to choose the cheapest worker that would solve the ticket, the atlas
+  planner chose Sonnet 13 times, Haiku 3 times and Opus never. Against the cheapest tier that did solve each
+  ticket it was right on 2, too large on 6, too small on 3 (5 tickets no tier solved). Following it solved 8 of
+  16 for $0.73; always Opus solved 11 for $5.17; always Haiku solved the same 8 for $0.10.
+* **The tiers split cleanly, which the brief did not predict:** Haiku at low effort solved 8 tickets, Sonnet at
+  medium the same 8 and no more, and Opus at high 3 more. Starting every ticket on Haiku and sending failures to
+  Opus would solve 11; that needs a check that tells a failed ticket from a solved one (here the tests did).
+* **A brief may help the worker, whichever context wrote it.** Opus solved 11 with the atlas brief and 10 with
+  the file-list brief against 8 with none: 3 tickets to 0 for the brief, exact p = 0.25, one run per ticket. This
+  is the third 3-to-0 hint of this kind (atlas in the agent's context: security flaws, hard coding tasks), and
+  the file-list brief nearly matching it says the gain, if real, comes from planning before editing, not from
+  the atlas. Turns did not fall.
+* **Colliding tickets could not be tested:** the benchmark has one repository with three or more usable tickets;
+  the design needed three.
+* Predictions: 2 held (few invented names; scout and atlas name as many files), 4 failed (atlas over file list
+  on files; sizing; right-sizing by the planner; fewer turns with a brief), 1 not evaluable (collisions).
+
+**What this means for the use:** an orchestrator that plans from the atlas is not worth its cost on these
+tickets. A file-list brief at $0.05 does as well, and for model choice a fixed rule (cheapest first, escalate on
+a failed check) beat the planner's own estimate. Not tested: private code the model has never seen, a real
+backlog with collisions, and repeat runs.
 
 **Where not to use it**
 

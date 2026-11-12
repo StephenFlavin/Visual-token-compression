@@ -201,12 +201,13 @@ table and curves `analyse_stage0.py`, rows `encoder_probe/results/stage0/runs.js
   No D3 or D10. Next: a recipe amendment (faster slot learning), not a density conclusion.
 
 ## Open items, in priority order
-**On the cloud runner (2026-11-12), run by an Opus subagent:** the plan-quality test
-([PLAN_QUALITY_TEST.md](PLAN_QUALITY_TEST.md), `results/plan_quality/`, started 13:40 UTC, cap $45). The five atlas
-tests before it are finished (pilot, SWE-QA, security, hard coding tasks, C-to-Rust migration): the use-case table
-and their results are in [CLAUDE_QA.md](CLAUDE_QA.md). **Queued behind it, one at a time** ([REPO_ATLAS_PLAN.md](REPO_ATLAS_PLAN.md), "Queued"): Q1 the 16 hard coding
-tasks again with auto-memory off, plain against atlas, 2 runs each (cap $40); Q2 a larger port with concurrency,
-gitleaks Go to Rust on RepoMod-Bench (cap $50).
+**On the cloud runner (2026-11-12), each run by an Opus subagent:** six atlas tests are finished (pilot, SWE-QA,
+security, hard coding tasks, C-to-Rust migration, plan quality): the use-case table and their results are in
+[CLAUDE_QA.md](CLAUDE_QA.md). The plan-quality test ([PLAN_QUALITY_TEST.md](PLAN_QUALITY_TEST.md),
+`results/plan_quality/`, $44.25) found atlas briefs no better than file-list briefs and the planner unable to size
+work or pick the worker. **Still queued, one at a time** ([REPO_ATLAS_PLAN.md](REPO_ATLAS_PLAN.md), "Queued"): Q1 the
+16 hard coding tasks again with auto-memory off, plain against atlas, 2 runs each (cap $40); Q2 a larger port with
+concurrency, gitleaks Go to Rust on RepoMod-Bench (cap $50).
 
 **As of 2026-11-12:** (1) the Qwen3.8-27B evening (the prompt at the top); (2) done: the 2.2x claim now carries
 the wording-sensitive limit from [results/claude_qa/repeat](../results/claude_qa/repeat/README.md).
