@@ -59,6 +59,11 @@ Outputs: `results/phase{1,1b,2}/<run>/`, `encoder_probe/results/<run>/`, `learne
 `runs.jsonl` (map in `results/README.md`). Claude responses are cached in `results/cache/claude/` (keyed on
 model+prompt+image bytes), so re-runs are free.
 
+**Standing instruction from the user (2026-11-12): validation runs go to an Opus subagent.** Any test that checks a
+claim (Claude-reader experiments, repeats, pilots) is delegated to a subagent on Opus with a written brief, a
+pre-registration committed before the first scored call, and a hard spend cap; the main session designs, reviews the
+rows it returns and updates the docs.
+
 ## Things that DON'T work / gotchas (save yourself the time)
 
 **Network / installs**
