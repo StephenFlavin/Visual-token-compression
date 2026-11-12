@@ -80,3 +80,10 @@
 {"what": "stanfordnlp__dspy-8607 atlas", "cost_usd": 0.9527702000000001, "input_tokens": 1409987, "output_tokens": 8269}
 {"what": "pypa__virtualenv-2940 plain", "cost_usd": 0.17043560000000002, "input_tokens": 110568, "output_tokens": 3236}
 {"what": "pypa__virtualenv-2940 map", "cost_usd": 0.2560984, "input_tokens": 271882, "output_tokens": 2893}
+{"what": "pypa__virtualenv-2940 atlas", "cost_usd": 0.34149460000000004, "input_tokens": 317955, "output_tokens": 3225}
+{"what": "MAIF__arta-50 plain", "cost_usd": 0.10653619999999998, "input_tokens": 77803, "output_tokens": 2113}
+{"what": "MAIF__arta-50 map", "cost_usd": 0.1107086, "input_tokens": 90603, "output_tokens": 2061}
+{"what": "MAIF__arta-50 atlas", "cost_usd": 0.12086820000000001, "input_tokens": 82383, "output_tokens": 1664}
+{"what": "tobymao__sqlglot-5359 map", "cost_usd": 0.5665632, "input_tokens": 687346, "output_tokens": 5293}
+{"what": "tobymao__sqlglot-5359 plain", "cost_usd": 0.2144682, "input_tokens": 157859, "output_tokens": 5735}
+{"what": "tobymao__sqlglot-5359 atlas", "cost_usd": 1.0826752, "input_tokens": 1432084, "output_tokens": 5252}

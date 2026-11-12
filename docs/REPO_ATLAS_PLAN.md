@@ -157,3 +157,25 @@ tables and problems: [results/repo_atlas_sec/README.md](../results/repo_atlas_se
   turns.
 * All pages arrived (102-127% of the image-token formula); no refusals; no tool call left the export.
 * A sharper test would score functions or line ranges, or use flaws in files whose names say nothing about security.
+
+## Hard fresh tasks: results (2026-11-12)
+
+*17 Python tasks from the SWE-rebench leaderboard (created 2025-07 to 2026-05; nothing newer exists in SWE-rebench or
+SWE-bench-Live), each with a gold patch over at least 3 source files, an atlas of at most 150k image tokens, local
+validation without Docker, and a closed-book screen that dropped 12 of 37 tasks as already located. Claude Code
+(Opus 5.5, high effort) solved each task once per arm: plain, with a repo map, with the atlas pages in the first
+message. Graded by the tasks' own tests. $28.45 of a $35 cap. Pre-registration, tables and problems:
+[results/repo_atlas_swe/README.md](../results/repo_atlas_swe/README.md).*
+
+* **The atlas arm solved the most, but not significantly so:** 11 of 16 compared tasks against 8 for plain and 9
+  for the map. All 3 discordant tasks went to the atlas (exact McNemar p = 0.25). One run per arm cannot separate
+  this from run-to-run variation.
+* **Fewer turns, higher cost.** The atlas run took fewer turns on 11 of 12 untied tasks (median 10 vs 12.5, p =
+  0.006). It cost more on every task: $0.68 against $0.26 (2.6x). Wall time did not change. The map cost $0.49 and
+  changed nothing measurable.
+* Predictions: H1 (atlas within 2 tasks of plain) FAIL (3), not significant; H2 (fewer turns) PASS; H3 (dearer) PASS;
+  H4 (map within 1 of plain) PASS; H5 (gold files touched at least as often) PASS.
+* All pages arrived (106-194% of the image-token formula). In the pilot one map run downloaded a later PyPI release
+  holding the fix. That task is left out, and later runs had no package index.
+* Next step, if wanted: the same 16 tasks with 2-3 repeats per arm (about $45 at these prices), to tell a 3-task
+  effect from noise.
