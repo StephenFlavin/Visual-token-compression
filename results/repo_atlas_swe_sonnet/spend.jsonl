@@ -2,3 +2,17 @@
 {"what": "gate claude-sonnet-5-5 pytest-dev__pyfakefs-1286 88.2", "cost_usd": 0.1669427, "t": "2026-11-12T19:49:29"}
 {"what": "gate claude-opus-5-5 scientific-python__docstub-123 88.2", "cost_usd": 0.1353316, "t": "2026-11-12T19:49:39"}
 {"what": "gate claude-opus-5-5 pytest-dev__pyfakefs-1286 88.2", "cost_usd": 0.2597054, "t": "2026-11-12T19:49:51"}
+{"what": "microsoft__fabric-cicd-670 plain r1", "cost_usd": 0.0248564, "input_tokens": 30344, "output_tokens": 829, "t": "2026-11-12T19:59:24"}
+{"what": "tox-dev__tox-3904 atlas r1", "cost_usd": 0.34720809999999996, "input_tokens": 714231, "output_tokens": 3404, "t": "2026-11-12T20:02:59"}
+{"what": "niconoe__pyinaturalist-643 atlas r1", "cost_usd": 0.1437453, "input_tokens": 202077, "output_tokens": 1000, "t": "2026-11-12T20:03:52"}
+{"what": "jsonpickle__jsonpickle-587 atlas r1", "cost_usd": 0.1096873, "input_tokens": 195633, "output_tokens": 1801, "t": "2026-11-12T20:04:18"}
+{"what": "pypa__virtualenv-2940 atlas r1", "cost_usd": 0.14341559999999998, "input_tokens": 260924, "output_tokens": 1813, "t": "2026-11-12T20:05:09"}
+{"what": "agronholm__anyio-975 atlas r1", "cost_usd": 0.2025642, "input_tokens": 284240, "output_tokens": 3813, "t": "2026-11-12T20:07:29"}
+{"what": "agronholm__anyio-975 plain r1", "cost_usd": 0.0891247, "input_tokens": 122199, "output_tokens": 4553, "t": "2026-11-12T20:07:55"}
+{"what": "pytest-dev__pyfakefs-1286 plain r1", "cost_usd": 0.109901, "input_tokens": 195448, "output_tokens": 4236, "t": "2026-11-12T20:10:30"}
+{"what": "pyjanitor-devs__pyjanitor-1593 plain r1", "cost_usd": 0.12437690000000001, "input_tokens": 193259, "output_tokens": 5789, "t": "2026-11-12T20:10:57"}
+{"what": "jsonpickle__jsonpickle-588 atlas r1", "cost_usd": 0.1527296, "input_tokens": 332018, "output_tokens": 2952, "t": "2026-11-12T20:11:39"}
+{"what": "scientific-python__docstub-123 plain r1", "cost_usd": 0.044953400000000004, "input_tokens": 48096, "output_tokens": 1834, "t": "2026-11-12T20:11:50"}
+{"what": "pytest-dev__pyfakefs-1286 atlas r1", "cost_usd": 0.16739110000000001, "input_tokens": 213811, "output_tokens": 2155, "t": "2026-11-12T20:12:33"}
+{"what": "stanfordnlp__dspy-8607 plain r1", "cost_usd": 0.0678743, "input_tokens": 101829, "output_tokens": 2915, "t": "2026-11-12T20:14:55"}
+{"what": "tobymao__sqlglot-6067 atlas r1", "cost_usd": 0.4662511, "input_tokens": 774705, "output_tokens": 2130, "t": "2026-11-12T20:15:08"}
