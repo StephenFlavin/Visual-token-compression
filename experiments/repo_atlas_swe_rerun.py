@@ -88,7 +88,13 @@ LEAK_EXTRA = (r"|/ra_swe\b|/pq/|/swe_rerun/(ds|ctx|git|co|validate|transcripts)\
 OUTSIDE = re.compile(r"/tmp/claude-0|scratchpad|/root/\.claude")
 
 
-def leak_hits(commands: list[str], pkg: str, own: str) -> list[str]:
+def own_prefixes(base: Path, repo: Path) -> list[str]:
+    """The run's own directory and the CLI's own per-run temp dir (background-task output files live in
+    /tmp/claude-0/<slug of the cwd>/<session>/tasks/)."""
+    return [str(base), "/tmp/claude-0/" + memory_slug(str(repo))]
+
+
+def leak_hits(commands: list[str], pkg: str, own) -> list[str]:
     """The first test's pattern (a release of the package, pip download/index, pypi.org, git fetch/clone, curl/wget,
     github, the dataset) plus any path into the scratch directories, the repository of this harness or a memory
     store. The run's own directory (``own``: checkout + venv) is removed from each command first, so its venv path
@@ -96,7 +102,9 @@ def leak_hits(commands: list[str], pkg: str, own: str) -> list[str]:
     rx = re.compile(sw.LEAK.pattern.replace("{pkg}", re.escape(pkg)) + LEAK_EXTRA, re.I)
     out = []
     for c in commands:
-        s = c.replace(own, "<RUN>") if own else c
+        s = c
+        for o in ([own] if isinstance(own, str) else own or []):
+            s = s.replace(o, "<RUN>")
         if rx.search(s) or OUTSIDE.search(s):
             out.append(c[:200])
     return out
@@ -339,13 +347,13 @@ def run_one(work: Path, t: dict, arm: str, rep: int, broken: set) -> dict:
             "image_tokens_formula": meta["image_tokens_formula"] if arm == "atlas" else 0,
             "pages_arrived": arm != "atlas" or first_in >= sw.PAGE_ARRIVAL * meta["image_tokens_formula"],
             "pages": meta["pages"] if arm == "atlas" else 0, "tools": {k: names.count(k) for k in sorted(set(names))},
-            "outside_paths": outside[:10], "leak_suspects": leak_hits(cmds + outside, pkg, str(base)),
+            "outside_paths": outside[:10], "leak_suspects": leak_hits(cmds + outside, pkg, own_prefixes(base, repo)),
             "memory_before": mem_before, "memory_after": mem_after,
             "memory_path_init": (init.get("memory_paths") or {}).get("auto"),
             "cli_version": init.get("claude_code_version"),
             "permission_denials": [str(x)[:200] for x in res.get("permission_denials") or []][:10],
             "model_usage": {m: round(v.get("costUSD", 0.0), 4) for m, v in (res.get("modelUsage") or {}).items()},
-            "final": (res.get("result") or "")[-300:], "dir_tag": run_dir_tag(iid, arm, rep)}
+            "final": (res.get("result") or "")[-300:], "dir_tag": run_dir_tag(iid, arm, rep), "repo_dir": repo.name}
 
 
 def run(work: Path, cap: float, max_runs: int | None, workers: int) -> None:
@@ -497,6 +505,10 @@ def analyse() -> str:
               f"* A3 fewer turns with the atlas (sign test p < 0.05): {'PASS' if a3 else 'FAIL'} "
               f"(lower on {s_turn['a_lower']} of {s_turn['n']}, p = {s_turn['p']:.4f})",
               f"* A4 atlas costs at least twice plain: {'PASS' if ratio >= 2 else 'FAIL'} ({ratio:.2f}x)"]
+    for r in rows:                     # re-apply the current pattern (amendment 1: the CLI's own task-output dir)
+        b = DEFAULT_WORK / "runs" / r["dir_tag"]
+        r["leak_suspects"] = leak_hits(r.get("leak_suspects") or [], r["id"].split("__")[1].split("-")[0],
+                                       own_prefixes(b, b / r["repo_dir"]))
     leaks = [(r["id"], r["arm"], r["rep"], r["leak_suspects"]) for r in rows if r.get("leak_suspects")]
     mem = [(r["id"], r["arm"], r["rep"]) for r in rows
            if r["memory_before"]["memory_files"] or r["memory_after"]["memory_files"]]

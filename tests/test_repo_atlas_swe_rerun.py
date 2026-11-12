@@ -73,3 +73,12 @@ def test_per_task_and_bootstrap():
     assert lo == hi == 6
     lo, hi = R.bootstrap_diff([1, 0, 2, 1], [1, 1, 1, 1])
     assert lo <= 0 <= hi
+
+
+def test_leak_hits_ignore_cli_task_output_dir():
+    base = Path("/tmp/claude-0/x/scratchpad/swe_rerun/runs/abc123")
+    repo = base / "pkg"
+    own = R.own_prefixes(base, repo)
+    cli = "/tmp/claude-0/" + R.memory_slug(str(repo)) + "/sess/tasks/b1.output"
+    assert R.leak_hits([f"tail -3 {cli}"], "pkg", own) == []
+    assert R.leak_hits(["tail -3 /tmp/claude-0/-tmp-other-run/sess/tasks/b1.output"], "pkg", own)

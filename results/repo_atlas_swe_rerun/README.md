@@ -126,6 +126,21 @@ price), seconds, tokens. Per task and arm: resolved runs of 2.
 * Refusals are reported, not worked around; prompts are not reworded. Tests are never edited or skipped.
 * A run with no result event is retried once (as in the first test).
 
+## Amendment 1 (2026-11-12, after the two smoke runs, before the third run)
+
+* Smoke runs: docstub-123 plain (not resolved, 11 turns, $0.20, 62 s) and pyjanitor-1593 atlas (resolved, 12 turns
+  over 3 result events, $3.61, 2,637 s: the agent ran the full test suite with `-n 4` in the background for ~30
+  minutes and waited on it; the atlas's 131k image tokens were re-read, and re-written after cache expiry, at each
+  turn). Pages arrived (140,782 first-call input vs 131,169 formula). Neither run's init event lists an auto-memory
+  path (memory off); no project store existed before or after either run.
+* **The leak scan flagged the CLI's own background-task output files** (`/tmp/claude-0/<slug of the run's cwd>/<session>/tasks/*.output`,
+  read by `tail` while waiting). That directory is now treated like the run's own directory
+  (`own_prefixes`); a path to any other run's temp dir is still a hit. Stored suspects are re-scanned with the current
+  pattern at analysis. No scoring rule changes.
+* The atlas run's cost bound is now 1.5 x $3.61 = $5.41 per run (the rule above). The $30 estimate assumed $0.68 per
+  atlas run; if more runs behave like this one, the cap may cut the second replication. The order already puts all
+  first runs first.
+
 ## Results
 
 *(to be filled in after the runs)*
