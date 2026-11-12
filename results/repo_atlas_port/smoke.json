@@ -1,0 +1,44 @@
+{
+ "what": "smoke",
+ "killed": null,
+ "cost": 0.5473138,
+ "reported": 0.5473138,
+ "est_all": 0.5927156,
+ "results": [
+  [
+   "success",
+   1,
+   0.471668
+  ],
+  [
+   "success",
+   3,
+   0.5473138
+  ]
+ ],
+ "est_at_results": [
+  0.4717,
+  0.5927
+ ],
+ "first_call_input": 94318,
+ "image_tokens_formula": 81834,
+ "pages_arrived": true,
+ "turns": {
+  "api_calls": 3,
+  "ack_calls": 1,
+  "cli_turns": 3,
+  "agent_s": 23,
+  "n_results": 2,
+  "usage": {
+   "input_tokens": 8,
+   "cache_creation_input_tokens": 95720,
+   "cache_read_input_tokens": 283309,
+   "output_tokens": 38
+  }
+ },
+ "store_files": [
+  "1bfaad42-9e3c-4378-b3cc-8f0f8da07e6f.jsonl"
+ ],
+ "built": true,
+ "session": true
+}
