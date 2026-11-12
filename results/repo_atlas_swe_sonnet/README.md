@@ -129,3 +129,64 @@ each, dspy-8607 9, others 0). Installs took 1-8 s, the two test runs together 2-
 virtualenv-2940 about 4 minutes, run beside Q1's and the port test's agents), each under the 300 s test timeout.
 
 ## Results
+
+**Complete (2026-11-12, 21:25 UTC): 64 of 64 runs, $11.38 of the $20 cap** (gate $0.63, agent runs $10.75: plain
+$2.27, atlas $8.47). `summary.md` is the runner's `analyse` output on these rows, with every run per task.
+
+**The atlas does not help Sonnet either: it solves one task-run fewer than plain, at 3.7 times the cost.**
+
+| | Sonnet plain | Sonnet atlas | Q1 Opus plain | Q1 Opus atlas | PQ Sonnet medium + atlas brief |
+|---|---|---|---|---|---|
+| task-runs solved | **14 of 32** | **13 of 32** | 19 of 32 | 17 of 32 | 8 of 16 (1 run) |
+| tasks solved in both / one / neither run | 6 / 2 / 8 | 6 / 1 / 9 | 9 / 1 / 6 | 8 / 1 / 7 | - |
+| run 1 / run 2 | 6 / 8 of 16 | 7 / 6 of 16 | 10 / 9 | 9 / 8 | - |
+| median turns per run | 7.5 | 6 | 11 | 11.5 | 6 |
+| mean (median) cost per run | $0.07 ($0.07) | $0.26 ($0.19) | $0.27 ($0.24) | $0.83 ($0.61) | $0.05 ($0.04) |
+| median seconds per run | 41 | 42 | 82 | 103 | 29 |
+
+* **Solved, paired over 16 tasks:** 15 tasks tie on resolved runs (0-2); one differs, tox-3904, in plain's favour
+  (plain no then yes, atlas no twice). Sign test p = 1.0; no task is solved in both runs by one arm only (McNemar
+  0 to 0, p = 1.0); atlas minus plain = -1 of 32 task-runs, bootstrap 95% interval over tasks -3 .. 0.
+* **Turns:** the atlas takes fewer on 11 of 14 untied tasks (median of per-task means 6 vs 8.25), sign test
+  p = 0.057: a lean, not the pre-registered p < 0.05. Seconds: no difference (atlas faster on 7 of 16).
+* **Cost:** the atlas costs more on all 16 tasks, $0.26 against $0.07 per run (3.72x); median input 352k tokens
+  against 95k per run.
+* **Flips between run 1 and run 2:** plain 2 of 16 (tox-3904 no/yes, pyjanitor-1593 no/yes), atlas 1 of 16
+  (pyjanitor-1593 yes/no). Within run 1 the atlas is ahead 7 to 6, within run 2 behind 6 to 8: single runs of 16
+  tasks swing by 1-2 task-runs either way.
+* **Against Opus (shown beside, not pooled):** Sonnet with the atlas (13) stays below Opus plain (19) and Opus with
+  the atlas (17); the 6-task-run gap is mostly tasks Opus solves in both runs and Sonnet never: jsonpickle-587 (Opus
+  plain only), anyio-975 (Opus 3 of 4 runs), tox-3904 (Opus 4 of 4; Sonnet plain 1 of 2, atlas 0 of 2) and pyjanitor-1593 (Opus 4 of 4; Sonnet 1 of 2 in
+  each arm).
+  Sonnet is faster and cheaper per run than Opus in either arm: Sonnet with the atlas costs about what Opus plain
+  costs ($0.26 against $0.27) and solves 6 task-runs fewer. Sonnet does not use the atlas to explore less than it
+  already does: its plain runs are already short (median 7.5 turns, 41 s), and its turns with the atlas (6) are
+  half Opus's (11.5).
+* **The plan-quality test's Sonnet** (medium effort, a written brief from an atlas planner, one run) solved 8 of 16:
+  fromager-1124, which no arm here and no Opus run solved, and not sqlglot-5359, which every Sonnet run here solved.
+
+Predictions: **S1 PASS** (gate 20/20 without re-rendering). **S2 PASS** (atlas minus plain = -1 of 32, under 3).
+**S3 PASS** (Sonnet atlas 13 against Opus plain 19 of 32). **S4 PASS** (3.72x the cost per run).
+
+**Checks.**
+* *Pages:* every atlas run's first turn held all its pages (input >= 97% of the image-token formula; 0 dropped).
+  Every run was served by `claude-sonnet-5-5` only.
+* *Memory:* no run's init event names an auto-memory path; no project store existed before any run or held any file
+  after it (64 of 64).
+* *Leaks:* the stored scan flagged 3 runs, all read by hand and benign: fabric-cicd-670 atlas r1 (`pip install
+  fabric-cicd` is text the agent grepped and edited in the README), sqlglot-6067 plain r1 and tox-3904 plain r1 (the
+  run's own directory written with a glob or a variable, and the CLI's own background-task output file). A wider
+  scan of every tool call in all 64 transcripts (pip, uv, curl, wget, http, github, git fetch/clone/log/show, any
+  other run's directory, Q1's or the first test's directories, this repository, `~/.claude`) found no download, no
+  package index, no other run's or test's files; the hits were `git log` / `git show` on the one-commit checkout
+  (no history to read) and the agents' own scratch files under `/tmp` (`/tmp/t1`, `/tmp/before`, `/tmp/after`; two
+  runs in flight could share such a name, which affects only what an agent saw of its own check, not grading).
+* *One run with two result events:* sqlglot-5359 atlas r1 (solved, 11 turns, 2,331 s, $0.87): the agent started the
+  test suite in the background and then waited on it with `until [ -z "$(pgrep -f 'pytest tests/test_executor')" ]`,
+  a loop that matches its own command line and never ends; the CLI ended it after about 30 minutes. Turns and cost
+  are summed over both events. While it ran, the second runs waited (run 1 of every task first, as pre-registered).
+* No refusals, no permission denials, no timeouts, no errors, no usage-limit stop; every patch applied.
+
+**Deviations:** none from the pre-registration. The gate's questions came out as 9 "definition after a tagged line",
+9 "parameter list" and 2 "constant" questions (the seeded draw over thirds of the atlas and kinds; both constants
+came from pyfakefs), not an equal split; both models answered every one exactly.
