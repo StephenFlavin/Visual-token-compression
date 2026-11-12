@@ -38,10 +38,11 @@ must then say why in RISKS.
 ## Tasks
 
 Fresh tickets with a known fix, from the benchmark the fresh-task test uses (SWE-rebench; its selection, clones
-and validation records are in `results/repo_atlas_swe/`): published after the model's training data, in
-repositories whose atlas fits, not located by a bare file list. Layers 1 and 2 need only the real fix, so they use
+and validation records are in `results/repo_atlas_swe/`), in repositories whose atlas fits and not located by a
+bare file list. They are not newer than the model (created 2025-07 to 2026-05; nothing later exists in the
+benchmark), so the bare-file-list screen is the guard against memorised tickets. Layers 1 and 2 need only the real fix, so they use
 every such ticket (target 40 or more). Layer 3 needs tests that run here, so it uses the tickets that test
-validated (17).
+validated and compared (16; its environments were deleted and must be rebuilt from its selection records).
 
 ## Planners (Opus 5.5, high effort; the same instruction and brief format)
 

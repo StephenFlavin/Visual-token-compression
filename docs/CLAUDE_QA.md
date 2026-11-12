@@ -70,7 +70,7 @@ the same model reading text, at lower cost.
 | Repo atlas: locating a bug fix | 8 SWE-bench tasks, 5 arms | every arm, even a bare file list, names the files; searching agent $0.04 per task | **Not separable** (memorised tasks); [details](#tested-a-whole-repository-as-page-images-repo-atlas) |
 | Repo atlas: questions about a repository | SWE-QA, 144 questions on requests, flask, pytest | atlas 75.4 = no code 75.6 (of 100); only the searching agent beats memory (79.1) | **Fails** on code the model knows |
 | Repo atlas: finding a security flaw | 12 fresh advisories in small libraries | atlas alone 9 of 12 against 10 for a bare file list; agent with atlas 10 against 7 for the plain agent, in half the turns, 45% dearer (p = 0.25) | **Atlas alone fails; with an agent: a hint, not settled** |
-| Repo atlas: hard fresh coding tasks | SWE-rebench tasks, plain / repo map / atlas | running | pending; [results/repo_atlas_swe](../results/repo_atlas_swe/README.md) |
+| Repo atlas: hard coding tasks solved end to end | 16 SWE-rebench tasks (3 or more files in the fix, not located by a bare file list), Claude Code plain / with a repo map / with the atlas | solved: plain 8, map 9, atlas 11 (3 tasks to 0 for the atlas, p = 0.25); fewer turns with the atlas (median 10 against 12.5, p = 0.006) at 2.6x the cost ($0.68 against $0.26) | **A hint, not settled**: one run per task; [results/repo_atlas_swe](../results/repo_atlas_swe/README.md) |
 | Repo atlas: migrating C to Rust | CRUST-Bench, plain / atlas / atlas only | pilot done, rest queued | pending; [results/repo_atlas_migrate](../results/repo_atlas_migrate/README.md) |
 | Orchestrator reads the atlas once, workers get briefs | not tested; plan-quality test queued ([PLAN_QUALITY_TEST.md](PLAN_QUALITY_TEST.md)) | on paper ~$1 for a 20-ticket backlog against ~$19 if every worker carries the atlas | **Proposed, test queued**; [details](#proposed-not-tested-an-orchestrator-that-reads-the-atlas-once) |
 | A local model (Qwen3.8-27B) | not run | plan and harness ready | **Planned**; [LOCAL_QWEN.md](LOCAL_QWEN.md) |
@@ -283,7 +283,7 @@ a pre-registration:
 | Locate the files of a bug fix ([pilot](../results/repo_atlas/README.md)) | 8 SWE-bench tasks | all changed files named: file list 8/8, repo map 8/8, atlas 8/8, text 4/4, searching agent 8/8 | $7.49 |
 | Answer questions about a repository ([SWE-QA](../results/repo_atlas_qa/README.md)) | 144 questions | judge score of 100: no code 75.6, repo map 76.1, atlas 75.4, text 75.5, searching agent 79.1 | $20.83 |
 | Find a security flaw ([fresh advisories](../results/repo_atlas_sec/README.md)) | 12 advisories | fixed file in the top 5: file list 10, atlas 9, searching agent 7, agent with atlas 10 | $20.70 |
-| Solve hard fresh coding tasks ([SWE-rebench](../results/repo_atlas_swe/README.md)) | up to 17 | running | |
+| Solve hard coding tasks ([SWE-rebench](../results/repo_atlas_swe/README.md)) | 16 | tasks solved: plain agent 8, with a repo map 9, with the atlas 11; median turns 12.5 / 12 / 10; cost per task $0.26 / $0.49 / $0.68 | $28.45 |
 | Migrate C to Rust ([CRUST-Bench](../results/repo_atlas_migrate/README.md)) | 2 of up to 10 so far | queued | |
 
 * **The atlas alone has not beaten a cheaper option anywhere.** On public repositories the model answers from
@@ -292,9 +292,15 @@ a pre-registration:
   them away.
 * **A searching agent is cheap.** Claude Code with read-only tools found the files of a fix in ~3 turns for $0.04,
   against $0.23 for the atlas and $1.18 for the same code as text.
-* **The one hint is the atlas as a head start for an agent:** in the security test the agent with the atlas found
-  3 flaws the plain agent missed and lost none, in a median of 8 turns instead of 18, at $0.67 against $0.46 per
-  task. With 12 tasks that is not significant (exact p = 0.25).
+* **The one hint is the atlas as a head start for an agent, and it showed twice.** In the security test the
+  agent with the atlas found 3 flaws the plain agent missed and lost none, in a median of 8 turns instead of 18,
+  at $0.67 against $0.46 per task. On the hard coding tasks it solved 3 tasks the plain agent did not and lost
+  none (11 against 8 of 16), in fewer turns on 11 of 12 untied tasks, at $0.68 against $0.26. Each is 3 to 0 with
+  one run per task (exact p = 0.25 each): the same direction twice, not yet more than noise. Fewer turns is the
+  solid part (p = 0.006); the atlas always costs more.
+* **The benchmark's tasks are not newer than the model** (created 2025-07 to 2026-05; nothing later exists in
+  SWE-rebench or SWE-bench-Live), so memorised tasks were screened out instead: 12 of 37 candidates were dropped
+  because a call with only the file list named every file of the fix.
 * **The existing repository-level security benchmark (VulnGym) cannot be used:** its smallest measured repository
   is 246k image tokens. Real services are mostly too large for one atlas.
 
