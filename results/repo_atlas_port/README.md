@@ -141,3 +141,26 @@ for per-test outcomes. Nothing in the tests is changed, skipped or weakened.
 * gitleaks has been public since 2018 and the model knows it well; RepoMod-Bench is from 2026. Both arms get that
   prior alike.
 * Another test (Q1's re-run) is running agent runs in the same container at the same time; both arms share that load.
+
+## Amendment 1 (2026-11-12, 20:25 UTC, after both first segments, before any grading)
+
+**The guard stopped both runs early.** The live estimator priced cache reads at $0.40/M (the brief's 0.1x of $4);
+the CLI's `total_cost_usd` prices them at $0.20/M (fitted exactly on the smoke runs, noted above, but the guard was
+left at the conservative rate). A port reads a large context on every call (atlas 22.7M cache-read tokens in 91 API
+calls, plain 16.2M in 67), so cache reads dominate and the estimate ran about 40% high. Checked from the
+transcripts (usage per assistant message, de-duplicated by message id, final output counts from `message_delta`;
+the de-duplication was right, only the price was off):
+
+| Arm | Stopped at (v1 estimate) | At the CLI's prices | Time | Turns | Cache reads | Cache writes | Output |
+|---|---|---|---|---|---|---|---|
+| atlas | $15.15 | $10.61 | 0.55 h | 93 | 22.70M | 0.42M | 198,481 |
+| plain | $15.06 | $10.90 | 0.67 h | 87 (at kill) | ~16.2M+ | ~0.41M | ~223k+ |
+
+The coordinator asked for a check before either was graded as cut. **Fix, the same for both arms:** the estimator
+now prices cache reads at $0.20/M; each run's first segment is repriced in `spend.jsonl` (a correction row), and the
+run is resumed once (`claude -p --resume <session id>`, same directory, message "The session was interrupted.
+Continue the task from where you left off; the files you wrote are still on disk.") with the rest of its $15 and its
+2.5 h. The resume is the one allowed by the restart rule; a run stopped again is cut. The plain arm reached the old
+guard about 7 minutes after the atlas arm, before the fixed runner could take over its live process, so both arms
+had exactly the same interruption (atlas resumed at 20:19, plain at 20:24 UTC). The interruption itself (one extra
+user message, cache possibly re-written) is a deviation from a single uninterrupted run in both arms.

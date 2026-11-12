@@ -57,8 +57,10 @@ WALL_S = 2.5 * 3600           # per agent run
 MAX_TURNS = 500               # effectively unlimited: the guard and the wall clock bind
 PAGE_ARRIVAL = 0.97
 XOR = 0x5A
-# Live guard prices, $ per million tokens (Opus 5.5 list: in 4, out 20, cache write 1.25x, cache read 0.1x)
-PRICE = {"input_tokens": 4.0, "cache_creation_input_tokens": 5.0, "cache_read_input_tokens": 0.4, "output_tokens": 20.0}
+# Live guard prices, $ per million tokens. Amendment 1: cache reads at $0.20/M, the rate the CLI's total_cost_usd
+# uses (fitted exactly on the smoke runs; the first runs priced them at $0.40/M and stopped early, see the README).
+PRICE = {"input_tokens": 4.0, "cache_creation_input_tokens": 5.0, "cache_read_input_tokens": 0.2, "output_tokens": 20.0}
+PRICE_V1 = {"input_tokens": 4.0, "cache_creation_input_tokens": 5.0, "cache_read_input_tokens": 0.4, "output_tokens": 20.0}
 USAGE_KEYS = tuple(PRICE)
 
 # RepoMod-Bench dataset/gitleaks/benchmark.yml, rendered into templates/v3/prompt_cli.md.j2 (generate_prompts.py)
@@ -75,6 +77,8 @@ ATLAS_TEXT = ("The {n_pages} page images above show the Go repository that is in
               "for orientation and read the files when exact text matters. Which page holds which file:\n\n{index}\n"
               "The task follows in the next message. Reply only OK.")
 ACK = "Reply only OK."
+RESUME_GUARD_MSG = ("The session was interrupted. Continue the task from where you left off; the files you wrote are "
+                    "still on disk.")
 RESUME_MSG = ("The session was interrupted by a machine restart. Continue the task from where you left off; the "
               "files you wrote are still on disk.")
 
@@ -655,12 +659,35 @@ def run_arm(arm: str, guard: float = GUARD, wall_s: float = WALL_S) -> dict:
     return load_state(arm)
 
 
-def run(arms: list[str]) -> None:
+def resume_guard(arm: str, guard: float = GUARD, wall_s: float = WALL_S) -> dict:
+    """Amendment 1: a run stopped by the v1 guard (cache reads priced at twice the CLI's rate) is repriced from its
+    stream and resumed once with --resume in the same directory, with the rest of the $15 budget and wall clock."""
+    st = load_state(arm)
+    if st["status"] != "ended" or st.get("resumed") or st["segments"][-1].get("killed") != "guard":
+        raise RuntimeError(f"{arm}: not a run stopped by the v1 guard ({st['status']}, resumed={st.get('resumed')})")
+    for seg in st["segments"]:
+        ev = parse_events((WORK / "runs" / arm / seg["stream"]).read_text().splitlines())
+        c = segment_cost(ev)
+        old = seg["cost"]
+        seg.update(cost=c["cost"], cost_tail_est=c["tail_est"], cost_v1=old, killed="guard_v1")
+        append("spend.jsonl", {"what": f"{PROJECT} {arm} segment {seg['n']} repriced (amendment 1)",
+                               "cost_usd": round(c["cost"] - old, 4), "v1": round(old, 4), "v2": round(c["cost"], 4)})
+    st["resumed"] = True
+    save_state(arm, st)
+    prior = sum(s.get("cost", 0.0) for s in st["segments"])
+    if spent() + (guard - prior) > CAP:
+        raise RuntimeError(f"{arm}: resuming could cross the cap")
+    print(f"[port] {arm}: resuming after the v1 guard (true cost so far ${prior:.2f})", flush=True)
+    segment(arm, st, [user_msg(RESUME_GUARD_MSG)], True, guard, wall_s)
+    return load_state(arm)
+
+
+def run(arms: list[str], resume: bool = False) -> None:
     errs = {}
 
     def go(a):
         try:
-            st = run_arm(a)
+            st = resume_guard(a) if resume else run_arm(a)
             segs = st["segments"]
             print(f"[port] {a}: {st['status']}, ${sum(s.get('cost', 0) for s in segs):.2f}, "
                   f"{sum(s.get('elapsed_s', 0) for s in segs) / 3600:.2f} h, killed={[s.get('killed') for s in segs]}",
@@ -772,7 +799,7 @@ def finish() -> None:
                "input_tokens": sum(tt["usage"][k] for k in USAGE_KEYS[:3]),
                "segments": [{k: s.get(k) for k in ("n", "resume", "killed", "cost", "cost_reported", "elapsed_s", "exit",
                                                    "usage_limit")} for s in st["segments"]],
-               "cut": any(s.get("killed") for s in st["segments"]),
+               "cut": bool(st["segments"][-1].get("killed")),            # the run's last stretch was stopped
                "cut_reason": [s.get("killed") for s in st["segments"] if s.get("killed")],
                "resumed": st.get("resumed", False),
                "subtypes": [r.get("subtype") for r in res], "final": (res[-1].get("result") or "")[-600:] if res else "",
@@ -925,6 +952,7 @@ def main(argv=None) -> int:
     s.add_argument("--no-atlas", action="store_true", help="cheap guard check without the pages")
     r = sub.add_parser("run")
     r.add_argument("--arms", nargs="+", default=list(ARMS), choices=ARMS)
+    r.add_argument("--resume-guard", action="store_true", help="amendment 1: resume runs stopped by the v1 guard")
     a = ap.parse_args(argv)
     if a.cmd == "prepare":
         prepare()
@@ -933,7 +961,7 @@ def main(argv=None) -> int:
     elif a.cmd == "smoke":
         smoke(a.guard, a.no_atlas)
     elif a.cmd == "run":
-        run(a.arms)
+        run(a.arms, a.resume_guard)
     elif a.cmd == "finish":
         finish()
     elif a.cmd == "grade":

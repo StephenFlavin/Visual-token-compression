@@ -73,7 +73,7 @@ def test_msg_usages_dedupes_and_takes_max():
 def test_usage_cost_prices():
     u = {"input_tokens": 1_000_000, "cache_creation_input_tokens": 1_000_000, "cache_read_input_tokens": 1_000_000,
          "output_tokens": 1_000_000}
-    assert P.usage_cost(u) == pytest.approx(4 + 5 + 0.4 + 20)
+    assert P.usage_cost(u) == pytest.approx(4 + 5 + 0.2 + 20)
 
 
 def test_segment_cost_reported_plus_tail():

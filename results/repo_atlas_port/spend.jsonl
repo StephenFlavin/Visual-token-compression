@@ -2,3 +2,7 @@
 {"what": "smoke2 partial-messages check", "cost_usd": 0.0114062}
 {"what": "gitleaks smoke_guard segment 0", "cost_usd": 0.0656, "reported": 0.06563139999999999, "tail_estimated": 0, "killed": "guard", "usage_limit": false, "t": "2026-11-12T19:40:06Z"}
 {"what": "gitleaks atlas segment 0", "cost_usd": 15.146, "reported": 0.4519896, "tail_estimated": 14.694, "killed": "guard", "usage_limit": false, "t": "2026-11-12T20:15:11Z"}
+{"what": "gitleaks atlas segment 0 repriced (amendment 1)", "cost_usd": -4.5393, "v1": 15.146, "v2": 10.6068}
+{"what": "gitleaks atlas segment 1", "cost_usd": 0.5888, "reported": 0.5887838, "tail_estimated": 0, "killed": null, "usage_limit": false, "t": "2026-11-12T20:20:37Z"}
+{"what": "gitleaks plain segment 0", "cost_usd": 15.0606, "reported": 0.0, "tail_estimated": 15.0606, "killed": "guard", "usage_limit": false, "t": "2026-11-12T20:22:00Z"}
+{"what": "gitleaks plain segment 0 repriced (amendment 1)", "cost_usd": -4.1624, "v1": 15.0606, "v2": 10.8982}
