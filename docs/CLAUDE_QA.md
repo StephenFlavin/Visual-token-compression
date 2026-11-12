@@ -224,6 +224,19 @@ by"), Opus 5.5 at high effort, 480 paired questions per arm ([results/claude_qa/
   answered the wrong way round in two of the three calls; text and the 88.2 pages did not.
 * Cost $17.52 at list price for 24 calls and calibration.
 
+### Tested: repeat calls on wording-sensitive questions
+
+Was the 2.2x pages' passive flip in Test A chance or density? Pre-registered: the same calls repeated byte for byte,
+5 per document at 117.6 and at 88.2 px² per character, 2 per document for text (27 new calls, $16.17 at list price;
+[results/claude_qa/repeat](../results/claude_qa/repeat/README.md)):
+
+* **Chance, and it hits both densities.** About 1 page call in 6 (2 of 15 at 117.6, 3 of 15 at 88.2) reads every
+  "A was paid n by B" sentence the wrong way round; the other calls get the passives right. Text never did (0 of 6).
+* **Pages lose a little on wording-sensitive questions at both densities:** small-word accuracy 97.2% (2.2x) and
+  96.2% (2.85x) against 100% for text, −2.8 points (95% CI −5.2 to −1.2) and −3.8 (−6.3 to −1.7) over calls.
+* **The lossless headline holds over repeats** on the original 120 questions: 99.9% at 2.2x, 99.3% at 2.85x, 100%
+  for text.
+
 **Where not to use it**
 
 * **Counting and aggregation over the whole input** ("how many errors are in this log?"): counts are the first thing
