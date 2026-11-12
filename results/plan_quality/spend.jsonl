@@ -213,3 +213,6 @@
 {"what": "L3 MAIF__arta-50 haiku_atlas", "cost_usd": 0.003916635, "t": "2026-11-12T16:21:13"}
 {"what": "L3 tobymao__sqlglot-5359 opus_atlas", "cost_usd": 0.1270902, "t": "2026-11-12T16:21:51"}
 {"what": "L3 tobymao__sqlglot-5359 sonnet_atlas", "cost_usd": 0.0381958, "t": "2026-11-12T16:22:10"}
+{"what": "L3 tobymao__sqlglot-5359 opus_tree", "cost_usd": 0.264951, "t": "2026-11-12T16:24:40"}
+{"what": "L3 tobymao__sqlglot-5359 haiku_atlas", "cost_usd": 0.00367901, "t": "2026-11-12T16:24:56"}
+{"what": "L3 pytest-dev__pyfakefs-1286 haiku_atlas", "cost_usd": 0.007374530000000001, "t": "2026-11-12T16:26:30"}
