@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Phase 2: train one CRNN line reader from scratch per (scheme, em); write held-out CER rows.
 
-  python experiments/phase2_train.py --run-name main                    # full default grid
-  python experiments/phase2_train.py --smoke --schemes latin --ems 8 5  # quick benchmark
-  python experiments/phase2_train.py --mixed-ems 4 5 6 7 8 10 --parallel 3 --run-name mixed
+  python experiments/phases/phase2_train.py --run-name main                    # full default grid
+  python experiments/phases/phase2_train.py --smoke --schemes latin --ems 8 5  # quick benchmark
+  python experiments/phases/phase2_train.py --mixed-ems 4 5 6 7 8 10 --parallel 3 --run-name mixed
 
 Stages: (1) pre-render every (scheme, em) dataset into results/phase2/cache/ using
 ``--render-workers`` processes; (2) train ``--parallel`` runs concurrently, each with
@@ -21,7 +21,7 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import asdict
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from vbpe.crnn.train import TrainConfig, default_out, load_data, train_model  # noqa: E402
 

@@ -423,7 +423,7 @@ multi-token prediction module it ships with. Design, predictions and what each o
 [LOCAL_QWEN.md](LOCAL_QWEN.md), which also has the full runbook; the session prompt is at the top of
 [HANDOFF.md](../HANDOFF.md).
 
-**Nothing here has run against a real model.** `experiments/local_qa.py` passed its tests against a mock server
+**Nothing here has run against a real model.** `experiments/claude_qa/local_qa.py` passed its tests against a mock server
 only. The first real request (step 2 of the prompt) is the check.
 
 * **Different stack from sections 1-9:** no PyTorch job. The model runs in llama.cpp's `llama-server` (Windows CUDA
@@ -438,7 +438,7 @@ only. The first real request (step 2 of the prompt) is the check.
 * **Time (estimate):** under an hour of GPU time for the 15 arms with thinking off, plus downloads and setup.
 * **Sending results back:**
 ```bash
-python experiments/local_qa.py analyse
+python experiments/claude_qa/local_qa.py analyse
 git add results/local_qa docs/gpu/LOCAL_QWEN.md && git commit -m "Local Qwen3.8-27B: <what ran>"
 git pull --rebase origin claude/validation-harness && git push origin claude/validation-harness
 ```

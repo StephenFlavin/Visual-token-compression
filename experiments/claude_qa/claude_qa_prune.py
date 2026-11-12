@@ -10,11 +10,11 @@ Arms (Opus, effort high, one call per arm and document, all 160 questions in one
   none, text, page118 / page88 / page59 (pages at 117.6 / 88.2 / 58.8 px²/char), ptext22 (pruned text, tokens matched to
   page118), ptext15 (lightly pruned text, ~1.5x fewer tokens than text), ppage15 (ptext15's document as 117.6 pages).
 
-    python3 experiments/claude_qa_prune.py build             # documents, questions, pruning probabilities (CPU, cached)
-    python3 experiments/claude_qa_prune.py check             # free survival checks + token / cost estimate
-    python3 experiments/claude_qa_prune.py calibrate --yes   # small unscored calls: Claude tokens per char of pruned text
-    python3 experiments/claude_qa_prune.py run --docs 0 --yes
-    python3 experiments/claude_qa_prune.py analyse
+    python3 experiments/claude_qa/claude_qa_prune.py build             # documents, questions, pruning probabilities (CPU, cached)
+    python3 experiments/claude_qa/claude_qa_prune.py check             # free survival checks + token / cost estimate
+    python3 experiments/claude_qa/claude_qa_prune.py calibrate --yes   # small unscored calls: Claude tokens per char of pruned text
+    python3 experiments/claude_qa/claude_qa_prune.py run --docs 0 --yes
+    python3 experiments/claude_qa/claude_qa_prune.py analyse
 Pre-registration and results: results/claude_qa/prune/README.md.
 """
 from __future__ import annotations
@@ -29,9 +29,9 @@ from pathlib import Path
 
 import numpy as np
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
-sys.path.insert(0, str(ROOT / "experiments"))
+sys.path.insert(0, str(ROOT / "experiments" / "claude_qa"))
 import claude_qa_render as R  # noqa: E402
 from vbpe import config  # noqa: E402
 

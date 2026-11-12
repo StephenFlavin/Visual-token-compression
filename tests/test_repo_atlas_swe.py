@@ -1,9 +1,9 @@
-"""Pure functions of experiments/repo_atlas_swe.py: selection rule, gold files, grading, scoring, first message."""
+"""Pure functions of experiments/atlas/repo_atlas_swe.py: selection rule, gold files, grading, scoring, first message."""
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path[:0] = [str(ROOT), str(ROOT / "experiments")]
+sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
 
 import repo_atlas_swe as S  # noqa: E402
 

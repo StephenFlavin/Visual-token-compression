@@ -1,9 +1,9 @@
-"""Pure functions of experiments/repo_atlas_migrate.py (no cargo, no Claude calls)."""
+"""Pure functions of experiments/atlas/repo_atlas_migrate.py (no cargo, no Claude calls)."""
 import base64
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "experiments"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "experiments" / "atlas"))
 import repo_atlas_migrate as M  # noqa: E402
 
 

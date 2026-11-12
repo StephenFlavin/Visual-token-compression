@@ -1,11 +1,11 @@
-"""Pure parts of experiments/claude_qa_prune.py: small-word facts, keep thresholds, survival check, parsing."""
+"""Pure parts of experiments/claude_qa/claude_qa_prune.py: small-word facts, keep thresholds, survival check, parsing."""
 import re
 import sys
 from pathlib import Path
 
 import numpy as np
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "experiments"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "experiments" / "claude_qa"))
 import claude_qa_prune as P  # noqa: E402
 
 NUM = re.compile(r"\d+")

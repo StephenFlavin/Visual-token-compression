@@ -1,4 +1,4 @@
-"""Tests for experiments/claude_qa_repeat.py (no Claude calls, no rendering)."""
+"""Tests for experiments/claude_qa/claude_qa_repeat.py (no Claude calls, no rendering)."""
 from __future__ import annotations
 
 import sys
@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "experiments"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "experiments" / "claude_qa"))
 import claude_qa_repeat as Q  # noqa: E402
 
 

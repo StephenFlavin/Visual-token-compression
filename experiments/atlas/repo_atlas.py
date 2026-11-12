@@ -5,8 +5,8 @@ whitespace is removed, indentation that carries meaning is kept as ``»``), join
 file, and rendered as pages at the hooks' density (88.2 px² per character). Next to the pages it writes an index
 (which pages hold which file) that costs a few hundred text tokens.
 
-    python3 experiments/repo_atlas.py stats <repo dir> [<repo dir> ...]         # sizes only, no rendering
-    python3 experiments/repo_atlas.py build <repo dir> --out <dir>               # pages + index.json + index.txt
+    python3 experiments/atlas/repo_atlas.py stats <repo dir> [<repo dir> ...]         # sizes only, no rendering
+    python3 experiments/atlas/repo_atlas.py build <repo dir> --out <dir>               # pages + index.json + index.txt
 
 Not one image: a model reads pages of at most 1932 px, and a request above ~175k image tokens silently loses its
 first pages (AGENTS.md), so ``fits`` in the stats means the atlas is at most FIT_TOKENS image tokens.
@@ -20,7 +20,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "readhook")]
 from vbhook import render  # noqa: E402
 from vbhook.minify import minify  # noqa: E402

@@ -1,10 +1,10 @@
-"""Pure functions of experiments/plan_quality.py: brief parsing and validation, existence checks, file / function
+"""Pure functions of experiments/atlas/plan_quality.py: brief parsing and validation, existence checks, file / function
 scores, fix size, rank correlation, tiers, policies, collisions, judge parsing, groups."""
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path[:0] = [str(ROOT), str(ROOT / "experiments")]
+sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
 
 import plan_quality as P  # noqa: E402
 

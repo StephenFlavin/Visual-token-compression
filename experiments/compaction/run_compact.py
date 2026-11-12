@@ -38,7 +38,7 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path[:0] = [str(ROOT), str(ROOT / "experiments"), str(ROOT / "experiments" / "readhook")]
+sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "claude_qa"), str(ROOT / "experiments" / "readhook")]
 import claude_qa_research as R  # noqa: E402
 import claude_qa_render as Q  # noqa: E402
 

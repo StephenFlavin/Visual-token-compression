@@ -17,8 +17,8 @@ Questions (all with exact answers, scored automatically):
 Tokens come from the CLI's usage report (input incl. cache creation / read). Calls go through
 vbpe.claude_eval (isolated, no tools, cached on disk). Paired exact McNemar test, text vs image.
 
-    python3 experiments/claude_qa_render.py --chars 500000 --dry-run      # build pages + questions, no calls
-    python3 experiments/claude_qa_render.py --chars 500000 --yes
+    python3 experiments/claude_qa/claude_qa_render.py --chars 500000 --dry-run      # build pages + questions, no calls
+    python3 experiments/claude_qa/claude_qa_render.py --chars 500000 --yes
 """
 from __future__ import annotations
 
@@ -31,7 +31,7 @@ from pathlib import Path
 
 import numpy as np
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 from vbpe import config, corpus, metrics  # noqa: E402
 from vbpe.layout import render_page  # noqa: E402
@@ -301,7 +301,7 @@ def render_pages(doc: str, budget: float, page_px: int = 0) -> tuple[list, list[
     of that side (a multiple of 28; the high-resolution tier allows 1932 = 69 x 69 = 4761 visual tokens), the last
     page cut to the height its text needs."""
     from vbpe.schemes import get_scheme
-    sys.path.insert(0, str(ROOT / "experiments"))
+    sys.path.insert(0, str(ROOT / "experiments" / "phases"))
     from phase1_sweep import canvas_size
     sch = get_scheme("latin")
     P = config.CLAUDE_PATCH

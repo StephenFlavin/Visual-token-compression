@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "experiments"))
+sys.path.insert(0, str(ROOT / "experiments" / "claude_qa"))
 import local_qa as LQ  # noqa: E402
 
 DOC = " ".join(f"Sentence {i} of the test document has the value {i * 7} in it." for i in range(400))

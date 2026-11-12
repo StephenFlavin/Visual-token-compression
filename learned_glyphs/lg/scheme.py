@@ -1,7 +1,7 @@
 """Bridge (E3): a learned (or fixed) GlyphBank as a vbpe ``Scheme`` -- a bitmap font.
 
 ``LearnedGlyphScheme(bank, alphabet)`` renders text through the unchanged vbpe layout engine, so a
-bank can be scored by the Phase-2 pipeline (``experiments/phase2_train.py``) exactly like
+bank can be scored by the Phase-2 pipeline (``experiments/phases/phase2_train.py``) exactly like
 latin / subst, at any em.
 
 Units and labels

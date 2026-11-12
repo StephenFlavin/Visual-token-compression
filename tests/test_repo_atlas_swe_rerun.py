@@ -1,9 +1,9 @@
-"""Pure functions of experiments/repo_atlas_swe_rerun.py: run order, neutral dirs, leak scan, memory store, stats."""
+"""Pure functions of experiments/atlas/repo_atlas_swe_rerun.py: run order, neutral dirs, leak scan, memory store, stats."""
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path[:0] = [str(ROOT), str(ROOT / "experiments")]
+sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
 
 import repo_atlas_swe_rerun as R  # noqa: E402
 

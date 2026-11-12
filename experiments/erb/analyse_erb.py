@@ -16,7 +16,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 import erb_common as E  # noqa: E402
 
-sys.path.insert(0, str(E.ROOT / "experiments"))
+sys.path.insert(0, str(E.ROOT / "experiments" / "claude_qa"))
 from analyse_claude_qa import mcnemar, paired_diff_ci  # noqa: E402
 from run_erb import ARMS, RUNS, cost  # noqa: E402
 

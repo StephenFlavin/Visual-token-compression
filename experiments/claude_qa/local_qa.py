@@ -5,11 +5,11 @@ llama-server running Qwen3.8-27B with its vision projector. Same documents, plan
 smaller documents (200k chars, 100 questions: a 24 GB card holds far less context) and the questions sent in
 batches after the document, so the server's prefix cache processes the document once per arm.
 
-    python3 experiments/local_qa.py run --dry-run                       # sizes only, no server
-    python3 experiments/local_qa.py run --doc 0 --arms text page118     # needs the server (--base-url)
-    python3 experiments/local_qa.py run --doc 0 1 2                     # all arms: none text page118 page88 page59
-    python3 experiments/local_qa.py speed --label plain                 # generation speed (run once per server setup)
-    python3 experiments/local_qa.py analyse                             # table, verdicts -> results/local_qa/<run>/summary.md
+    python3 experiments/claude_qa/local_qa.py run --dry-run                       # sizes only, no server
+    python3 experiments/claude_qa/local_qa.py run --doc 0 --arms text page118     # needs the server (--base-url)
+    python3 experiments/claude_qa/local_qa.py run --doc 0 1 2                     # all arms: none text page118 page88 page59
+    python3 experiments/claude_qa/local_qa.py speed --label plain                 # generation speed (run once per server setup)
+    python3 experiments/claude_qa/local_qa.py analyse                             # table, verdicts -> results/local_qa/<run>/summary.md
 
 Rows: results/local_qa/<run>/runs.jsonl (one per document and arm; resumable: finished arms are skipped) and
 speed.jsonl. No Claude calls.
@@ -30,9 +30,9 @@ from pathlib import Path
 
 import numpy as np
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
-sys.path.insert(0, str(ROOT / "experiments"))
+sys.path.insert(0, str(ROOT / "experiments" / "claude_qa"))
 import analyse_claude_qa as AN  # noqa: E402
 import claude_qa_render as R  # noqa: E402
 from vbpe import config, metrics  # noqa: E402

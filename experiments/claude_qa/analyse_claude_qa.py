@@ -6,7 +6,7 @@ accuracy per question kind (Wilson 95% CI), the paired difference text - image (
 paired proportions, 95%), exact McNemar on the discordant pairs, and the pre-registered verdicts.
 Arms whose input tokens fall short of the image-token formula (pages dropped) are excluded and listed.
 
-    python3 experiments/analyse_claude_qa.py results/claude_qa/qav2_*
+    python3 experiments/claude_qa/analyse_claude_qa.py results/claude_qa/qav2_*
 """
 from __future__ import annotations
 

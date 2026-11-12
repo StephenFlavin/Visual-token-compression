@@ -33,7 +33,7 @@ reasons irrelevant to real rendering / VLM encoders. Guards (all mandatory):
 3. **Transfer (E2):** freeze a learned bank, train a FRESH reader from scratch (same budget as Phase 2).
    Measures intrinsic legibility, not reader/glyph co-adaptation.
 4. **Bridge (E3):** export a learned bank as a vbpe `Scheme` (bitmap font) and run it through the unchanged
-   Phase-2 pipeline (`experiments/phase2_train.py`), so it is scored exactly like latin/subst.
+   Phase-2 pipeline (`experiments/phases/phase2_train.py`), so it is scored exactly like latin/subst.
 
 ## Experiments
 | ID | What | Purpose |

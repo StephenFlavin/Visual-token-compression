@@ -1,10 +1,10 @@
-"""Pure functions of experiments/repo_atlas_swe_sonnet.py (Q3): isolation from Q1, order, bound, gate questions and
+"""Pure functions of experiments/atlas/repo_atlas_swe_sonnet.py (Q3): isolation from Q1, order, bound, gate questions and
 scoring. No network, no Claude calls."""
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path[:0] = [str(ROOT), str(ROOT / "experiments")]
+sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
 
 import repo_atlas_swe as sw  # noqa: E402
 import repo_atlas_swe_rerun as rr  # noqa: E402

@@ -1,18 +1,18 @@
 """Sonnet with the repo atlas on the hard coding tasks (REPO_ATLAS_PLAN.md Q3): plain vs atlas, two fresh runs per
 task and arm, Claude Code on Sonnet 5.5 at high effort.
 
-A thin runner over Q1's (``experiments/repo_atlas_swe_rerun.py``, imported, not edited): same 16 tasks, prompt,
+A thin runner over Q1's (``experiments/atlas/repo_atlas_swe_rerun.py``, imported, not edited): same 16 tasks, prompt,
 tools, flags, atlas pages, environments, grading, memory-off, index blocking and leak scan. What this file adds: the
 model as a parameter, its own work dir and results dir, its own run-directory hash and order seed, its own cost
 bound, a legibility gate (20 lookups on two atlases, Sonnet against Opus) and an analysis that shows Q1's Opus rows
 and the plan-quality test's Sonnet rows beside its own (never pooled).
 
-    python3 experiments/repo_atlas_swe_sonnet.py gate-build                    # the 20 lookup questions (free)
-    python3 experiments/repo_atlas_swe_sonnet.py gate --models claude-sonnet-5-5 claude-opus-5-5 [--cap 1]
-    python3 experiments/repo_atlas_swe_sonnet.py validate [--workers 2]
-    python3 experiments/repo_atlas_swe_sonnet.py order
-    python3 experiments/repo_atlas_swe_sonnet.py run --cap 20 [--max-runs N] [--workers 2]
-    python3 experiments/repo_atlas_swe_sonnet.py analyse                       # standalone, on whatever rows exist
+    python3 experiments/atlas/repo_atlas_swe_sonnet.py gate-build                    # the 20 lookup questions (free)
+    python3 experiments/atlas/repo_atlas_swe_sonnet.py gate --models claude-sonnet-5-5 claude-opus-5-5 [--cap 1]
+    python3 experiments/atlas/repo_atlas_swe_sonnet.py validate [--workers 2]
+    python3 experiments/atlas/repo_atlas_swe_sonnet.py order
+    python3 experiments/atlas/repo_atlas_swe_sonnet.py run --cap 20 [--max-runs N] [--workers 2]
+    python3 experiments/atlas/repo_atlas_swe_sonnet.py analyse                       # standalone, on whatever rows exist
 
 Rows: results/repo_atlas_swe_sonnet/{gate_questions.json,gate.jsonl,validate,runs,spend}.jsonl. Work dir in the
 scratchpad (``swe_sonnet``): links to the first test's atlas builds and dataset and to today's git stores (read only).
@@ -33,8 +33,8 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path[:0] = [str(ROOT), str(ROOT / "experiments")]
+ROOT = Path(__file__).resolve().parents[2]
+sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
 
 import repo_atlas_swe as sw  # noqa: E402
 import repo_atlas_swe_rerun as rr  # noqa: E402

@@ -13,10 +13,10 @@ Arms (Claude Code headless, Opus 5.5, --effort high, tools Bash/Read/Edit/Write,
   atlas  the atlas pages (repo_atlas.build) as images, a note on the format, index.txt, one sentence on how to use
          them, then the task prompt
 
-    python3 experiments/repo_atlas_swe.py inspect                 # dataset sizes and dates (no calls)
-    python3 experiments/repo_atlas_swe.py select [--workers 2]    # fit, closed-book screen, local validation
-    python3 experiments/repo_atlas_swe.py run --cap 35 [--ids ...] [--max-tasks N]
-    python3 experiments/repo_atlas_swe.py analyse
+    python3 experiments/atlas/repo_atlas_swe.py inspect                 # dataset sizes and dates (no calls)
+    python3 experiments/atlas/repo_atlas_swe.py select [--workers 2]    # fit, closed-book screen, local validation
+    python3 experiments/atlas/repo_atlas_swe.py run --cap 35 [--ids ...] [--max-tasks N]
+    python3 experiments/atlas/repo_atlas_swe.py analyse
 
 Rows: results/repo_atlas_swe/{funnel,validate,screen,runs,spend}.jsonl. Clones, venvs, pages and transcripts in
 --work (scratchpad), never in the repository.
@@ -38,8 +38,8 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path[:0] = [str(ROOT), str(ROOT / "experiments")]
+ROOT = Path(__file__).resolve().parents[2]
+sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
 
 OUT = ROOT / "results" / "repo_atlas_swe"
 DEFAULT_WORK = Path(os.environ.get("RA_SWE_WORK", "/tmp/claude-0/-home-user-visual-bpe/"

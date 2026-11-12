@@ -8,7 +8,7 @@ as approved by the user before the run.*
 ## The use case
 
 A backlog of tickets against one service. One orchestrator session loads the repo atlas
-(`experiments/repo_atlas.py`), reads every ticket and writes a brief per ticket. Worker subagents get their brief,
+(`experiments/atlas/repo_atlas.py`), reads every ticket and writes a brief per ticket. Worker subagents get their brief,
 not the atlas, and run in parallel; after a batch merges the atlas is rebuilt and the next phase is planned. Cost
 reasoning and what earlier tests showed: [CLAUDE_QA.md](CLAUDE_QA.md), "Proposed, not tested".
 

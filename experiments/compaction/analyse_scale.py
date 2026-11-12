@@ -17,7 +17,7 @@ from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "experiments"))
+sys.path.insert(0, str(ROOT / "experiments" / "claude_qa"))
 from analyse_claude_qa import mcnemar, paired_diff_ci  # noqa: E402
 
 OUT = ROOT / "results" / "compaction_scale"

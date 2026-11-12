@@ -1,8 +1,8 @@
 # Repo atlas on hard coding tasks, again: two clean runs per task and arm (Q1)
 
 *Pre-registered 2026-11-12, before the first scored agent run. Design: `docs/claude/REPO_ATLAS_PLAN.md`, "Queued
-(2026-11-12)", Q1. Code: `experiments/repo_atlas_swe_rerun.py` (tests `tests/test_repo_atlas_swe_rerun.py`), which
-imports the first test's runner `experiments/repo_atlas_swe.py` unchanged. First test:
+(2026-11-12)", Q1. Code: `experiments/atlas/repo_atlas_swe_rerun.py` (tests `tests/test_repo_atlas_swe_rerun.py`), which
+imports the first test's runner `experiments/atlas/repo_atlas_swe.py` unchanged. First test:
 [results/repo_atlas_swe/README.md](../repo_atlas_swe/README.md). Results go below the "Results" heading; nothing above
 it changes after the first scored run, except dated amendments.*
 

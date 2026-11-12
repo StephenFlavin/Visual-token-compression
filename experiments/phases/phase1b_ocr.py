@@ -9,8 +9,8 @@ Recognition-only on exact line strips (no detection), see vbpe/readers/rapidocr_
 
 Rows use the Phase-1 schema so ``python3 -m vbpe.analysis`` works on the output.
 
-    python3 experiments/phase1b_ocr.py --variant natural --n-passages 6
-    python3 experiments/phase1b_ocr.py --variant scrambled --n-passages 3
+    python3 experiments/phases/phase1b_ocr.py --variant natural --n-passages 6
+    python3 experiments/phases/phase1b_ocr.py --variant scrambled --n-passages 3
 """
 from __future__ import annotations
 
@@ -22,7 +22,7 @@ import time
 from multiprocessing import Pool
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from vbpe import config  # noqa: E402
 from vbpe.metrics import cer, normalize  # noqa: E402
@@ -33,7 +33,7 @@ DEFAULT_BUDGETS = [12, 14, 16, 18, 20, 23, 26, 30, 34, 40, 48, 60, 90]
 
 def _job(args):
     passage, variant, scheme_name, budget, run, img_dir = args
-    from experiments.phase1_sweep import canvas_size
+    from experiments.phases.phase1_sweep import canvas_size
     from vbpe.layout import render_page
     from vbpe.readers.rapidocr_reader import cer_nospace, read_lines
     from vbpe.schemes import get_scheme

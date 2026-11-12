@@ -124,8 +124,8 @@ All text is ASCII after corpus cleaning. Data in `data/` (git-ignored), outputs 
 | C substitution scheme | `vbpe/schemes/substitution.py`, `assets/cjk_symbols.txt`, `tests/test_substitution.py` | Dictionary interface (stub until A lands) |
 | D quadrant scheme | `vbpe/schemes/quadrant.py`, `tests/test_quadrant.py` | layout |
 | E1 Claude client + vision checks | `vbpe/claude_eval.py`, `scripts/check_claude_vision.py`, `tests/test_claude_eval.py`, `docs/claude/claude-eval-notes.md` | — |
-| E2 Phase-1 runner + analysis | `experiments/phase1_sweep.py`, `vbpe/analysis.py`, `tests/test_analysis.py` | E1 interface (fake transcriber for dry-run) |
-| F Phase-2 CRNN | `vbpe/crnn/*`, `experiments/phase2_train.py`, `tests/test_crnn.py` | layout, schemes, corpus interface |
+| E2 Phase-1 runner + analysis | `experiments/phases/phase1_sweep.py`, `vbpe/analysis.py`, `tests/test_analysis.py` | E1 interface (fake transcriber for dry-run) |
+| F Phase-2 CRNN | `vbpe/crnn/*`, `experiments/phases/phase2_train.py`, `tests/test_crnn.py` | layout, schemes, corpus interface |
 | G prior art | `docs/background/prior-art.md` | — |
 
 Integration (lead): merge, full tests, pilot → main Phase-1 sweep → Phase-2 grid → `docs/glyphs/RESULTS.md`.

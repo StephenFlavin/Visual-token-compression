@@ -1,7 +1,7 @@
 # Repo atlas, migration test: does the C project as page images help Claude Code migrate it to Rust?
 
 *Pre-registration, 2026-11-12, written and pushed before the first agent run. Runner:
-`experiments/repo_atlas_migrate.py` (tests `tests/test_repo_atlas_migrate.py`). Plan and earlier atlas results:
+`experiments/atlas/repo_atlas_migrate.py` (tests `tests/test_repo_atlas_migrate.py`). Plan and earlier atlas results:
 [docs/claude/REPO_ATLAS_PLAN.md](../../docs/claude/REPO_ATLAS_PLAN.md), [results/repo_atlas/README.md](../repo_atlas/README.md).*
 
 ## Results (2026-11-12)
@@ -174,7 +174,7 @@ rubiksolver, c_string, simple_lang, ...
 ## The atlas
 
 Every `.c` and `.h` file of the C project (all directories, the C project's own tests included, since the `plain` arm
-sees them too), minified and rendered by `experiments/repo_atlas.py`'s minifiers and renderer at 88.2 px² per
+sees them too), minified and rendered by `experiments/atlas/repo_atlas.py`'s minifiers and renderer at 88.2 px² per
 character, 1932 px wide, a `▶path◀` header per file and a line number on every 10th line, plus `index.txt` (file ->
 pages). `repo_atlas.collect` would have skipped C files under `test/`, `examples/` or `build/`-like directories, so this
 test collects the files itself (`build_atlas`); the minifier covers `.c` and `.h` (brace family), and no C file went

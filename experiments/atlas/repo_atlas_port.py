@@ -4,13 +4,13 @@ Benchmark: RepoMod-Bench (github.com/Modelcode-ai/mcode-benchmark, commit 73093f
 pytest suites that drive the built CLI. Project: ``gitleaks`` (Go -> Rust, v8.30.0 at ca20267, 35 tests). Design,
 pre-registration and results: results/repo_atlas_port/README.md; plan: docs/claude/REPO_ATLAS_PLAN.md (Q2).
 
-    python3 experiments/repo_atlas_port.py prepare             # atlas (pages + index) and its size (no Claude calls)
-    python3 experiments/repo_atlas_port.py reference           # build the Go original, run the hidden tests on it
-    python3 experiments/repo_atlas_port.py smoke               # cheap harness check ($0.60 guard)
-    python3 experiments/repo_atlas_port.py run --arms plain atlas    # agent runs (parallel); resumable after a restart
-    python3 experiments/repo_atlas_port.py finish              # copy ports/transcripts, audit, memory check (after runs)
-    python3 experiments/repo_atlas_port.py grade               # cargo build --release + the hidden pytest suite
-    python3 experiments/repo_atlas_port.py analyse             # summary.md + B1-B3
+    python3 experiments/atlas/repo_atlas_port.py prepare             # atlas (pages + index) and its size (no Claude calls)
+    python3 experiments/atlas/repo_atlas_port.py reference           # build the Go original, run the hidden tests on it
+    python3 experiments/atlas/repo_atlas_port.py smoke               # cheap harness check ($0.60 guard)
+    python3 experiments/atlas/repo_atlas_port.py run --arms plain atlas    # agent runs (parallel); resumable after a restart
+    python3 experiments/atlas/repo_atlas_port.py finish              # copy ports/transcripts, audit, memory check (after runs)
+    python3 experiments/atlas/repo_atlas_port.py grade               # cargo build --release + the hidden pytest suite
+    python3 experiments/atlas/repo_atlas_port.py analyse             # summary.md + B1-B3
 
 Arms (Claude Code headless, Opus 5.5, --effort high, tools Bash/Read/Edit/Write, $15 guard, 2.5 h wall clock):
 ``plain`` (the benchmark's prompt; the Go repository in ``workspace/src``), ``atlas`` (first message: the Go source as
@@ -40,8 +40,8 @@ import uuid
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path[:0] = [str(ROOT), str(ROOT / "experiments")]
+ROOT = Path(__file__).resolve().parents[2]
+sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
 WORK = Path(os.environ.get("PORT_WORK", "/tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port"))
 OUT = ROOT / "results" / "repo_atlas_port"
 PROJECT = "gitleaks"
@@ -857,7 +857,7 @@ def analyse() -> str:
     grades = {r["arm"]: r for r in jl(OUT / "grades.jsonl")}
     rows = {a: {**runs[a], **grades[a]} for a in ARMS if a in runs and a in grades}
     lines = ["# Repo atlas, Q2 (gitleaks Go -> Rust): summary", "",
-             "*Written by `experiments/repo_atlas_port.py analyse`. One run per arm: an anecdote, not a measurement.*", "",
+             "*Written by `experiments/atlas/repo_atlas_port.py analyse`. One run per arm: an anecdote, not a measurement.*", "",
              "| Arm | Tests passed | Builds | Concurrent | thread/rayon/async | Mutex / RwLock / Arc / channels | `unsafe` | "
              "Rust lines | Turns | CLI turns | API calls | Cost | Hours | Output tokens | Cut |",
              "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]

@@ -5,7 +5,7 @@ Launches one ``phase2_train.py`` process per (scheme, em) job, longest (largest 
 processes (e.g. an earlier grid still finishing) are measured from /proc CPU deltas and subtracted.
 All jobs append to the same run (default phase2_main); phase2_train resumes per (scheme, em).
 
-    nohup python3 experiments/phase2_driver.py > results/phase2_driver.log 2>&1 &
+    nohup python3 experiments/phases/phase2_driver.py > results/phase2_driver.log 2>&1 &
 """
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ import sys
 import time
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 TICKS = os.sysconf("SC_CLK_TCK") if hasattr(os, "sysconf") else 100   # no /proc on Windows: see _train_pids
 
 # Full Phase-2 grid. Finished (scheme, em) rows are skipped by phase2_train, so re-running this
@@ -94,7 +94,7 @@ def main(argv=None) -> int:
         free = a.cores - ext - len(running)
         while free > 0 and jobs:
             s, e = jobs.pop(0)
-            cmd = [sys.executable, "experiments/phase2_train.py", "--schemes", s, "--ems", str(e),
+            cmd = [sys.executable, "experiments/phases/phase2_train.py", "--schemes", s, "--ems", str(e),
                    "--steps", str(a.steps), "--parallel", "1", "--threads", "1",
                    "--render-workers", "1", "--run-name", a.run_name]
             log = open(log_dir / f"{s}_em{e}.log", "a")

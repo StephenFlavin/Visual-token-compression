@@ -1,4 +1,4 @@
-"""Tests for experiments/repo_atlas_port.py (no network, no Claude calls)."""
+"""Tests for experiments/atlas/repo_atlas_port.py (no network, no Claude calls)."""
 import json
 import sys
 from pathlib import Path
@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "experiments"))
+sys.path.insert(0, str(ROOT / "experiments" / "atlas"))
 import repo_atlas_port as P  # noqa: E402
 
 TEMPLATE = """# Task

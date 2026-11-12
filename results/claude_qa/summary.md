@@ -2,7 +2,7 @@
 
 Write-up with charts and the cost of every run: [docs/claude/CLAUDE_QA.md](../../docs/claude/CLAUDE_QA.md). This file is the run log.
 
-`experiments/claude_qa_render.py`, headless Claude (same model as Phase 1, effort low), one document: 503,630 chars of
+`experiments/claude_qa/claude_qa_render.py`, headless Claude (same model as Phase 1, effort low), one document: 503,630 chars of
 held-out WikiText-103 test text plus 40 invented facts ("needles"). 80 questions with exact numeric answers: 40 about
 the invented facts (only the document can answer them) and 40 asking for the number in a quoted real sentence. Same
 document string and questions in every arm. Tokens are the CLI's usage report (all input, incl. cache creation).
@@ -107,7 +107,7 @@ Addresses the limits of the runs above: ceiling (text at 100%), one document, on
   6 largest-of-three, 6 counts over fact types no other question mentions). Exact answers, scored automatically.
 * **Arms per document and effort:** text, no document, images at 117.6 (~2.2x fewer tokens), 88.2 (~3x) and 58.8
   (~4.2x) px²/char on 1932-px pages. **Effort low and high** (`--effort`). 30 calls in all.
-* **Analysis:** `experiments/analyse_claude_qa.py`, pooled over the 3 documents per (effort, density), each image
+* **Analysis:** `experiments/claude_qa/analyse_claude_qa.py`, pooled over the 3 documents per (effort, density), each image
   answer paired with the same document's text answer. Paired difference text - image with Newcombe's score
   interval (95%); exact McNemar; per-kind accuracy with Wilson intervals. Arms that lost pages are excluded and
   listed.
@@ -122,7 +122,7 @@ Addresses the limits of the runs above: ceiling (text at 100%), one document, on
 ## v2 results (2026-11-10): all 30 calls complete, no arm lost pages; $11.48 at list price
 
 Pooled over 3 documents, 360 paired questions per row; tables per question kind in `analysis_v2/summary.md`
-(`python3 experiments/analyse_claude_qa.py results/claude_qa/qav2_*`).
+(`python3 experiments/claude_qa/analyse_claude_qa.py results/claude_qa/qav2_*`).
 
 | effort | image px²/char | fewer tokens than text | text | image | text - image (95% CI) | complex: text / image | verdict |
 |---|---|---|---|---|---|---|---|
@@ -213,7 +213,7 @@ vs $0.67 for text (list price, as if uncached).
 ## Deep-research variant: pre-registered (2026-11-10, written and committed before any call)
 
 Question (user): can a research orchestrator keep its sources as page images, with short text notes, instead of as
-full text? Script `experiments/claude_qa_research.py` (design in its docstring); rows in `results/claude_qa/research/`.
+full text? Script `experiments/claude_qa/claude_qa_research.py` (design in its docstring); rows in `results/claude_qa/research/`.
 
 * **Corpora:** 3, made of consecutive real Wikipedia articles (WikiText-103 test + validation, articles > 2,000
   chars), 34-50 sources each (36, 50, 34; 686k-829k chars), each with a visible header `[Source k: Title]`, invented facts planted inside them.

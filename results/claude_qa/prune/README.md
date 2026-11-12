@@ -251,13 +251,13 @@ billed.
 ## Reproduce
 
 ```bash
-python3 experiments/claude_qa_prune.py build        # documents, questions, LLMLingua-2 probabilities (~7 min/doc, CPU)
-python3 experiments/claude_qa_prune.py calibrate --rate22 0.37 --rate15 0.57 --yes   # ~$0.4, unscored
-python3 experiments/claude_qa_prune.py set-rates
-python3 experiments/claude_qa_prune.py check        # survival + cost estimate (free)
-python3 experiments/claude_qa_prune.py run --docs 0 --yes
-python3 experiments/claude_qa_prune.py run --docs 1 2 --yes
-python3 experiments/claude_qa_prune.py analyse
+python3 experiments/claude_qa/claude_qa_prune.py build        # documents, questions, LLMLingua-2 probabilities (~7 min/doc, CPU)
+python3 experiments/claude_qa/claude_qa_prune.py calibrate --rate22 0.37 --rate15 0.57 --yes   # ~$0.4, unscored
+python3 experiments/claude_qa/claude_qa_prune.py set-rates
+python3 experiments/claude_qa/claude_qa_prune.py check        # survival + cost estimate (free)
+python3 experiments/claude_qa/claude_qa_prune.py run --docs 0 --yes
+python3 experiments/claude_qa/claude_qa_prune.py run --docs 1 2 --yes
+python3 experiments/claude_qa/claude_qa_prune.py analyse
 ```
 
 Files: `d*/questions.json` (160 questions; small-word ones carry `lure` and `critical`), `d*/runs.jsonl` (one row per

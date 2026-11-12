@@ -12,7 +12,7 @@
 7. claude_qa_position.png   single-fact lookups by where the fact sits in the document (does depth matter?)
 8. claude_qa_engagement.png output tokens per call, text vs pages, per model and effort (the Haiku exclusion)
 
-Numbers come from results/claude_qa/analysis_v2{,_sonnet,_haiku}/summary.json (experiments/analyse_claude_qa.py) and
+Numbers come from results/claude_qa/analysis_v2{,_sonnet,_haiku}/summary.json (experiments/claude_qa/analyse_claude_qa.py) and
 the calls' token counts in results/claude_qa/qav2*_*/runs.jsonl. Models missing a summary are skipped.
 
     python3 scripts/make_claude_qa_figures.py
@@ -209,7 +209,7 @@ def fig_pages():
     """The first page of document 1 exactly as the test sent it (the experiment's own document with its inserted
     facts, and its page geometry: 1932 x 1876 px, 4,626 tokens), cropped to 31 x 6 vision tokens at actual pixels,
     with the 28-px token grid."""
-    sys.path.insert(0, str(ROOT / "experiments"))
+    sys.path.insert(0, str(ROOT / "experiments" / "claude_qa"))
     import claude_qa_render as Q
     from vbpe import metrics
     from vbpe.layout import render_page

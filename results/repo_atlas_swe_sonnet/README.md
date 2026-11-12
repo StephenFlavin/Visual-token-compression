@@ -1,9 +1,9 @@
 # Sonnet with the repo atlas on the hard coding tasks (Q3)
 
 *Pre-registered 2026-11-12, after the legibility gate and the environment validation, before the first scored agent
-run. Design: `docs/claude/REPO_ATLAS_PLAN.md`, "Queued", Q3. Code: `experiments/repo_atlas_swe_sonnet.py` (tests
-`tests/test_repo_atlas_swe_sonnet.py`), a thin runner that imports Q1's runner `experiments/repo_atlas_swe_rerun.py`
-and the first test's `experiments/repo_atlas_swe.py` unchanged. Results go below the "Results" heading; nothing above
+run. Design: `docs/claude/REPO_ATLAS_PLAN.md`, "Queued", Q3. Code: `experiments/atlas/repo_atlas_swe_sonnet.py` (tests
+`tests/test_repo_atlas_swe_sonnet.py`), a thin runner that imports Q1's runner `experiments/atlas/repo_atlas_swe_rerun.py`
+and the first test's `experiments/atlas/repo_atlas_swe.py` unchanged. Results go below the "Results" heading; nothing above
 it changes after the first scored run, except dated amendments.*
 
 ## Question
@@ -112,13 +112,13 @@ price), seconds, tokens. Per task and arm: resolved runs of 2.
   is reported on all 16.
 * **Usage limit:** a run that ends in a usage-limit error is not recorded (its cost is booked); the runner stops
   launching, the rows so far are committed and pushed, and what remains is reported. The runner is resumable
-  (finished (task, arm, run) rows are skipped): `python3 experiments/repo_atlas_swe_sonnet.py run --cap 20`.
+  (finished (task, arm, run) rows are skipped): `python3 experiments/atlas/repo_atlas_swe_sonnet.py run --cap 20`.
 * Refusals are reported, not worked around; prompts are not reworded. Tests are never edited or skipped.
 * A run with no result event is retried once (as Q1).
 * **Leaks:** every run's Bash commands and file paths are scanned with Q1's pattern and every hit read by hand; a run
   that read a release, upstream copy, old patch or transcript of the fix is listed and its task left out of the
   paired tests (both arms). Transcripts are kept until the leak and memory checks are done.
-* `python3 experiments/repo_atlas_swe_sonnet.py analyse` is standalone and runs on whatever rows exist
+* `python3 experiments/atlas/repo_atlas_swe_sonnet.py analyse` is standalone and runs on whatever rows exist
   (`summary.md`).
 
 ## Validation

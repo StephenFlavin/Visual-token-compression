@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "experiments"))
+sys.path.insert(0, str(ROOT / "experiments" / "atlas"))
 import repo_atlas_sec as S  # noqa: E402
 
 SHA = "0123456789abcdef0123456789abcdef01234567"

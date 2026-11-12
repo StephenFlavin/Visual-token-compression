@@ -2,17 +2,17 @@
 auto-memory off, package index blocked for every run.
 
 Same 16 SWE-rebench tasks as the first test (``results/repo_atlas_swe/``, smolvm-172 left out there for a leak), same
-prompt, tools, model, effort, atlas pages and grading: everything comes from ``experiments/repo_atlas_swe.py``
+prompt, tools, model, effort, atlas pages and grading: everything comes from ``experiments/atlas/repo_atlas_swe.py``
 (imported, not edited). What differs: ``CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`` in the child env, each run's project
 store under ``~/.claude/projects/`` checked and deleted before and after, the package index blocked from the first
 run, two independent runs per task and arm in a shuffled order (all first runs before any second run), each run in
 its own neutral directory (a hash of task, arm and run number).
 
-    python3 experiments/repo_atlas_swe_rerun.py check                  # memory check of the first test's transcripts
-    python3 experiments/repo_atlas_swe_rerun.py validate [--workers 2]  # rebuild + validate the 16 environments
-    python3 experiments/repo_atlas_swe_rerun.py order                   # print the shuffled run order
-    python3 experiments/repo_atlas_swe_rerun.py run --cap 40 [--max-runs N] [--workers 2]
-    python3 experiments/repo_atlas_swe_rerun.py analyse
+    python3 experiments/atlas/repo_atlas_swe_rerun.py check                  # memory check of the first test's transcripts
+    python3 experiments/atlas/repo_atlas_swe_rerun.py validate [--workers 2]  # rebuild + validate the 16 environments
+    python3 experiments/atlas/repo_atlas_swe_rerun.py order                   # print the shuffled run order
+    python3 experiments/atlas/repo_atlas_swe_rerun.py run --cap 40 [--max-runs N] [--workers 2]
+    python3 experiments/atlas/repo_atlas_swe_rerun.py analyse
 
 Rows: results/repo_atlas_swe_rerun/{validate,runs,spend}.jsonl. Work dir (checkouts, venvs, transcripts) in the
 scratchpad; it links the first test's atlas builds (``ra_swe/ctx``) and today's git stores (``pq/git``).
@@ -34,8 +34,8 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path[:0] = [str(ROOT), str(ROOT / "experiments")]
+ROOT = Path(__file__).resolve().parents[2]
+sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
 
 import repo_atlas_swe as sw  # noqa: E402
 
@@ -53,7 +53,7 @@ BOUND_FLOOR = {"plain": 1.5, "atlas": 2.5}                 # reserved before a r
 
 # --------------------------------------------------------------------------- pure functions (tested)
 def memory_slug(cwd: str) -> str:
-    """Claude Code's per-project directory name under ~/.claude/projects (as experiments/plan_quality.py)."""
+    """Claude Code's per-project directory name under ~/.claude/projects (as experiments/atlas/plan_quality.py)."""
     return re.sub(r"[^A-Za-z0-9]", "-", str(cwd))
 
 

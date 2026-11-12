@@ -1,7 +1,7 @@
 """Plan-quality test: an orchestrator reads the repository once and writes a brief per ticket for worker agents.
 
 Design: docs/claude/PLAN_QUALITY_TEST.md. Pre-registration, ticket lists, rows and results: results/plan_quality/README.md.
-Tickets come from SWE-rebench (the fresh-task test's source, experiments/repo_atlas_swe.py); its funnel rows are
+Tickets come from SWE-rebench (the fresh-task test's source, experiments/atlas/repo_atlas_swe.py); its funnel rows are
 reused, its runner functions (checkouts, environments, grading) are imported, nothing of it is edited.
 
 Planners (Opus 5.5, high effort, one instruction and brief format):
@@ -13,14 +13,14 @@ Layer 2: groups of tickets of one repository planned together on one commit (COL
 Layer 3: Claude Code workers with edit tools, graded by the ticket's own tests: Opus high with the atlas brief, Opus
          high with the tree brief, Sonnet medium and Haiku low with the atlas brief (no-brief rows: repo_atlas_swe).
 
-    python3 experiments/plan_quality.py select                 # fit + closed-book screen beyond the first 80 (cheap)
-    python3 experiments/plan_quality.py prepare                # contexts, groups, size estimate (no calls)
-    python3 experiments/plan_quality.py plan  --layer 1 [--ids ...] [--planners ...] --cap 45
-    python3 experiments/plan_quality.py judge [--ids ...] --cap 45
-    python3 experiments/plan_quality.py plan  --layer 2 --cap 45
-    python3 experiments/plan_quality.py work  --cap 45 [--max-tickets N]
-    python3 experiments/plan_quality.py extend --cap 45               # layer 1 beyond the layer-3 tickets, whole tickets
-    python3 experiments/plan_quality.py analyse
+    python3 experiments/atlas/plan_quality.py select                 # fit + closed-book screen beyond the first 80 (cheap)
+    python3 experiments/atlas/plan_quality.py prepare                # contexts, groups, size estimate (no calls)
+    python3 experiments/atlas/plan_quality.py plan  --layer 1 [--ids ...] [--planners ...] --cap 45
+    python3 experiments/atlas/plan_quality.py judge [--ids ...] --cap 45
+    python3 experiments/atlas/plan_quality.py plan  --layer 2 --cap 45
+    python3 experiments/atlas/plan_quality.py work  --cap 45 [--max-tickets N]
+    python3 experiments/atlas/plan_quality.py extend --cap 45               # layer 1 beyond the layer-3 tickets, whole tickets
+    python3 experiments/atlas/plan_quality.py analyse
 
 Rows: results/plan_quality/{funnel,briefs,judge,groups,work,spend}.jsonl, tickets.json. Clones, exports, venvs,
 pages and transcripts in --work (scratchpad), never in the repository. Every step skips finished rows (resumable).
@@ -42,8 +42,8 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path[:0] = [str(ROOT), str(ROOT / "experiments")]
+ROOT = Path(__file__).resolve().parents[2]
+sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
 
 OUT = ROOT / "results" / "plan_quality"
 SWE_OUT = ROOT / "results" / "repo_atlas_swe"          # read only

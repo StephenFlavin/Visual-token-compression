@@ -8,12 +8,12 @@ One question per SWE-bench task: the issue, then "list the files that must chang
   text   the same files as plain text with a path header per file
   agent  Claude Code headless in an export of the checkout, read-only tools (Read, Grep, Glob), turn limit
 
-    python3 experiments/repo_atlas_eval.py select   --work DIR            # pick the tasks (no model calls)
-    python3 experiments/repo_atlas_eval.py prepare  --work DIR            # checkouts, atlases, contexts, sizes
-    python3 experiments/repo_atlas_eval.py estimate --work DIR            # list-price estimate per arm
-    python3 experiments/repo_atlas_eval.py run      --work DIR --arms tree map atlas text [--cap 12]
-    python3 experiments/repo_atlas_eval.py run      --work DIR --arms agent --cap 12
-    python3 experiments/repo_atlas_eval.py analyse
+    python3 experiments/atlas/repo_atlas_eval.py select   --work DIR            # pick the tasks (no model calls)
+    python3 experiments/atlas/repo_atlas_eval.py prepare  --work DIR            # checkouts, atlases, contexts, sizes
+    python3 experiments/atlas/repo_atlas_eval.py estimate --work DIR            # list-price estimate per arm
+    python3 experiments/atlas/repo_atlas_eval.py run      --work DIR --arms tree map atlas text [--cap 12]
+    python3 experiments/atlas/repo_atlas_eval.py run      --work DIR --arms agent --cap 12
+    python3 experiments/atlas/repo_atlas_eval.py analyse
 
 Clones, checkouts, page images and agent transcripts live in --work (outside the repo); rows, the selection, the
 context sizes and the atlas indexes go to results/repo_atlas/. Rows are appended per (task, arm); finished pairs
@@ -35,8 +35,8 @@ import warnings
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path[:0] = [str(ROOT), str(ROOT / "experiments")]
+ROOT = Path(__file__).resolve().parents[2]
+sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
 import repo_atlas as RA  # noqa: E402
 
 OUT = ROOT / "results" / "repo_atlas"

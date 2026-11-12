@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "experiments"))
+sys.path.insert(0, str(ROOT / "experiments" / "atlas"))
 import repo_atlas as RA  # noqa: E402
 
 PY = "import os\n\n\ndef area(w, h):\n    if w < 0:\n        raise ValueError('negative')\n    return w * h\n" * 40

@@ -9,10 +9,10 @@ Arms (Opus 5.5, high effort): closed (file paths only), atlas (pages + index, on
 tools in an export of the vulnerable commit), agent_atlas (the same agent with the pages in its first message).
 Design, predictions and results: results/repo_atlas_sec/README.md.
 
-    python3 experiments/repo_atlas_sec.py select   [--work DIR]     # advisory funnel, clones, atlas sizes (no model calls)
-    python3 experiments/repo_atlas_sec.py prepare  [--work DIR]     # exports, atlases, contexts, gold (no model calls)
-    python3 experiments/repo_atlas_sec.py run      [--work DIR] --tasks 3 --cap 25    # first n tasks, all arms
-    python3 experiments/repo_atlas_sec.py analyse
+    python3 experiments/atlas/repo_atlas_sec.py select   [--work DIR]     # advisory funnel, clones, atlas sizes (no model calls)
+    python3 experiments/atlas/repo_atlas_sec.py prepare  [--work DIR]     # exports, atlases, contexts, gold (no model calls)
+    python3 experiments/atlas/repo_atlas_sec.py run      [--work DIR] --tasks 3 --cap 25    # first n tasks, all arms
+    python3 experiments/atlas/repo_atlas_sec.py analyse
 
 Clones, exports, page images and agent transcripts stay in --work; rows, the selection and the summary go to
 results/repo_atlas_sec/. Rows are appended per (task, arm); finished pairs are skipped (resumable). Errors are
@@ -34,8 +34,8 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path[:0] = [str(ROOT), str(ROOT / "experiments"), str(ROOT / "experiments" / "readhook")]
+ROOT = Path(__file__).resolve().parents[2]
+sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas"), str(ROOT / "experiments" / "readhook")]
 import repo_atlas as RA  # noqa: E402
 import repo_atlas_eval as RE  # noqa: E402
 from vbhook.minify.base import REGISTRY, detect  # noqa: E402

@@ -20,9 +20,9 @@ Questions per corpus (60 lookups, 60 synthesis):
   mention an organisation; 3-9), ``total`` (sum of an organisation's grants reported across 2-4 sources).
 Cross-source facts sit in different sources at least 1/8 of the corpus apart.
 
-    python3 experiments/claude_qa_research.py --dry-run          # build corpora, pages and questions; no calls
-    python3 experiments/claude_qa_research.py --yes              # notes calls, then the 5 arms x 3 corpora
-    python3 experiments/claude_qa_research.py --analyse          # tables from runs.jsonl
+    python3 experiments/claude_qa/claude_qa_research.py --dry-run          # build corpora, pages and questions; no calls
+    python3 experiments/claude_qa/claude_qa_research.py --yes              # notes calls, then the 5 arms x 3 corpora
+    python3 experiments/claude_qa/claude_qa_research.py --analyse          # tables from runs.jsonl
 """
 from __future__ import annotations
 
@@ -34,9 +34,9 @@ from pathlib import Path
 
 import numpy as np
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
-sys.path.insert(0, str(ROOT / "experiments"))
+sys.path.insert(0, str(ROOT / "experiments" / "claude_qa"))
 from vbpe import config, corpus  # noqa: E402
 import claude_qa_render as Q  # noqa: E402
 import analyse_claude_qa as A  # noqa: E402

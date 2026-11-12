@@ -9,12 +9,12 @@ agent (Claude Code, read-only tools, one question per run). Arms 1-4 answer 8 qu
 user messages: the context (answered "OK"), then the questions, so later calls on one repository read the context
 from the prompt cache (a single message is never reused: measured, see the README).
 
-    python3 experiments/repo_atlas_qa.py prepare  --work DIR --bench DIR   # clones, contexts, batches (no model calls)
-    python3 experiments/repo_atlas_qa.py estimate --work DIR
-    python3 experiments/repo_atlas_qa.py run      --work DIR --arms closed map atlas text --cap 22
-    python3 experiments/repo_atlas_qa.py run      --work DIR --arms agent --cap 22 [--agent-n N]
-    python3 experiments/repo_atlas_qa.py judge    --work DIR --cap 22
-    python3 experiments/repo_atlas_qa.py analyse
+    python3 experiments/atlas/repo_atlas_qa.py prepare  --work DIR --bench DIR   # clones, contexts, batches (no model calls)
+    python3 experiments/atlas/repo_atlas_qa.py estimate --work DIR
+    python3 experiments/atlas/repo_atlas_qa.py run      --work DIR --arms closed map atlas text --cap 22
+    python3 experiments/atlas/repo_atlas_qa.py run      --work DIR --arms agent --cap 22 [--agent-n N]
+    python3 experiments/atlas/repo_atlas_qa.py judge    --work DIR --cap 22
+    python3 experiments/atlas/repo_atlas_qa.py analyse
 
 Clones, page images and agent transcripts stay in --work; rows, selection, sizes, indexes and the summary go to
 results/repo_atlas_qa/. Rows are appended; finished (question, arm) pairs and judged answers are skipped (resumable).
@@ -33,8 +33,8 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path[:0] = [str(ROOT), str(ROOT / "experiments")]
+ROOT = Path(__file__).resolve().parents[2]
+sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
 import repo_atlas as RA  # noqa: E402
 import repo_atlas_eval as RE  # noqa: E402
 

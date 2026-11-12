@@ -186,9 +186,9 @@ subscription quota; these are not amounts billed.
 ## Reproduce
 
 ```bash
-python3 experiments/claude_qa_prune.py build          # documents and questions (Test A; already on disk)
-python3 experiments/claude_qa_repeat.py check         # free: identity with Test A, estimate
-python3 experiments/claude_qa_repeat.py locate        # free: sentence placement on the pages
-python3 experiments/claude_qa_repeat.py run --yes     # 27 calls, resumable
-python3 experiments/claude_qa_repeat.py analyse       # -> analysis/summary.{md,json}
+python3 experiments/claude_qa/claude_qa_prune.py build          # documents and questions (Test A; already on disk)
+python3 experiments/claude_qa/claude_qa_repeat.py check         # free: identity with Test A, estimate
+python3 experiments/claude_qa/claude_qa_repeat.py locate        # free: sentence placement on the pages
+python3 experiments/claude_qa/claude_qa_repeat.py run --yes     # 27 calls, resumable
+python3 experiments/claude_qa/claude_qa_repeat.py analyse       # -> analysis/summary.{md,json}
 ```

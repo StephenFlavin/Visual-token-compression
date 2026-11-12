@@ -2,7 +2,7 @@
 
 *Pre-registered 2026-11-12, before the first scored call (selection screens and a model-id smoke test came before
 it; $0.50). Design: [docs/claude/PLAN_QUALITY_TEST.md](../../docs/claude/PLAN_QUALITY_TEST.md), kept as written; this file fixes
-what the design leaves open. Code: `experiments/plan_quality.py` (tests `tests/test_plan_quality.py`). Results go
+what the design leaves open. Code: `experiments/atlas/plan_quality.py` (tests `tests/test_plan_quality.py`). Results go
 below the "Results" heading. Nothing above it changes after the first scored call, except dated amendments written
 before the runs they affect. Run by an Opus 5.5 subagent; hard cap **$45** at list price over every call.*
 
@@ -10,7 +10,7 @@ before the runs they affect. Run by an Opus 5.5 subagent; hard cap **$45** at li
 
 A backlog of tickets against one repository. One orchestrator reads the repository once and writes a brief per
 ticket; workers get the brief, not the repository view. Are briefs written from the atlas (the repository as page
-images, `experiments/repo_atlas.py`) as good as scouting with tools and better than briefs from a file list? Do they
+images, `experiments/atlas/repo_atlas.py`) as good as scouting with tools and better than briefs from a file list? Do they
 invent paths or symbols? Can the planner size a ticket and pick the right worker (model and reasoning level)? Does a
 brief help the worker?
 

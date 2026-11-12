@@ -9,10 +9,10 @@ the repeat index); the request is unchanged. Calls are the unit of analysis (ans
 a call): per density, the mean small-word accuracy over the 15 calls and a bootstrap over whole calls within document,
 against text.
 
-    python3 experiments/claude_qa_repeat.py check            # free: identity with Test A, cost estimate
-    python3 experiments/claude_qa_repeat.py locate           # free: where each small-word sentence sits on the pages
-    python3 experiments/claude_qa_repeat.py run --yes        # the 27 calls (resumable; rows appended per call)
-    python3 experiments/claude_qa_repeat.py analyse
+    python3 experiments/claude_qa/claude_qa_repeat.py check            # free: identity with Test A, cost estimate
+    python3 experiments/claude_qa/claude_qa_repeat.py locate           # free: where each small-word sentence sits on the pages
+    python3 experiments/claude_qa/claude_qa_repeat.py run --yes        # the 27 calls (resumable; rows appended per call)
+    python3 experiments/claude_qa/claude_qa_repeat.py analyse
 Pre-registration and results: results/claude_qa/repeat/README.md.
 """
 from __future__ import annotations
@@ -27,9 +27,9 @@ from pathlib import Path
 
 import numpy as np
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
-sys.path.insert(0, str(ROOT / "experiments"))
+sys.path.insert(0, str(ROOT / "experiments" / "claude_qa"))
 import claude_qa_prune as P  # noqa: E402
 import claude_qa_render as R  # noqa: E402
 from vbpe import config  # noqa: E402

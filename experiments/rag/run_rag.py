@@ -26,7 +26,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path[:0] = [str(ROOT), str(ROOT / "experiments"), str(ROOT / "experiments" / "readhook")]
+sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "claude_qa"), str(ROOT / "experiments" / "readhook")]
 OUT = ROOT / "results" / "rag"
 MODEL, EFFORT, BUDGET = "claude-opus-5-5", "low", 88.2
 ARMS = ["closed", "T5", "P5", "Pmatch", "T15", "hybrid"]

@@ -1,6 +1,6 @@
 # Repo atlas, Q2 (gitleaks Go -> Rust): summary
 
-*Written by `experiments/repo_atlas_port.py analyse`. One run per arm: an anecdote, not a measurement.*
+*Written by `experiments/atlas/repo_atlas_port.py analyse`. One run per arm: an anecdote, not a measurement.*
 
 | Arm | Tests passed | Builds | Concurrent | thread/rayon/async | Mutex / RwLock / Arc / channels | `unsafe` | Rust lines | Turns | CLI turns | API calls | Cost | Hours | Output tokens | Cut |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|

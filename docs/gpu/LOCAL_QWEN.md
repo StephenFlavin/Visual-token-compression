@@ -1,6 +1,6 @@
 # Does any of this help a local model? One evening on Qwen3.8-27B (RTX 3090)
 
-*Pre-registered 2026-11-12, before any row. No training. Code: `experiments/local_qa.py` (tests
+*Pre-registered 2026-11-12, before any row. No training. Code: `experiments/claude_qa/local_qa.py` (tests
 `tests/test_local_qa.py`, against a mock server: it has not talked to a real model yet). The prompt for the 3090
 session is at the end and in [HANDOFF.md](../HANDOFF.md).*
 
@@ -78,7 +78,7 @@ it as such, with the largest text document that did fit.
 cd /c/git/visual-bpe-run && . .venv/env.sh
 git fetch origin claude/sharp-mendel-kkhg4g && git merge origin/claude/sharp-mendel-kkhg4g
 python -m pytest -q tests/test_local_qa.py                    # mock server, ~10 s
-python experiments/local_qa.py run --dry-run --doc 0 1 2      # page and token counts, no server
+python experiments/claude_qa/local_qa.py run --dry-run --doc 0 1 2      # page and token counts, no server
 ```
 
 **Server.** Use the newest llama.cpp Windows CUDA release (multi-token prediction needs a build from mid-May 2026
@@ -103,14 +103,14 @@ llama-server -m models/qwen38/Qwen3.8-27B-UD-Q4_K_M.gguf --mmproj models/qwen38/
 
 ```bash
 X='--extra {"chat_template_kwargs":{"enable_thinking":false}}'
-python experiments/local_qa.py run --doc 0 $X          # none, text, page118, page88, page59
-python experiments/local_qa.py analyse
-python experiments/local_qa.py run --doc 1 2 $X
-python experiments/local_qa.py speed --label plain $X
+python experiments/claude_qa/local_qa.py run --doc 0 $X          # none, text, page118, page88, page59
+python experiments/claude_qa/local_qa.py analyse
+python experiments/claude_qa/local_qa.py run --doc 1 2 $X
+python experiments/claude_qa/local_qa.py speed --label plain $X
 # restart the server with the multi-token module (flag names from --help; the published examples use
 #   --spec-type mtp  or  --spec-type draft-mtp, --spec-draft-n-max 3, and the mtp-*.gguf file), then:
-python experiments/local_qa.py speed --label mtp $X
-python experiments/local_qa.py analyse                 # -> results/local_qa/qwen38_27b/summary.md
+python experiments/claude_qa/local_qa.py speed --label mtp $X
+python experiments/claude_qa/local_qa.py analyse                 # -> results/local_qa/qwen38_27b/summary.md
 ```
 
 Optional, if the main run leaves time: the text and 117.6 arms again with thinking on

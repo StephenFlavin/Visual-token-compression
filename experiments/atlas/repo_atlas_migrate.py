@@ -4,9 +4,9 @@ Benchmark: CRUST-Bench (github.com/anirudhkhatry/CRUST-bench): 100 C repositorie
 interfaces (bodies ``unimplemented!()``) and Rust tests, graded by ``cargo test``. Pre-registration, arms, scores and
 results: results/repo_atlas_migrate/README.md.
 
-    python3 experiments/repo_atlas_migrate.py prepare      # clone, unpack, select, validate, atlases (no Claude calls)
-    python3 experiments/repo_atlas_migrate.py run [--projects ...] [--workers 2]   # agent runs, resumable
-    python3 experiments/repo_atlas_migrate.py report       # tables + paired tests -> summary.md
+    python3 experiments/atlas/repo_atlas_migrate.py prepare      # clone, unpack, select, validate, atlases (no Claude calls)
+    python3 experiments/atlas/repo_atlas_migrate.py run [--projects ...] [--workers 2]   # agent runs, resumable
+    python3 experiments/atlas/repo_atlas_migrate.py report       # tables + paired tests -> summary.md
 
 Arms (Claude Code headless, Opus 5.5, --effort high, tools Bash/Read/Edit/Write, 60 turns, 30 min, $5 per run):
 ``plain`` (C source + Rust skeleton), ``atlas`` (the same plus the C project as pages in the first message),
@@ -33,8 +33,8 @@ import threading
 import time
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path[:0] = [str(ROOT), str(ROOT / "experiments"), str(ROOT / "experiments" / "readhook")]
+ROOT = Path(__file__).resolve().parents[2]
+sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas"), str(ROOT / "experiments" / "readhook")]
 WORK = Path(os.environ.get("MIG_WORK", "/tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/mig"))
 OUT = ROOT / "results" / "repo_atlas_migrate"
 BENCH_URL = "https://github.com/anirudhkhatry/CRUST-bench.git"

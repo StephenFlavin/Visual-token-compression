@@ -16,13 +16,13 @@ Outputs (results/phase1/<run>/):
 
 Examples
   # free, offline smoke test (fake transcriber, built-in sample text if the corpus is missing)
-  python3 experiments/phase1_sweep.py --dry-run --schemes latin latin_condensed --budgets 6 18
+  python3 experiments/phases/phase1_sweep.py --dry-run --schemes latin latin_condensed --budgets 6 18
   # pilot: 1 passage, every registered scheme, wide grid -> prints a cost estimate, needs --yes
-  python3 experiments/phase1_sweep.py --pilot --max-cost 10
-  python3 experiments/phase1_sweep.py --pilot --max-cost 10 --yes
+  python3 experiments/phases/phase1_sweep.py --pilot --max-cost 10
+  python3 experiments/phases/phase1_sweep.py --pilot --max-cost 10 --yes
   # main sweep
-  python3 experiments/phase1_sweep.py --variant natural --n-passages 6 --max-cost 40 --yes
-  python3 experiments/phase1_sweep.py --variant scrambled --n-passages 3 --max-cost 20 --yes
+  python3 experiments/phases/phase1_sweep.py --variant natural --n-passages 6 --max-cost 40 --yes
+  python3 experiments/phases/phase1_sweep.py --variant scrambled --n-passages 3 --max-cost 20 --yes
 """
 from __future__ import annotations
 
@@ -36,7 +36,7 @@ import time
 import zlib
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 

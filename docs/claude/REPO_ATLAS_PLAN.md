@@ -1,6 +1,6 @@
 # Repo atlas: does the whole repository as page images improve decisions on code? (draft for approval)
 
-*2026-11-12. Nothing here has called Claude. Built and tested: `experiments/repo_atlas.py`
+*2026-11-12. Nothing here has called Claude. Built and tested: `experiments/atlas/repo_atlas.py`
 (`tests/test_repo_atlas.py`). The test below needs approval of its spend.*
 
 ## The idea
@@ -278,7 +278,7 @@ at 2.2x at high effort only, and the atlas is rendered denser (2.9x), so legibil
   defined at a tagged line of a named file, a constant's value, an argument list), Sonnet against Opus. Under 80%
   for Sonnet: re-render for it (117.6 px² per character, pages of at most 1568 px, if the repository still fits
   150k image tokens) and ask again. Still under 80%: stop; "Sonnet cannot read the atlas" is the result.
-* Same 16 SWE-rebench tasks, environments and runner as Q1 (`experiments/repo_atlas_swe_rerun.py`), auto-memory off,
+* Same 16 SWE-rebench tasks, environments and runner as Q1 (`experiments/atlas/repo_atlas_swe_rerun.py`), auto-memory off,
   package index blocked. Worker: Claude Code on Sonnet 5.5 at high effort. Arms `plain` and `atlas`, 2 runs per
   task and arm = 64 runs.
 * Scores and tests as Q1 (resolved task-runs, paired over tasks; turns; cost). Beside them, not pooled: Opus plain

@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "experiments"))
+sys.path.insert(0, str(ROOT / "experiments" / "atlas"))
 import repo_atlas_eval as E  # noqa: E402
 
 PATCH = """diff --git a/requests/models.py b/requests/models.py

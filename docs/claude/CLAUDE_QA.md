@@ -198,7 +198,7 @@ candidates to test, ordered from closest to the test to furthest from it.
 ### Tested: deep-research sources
 
 A research orchestrator usually holds many fetched sources, or drops them and keeps notes. The test
-([`experiments/claude_qa_research.py`](../../experiments/claude_qa_research.py), pre-registered) used 3 corpora of
+([`experiments/claude_qa/claude_qa_research.py`](../../experiments/claude_qa/claude_qa_research.py), pre-registered) used 3 corpora of
 34-50 real Wikipedia articles each (~270k tokens of text), each article a labelled source with invented facts
 planted in it, and 120 questions per corpus: 60 lookups and 60 that need several sources (which source says this,
 two sources that disagree, chains across sources, how many sources mention something, totals across sources).
@@ -275,7 +275,7 @@ Was the 2.2x pages' passive flip in Test A chance or density? Pre-registered: th
 
 ### Tested: a whole repository as page images (repo atlas)
 
-`experiments/repo_atlas.py` minifies every source file and renders the whole repository as pages with an index.
+`experiments/atlas/repo_atlas.py` minifies every source file and renders the whole repository as pages with an index.
 It fits one request up to ~150k image tokens, about 1.3M characters of source (requests 24k tokens, bat 67k, axum
 120k; pytest is at the limit; anything Django-sized is far over), at about 3.5 times fewer tokens than the code as
 text. Plan and all results: [REPO_ATLAS_PLAN.md](REPO_ATLAS_PLAN.md). Seven tests and one repeat, each run by an Opus subagent with
@@ -433,13 +433,13 @@ backlog with collisions, and repeat runs.
   threshold. The Sonnet and Haiku suites were registered the same way before their runs.
 * **Engagement check** (added after the Haiku run): a call that leaves questions unanswered or says it did not look
   things up is not a reading measurement, and its rows are marked "not comparable".
-* **Reproduce:** [`experiments/claude_qa_render.py`](../../experiments/claude_qa_render.py) (one run per document,
+* **Reproduce:** [`experiments/claude_qa/claude_qa_render.py`](../../experiments/claude_qa/claude_qa_render.py) (one run per document,
   density, effort and model; the commands are in `results/claude_qa/summary.md`), then
-  [`experiments/analyse_claude_qa.py`](../../experiments/analyse_claude_qa.py):
+  [`experiments/claude_qa/analyse_claude_qa.py`](../../experiments/claude_qa/analyse_claude_qa.py):
   ```bash
-  python3 experiments/analyse_claude_qa.py results/claude_qa/qav2_d*                                              # Opus
-  python3 experiments/analyse_claude_qa.py results/claude_qa/qav2s_d* --out results/claude_qa/analysis_v2_sonnet  # Sonnet
-  python3 experiments/analyse_claude_qa.py results/claude_qa/qav2h_d* --out results/claude_qa/analysis_v2_haiku   # Haiku
+  python3 experiments/claude_qa/analyse_claude_qa.py results/claude_qa/qav2_d*                                              # Opus
+  python3 experiments/claude_qa/analyse_claude_qa.py results/claude_qa/qav2s_d* --out results/claude_qa/analysis_v2_sonnet  # Sonnet
+  python3 experiments/claude_qa/analyse_claude_qa.py results/claude_qa/qav2h_d* --out results/claude_qa/analysis_v2_haiku   # Haiku
   python3 scripts/make_claude_qa_figures.py                                                                       # figures
   ```
 

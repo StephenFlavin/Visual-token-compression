@@ -12,7 +12,7 @@ overview is the top-level [README.md](../README.md); how to run things and the g
 * [PLAN_QUALITY_TEST.md](claude/PLAN_QUALITY_TEST.md): design, queued: are briefs an orchestrator writes from the atlas
   good enough to replace scouting and to pick the right worker model and reasoning level per ticket?
 * [REPO_ATLAS_PLAN.md](claude/REPO_ATLAS_PLAN.md): draft for approval: a whole repository as page images read up front
-  (`experiments/repo_atlas.py`, built), which repositories fit, and a two-stage test against a repo map and a
+  (`experiments/atlas/repo_atlas.py`, built), which repositories fit, and a two-stage test against a repo map and a
   searching agent.
 * [TEXT_SLOTS.md](gpu/TEXT_SLOTS.md): Test B (built, not scheduled as of 2026-11-12), pre-registered: slots made from text tokens against vision tokens made from
   a page, same reader and budget, on the 3090. Test A (prune the text, then render it, on Claude):
