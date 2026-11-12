@@ -1,0 +1,1626 @@
+{
+ "tickets": [
+  {
+   "id": "python-wheel-build__fromager-1124",
+   "repo": "python-wheel-build/fromager",
+   "created_at": "2026-05-07",
+   "base_commit": "5fd5d20ff117279b938f003a5a0de18292fbbb83",
+   "gold": [
+    "src/fromager/resolver.py",
+    "src/fromager/sources.py",
+    "src/fromager/wheels.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "src/fromager/resolver.py",
+    "src/fromager/sources.py",
+    "src/fromager/wheels.py"
+   ],
+   "funcs": [
+    "resolve",
+    "default_resolver_provider",
+    "_has_equality_pin",
+    "get_source_provider",
+    "resolve_all_prebuilt_wheels"
+   ],
+   "size": {
+    "files": 3,
+    "functions": 5,
+    "lines": 25
+   },
+   "real_class": "M",
+   "layer3": true,
+   "files_in_atlas": 182,
+   "pages": 18,
+   "image_tokens_formula": 83559,
+   "map_chars": 60212,
+   "tree_chars": 5957
+  },
+  {
+   "id": "nesquena__hermes-webui-330_interface",
+   "repo": "nesquena/hermes-webui",
+   "created_at": "2026-04-12",
+   "base_commit": "9c44d0cf3e7623937dc9c81f3f0562bafa668c6a",
+   "gold": [
+    "api/onboarding.py",
+    "bootstrap.py",
+    "static/index.html"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "api/onboarding.py",
+    "bootstrap.py",
+    "static/index.html"
+   ],
+   "funcs": [
+    "get_onboarding_status",
+    "apply_onboarding_setup"
+   ],
+   "size": {
+    "files": 3,
+    "functions": 2,
+    "lines": 27
+   },
+   "real_class": "M",
+   "layer3": true,
+   "files_in_atlas": 42,
+   "pages": 20,
+   "image_tokens_formula": 91080,
+   "map_chars": 20609,
+   "tree_chars": 745
+  },
+  {
+   "id": "tox-dev__tox-3904",
+   "repo": "tox-dev/tox",
+   "created_at": "2026-03-26",
+   "base_commit": "106f036cdc6f7240380773e66d281bff7eaf1149",
+   "gold": [
+    "pyproject.toml",
+    "src/tox/config/loader/ini/factor.py",
+    "src/tox/config/loader/toml/_replace.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "pyproject.toml",
+    "src/tox/config/loader/ini/factor.py",
+    "src/tox/config/loader/toml/_replace.py"
+   ],
+   "funcs": [
+    "__init__"
+   ],
+   "size": {
+    "files": 3,
+    "functions": 1,
+    "lines": 24
+   },
+   "real_class": "M",
+   "layer3": true,
+   "files_in_atlas": 126,
+   "pages": 14,
+   "image_tokens_formula": 64584,
+   "map_chars": 75708,
+   "tree_chars": 3997
+  },
+  {
+   "id": "pytest-dev__pyfakefs-1286",
+   "repo": "pytest-dev/pyfakefs",
+   "created_at": "2026-02-22",
+   "base_commit": "50579559c7957f5350a5d2408e2827b355e1017c",
+   "gold": [
+    "pyfakefs/fake_filesystem_shutil.py",
+    "pyfakefs/fake_io.py",
+    "pyfakefs/fake_open.py",
+    "pyfakefs/fake_os.py",
+    "pyfakefs/fake_path.py",
+    "pyfakefs/fake_pathlib.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "pyfakefs/fake_filesystem_shutil.py",
+    "pyfakefs/fake_io.py",
+    "pyfakefs/fake_open.py",
+    "pyfakefs/fake_os.py",
+    "pyfakefs/fake_path.py",
+    "pyfakefs/fake_pathlib.py"
+   ],
+   "funcs": [
+    "dir",
+    "__init__",
+    "filesystem",
+    "open",
+    "lockf",
+    "init_module",
+    "_wrapped",
+    "chmod",
+    "getcwd",
+    "_FakeFlavour",
+    "compile_pattern",
+    "FakePath",
+    "cwd",
+    "resolve",
+    "read_bytes",
+    "read_text",
+    "write_bytes",
+    "write_text",
+    "home",
+    "samefile",
+    "expanduser",
+    "touch",
+    "patch_os_module"
+   ],
+   "size": {
+    "files": 6,
+    "functions": 23,
+    "lines": 150
+   },
+   "real_class": "L",
+   "layer3": true,
+   "files_in_atlas": 29,
+   "pages": 10,
+   "image_tokens_formula": 43953,
+   "map_chars": 40231,
+   "tree_chars": 825
+  },
+  {
+   "id": "pyjanitor-devs__pyjanitor-1593",
+   "repo": "pyjanitor-devs/pyjanitor",
+   "created_at": "2026-02-11",
+   "base_commit": "99011fe0f4a994ac13cd040a785a683a2f16e898",
+   "gold": [
+    "janitor/functions/case_when.py",
+    "janitor/functions/complete.py",
+    "janitor/functions/conditional_join.py",
+    "janitor/functions/expand_grid.py",
+    "janitor/functions/filter.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "janitor/functions/case_when.py",
+    "janitor/functions/complete.py",
+    "janitor/functions/conditional_join.py",
+    "janitor/functions/expand_grid.py",
+    "janitor/functions/filter.py"
+   ],
+   "funcs": [
+    "will",
+    "complete",
+    "_computations_complete",
+    "conditional_join",
+    "deprecated",
+    "is",
+    "get_join_indices",
+    "expand_grid",
+    "expand",
+    "_expand_groupby",
+    "filter_on",
+    "filter_column_isin"
+   ],
+   "size": {
+    "files": 5,
+    "functions": 12,
+    "lines": 122
+   },
+   "real_class": "L",
+   "layer3": true,
+   "files_in_atlas": 161,
+   "pages": 28,
+   "image_tokens_formula": 131169,
+   "map_chars": 71014,
+   "tree_chars": 5450
+  },
+  {
+   "id": "scientific-python__docstub-123",
+   "repo": "scientific-python/docstub",
+   "created_at": "2026-01-14",
+   "base_commit": "aa075d9d0cf208ae6658a4c16955ac3c1436f30f",
+   "gold": [
+    "src/docstub-stubs/_concurrency.pyi",
+    "src/docstub-stubs/_docstrings.pyi",
+    "src/docstub-stubs/_utils.pyi",
+    "src/docstub/_concurrency.py",
+    "src/docstub/_docstrings.py",
+    "src/docstub/_utils.py",
+    "src/docstub/doctype.lark"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "src/docstub-stubs/_concurrency.pyi",
+    "src/docstub-stubs/_docstrings.pyi",
+    "src/docstub-stubs/_utils.pyi",
+    "src/docstub/_concurrency.py",
+    "src/docstub/_docstrings.py",
+    "src/docstub/_utils.py",
+    "src/docstub/doctype.lark"
+   ],
+   "funcs": [
+    "LoggingProcessExecutor",
+    "DoctypeTransformer",
+    "param_spec",
+    "callable",
+    "_resolve_path_before_caching",
+    "_initialize_worker",
+    "subscription"
+   ],
+   "size": {
+    "files": 7,
+    "functions": 7,
+    "lines": 59
+   },
+   "real_class": "L",
+   "layer3": true,
+   "files_in_atlas": 41,
+   "pages": 5,
+   "image_tokens_formula": 19803,
+   "map_chars": 23244,
+   "tree_chars": 1220
+  },
+  {
+   "id": "jsonpickle__jsonpickle-588",
+   "repo": "jsonpickle/jsonpickle",
+   "created_at": "2026-01-12",
+   "base_commit": "8fcc1a7a0d22943d8343453b6532aaed45d445d3",
+   "gold": [
+    "jsonpickle/pickler.py",
+    "jsonpickle/tags.py",
+    "jsonpickle/unpickler.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "jsonpickle/pickler.py",
+    "jsonpickle/tags.py",
+    "jsonpickle/unpickler.py"
+   ],
+   "funcs": [
+    "_flatten_dict_obj",
+    "_restore_repr"
+   ],
+   "size": {
+    "files": 3,
+    "functions": 2,
+    "lines": 22
+   },
+   "real_class": "M",
+   "layer3": true,
+   "files_in_atlas": 44,
+   "pages": 6,
+   "image_tokens_formula": 23598,
+   "map_chars": 19456,
+   "tree_chars": 1018
+  },
+  {
+   "id": "jsonpickle__jsonpickle-587",
+   "repo": "jsonpickle/jsonpickle",
+   "created_at": "2026-01-11",
+   "base_commit": "f0a02c4dd46c5919669767ad84462937f3fbebf7",
+   "gold": [
+    ".gitignore",
+    ".pre-commit-config.yaml",
+    "jsonpickle/pickler.py",
+    "pyproject.toml"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    ".gitignore",
+    ".pre-commit-config.yaml",
+    "jsonpickle/pickler.py",
+    "pyproject.toml"
+   ],
+   "funcs": [
+    "_flatten_key_value_pair",
+    "valid_property",
+    "_flatten_newstyle_with_slots",
+    "_flatten_obj_instance"
+   ],
+   "size": {
+    "files": 4,
+    "functions": 4,
+    "lines": 39
+   },
+   "real_class": "L",
+   "layer3": true,
+   "files_in_atlas": 44,
+   "pages": 5,
+   "image_tokens_formula": 23460,
+   "map_chars": 19396,
+   "tree_chars": 1018
+  },
+  {
+   "id": "niconoe__pyinaturalist-643",
+   "repo": "niconoe/pyinaturalist",
+   "created_at": "2026-01-07",
+   "base_commit": "279e153e7af1f2a749b89d6191ca965362b3ec23",
+   "gold": [
+    "pyinaturalist/controllers/observation_controller.py",
+    "pyinaturalist/converters.py",
+    "pyinaturalist/v1/observations.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "pyinaturalist/controllers/observation_controller.py",
+    "pyinaturalist/converters.py",
+    "pyinaturalist/v1/observations.py"
+   ],
+   "funcs": [
+    "update",
+    "safe_split",
+    "ensure_file_obj",
+    "create_observation",
+    "update_observation"
+   ],
+   "size": {
+    "files": 3,
+    "functions": 5,
+    "lines": 22
+   },
+   "real_class": "M",
+   "layer3": true,
+   "files_in_atlas": 70,
+   "pages": 9,
+   "image_tokens_formula": 41538,
+   "map_chars": 33351,
+   "tree_chars": 2257
+  },
+  {
+   "id": "microsoft__fabric-cicd-670",
+   "repo": "microsoft/fabric-cicd",
+   "created_at": "2025-12-07",
+   "base_commit": "f0e1c5042cfe0601c979f4aa49197ccbb6eef104",
+   "gold": [
+    "src/fabric_cicd/_common/_validate_input.py",
+    "src/fabric_cicd/_parameter/_parameter.py",
+    "src/fabric_cicd/_parameter/_utils.py",
+    "src/fabric_cicd/fabric_workspace.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "src/fabric_cicd/_common/_validate_input.py",
+    "src/fabric_cicd/_parameter/_parameter.py",
+    "src/fabric_cicd/_parameter/_utils.py",
+    "src/fabric_cicd/fabric_workspace.py"
+   ],
+   "funcs": [
+    "validate_data_type",
+    "validate_item_type_in_scope",
+    "_validate_optional_values",
+    "replace_variables_in_parameter_file",
+    "validate_parameter_file",
+    "__init__"
+   ],
+   "size": {
+    "files": 4,
+    "functions": 6,
+    "lines": 22
+   },
+   "real_class": "L",
+   "layer3": true,
+   "files_in_atlas": 104,
+   "pages": 9,
+   "image_tokens_formula": 41607,
+   "map_chars": 22649,
+   "tree_chars": 5210
+  },
+  {
+   "id": "tobymao__sqlglot-6067",
+   "repo": "tobymao/sqlglot",
+   "created_at": "2025-10-09",
+   "base_commit": "ddc7bd334e8e303e78060839e3a1687dd2d9b2d3",
+   "gold": [
+    "sqlglot/expressions.py",
+    "sqlglot/generator.py",
+    "sqlglot/parser.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "sqlglot/expressions.py",
+    "sqlglot/generator.py",
+    "sqlglot/parser.py"
+   ],
+   "funcs": [
+    "Insert",
+    "insert_sql",
+    "_parse_insert"
+   ],
+   "size": {
+    "files": 3,
+    "functions": 3,
+    "lines": 5
+   },
+   "real_class": "M",
+   "layer3": true,
+   "files_in_atlas": 94,
+   "pages": 31,
+   "image_tokens_formula": 144555,
+   "map_chars": 114232,
+   "tree_chars": 2525
+  },
+  {
+   "id": "agronholm__anyio-975",
+   "repo": "agronholm/anyio",
+   "created_at": "2025-09-14",
+   "base_commit": "47a559ab1e1b03e51b769becdf6c76b732fdf127",
+   "gold": [
+    "pyproject.toml",
+    "src/anyio/_backends/_asyncio.py",
+    "src/anyio/_backends/_trio.py",
+    "src/anyio/_core/_tasks.py",
+    "src/anyio/from_thread.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "pyproject.toml",
+    "src/anyio/_backends/_asyncio.py",
+    "src/anyio/_backends/_trio.py",
+    "src/anyio/_core/_tasks.py",
+    "src/anyio/from_thread.py"
+   ],
+   "funcs": [
+    "is_anyio_cancellation",
+    "CancelScope",
+    "cancel",
+    "BlockingPortal"
+   ],
+   "size": {
+    "files": 5,
+    "functions": 4,
+    "lines": 37
+   },
+   "real_class": "L",
+   "layer3": true,
+   "files_in_atlas": 42,
+   "pages": 10,
+   "image_tokens_formula": 44712,
+   "map_chars": 78408,
+   "tree_chars": 1230
+  },
+  {
+   "id": "stanfordnlp__dspy-8607",
+   "repo": "stanfordnlp/dspy",
+   "created_at": "2025-08-07",
+   "base_commit": "aca8ebd4d7f0e4da249e7873d359fb730e709ddd",
+   "gold": [
+    "dspy/clients/base_lm.py",
+    "dspy/dsp/utils/settings.py",
+    "dspy/predict/predict.py",
+    "dspy/utils/dummies.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "dspy/clients/base_lm.py",
+    "dspy/dsp/utils/settings.py",
+    "dspy/predict/predict.py",
+    "dspy/utils/dummies.py"
+   ],
+   "funcs": [
+    "BaseLM",
+    "update_global_history",
+    "update_history",
+    "Predict",
+    "DummyLM"
+   ],
+   "size": {
+    "files": 4,
+    "functions": 5,
+    "lines": 36
+   },
+   "real_class": "L",
+   "layer3": true,
+   "files_in_atlas": 124,
+   "pages": 18,
+   "image_tokens_formula": 80523,
+   "map_chars": 66347,
+   "tree_chars": 3489
+  },
+  {
+   "id": "pypa__virtualenv-2940",
+   "repo": "pypa/virtualenv",
+   "created_at": "2025-08-05",
+   "base_commit": "94004cce5794fbbe46d37faf1bbb08ba7dd4ffc8",
+   "gold": [
+    "src/virtualenv/activation/bash/__init__.py",
+    "src/virtualenv/activation/bash/activate.sh",
+    "src/virtualenv/discovery/py_info.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "src/virtualenv/activation/bash/__init__.py",
+    "src/virtualenv/activation/bash/activate.sh",
+    "src/virtualenv/discovery/py_info.py"
+   ],
+   "funcs": [
+    "BashActivator",
+    "replacements",
+    "PythonInfo"
+   ],
+   "size": {
+    "files": 3,
+    "functions": 3,
+    "lines": 17
+   },
+   "real_class": "M",
+   "layer3": true,
+   "files_in_atlas": 89,
+   "pages": 7,
+   "image_tokens_formula": 31464,
+   "map_chars": 32417,
+   "tree_chars": 3527
+  },
+  {
+   "id": "MAIF__arta-50",
+   "repo": "MAIF/arta",
+   "created_at": "2025-07-21",
+   "base_commit": "4554f44729b2c23fc1ac91c1701451666b5d5c4b",
+   "gold": [
+    ".pre-commit-config.yaml",
+    "pyproject.toml",
+    "src/arta/condition.py",
+    "src/arta/rule.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    ".pre-commit-config.yaml",
+    "pyproject.toml",
+    "src/arta/condition.py",
+    "src/arta/rule.py"
+   ],
+   "funcs": [
+    "StandardCondition",
+    "Rule"
+   ],
+   "size": {
+    "files": 4,
+    "functions": 2,
+    "lines": 10
+   },
+   "real_class": "L",
+   "layer3": true,
+   "files_in_atlas": 15,
+   "pages": 2,
+   "image_tokens_formula": 7521,
+   "map_chars": 4168,
+   "tree_chars": 340
+  },
+  {
+   "id": "tobymao__sqlglot-5359",
+   "repo": "tobymao/sqlglot",
+   "created_at": "2025-07-07",
+   "base_commit": "7e1d2117d83df677e4019c81cf96f3a1729b5da2",
+   "gold": [
+    "sqlglot/dialects/duckdb.py",
+    "sqlglot/expressions.py",
+    "sqlglot/generator.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "sqlglot/dialects/duckdb.py",
+    "sqlglot/expressions.py",
+    "sqlglot/generator.py"
+   ],
+   "funcs": [
+    "Parser",
+    "_parse_lambda",
+    "Generator",
+    "lambda_sql",
+    "GroupingSets",
+    "join_sql"
+   ],
+   "size": {
+    "files": 3,
+    "functions": 6,
+    "lines": 32
+   },
+   "real_class": "M",
+   "layer3": true,
+   "files_in_atlas": 92,
+   "pages": 28,
+   "image_tokens_formula": 129168,
+   "map_chars": 105607,
+   "tree_chars": 2468
+  },
+  {
+   "id": "celestoai__smolvm-172",
+   "repo": "CelestoAI/SmolVM",
+   "created_at": "2026-04-18",
+   "base_commit": "34d68c5f960e283aca7ad0c31519bdbcab99800d",
+   "gold": [
+    "scripts/internal/configure-runtime-sudoers.sh",
+    "scripts/internal/install-firecracker.sh",
+    "scripts/system-setup.sh",
+    "src/smolvm/cli/main.py",
+    "src/smolvm/host/doctor.py",
+    "src/smolvm/host/setup.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "scripts/internal/configure-runtime-sudoers.sh",
+    "scripts/internal/install-firecracker.sh",
+    "scripts/system-setup.sh",
+    "src/smolvm/cli/main.py",
+    "src/smolvm/host/doctor.py",
+    "src/smolvm/host/setup.py"
+   ],
+   "funcs": [
+    "_linux_only_help",
+    "_render_list",
+    "_run_setup",
+    "main",
+    "generate_doctor_report",
+    "SetupOptions",
+    "packaged_asset_root",
+    "build_setup_command"
+   ],
+   "size": {
+    "files": 6,
+    "functions": 8,
+    "lines": 237
+   },
+   "real_class": "L",
+   "layer3": false,
+   "files_in_atlas": 92,
+   "pages": 20,
+   "image_tokens_formula": 90390,
+   "map_chars": 57528,
+   "tree_chars": 2609
+  },
+  {
+   "id": "sissbruecker__linkding-1291",
+   "repo": "sissbruecker/linkding",
+   "created_at": "2026-01-25",
+   "base_commit": "d52caefe2cae6bb841a71c807715d9aaf63ba919",
+   "gold": [
+    "bookmarks/templates/bundles/preview.html",
+    "bookmarks/templates/shared/pagination.html",
+    "bookmarks/templates/tags/edit.html",
+    "bookmarks/templates/tags/index.html",
+    "bookmarks/templatetags/pagination.py",
+    "bookmarks/views/tags.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "bookmarks/templates/bundles/preview.html",
+    "bookmarks/templates/shared/pagination.html",
+    "bookmarks/templates/tags/edit.html",
+    "bookmarks/templates/tags/index.html",
+    "bookmarks/templatetags/pagination.py",
+    "bookmarks/views/tags.py"
+   ],
+   "funcs": [
+    "pagination",
+    "tags_index",
+    "tag_edit"
+   ],
+   "size": {
+    "files": 6,
+    "functions": 3,
+    "lines": 41
+   },
+   "real_class": "L",
+   "layer3": false,
+   "files_in_atlas": 238,
+   "pages": 14,
+   "image_tokens_formula": 64239,
+   "map_chars": 52786,
+   "tree_chars": 9537
+  },
+  {
+   "id": "imperialcollegelondon__pyrealm-593",
+   "repo": "ImperialCollegeLondon/pyrealm",
+   "created_at": "2026-01-19",
+   "base_commit": "83686e7af6c6e6802f12319430bbd314bcf503d6",
+   "gold": [
+    "pyrealm/constants/phenology_const.py",
+    "pyrealm/pmodel/pmodel_environment.py",
+    "pyrealm_build_data/phenology/zhu_method/zhu_method.py"
+   ],
+   "gold_new": [
+    "pyrealm/phenology/fapar_limitation_new.py"
+   ],
+   "gold_all": [
+    "pyrealm/constants/phenology_const.py",
+    "pyrealm/phenology/fapar_limitation_new.py",
+    "pyrealm/pmodel/pmodel_environment.py",
+    "pyrealm_build_data/phenology/zhu_method/zhu_method.py"
+   ],
+   "funcs": [
+    "calculate_f0",
+    "PhenologyConstNew",
+    "defines",
+    "and",
+    "FaparLimitationMethodABC",
+    "in",
+    "__init__",
+    "_check_required_variables",
+    "set_z_and_f0",
+    "calculate_maximum_fapar",
+    "__init_subclass__",
+    "FaparLimitationCai",
+    "evolves",
+    "FaparLimitationZhu",
+    "of",
+    "FaparLimitationNew",
+    "calculates",
+    "defined",
+    "from",
+    "__repr__",
+    "instance",
+    "summarize",
+    "from_pmodel",
+    "can",
+    "cal_fapar_actually_in_python"
+   ],
+   "size": {
+    "files": 4,
+    "functions": 25,
+    "lines": 668
+   },
+   "real_class": "L",
+   "layer3": false,
+   "files_in_atlas": 110,
+   "pages": 20,
+   "image_tokens_formula": 92805,
+   "map_chars": 44861,
+   "tree_chars": 4265
+  },
+  {
+   "id": "fsspec__universal_pathlib-529",
+   "repo": "fsspec/universal_pathlib",
+   "created_at": "2026-01-04",
+   "base_commit": "fb7703d7883e5bdc5f3eda6caab3a7b974dd806e",
+   "gold": [
+    "upath/_chain.py",
+    "upath/_flavour.py",
+    "upath/core.py",
+    "upath/implementations/cloud.py",
+    "upath/implementations/smb.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "upath/_chain.py",
+    "upath/_flavour.py",
+    "upath/core.py",
+    "upath/implementations/cloud.py",
+    "upath/implementations/smb.py"
+   ],
+   "funcs": [
+    "unchain",
+    "WrappedFileSystemFlavour",
+    "stringify_path",
+    "split",
+    "__init__",
+    "with_segments",
+    "parent",
+    "parents",
+    "__reduce__",
+    "path",
+    "parts",
+    "root"
+   ],
+   "size": {
+    "files": 5,
+    "functions": 12,
+    "lines": 41
+   },
+   "real_class": "L",
+   "layer3": false,
+   "files_in_atlas": 45,
+   "pages": 9,
+   "image_tokens_formula": 42021,
+   "map_chars": 50688,
+   "tree_chars": 1167
+  },
+  {
+   "id": "py-pdf__pdfly-219",
+   "repo": "py-pdf/pdfly",
+   "created_at": "2025-12-19",
+   "base_commit": "b3aad8e327d7a8f0cb79b7e02c2f1e2d26563007",
+   "gold": [
+    "pdfly/booklet.py",
+    "pdfly/up2.py",
+    "pdfly/x2pdf.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "pdfly/booklet.py",
+    "pdfly/up2.py",
+    "pdfly/x2pdf.py"
+   ],
+   "funcs": [
+    "main",
+    "px_to_mm"
+   ],
+   "size": {
+    "files": 3,
+    "functions": 2,
+    "lines": 33
+   },
+   "real_class": "M",
+   "layer3": false,
+   "files_in_atlas": 36,
+   "pages": 4,
+   "image_tokens_formula": 14145,
+   "map_chars": 7356,
+   "tree_chars": 655
+  },
+  {
+   "id": "PyPSA__PyPSA-1498",
+   "repo": "PyPSA/PyPSA",
+   "created_at": "2025-12-17",
+   "base_commit": "608a336c99b5ec3ac56c8925a0609e260c7c3072",
+   "gold": [
+    "pypsa/components/index.py",
+    "pypsa/optimization/common.py",
+    "pypsa/optimization/optimize.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "pypsa/components/index.py",
+    "pypsa/optimization/common.py",
+    "pypsa/optimization/optimize.py"
+   ],
+   "funcs": [
+    "names",
+    "_set_dynamic_data",
+    "create_model"
+   ],
+   "size": {
+    "files": 3,
+    "functions": 3,
+    "lines": 38
+   },
+   "real_class": "M",
+   "layer3": false,
+   "files_in_atlas": 91,
+   "pages": 28,
+   "image_tokens_formula": 129651,
+   "map_chars": 85246,
+   "tree_chars": 2580
+  },
+  {
+   "id": "plone__cookieplone-templates-322",
+   "repo": "plone/cookieplone-templates",
+   "created_at": "2025-12-05",
+   "base_commit": "45e98bbbd680dc833b98d6591eee3497872a0585",
+   "gold": [
+    "templates/add-ons/backend/hooks/post_gen_project.py",
+    "templates/projects/classic/hooks/post_gen_project.py",
+    "templates/projects/monorepo/hooks/post_gen_project.py"
+   ],
+   "gold_new": [
+    "news/321.breaking"
+   ],
+   "gold_all": [
+    "news/321.breaking",
+    "templates/add-ons/backend/hooks/post_gen_project.py",
+    "templates/projects/classic/hooks/post_gen_project.py",
+    "templates/projects/monorepo/hooks/post_gen_project.py"
+   ],
+   "funcs": [
+    "handle_create_namespace_packages",
+    "main"
+   ],
+   "size": {
+    "files": 4,
+    "functions": 2,
+    "lines": 7
+   },
+   "real_class": "L",
+   "layer3": false,
+   "files_in_atlas": 277,
+   "pages": 11,
+   "image_tokens_formula": 51336,
+   "map_chars": 29323,
+   "tree_chars": 23763
+  },
+  {
+   "id": "tobymao__sqlglot-6174",
+   "repo": "tobymao/sqlglot",
+   "created_at": "2025-10-23",
+   "base_commit": "74b4e7c311e9d4ff39ce2e4d91940eced96aa32f",
+   "gold": [
+    "sqlglot/dialects/dialect.py",
+    "sqlglot/dialects/duckdb.py",
+    "sqlglot/dialects/postgres.py",
+    "sqlglot/expressions.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "sqlglot/dialects/dialect.py",
+    "sqlglot/dialects/duckdb.py",
+    "sqlglot/dialects/postgres.py",
+    "sqlglot/expressions.py"
+   ],
+   "funcs": [
+    "build_replace_with_optional_replacement",
+    "regexp_replace_global_modifier",
+    "Parser",
+    "Generator",
+    "_build_regexp_replace",
+    "RegexpReplace"
+   ],
+   "size": {
+    "files": 4,
+    "functions": 6,
+    "lines": 37
+   },
+   "real_class": "L",
+   "layer3": false,
+   "files_in_atlas": 94,
+   "pages": 31,
+   "image_tokens_formula": 144762,
+   "map_chars": 114800,
+   "tree_chars": 2525
+  },
+  {
+   "id": "basicmachines-co__basic-memory-341",
+   "repo": "basicmachines-co/basic-memory",
+   "created_at": "2025-10-08",
+   "base_commit": "1fa93ecbd2a23304b19475f29fa094b04d4aaeed",
+   "gold": [
+    "src/basic_memory/api/app.py",
+    "src/basic_memory/schemas/project_info.py",
+    "src/basic_memory/services/project_service.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "src/basic_memory/api/app.py",
+    "src/basic_memory/schemas/project_info.py",
+    "src/basic_memory/services/project_service.py"
+   ],
+   "funcs": [
+    "lifespan",
+    "permalink",
+    "add_project"
+   ],
+   "size": {
+    "files": 3,
+    "functions": 3,
+    "lines": 26
+   },
+   "real_class": "M",
+   "layer3": false,
+   "files_in_atlas": 170,
+   "pages": 27,
+   "image_tokens_formula": 125511,
+   "map_chars": 63464,
+   "tree_chars": 7144
+  },
+  {
+   "id": "a2aproject__a2a-python-472",
+   "repo": "a2aproject/a2a-python",
+   "created_at": "2025-09-13",
+   "base_commit": "5ec078830eccf2a72c4a467e520de70c3cbca68e",
+   "gold": [
+    "src/a2a/client/transports/rest.py",
+    "src/a2a/server/events/event_queue.py",
+    "src/a2a/server/request_handlers/default_request_handler.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "src/a2a/client/transports/rest.py",
+    "src/a2a/server/events/event_queue.py",
+    "src/a2a/server/request_handlers/default_request_handler.py"
+   ],
+   "funcs": [
+    "RestTransport",
+    "EventQueue",
+    "DefaultRequestHandler"
+   ],
+   "size": {
+    "files": 3,
+    "functions": 3,
+    "lines": 56
+   },
+   "real_class": "M",
+   "layer3": false,
+   "files_in_atlas": 95,
+   "pages": 13,
+   "image_tokens_formula": 56442,
+   "map_chars": 69128,
+   "tree_chars": 3230
+  },
+  {
+   "id": "cubed-dev__cubed-799",
+   "repo": "cubed-dev/cubed",
+   "created_at": "2025-09-09",
+   "base_commit": "de56acf751e5bf41bf2159466bb2fdc1bb89b3f0",
+   "gold": [
+    "cubed/core/ops.py",
+    "cubed/core/plan.py",
+    "cubed/primitive/blockwise.py",
+    "cubed/storage/backend.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "cubed/core/ops.py",
+    "cubed/core/plan.py",
+    "cubed/primitive/blockwise.py",
+    "cubed/storage/backend.py"
+   ],
+   "funcs": [
+    "from_zarr",
+    "store",
+    "_store_array",
+    "key_function",
+    "to_zarr",
+    "_general_blockwise",
+    "Plan",
+    "general_blockwise",
+    "backend_storage_name",
+    "is_backend_storage_array"
+   ],
+   "size": {
+    "files": 4,
+    "functions": 10,
+    "lines": 175
+   },
+   "real_class": "L",
+   "layer3": false,
+   "files_in_atlas": 78,
+   "pages": 10,
+   "image_tokens_formula": 44022,
+   "map_chars": 42553,
+   "tree_chars": 2182
+  },
+  {
+   "id": "Spenhouet__confluence-markdown-exporter-92",
+   "repo": "Spenhouet/confluence-markdown-exporter",
+   "created_at": "2025-09-05",
+   "base_commit": "7e08acc485dce32fc637336b877c223e4c6a4a4e",
+   "gold": [
+    "confluence_markdown_exporter/main.py",
+    "confluence_markdown_exporter/utils/app_data_store.py",
+    "pyproject.toml"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "confluence_markdown_exporter/main.py",
+    "confluence_markdown_exporter/utils/app_data_store.py",
+    "pyproject.toml"
+   ],
+   "funcs": [
+    "pages",
+    "pages_with_descendants",
+    "spaces",
+    "all_spaces",
+    "config",
+    "ApiDetails",
+    "dump_secret",
+    "ConfigModel",
+    "sanitize_config",
+    "load_app_data",
+    "save_app_data",
+    "set_setting",
+    "reset_to_defaults"
+   ],
+   "size": {
+    "files": 3,
+    "functions": 13,
+    "lines": 57
+   },
+   "real_class": "M",
+   "layer3": false,
+   "files_in_atlas": 14,
+   "pages": 3,
+   "image_tokens_formula": 11523,
+   "map_chars": 11300,
+   "tree_chars": 649
+  },
+  {
+   "id": "stellarmesh__stellarmesh-51",
+   "repo": "stellarmesh/stellarmesh",
+   "created_at": "2025-09-05",
+   "base_commit": "907f1fb8ae18045ebcfeb7663d9ece69d2b42ca0",
+   "gold": [
+    "pyproject.toml",
+    "src/stellarmesh/geometry.py",
+    "src/stellarmesh/mesh.py",
+    "src/stellarmesh/moab.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "pyproject.toml",
+    "src/stellarmesh/geometry.py",
+    "src/stellarmesh/mesh.py",
+    "src/stellarmesh/moab.py"
+   ],
+   "funcs": [
+    "Face",
+    "Shell",
+    "_get_child_shapes",
+    "_solids_from_shape",
+    "_get_solids_from_shape",
+    "Geometry",
+    "SurfaceMesh",
+    "_mesh_occ",
+    "DAGMCGroup",
+    "DAGMCSurface",
+    "DAGMCEntitySet",
+    "groups",
+    "boundary",
+    "DAGMCVolume",
+    "DAGMCModel"
+   ],
+   "size": {
+    "files": 4,
+    "functions": 15,
+    "lines": 311
+   },
+   "real_class": "L",
+   "layer3": false,
+   "files_in_atlas": 8,
+   "pages": 2,
+   "image_tokens_formula": 5796,
+   "map_chars": 5300,
+   "tree_chars": 265
+  },
+  {
+   "id": "pgmpy__pgmpy-2271",
+   "repo": "pgmpy/pgmpy",
+   "created_at": "2025-08-06",
+   "base_commit": "8895614089d2fc042d0d9114a50e9afe4cb9f036",
+   "gold": [
+    "pgmpy/estimators/BayesianEstimator.py",
+    "pyproject.toml"
+   ],
+   "gold_new": [
+    ".flake8"
+   ],
+   "gold_all": [
+    ".flake8",
+    "pgmpy/estimators/BayesianEstimator.py",
+    "pyproject.toml"
+   ],
+   "funcs": [
+    "BayesianEstimator"
+   ],
+   "size": {
+    "files": 3,
+    "functions": 1,
+    "lines": 30
+   },
+   "real_class": "M",
+   "layer3": false,
+   "files_in_atlas": 113,
+   "pages": 29,
+   "image_tokens_formula": 135378,
+   "map_chars": 52589,
+   "tree_chars": 3427
+  },
+  {
+   "id": "beeware__briefcase-2401",
+   "repo": "beeware/briefcase",
+   "created_at": "2025-07-19",
+   "base_commit": "4c1fb37399d94d2d1e21216e70bb6dfb1cec0b1a",
+   "gold": [
+    "pyproject.toml",
+    "src/briefcase/bootstraps/toga.py",
+    "src/briefcase/platforms/windows/app.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "pyproject.toml",
+    "src/briefcase/bootstraps/toga.py",
+    "src/briefcase/platforms/windows/app.py"
+   ],
+   "funcs": [
+    "TogaGuiBootstrap"
+   ],
+   "size": {
+    "files": 3,
+    "functions": 1,
+    "lines": 10
+   },
+   "real_class": "M",
+   "layer3": false,
+   "files_in_atlas": 87,
+   "pages": 19,
+   "image_tokens_formula": 88320,
+   "map_chars": 62077,
+   "tree_chars": 3033
+  },
+  {
+   "id": "libp2p__py-libp2p-750",
+   "repo": "libp2p/py-libp2p",
+   "created_at": "2025-07-07",
+   "base_commit": "0679efb299963b3921de05ef170f98e21311c0a8",
+   "gold": [
+    "libp2p/peer/peerstore.py",
+    "libp2p/relay/circuit_v2/discovery.py",
+    "pyproject.toml"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "libp2p/peer/peerstore.py",
+    "libp2p/relay/circuit_v2/discovery.py",
+    "pyproject.toml"
+   ],
+   "funcs": [
+    "PeerStore",
+    "RelayDiscovery"
+   ],
+   "size": {
+    "files": 3,
+    "functions": 2,
+    "lines": 15
+   },
+   "real_class": "M",
+   "layer3": false,
+   "files_in_atlas": 167,
+   "pages": 16,
+   "image_tokens_formula": 72588,
+   "map_chars": 94175,
+   "tree_chars": 5337
+  },
+  {
+   "id": "tobymao__sqlglot-5352",
+   "repo": "tobymao/sqlglot",
+   "created_at": "2025-07-04",
+   "base_commit": "194850a52497300a8f1d47f2306b67cdd11ffab6",
+   "gold": [
+    "sqlglot/dialects/dialect.py",
+    "sqlglot/dialects/oracle.py",
+    "sqlglot/dialects/redshift.py",
+    "sqlglot/dialects/snowflake.py",
+    "sqlglot/dialects/spark.py",
+    "sqlglot/expressions.py",
+    "sqlglot/generator.py",
+    "sqlglot/parser.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "sqlglot/dialects/dialect.py",
+    "sqlglot/dialects/oracle.py",
+    "sqlglot/dialects/redshift.py",
+    "sqlglot/dialects/snowflake.py",
+    "sqlglot/dialects/spark.py",
+    "sqlglot/expressions.py",
+    "sqlglot/generator.py",
+    "sqlglot/parser.py"
+   ],
+   "funcs": [
+    "_Dialect",
+    "not",
+    "Oracle",
+    "Redshift",
+    "Snowflake",
+    "Spark",
+    "Decode",
+    "DecodeCase",
+    "Generator",
+    "is",
+    "decodecase_sql",
+    "Parser",
+    "_parse_decode"
+   ],
+   "size": {
+    "files": 8,
+    "functions": 13,
+    "lines": 85
+   },
+   "real_class": "L",
+   "layer3": false,
+   "files_in_atlas": 92,
+   "pages": 28,
+   "image_tokens_formula": 128892,
+   "map_chars": 105309,
+   "tree_chars": 2468
+  },
+  {
+   "id": "lincc-frameworks__nested-pandas-303",
+   "repo": "lincc-frameworks/nested-pandas",
+   "created_at": "2025-07-03",
+   "base_commit": "728d7859efb8d2470b8867f390bbea8f74c66983",
+   "gold": [
+    "pyproject.toml",
+    "src/nested_pandas/series/_storage/list_struct_storage.py",
+    "src/nested_pandas/series/dtype.py",
+    "src/nested_pandas/series/ext_array.py",
+    "src/nested_pandas/series/utils.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "pyproject.toml",
+    "src/nested_pandas/series/_storage/list_struct_storage.py",
+    "src/nested_pandas/series/dtype.py",
+    "src/nested_pandas/series/ext_array.py",
+    "src/nested_pandas/series/utils.py"
+   ],
+   "funcs": [
+    "ListStructStorage",
+    "NestedDtype",
+    "na_value",
+    "name",
+    "syntax",
+    "convert_df_to_pa_scalar",
+    "NestedExtensionArray",
+    "_from_sequence_of_strings",
+    "__getitem__",
+    "to_numpy",
+    "dropna",
+    "table_from_struct_array",
+    "chunk_lengths",
+    "rechunk"
+   ],
+   "size": {
+    "files": 5,
+    "functions": 14,
+    "lines": 113
+   },
+   "real_class": "L",
+   "layer3": false,
+   "files_in_atlas": 25,
+   "pages": 5,
+   "image_tokens_formula": 21114,
+   "map_chars": 14100,
+   "tree_chars": 943
+  },
+  {
+   "id": "python-wheel-build__fromager-653",
+   "repo": "python-wheel-build/fromager",
+   "created_at": "2025-07-01",
+   "base_commit": "4fa10a0a7b67131e1f158060f4c1580df25e432f",
+   "gold": [
+    ".gitignore",
+    "pyproject.toml",
+    "src/fromager/bootstrapper.py",
+    "src/fromager/dependencies.py",
+    "src/fromager/packagesettings.py",
+    "src/fromager/resolver.py",
+    "src/fromager/sources.py",
+    "src/fromager/wheels.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    ".gitignore",
+    "pyproject.toml",
+    "src/fromager/bootstrapper.py",
+    "src/fromager/dependencies.py",
+    "src/fromager/packagesettings.py",
+    "src/fromager/resolver.py",
+    "src/fromager/sources.py",
+    "src/fromager/wheels.py"
+   ],
+   "funcs": [
+    "Bootstrapper",
+    "get_build_system_dependencies",
+    "get_build_backend_dependencies",
+    "get_build_sdist_dependencies",
+    "ResolverDist",
+    "validate_ignore_platform",
+    "PackageBuildInfo",
+    "resolver_ignore_platform",
+    "resolve",
+    "default_resolver_provider",
+    "get_project_from_pypi",
+    "BaseProvider",
+    "PyPIProvider",
+    "default_resolve_source",
+    "resolve_prebuilt_wheel"
+   ],
+   "size": {
+    "files": 8,
+    "functions": 15,
+    "lines": 111
+   },
+   "real_class": "L",
+   "layer3": false,
+   "files_in_atlas": 123,
+   "pages": 12,
+   "image_tokens_formula": 52716,
+   "map_chars": 41625,
+   "tree_chars": 3827
+  },
+  {
+   "id": "qutech__qupulse-900",
+   "repo": "qutech/qupulse",
+   "created_at": "2025-07-01",
+   "base_commit": "84f63f102e78a1c22450fa0ee12bab9cdb3dc1a9",
+   "gold": [
+    "qupulse/program/linspace.py",
+    "qupulse/program/loop.py",
+    "qupulse/program/volatile.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "qupulse/program/linspace.py",
+    "qupulse/program/loop.py",
+    "qupulse/program/volatile.py"
+   ],
+   "funcs": [
+    "LinSpaceBuilder",
+    "LinSpaceVM",
+    "MakeCompatibleWarning",
+    "VolatileModificationWarning",
+    "VolatileRepetitionCount",
+    "InefficientVolatility"
+   ],
+   "size": {
+    "files": 3,
+    "functions": 6,
+    "lines": 39
+   },
+   "real_class": "M",
+   "layer3": false,
+   "files_in_atlas": 74,
+   "pages": 19,
+   "image_tokens_formula": 88044,
+   "map_chars": 118306,
+   "tree_chars": 2369
+  },
+  {
+   "id": "feder-observatory__stellarphot-519",
+   "repo": "feder-observatory/stellarphot",
+   "created_at": "2025-06-09",
+   "base_commit": "2c0714e45d0f4c4a20059fc670f316df70957085",
+   "gold": [
+    "pyproject.toml",
+    "stellarphot/core.py",
+    "stellarphot/table_representations.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "pyproject.toml",
+    "stellarphot/core.py",
+    "stellarphot/table_representations.py"
+   ],
+   "funcs": [
+    "BaseEnhancedTable",
+    "read",
+    "write",
+    "generate_table_representers",
+    "serialize_models_in_table_meta",
+    "deserialize_models_in_table_meta",
+    "_generate_old_table_representers"
+   ],
+   "size": {
+    "files": 3,
+    "functions": 7,
+    "lines": 143
+   },
+   "real_class": "M",
+   "layer3": false,
+   "files_in_atlas": 62,
+   "pages": 12,
+   "image_tokens_formula": 54855,
+   "map_chars": 21807,
+   "tree_chars": 2298
+  },
+  {
+   "id": "tobymao__sqlglot-5189",
+   "repo": "tobymao/sqlglot",
+   "created_at": "2025-06-08",
+   "base_commit": "696150dcb3337e328290434debbb28055233b2f8",
+   "gold": [
+    "sqlglot/dialects/hive.py",
+    "sqlglot/dialects/sqlite.py",
+    "sqlglot/parser.py",
+    "sqlglot/transforms.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "sqlglot/dialects/hive.py",
+    "sqlglot/dialects/sqlite.py",
+    "sqlglot/parser.py",
+    "sqlglot/transforms.py"
+   ],
+   "funcs": [
+    "Hive",
+    "SQLite",
+    "Parser",
+    "struct_kv_to_alias"
+   ],
+   "size": {
+    "files": 4,
+    "functions": 4,
+    "lines": 175
+   },
+   "real_class": "L",
+   "layer3": false,
+   "files_in_atlas": 89,
+   "pages": 27,
+   "image_tokens_formula": 125442,
+   "map_chars": 102205,
+   "tree_chars": 2387
+  },
+  {
+   "id": "ultrabug__py3status-2286",
+   "repo": "ultrabug/py3status",
+   "created_at": "2025-05-15",
+   "base_commit": "51eb2dfe4fba47ebe2f754beb051fbdb194c5d3a",
+   "gold": [
+    "py3status/core.py",
+    "py3status/modules/kdeconnector.py",
+    "py3status/modules/mail.py"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "py3status/core.py",
+    "py3status/modules/kdeconnector.py",
+    "py3status/modules/mail.py"
+   ],
+   "funcs": [
+    "Py3statusWrapper"
+   ],
+   "size": {
+    "files": 3,
+    "functions": 1,
+    "lines": 26
+   },
+   "real_class": "M",
+   "layer3": false,
+   "files_in_atlas": 146,
+   "pages": 24,
+   "image_tokens_formula": 111642,
+   "map_chars": 44722,
+   "tree_chars": 4274
+  },
+  {
+   "id": "pgmpy__pgmpy-2034",
+   "repo": "pgmpy/pgmpy",
+   "created_at": "2025-05-03",
+   "base_commit": "0bd031b75d7bbed66ea8b0d83c9f4742417500b7",
+   "gold": [
+    "pgmpy/inference/CausalInference.py",
+    "pgmpy/utils/compat_fns.py",
+    "pyproject.toml"
+   ],
+   "gold_new": [],
+   "gold_all": [
+    "pgmpy/inference/CausalInference.py",
+    "pgmpy/utils/compat_fns.py",
+    "pyproject.toml"
+   ],
+   "funcs": [
+    "CausalInference",
+    "exp"
+   ],
+   "size": {
+    "files": 3,
+    "functions": 2,
+    "lines": 19
+   },
+   "real_class": "M",
+   "layer3": false,
+   "files_in_atlas": 111,
+   "pages": 27,
+   "image_tokens_formula": 122751,
+   "map_chars": 44597,
+   "tree_chars": 3361
+  }
+ ],
+ "groups": [
+  {
+   "gid": "G1",
+   "repo": "tobymao/sqlglot",
+   "commit_of": "tobymao__sqlglot-5189",
+   "base_commit": "696150dcb3337e328290434debbb28055233b2f8",
+   "tickets": [
+    "tobymao__sqlglot-5189",
+    "tobymao__sqlglot-5352",
+    "tobymao__sqlglot-5359",
+    "tobymao__sqlglot-6067",
+    "tobymao__sqlglot-6174"
+   ],
+   "dropped": [],
+   "usable": true
+  }
+ ],
+ "layer3": [
+  "python-wheel-build__fromager-1124",
+  "nesquena__hermes-webui-330_interface",
+  "tox-dev__tox-3904",
+  "pytest-dev__pyfakefs-1286",
+  "pyjanitor-devs__pyjanitor-1593",
+  "scientific-python__docstub-123",
+  "jsonpickle__jsonpickle-588",
+  "jsonpickle__jsonpickle-587",
+  "niconoe__pyinaturalist-643",
+  "microsoft__fabric-cicd-670",
+  "tobymao__sqlglot-6067",
+  "agronholm__anyio-975",
+  "stanfordnlp__dspy-8607",
+  "pypa__virtualenv-2940",
+  "MAIF__arta-50",
+  "tobymao__sqlglot-5359"
+ ],
+ "layer2_evaluable": false
+}

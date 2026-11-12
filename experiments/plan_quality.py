@@ -19,6 +19,7 @@ Layer 3: Claude Code workers with edit tools, graded by the ticket's own tests: 
     python3 experiments/plan_quality.py judge [--ids ...] --cap 45
     python3 experiments/plan_quality.py plan  --layer 2 --cap 45
     python3 experiments/plan_quality.py work  --cap 45 [--max-tickets N]
+    python3 experiments/plan_quality.py extend --cap 45               # layer 1 beyond the layer-3 tickets, whole tickets
     python3 experiments/plan_quality.py analyse
 
 Rows: results/plan_quality/{funnel,briefs,judge,groups,work,spend}.jsonl, tickets.json. Clones, exports, venvs,
@@ -1015,6 +1016,40 @@ def run_work(work: Path, cap: float, max_tickets: int | None, workers: int) -> N
         print(f"[work] spent ${spent():.2f}", flush=True)
 
 
+def ticket_projection(x: dict) -> float:
+    """Projected list price of one more layer-1 ticket (four planners + four judge calls) from the rows so far: the
+    mean of tree, map, scout and judge calls; the atlas call as its measured cost per image token times this
+    ticket's image tokens, plus the mean atlas output cost."""
+    rows = [r for r in jl(OUT / "briefs.jsonl") if r["layer"] == 1 and r.get("cost_usd") and not r.get("cached")]
+    sel = {t["id"]: t for t in tickets()["tickets"]}
+    m = lambda p: statistics.mean(r["cost_usd"] for r in rows if r["planner"] == p)  # noqa: E731
+    at = [r for r in rows if r["planner"] == "atlas"]
+    per_tok = statistics.mean((r["cost_usd"] - (r.get("output_tokens") or 0) * PRICE_OUT)
+                              / sel[r["unit"]]["image_tokens_formula"] for r in at)
+    out = statistics.mean((r.get("output_tokens") or 0) * PRICE_OUT for r in at)
+    jd = statistics.mean(r["cost_usd"] for r in jl(OUT / "judge.jsonl") if r.get("cost_usd"))
+    return m("tree") + m("map") + m("scout") + per_tok * x["image_tokens_formula"] + out + 4 * jd
+
+
+def extend(work: Path, cap: float, workers: int) -> None:
+    """Layer 1 beyond the layer-3 tickets, in order, one whole ticket at a time (four planners, then its four judge
+    calls), started only when spent + 1.2 x its projection stays under the cap."""
+    for x in tickets()["tickets"]:
+        have = {r["planner"] for r in jl(OUT / "briefs.jsonl") if r["layer"] == 1 and r["unit"] == x["id"]}
+        judged = {r["planner"] for r in jl(OUT / "judge.jsonl") if r["unit"] == x["id"]}
+        if have >= set(PLANNERS) and judged >= set(PLANNERS):
+            continue
+        if STOP.is_set():
+            break
+        proj = ticket_projection(x)
+        if not have and spent() + 1.2 * proj > cap:
+            print(f"[extend] STOP before {x['id']}: ${spent():.2f} + 1.2 x ${proj:.2f} > cap ${cap}", flush=True)
+            break
+        run_plans(work, 1, list(PLANNERS), [x["id"]], cap, workers)
+        run_judge(work, [x["id"]], cap, workers)
+        print(f"[extend] {x['id']} done (projected ${proj:.2f}); spent ${spent():.2f}", flush=True)
+
+
 # --------------------------------------------------------------------------- estimate
 def estimate(work: Path, out_tokens: int = 3000) -> dict:
     sel = tickets()
@@ -1268,7 +1303,7 @@ def analyse(work: Path) -> str:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("cmd", choices=["select", "prepare", "estimate", "plan", "judge", "work", "analyse"])
+    ap.add_argument("cmd", choices=["select", "prepare", "estimate", "plan", "judge", "work", "extend", "analyse"])
     ap.add_argument("--work", type=Path, default=DEFAULT_WORK)
     ap.add_argument("--workers", type=int, default=2)
     ap.add_argument("--cap", type=float, default=45.0)
@@ -1295,6 +1330,8 @@ def main(argv=None) -> int:
         run_judge(a.work, a.ids, a.cap, w)
     elif a.cmd == "work":
         run_work(a.work, a.cap, a.max_tickets, w)
+    elif a.cmd == "extend":
+        extend(a.work, a.cap, w)
     else:
         txt = analyse(a.work)
         (OUT / "summary.md").write_text(txt + "\n")
