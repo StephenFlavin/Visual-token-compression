@@ -1309,7 +1309,7 @@ def analyse(work: Path) -> str:
     for r in sp:
         w = r["what"]
         k = ("screen" if w.endswith("screen") else "smoke" if w.startswith("smoke") else "judge" if w.startswith("judge")
-             else "L3 " + w.split()[-1] if w.startswith("L3") else f"L{w[1]} " + w.split()[-1] if w.startswith("L") else w)
+             else "L3 " + w.split()[2] if w.startswith("L3") else f"L{w[1]} " + w.split()[-1] if w.startswith("L") else w)
         cat[k] = cat.get(k, 0) + r["cost_usd"]
     L += ["", "## Spend (list price)", "", "| what | $ |", "|---|---|"] + [f"| {k} | {v:.2f} |" for k, v in sorted(cat.items())]
     L.append(f"| **total** | **{spent():.2f}** |")

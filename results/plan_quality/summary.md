@@ -117,11 +117,9 @@ Worker runs that wrote auto-memory files: 0
 | L1 map | 5.38 |
 | L1 scout | 5.19 |
 | L1 tree | 1.71 |
-| L3 cost) | 0.01 |
-| L3 haiku_atlas | 0.10 |
+| L3 haiku_atlas | 0.11 |
 | L3 opus_atlas | 5.17 |
 | L3 opus_tree | 6.76 |
-| L3 recorded) | 0.01 |
 | L3 sonnet_atlas | 0.81 |
 | judge | 4.51 |
 | screen | 0.50 |
