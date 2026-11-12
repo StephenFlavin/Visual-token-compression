@@ -116,6 +116,25 @@ def test_cache_hit_and_keying(fake):
     assert len(f.calls) == 7
 
 
+def test_cache_salt_default_key_unchanged_and_salt_only_changes_key(fake):
+    import hashlib
+    pngs = [ce.png_bytes(img()), ce.png_bytes(img(color=0))]
+    # the key as computed before cache_salt existed
+    payload = {"model": "m", "system": "s", "prompt": "p", "images": [hashlib.sha256(b).hexdigest() for b in pngs],
+               "effort": "high"}
+    old = hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
+    assert ce.cache_key("m", "s", "p", pngs, "high") == old
+    assert ce.cache_key("m", "s", "p", pngs, "high", None) == old
+    assert ce.cache_key("m", "s", "p", pngs, "high", "1") not in (old, ce.cache_key("m", "s", "p", pngs, "high", "2"))
+    # a salted repeat is a new call with a byte-identical request; the unsalted entry stays cached
+    f = fake()
+    ce.transcribe([img()], "s", "p", effort="high")
+    ce.transcribe([img()], "s", "p", effort="high", cache_salt="1")
+    ce.transcribe([img()], "s", "p", effort="high", cache_salt="1")
+    assert len(f.calls) == 2
+    assert f.calls[0]["stdin"] == f.calls[1]["stdin"] and f.calls[0]["cmd"] == f.calls[1]["cmd"]
+
+
 def test_cache_key_order_sensitive():
     a, b = ce.png_bytes(img(color=0)), ce.png_bytes(img(color=255))
     assert ce.cache_key("m", "s", "p", [a, b]) != ce.cache_key("m", "s", "p", [b, a])

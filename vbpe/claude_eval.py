@@ -99,12 +99,17 @@ def check_image_bounds(img: Image.Image, hires: bool = False) -> None:
         )
 
 
-def cache_key(model: str, system: str, prompt: str, pngs: list[bytes], effort: str | None = None) -> str:
+def cache_key(model: str, system: str, prompt: str, pngs: list[bytes], effort: str | None = None,
+              cache_salt: str | None = None) -> str:
+    """``cache_salt``: an extra string that enters only the key (never the request), so a repeat of an identical
+    call gets its own cache entry. None (default) leaves every key as it was before the salt existed."""
     h = hashlib.sha256()
     payload = {"model": model, "system": system, "prompt": prompt,
                "images": [hashlib.sha256(b).hexdigest() for b in pngs]}
     if effort:
         payload["effort"] = effort
+    if cache_salt is not None:
+        payload["cache_salt"] = cache_salt
     h.update(json.dumps(payload, sort_keys=True).encode())
     return h.hexdigest()
 
@@ -232,17 +237,19 @@ _sleep = time.sleep  # patched in tests
 # --------------------------------------------------------------------------- public API
 def transcribe(images: list[Image.Image], system: str, prompt: str, model: str = DEFAULT_MODEL,
                max_retries: int = 5, *, timeout: float = DEFAULT_TIMEOUT, use_cache: bool = True,
-               effort: str | None = DEFAULT_EFFORT, cache_dir: Path | None = None, hires: bool = False) -> dict:
+               effort: str | None = DEFAULT_EFFORT, cache_dir: Path | None = None, hires: bool = False,
+               cache_salt: str | None = None) -> dict:
     """Send ``images`` (in order) followed by ``prompt`` to Claude; return text + accounting.
 
     Keys: text, model (served), input_tokens (incl. cache creation/read), output_tokens,
     cost_usd, latency_s, cached, error (None or str) + diagnostics (usage, model_usage, ...).
-    ``use_cache=False`` bypasses the read but still stores a successful result.
+    ``use_cache=False`` bypasses the read but still stores a successful result. ``cache_salt`` (e.g. a repeat
+    index) changes only the cache key, not the request: repeats of one call are stored separately.
     """
     for img in images:
         check_image_bounds(img, hires)
     pngs = [png_bytes(img) for img in images]
-    key = cache_key(model, system, prompt, pngs, effort)
+    key = cache_key(model, system, prompt, pngs, effort, cache_salt)
     cdir = Path(cache_dir) if cache_dir is not None else CACHE_DIR
     path = cdir / f"{key}.json"
     if use_cache and path.exists():
