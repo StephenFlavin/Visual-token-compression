@@ -150,3 +150,15 @@
 {"what": "judge tobymao__sqlglot-5359 scout", "cost_usd": 0.019953, "t": "2026-11-12T14:30:52", "error": null}
 {"what": "judge pypa__virtualenv-2940 scout", "cost_usd": 0.028878, "t": "2026-11-12T14:30:54", "error": null}
 {"what": "judge microsoft__fabric-cicd-670 map", "cost_usd": 0.024748, "t": "2026-11-12T14:30:56", "error": null}
+{"what": "L3 python-wheel-build__fromager-1124 opus_atlas", "cost_usd": 0.445516, "t": "2026-11-12T14:32:52"}
+{"what": "L3 python-wheel-build__fromager-1124 sonnet_atlas", "cost_usd": 0.0495372, "t": "2026-11-12T14:33:19"}
+{"what": "L3 python-wheel-build__fromager-1124 opus_tree", "cost_usd": 0.7544616000000001, "t": "2026-11-12T14:33:55"}
+{"what": "L3 python-wheel-build__fromager-1124 haiku_atlas", "cost_usd": 0.0074248100000000004, "t": "2026-11-12T14:34:01"}
+{"what": "L3 nesquena__hermes-webui-330_interface opus_tree", "cost_usd": 0.4229244, "t": "2026-11-12T14:35:31"}
+{"what": "L3 nesquena__hermes-webui-330_interface sonnet_atlas", "cost_usd": 0.03834800000000001, "t": "2026-11-12T14:35:49"}
+{"what": "L3 nesquena__hermes-webui-330_interface haiku_atlas", "cost_usd": 0.008287315, "t": "2026-11-12T14:36:46"}
+{"what": "L3 nesquena__hermes-webui-330_interface opus_atlas", "cost_usd": 0.5347772000000001, "t": "2026-11-12T14:36:46"}
+{"what": "L3 tox-dev__tox-3904 opus_tree", "cost_usd": 0.7187209999999999, "t": "2026-11-12T14:40:08"}
+{"what": "L3 tox-dev__tox-3904 opus_atlas", "cost_usd": 0.46951, "t": "2026-11-12T14:40:54"}
+{"what": "L3 tox-dev__tox-3904 sonnet_atlas", "cost_usd": 0.1221466, "t": "2026-11-12T14:41:35"}
+{"what": "L3 tox-dev__tox-3904 haiku_atlas", "cost_usd": 0.012414689999999999, "t": "2026-11-12T14:43:39"}

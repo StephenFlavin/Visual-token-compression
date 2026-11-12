@@ -875,7 +875,8 @@ def run_judge(work: Path, ids: list[str] | None, cap: float, workers: int) -> No
 
 
 # --------------------------------------------------------------------------- layer 3 workers
-LEAK_EXTRA = r"|/pq/(ds|ctx|co|git|x|transcripts|runs)\b|visual-bpe|plan_quality|repo_atlas"
+LEAK_EXTRA = r"|/pq/(ds|ctx|co|git|x|transcripts)\b|visual-bpe|plan_quality|repo_atlas"
+# (the run's own checkout and venv live under /pq/runs/<hash>/: not a leak)
 
 
 def leak_hits(commands: list[str], pkg: str) -> list[str]:
@@ -1262,6 +1263,8 @@ def analyse(work: Path) -> str:
         L += [f"| {k} | {v['tickets']} | {v['resolved']} | ${v['cost_usd']:.2f} |" for k, v in pol.items()]
         summ["policies"] = pol
         summ["verdicts"] = vc
+        for r in W.values():                                 # re-apply the current pattern to stored commands
+            r["leak_suspects"] = leak_hits(r.get("leak_suspects") or [], r["id"].split("__")[1].rsplit("-", 1)[0])
         leaks = [(r["id"], r["arm"], r["leak_suspects"]) for r in W.values() if r.get("leak_suspects")]
         L += ["", f"Leak suspects in worker runs: {len(leaks)}"] + [f"* {x}" for x in leaks]
         mem = [(r["id"], r["arm"], r["memory"]) for r in W.values() if (r.get("memory") or {}).get("memory_files")]
