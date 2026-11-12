@@ -188,3 +188,22 @@ alike:
   soon as the run ends (a watcher for the runs already in flight, then in the runner), before any `atlas_only` run of
   the same project can start. The audit also flags any read of another run's directory there. Its path rule was
   refined: `//` comments and the run's own CLI store no longer count as outside paths.
+
+## Pilot cost and amendment 2 (2026-11-12, 13:05 UTC, before any run after the pilot)
+
+**Pilot spend:** 6 runs, $12.71 (plus the $0.02 smoke call): $1.72-2.58 per run, mean $2.12, so about $6.40 per
+project, $7.60 at the runner's 1.2 margin. $17.27 is left under the cap: at this cost two more projects of the large
+end fit, four in all, fewer than 6. **So the pre-registered switch applies:** the remaining budget goes to the
+validated projects in smaller-end order (SimpleXML 806 C lines, utf8 806, clhash 824, Simple_Sparsehash 845,
+proj_2DPartInt 855, Phills_DHT 875, lib2bit 911, rubiksolver 923, ...), each started only while its three runs fit
+under the cap at the measured mean cost per run (the mean updates as runs come in), each finished in all three arms.
+The two pilot projects stay in the analysis; the large/small split is reported.
+
+**Two more harness faults, found in the pilot's transcripts (bookkeeping only, every arm alike):** an agent can start
+a long test in the background (Genetic's 50,000-generation test), end its turn, and then be woken by the task's
+notification; each wake writes its own result event. Cost there is cumulative (the last result is the run's
+total, so the spend above is right), but turns, duration and token usage are per wake. The runner had taken only
+the last result (Genetic `atlas_only` showed 2 turns instead of 31). Now turns, agent time and usage are summed over
+all result events, and the answer is the first result's text. "Seconds" in the tables is the agent's own time (sum of
+`duration_ms`): the wall clock also counts a background test left running until the 30-minute kill (Genetic
+`atlas` and `atlas_only`: 1800 s wall vs 991 s and 746 s agent time). Wall seconds stay in the rows (`wall_s`).

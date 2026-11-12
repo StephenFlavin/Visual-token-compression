@@ -187,3 +187,11 @@ def test_audit_ignores_comment_slashes_and_own_cli_store():
     assert not M.audit_calls(calls, cwd)["suspect"]
     other = str(M.cli_store(M.Path("/tmp/claude-0/x/mig/runs/p/atlas")))
     assert M.audit_calls(calls + [{"name": "Bash", "input": {"command": f"ls {other}/memory"}}], cwd)["suspect"]
+
+
+def test_result_summary_sums_segments_and_keeps_cumulative_cost():
+    ev = [{"type": "result", "num_turns": 29, "total_cost_usd": 2.09, "duration_ms": 741794, "subtype": "success", "result": "DONE"},
+          {"type": "assistant"}, {"type": "result", "num_turns": 2, "total_cost_usd": 2.14, "duration_ms": 4335, "result": "x"}]
+    s = M.result_summary(ev)
+    assert s["usage"]["output_tokens"] == 0 and s["turns"] == 31 and s["cost_usd"] == 2.14 and s["agent_s"] == 746 and s["n_results"] == 2 and s["final"] == "DONE"
+    assert M.result_summary([]) == {}

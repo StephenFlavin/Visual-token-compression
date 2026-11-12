@@ -611,6 +611,12 @@ def regrade() -> None:
             ev = [json.loads(l) for l in stream.read_text().splitlines() if l.startswith("{")]
             calls = [c for e in ev if e.get("type") == "assistant" for c in e["message"]["content"] if c.get("type") == "tool_use"]
             r["audit"] = audit_calls(calls, str(WORK / "runs" / r["project"] / r["arm"]))
+            rsum = result_summary(ev)
+            if rsum and "agent_s" not in r:
+                u = rsum["usage"]
+                r.update(turns=rsum["turns"], agent_s=rsum["agent_s"], n_results=rsum["n_results"], wall_s=r["seconds"],
+                         final=rsum["final"], subtype=rsum["subtype"], output_tokens=u["output_tokens"],
+                         input_tokens=sum(u[k] for k in USAGE_KEYS[:3]), usage=u)
     tmp = OUT / "runs.jsonl.tmp"
     tmp.write_text("".join(json.dumps(r) + "\n" for r in rows))
     os.replace(tmp, OUT / "runs.jsonl")
@@ -637,6 +643,22 @@ def limit_hit(res: dict | None, stderr: str, n_messages: int, timed_out: bool) -
         return False
     return bool(res.get("is_error")) and bool(LIMIT.search(str(res.get("result")) + " " + stderr
                                                            + " " + str(res.get("api_error_status"))))
+
+
+def result_summary(ev: list[dict]) -> dict:
+    """A stream can hold several result events: background tasks the agent started wake it again after its answer,
+    and each wake ends with its own result. total_cost_usd is cumulative (the last one is the run's), turns and
+    durations are per segment (summed); the answer is the first result's text."""
+    rs = [e for e in ev if e.get("type") == "result"]
+    if not rs:
+        return {}
+    return {"turns": sum(r.get("num_turns") or 0 for r in rs), "cost_usd": float(rs[-1].get("total_cost_usd") or 0.0),
+            "agent_s": round(sum(r.get("duration_ms") or 0 for r in rs) / 1000), "n_results": len(rs),
+            "subtype": rs[0].get("subtype"), "final": (rs[0].get("result") or "")[-400:],
+            "usage": {k: sum((r.get("usage") or {}).get(k, 0) for r in rs) for k in USAGE_KEYS}}
+
+
+USAGE_KEYS = ("input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens")
 
 
 def run_one(project: str, arm: str, budget: float) -> dict:
@@ -704,7 +726,7 @@ def run_one(project: str, arm: str, budget: float) -> dict:
     names = [c["name"] for c in calls]
     if res is not None:
         cost, cost_est = float(res.get("total_cost_usd") or 0.0), False
-        u = res.get("usage") or {}
+        u = result_summary(ev)["usage"]
     else:
         cost, cost_est = run_cost(usages), True
         u = {k: sum(x.get(k, 0) for x in usages) for k in ("input_tokens", "cache_creation_input_tokens",
@@ -736,11 +758,13 @@ def run_one(project: str, arm: str, budget: float) -> dict:
     lib_src = "\n".join(v.decode("utf-8", "replace") for k, v in read_tree(crate).items()
                         if k.startswith("src/") and not k.startswith("src/bin/") and k.endswith(".rs"))
     audit = audit_calls(calls, str(base))
+    rsum = result_summary(ev)
     row = {"project": project, "arm": arm, "model": MODEL, "effort": EFFORT, **sc,
            "bench_ok": g["bench_ok"], "bench_failed": g["bench_failed"], "test_timeout": g["timeout"],
            "build_log_tail": g["build_log_tail"][-800:],
            "unsafe": count_unsafe(lib_src), "unimplemented_left": len(re.findall(r"unimplemented!\(", strip_comments(lib_src))),
-           "turns": (res or {}).get("num_turns"), "subtype": (res or {}).get("subtype", "killed_wall_clock" if timed_out else "no_result"),
+           "turns": rsum.get("turns"), "subtype": rsum.get("subtype", "killed_wall_clock" if timed_out else "no_result"),
+           "agent_s": rsum.get("agent_s", round(secs)), "n_results": rsum.get("n_results", 0), "wall_s": round(secs),
            "is_error": (res or {}).get("is_error"), "cost_usd": cost, "cost_estimated": cost_est, "budget_usd": budget,
            "seconds": round(secs), "timed_out": timed_out, "output_tokens": u.get("output_tokens"),
            "input_tokens": sum(u.get(k, 0) for k in ("input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens")),
@@ -749,7 +773,7 @@ def run_one(project: str, arm: str, budget: float) -> dict:
            "first_turn_input": first_in, "image_tokens_formula": image_tokens(sizes),
            "pages_arrived": (arm == "plain") or first_in >= PAGE_ARRIVAL * image_tokens(sizes),
            "integrity": integ, "audit": audit, "permission_denials": [str(d)[:200] for d in (res or {}).get("permission_denials") or []][:10],
-           "final": ((res or {}).get("result") or "")[-400:], "stderr_tail": stderr.decode("utf-8", "replace")[-400:]}
+           "final": rsum.get("final", ""), "stderr_tail": stderr.decode("utf-8", "replace")[-400:]}
     row["grade_version"] = 2
     row["timed_out_bins"] = g.get("timed_out_bins", [])
     shutil.rmtree(base / "rust", ignore_errors=True)
@@ -865,7 +889,7 @@ def report() -> str:
             continue
         L.append(f"| {a} | {len(rs)} | {sum(r['all_pass'] for r in rs)} | {100 * sum(r['share'] for r in rs) / len(rs):.1f}% | "
                  f"{sum(r['built'] for r in rs)} | {median([r['turns'] for r in rs])} | "
-                 f"${sum(r['cost_usd'] for r in rs) / len(rs):.2f} | {median([r['seconds'] for r in rs])} | "
+                 f"${sum(r['cost_usd'] for r in rs) / len(rs):.2f} | {median([r.get('agent_s', r['seconds']) for r in rs])} | "
                  f"{median([r['output_tokens'] for r in rs])} | {sum(r['unsafe'] for r in rs)} |")
     L += ["", "| Project | C lines | Tests | " + " | ".join(f"{a}: pass / turns / $ / s" for a in ARMS) + " |",
           "|---|---|---|" + "---|" * len(ARMS)]
@@ -880,7 +904,7 @@ def report() -> str:
             flag += " (SUSPECT)" if r["audit"]["suspect"] else ""
             flag += "" if r["pages_arrived"] else " (PAGES DROPPED)"
             cells.append(f"{r['n_passed']}/{r['n_tests']}{' ALL' if r['all_pass'] else ''}{flag} / {r['turns']} / "
-                         f"{r['cost_usd']:.2f} / {r['seconds']}")
+                         f"{r['cost_usd']:.2f} / {r.get('agent_s', r['seconds'])}")
         L.append(f"| {p} | {m['c_lines']} | {m['n_tests']} | " + " | ".join(cells) + " |")
     L += ["", "Paired tests (exact; McNemar on all-tests-pass, sign tests on the rest):", ""]
     for a, b in (("atlas", "plain"), ("atlas_only", "plain"), ("atlas_only", "atlas")):
@@ -890,8 +914,8 @@ def report() -> str:
         ab = sum(x["all_pass"] and not y["all_pass"] for x, y in zip(A, B))
         ba = sum(y["all_pass"] and not x["all_pass"] for x, y in zip(A, B))
         parts = [f"all-pass {a} only {ab}, {b} only {ba}, p = {exact_binom_two_sided(ab, ab + ba):.3f}"]
-        for k in ("share", "turns", "cost_usd", "seconds", "output_tokens"):
-            d = [(x[k] or 0) - (y[k] or 0) for x, y in zip(A, B)]
+        for k in ("share", "turns", "cost_usd", "agent_s", "output_tokens"):
+            d = [(x.get(k, x.get("seconds")) or 0) - (y.get(k, y.get("seconds")) or 0) for x, y in zip(A, B)]
             st = sign_test(d)
             parts.append(f"{k}: median diff {median(d):+.3g} ({st['pos']}+ / {st['neg']}- / {st['ties']}=, p = {st['p']:.3f})")
         L.append(f"* **{a} vs {b}:** " + "; ".join(parts))
