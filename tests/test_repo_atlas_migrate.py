@@ -172,3 +172,18 @@ def test_limit_hit_separates_limits_from_agent_endings():
     assert not M.limit_hit({"is_error": True, "subtype": "error_max_turns", "result": ""}, "", 60, False)
     assert not M.limit_hit({"is_error": True, "subtype": "error_max_budget_usd", "result": ""}, "", 40, False)
     assert not M.limit_hit({"is_error": False, "subtype": "success", "result": "DONE"}, "", 30, False)
+
+
+def test_parse_bin_keys_by_binary():
+    out = "running 2 tests\ntest t_one ... ok\ntest t_two ... FAILED\n"
+    assert M.parse_bin(out, "test_a") == {"test_a::t_one": "ok", "test_a::t_two": "FAILED"}
+
+
+def test_audit_ignores_comment_slashes_and_own_cli_store():
+    cwd = "/tmp/claude-0/x/mig/runs/p/plain"
+    own = str(M.cli_store(M.Path(cwd)))
+    calls = [{"name": "Write", "input": {"file_path": f"{cwd}/rust/src/a.rs", "content": "// note\n/// doc\nlet x = a / b;"}},
+             {"name": "Read", "input": {"file_path": f"{own}/abc/tool-results/x.txt"}}]
+    assert not M.audit_calls(calls, cwd)["suspect"]
+    other = str(M.cli_store(M.Path("/tmp/claude-0/x/mig/runs/p/atlas")))
+    assert M.audit_calls(calls + [{"name": "Bash", "input": {"command": f"ls {other}/memory"}}], cwd)["suspect"]

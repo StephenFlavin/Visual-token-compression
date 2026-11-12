@@ -211,8 +211,9 @@ def audit_calls(calls: list[dict], cwd: str) -> dict:
         text = " ".join(str(v) for v in inp.values() if isinstance(v, (str, int)))
         if NET.search(text):
             net.append(text[:200])
-        for p in re.findall(r"(?<![\w.~-])(/[\w./-]+)", text):
-            if p.startswith(cwd):
+        own = str(cli_store(Path(cwd)))
+        for p in re.findall(r"(?<![\w.~/:-])(/[A-Za-z_][\w./-]*)", text):
+            if p.startswith(cwd) or p.startswith(own):
                 continue
             if (not p.startswith(ALLOWED_OUTSIDE) or p.startswith("/tmp/claude")) and p != "/":
                 outside.append(p[:120])
@@ -340,31 +341,50 @@ def cargo_env(target: Path) -> dict:
     return env
 
 
-def cargo_grade(crate: Path, target: Path, run_timeout: int = 300) -> dict:
-    """Build the tests, then run every test binary (--no-fail-fast). Returns built, outcomes and timings."""
+BIN_TIMEOUT = 300           # per test binary (amendment 1: one slow binary no longer hides the others)
+
+
+def run_group(cmd: list[str], cwd: Path, env: dict, timeout: int) -> tuple[str, str, bool, int]:
+    """Run a command in its own process group; on timeout kill the whole group (cargo and the test binary) and
+    return what it printed so far."""
+    p = subprocess.Popen(cmd, cwd=cwd, env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                         stdin=subprocess.DEVNULL, start_new_session=True)
+    try:
+        out, err = p.communicate(timeout=timeout)
+        return out.decode("utf-8", "replace"), err.decode("utf-8", "replace"), False, p.returncode
+    except subprocess.TimeoutExpired:
+        os.killpg(p.pid, signal.SIGKILL)
+        out, err = p.communicate()
+        return out.decode("utf-8", "replace"), err.decode("utf-8", "replace"), True, -9
+
+
+def parse_bin(stdout: str, name: str) -> dict[str, str]:
+    """One test binary's stdout -> {"<bin>::<test>": ok | FAILED | ignored}."""
+    return {f"{name}::{m.group(1)}": m.group(2) for m in TEST_LINE.finditer(stdout)}
+
+
+def cargo_grade(crate: Path, target: Path, bin_timeout: int = BIN_TIMEOUT) -> dict:
+    """Build the tests, then run each test target on its own (the library's unit tests as ``lib``, then every
+    src/bin/*.rs) with its own time limit. Returns built, outcomes keyed ``<bin>::<test>`` and the timed-out targets."""
     env = cargo_env(target)
     t0 = time.time()
-    try:
-        b = sh(["cargo", "test", "--no-run"], cwd=crate, env=env, timeout=1200)
-        built, blog = b.returncode == 0, b.stderr[-3000:]
-    except subprocess.TimeoutExpired:
-        built, blog = False, "BUILD TIMEOUT"
-    res = {"built": built, "build_s": round(time.time() - t0), "build_log_tail": "" if built else blog}
+    out, err, to, rc = run_group(["cargo", "test", "--no-run"], crate, env, 1200)
+    built = rc == 0
+    res = {"built": built, "build_s": round(time.time() - t0), "build_log_tail": "" if built else (err[-3000:] or "BUILD TIMEOUT")}
     if not built:
-        return {**res, "outcomes": {}, "bench_ok": 0, "bench_failed": 0, "timeout": False}
+        return {**res, "outcomes": {}, "bench_ok": 0, "bench_failed": 0, "timeout": False, "timed_out_bins": []}
     t1 = time.time()
-    timeout = False
-    try:
-        p = subprocess.run(["cargo", "test", "--no-fail-fast"], cwd=crate, env=env, capture_output=True,
-                           text=True, timeout=run_timeout, stdin=subprocess.DEVNULL)
-        log = p.stdout + "\n" + p.stderr
-    except subprocess.TimeoutExpired as e:
-        timeout = True
-        log = ((e.stdout.decode() if isinstance(e.stdout, bytes) else e.stdout) or "") + "\n" + \
-              ((e.stderr.decode() if isinstance(e.stderr, bytes) else e.stderr) or "")
-    pt = parse_tests(log)
-    return {**res, "outcomes": pt["tests"], "bench_ok": pt["bench_ok"], "bench_failed": pt["bench_failed"],
-            "timeout": timeout, "test_s": round(time.time() - t1)}
+    outcomes, ok, failed, tbins = {}, 0, 0, []
+    targets = [("lib", ["--lib"])] + [(b.stem, ["--bin", b.stem]) for b in sorted((crate / "src" / "bin").glob("*.rs"))]
+    for name, sel in targets:
+        out, _err, to, _rc = run_group(["cargo", "test", "--no-fail-fast", *sel], crate, env, bin_timeout)
+        outcomes.update(parse_bin(out, name))
+        ok += out.count("... ok")
+        failed += out.count("... FAILED")
+        if to:
+            tbins.append(name)
+    return {**res, "outcomes": outcomes, "bench_ok": ok, "bench_failed": failed, "timeout": bool(tbins),
+            "timed_out_bins": tbins, "test_s": round(time.time() - t1)}
 
 
 # ----------------------------------------------------------------------------------------------- prepare
@@ -424,10 +444,16 @@ def prepare() -> None:
 def validate(s: dict) -> dict:
     """The harness works locally: the untouched skeleton's tests compile and they fail (not all pass)."""
     sk = WORK / "pristine" / s["project"]
-    format_skeleton(WORK / "rbench" / s["project"], sk)
+    if not (sk / "Cargo.toml").exists():
+        format_skeleton(WORK / "rbench" / s["project"], sk)
+    sk_copy = WORK / "tmp_validate" / s["project"]           # cargo may write into the crate (Cargo.lock)
+    shutil.rmtree(sk_copy, ignore_errors=True)
+    shutil.copytree(sk, sk_copy)
+    sk = sk_copy
     tgt = WORK / "targets" / f"validate_{s['project']}"
-    g = cargo_grade(sk, tgt, run_timeout=300)
+    g = cargo_grade(sk, tgt)
     shutil.rmtree(tgt, ignore_errors=True)
+    shutil.rmtree(sk, ignore_errors=True)
     base = sorted(t for t, o in g["outcomes"].items() if o != "ignored")
     r = {"project": s["project"], "built": g["built"], "n_tests": len(base), "baseline": base,
          "baseline_passing": sorted(t for t in base if g["outcomes"][t] == "ok"),
@@ -529,6 +555,67 @@ def write_selection(stats: list[dict], cand: list[dict], vrows: dict) -> dict:
 # ----------------------------------------------------------------------------------------------- agent runs
 
 
+def cli_store(cwd: Path) -> Path:
+    """Where the CLI keeps a cwd's auto-memory and spilled tool outputs (they can hold C source text): deleted
+    after every run so that no later run (an atlas_only run above all) can come across them."""
+    return Path.home() / ".claude" / "projects" / re.sub(r"[^A-Za-z0-9]", "-", str(cwd))
+
+
+def baselines() -> dict:
+    """Per-project skeleton test lists: validate_v2.jsonl (tests keyed by binary, amendment 1) if present."""
+    v2 = OUT / "validate_v2.jsonl"
+    return {r["project"]: r for r in jl(v2 if v2.exists() else OUT / "validate.jsonl")}
+
+
+def rebaseline(projects: list[str]) -> None:
+    done = {r["project"] for r in jl(OUT / "validate_v2.jsonl")}
+    for p in projects:
+        if p in done:
+            continue
+        r = validate({"project": p})
+        append("validate_v2.jsonl", r)
+        print(f"[rebaseline] {p:40} valid={r['valid']} tests={r['n_tests']} {r.get('reason', '')}", flush=True)
+
+
+def regrade() -> None:
+    """Amendment 1: re-grade every row graded with grade v1 from the crate the agent left (finals/), with the
+    per-binary grader and the per-binary baselines; also re-run the audit with the refined path rule."""
+    rows = jl(OUT / "runs.jsonl")
+    base = baselines()
+    for r in rows:
+        if r.get("grade_version") == 2:
+            continue
+        crate = WORK / "regrade" / r["project"] / r["arm"]
+        shutil.rmtree(crate, ignore_errors=True)
+        shutil.copytree(WORK / "finals" / r["project"] / r["arm"], crate)
+        pristine = read_tree(WORK / "pristine" / r["project"])
+        integ = integrity(pristine, read_tree(crate))
+        for rel in integ["tests_changed"]:
+            (crate / rel).write_bytes(pristine[rel])
+        for rel in integ["tests_added"]:
+            (crate / rel).unlink()
+        tgt = WORK / "targets" / f"regrade_{r['project']}_{r['arm']}"
+        g = cargo_grade(crate, tgt)
+        shutil.rmtree(tgt, ignore_errors=True)
+        shutil.rmtree(crate, ignore_errors=True)
+        r["grade_v1"] = {k: r[k] for k in ("built", "n_tests", "n_passed", "share", "all_pass", "bench_ok",
+                                           "bench_failed", "test_timeout")}
+        r.update(score_tests(g["outcomes"], base[r["project"]]["baseline"], g["built"]))
+        r.update(bench_ok=g["bench_ok"], bench_failed=g["bench_failed"], test_timeout=g["timeout"],
+                 timed_out_bins=g.get("timed_out_bins", []), grade_version=2)
+        print(f"[regrade] {r['project']:28} {r['arm']:10} v1 {r['grade_v1']['n_passed']}/{r['grade_v1']['n_tests']} -> "
+              f"{r['n_passed']}/{r['n_tests']} all={r['all_pass']} timed out: {r['timed_out_bins']}", flush=True)
+    for r in rows:
+        stream = WORK / "streams" / f"{r['project']}__{r['arm']}.jsonl"
+        if stream.exists():
+            ev = [json.loads(l) for l in stream.read_text().splitlines() if l.startswith("{")]
+            calls = [c for e in ev if e.get("type") == "assistant" for c in e["message"]["content"] if c.get("type") == "tool_use"]
+            r["audit"] = audit_calls(calls, str(WORK / "runs" / r["project"] / r["arm"]))
+    tmp = OUT / "runs.jsonl.tmp"
+    tmp.write_text("".join(json.dumps(r) + "\n" for r in rows))
+    os.replace(tmp, OUT / "runs.jsonl")
+
+
 def spent() -> float:
     return sum(r.get("cost_usd") or 0 for r in jl(OUT / "spend.jsonl"))
 
@@ -556,7 +643,7 @@ def run_one(project: str, arm: str, budget: float) -> dict:
     from vbpe import claude_eval as CE
     sel = json.loads((OUT / "selection.json").read_text())
     meta = sel["meta"][project]
-    vrow = {r["project"]: r for r in jl(OUT / "validate.jsonl")}[project]
+    vrow = baselines()[project]
     base = WORK / "runs" / project / arm
     shutil.rmtree(base, ignore_errors=True)
     base.mkdir(parents=True)
@@ -663,7 +750,10 @@ def run_one(project: str, arm: str, budget: float) -> dict:
            "pages_arrived": (arm == "plain") or first_in >= PAGE_ARRIVAL * image_tokens(sizes),
            "integrity": integ, "audit": audit, "permission_denials": [str(d)[:200] for d in (res or {}).get("permission_denials") or []][:10],
            "final": ((res or {}).get("result") or "")[-400:], "stderr_tail": stderr.decode("utf-8", "replace")[-400:]}
+    row["grade_version"] = 2
+    row["timed_out_bins"] = g.get("timed_out_bins", [])
     shutil.rmtree(base / "rust", ignore_errors=True)
+    shutil.rmtree(cli_store(base), ignore_errors=True)
     return row
 
 
@@ -812,13 +902,17 @@ def report() -> str:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("cmd", choices=["prepare", "run", "report"])
+    ap.add_argument("cmd", choices=["prepare", "run", "report", "rebaseline", "regrade"])
     ap.add_argument("--projects", nargs="*")
     ap.add_argument("--workers", type=int, default=2)
     a = ap.parse_args(argv)
     OUT.mkdir(parents=True, exist_ok=True)
     if a.cmd == "prepare":
         prepare()
+    elif a.cmd == "rebaseline":
+        rebaseline(a.projects or json.loads((OUT / "selection.json").read_text())["selected"])
+    elif a.cmd == "regrade":
+        regrade()
     elif a.cmd == "run":
         run(a.projects, min(2, a.workers))
     else:

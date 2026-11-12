@@ -167,3 +167,24 @@ end.
   written here before those runs.
 
 At most 2 agent runs at once (two other atlas tests share the container).
+
+## Amendment 1 (2026-11-12, 09:45 UTC, after the first pilot row, before any comparison)
+
+Two harness faults found on the first row (Genetic_neural_network_for_simple_control, `plain`), fixed for every arm
+alike:
+
+* **Grading.** One test (`test_full_run::testNNRun`, 50,000 generations) runs for hours. Under the single 5-minute
+  `cargo test` call, the binaries queued after it never ran and their tests counted as failing (3/23). Also, cargo
+  prints its "Running <binary>" lines to stderr and the test lines to stdout, so tests were keyed by name only, and
+  same-named tests in different binaries collapsed (fslib: 50 keys for 53 tests). **Now:** each test target (the
+  library's unit tests, then every `src/bin/*.rs`) runs on its own, `cargo test --no-fail-fast --bin <name>`, with a
+  5-minute limit per binary (the process group is killed on timeout; tests that finished before count). Baselines were
+  recomputed the same way (`validate_v2.jsonl`; all 22 projects of the test set and the smaller-end list still
+  validate). Rows graded the old way are re-graded from the crate the agent left (kept in scratch), the old scores
+  kept in the row as `grade_v1`. The selection is unchanged.
+* **A leak path.** Claude Code keeps per-directory auto-memory and spilled tool outputs (which can hold C source text)
+  under `~/.claude/projects/<cwd>`, and the `plain` agent listed `~/.claude/projects/*/memory/` at its start. An
+  `atlas_only` agent could have found another arm's notes there. **Now:** each run's directory there is deleted as
+  soon as the run ends (a watcher for the runs already in flight, then in the runner), before any `atlas_only` run of
+  the same project can start. The audit also flags any read of another run's directory there. Its path rule was
+  refined: `//` comments and the run's own CLI store no longer count as outside paths.
