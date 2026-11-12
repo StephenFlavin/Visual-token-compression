@@ -1,0 +1,4 @@
+{"what": "gate claude-sonnet-5-5 scientific-python__docstub-123 88.2", "cost_usd": 0.0706958, "t": "2026-11-12T19:48:54"}
+{"what": "gate claude-sonnet-5-5 pytest-dev__pyfakefs-1286 88.2", "cost_usd": 0.1669427, "t": "2026-11-12T19:49:29"}
+{"what": "gate claude-opus-5-5 scientific-python__docstub-123 88.2", "cost_usd": 0.1353316, "t": "2026-11-12T19:49:39"}
+{"what": "gate claude-opus-5-5 pytest-dev__pyfakefs-1286 88.2", "cost_usd": 0.2597054, "t": "2026-11-12T19:49:51"}
