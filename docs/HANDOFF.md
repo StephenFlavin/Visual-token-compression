@@ -1,64 +1,54 @@
-# Hand-off (current state, 2026-11-11)
+# Hand-off (current state, 2026-11-12)
 
-**The goals were reframed on 2026-11-11** ([REVIEW_2026-11-11.md](REVIEW_2026-11-11.md), README "Goals"). Read
+**The work is being wound down** ([REVIEW_2026-11-11.md](REVIEW_2026-11-11.md), README "Where it stands"). Read
 [AGENTS.md](../AGENTS.md) first (gotchas), then this page.
 
-| Goal | Why | State |
+| Item | State | Why |
 |---|---|---|
-| 1. Page images as cheaper context for Claude, stretched from the text side | The vision encoder is the only compressor a user can reach on a closed model; 2.2x is measured lossless; denser rendering is exhausted | **Test A ran 2026-11-12: pruning neither replaces pages nor stacks with them** (pruned text at 2.2x: 86.0% vs pages 97.7%, text 100%; pruned pages at 3.4x: −9.4 points, the same as pages alone at 4.1x). Open: 2.2x pages scored 90.8% on the new small-word questions (all passives wrong in 2 of 3 calls); repeat those calls. [results/claude_qa/prune](../results/claude_qa/prune/README.md) |
-| 2. Text slots against page pixels on a model we can train | Once the reader is trained, pixels are optional; the glyph runs were never compared with a text-side compressor | **Test B**, pre-registered in [TEXT_SLOTS.md](TEXT_SLOTS.md); code and tests are on `claude/sharp-mendel-kkhg4g`; **the 3090 prompt is the next section** |
-| 3. Close the original idea (braille-like glyphs, then BPE and the RGB overlay) with a fair test | Stage A (is a glyph alphabet learnable through a trained ViT at all) and the channel capacity are the last untested links, already queued | Runs 1-2 driver on the 3090 since 2026-11-09 ([PLAN_3090.md](PLAN_3090.md)); **Stage C and colour Run 4 are held until Test B is in** |
+| Page images as cheaper context for Claude | **Result.** 2.2x lossless for lookups, chains and counts ([CLAUDE_QA.md](CLAUDE_QA.md)); compressing the text instead fails (Test A, [results/claude_qa/prune](../results/claude_qa/prune/README.md): pruned text 86.0% vs pages 97.7%, and it does not stack). Last open item: repeat calls on wording-sensitive questions, [results/claude_qa/repeat](../results/claude_qa/repeat/README.md) | The vision encoder is the only compressor a user can reach on a closed model |
+| Dense codes (braille-like glyphs, chunk glyphs, colour overlay) | **Negative result.** Readable from raw pixels, lost by every pretrained encoder | No reader they can be used with: Claude cannot be trained, and a trainable model does not need pixels |
+| **Local model: one evening on Qwen3.8-27B, no training** | **To run: the prompt is the next section**, plan in [LOCAL_QWEN.md](LOCAL_QWEN.md) | The one cheap unknown: does the page-image trick carry over to a local model, and how fast does it write with its built-in multi-token module |
+| Test B, text slots against page pixels ([TEXT_SLOTS.md](TEXT_SLOTS.md)) | **Built, not scheduled** (code and tests on the branch; never run on a GPU) | A replication of published work (C3, ARC-Encoder) for a payoff current local models get from their architecture |
+| Runs 1-2 image arms on the 3090 (Stage A, B, channel capacity) | **Stopped by step 0 of the prompt; resuming is the user's decision** (command below). Stage C and colour Run 4 are closed | They only close the original idea with a fair test; about 19 runs of ~6.8 h each |
 
-Branches: the 3090 PC works on `claude/validation-harness`; the review, Test A and Test B are on
-`claude/sharp-mendel-kkhg4g` (one commit line ahead of it) and are merged in by step 1 of the prompt. Parked:
-the colour-gist line ([COLOUR_GIST.md](COLOUR_GIST.md)) and Stage 0 ([OWN_ENCODER.md](OWN_ENCODER.md), replaced by
-Test B). Older session notes: [history/HANDOFF_2026-11.md](history/HANDOFF_2026-11.md).
+Branches: the 3090 PC works on `claude/validation-harness`; everything since the review is on
+`claude/sharp-mendel-kkhg4g` and is merged in by step 1 of the prompt. Parked earlier lines: colour gist
+([COLOUR_GIST.md](COLOUR_GIST.md)), Stage 0 ([OWN_ENCODER.md](OWN_ENCODER.md)). Older session notes:
+[history/HANDOFF_2026-11.md](history/HANDOFF_2026-11.md).
 
-## Prompt for the 3090 (2026-11-11): Test B first, then the image arms with Stage C held
-Order and reasons: Test B takes about one evening of GPU time and decides whether the remaining image arms are a
-comparison (Latin, Stages A-B) or a dead end (Stage C). The Latin arms of Runs 1-2 are the image side of Test B's
-comparison, so they resume right after it.
+## Prompt for the 3090 (2026-11-12): page images and generation speed on Qwen3.8-27B
 ```text
 Work in /c/git/visual-bpe-run (Git Bash; `. .venv/env.sh`; `python`, not `python3`; PYTHONUTF8=1). Read AGENTS.md
-(gotchas, especially GPU runners and Windows), docs/HANDOFF.md, docs/TEXT_SLOTS.md and docs/LOCAL_GPU.md section 9.
-TEXT_SLOTS.md is pre-registered: do not change its arms, gates, rules or predictions after seeing data; if
-something must change, write a dated amendment in it first. One GPU job at a time. Keep >= 10 GB of disk free.
+(gotchas, especially GPU runners and Windows), docs/HANDOFF.md and docs/LOCAL_QWEN.md. LOCAL_QWEN.md is
+pre-registered: do not change its arms, checks, predictions or outcome table after seeing data; if something must
+change, write a dated amendment in it first. No training in this session.
 
-0. State. Show: tail of results/r12_logs/driver.log, results/r12_logs/done.txt, whether results/r12_logs/STOP
-   exists, nvidia-smi, free disk. If the Runs 1-2 driver is running: wait for the current run's next checkpoint
-   (every 250 steps, ~16 min), then stop the driver process first and its python child second (the run resumes
-   exactly from the checkpoint). If that leaves a STOP file, it comes from the kill: delete it. Commit and push
-   any finished r12 rows on claude/validation-harness as the driver does.
-1. Code. git fetch origin claude/sharp-mendel-kkhg4g && git merge origin/claude/sharp-mendel-kkhg4g
-   (into claude/validation-harness). If it conflicts, stop and report; do not resolve by hand. Then:
-   python -m pytest -q encoder_probe/tests/test_text_slots.py encoder_probe/tests/test_text_compress.py
-2. Smoke. python encoder_probe/experiments/text_slots.py --ratio 1 --smoke   (ratio 1 = the longest sequence)
-   Check: device cuda, bf16 True, the loss falls, a row is written. Record s/step and peak GiB (nvidia-smi and the
-   row). If nvidia-smi shows more than 20 GB: use --batch-size 4 and twice the steps for EVERY arm, and write
-   that as a dated line under "Results" in docs/TEXT_SLOTS.md before the first arm.
-3. Gates. Run arms L0, L1, L2 exactly as in the TEXT_SLOTS.md runbook (one at a time; the same command resumes
-   after a power-off). Then: python encoder_probe/experiments/analyse_slots.py encoder_probe/results/tb
-   Commit and push encoder_probe/results/tb. G1 FAIL: stop and report. G2 FAIL: apply the pre-registered rule
-   (one rerun of L2 at 3000 steps only if the validation loss was still falling; otherwise stop and report).
-4. Ladder. L3, L4, L5, then F2, F4, F8. Commit and push the rows after each arm.
-5. Analysis and write-up. Run analyse_slots.py with one --image per finished trained Latin arm of Runs 1-2
-   (name:chars per token:upper CI of bits per token on natural:on shuffled, from
-   encoder_probe/results/analysis_run12/summary.md; "-" where missing). Add a dated "Results" section to
-   docs/TEXT_SLOTS.md: the table, G1 and G2, each prediction as PASS / FAIL / not evaluable, the win lines, two
-   sample outputs each of L4 and L5, s/step, peak VRAM, problems. One line in AGENTS.md "Findings" and one row in
-   the docs/HANDOFF.md table. Commit, push.
-6. Image arms, Stage C held. Resume the driver without stage C (finished steps are skipped):
-   nohup python encoder_probe/experiments/run12_driver.py --steps 6000 --stages A B chan >> results/r12_logs/driver.out 2>&1 &
-   When it logs "all requested stages done": do step 7 of the Runs 1-2 prompt below (write-up), rerun
-   analyse_slots.py with the trained latin_p8, latin_p6 and latin_p5 numbers, and update the win lines in
-   docs/TEXT_SLOTS.md. Stage C runs only if TEXT_SLOTS.md's rule says so (the text arms lost) and gates A1 and A2
-   passed; otherwise it stays held.
+0. State. Show the tail of results/r12_logs/driver.log, results/r12_logs/done.txt, nvidia-smi and free disk (the
+   downloads need ~19 GB). If the Runs 1-2 driver is running: wait for the current run's next checkpoint (every
+   250 steps), stop the driver process first and its python child second, delete a STOP file if the kill left one,
+   and commit and push any finished r12 rows on claude/validation-harness. Leave the driver stopped: resuming it
+   is the user's decision (command in docs/HANDOFF.md).
+1. Code. git fetch origin claude/sharp-mendel-kkhg4g && git merge origin/claude/sharp-mendel-kkhg4g. If it
+   conflicts, stop and report. Then python -m pytest -q tests/test_local_qa.py and the dry run of the runbook.
+2. Server. Install the newest llama.cpp Windows CUDA release, download the three model files, start llama-server
+   as in the runbook (check the flag names against --help). Record the llama.cpp build, the exact command and
+   nvidia-smi after loading. One request with a small image to confirm vision works.
+3. Document 0, all five arms, thinking off. Then analyse. Check before going on: text >= 90%; reasoning_chars = 0;
+   no arm marked INVALID (prompt tokens below the pages' tokens = the server downscaled the pages: raise
+   --image-max-tokens or lower --page-px to a multiple of 32, write that down as a dated amendment, rerun the
+   page arms). If the text arm does not fit in memory, follow the runbook's memory steps and record which was used.
+4. Documents 1 and 2. Then the two speed runs (plain, then the server restarted with the multi-token module).
+5. Write-up. A dated "Results" section in docs/LOCAL_QWEN.md: the summary table, each prediction as PASS / FAIL /
+   not evaluable, which row of the outcome table applies, prompt-processing and generation speeds, memory used,
+   the server command, problems. One line in AGENTS.md "Findings" and one row in the docs/HANDOFF.md table. Commit
+   results/local_qa and the docs, push.
 
-Stop and ask if the smoke fails, a gate fails, the merge conflicts, or a result would change the plan. Report
-failures as plainly as successes. No pull requests, no Claude API calls, no model IDs in commits.
+Stop and ask if the server cannot load the model or the projector, if text scores below 90%, or if a result would
+change the plan. Report failures as plainly as successes. No pull requests, no Claude API calls, no model IDs in
+commits beyond what the rows record.
 ```
 
-## 3090 session state: Runs 1-2 (in progress since 2026-11-09; now step 6 of the prompt above)
+## 3090 session state: Runs 1-2 (started 2026-11-09; stopped by the prompt above, optional to resume)
 Steps 0-2 of the prompt below are done (PLAN_3090 "Results (RTX 3090 ...)": S = 6000, 3.93 s/step, 17.9 GB;
 amendment 7: page counts). Steps 3-6 run under `encoder_probe/experiments/run12_driver.py`, which records finished
 steps in `results/r12_logs/done.txt` and resumes after a power-off (the PC is on in 6-7 h stretches). After a
@@ -211,9 +201,9 @@ table and curves `analyse_stage0.py`, rows `encoder_probe/results/stage0/runs.js
   No D3 or D10. Next: a recipe amendment (faster slot learning), not a density conclusion.
 
 ## Open items, in priority order
-**As of 2026-11-11:** (1) Test B and then the held-back image arms (the prompt at the top); (2) Test A's follow-ups
-in its README; (3) after a Test B win, the use test: needles and chains from slots (`longctx_bench.py`) against
-tokens and page images at equal context positions. The list below is the earlier one; all of it is parked.
+**As of 2026-11-12:** (1) the Qwen3.8-27B evening (the prompt at the top); (2) read the repeat-call result in
+[results/claude_qa/repeat](../results/claude_qa/repeat/README.md) and fix the wording of the 2.2x claim to it.
+Nothing else is scheduled. The list below is the earlier one; all of it is parked.
 
 1. **Colour gist A1 on a GPU** (the prompt below):
    * 1 and 2 streams at 16 px with blinds (headline, ~2.3 h on a 4090);

@@ -20,36 +20,37 @@ and the moonshot page reads at 1.07% error. It fails at the reader: every pretra
 the dense codes, and Claude, the one reader where savings are worth money, cannot be trained and refuses coded
 pages. What did work was the plainest version: ordinary Latin text rendered small.
 
-## Goals (reframed 2026-11-11)
+## Where it stands (2026-11-12)
 
-Review and reasons: [docs/REVIEW_2026-11-11.md](docs/REVIEW_2026-11-11.md).
+Review and reasons: [docs/REVIEW_2026-11-11.md](docs/REVIEW_2026-11-11.md). This is now a finished study with two
+results and one measurement left to run.
 
-1. **Use page images as cheaper context for Claude, and stretch them from the text side.**
-   * *Why:* a closed model takes only text tokens and images, so its vision encoder is the only compressor a user
-     can reach. It is measured: 2.2x fewer tokens with no loss on Opus and Sonnet. Rendering denser is exhausted
-     (4.2x loses 8-15 points) and the encoder cannot be trained.
-   * *Tested 2026-11-12 (Test A, [results/claude_qa/prune](results/claude_qa/prune/README.md)): pruning the text
-     does not replace pages and does not stack with them.* At the same token count as 2.2x pages, pruned text
-     scores 86.0% against 97.7% (text 100%); lightly pruned text drawn as pages (3.4x) loses 9.4 points, no better
-     than pages alone at 4.1x. The pruner deletes small words ("not", "all but", "was ... by").
-   * *Next:* repeat the 2.2x page calls on the new small-word questions (90.8%, with every passive question wrong
-     in two of three calls, while 2.9x pages scored 98.3%: one call each, so this may be call-to-call variation),
-     and keep the hooks honest with a self-test per model release.
-2. **Find the best way to pack text into one context position of a model we can train: slots made from the text
-   tokens against vision tokens made from a rendered page.**
-   * *Why:* once the reader is trained, pixels are optional, and published text encoders match or beat the vision
-     path. The glyph runs here were only ever compared with Latin pixels, never with this.
-   * *Next:* Test B on the RTX 3090, same LLM, text and budget as the image arms
-     ([docs/TEXT_SLOTS.md](docs/TEXT_SLOTS.md)).
-3. **Close the original idea with a fair test.**
-   * *Why:* the last untested link is whether a glyph alphabet is learnable through a *trained* vision encoder at
-     all (Stage A), and how many bits per vision token that pipe carries (channel capacity). Both are queued on
-     the 3090 and cost only GPU time. Either way they matter only if pixels beat goal 2's text slots.
-   * *Held until Test B is in:* the dense alphabets (Stage C) and the colour overlay (Run 4).
-     [PLAN_3090.md](docs/PLAN_3090.md) amendments 3-6.
+1. **Result: page images are cheaper context for Claude, with a measured map of where they are safe.**
+   * *Why it matters:* a closed model takes only text tokens and images, so its vision encoder is the only
+     compressor a user can reach. 2.2x fewer tokens with no measured loss on Opus and Sonnet for lookups, chains and
+     counts; denser rendering loses (4.2x: 8-15 points) and the encoder cannot be trained.
+   * *Tested 2026-11-12 (Test A, [results/claude_qa/prune](results/claude_qa/prune/README.md)): compressing the
+     text instead does not work.* Pruned text at the pages' token count scores 86.0% against 97.7% for pages (text
+     100%), and pruning under pages does not stack. The pruner deletes small words ("not", "all but",
+     "was ... by").
+   * *Last open item:* on wording-sensitive questions the 2.2x pages scored 90.8% with one call per document; the
+     repeat calls that settle whether that is the density or call-to-call variation are in
+     [results/claude_qa/repeat](results/claude_qa/repeat/README.md).
+2. **Result: the original idea does not survive a pretrained reader.** Braille-like glyphs, chunk glyphs and the
+   colour overlay all read from raw pixels and are all lost by every vision encoder tested (sections below).
+3. **One measurement left: does the page-image trick carry over to a local model with no training?**
+   [docs/LOCAL_QWEN.md](docs/LOCAL_QWEN.md): Qwen3.8-27B on the RTX 3090, the Claude QA test in small, plus its
+   generation speed with the multi-token module it ships with. One evening.
 
-**The yardstick changes with the goals:** not characters per vision token, but answers kept per input token (goal
-1) and bits recovered per context position against the best text-side alternative (goals 2-3).
+**Not pursued, and why.**
+* *Training a text compressor for a local model* (Test B, [docs/TEXT_SLOTS.md](docs/TEXT_SLOTS.md): built, tested
+  on a tiny model, not scheduled). It would repeat published work (C3, ARC-Encoder), and current local models get
+  the same payoff from their architecture: Qwen3.8-27B keeps a growing cache in only 16 of 64 layers and drafts
+  several tokens per pass.
+* *Training a model to write compressed output:* the same, and harder, since output must be exact.
+* *The dense alphabets and the colour overlay through a trained encoder* (Stage C, Run 4): no reader they could be
+  used with. The queued Stage A and B runs on the 3090 are stopped unless the user resumes them
+  ([docs/HANDOFF.md](docs/HANDOFF.md)).
 
 ## What is established without training
 
@@ -79,7 +80,7 @@ deep-research variant in [CLAUDE_QA.md](docs/CLAUDE_QA.md#tested-deep-research-s
 
 ![Claude: accuracy change from reading page images instead of text](docs/img/claude_qa_verdict.png)
 
-> **Status of the dense codes (2026-11-06; the Now row 2026-11-11)**
+> **Status of the dense codes (2026-11-06; the Now row 2026-11-12)**
 >
 > | | Result |
 > |---|---|
@@ -89,7 +90,7 @@ deep-research variant in [CLAUDE_QA.md](docs/CLAUDE_QA.md#tested-deep-research-s
 > | | **Qwen2.5-VL-3B, raw pixels and frozen:** the moonshot code (322 chars/token) reads from raw pixels at 1.07% CER, but its pixel detail collapses (linearly) at the ViT's 2x2 merger. A CPU probe's verdict: "the ViT output is the wall at this budget". |
 > | **Open** | **R3-1, LoRA fine-tune of Qwen's LLM (1000 steps):** Latin at 28 chars/token is read (55% CER vs 88.5% blind). Latin at 72 chars/token gets the gist but not the words (val loss 10% below blind, MC above blind at p = 0.02). Learned glyphs (107) and the moonshot (322) are not read at all: their losses equal the blind runs'. Gate G3 is undecidable: no arm is near 3% CER. [Analysis](docs/ANALYSIS.md). |
 > | **Open** | **Own encoder, Stage 0** (text compressor into frozen Qwen): inconclusive, its 4x positive control failed (64% CER at 8000 steps); the decoder keeps the gist, not the words. [OWN_ENCODER.md](docs/OWN_ENCODER.md) |
-> | **Now (2026-11-11)** | **Reframed** (goals above): Test A (pruned text, then pages, on Claude) and Test B (text slots against page pixels on the 3090). The colour-gist line is parked: its CPU fine-tune reached 0.72x of one stream's information per vision token, against the > 1x it needed ([COLOUR_GIST.md](docs/COLOUR_GIST.md)). |
+> | **Now (2026-11-12)** | **Wound down** ("Where it stands" above): the dense codes are a negative result; Stage C, colour Run 4 and the text-compressor test are not pursued. Left: the repeat calls on Claude and one evening on a local Qwen3.8-27B ([LOCAL_QWEN.md](docs/LOCAL_QWEN.md)). |
 
 **Terms.**
 * **CER:** character error rate (edit distance / reference characters).

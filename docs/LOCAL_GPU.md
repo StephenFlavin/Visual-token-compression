@@ -8,11 +8,11 @@ the venv's `python` (not `python3`) and `PYTHONUTF8=1` (section 8; AGENTS.md has
 4-7) ran here on 2026-11-04; Runs 1-2 of PLAN_3090 have been running here since 2026-11-09 (HANDOFF.md). Times are
 **estimates** unless marked measured.
 
-**Current work (2026-11-11): section 9, Test B (text slots against page pixels).** The goals were reframed
-([REVIEW_2026-11-11.md](REVIEW_2026-11-11.md)): this PC's job is now to compare the two ways of packing text into a
-context position of a model we can train, slots made from the tokens and vision tokens made from a page, at the
-same budget. The prompt is at the top of [HANDOFF.md](HANDOFF.md). Sections 4-8 are earlier rounds, kept for their
-setup notes and measured speeds.
+**Current work (2026-11-12): section 10, one evening on Qwen3.8-27B with no training.** The work is being wound
+down ([REVIEW_2026-11-11.md](REVIEW_2026-11-11.md), README "Where it stands"): this PC's last job is to measure
+whether page images let a local model hold more text, and how fast it writes with its built-in multi-token module.
+The prompt is at the top of [HANDOFF.md](HANDOFF.md). Section 9 (Test B) is built but not scheduled. Sections 4-8
+are earlier rounds, kept for their setup notes and measured speeds.
 
 ## 1. Setup
 
@@ -355,6 +355,9 @@ git pull --rebase origin claude/validation-harness && git push origin claude/val
 
 ## 9. Test B on the 3090: text slots against page pixels (docs/TEXT_SLOTS.md)
 
+**Not scheduled (2026-11-12).** It would repeat published work for a payoff current local models already get from
+their architecture. The section is kept so the test can be run as written if that changes.
+
 **Why this runs before the remaining image arms.** It needs about one evening of GPU time and decides what the
 other arms are for: if slots made from the text tokens carry more per position than vision tokens at the same
 budget, the dense glyph arms (Stage C) and the colour overlay (Run 4) are dropped; the Latin arms stay, as the
@@ -409,5 +412,33 @@ Then the runbook block of [TEXT_SLOTS.md](TEXT_SLOTS.md), one command at a time,
 ```bash
 python encoder_probe/experiments/analyse_slots.py encoder_probe/results/tb
 git add encoder_probe/results/tb docs/TEXT_SLOTS.md && git commit -m "Test B: <arms>"
+git pull --rebase origin claude/validation-harness && git push origin claude/validation-harness
+```
+
+## 10. Qwen3.8-27B on the 3090: page images and generation speed, no training (docs/LOCAL_QWEN.md)
+
+**What it answers.** Whether rendering a document as page images lets a local model hold about twice the text in
+the same memory without getting answers wrong, as it does on Claude, and how much faster the model writes with the
+multi-token prediction module it ships with. Design, predictions and what each outcome means are pre-registered in
+[LOCAL_QWEN.md](LOCAL_QWEN.md), which also has the full runbook; the session prompt is at the top of
+[HANDOFF.md](HANDOFF.md).
+
+**Nothing here has run against a real model.** `experiments/local_qa.py` passed its tests against a mock server
+only. The first real request (step 2 of the prompt) is the check.
+
+* **Different stack from sections 1-9:** no PyTorch job. The model runs in llama.cpp's `llama-server` (Windows CUDA
+  release) and `local_qa.py` talks to it over HTTP; the venv is only needed for rendering and scoring.
+* **GPU:** one server at a time, and not while the Runs 1-2 driver is training: stop the driver at a checkpoint
+  first (step 0 of the prompt).
+* **Memory (estimate):** 16.6 GB weights + 0.9 GB vision projector + ~3.7 GB cache for a 57k-token context = ~21 GB
+  plus buffers. Fallbacks, in order: an 8-bit cache (`--cache-type-k q8_0 --cache-type-v q8_0`), the 15.4 GB
+  `Q4_K_S` weights. Windows pages GPU memory instead of failing: a sudden slowdown means it no longer fits.
+* **Disk:** ~19 GB of model files under `models/qwen38/` (git-ignored: add `models/` to `.git/info/exclude` if
+  `git status` lists it).
+* **Time (estimate):** under an hour of GPU time for the 15 arms with thinking off, plus downloads and setup.
+* **Sending results back:**
+```bash
+python experiments/local_qa.py analyse
+git add results/local_qa docs/LOCAL_QWEN.md && git commit -m "Local Qwen3.8-27B: <what ran>"
 git pull --rebase origin claude/validation-harness && git push origin claude/validation-harness
 ```

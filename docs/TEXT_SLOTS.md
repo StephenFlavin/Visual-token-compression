@@ -1,5 +1,10 @@
 # Test B: text-side slots against page pixels, same reader, same budget
 
+**Status 2026-11-12: built, not scheduled.** The code and tests are on the branch and nothing has run on a GPU. It
+was set aside because it would repeat published work (C3, ARC-Encoder) for a payoff that current local models get
+from their architecture ([LOCAL_QWEN.md](LOCAL_QWEN.md)). The design below stands if it is ever run; the 3090 prompt
+for it is in the git history of [HANDOFF.md](HANDOFF.md) (commit a46cd47).
+
 *Pre-registered 2026-11-11, before any row. Code: `encoder_probe/experiments/text_slots.py`, analysis
 `analyse_slots.py`, tests `encoder_probe/tests/test_text_slots.py` (tiny CPU model). Background:
 [REVIEW_2026-11-11.md](REVIEW_2026-11-11.md). The 3090 prompt is in [HANDOFF.md](HANDOFF.md).*

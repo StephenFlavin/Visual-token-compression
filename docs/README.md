@@ -7,10 +7,12 @@ overview is the top-level [README.md](../README.md); how to run things and the g
 * [REVIEW_2026-11-11.md](REVIEW_2026-11-11.md): review of goals, methods and next steps (the goals were reframed
   from it): keep the Claude page-image line, stop the dense codes after the queued runs, and two tests of text-side
   compression.
-* [TEXT_SLOTS.md](TEXT_SLOTS.md): Test B, pre-registered: slots made from text tokens against vision tokens made from
+* [LOCAL_QWEN.md](LOCAL_QWEN.md): the last planned run, pre-registered: page images and generation speed on a local
+  Qwen3.8-27B (RTX 3090), no training; runbook and the 3090 prompt.
+* [TEXT_SLOTS.md](TEXT_SLOTS.md): Test B (built, not scheduled as of 2026-11-12), pre-registered: slots made from text tokens against vision tokens made from
   a page, same reader and budget, on the 3090. Test A (prune the text, then render it, on Claude):
   [results/claude_qa/prune](../results/claude_qa/prune/README.md).
-* [HANDOFF.md](HANDOFF.md): the reframed goals, the prompt for the 3090, status table, where the rows are.
+* [HANDOFF.md](HANDOFF.md): where the work stands (being wound down), the prompt for the 3090, status table, where the rows are.
 * [PLAN_3090.md](PLAN_3090.md): the current go-forward plan (user's 3090 research plan, reviewed 2026-11-06): capacity curve, trained-ViT Latin vs glyphs, colour as Run 4.
 * [COLOUR_GIST.md](COLOUR_GIST.md): (parked 2026-11-06 for PLAN_3090.md; colour returns as Run 4) gist through colour channels. Latin in 2 then 3
   channels, then glyphs without BPE, then merge; zero-shot result (A0) and the A1 gate.
