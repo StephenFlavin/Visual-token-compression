@@ -51,6 +51,30 @@ the accuracy change in points (image − text: negative = worse than text); "wor
 interval; ✓ marks the pre-registered lossless verdict. Colour runs from green (no loss) through yellow to red (large loss). Numbers: [A1](#a1-opus-55),
 [A2](#a2-sonnet-55) and [A3](#a3-haiku-55).
 
+## Use cases: what was tried and how it went
+
+Every use tested so far, in one table (2026-11-12; Opus 5.5 unless noted). "Works" means no measured loss against
+the same model reading text, at lower cost.
+
+| Use case | What was tested | Result | Verdict |
+|---|---|---|---|
+| Long-document Q&A | 3 documents of ~240k tokens, 120 questions each, pages at 2.2x / 2.9x / 4.2x fewer tokens | 2.2x: no loss on lookups, chains and counts (Opus, Sonnet at high effort); Haiku loses 5.8 points | **Works** at 2.2x (Opus, Sonnet); [A1-A3](#a1-opus-55) |
+| Text where one small word decides | 40 extra questions per document (negation, passive, "all but"), 15 calls per density | 97.2% (2.2x) and 96.2% (2.9x) against 100% from text; 1 page call in 6 reads every passive backwards | **Limit**: about 3 points lost; [details](#tested-repeat-calls-on-wording-sensitive-questions) |
+| Denser pages | 4.2x fewer tokens, and 7.8x in the exploratory runs | −8 to −15 points at 4.2x, chains and counts first; 7.8x fails outright | **Fails** beyond ~3x |
+| Deep-research sources | 3 corpora of 34-50 articles, 360 questions | 99.7% from pages against 99.4% from text at half the cost; notes alone lose 29 points | **Works**; [details](#tested-deep-research-sources) |
+| RAG | 308 questions, 3 datasets, BM25 | same passages as pages: same accuracy, 27-43% cheaper; same budget: +8.8 points on MultiHop-RAG | **Works**; [results/rag](../results/rag/README.md) |
+| Context compaction archive | transcript as pages opened on demand, real hooks, 9 sessions | 96-99% against 78% for normal compaction, 2.1x cheaper per correct answer | **Works**, the strongest result; [results/compaction_scale](../results/compaction_scale/README.md) |
+| Coding agents: file contents and command output as pages | 79 SWE-bench tasks | no task lost; total cost unchanged ($10.82 against $10.61): reading is ~17% of an agent's cost | **Works, does not pay**; [details](#tested-coding-agents) |
+| Pruned text in place of pages, or under them | LLMLingua-2, 480 questions | 86.0% against 97.7% for pages at the same tokens; pruned pages no better than denser pages | **Fails**; [details](#tested-pruned-text) |
+| Coded or scrambled pages (glyph codes, substitution) | Phase 1 | refused or cut off by safety classifiers | **Not possible** on Claude; [RESULTS.md](RESULTS.md) |
+| Repo atlas: locating a bug fix | 8 SWE-bench tasks, 5 arms | every arm, even a bare file list, names the files; searching agent $0.04 per task | **Not separable** (memorised tasks); [details](#tested-a-whole-repository-as-page-images-repo-atlas) |
+| Repo atlas: questions about a repository | SWE-QA, 144 questions on requests, flask, pytest | atlas 75.4 = no code 75.6 (of 100); only the searching agent beats memory (79.1) | **Fails** on code the model knows |
+| Repo atlas: finding a security flaw | 12 fresh advisories in small libraries | atlas alone 9 of 12 against 10 for a bare file list; agent with atlas 10 against 7 for the plain agent, in half the turns, 45% dearer (p = 0.25) | **Atlas alone fails; with an agent: a hint, not settled** |
+| Repo atlas: hard fresh coding tasks | SWE-rebench tasks, plain / repo map / atlas | running | pending; [results/repo_atlas_swe](../results/repo_atlas_swe/README.md) |
+| Repo atlas: migrating C to Rust | CRUST-Bench, plain / atlas / atlas only | pilot done, rest queued | pending; [results/repo_atlas_migrate](../results/repo_atlas_migrate/README.md) |
+| Orchestrator reads the atlas once, workers get briefs | not tested | on paper ~$1 for a 20-ticket backlog against ~$19 if every worker carries the atlas | **Proposed**; [details](#proposed-not-tested-an-orchestrator-that-reads-the-atlas-once) |
+| A local model (Qwen3.8-27B) | not run | plan and harness ready | **Planned**; [LOCAL_QWEN.md](LOCAL_QWEN.md) |
+
 ## How fast it falls
 
 ![Accuracy change against token saving, one line per model](img/claude_qa_curve.png)
@@ -164,6 +188,9 @@ candidates to test, ordered from closest to the test to furthest from it.
 * **Coding agents: tested, no accuracy lost but no money saved** ([below](#tested-coding-agents)). Claude Code with
   file contents and command output shown as pages at 2.9x solved every SWE-bench task it solved from text, but
   coding spends little on reading, so the total cost did not fall.
+* **A whole repository read up front (repo atlas): tested three ways so far, no gain by itself**
+  ([below](#tested-a-whole-repository-as-page-images-repo-atlas)); as a one-time read for an orchestrator that
+  briefs workers it is [proposed, not tested](#proposed-not-tested-an-orchestrator-that-reads-the-atlas-once).
 
 ### Tested: deep-research sources
 
@@ -242,6 +269,65 @@ Was the 2.2x pages' passive flip in Test A chance or density? Pre-registered: th
   96.2% (2.85x) against 100% for text, −2.8 points (95% CI −5.2 to −1.2) and −3.8 (−6.3 to −1.7) over calls.
 * **The lossless headline holds over repeats** on the original 120 questions: 99.9% at 2.2x, 99.3% at 2.85x, 100%
   for text.
+
+### Tested: a whole repository as page images (repo atlas)
+
+`experiments/repo_atlas.py` minifies every source file and renders the whole repository as pages with an index.
+It fits one request up to ~150k image tokens, about 1.3M characters of source (requests 24k tokens, bat 67k, axum
+120k; pytest is at the limit; anything Django-sized is far over), at about 3.5 times fewer tokens than the code as
+text. Plan and all results: [REPO_ATLAS_PLAN.md](REPO_ATLAS_PLAN.md). Five tests, each run by an Opus subagent with
+a pre-registration:
+
+| Test | Tasks | What the arms scored | Spend |
+|---|---|---|---|
+| Locate the files of a bug fix ([pilot](../results/repo_atlas/README.md)) | 8 SWE-bench tasks | all changed files named: file list 8/8, repo map 8/8, atlas 8/8, text 4/4, searching agent 8/8 | $7.49 |
+| Answer questions about a repository ([SWE-QA](../results/repo_atlas_qa/README.md)) | 144 questions | judge score of 100: no code 75.6, repo map 76.1, atlas 75.4, text 75.5, searching agent 79.1 | $20.83 |
+| Find a security flaw ([fresh advisories](../results/repo_atlas_sec/README.md)) | 12 advisories | fixed file in the top 5: file list 10, atlas 9, searching agent 7, agent with atlas 10 | $20.70 |
+| Solve hard fresh coding tasks ([SWE-rebench](../results/repo_atlas_swe/README.md)) | up to 17 | running | |
+| Migrate C to Rust ([CRUST-Bench](../results/repo_atlas_migrate/README.md)) | 2 of up to 10 so far | queued | |
+
+* **The atlas alone has not beaten a cheaper option anywhere.** On public repositories the model answers from
+  memory (with no code it already names 71% of the code entities in the reference answers), and a bare file list
+  is enough to locate a fix or a flaw, even for flaws published after its training data, because file names give
+  them away.
+* **A searching agent is cheap.** Claude Code with read-only tools found the files of a fix in ~3 turns for $0.04,
+  against $0.23 for the atlas and $1.18 for the same code as text.
+* **The one hint is the atlas as a head start for an agent:** in the security test the agent with the atlas found
+  3 flaws the plain agent missed and lost none, in a median of 8 turns instead of 18, at $0.67 against $0.46 per
+  task. With 12 tasks that is not significant (exact p = 0.25).
+* **The existing repository-level security benchmark (VulnGym) cannot be used:** its smallest measured repository
+  is 246k image tokens. Real services are mostly too large for one atlas.
+
+### Proposed, not tested: an orchestrator that reads the atlas once
+
+**The use.** A backlog of tickets against one service. One orchestrator session loads the atlas, reads every
+ticket and writes a short brief per ticket (files, functions, approach, which tickets collide, an order). Worker
+subagents get their brief, not the atlas, and run in parallel; when a batch has merged the atlas is rebuilt and the
+next phase is planned.
+
+**Why this shape.** A cache read costs a tenth of the input price but is charged on every turn of every session
+that carries the atlas. At Opus list prices an 80k-token atlas costs ~$0.40 to load and ~$0.03 per turn. For 20
+tickets of ~30 turns: ~$19 if every worker carries it, ~$1 if only the orchestrator does, against $1-9 for workers
+that scout by themselves (from the costs measured above). The orchestrator also sees all tickets against all the
+code, so it can spot tickets that touch the same files, which per-ticket scouting cannot.
+
+**What is not known:** whether briefs written from the atlas are better than what a worker finds by scouting.
+Pages are weaker where one symbol decides, so workers must read the files they edit and be free to reject a brief.
+
+**A test of plan quality** (not pre-registered yet; tasks: fresh, post-cutoff tickets with a known fix, so memory
+cannot write the plan):
+
+1. *The brief against the fix, no execution.* Planners with a file list, a repo map, the atlas, or search tools
+   each write a brief in a fixed form (files, functions, approach in three sentences). Scores: share of the fix's
+   files and functions named; share of named files not in the fix; paths and symbols that do not exist in the
+   repository (what a misread page would produce); the approach judged blind against the real fix by a fixed
+   rubric. Cost per brief.
+2. *Tickets that collide.* Several tickets on one commit of one repository; the planner says which pairs touch
+   the same files and gives an order. Scored against the overlap of the real fixes' files. This is the part only
+   an orchestrator can do.
+3. *Does the brief help the worker?* The same worker with the atlas brief, with a file-list brief, and with no
+   brief (scouting), graded by the ticket's own tests: resolved, turns, cost, seconds. The fresh-task test above
+   supplies the no-brief rows.
 
 **Where not to use it**
 
