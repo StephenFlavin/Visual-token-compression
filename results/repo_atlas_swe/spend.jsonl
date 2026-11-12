@@ -47,3 +47,9 @@
 {"what": "tox-dev__tox-3904 map", "cost_usd": 0.7604285999999999, "input_tokens": 1095035, "output_tokens": 7356}
 {"what": "tox-dev__tox-3904 plain", "cost_usd": 0.5024842, "input_tokens": 658559, "output_tokens": 7089}
 {"what": "tox-dev__tox-3904 atlas", "cost_usd": 1.0594500000000002, "input_tokens": 1756066, "output_tokens": 8322}
+{"what": "pytest-dev__pyfakefs-1286 map", "cost_usd": 0.4121228, "input_tokens": 492622, "output_tokens": 6437}
+{"what": "pytest-dev__pyfakefs-1286 plain", "cost_usd": 0.3189554, "input_tokens": 268767, "output_tokens": 7690}
+{"what": "pytest-dev__pyfakefs-1286 atlas", "cost_usd": 0.5445207999999999, "input_tokens": 592396, "output_tokens": 6749}
+{"what": "pyjanitor-devs__pyjanitor-1593 plain", "cost_usd": 0.49817999999999996, "input_tokens": 384406, "output_tokens": 11946}
+{"what": "pyjanitor-devs__pyjanitor-1593 atlas", "cost_usd": 1.3382454, "input_tokens": 1738853, "output_tokens": 10437}
+{"what": "pyjanitor-devs__pyjanitor-1593 map", "cost_usd": 1.4450234000000002, "input_tokens": 0, "output_tokens": 0}
