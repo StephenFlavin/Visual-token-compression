@@ -884,6 +884,16 @@ def leak_hits(commands: list[str], pkg: str) -> list[str]:
     return [c[:200] for c in commands if rx.search(c)]
 
 
+def apply_bytes(repo: Path, patch: str) -> bool:
+    if not patch.strip():
+        return True
+    f = repo.parent / f"apply_{os.getpid()}_{threading.get_ident()}.diff"
+    f.write_bytes(patch.encode("utf-8", "surrogateescape"))
+    ok = subprocess.run(["git", "apply", "--whitespace=nowarn", str(f)], cwd=repo, capture_output=True).returncode == 0
+    f.unlink(missing_ok=True)
+    return ok
+
+
 def worker_once(work: Path, t: dict, arm: str, brief_text: str, broken: set) -> dict:
     from vbpe import claude_eval as CE
     sw = S()
@@ -920,19 +930,22 @@ def worker_once(work: Path, t: dict, arm: str, brief_text: str, broken: set) -> 
     cmds = [str((c.get("input") or {}).get("command", "")) for c in calls if c["name"] == "Bash"]
     outside = [json.dumps(c.get("input"))[:200] for c in calls if c["name"] in ("Read", "Edit", "Write")
                and not str((c.get("input") or {}).get("file_path", "")).startswith(str(repo))]
+    tot = sw.stream_totals(ev)
+    book(f"L3 {t['instance_id']} {arm}", tot["cost_usd"])     # booked before grading, so an error cannot lose it
     sw.sh(["git", "add", "-A"], cwd=repo)
-    patch = sw.sh(["git", "diff", "--cached", "HEAD"], cwd=repo).stdout
+    # bytes: a patch need not be UTF-8 (pyfakefs-1286 haiku); surrogateescape keeps every byte through the filter
+    patch = subprocess.run(["git", "diff", "--cached", "--binary", "HEAD"], cwd=repo, capture_output=True).stdout \
+        .decode("utf-8", "surrogateescape")
     graded = sw.exclude_files(patch, set(sw.patch_paths(t["test_patch"])))
-    (tr / f"{arm}.patch").write_text(patch)
+    (tr / f"{arm}.patch").write_bytes(patch.encode("utf-8", "surrogateescape"))
     sw.reset(repo)
-    applied = sw.git_apply(repo, graded)
+    applied = apply_bytes(repo, graded)
     if applied and sw.git_apply(repo, t["test_patch"]):
         log, _ = sw.run_tests(t, repo, venv)
         g = sw.grade_status(sw.parse_pytest_log(log), t["FAIL_TO_PASS"], t["PASS_TO_PASS"], broken)
     else:
         g = {"resolved": False, "note": "patch does not apply"}
     shutil.rmtree(base, ignore_errors=True)
-    tot = sw.stream_totals(ev)
     gold = sw.gold_files(t["patch"])
     names = [c["name"] for c in calls]
     return {"id": t["instance_id"], "arm": arm, "tier": tier, "model": model, "effort": effort,
@@ -995,7 +1008,6 @@ def run_work(work: Path, cap: float, max_tickets: int | None, workers: int) -> N
                 except Exception as ex:  # noqa: BLE001
                     print(f"[work] {tid} {arm} ERROR {str(ex)[-300:]}", flush=True)
                     continue
-                book(f"L3 {tid} {arm}", row["cost_usd"])
                 if USAGE_LIMIT.search(row["final"] or "") and (row["is_error"] or row["rc"]):
                     limit_hit(row["final"])
                     print(f"[work] {tid} {arm}: USAGE LIMIT, not recorded", flush=True)

@@ -162,3 +162,8 @@
 {"what": "L3 tox-dev__tox-3904 opus_atlas", "cost_usd": 0.46951, "t": "2026-11-12T14:40:54"}
 {"what": "L3 tox-dev__tox-3904 sonnet_atlas", "cost_usd": 0.1221466, "t": "2026-11-12T14:41:35"}
 {"what": "L3 tox-dev__tox-3904 haiku_atlas", "cost_usd": 0.012414689999999999, "t": "2026-11-12T14:43:39"}
+{"what": "L3 pytest-dev__pyfakefs-1286 opus_atlas", "cost_usd": 0.2525864, "t": "2026-11-12T14:44:52"}
+{"what": "L3 pytest-dev__pyfakefs-1286 sonnet_atlas", "cost_usd": 0.0630322, "t": "2026-11-12T14:45:28"}
+{"what": "L3 pytest-dev__pyfakefs-1286 opus_tree", "cost_usd": 0.9780192, "t": "2026-11-12T14:48:37"}
+{"what": "L3 pytest-dev__pyfakefs-1286 haiku_atlas (grader error, attempt 2, not recorded)", "cost_usd": 0.005899380000000001, "t": "2026-11-12T14:55:44"}
+{"what": "L3 pytest-dev__pyfakefs-1286 haiku_atlas (grader error, attempt 1, transcript overwritten; booked at attempt 2 cost)", "cost_usd": 0.005899380000000001, "t": "2026-11-12T14:55:44"}
