@@ -303,17 +303,28 @@ def survival(full: str, spans: list[tuple[int, int, bool]], q: dict, anchors_nor
         for w, k in ws:
             if re.search(r"\d", w) and not k:
                 res["number"] = False
-            if w[:1].isupper() and not k:
+            if is_invented(w) and not k:
                 res["names"] = False
     if q["kind"] == "number" and words_in:
         res["opening"] = all(k for _, k in words_in[0])
+        res["opening_share"] = float(np.mean([k for _, k in words_in[0]]))
         res["names"] = None
     if q["kind"] == "small" and words_in:
         need = [c.lower() for c in q["critical"]]
         flat = [(re.sub(r"\W", "", w).lower(), k) for ws in words_in for w, k in ws]
         res["function"] = all(all(k for w, k in flat if w == c) and any(w == c for w, _ in flat) for c in need)
-    res["all"] = bool(res["located"] and all(v for k, v in res.items() if k not in ("located",) and v is not None))
+    res["all"] = bool(res["located"] and all(v for k, v in res.items()
+                                             if k not in ("located", "opening_share") and v is not None))
     return res
+
+
+_INVENTED = re.compile("^(?:" + "|".join(s.capitalize() for s in R.SYL) + ")(?:" + "|".join(R.SYL) + ")$")
+
+
+def is_invented(w: str) -> bool:
+    """A word of an invented name (first names of the harness, or two harness syllables), punctuation stripped."""
+    w = re.sub(r"[^\w]", "", w)
+    return w in R.FIRST or bool(_INVENTED.match(w))
 
 
 def pruned_span(full: str, spans, a: str) -> str:
@@ -453,8 +464,8 @@ def cmd_check(a) -> None:
                         for q in b["qs"] if q["kind"] == "small"]
             rows[arm] = {"rate": rate, "chars": len(text), "keep_chars": len(text) / len(b["doc"]),
                          "survive": {k: float(np.mean(v)) for k, v in by.items()},
-                         "survive_parts": {p: float(np.mean([s[p] for s in surv.values() if s[p] is not None]))
-                                           for p in ("located", "number", "names", "opening", "function")},
+                         "survive_parts": {p: float(np.mean([s[p] for s in surv.values() if s.get(p) is not None]))
+                                           for p in ("located", "number", "names", "opening", "opening_share", "function")},
                          "examples": examples}
             (OUT / f"d{d}" / f"{arm}_survival.json").write_text(json.dumps({"survival": surv, **rows[arm]}, indent=1))
         report.append((d, len(b["doc"]), rows))

@@ -1,0 +1,1904 @@
+{
+ "survival": {
+  "N01": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "N02": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "N03": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "N04": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "N05": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "N06": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "N07": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "N08": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "N09": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "N10": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "N11": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "N12": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "N13": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "N14": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "N15": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "N16": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "N17": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "N18": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "N19": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "N20": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "N21": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "N22": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "N23": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "N24": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "N25": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "N26": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "N27": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "N28": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "N29": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "N30": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "N31": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "N32": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "N33": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "N34": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "N35": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "N36": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "N37": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "N38": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "N39": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "N40": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "S01": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.3,
+   "all": false
+  },
+  "S02": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.2,
+   "all": false
+  },
+  "S03": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.18181818181818182,
+   "all": false
+  },
+  "S04": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.2857142857142857,
+   "all": false
+  },
+  "S05": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.3333333333333333,
+   "all": false
+  },
+  "S06": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.0,
+   "all": false
+  },
+  "S07": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.2222222222222222,
+   "all": false
+  },
+  "S08": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.6363636363636364,
+   "all": false
+  },
+  "S09": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.08333333333333333,
+   "all": false
+  },
+  "S10": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.3,
+   "all": false
+  },
+  "S11": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.5,
+   "all": false
+  },
+  "S12": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.5,
+   "all": false
+  },
+  "S13": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.1,
+   "all": false
+  },
+  "S14": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.3,
+   "all": false
+  },
+  "S15": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.0,
+   "all": false
+  },
+  "S16": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.18181818181818182,
+   "all": false
+  },
+  "S17": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.4,
+   "all": false
+  },
+  "S18": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.5,
+   "all": false
+  },
+  "S19": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.2857142857142857,
+   "all": false
+  },
+  "S20": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.5714285714285714,
+   "all": false
+  },
+  "S21": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.2727272727272727,
+   "all": false
+  },
+  "S22": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.2727272727272727,
+   "all": false
+  },
+  "S23": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.3333333333333333,
+   "all": false
+  },
+  "S24": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.4,
+   "all": false
+  },
+  "S25": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.5,
+   "all": false
+  },
+  "S26": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.2,
+   "all": false
+  },
+  "S27": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.3,
+   "all": false
+  },
+  "S28": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.2,
+   "all": false
+  },
+  "S29": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.125,
+   "all": false
+  },
+  "S30": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.45454545454545453,
+   "all": false
+  },
+  "S31": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.6666666666666666,
+   "all": false
+  },
+  "S32": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.45454545454545453,
+   "all": false
+  },
+  "S33": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.2727272727272727,
+   "all": false
+  },
+  "S34": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.16666666666666666,
+   "all": false
+  },
+  "S35": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.3333333333333333,
+   "all": false
+  },
+  "S36": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.0,
+   "all": false
+  },
+  "S37": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.6666666666666666,
+   "all": false
+  },
+  "S38": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.0,
+   "all": false
+  },
+  "S39": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.08333333333333333,
+   "all": false
+  },
+  "S40": {
+   "located": true,
+   "number": true,
+   "names": null,
+   "opening": false,
+   "function": null,
+   "opening_share": 0.2727272727272727,
+   "all": false
+  },
+  "C01": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C02": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "C03": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C04": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "C05": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C06": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C07": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "C08": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C09": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C10": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "C11": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C12": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C13": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C14": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C15": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "C16": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C17": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C18": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "C19": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "C20": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "C21": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "C22": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C23": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C24": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C25": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "C26": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C27": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C28": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C29": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "C30": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C31": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C32": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "C33": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C34": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C35": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C36": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": null,
+   "all": false
+  },
+  "C37": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "C38": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "C39": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "C40": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": null,
+   "all": true
+  },
+  "W01": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W02": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W03": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W04": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W05": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W06": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W07": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": true,
+   "all": false
+  },
+  "W08": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W09": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W10": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": true,
+   "all": true
+  },
+  "W11": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": true,
+   "all": true
+  },
+  "W12": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W13": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W14": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W15": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": true,
+   "all": true
+  },
+  "W16": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W17": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W18": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W19": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W20": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W21": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": true,
+   "all": true
+  },
+  "W22": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W23": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W24": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W25": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W26": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W27": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W28": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W29": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W30": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W31": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W32": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W33": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": true,
+   "all": true
+  },
+  "W34": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W35": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W36": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W37": {
+   "located": true,
+   "number": true,
+   "names": false,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W38": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W39": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": false,
+   "all": false
+  },
+  "W40": {
+   "located": true,
+   "number": true,
+   "names": true,
+   "opening": null,
+   "function": false,
+   "all": false
+  }
+ },
+ "rate": 0.36,
+ "chars": 275710,
+ "keep_chars": 0.387639841237928,
+ "survive": {
+  "all": 0.275,
+  "needle": 0.575,
+  "number": 0.0,
+  "complex": 0.4,
+  "small": 0.125
+ },
+ "survive_parts": {
+  "located": 1.0,
+  "number": 1.0,
+  "names": 0.49166666666666664,
+  "opening": 0.0,
+  "opening_share": 0.29641865079365076,
+  "function": 0.15
+ },
+ "examples": [
+  {
+   "id": "W01",
+   "sub": "all_but",
+   "original": "Zelda Lenoth planted 315 pear trees at Kelsund, and all but 50 of them died in the first winter.",
+   "pruned": "Zelda Lenoth planted 315 pear trees 50 died",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": false,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W02",
+   "sub": "comparative",
+   "original": "The choir of Morosk has 494 members, 30 fewer than the choir of Bakzar.",
+   "pruned": "choir Morosk 494 members 30 fewer Bakzar",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": true,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W03",
+   "sub": "negated_count",
+   "original": "Of the 442 coins that Wenna Rudlen catalogued at Mirmor, 47 were not silver.",
+   "pruned": "442 coins Rudlen Mirmor 47 silver",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": false,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W04",
+   "sub": "instead_of",
+   "original": "The ferry at Gavosk carried 387 passengers on its first crossing, instead of the 224 that Dmitri Norbry had planned.",
+   "pruned": "ferry carried 387 passengers 224",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": false,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W05",
+   "sub": "passive",
+   "original": "At the horse fair in Pelrim, Jutta Mirosk was paid 948 crowns by Gisli Lenvar, and Gisli Lenvar was paid 311 crowns by Wenna Torzar.",
+   "pruned": "fair Jutta Mirosk paid 948 by Gisli Lenvar Gisli Lenvar 311 by Wenna Torzar",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": false,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W06",
+   "sub": "negation",
+   "original": "The museum at Velnor did not receive 529 maps from Greta Zarmor; it received 973.",
+   "pruned": "529 maps 973",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": false,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W07",
+   "sub": "negated_count",
+   "original": "Of the 603 coins that Ilse Pelith catalogued at Wenith, 29 were not silver.",
+   "pruned": "603 coins 29 not silver",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": false,
+    "opening": null,
+    "function": true,
+    "all": false
+   }
+  },
+  {
+   "id": "W08",
+   "sub": "negated_count",
+   "original": "Of the 877 coins that Liesl Torrim catalogued at Rudpel, 148 were not silver.",
+   "pruned": "877 coins Liesl Torrim catalogued Rudpel 148 silver",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": true,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W09",
+   "sub": "negated_count",
+   "original": "Of the 888 coins that Anselm Lenrim catalogued at Oskdra, 145 were not silver.",
+   "pruned": "888 coins Lenrim Oskdra 145 silver",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": false,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W10",
+   "sub": "before_after",
+   "original": "Before the flood, the granary at Lendra held 249 sacks of rye; after it, the granary held 507.",
+   "pruned": "Before flood granary at Lendra held 249 sacks rye after 507.",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": true,
+    "opening": null,
+    "function": true,
+    "all": true
+   }
+  },
+  {
+   "id": "W11",
+   "sub": "before_after",
+   "original": "Before the flood, the granary at Kellen held 83 sacks of rye; after it, the granary held 371.",
+   "pruned": "Before flood granary at Kellen held 83 sacks rye after 371",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": true,
+    "opening": null,
+    "function": true,
+    "all": true
+   }
+  },
+  {
+   "id": "W12",
+   "sub": "instead_of",
+   "original": "The ferry at Varlen carried 371 passengers on its first crossing, instead of the 56 that Maren Wenrim had planned.",
+   "pruned": "ferry at Varlen carried 371 passengers first crossing 56 Maren Wenrim planned",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": true,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W13",
+   "sub": "negation",
+   "original": "The museum at Tistor did not receive 647 maps from Gisli Gavoth; it received 946.",
+   "pruned": "museum Tistor 647 maps received 946",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": false,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W14",
+   "sub": "passive",
+   "original": "At the horse fair in Dradek, Viggo Leneby was paid 845 crowns by Fenna Gavhal, and Fenna Gavhal was paid 273 crowns by Ivo Halmir.",
+   "pruned": "Viggo Leneby paid 845 crowns Fenna Gavhal Fenna Gavhal 273 crowns Ivo Halmir",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": false,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W15",
+   "sub": "negated_count",
+   "original": "Of the 612 coins that Greta Haltor catalogued at Tistis, 119 were not silver.",
+   "pruned": "612 coins Greta Haltor Tistis 119 not silver",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": true,
+    "opening": null,
+    "function": true,
+    "all": true
+   }
+  },
+  {
+   "id": "W16",
+   "sub": "from_to",
+   "original": "521 crates of slate were shipped from Halbry to Lenzar, and 981 crates from Lenzar to Halbry.",
+   "pruned": "521 crates slate shipped Halbry to Lenzar 981 crates Lenzar to Halbry",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": true,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W17",
+   "sub": "before_after",
+   "original": "After the flood, the granary at Draell held 749 sacks of rye; before it, the granary held 358.",
+   "pruned": "granary Draell 749 sacks rye 358",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": true,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W18",
+   "sub": "all_but",
+   "original": "Kasimir Brybak planted 485 pear trees at Quennor, and all but 103 of them died in the first winter.",
+   "pruned": "Brybak planted 485 pear trees Quennor 103 died first winter",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": false,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W19",
+   "sub": "passive",
+   "original": "At the horse fair in Gavtis, Niels Gavhal was paid 924 crowns by Sabine Tislun, and Sabine Tislun was paid 84 crowns by Wenna Wenbry.",
+   "pruned": "Niels Gavhal paid 924 crowns Sabine Tislun Sabine Tislun 84 Wenna Wenbry",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": false,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W20",
+   "sub": "passive",
+   "original": "At the horse fair in Mirpel, Fenna Rudfal was paid 648 crowns by Katja Othquen, and Katja Othquen was paid 926 crowns by Ivo Othosk.",
+   "pruned": "horse fair Fenna Rudfal paid 648 crowns Katja Othquen Katja Othquen 926 crowns Ivo Othosk",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": false,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W21",
+   "sub": "before_after",
+   "original": "Before the flood, the granary at Rudoth held 282 sacks of rye; after it, the granary held 206.",
+   "pruned": "Before flood granary at Rudoth held 282 sacks rye after 206",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": true,
+    "opening": null,
+    "function": true,
+    "all": true
+   }
+  },
+  {
+   "id": "W22",
+   "sub": "instead_of",
+   "original": "The ferry at Mirtor carried 483 passengers on its first crossing, instead of the 108 that Dagny Quenlun had planned.",
+   "pruned": "ferry Mirtor carried 483 passengers 108",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": false,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W23",
+   "sub": "passive",
+   "original": "At the horse fair in Torvar, Nora Dratis was paid 853 crowns by Dagny Gavith, and Dagny Gavith was paid 787 crowns by Alma Ellquen.",
+   "pruned": "Nora Dratis paid 853 Dagny Gavith 787 Ellquen",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": false,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W24",
+   "sub": "all_but",
+   "original": "Henrik Pelfal planted 574 pear trees at Velbak, and all but 85 of them died in the first winter.",
+   "pruned": "Henrik Pelfal planted 574 pear trees Velbak 85 died",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": true,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W25",
+   "sub": "all_but",
+   "original": "Fenna Kelell planted 793 pear trees at Vartor, and all but 106 of them died in the first winter.",
+   "pruned": "Fenna Kelell planted 793 pear trees at Vartor 106 died",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": true,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W26",
+   "sub": "instead_of",
+   "original": "The ferry at Ithvar carried 635 passengers on its first crossing, instead of the 667 that Rasmus Kellen had planned.",
+   "pruned": "ferry Ithvar carried 635 passengers 667",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": false,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W27",
+   "sub": "comparative",
+   "original": "The choir of Gavzar has 590 members, 91 more than the choir of Zarsund.",
+   "pruned": "choir 590 members 91 Zarsund",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": false,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W28",
+   "sub": "negation",
+   "original": "The museum at Gavkel did not receive 465 maps from Cora Brylun; it received 129.",
+   "pruned": "museum 465 maps 129",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": false,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W29",
+   "sub": "comparative",
+   "original": "The choir of Quenlun has 281 members, 33 more than the choir of Ebyeby.",
+   "pruned": "choir Quenlun 281 members 33 more Ebyeby",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": true,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W30",
+   "sub": "negation",
+   "original": "The museum at Falrud did not receive 293 maps from Alma Othtis; it received 437.",
+   "pruned": "museum Falrud 293 maps Alma Othtis received 437",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": true,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W31",
+   "sub": "from_to",
+   "original": "281 crates of slate were shipped from Haltor to Dekeby, and 392 crates from Dekeby to Haltor.",
+   "pruned": "281 crates shipped Haltor Dekeby 392 crates Dekeby Haltor",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": true,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W32",
+   "sub": "from_to",
+   "original": "175 crates of slate were shipped from Osknor to Dekmor, and 195 crates from Dekmor to Osknor.",
+   "pruned": "175 crates slate shipped Osknor to Dekmor 195 crates Dekmor Osknor",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": true,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W33",
+   "sub": "comparative",
+   "original": "The choir of Brysund has 412 members, 15 more than the choir of Ellith.",
+   "pruned": "choir of Brysund 412 members 15 more than choir Ellith",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": true,
+    "opening": null,
+    "function": true,
+    "all": true
+   }
+  },
+  {
+   "id": "W34",
+   "sub": "negation",
+   "original": "The museum at Ebytis did not receive 978 maps from Ilse Ebymir; it received 552.",
+   "pruned": "museum Ebytis 978 maps received 552.",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": false,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W35",
+   "sub": "before_after",
+   "original": "After the flood, the granary at Kelquen held 560 sacks of rye; before it, the granary held 689.",
+   "pruned": "granary held 560 sacks rye 689",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": false,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W36",
+   "sub": "from_to",
+   "original": "467 crates of slate were shipped from Rimith to Mortor, and 516 crates from Mortor to Rimith.",
+   "pruned": "467 crates slate shipped Rimith Mortor 516 crates Mortor Rimith",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": true,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W37",
+   "sub": "instead_of",
+   "original": "The ferry at Sundquen carried 304 passengers on its first crossing, instead of the 684 that Cora Wenkel had planned.",
+   "pruned": "ferry Sundquen carried 304 passengers 684",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": false,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W38",
+   "sub": "from_to",
+   "original": "535 crates of slate were shipped from Oskhal to Sundtis, and 926 crates from Sundtis to Oskhal.",
+   "pruned": "535 crates of slate shipped Oskhal to Sundtis 926 crates Sundtis to Oskhal",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": true,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W39",
+   "sub": "all_but",
+   "original": "Alma Ithmir planted 784 pear trees at Nortor, and all but 53 of them died in the first winter.",
+   "pruned": "Alma Ithmir planted 784 pear trees Nortor 53 died winter",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": true,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  },
+  {
+   "id": "W40",
+   "sub": "comparative",
+   "original": "The choir of Zarrud has 609 members, 62 fewer than the choir of Pellen.",
+   "pruned": "Zarrud 609 members 62 fewer Pellen",
+   "survives": {
+    "located": true,
+    "number": true,
+    "names": true,
+    "opening": null,
+    "function": false,
+    "all": false
+   }
+  }
+ ]
+}

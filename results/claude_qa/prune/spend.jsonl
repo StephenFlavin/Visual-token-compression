@@ -1,0 +1,7 @@
+{"what": "calibrate overhead", "cost_usd": 0.003033, "input_tokens": 591, "output_tokens": 4, "error": null}
+{"what": "calibrate full", "cost_usd": 0.10397300000000001, "input_tokens": 20779, "output_tokens": 4, "error": null}
+{"what": "calibrate ptext22", "cost_usd": 0.054682999999999995, "input_tokens": 10921, "output_tokens": 4, "error": null}
+{"what": "calibrate ptext15", "cost_usd": 0.075158, "input_tokens": 15016, "output_tokens": 4, "error": null}
+{"what": "calibrate question block", "cost_usd": 0.035828, "input_tokens": 7150, "output_tokens": 4, "error": null}
+{"what": "calibrate ptext22", "cost_usd": 0.049203, "input_tokens": 9825, "output_tokens": 4, "error": null}
+{"what": "calibrate ptext15", "cost_usd": 0.07055800000000001, "input_tokens": 14096, "output_tokens": 4, "error": null}
