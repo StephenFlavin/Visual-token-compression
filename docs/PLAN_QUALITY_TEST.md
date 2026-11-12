@@ -99,3 +99,21 @@ Predictions 1, 4 and 6 are the uncertain ones: on every earlier test the atlas a
 Layers 1-2: ~$20 (atlas briefs are the main cost). Layer 3: ~$14 for the two Opus brief arms and ~$4 for the
 Haiku and Sonnet runs. Cap $45. Order: layer 1 pilot on 6 tickets, then layers 1-2 in full, then layer 3 while
 whole tickets fit under the cap. With 17 tickets layer 3 can only show large differences; say so in the write-up.
+
+## Results (2026-11-12)
+
+Run by an Opus subagent, $44.25 of the $45 cap; pre-registration, tables and caveats in
+[results/plan_quality/README.md](../results/plan_quality/README.md). Layer 1 on 33 tickets with all four planners,
+layer 2 not evaluable (only one repository had 3+ tickets), layer 3 on all 16 tickets.
+
+* **Atlas briefs are no better than file-list briefs and match scouting:** fix files named, atlas 50.1%, tree 48.1%,
+  map 47.6%, scout 49.8% (atlas vs tree 6-6 on the tickets that differ). The atlas names fewer wrong files than tree
+  (24.7% vs 38.2%) but more than the scout (12.5%), and costs most ($0.41 per brief vs $0.05 tree, $0.15 scout). The
+  blind judge put every planner near 6 of 6.
+* **Few invented names:** atlas 0.4% of named paths and functions, scout 0.8%, tree 2.5%.
+* **Sizing and worker choice fail:** SIZE vs real size, rank correlation 0.24 (atlas), 0.38 (scout). The atlas planner
+  never chose Opus; its choice solved 8 of 16 against 11 for always-Opus-high (at 14% of the cost); right 2, too large
+  6, too small 3, unresolvable 5. Haiku low and Sonnet medium with the brief each solved the same 8 tickets.
+* **The brief and the worker:** Opus with the atlas brief solved 11, with the tree brief 10, with no brief 8 (3-0
+  discordant, p = 0.25); turns did not fall (median 12.5 both).
+* Predictions: 1 FAIL, 2 PASS, 3 PASS, 4 not evaluable, 5 FAIL, 6 FAIL, 7 FAIL.

@@ -281,3 +281,182 @@ scores and sizing correlations only moderate effects; layer 3 (16 tickets, one r
 (McNemar needs about 6 discordant tickets all one way for p < 0.05).
 
 ## Results
+
+### Amendment 1 (2026-11-12, after the pilot, before ticket 7): none needed
+
+The pilot (tickets 1-6, 24 briefs, 24 judge calls) cost $6.59, about $1.10 per ticket; the projection for all 40
+tickets stayed near $42 for layer 1 alone. The pre-registered order (layer-3 tickets first, then layer 3, then the
+rest of layer 1 while the cap allows) was kept unchanged.
+
+## Results (2026-11-12)
+
+*Spend: **$44.25** of the $45 cap. Layer 1: 33 tickets with all four briefs (35 with tree, map and atlas). Layer 2:
+not evaluable. Layer 3: all 16 tickets, four worker runs each. Full tables: `summary.md`
+(`plan_quality.py analyse`).*
+
+### Verdict
+
+* **Atlas briefs are not better than file-list briefs, and they match scouting.** Over 33 tickets the atlas brief
+  named 50.1% of the fix's files, the file-list brief 48.1%, the repo map 47.6%, the scout 49.8%. Atlas and tree
+  tie on 21 tickets and split 6-6 on the rest. The blind judge scored every planner near its ceiling (5.4-5.7 of 6),
+  so it cannot separate them. Where the atlas does differ: fewer named files that are not in the fix (24.7% against
+  38.2% for tree), but the scout is lower still (12.5%), and the atlas costs most ($0.41 per brief against $0.05
+  for tree and $0.15 for the scout).
+* **The atlas planner hardly invents anything.** 1 of 246 named paths and functions does not exist in the repository
+  (0.4%: a helper `_is_anyio_cancellation`); scout 0.8% (two test files it did not mark as new), map 0.4%, tree 2.5%
+  (six functions guessed from file names). Misread pages did not show up as invented names.
+* **The planner cannot size work or pick the worker.** SIZE rises only weakly with the real fix's size (rank
+  correlation 0.24 for atlas, 0.38 for scout; the pre-registered bar was 0.3). The atlas planner chose Sonnet medium on
+  13 of 16 layer-3 tickets, Haiku on 3, Opus never. Against the measured tier it was right on 2, too large on 6 (Haiku
+  low already solved them), too small on 3 (only Opus solved them), and 5 were solved by no tier. Following its choice
+  solved 8 tickets against 11 for always-Opus-high, at 14% of the cost.
+* **A brief may help an Opus worker solve more, but not with fewer turns.** With the atlas brief Opus solved 11 of
+  16, with the tree brief 10, with no brief (the earlier test's rows) 8. The 3 discordant tickets all favour the brief
+  (exact p = 0.25). Median turns were the same (12.5 against 12.5; fewer on 5 of 14 untied tickets). The cheap
+  tiers with the atlas brief solved 8 each (Sonnet medium $0.05, Haiku low $0.01 per ticket at the CLI's list
+  prices), as many as the no-brief Opus worker.
+
+### Layer 1: briefs against the real fix (33 tickets with all four briefs)
+
+| planner | fix files named (mean) | named source files not in the fix | first file in the fix | fix functions named | invented paths + functions | judge score (0-6) | judge OUTCOME yes | format problems | cost per brief | seconds | turns |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| tree | 48.1% | 38.2% | 29 of 33 | 44.6% | 6 of 239 (2.5%) | 5.48 | 28 | 14 | $0.049 | 15 | 1 |
+| map | 47.6% | 35.4% | 29 of 33 | 49.2% | 1 of 283 (0.4%) | 5.42 | 25 | 13 | $0.157 | 14 | 1 |
+| atlas | 50.1% | 24.7% | 29 of 33 | 50.3% | 1 of 246 (0.4%) | 5.67 | 27 | 16 | $0.414 | 22 | 1 |
+| scout | 49.8% | 12.5% | 29 of 33 | 50.0% | 2 of 255 (0.8%) | 5.73 | 30 | 20 | $0.153 | 31 | 9.5 |
+
+Paired, 33 tickets: fix files named, atlas minus tree +2.0 points (atlas higher on 6, lower on 6, p = 1.0); scout
+minus atlas -0.3 (3 vs 4, p = 1.0); fix functions, atlas minus tree +5.6 (8 vs 5, p = 0.58); judge score, atlas minus
+tree +3.0 points of 6 (7 vs 4, p = 0.55). On the first 16 tickets alone the atlas led tree by 6.7 points and the scout
+led the atlas by 5.1; the 17 later tickets erased both gaps. Most "format problems" are an APPROACH longer than three
+sentences; every brief had files, a size and a worker.
+
+Sizing (SIZE S/M/L against the fix; every fix has 3+ files, so by the design's rule each is M or L):
+
+| planner | rank correlation with real size (composite) | with files | with functions | with lines | SIZE S / M / L | SIZE = rule's class |
+|---|---|---|---|---|---|---|
+| tree | 0.32 | 0.34 | 0.30 | 0.25 | 6 / 22 / 5 | 17 of 33 |
+| map | 0.27 | 0.29 | 0.23 | 0.22 | 6 / 20 / 7 | 17 of 33 |
+| atlas | 0.24 | 0.39 | 0.14 | 0.14 | 7 / 19 / 7 | 15 of 33 |
+| scout | 0.38 | 0.46 | 0.29 | 0.31 | 6 / 20 / 7 | 18 of 33 |
+
+Atlas confusion (rows SIZE, columns the rule's class): S: 6 M, 1 L; M: 9 M, 10 L; L: 1 M, 6 L.
+
+### Layer 2: not evaluable
+
+Only sqlglot had 3 or more tickets (one group of 5); the design needs three groups. Not run; prediction 4 not
+evaluable.
+
+### Layer 3: workers on 16 tickets
+
+| arm | resolved | median turns | mean cost | median seconds | share of fix files touched |
+|---|---|---|---|---|---|
+| Opus high, no brief (repo_atlas_swe `plain`) | 8 | 12.5 | $0.26 | 100 | 0.58 |
+| Opus high, atlas brief | **11** | 12.5 | $0.32 | 90 | 0.54 |
+| Opus high, tree brief | 10 | 15 | $0.42 | 173 | 0.59 |
+| Sonnet medium, atlas brief | 8 | 6 | $0.05 | 29 | 0.52 |
+| Haiku low, atlas brief | 8 | 8.5 | $0.01 | 54 | 0.49 |
+
+* Atlas brief vs no brief: 3 tickets only with the brief (fromager-1124, jsonpickle-587, dspy-8607), 0 only without,
+  p = 0.25. Turns lower on 5 of 14 untied, p = 0.42. Cost lower on 7 of 16.
+* Atlas brief vs tree brief: 1-0 (jsonpickle-587), p = 1.0; the atlas-brief run used fewer turns on 9 of 16.
+* fromager-1124 was solved by all four brief arms and by none of the earlier test's three arms (plain, map, atlas
+  in context): the briefs named the right helper (`resolve_package_cooldown`) and the `req_type` parameter.
+* For comparison only (other run, same tasks): the earlier test's Opus worker with the atlas pages in its own context
+  also solved 11.
+
+### Right-sizing (atlas planner's WORKER against the measured tier)
+
+| ticket | SIZE | WORKER | Haiku low | Sonnet medium | Opus high | measured tier | verdict |
+|---|---|---|---|---|---|---|---|
+| fromager-1124 | L | sonnet / medium | yes | yes | yes | haiku | too large |
+| hermes-webui-330 | M | sonnet / medium | no | no | no | none | unresolvable |
+| tox-3904 | M | sonnet / medium | yes | yes | yes | haiku | too large |
+| pyfakefs-1286 | L | sonnet / medium | yes | yes | yes | haiku | too large |
+| pyjanitor-1593 | M | sonnet / medium | yes | yes | yes | haiku | too large |
+| docstub-123 | M | sonnet / medium | no | no | no | none | unresolvable |
+| jsonpickle-588 | M | sonnet / medium | yes | yes | yes | haiku | too large |
+| jsonpickle-587 | M | sonnet / medium | no | no | yes | opus | too small |
+| pyinaturalist-643 | S | haiku / low | yes | yes | yes | haiku | right |
+| fabric-cicd-670 | M | haiku / low | no | no | no | none | unresolvable |
+| sqlglot-6067 | M | sonnet / medium | yes | yes | yes | haiku | too large |
+| anyio-975 | L | sonnet / medium | no | no | yes | opus | too small |
+| dspy-8607 | L | sonnet / medium | no | no | yes | opus | too small |
+| virtualenv-2940 | M | sonnet / medium | no | no | no | none | unresolvable |
+| arta-50 | M | haiku / medium | yes | yes | yes | haiku | right |
+| sqlglot-5359 | S | sonnet / medium | no | no | no | none | unresolvable |
+
+Right 2, too large 6, too small 3, unresolvable 5. The planner ignored its own default for L (Opus): every L ticket
+got Sonnet. Haiku and Sonnet solved exactly the same 8 tickets; Opus added 3.
+
+| policy | resolved (of 16) | total worker cost |
+|---|---|---|
+| always Opus high | 11 | $5.17 |
+| always Sonnet medium | 8 | $0.81 |
+| always Haiku low (cheapest) | 8 | $0.10 |
+| the planner's choice | 8 | $0.73 |
+
+Costs are the CLI's `total_cost_usd` (list price). Haiku 5.5's runs cost $0.004-0.01 each at that price.
+
+### Predictions
+
+1. Atlas names more fix files than tree by at least 5 points: **FAIL** (+2.0 points over 33 tickets; 6 higher, 6
+   lower).
+2. Invented things at most 2% of what atlas names and not more than 2 points above scout: **PASS** (0.4% vs scout
+   0.8%).
+3. Scout names at least as many fix files as atlas, within 5 points: **PASS** (49.8% vs 50.1%).
+4. Collisions: **not evaluable** (one group).
+5. Atlas SIZE rank correlation with real size at least 0.3: **FAIL** (0.24; with fix files alone 0.39).
+6. Planner's WORKER resolves within 1 of always-Opus at no more than 70% of its cost: **FAIL** (8 vs 11, at 14% of
+   the cost).
+7. Atlas-brief worker uses fewer turns than no brief (paired median) and resolves within 2 tickets: **FAIL** on
+   turns (12.5 vs 12.5; lower on 5 of 14) and, strictly, on resolved (11 vs 8 differs by 3, in the brief's favour).
+
+### What the sample can show
+
+33 tickets show file-share differences of about 5 points or more; the atlas-tree gap (+2) and the scout-atlas gap
+(-0.3) are inside that. The judge is near its ceiling for every planner, so it says only that most briefs point at
+a workable fix. Layer 3 has 16 tickets and one run per arm: the 3-0 for the brief is p = 0.25, the same size of gap
+the earlier test found for the atlas in context, and run-to-run variation on these tasks is unmeasured. The
+no-brief rows come from another day's runs (its first four tasks ran before its package-index block). The right-sizing
+result does not need a test: the planner never chose Opus, and three tickets needed it.
+
+### Funnel and order
+
+91 candidates (newest first, 3+ fix source files) -> 33 atlases over 150k image tokens -> 58 screened -> 18 dropped
+(file list named every fix file) -> 40 tickets. Layer 1 ran on tickets 1-16 (the layer-3 tickets), then layer 3, then
+tickets 17-35 while the cap allowed. Tickets 34-35 (nested-pandas-303, fromager-653) have no scout brief: the scout's
+cost bound ($1.50) would have crossed the cap, and they are left out of the four-planner tables. Tickets 36-40 were not
+run. Layer 1 on all 40 was estimated at ~$42-50 before layer 3, so it could not all fit with layer 3 under $45.
+
+### Cost (list price)
+
+| what | calls | $ |
+|---|---|---|
+| closed-book screens (selection) + model-id smoke | 21 + 2 | 0.51 |
+| tree briefs | 35 | 1.71 |
+| map briefs | 35 | 5.38 |
+| atlas briefs | 35 | 14.12 |
+| scout briefs | 33 (+1 cut by the usage limit, $0) | 5.19 |
+| judge (Opus low) | 138 | 4.51 |
+| Opus high workers, atlas brief / tree brief | 16 / 16 | 5.17 / 6.76 |
+| Sonnet medium workers | 16 | 0.81 |
+| Haiku low workers (incl. 2 runs lost to a grader error) | 18 | 0.11 |
+| **total** | | **44.25** (Opus 43.33, Sonnet 0.81, Haiku 0.11) |
+
+### Problems and checks
+
+* **Usage limit** hit twice: at 14:19 UTC during the pilot (one scout call and two judge calls failed; not recorded,
+  redone after the reset) and at ~16:45 UTC after the extension runner had already stopped at the cap (nothing lost).
+* **Grader error:** two Haiku runs on pyfakefs-1286 wrote a patch that is not valid UTF-8; the inherited text-mode
+  `git diff` failed before grading and before the cost was booked. The runner now reads the patch as bytes and books
+  the cost first; the arm was re-run with the fixed code; both lost runs are booked ($0.006 each).
+* **Leaks:** workers had no package index; Bash commands were scanned. My first extra pattern flagged the runs' own
+  venv path; after narrowing it (to the dataset, contexts, other exports and this repository's path) no command
+  remains flagged. One worker read its own background-task output file outside the checkout. Scouts had only
+  Read/Grep/Glob: three tried paths outside their export (a mistyped path, `/usr/lib/.../site-packages`, a glob from
+  `/`) and all three were denied.
+* **Auto-memory:** off for every agent run (`CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`), and each run's project store was
+  deleted before and after; no run left a project store or memory file.
+* **Pages:** every atlas call arrived whole (input tokens at least 97% of the image-token formula).
+* **Judge ceiling:** the rubric gave 6 of 6 to most briefs of every planner; it separates almost nothing here.
