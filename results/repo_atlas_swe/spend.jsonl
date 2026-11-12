@@ -77,3 +77,6 @@
 {"what": "agronholm__anyio-975 atlas", "cost_usd": 0.8321202000000001, "input_tokens": 536635, "output_tokens": 6290}
 {"what": "stanfordnlp__dspy-8607 plain", "cost_usd": 0.26988719999999994, "input_tokens": 203986, "output_tokens": 6519}
 {"what": "stanfordnlp__dspy-8607 map", "cost_usd": 0.6283093999999999, "input_tokens": 881507, "output_tokens": 9293}
+{"what": "stanfordnlp__dspy-8607 atlas", "cost_usd": 0.9527702000000001, "input_tokens": 1409987, "output_tokens": 8269}
+{"what": "pypa__virtualenv-2940 plain", "cost_usd": 0.17043560000000002, "input_tokens": 110568, "output_tokens": 3236}
+{"what": "pypa__virtualenv-2940 map", "cost_usd": 0.2560984, "input_tokens": 271882, "output_tokens": 2893}

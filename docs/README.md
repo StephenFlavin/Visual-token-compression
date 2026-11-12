@@ -9,6 +9,8 @@ overview is the top-level [README.md](../README.md); how to run things and the g
   compression.
 * [LOCAL_QWEN.md](LOCAL_QWEN.md): the last planned run, pre-registered: page images and generation speed on a local
   Qwen3.8-27B (RTX 3090), no training; runbook and the 3090 prompt.
+* [PLAN_QUALITY_TEST.md](PLAN_QUALITY_TEST.md): design, queued: are briefs an orchestrator writes from the atlas
+  good enough to replace scouting and to pick the right worker model and reasoning level per ticket?
 * [REPO_ATLAS_PLAN.md](REPO_ATLAS_PLAN.md): draft for approval: a whole repository as page images read up front
   (`experiments/repo_atlas.py`, built), which repositories fit, and a two-stage test against a repo map and a
   searching agent.

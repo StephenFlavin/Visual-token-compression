@@ -72,7 +72,7 @@ the same model reading text, at lower cost.
 | Repo atlas: finding a security flaw | 12 fresh advisories in small libraries | atlas alone 9 of 12 against 10 for a bare file list; agent with atlas 10 against 7 for the plain agent, in half the turns, 45% dearer (p = 0.25) | **Atlas alone fails; with an agent: a hint, not settled** |
 | Repo atlas: hard fresh coding tasks | SWE-rebench tasks, plain / repo map / atlas | running | pending; [results/repo_atlas_swe](../results/repo_atlas_swe/README.md) |
 | Repo atlas: migrating C to Rust | CRUST-Bench, plain / atlas / atlas only | pilot done, rest queued | pending; [results/repo_atlas_migrate](../results/repo_atlas_migrate/README.md) |
-| Orchestrator reads the atlas once, workers get briefs | not tested | on paper ~$1 for a 20-ticket backlog against ~$19 if every worker carries the atlas | **Proposed**; [details](#proposed-not-tested-an-orchestrator-that-reads-the-atlas-once) |
+| Orchestrator reads the atlas once, workers get briefs | not tested; plan-quality test queued ([PLAN_QUALITY_TEST.md](PLAN_QUALITY_TEST.md)) | on paper ~$1 for a 20-ticket backlog against ~$19 if every worker carries the atlas | **Proposed, test queued**; [details](#proposed-not-tested-an-orchestrator-that-reads-the-atlas-once) |
 | A local model (Qwen3.8-27B) | not run | plan and harness ready | **Planned**; [LOCAL_QWEN.md](LOCAL_QWEN.md) |
 
 ## How fast it falls
@@ -314,8 +314,10 @@ code, so it can spot tickets that touch the same files, which per-ticket scoutin
 **What is not known:** whether briefs written from the atlas are better than what a worker finds by scouting.
 Pages are weaker where one symbol decides, so workers must read the files they edit and be free to reject a brief.
 
-**A test of plan quality** (not pre-registered yet; tasks: fresh, post-cutoff tickets with a known fix, so memory
-cannot write the plan):
+**A test of plan quality** (queued 2026-11-12 behind the two running atlas tests; full design in
+[PLAN_QUALITY_TEST.md](PLAN_QUALITY_TEST.md); tasks: fresh, post-cutoff tickets with a known fix, so memory cannot
+write the plan). Briefs follow a fixed structure and carry a size (S / M / L) and a worker choice (model and
+reasoning level):
 
 1. *The brief against the fix, no execution.* Planners with a file list, a repo map, the atlas, or search tools
    each write a brief in a fixed form (files, functions, approach in three sentences). Scores: share of the fix's
@@ -328,6 +330,10 @@ cannot write the plan):
 3. *Does the brief help the worker?* The same worker with the atlas brief, with a file-list brief, and with no
    brief (scouting), graded by the ticket's own tests: resolved, turns, cost, seconds. The fresh-task test above
    supplies the no-brief rows.
+4. *Is the work right-sized?* The brief's size against the real fix's size; and each ticket run on a cheap, a
+   middle and a top worker (Haiku low, Sonnet medium, Opus high) to find the cheapest that solves it, compared with
+   the worker the brief chose. Policies compared on tickets solved and total cost: always the top worker, always
+   the cheapest, the brief's choice.
 
 **Where not to use it**
 

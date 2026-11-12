@@ -201,6 +201,11 @@ table and curves `analyse_stage0.py`, rows `encoder_probe/results/stage0/runs.js
   No D3 or D10. Next: a recipe amendment (faster slot learning), not a density conclusion.
 
 ## Open items, in priority order
+**Queue on the cloud runner (2026-11-12), each run by an Opus subagent:** the hard-fresh-tasks atlas test
+(`results/repo_atlas_swe/`, running), then the C-to-Rust migration atlas test (`results/repo_atlas_migrate/`, pilot
+done), then the plan-quality test ([PLAN_QUALITY_TEST.md](PLAN_QUALITY_TEST.md), approved, not started). Finished
+atlas tests and the use-case table: [CLAUDE_QA.md](CLAUDE_QA.md).
+
 **As of 2026-11-12:** (1) the Qwen3.8-27B evening (the prompt at the top); (2) done: the 2.2x claim now carries
 the wording-sensitive limit from [results/claude_qa/repeat](../results/claude_qa/repeat/README.md).
 Nothing else is scheduled. The list below is the earlier one; all of it is parked.
