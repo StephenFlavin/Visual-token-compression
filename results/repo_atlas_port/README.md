@@ -7,6 +7,73 @@
 **One run per arm on one project. This is an anecdote, not a measurement:** a difference of a few tests or turns
 between two single runs says nothing about the arms. The write-up will say so.
 
+## Results (2026-11-12)
+
+*2 Claude Code runs (Opus 5.5, high effort), $23.14 of the $50 cap ($0.62 smoke, $11.32 plain, $11.20 atlas). Rows
+`runs.jsonl` (agent side), `grades.jsonl` (tests), table `summary.md` (`repo_atlas_port.py analyse`), ports
+`ports/<arm>/`, commands `commands/<arm>.txt`, transcripts `transcripts/<arm>.jsonl.gz` (token deltas and images
+removed). The pre-registration and amendment 1 follow below.*
+
+**Verdict: both arms ported gitleaks completely, so this anecdote cannot separate them.** Each Rust port builds
+from clean and passes all 35 hidden tests (the Go original passes 35 here too). Turns, cost and time are nearly the
+same (atlas 99 turns, $11.20, 0.59 h; plain 102, $11.32, 0.69 h). Both agents used the same method: build the Go
+original into `/tmp` as a local oracle and compare their port's output with it on many inputs. That is allowed (the
+prompt forbids only calling the original from the port), but it makes the hidden tests close to a formality. Neither
+port is a concurrent scanner, although the Go original scans files through a 40-wide semaphore group
+(`semgroup`, goroutines, mutexes). The atlas did not make the agent read less source: the atlas agent also read the
+Go files and the Go module cache (`~/go/pkg/mod`: go-gitdiff, zerolog, lipgloss, filetype, archives), as plain did.
+One run per arm, a well-known project (public since 2018) and a ceiling score: this shows that a 22k-line Go-to-Rust
+port is within reach of one Claude Code session at about $11. It says nothing about the atlas.
+
+| Arm | Tests passed | Builds | Concurrent scan | `unsafe` blocks | Rust lines (files) | Deps | Turns | Cost | Hours (wall) | Output tokens | Cut |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| plain | 35 / 35 | yes | no | 3 | 9,431 (22) | 18 | 102 | $11.32 | 0.69 | 234,160 | no (resumed once, amendment 1) |
+| atlas | 35 / 35 | yes | no | 2 | 8,902 (16) | 3 | 99 | $11.20 | 0.59 | 201,480 | no (resumed once, amendment 1) |
+
+* **Concurrency.** plain: scans sequentially. Its only thread reads `git log`'s stderr while the main thread parses
+  the diff stream (the Go source does the same for that pipe). `Mutex` and atomics hold the global log level, the
+  config state and an output lock. atlas: single-threaded, with no thread, rayon, channel or async anywhere. `Arc`
+  only shares commit and remote metadata between findings, and atomics hold the log level. The automatic counter marks
+  plain "concurrent" because of the stderr thread; by hand, neither is.
+* **`unsafe`:** plain has 3 blocks (`libc::isatty`, a SIGINT handler that writes and `_exit`s, `libc::signal`
+  setup); atlas has 2 (in logging and in `gitdiff.rs`). These are by hand and by the corrected counter. The counter
+  first reported 1 and 0, because a `'"'` char literal opened a fake string; it was fixed and the rows were recounted.
+* **Dependencies differ for an incidental reason.** The atlas agent tested the network with `curl` (denied) and then
+  assumed no crates could be fetched. It built with `--offline` from the crates already in the cache (`regex`,
+  `aho-corasick`, `libc`) and hand-wrote its TOML, JSON and CLI parsing and its DEFLATE, LZMA/xz/7z and zstd decoders.
+  The plain agent checked with `cargo fetch` (which worked) and used 18 crates (`toml`, `serde_json`, `zip`, `tar`,
+  `flate2`, `bzip2`, `lzma-rs`, `ruzstd`, `sevenz-rust`, `chrono`, ...). The atlas port is still 529 lines shorter.
+  This difference comes from one agent's guess about the network, not from the pages.
+* Turns count tool calls plus closing answers, without the atlas's "OK". The CLI's own `num_turns` covers only the
+  resumed segments (4 and 6), because the first segments were stopped before their result events; API calls were
+  82 (plain) and 97 (atlas).
+
+**Predictions:**
+* **B1** (neither arm passes every test): **FAIL**. Both pass 35 of 35.
+* **B2** (shares differ by < 15 points): **PASS**, with a difference of 0 points.
+* **B3** (atlas uses fewer turns): **PASS on the letter only**: 99 vs 102. That is one run per arm and a 3% difference,
+  so it means nothing.
+
+**Checks:**
+* **Pages arrived:** the atlas run's first call had 94,350 input tokens, against 81,834 by the image-token formula.
+* **Leaks: none found.** Every hit of the download pattern was read by hand. Most were reads of the Go module cache
+  (paths with `github.com` in them: the Go dependencies' source, not a Rust port). plain also ran `cargo fetch` of
+  `regex` in a scratch crate, to test the network. atlas ran `curl -sI https://index.crates.io/config.json`, which
+  was denied, and one `find / -type d -name 'archives@*'` to look for a Go module. Neither ran `cargo add`, `cargo
+  install`, `git clone` or `go install`, or fetched anything gitleaks-like. No dependency in `Cargo.toml` or
+  `Cargo.lock` is a secret-scanner crate (the only flag is the port's own package name, `gitleaks`).
+* **Outside paths:** the audit flags are `/tmp` scratch files (the Go oracle in `/tmp/ref` or `/tmp/goref` and test
+  inputs), `~/go/pkg/mod`, and false positives from regexes and format strings (`/blob/`, `/commit/`, `/testsuite`).
+  Neither run read `~/.claude/`, the repository, the other run's directory or the stash.
+* **Memory:** auto-memory was off. Each run's store held only its session file, no `memory/` directory, and was
+  deleted after `finish`.
+* **Interruption:** the first segment of each run was stopped early by the mispriced guard (amendment 1). Both were
+  resumed once, and both finished within 2 minutes of the resume. plain's resume used 1.3 min and $0.43; atlas's
+  used 2.2 min and $0.59. Both were close to done when they were stopped, so the resumes changed little.
+* **Second project:** jmespath did not run. After gitleaks, $26.86 of the cap was left, under the $30 the
+  pre-registered rule needs (two runs at the full $15 guard).
+* Q1's re-run was running agent runs in the same container at the same time.
+
 ## Question
 
 The C-to-Rust test (14 small CRUST-Bench projects, atlases of 2-13k image tokens) tied on every project. Does the

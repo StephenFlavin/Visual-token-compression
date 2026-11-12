@@ -6,3 +6,4 @@
 {"what": "gitleaks atlas segment 1", "cost_usd": 0.5888, "reported": 0.5887838, "tail_estimated": 0, "killed": null, "usage_limit": false, "t": "2026-11-12T20:20:37Z"}
 {"what": "gitleaks plain segment 0", "cost_usd": 15.0606, "reported": 0.0, "tail_estimated": 15.0606, "killed": "guard", "usage_limit": false, "t": "2026-11-12T20:22:00Z"}
 {"what": "gitleaks plain segment 0 repriced (amendment 1)", "cost_usd": -4.1624, "v1": 15.0606, "v2": 10.8982}
+{"what": "gitleaks plain segment 1", "cost_usd": 0.4268, "reported": 0.4267930000000001, "tail_estimated": 0, "killed": null, "usage_limit": false, "t": "2026-11-12T20:23:35Z"}

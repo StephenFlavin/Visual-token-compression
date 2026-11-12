@@ -278,3 +278,11 @@ at 2.2x at high effort only, and the atlas is rendered denser (2.9x), so legibil
 * Predictions: (S1) the gate passes without re-rendering; (S2) Sonnet with the atlas solves no more task-runs than
   Sonnet plain (difference under 3 of 32); (S3) Sonnet with the atlas stays below Opus plain; (S4) the atlas
   multiplies Sonnet's cost per run by at least 3.
+
+**Result (2026-11-12, 2 runs, $23.14; [results/repo_atlas_port](../results/repo_atlas_port/README.md)): both arms
+port gitleaks completely, which leaves nothing to compare.** Each Rust port builds and passes all 35 hidden tests (the Go original
+passes 35 here too); atlas 99 turns, $11.20, 0.59 h; plain 102 turns, $11.32, 0.69 h. Both agents built the Go
+original as a local oracle and diffed outputs; neither port scans concurrently (the original uses a 40-wide
+semaphore group). B1 fails, B2 passes (0 points), B3 passes on the letter only (99 vs 102). One run per arm on a
+well-known project: an anecdote. A guard mispricing (cache reads at 2x the CLI's rate) stopped both first segments at
+about $10.7; both were resumed once and finished within minutes (amendment 1). jmespath did not fit the cap rule.

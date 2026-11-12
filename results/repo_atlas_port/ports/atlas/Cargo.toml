@@ -1,0 +1,17 @@
+[package]
+name = "gitleaks"
+version = "8.0.0"
+edition = "2021"
+
+[[bin]]
+name = "gitleaks"
+path = "src/main.rs"
+
+[dependencies]
+regex = "1"
+aho-corasick = "1"
+libc = "0.2"
+
+[profile.release]
+opt-level = 3
+debug = false

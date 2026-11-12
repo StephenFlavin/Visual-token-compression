@@ -260,6 +260,7 @@ def lock_packages(lock: str) -> list[str]:
 
 
 def strip_comments(src: str) -> str:
+    src = re.sub(r"'(?:\\.|[^'\\\n])'", "' '", src)        # char literals ('"' would open a fake string)
     src = re.sub(r"/\*.*?\*/", " ", src, flags=re.S)
     src = re.sub(r'"(?:\\.|[^"\\])*"', '""', src)
     return re.sub(r"//[^\n]*", "", src)

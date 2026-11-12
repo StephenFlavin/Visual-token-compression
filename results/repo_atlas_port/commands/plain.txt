@@ -1,0 +1,443 @@
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace; ls -la; ls dst; find src -type f | grep -v testdata | head -100; find src -type f | wc -l; cargo --version; ls ~/.cargo/registry 2>/dev/null
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace; cat prompt.md; ls ~/.cargo/registry/cache/*/ | head -200; find src -type f | grep -v "rules/" | grep -v "^src/.github" | xargs wc -l | sort -n | tail -80
+$ cd /tmp && mkdir -p nettest && cd nettest && cargo init --name nt -q 2>&1; echo 'regex = "1"' >> Cargo.toml; timeout 60 cargo fetch 2>&1 | tail -5
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; cat main.go cmd/root.go
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; cat cmd/detect.go cmd/directory.go cmd/git.go cmd/protect.go cmd/stdin.go cmd/version.go cmd/scm/scm.go version/version.go logging/log.go
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; cat config/config.go config/rule.go config/allowlist.go config/utils.go
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; cat detect/detect.go
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; cat detect/utils.go detect/location.go detect/baseline.go detect/files.go detect/git.go detect/reader.go
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; cat detect/codec/*.go | grep -v _test
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; cat sources/source.go sources/fragment.go sources/common.go sources/file.go sources/files.go
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; cat sources/git.go
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; cat report/*.go | grep -v "^$"; ls testdata testdata/expected testdata/expected/*
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; cat report/json_test.go report/csv_test.go report/template_test.go; cat testdata/expected/report/csv_simple.csv; cat testdata/expected/report/json_simple.json; cat testdata/expected/report/junit_simple.xml; cat testdata/expected/report/sarif_simple.sarif | head -80
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; ls testdata/report testdata/*; cat testdata/report/*.tmpl; cat testdata/expected/report/template_*; cat testdata/expected/report/empty.json testdata/expected/report/junit_empty.xml
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; cat testdata/repos/small/dotGit/HEAD; head -40 testdata/expected/git/small.txt; cat testdata/config/simple.toml | head -60; cat .gitleaksignore | head -10; cat go.mod | head -40
+$ ls ~/go/pkg/mod/github.com 2>/dev/null; which go; cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; ls testdata/config/invalid testdata/config/valid; ls -R testdata/repos | head -50
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; mkdir -p /tmp/ref; GOFLAGS=-mod=mod GOPROXY=off go build -o /tmp/ref/gitleaks . 2>&1 | tail -5; ls -la /tmp/ref; cat regexp/*.go | head -40
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; grep -n "func Test\|cfgName\|source:\|\.toml\|NewGit\|Files{" detect/detect_test.go | head -120
+$ cd ~/go/pkg/mod/github.com/mholt/archives*/; ls; sed -n 1,200p formats.go
+$ cd ~/go/pkg/mod/github.com/mholt/archives*/; grep -n "func (.*) Match" -A 25 *.go | grep -n "filename\|Extension\|HasSuffix\|Contains\|Base" | head -60; grep -n "func (.*) Extension" -A2 *.go | grep return
+$ cd ~/go/pkg/mod/github.com/gitleaks/go-gitdiff*/gitdiff; wc -l *.go | grep -v _test
+$ cd ~/go/pkg/mod/github.com/gitleaks/go-gitdiff*/gitdiff; cat parser.go text.go
+$ cd ~/go/pkg/mod/github.com/gitleaks/go-gitdiff*/gitdiff; cat file_header.go
+$ cd ~/go/pkg/mod/github.com/gitleaks/go-gitdiff*/gitdiff; cat patch_header.go; sed -n 1,212p gitdiff.go | grep -n "func\|type" ; grep -n "func (f \*TextFragment) Raw" -A 25 gitdiff.go
+$ cd ~/go/pkg/mod/github.com/gitleaks/go-gitdiff*/gitdiff; cat binary.go | head -80; grep -n "parseLine\|func\b" io.go | head
+$ cd /tmp; /tmp/ref/gitleaks; echo "exit=$?"; /tmp/ref/gitleaks dir --help; echo "exit=$?"; /tmp/ref/gitleaks --bogus; echo "exit=$?"; /tmp/ref/gitleaks version; /tmp/ref/gitleaks --version; /tmp/ref/gitleaks git a b; echo "exit=$?"
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; /tmp/ref/gitleaks --help 2>/dev/null | head -2; /tmp/ref/gitleaks --bogus 2>/dev/null | head -3; echo ---; /tmp/ref/gitleaks dir testdata/repos/nogit -c testdata/config/simple.toml -v -r /tmp/o.json; echo "exit=$?"; cat /tmp/o.json; /tmp/ref/gitleaks dir testdata/repos/nogit -c testdata/config/simple.toml -v -l trace --no-color 2>&1 | head -40
+$ cd ~/go/pkg/mod/github.com/; ls muesli/ charmbracelet/; grep -n "func (t Style) Styled" -A 12 muesli/termenv*/style.go; grep -n "func (p Profile) Color\b\|func (p Profile) Color(" -A 25 muesli/termenv*/color.go | head -40
+$ cd ~/go/pkg/mod/github.com/charmbracelet/lipgloss@v0.5.0; sed -n '/^func (s Style) Render/,/^}/p' style.go | head -120; grep -n "func ColorProfile\|colorProfile\b" -A8 color.go | head -40
+$ cd ~/go/pkg/mod/github.com/charmbracelet/lipgloss@v0.5.0; sed -n '/^func (s Style) Render/,/^}/p' style.go | sed -n 120,220p; cat align.go | head -60
+$ cd /tmp; for args in "foo" "dir -x" "dir --exit-code abc" "dir --redact=abc /nonexist" "help dir" "stdin --help" "git --help" "completion" "dir /nonexistent" "version extra" "detect --help" "protect --help" ; do echo "=== $args"; NO_COLOR=1 /tmp/ref/gitleaks $args </dev/null >/tmp/out.txt 2>/tmp/err.txt; echo "exit=$?"; echo "--stdout:"; head -12 /tmp/out.txt; echo "--stderr:"; head -8 /tmp/err.txt; done 2>&1 | cut -c1-150
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; for f in testdata/config/invalid/*.toml; do echo "=== $f"; NO_COLOR=1 /tmp/ref/gitleaks dir testdata/repos/nogit --no-banner -c $f 2>&1 | cut -c1-250; echo "exit=$?"; done; echo 'x' > /tmp/bad.toml; echo '[[rules]]
+id="a"
+regex="(?P<x"' > /tmp/badre.toml; NO_COLOR=1 /tmp/ref/gitleaks dir testdata/repos/nogit --no-banner -c /tmp/bad.toml; NO_COLOR=1 /tmp/ref/gitleaks dir testdata/repos/nogit --no-banner -c /tmp/badre.toml; NO_COLOR=1 /tmp/ref/gitleaks dir testdata/repos/nogit --no-banner -c /tmp/nonexist.toml
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src/testdata/config; cat valid/rule_regex_escaped_character_group.toml valid/extend.toml valid/allowlist_global_target_rules.toml composite.toml; head -30 encoded.toml; cat archives.toml
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; grep -o '\\[^dDwWsSbB.(){}\[\]|*+?^$/\\-]' config/gitleaks.toml | sort | uniq -c; grep -c "^\[\[rules\]\]" config/gitleaks.toml; head -30 config/gitleaks.toml; grep -n "allowlist" config/gitleaks.toml | head
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; grep -oh "{{[^}]*}}" report_templates/*.tmpl | sort | uniq -c | sort -rn | head -50
+$ cd ~/go/pkg/mod/github.com/h2non/filetype*/; ls; ls matchers types; cat matchers/matchers.go | head -60; cat match.go | sed -n 1,60p
+$ cd ~/go/pkg/mod/github.com/h2non/filetype*/; wc -l matchers/*.go matchers/isobmff/*.go; grep -n "newType" matchers/*.go | head -100
+$ cd ~/go/pkg/mod/github.com/h2non/filetype*/matchers; cat application.go archive.go font.go | grep -v "^\s*//" | grep -v "^$"
+$ cd ~/go/pkg/mod/github.com/h2non/filetype*/matchers; cat image.go video.go audio.go document.go isobmff/isobmff.go | grep -v "^\s*//" | grep -v "^$" | grep -v "newType\|^\s*Type.*:" ; grep -n "func compareBytes" -A 15 *.go
+$ cd ~/go/pkg/mod/github.com/rs/zerolog@v1.33.0; grep -n "func consoleDefault\|func colorize\|func needsQuote" -A 22 console.go | grep -v "^\-\-$" | head -230
+$ cd ~/go/pkg/mod/github.com/rs/zerolog@v1.33.0; sed -n '/^func (w ConsoleWriter) Write(/,/^}/p;/^func (w ConsoleWriter) writeFields/,/^}/p;/^func (w ConsoleWriter) writePart/,/^}/p' console.go | grep -v "^\s*//"; grep -n "LevelColors = \|FormattedLevels = " -A 10 globals.go console.go | head -30; grep -n "Kitchen\|consoleDefaultTimeFormat =" console.go
+$ cd ~/go/pkg/mod/github.com/rs/zerolog@v1.33.0; grep -n "gLevel\|func SetGlobalLevel" -A3 globals.go | head -20; grep -n "func (l \*Logger) should" -A 20 log.go; grep -n "func (l \*Logger) Fatal\|func (l \*Logger) newEvent" -A 12 log.go | head -40
+$ mkdir -p /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/dst/src && cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/dst && cp ../src/config/gitleaks.toml src/gitleaks.toml && cat > Cargo.toml <<'EOF'
+[package]
+name = "gitleaks"
+version = "8.0.0"
+edition = "2021"
+
+[[bin]]
+name = "gitleaks"
+path = "src/main.rs"
+
+[dependencies]
+regex = "1"
+regex-syntax = "0.8"
+toml = { version = "0.8", default-features = false, features = ["parse"] }
+serde_json = { version = "1", features = ["preserve_order"] }
+chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
+aho-corasick = "1"
+libc = "0.2"
+unicode-width = "0.1"
+flate2 = "1"
+tar = "0.4"
+zip = { version = "2", default-features = false, features = ["deflate", "bzip2"] }
+lzma-rs = "0.3"
+ruzstd = "0.7"
+bzip2 = "0.4"
+sevenz-rust = "0.6"
+lz4_flex = "0.11"
+brotli-decompressor = "4"
+snap = "1"
+
+[profile.release]
+opt-level = 3
+debug = false
+EOF
+cargo fetch 2>&1 | tail -3
+$ cargo build --release 2>&1 | grep -E "^(error|warning: unused)" -A 7 | head -150
+$ sed -i 's/        type_name(v),\n        v$/X/' src/config/mod.rs && python3 - <<'EOF'
+p='src/config/mod.rs'
+s=open(p).read()
+s=s.replace("""        type_name(v),
+        v
+    )""","""        type_name(v),
+        format!("{:?}", v)
+    )""")
+open(p,'w').write(s)
+EOF
+cargo build --release 2>&1 | grep -E "^error" -A 9 | head -150
+$ sed -i 's/^    validated: bool,/    pub(crate) validated: bool,/; s/^    commit_map: Option/    pub(crate) commit_map: Option/; s/^    regex_pat: Option/    pub(crate) regex_pat: Option/; s/^    path_pat: Option/    pub(crate) path_pat: Option/; s/^    stopword_trie: Option/    pub(crate) stopword_trie: Option/' src/config/allowlist.rs && cargo build --release 2>&1 | grep -E "^error" -A 12 | head -150
+$ cargo test --release 2>&1 | grep -E "test result|FAILED|panicked|assert" | head -20; cd ../src; R=../dst/target/release/gitleaks; for t in "dir testdata/repos/nogit -c testdata/config/simple.toml" "dir testdata/repos/nogit" "dir testdata -r - -f json" ; do echo "=== $t"; NO_COLOR=1 /tmp/ref/gitleaks $t --no-banner -r /tmp/a.json -f json >/tmp/a.out 2>/tmp/a.err; echo "ref exit=$?"; NO_COLOR=1 $R $t --no-banner -r /tmp/b.json -f json >/tmp/b.out 2>/tmp/b.err; echo "rust exit=$?"; diff <(python3 -c "import json,sys;d=json.load(open('/tmp/a.json'));print(json.dumps(sorted(d,key=lambda x:(x['File'],x['StartLine'],x['RuleID'],x['StartColumn'])),indent=1))") <(python3 -c "import json,sys;d=json.load(open('/tmp/b.json'));print(json.dumps(sorted(d,key=lambda x:(x['File'],x['StartLine'],x['RuleID'],x['StartColumn'])),indent=1))") | head -30; diff <(sed 's/^[0-9:APM]* //' /tmp/a.err) <(sed 's/^[0-9:APM]* //' /tmp/b.err); done
+$ mkdir -p /tmp/rt && cd /tmp/rt && cat > t.rs <<'EOF'
+fn main(){ for p in [r"(?-u:\b)a", r"(?i)(?-u:\b)a", r"x(?-u:\B)"] { println!("{} {:?}", p, regex::Regex::new(p).err().map(|e| e.to_string())); } }
+EOF
+cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/dst && mkdir -p examples && cp /tmp/rt/t.rs examples/t.rs && cargo run --release --example t 2>&1 | tail -4; rm -rf examples
+$ cat >> src/regexp.rs <<'EOF'
+#[cfg(test)]
+mod dbg {
+    #[test]
+    fn show() {
+        for p in [r"(?:(?:U\+[a-fA-F0-9]{4}(?:\s|$))+|(?i)(?:\\{1,2}u[a-fA-F0-9]{4})+)", r"\bZXlK(?:(?P<alg>aGJHY2lPaU))"] {
+            eprintln!("{:?}", super::translate(p));
+        }
+    }
+}
+EOF
+cargo test --release dbg -- --nocapture 2>&1 | grep -E "^(Ok|Err)"
+$ cargo build --release 2>&1 | grep -E "^error" -A 9; cd ../src; R=../dst/target/release/gitleaks; for t in "dir testdata/repos/nogit -c testdata/config/simple.toml" "dir testdata/repos/nogit" "dir testdata" "dir testdata --max-archive-depth 8" "dir testdata/repos -c testdata/config/encoded.toml"; do echo "=== $t"; NO_COLOR=1 /tmp/ref/gitleaks $t --no-banner -r /tmp/a.json -f json >/tmp/a.out 2>/tmp/a.err; echo "ref exit=$?"; NO_COLOR=1 $R $t --no-banner -r /tmp/b.json -f json >/tmp/b.out 2>/tmp/b.err; echo "rust exit=$?"; for x in a b; do python3 -c "import json,sys;d=json.load(open('/tmp/$x.json'));print(json.dumps(sorted(d,key=lambda x:(x['File'],x['StartLine'],x['RuleID'],x['StartColumn'])),indent=1))" > /tmp/$x.sorted; done; diff /tmp/a.sorted /tmp/b.sorted | head -30; diff <(sed 's/^[0-9:APM]* //' /tmp/a.err | sed 's/in [0-9.]*m\?s$//') <(sed 's/^[0-9:APM]* //' /tmp/b.err| sed 's/in [0-9.]*m\?s$//'); done
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; rm -rf /tmp/repos; mkdir /tmp/repos; for r in small archives staged; do cp -r testdata/repos/$r /tmp/repos/$r; mv /tmp/repos/$r/dotGit /tmp/repos/$r/.git; done; R=../dst/target/release/gitleaks; C=$PWD/testdata/config; for t in "git /tmp/repos/small -c $C/simple.toml" "git /tmp/repos/small" "git /tmp/repos/archives -c $C/archives.toml --max-archive-depth 3" "git /tmp/repos/staged -c $C/simple.toml --staged" "git /tmp/repos/staged --pre-commit" "git /tmp/repos/small --log-opts=--all --platform gitlab" "git /tmp/repos/small -c $C/simple.toml --log-opts=-n1"; do echo "=== $t"; NO_COLOR=1 /tmp/ref/gitleaks $t --no-banner -r /tmp/a.json -f json >/tmp/a.out 2>/tmp/a.err; echo "ref exit=$?"; NO_COLOR=1 $R $t --no-banner -r /tmp/b.json -f json >/tmp/b.out 2>/tmp/b.err; echo "rust exit=$?"; for x in a b; do python3 -c "import json,sys;d=json.load(open('/tmp/$x.json'));print(json.dumps(sorted(d,key=lambda x:(x['Commit'],x['File'],x['StartLine'],x['RuleID'],x['StartColumn'])),indent=1))" > /tmp/$x.sorted; done; diff /tmp/a.sorted /tmp/b.sorted | head -30; diff <(sed 's/^[0-9:APM]* //' /tmp/a.err | sed 's/in [0-9.]*m\?s$//') <(sed 's/^[0-9:APM]* //' /tmp/b.err| sed 's/in [0-9.]*m\?s$//'); done
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; R=../dst/target/release/gitleaks; C=$PWD/testdata/config; run(){ NO_COLOR=1 /tmp/ref/gitleaks "$@" >/tmp/a.out 2>/tmp/a.err; ea=$?; NO_COLOR=1 $R "$@" >/tmp/b.out 2>/tmp/b.err; eb=$?; [ $ea != $eb ] && echo "EXIT DIFF $ea $eb: $*"; diff -q /tmp/a.out /tmp/b.out >/dev/null || { echo "STDOUT DIFF: $*"; diff /tmp/a.out /tmp/b.out | head -10; }; diff <(sed 's/^[0-9:APM]* //' /tmp/a.err | sed 's/in [0-9.]*[mµ]\?s$//') <(sed 's/^[0-9:APM]* //' /tmp/b.err| sed 's/in [0-9.]*[mµ]\?s$//') >/dev/null || { echo "STDERR DIFF: $*"; diff <(sed 's/^[0-9:APM]* //' /tmp/a.err | sed 's/in [0-9.]*[mµ]\?s$//') <(sed 's/^[0-9:APM]* //' /tmp/b.err| sed 's/in [0-9.]*[mµ]\?s$//') | head -10; }; }; 
+for f in json csv junit sarif; do run git /tmp/repos/small -r - -f $f --no-banner; run dir testdata/repos/nogit -r - -f $f; done
+run dir testdata/repos/nogit -r - -f template --report-template testdata/report/jsonextra.tmpl
+run dir testdata/repos/nogit -r - -f template --report-template testdata/report/markdown.tmpl
+run git /tmp/repos/small -r - -f template --report-template report_templates/basic.tmpl --no-banner
+run git /tmp/repos/small -v --no-banner
+run git /tmp/repos/small -v --no-banner --redact
+run git /tmp/repos/small -v --no-banner --redact=40 -r - 
+run dir testdata -v --max-archive-depth 3
+cat testdata/repos/nogit/main.go | run stdin -r - -f json
+run stdin -r - < testdata/repos/nogit/main.go
+for a in "" "--help" "dir --help" "git -h" "help" "help git" "version" "--version" "foo" "gti" "dir --bogus" "dir -x" "dir -l" "dir --exit-code=abc" "git a b" "stdin --help" "detect --help" "protect --help" "completion" "dir /nonexist" "dir testdata/repos/nogit -r /nonexist/x.json" "dir testdata/repos/nogit -r /tmp/x.txt" "dir testdata/repos/nogit -r - -f xml" "dir testdata/repos/nogit --enable-rule foo" "dir testdata/repos/nogit --enable-rule generic-api-key -r -" "dir testdata/repos/nogit -l bogus" "dir testdata/repos/nogit -c /nonexist.toml" "dir testdata/repos/nogit -r - -f json --report-template x" "dir testdata/repos/nogit -r - -f template"; do run $a; done 2>&1 | head -120
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; for i in 1 2 3 4 5 6; do /tmp/ref/gitleaks git /tmp/repos/small -r - -f csv --no-banner 2>/dev/null | md5sum; done | sort | uniq -c; for i in 1 2 3 4 5 6; do /tmp/ref/gitleaks dir testdata --max-archive-depth 3 -r - -f csv --no-banner 2>/dev/null | md5sum; done | sort | uniq -c; R=../dst/target/release/gitleaks; $R stdin -r - -f json --no-banner < testdata/repos/nogit/main.go 2>&1 | head -5; printf '{{ range . -}}\n| {{ .File }} |\n{{ end -}}' > /tmp/t.tmpl; $R dir testdata/repos/nogit -r - -f template --report-template /tmp/t.tmpl --no-banner 2>&1 | tail -3
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/dst && python3 - <<'EOF'
+p='src/report/template.rs'
+s=open(p).read()
+old="""        let mut fields = Vec::new();
+        while let Some(Tok::Field(f)) = self.peek() {
+            fields.push(f.clone());
+            self.pos += 1;
+        }
+        if fields.is_empty() {
+            Ok(base)
+        } else {
+            Ok(Arg::Chain(Box::new(base), fields))
+        }"""
+new="""        let mut fields = Vec::new();
+        if let Arg::Pipe(_) = base {
+            while let Some(Tok::ChainField(f)) = self.peek() {
+                fields.push(f.clone());
+                self.pos += 1;
+            }
+        }
+        if fields.is_empty() {
+            Ok(base)
+        } else {
+            Ok(Arg::Chain(Box::new(base), fields))
+        }"""
+assert old in s
+s=s.replace(old,new)
+s=s.replace("""    Field(String), // ".Name"
+""","""    Field(String), // ".Name"
+    ChainField(String), // ").Name"
+""")
+old2="""            '.' => {
+                if i + 1 < c.len() && (c[i + 1].is_alphanumeric() || c[i + 1] == '_') {"""
+new2="""            '.' => {
+                if i > 0 && c[i - 1] == ')' && i + 1 < c.len() && (c[i + 1].is_alphanumeric() || c[i + 1] == '_') {
+                    let mut j = i + 1;
+                    while j < c.len() && (c[j].is_alphanumeric() || c[j] == '_') {
+                        j += 1;
+                    }
+                    out.push(Tok::ChainField(c[i + 1..j].iter().collect()));
+                    i = j;
+                } else if i + 1 < c.len() && (c[i + 1].is_alphanumeric() || c[i + 1] == '_') {"""
+assert old2 in s
+s=s.replace(old2,new2)
+open(p,'w').write(s)
+EOF
+cargo build --release 2>&1 | grep -E "^error" -A 9; cd ../src; R=../dst/target/release/gitleaks; for t in testdata/report/jsonextra.tmpl testdata/report/markdown.tmpl report_templates/basic.tmpl report_templates/leet.tmpl; do diff <(/tmp/ref/gitleaks git /tmp/repos/small -r - -f template --report-template $t --no-banner -c testdata/config/simple.toml --log-opts=-n3 2>/dev/null) <($R git /tmp/repos/small -r - -f template --report-template $t --no-banner -c testdata/config/simple.toml --log-opts=-n3 2>&1) | head -10; done; NO_COLOR=1 /tmp/ref/gitleaks git /tmp/repos/small -v --no-banner --redact -c testdata/config/simple.toml > /tmp/a.out 2>&1; NO_COLOR=1 $R git /tmp/repos/small -v --no-banner --redact -c testdata/config/simple.toml > /tmp/b.out 2>&1; diff /tmp/a.out /tmp/b.out | head -30
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/dst && python3 - <<'EOF'
+p='src/report/template.rs'
+s=open(p).read()
+old="""            if rest.starts_with(k) {
+                out.push_str(&t.format(v).to_string());"""
+new="""            if rest.starts_with(k) {
+                if *k == "MST" {
+                    let off = t.offset().local_minus_utc();
+                    let z = t.format("%Z").to_string();
+                    if off == 0 && (z.starts_with('+') || z.starts_with('-')) {
+                        out.push_str("UTC");
+                    } else if z.starts_with('+') || z.starts_with('-') {
+                        out.push_str(&t.format("%z").to_string());
+                    } else {
+                        out.push_str(&z);
+                    }
+                    rest = &rest[k.len()..];
+                    continue 'outer;
+                }
+                out.push_str(&t.format(v).to_string());"""
+assert old in s
+s=s.replace(old,new)
+open(p,'w').write(s)
+EOF
+cargo build --release 2>&1 | grep -E "^error" -A 9; cd ../src; R=../dst/target/release/gitleaks; run(){ NO_COLOR=1 /tmp/ref/gitleaks "$@" >/tmp/a.out 2>/tmp/a.err </dev/null; ea=$?; NO_COLOR=1 $R "$@" >/tmp/b.out 2>/tmp/b.err </dev/null; eb=$?; [ $ea != $eb ] && echo "EXIT DIFF $ea $eb: $*"; diff -q /tmp/a.out /tmp/b.out >/dev/null || { echo "STDOUT DIFF: $*"; diff /tmp/a.out /tmp/b.out | head -10; }; diff <(sed 's/^[0-9:APM]* //' /tmp/a.err | sed 's/in [0-9.]*[mµ]\?s$//') <(sed 's/^[0-9:APM]* //' /tmp/b.err| sed 's/in [0-9.]*[mµ]\?s$//') >/dev/null || { echo "STDERR DIFF: $*"; diff <(sed 's/^[0-9:APM]* //' /tmp/a.err | sed 's/in [0-9.]*[mµ]\?s$//') <(sed 's/^[0-9:APM]* //' /tmp/b.err| sed 's/in [0-9.]*[mµ]\?s$//') | head -10; }; }; 
+for a in "" "--help" "dir --help" "git -h" "help" "help git" "version" "--version" "foo" "gti" "dir --bogus" "dir -x" "dir -l" "dir --exit-code=abc" "git a b" "stdin --help" "detect --help" "protect --help" "completion" "dir /nonexist" "dir testdata/repos/nogit -r /nonexist/x.json" "dir testdata/repos/nogit -r /tmp/x.txt" "dir testdata/repos/nogit -r - -f xml" "dir testdata/repos/nogit --enable-rule foo" "dir testdata/repos/nogit --enable-rule generic-api-key -r -" "dir testdata/repos/nogit -l bogus" "dir testdata/repos/nogit -c /nonexist.toml" "dir testdata/repos/nogit -r - -f json --report-template x" "dir testdata/repos/nogit -r - -f template" "dir testdata/repos/nogit --exit-code 7" "dir testdata/repos/nogit --redact=50 -v" "dir testdata/repos/nogit -b testdata/baseline/baseline.json" "git /tmp/repos/small --platform foo" "git /tmp/nonexist" "git testdata -c testdata/config/simple.toml" "detect --source testdata/repos/nogit --no-git" "detect --source /tmp/repos/small -r - " "protect --source /tmp/repos/staged --staged" "dir testdata/repos/nogit -i testdata/gitleaksignore" ; do run $a; done 2>&1 | head -100; for f in testdata/config/invalid/*.toml testdata/config/valid/*.toml; do run dir testdata/repos/nogit -c $f -r -; done 2>&1 | head -60
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; R=../dst/target/release/gitleaks; run(){ NO_COLOR=1 /tmp/ref/gitleaks "$@" >/tmp/a.out 2>/tmp/a.err </dev/null; ea=$?; NO_COLOR=1 $R "$@" >/tmp/b.out 2>/tmp/b.err </dev/null; eb=$?; [ $ea != $eb ] && echo "EXIT DIFF $ea $eb: $*"; diff -q <(sort /tmp/a.out) <(sort /tmp/b.out) >/dev/null || { echo "STDOUT DIFF: $*"; diff /tmp/a.out /tmp/b.out | head -10; }; diff <(sed 's/^[0-9:APM]* //' /tmp/a.err | sed 's/in [0-9.]*[mµ]\?s$//' | sort) <(sed 's/^[0-9:APM]* //' /tmp/b.err| sed 's/in [0-9.]*[mµ]\?s$//' | sort) >/dev/null || { echo "STDERR DIFF: $*"; diff <(sed 's/^[0-9:APM]* //' /tmp/a.err | sed 's/in [0-9.]*[mµ]\?s$//'|sort) <(sed 's/^[0-9:APM]* //' /tmp/b.err| sed 's/in [0-9.]*[mµ]\?s$//'|sort) | head -10; }; }
+mkdir -p /tmp/edge; cd /tmp/edge; rm -rf *
+python3 - <<'EOF'
+import base64, random
+random.seed(1)
+open('b64.txt','w').write("token: " + base64.b64encode(b"aws_key = AKIALALEMEL33243OLIA and ghp_" + b"a"*36).decode() + "\n")
+open('hex.txt','w').write("x = " + b"password = 'Sup3rS3cr3tP4ssw0rd!xyz'".hex() + "\n")
+open('pct.txt','w').write("u=https://x.com/?k=%41KIALALEMEL33243OLIA%22\n")
+open('uni.txt','w').write("é ü 你好 AKIALALEMEL33243OLIA ghp_" + "Z"*36 + "\nslack xoxb-123456789012-1234567890123-abcdefghijklmnopqrstuvwx\n")
+lines=[]
+for i in range(6000):
+    lines.append("line %d %s" % (i, ''.join(random.choice('abcdef \n') for _ in range(30))))
+    if i % 500 == 7: lines.append('aws_secret = "AKIALALEMEL33243OLIA"  # key ' + str(i))
+open('big.txt','w').write("\n".join(lines))
+open('crlf.txt','w').write("a\r\nkey = 'AKIALALEMEL33243OLIA'\r\n\r\ngithub_token = 'ghp_" + "b1"*18 + "'\r\n")
+open('allow.txt','w').write("AKIALALEMEL33243OLIA # gitleaks:allow\n")
+open('jwt.txt','w').write("jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c\n")
+open('pk.txt','w').write("-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA" + "x"*64 + "\n-----END RSA PRIVATE KEY-----\n")
+EOF
+printf 'MZ binary\x00 AKIALALEMEL33243OLIA' > exe.bin; ln -sf uni.txt link.txt
+cd -  >/dev/null
+for extra in "" "--max-decode-depth 0" "--redact" "-l trace" "--follow-symlinks" "--ignore-gitleaks-allow" "--max-target-megabytes 1"; do run dir /tmp/edge -r - $extra; done
+run dir /tmp/edge -c testdata/config/encoded.toml -r - -l debug
+run dir testdata/repos/symlinks --follow-symlinks -r - -l debug
+GITLEAKS_CONFIG=testdata/config/simple.toml run dir /tmp/edge -r -
+GITLEAKS_CONFIG_TOML="$(cat testdata/config/composite.toml)" run dir /tmp/edge -r - -l debug
+printf 'password = "hunter2xx"\nusername = "admin"\n' > /tmp/edge/comp.txt; run dir /tmp/edge/comp.txt -c testdata/config/composite.toml -r - -v
+run dir /tmp/edge/big.txt -v -r - -f csv
+$ rm -rf /tmp/edge && mkdir -p /tmp/edge && cd /tmp/edge && python3 - <<'EOF'
+import base64, random
+random.seed(1)
+open('b64.txt','w').write("token: " + base64.b64encode(b"aws_key = AKIALALEMEL33243OLIA and ghp_" + b"a"*36).decode() + "\n")
+open('hex.txt','w').write("x = " + b"password = 'Sup3rS3cr3tP4ssw0rd!xyz'".hex() + "\n")
+open('pct.txt','w').write("u=https://x.com/?k=%41KIALALEMEL33243OLIA%22\n")
+open('uni.txt','w').write("é ü 你好 AKIALALEMEL33243OLIA ghp_" + "Z"*36 + "\nslack xoxb-123456789012-1234567890123-abcdefghijklmnopqrstuvwx\n")
+lines=[]
+for i in range(6000):
+    lines.append("line %d %s" % (i, ''.join(random.choice('abcdef \n') for _ in range(30))))
+    if i % 500 == 7: lines.append('aws_secret = "AKIALALEMEL33243OLIA"  # key ' + str(i))
+open('big.txt','w').write("\n".join(lines))
+open('crlf.txt','w').write("a\r\nkey = 'AKIALALEMEL33243OLIA'\r\n\r\ngithub_token = 'ghp_" + "b1"*18 + "'\r\n")
+open('allow.txt','w').write("AKIALALEMEL33243OLIA # gitleaks:allow\n")
+open('jwt.txt','w').write("jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c\n")
+open('pk.txt','w').write("-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA" + "x"*64 + "\n-----END RSA PRIVATE KEY-----\n")
+open('comp.txt','w').write('password = "hunter2xx"\nusername = "admin"\n')
+EOF
+printf 'MZ binary\x00 AKIALALEMEL33243OLIA' > exe.bin; ln -sf uni.txt link.txt; ls
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; R=../dst/target/release/gitleaks; run(){ NO_COLOR=1 /tmp/ref/gitleaks "$@" >/tmp/a.out 2>/tmp/a.err </dev/null; ea=$?; NO_COLOR=1 $R "$@" >/tmp/b.out 2>/tmp/b.err </dev/null; eb=$?; [ $ea != $eb ] && echo "EXIT DIFF $ea $eb: $*"; diff -q <(sort /tmp/a.out) <(sort /tmp/b.out) >/dev/null || { echo "STDOUT DIFF: $*"; diff /tmp/a.out /tmp/b.out | head -10; }; diff <(sed 's/^[0-9:APM]* //' /tmp/a.err | sed 's/in [0-9.]*[mµ]\?s$//' | sort) <(sed 's/^[0-9:APM]* //' /tmp/b.err| sed 's/in [0-9.]*[mµ]\?s$//' | sort) >/dev/null || { echo "STDERR DIFF: $*"; diff <(sed 's/^[0-9:APM]* //' /tmp/a.err | sed 's/in [0-9.]*[mµ]\?s$//'|sort) <(sed 's/^[0-9:APM]* //' /tmp/b.err| sed 's/in [0-9.]*[mµ]\?s$//'|sort) | head -10; }; }
+for extra in "" "--max-decode-depth 0" "--redact" "-l trace" "--follow-symlinks" "--ignore-gitleaks-allow" "--max-target-megabytes 1"; do run dir /tmp/edge -r - $extra; done
+run dir /tmp/edge -c testdata/config/encoded.toml -r - -l debug
+run dir testdata/repos/symlinks --follow-symlinks -r - -l debug
+GITLEAKS_CONFIG=testdata/config/simple.toml run dir /tmp/edge -r -
+GITLEAKS_CONFIG_TOML="$(cat testdata/config/composite.toml)" run dir /tmp/edge -r - -l debug
+run dir /tmp/edge/comp.txt -c testdata/config/composite.toml -r - -v
+run dir /tmp/edge/big.txt -v -r - -f csv
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; R=../dst/target/release/gitleaks; $R dir /tmp/edge -r - -f csv --no-banner 2>/dev/null | cut -d, -f1,3,7,9 ; sed -n 495,520p detect/detect_test.go
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; grep -n "encodedTestValues = \|^const\|^var" detect/detect_test.go | head; python3 - <<'EOF'
+import re
+s=open('detect/detect_test.go').read()
+i=s.find('encodedTestValues = `')
+j=s.find('`', i+len('encodedTestValues = `'))
+open('/tmp/edge2.go','w').write(s[i+len('encodedTestValues = `'):j])
+EOF
+mkdir -p /tmp/enc && cp /tmp/edge2.go /tmp/enc/tmp.go; wc -c /tmp/enc/tmp.go; R=../dst/target/release/gitleaks; for d in 5 2 0; do for c in encoded.toml simple.toml ""; do cf=""; [ -n "$c" ] && cf="-c testdata/config/$c"; diff <(/tmp/ref/gitleaks dir /tmp/enc $cf --max-decode-depth $d -r - -f json --no-banner 2>/dev/null | python3 -c "import json,sys;print(json.dumps(sorted(json.load(sys.stdin),key=lambda x:json.dumps(x,sort_keys=True)),indent=1))") <($R dir /tmp/enc $cf --max-decode-depth $d -r - -f json --no-banner 2>/dev/null | python3 -c "import json,sys;print(json.dumps(sorted(json.load(sys.stdin),key=lambda x:json.dumps(x,sort_keys=True)),indent=1))") | head -20; done; done; $R dir /tmp/enc -c testdata/config/encoded.toml -r - -f csv --no-banner 2>/dev/null | wc -l
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; R=../dst/target/release/gitleaks; time (/tmp/ref/gitleaks dir . -r /tmp/a.json --no-banner 2>&1 | tail -2); time ($R dir . -r /tmp/b.json --no-banner 2>&1 | tail -2); for x in a b; do python3 -c "import json,sys;print(json.dumps(sorted(json.load(open('/tmp/$x.json')),key=lambda x:json.dumps(x,sort_keys=True)),indent=1))" > /tmp/$x.s; done; diff /tmp/a.s /tmp/b.s | head -40
+$ rm -rf /tmp/gr && mkdir /tmp/gr && cd /tmp/gr && git init -q -b main . && git config user.email "t@x.com" && git config user.name "Tëst User" && git remote add origin git@gitlab.com:org/proj.git && 
+printf 'key = "AKIALALEMEL33243OLIA"\n' > a.txt && git add . && git commit -qm "first" &&
+git mv a.txt "b file é.md" && printf 'more\ntoken = "ghp_%s"' "$(printf 'x1y2%.0s' {1..9})" >> "b file é.md" && git add -A && git commit -qm "rename
+
+body line 1
+
+  body line 3" &&
+printf '\x00\x01binary AKIALALEMEL33243OLIA' > bin.dat && printf 'tab\there' > "t\tab.txt" && git add -A && git commit -qm "binary" &&
+git rm -q "b file é.md" && git commit -qm "delete" &&
+git checkout -qb feature && printf 'stripe = "sk_live_%s"\n' "abcdefghijklmnopqrstuvwx" > s.py && git add . && git commit -qm "feature" && git checkout -q main && printf 'x=1\n' > c.txt && git add . && git commit -qm c && git merge -q --no-edit feature 2>/dev/null; git log --oneline | head; cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; R=../dst/target/release/gitleaks; for extra in "" "--log-opts=--all" "-v" "--platform github" "--platform bitbucket" "--platform azuredevops" "--platform gitea" "--platform none"; do NO_COLOR=1 /tmp/ref/gitleaks git /tmp/gr -r /tmp/a.json --no-banner $extra > /tmp/a.out 2>/tmp/a.err; ea=$?; NO_COLOR=1 $R git /tmp/gr -r /tmp/b.json --no-banner $extra > /tmp/b.out 2>/tmp/b.err; eb=$?; echo "$extra: $ea $eb"; for x in a b; do python3 -c "import json,sys;print(json.dumps(sorted(json.load(open('/tmp/$x.json')),key=lambda x:json.dumps(x,sort_keys=True)),indent=1))" > /tmp/$x.s; done; diff /tmp/a.s /tmp/b.s | head -20; diff <(sort /tmp/a.out) <(sort /tmp/b.out) | head; diff <(sed 's/^[0-9:APM]* //' /tmp/a.err | sed 's/in [0-9.]*[mµ]\?s$//' | sort) <(sed 's/^[0-9:APM]* //' /tmp/b.err| sed 's/in [0-9.]*[mµ]\?s$//' | sort); done; python3 -c "import json;[print(f['File'],f['Link'] if 'Link' in f else '', repr(f['Message'])) for f in json.load(open('/tmp/b.json'))]"
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; R=../dst/target/release/gitleaks; run(){ NO_COLOR=1 /tmp/ref/gitleaks "$@" >/tmp/a.out 2>/tmp/a.err </tmp/edge/uni.txt; ea=$?; NO_COLOR=1 $R "$@" >/tmp/b.out 2>/tmp/b.err </tmp/edge/uni.txt; eb=$?; [ $ea != $eb ] && echo "EXIT DIFF $ea $eb: $*"; diff -q <(sort /tmp/a.out) <(sort /tmp/b.out) >/dev/null || { echo "STDOUT DIFF: $*"; diff /tmp/a.out /tmp/b.out | head -10; }; diff <(sed 's/^[0-9:APM]* //' /tmp/a.err | sed 's/in [0-9.]*[mµ]\?s$//' | sort) <(sed 's/^[0-9:APM]* //' /tmp/b.err| sed 's/in [0-9.]*[mµ]\?s$//' | sort) >/dev/null || { echo "STDERR DIFF: $*"; diff <(sed 's/^[0-9:APM]* //' /tmp/a.err | sed 's/in [0-9.]*[mµ]\?s$//'|sort) <(sed 's/^[0-9:APM]* //' /tmp/b.err| sed 's/in [0-9.]*[mµ]\?s$//'|sort) | head -10; }; }
+run git /tmp/gr --log-opts=--bogus -r -
+run git /tmp/edge -r -
+run git /tmp/gr --log-opts="'--all'" -r -
+run detect --pipe -r -
+run stdin -r - -v
+run stdin -r - --redact=30 -f sarif
+run git /tmp/gr -l debug -r - --log-opts=-p
+/tmp/ref/gitleaks git /tmp/gr -r /tmp/base.json --no-banner 2>/dev/null; run git /tmp/gr -b /tmp/base.json -r -; run git /tmp/gr -b /tmp/base.json -r - --redact; run git /tmp/gr -b /tmp/nonexist.json -r -; run git /tmp/gr -b /tmp/edge/uni.txt -r -
+run dir testdata/repos/nogit -b testdata/baseline/baseline.json -r -
+run dir testdata/repos/nogit -b testdata/baseline/baseline.sarif -r -
+echo "a.txt:aws-access-token:1" > /tmp/gl; run git /tmp/gr -i /tmp/gl -r - 
+echo "28d128257ab7a49f76c1d9c84a14f6dfd2f9d0c9:a.txt:aws-access-token:1" > /tmp/gl2; run git /tmp/gr -i /tmp/gl2 -r -
+$ cd /tmp; R=/tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/dst/target/release/gitleaks; for a in "completion --help" "completion bash --help" "help completion" "completion zsh -h" "help foo" "dir -h extra" "--help dir" "-v" "dir --redact" ; do diff <(/tmp/ref/gitleaks $a 2>&1 </dev/null | sed 's/^[0-9:APM]* //') <($R $a 2>&1 </dev/null| sed 's/^[0-9:APM]* //') > /tmp/d.txt || { echo "== $a"; head -20 /tmp/d.txt; }; done
+$ pkill -f "gitleaks -v" ; pkill -f "gitleaks dir --redact"; cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; for a in "--no-banner dir testdata/repos/nogit" "-v dir testdata/repos/nogit" "-c testdata/config/simple.toml dir testdata/repos/nogit" "-h dir" "--log-level debug dir testdata/repos/nogit"; do echo "== $a"; NO_COLOR=1 timeout 5 /tmp/ref/gitleaks $a 2>&1 </dev/null | head -4; done
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; for a in "--no-banner dir testdata/repos/nogit" "-v dir testdata/repos/nogit" "-c testdata/config/simple.toml dir testdata/repos/nogit" "-h dir" "--log-level debug dir testdata/repos/nogit"; do echo "== $a"; NO_COLOR=1 timeout 5 /tmp/ref/gitleaks $a 2>&1 </dev/null | head -4; done
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/dst; for s in bash zsh fish powershell; do /tmp/ref/gitleaks completion $s --help 2>/dev/null | awk '/^Usage:/{exit} {print}' > /tmp/long_$s.txt; done; /tmp/ref/gitleaks completion bash --help | sed -n '/^Usage:/,$p' | head -8; python3 - <<'EOF'
+import json
+p='src/cmd/mod.rs'
+s=open(p).read()
+longs={}
+for sh in ['bash','zsh','fish','powershell']:
+    t=open('/tmp/long_%s.txt'%sh).read().rstrip('\n')+'\n'
+    longs[sh]=t
+old="""        let mut c = cmd(n, n, s, vec![]);
+        c.max_args = Some(0);"""
+new="""        let mut c = cmd(n, n, s, vec![]);
+        c.max_args = Some(0);
+        c.long = completion_long(n);
+        if n == "bash" || n == "zsh" || n == "fish" || n == "powershell" {
+            c.flags.push(FlagDef::new("no-descriptions", "", Kind::Bool, "false", "disable completion descriptions"));
+        }"""
+assert old in s
+s=s.replace(old,new)
+fn="\nfn completion_long(shell: &str) -> &'static str {\n    match shell {\n"
+for sh,t in longs.items():
+    fn+="        %s => %s,\n"%(json.dumps(sh), json.dumps(t))
+fn+="        _ => \"\",\n    }\n}\n"
+s+=fn
+open(p,'w').write(s)
+
+p='src/cmd/cli.rs'
+s=open(p).read()
+old="""        let has_no_opt_long = |n: &str| flags.iter().any(|f| f.name == n && !f.no_opt().is_empty());
+        let has_no_opt_short = |n: &str| flags.iter().any(|f| f.short == n && !f.no_opt().is_empty());"""
+new="""        // the help and version flags are added lazily by cobra, so they are unknown here
+        let lazy = |f: &FlagDef| f.name == "help" || f.name == "version";
+        let has_no_opt_long = |n: &str| flags.iter().any(|f| !lazy(f) && f.name == n && !f.no_opt().is_empty());
+        let has_no_opt_short = |n: &str| flags.iter().any(|f| !lazy(f) && f.short == n && !f.no_opt().is_empty());"""
+assert old in s
+s=s.replace(old,new)
+s=s.replace("""    pub fn usage_string(&self, path: &[&CommandDef]) -> String {
+        let cmd = path.last().unwrap();""","""    pub fn usage_string(&self, path: &[&CommandDef]) -> String {
+        self.usage_string_opt(path, true)
+    }
+
+    pub fn usage_string_opt(&self, path: &[&CommandDef], lazy_flags: bool) -> String {
+        let cmd = path.last().unwrap();""")
+s=s.replace("""        let local = self.local_flags(path);
+        let lrefs: Vec<&FlagDef> = local.iter().collect();""","""        let local = self.local_flags(path);
+        let lrefs: Vec<&FlagDef> = local.iter().filter(|f| lazy_flags || (f.name != "help" && f.name != "version")).collect();""")
+s=s.replace("""                                topic.join(" "),
+                                self.usage_string(&[&self.root])""","""                                topic.join(" "),
+                                self.usage_string_opt(&[&self.root], false)""")
+open(p,'w').write(s)
+EOF
+cargo build --release 2>&1 | grep -E "^error" -A 9; cd /tmp; R=/tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/dst/target/release/gitleaks; for a in "completion --help" "completion bash --help" "help completion" "completion zsh -h" "completion fish -h" "completion powershell -h" "help foo" "dir -h extra" "--help dir" "-h dir" "help dir"; do diff <(/tmp/ref/gitleaks $a 2>&1 </dev/null | sed 's/^[0-9:APM]* //') <($R $a 2>&1 </dev/null| sed 's/^[0-9:APM]* //') > /tmp/d.txt || { echo "== $a"; head -20 /tmp/d.txt; }; done
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/dst && python3 - <<'EOF'
+p='src/cmd/cli.rs'
+s=open(p).read()
+s=s.replace("""    pub subcommands: Vec<CommandDef>,
+}""","""    pub subcommands: Vec<CommandDef>,
+    pub disable_flags_in_use_line: bool,
+}""",1)
+s=s.replace("""            if !use_line.contains("[flags]") {""","""            if !cmd.disable_flags_in_use_line && !use_line.contains("[flags]") {""")
+open(p,'w').write(s)
+p='src/cmd/mod.rs'
+s=open(p).read()
+s=s.replace("""        flags,
+        subcommands: vec![],
+    }""","""        flags,
+        subcommands: vec![],
+        disable_flags_in_use_line: false,
+    }""")
+s=s.replace("""        c.long = completion_long(n);""","""        c.long = completion_long(n);
+        c.disable_flags_in_use_line = true;""")
+s=s.replace("""        subcommands: vec![completion, dir, git, stdin, version_cmd, detect, protect],
+    };""","""        subcommands: vec![completion, dir, git, stdin, version_cmd, detect, protect],
+        disable_flags_in_use_line: false,
+    };""")
+open(p,'w').write(s)
+EOF
+cargo build --release 2>&1 | grep -E "^error" -A 9; cd /tmp; R=$OLDPWD/target/release/gitleaks; for a in "completion bash --help" "completion powershell -h"; do diff <(/tmp/ref/gitleaks $a 2>&1 </dev/null) <($R $a 2>&1 </dev/null) && echo ok; done
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/dst && sed -i 's/        c.disable_flags_in_use_line = true;/        c.disable_flags_in_use_line = n != "powershell";/' src/cmd/mod.rs && cargo build --release 2>&1 | grep -E "^error" -A 9; cd /tmp; R=$OLDPWD/target/release/gitleaks; for a in "completion bash --help" "completion powershell -h" "completion fish -h" "completion zsh -h"; do diff <(/tmp/ref/gitleaks $a 2>&1 </dev/null) <($R $a 2>&1 </dev/null) >/dev/null && echo ok; done
+$ cd /tmp; R=/tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/dst/target/release/gitleaks; for a in "completion fish -h" "completion zsh -h"; do diff <(/tmp/ref/gitleaks $a 2>&1 </dev/null) <($R $a 2>&1 </dev/null); done
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/dst && sed -i 's/        c.disable_flags_in_use_line = n != "powershell";/        c.disable_flags_in_use_line = n == "bash";/' src/cmd/mod.rs && cargo build --release 2>&1 | grep -E "^error" -A 9; cd /tmp; R=$OLDPWD/target/release/gitleaks; for a in "completion bash --help" "completion powershell -h" "completion fish -h" "completion zsh -h" "completion" "help completion"; do diff <(/tmp/ref/gitleaks $a 2>&1 </dev/null) <($R $a 2>&1 </dev/null) >/dev/null && echo ok || echo "FAIL $a"; done
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; grep -n "Errorf\|errors.New\|Msg(\|Msgf(" cmd/diagnostics.go | head -30
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; sed -n 28,118p cmd/diagnostics.go | grep -v "^\s*//"
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/dst && python3 - <<'EOF'
+p='src/cmd/mod.rs'
+s=open(p).read()
+old=s[s.index("fn init_diagnostics(p: &Parsed) {"):s.index("fn load_config(")]
+new='''static DIAGNOSTICS_ENABLED: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
+
+/// Port of NewDiagnosticsManager + StartDiagnostics. The Go implementation
+/// produces pprof/trace profiles of the Go runtime; those have no equivalent
+/// here, so only the configuration handling and logging are reproduced.
+fn init_diagnostics(p: &Parsed) {
+    let flag = p.get_string("diagnostics");
+    let mut dir = p.get_string("diagnostics-dir");
+    if flag.is_empty() {
+        return;
+    }
+    let types: Vec<String> = flag.split(',').map(|s| s.to_string()).collect();
+    if flag == "http" {
+        if !dir.is_empty() {
+            logging::fatal().err("the diagnostics directory should not be set in http mode").msg("Error initializing diagnostics");
+        }
+    } else {
+        if dir.is_empty() {
+            dir = std::env::current_dir().map(|d| d.to_string_lossy().into_owned()).unwrap_or_default();
+            logging::debug().msg(&format!("No diagnostics directory specified, using current directory: {}", dir));
+        }
+        if let Err(e) = std::fs::create_dir_all(&dir) {
+            logging::fatal()
+                .err(format!("failed to create diagnostics directory: {}", config::go_os_error("mkdir", &dir, &e)))
+                .msg("Error initializing diagnostics");
+        }
+        let dir = crate::detect::abs_path(&dir);
+        logging::debug().msg(&format!("Diagnostics enabled: {}", types.join(",")));
+        logging::debug().msg(&format!("Diagnostics output directory: {}", dir));
+    }
+    DIAGNOSTICS_ENABLED.store(true, std::sync::atomic::Ordering::SeqCst);
+    logging::info().msg("Starting diagnostics...");
+    for t in &types {
+        let t = t.trim();
+        match t {
+            "cpu" | "mem" | "trace" | "http" => {
+                logging::debug().msg(&format!("{} profiling of the Go runtime is not available in this build", t));
+            }
+            _ => logging::warn().msg(&format!("Unknown diagnostics type: {}", t)),
+        }
+    }
+}
+
+'''
+s=s.replace(old,new)
+old2="""    let total = d.total_bytes;"""
+new2="""    if DIAGNOSTICS_ENABLED.load(std::sync::atomic::Ordering::SeqCst) {
+        logging::debug().msg("Finalizing diagnostics...");
+        logging::debug().msg("Stopping diagnostics and writing profiling data...");
+    }
+    let total = d.total_bytes;"""
+s=s.replace(old2,new2)
+open(p,'w').write(s)
+EOF
+cargo build --release 2>&1 | grep -E "^(error|warning)" -A 5 | head -40
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/dst && python3 - <<'EOF'
+p='src/regexp.rs'
+s=open(p).read()
+i=s.find("#[cfg(test)]\nmod dbg {")
+if i>=0: s=s[:i]
+open(p,'w').write(s)
+EOF
+cargo build --release 2>&1 | grep -E "^error|Finished"; cargo test --release 2>&1 | grep "test result"
+cd ../src; R=../dst/target/release/gitleaks; fails=0
+cmp_run(){ NO_COLOR=1 timeout 60 /tmp/ref/gitleaks "$@" >/tmp/a.out 2>/tmp/a.err </dev/null; ea=$?; NO_COLOR=1 timeout 60 $R "$@" >/tmp/b.out 2>/tmp/b.err </dev/null; eb=$?; n(){ sed 's/^[0-9:APM]* //' $1 | sed 's/in [0-9.]*[mµ]\?s$//' | sort; }; if [ $ea != $eb ] || ! diff -q <(sort /tmp/a.out) <(sort /tmp/b.out) >/dev/null || ! diff -q <(n /tmp/a.err) <(n /tmp/b.err) >/dev/null; then echo "FAIL: $*"; fails=$((fails+1)); fi; }
+for a in "dir testdata" "dir testdata --max-archive-depth 8 -r - -f csv" "dir testdata/repos/nogit -r - -f sarif" "dir testdata/repos/nogit -r - -f junit" "git /tmp/repos/small -r - -f json" "git /tmp/gr -r - -v" "git /tmp/repos/staged --staged -r -" "dir /tmp/edge -r - -l trace" "dir /tmp/enc -c testdata/config/encoded.toml -r -" "--help" "dir --help" "foo" "dir --bogus" "git a b" "help foo" "-h dir" "dir testdata/repos/nogit --diagnostics=cpu,bogus -l debug" "dir testdata/repos/nogit --diagnostics=http --diagnostics-dir=/tmp/x"; do cmp_run $a; done
+for f in testdata/config/invalid/*.toml testdata/config/valid/*.toml; do cmp_run dir testdata/repos/nogit -c $f -r -; done; echo "failures: $fails"
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/plain/workspace/src; R=../dst/target/release/gitleaks; for a in "help foo" "dir testdata/repos/nogit --diagnostics=cpu,bogus -l debug --no-banner"; do echo "== $a"; diff <(NO_COLOR=1 /tmp/ref/gitleaks $a 2>&1 </dev/null; echo "exit $?") <(NO_COLOR=1 $R $a 2>&1 </dev/null; echo "exit $?"); done; ls *.pprof 2>/dev/null
+$ rm -f cpu.pprof && ls ../dst ../dst/src ../dst/src/*/ && wc -l ../dst/src/*.rs ../dst/src/*/*.rs | tail -1

@@ -228,3 +228,8 @@ def test_transcript_line_drops_token_deltas():
     s = json.dumps({"type": "stream_event", "event": {"type": "message_delta", "usage": {"output_tokens": 3}}})
     a = json.dumps({"type": "assistant", "message": {"id": "a"}})
     assert P.transcript_line(d) is None and P.transcript_line(s) == s and P.transcript_line(a) == a
+
+
+def test_unsafe_after_char_literal():
+    src = "fn f(c: char) -> bool { c == '\"' }\nfn g() { unsafe { x() } }\nfn h() { let q = '\\''; unsafe { y() } }"
+    assert P.count_unsafe(src) == 2

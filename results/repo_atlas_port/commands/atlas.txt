@@ -1,0 +1,235 @@
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace; ls; ls src dst 2>&1 | head -50; cargo --version; ls ~/.cargo/registry 2>&1; find src -name '*_test.go' | head; ls src/testdata | head
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace; cat prompt.md | head -50; ls ~/.cargo/registry/cache/*/ | head -100; ls ~/.cargo/registry/cache/*/ | wc -l; find src -name '*_test.go' | xargs wc -l; ls src/testdata/*
+$ ls ~/.cargo/registry/cache/*/ | tail -25; ls ~/.cargo/registry/cache/
+$ cd /tmp && timeout 20 curl -sI https://index.crates.io/config.json | head -3; ls ~/.cargo/registry/cache/*/ | grep -i -E 'json|toml|clap|fancy|walk|glob|flate|zip|tar'
+$ ls ~/.cargo/registry/cache/*/ | grep -i -E 'json|toml|clap|fancy|walk|glob|flate|zip|tar'; ls ~/.cargo/registry/src/*/ | wc -l
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src; find testdata -type f | grep -v '/repos/.*/\(objects\|refs\|logs\|hooks\)/' | head -80; find testdata -type f | wc -l
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src; ls -la testdata/repos/*; cat testdata/expected/git/small.txt | head -60
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src; find . -name '*.go' ! -name '*_test.go' ! -path './cmd/generate/*' | xargs wc -l | sort -n | tail -50; cat go.mod
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src; cat cmd/root.go
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src; cat cmd/git.go cmd/directory.go cmd/stdin.go | grep -v '^\s*//' ; sed -n 1,140p cmd/detect.go | grep -n 'Flags\|Use\|Alias' 
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src; sed -n 40,136p cmd/detect.go; cat cmd/protect.go | sed -n 10,66p
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src; cat config/config.go
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src; sed -n 60,107p config/rule.go; sed -n 60,179p config/allowlist.go
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src; sed -n 150,620p detect/detect.go
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src; sed -n 620,900p detect/detect.go; sed -n 1,150p detect/detect.go | grep -n 'Sema\|NewDetector\|semgroup' 
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src; sed -n 1,80p detect/location.go | grep -v '^\s*//'; sed -n 100,263p detect/utils.go
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src; sed -n 20,100p detect/utils.go; sed -n 1,81p detect/baseline.go | sed -n 12,81p
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src/detect/codec; grep -v '^\s*//' decoder.go | sed -n 1,200p; grep -v '^\s*//' encodings.go
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src/detect/codec; grep -v '^\s*//' segment.go; grep -v '^\s*//' start_end.go | sed -n 1,60p; grep -v '^\s*//' base64.go ascii.go percent.go | grep -v '^\S*:\s*$'
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src/detect/codec; grep -v '^\s*//' unicode.go; sed -n 30,60p hex.go
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src/sources; grep -v '^\s*//' common.go | sed -n 1,125p; grep -v '^\s*//' file.go | sed -n 160,264p
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src/sources; grep -v '^\s*//' file.go | sed -n 18,160p
+$ ls ~/go/pkg/mod/github.com 2>&1 | head; find / -type d -name 'archives@*' 2>/dev/null | head; which go git
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src && mkdir -p /tmp/goref && GOFLAGS=-mod=mod GOPROXY=off go build -o /tmp/goref/gitleaks . 2>&1 | tail -5; ls -la /tmp/goref
+$ cd /root/go/pkg/mod/github.com/mholt/archives@v0.1.2; grep -n -A6 'func (.*) Match(' *.go | grep -E 'Match\(|filename|Extension|ByName' | head -80; grep -n 'func (.*) Extension' *.go
+$ cd /root/go/pkg/mod/github.com/mholt/archives@v0.1.2; sed -n 30,140p formats.go
+$ cd /root/go/pkg/mod/github.com/mholt/archives@v0.1.2; sed -n 46,60p tar.go; grep -n 'RegisterFormat' *.go | head -20
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src/sources; grep -v '^\s*//' files.go | sed -n 50,191p
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src/sources; grep -v '^\s*//' git.go | sed -n 280,530p
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src/sources; grep -v '^\s*//' git.go | sed -n 1,280p | grep -v 'logging.Debug\|^$'
+$ cd /root/go/pkg/mod/github.com/gitleaks/go-gitdiff@v0.9.1/gitdiff; ls; grep -n 'func (h \*PatchHeader) Message\|func (f \*TextFragment) Raw' -A 25 *.go | head -60
+$ cd /root/go/pkg/mod/github.com/gitleaks/go-gitdiff@v0.9.1/gitdiff; grep -v '^\s*//' parser.go | grep -v '^$' | head -150
+$ cd /root/go/pkg/mod/github.com/gitleaks/go-gitdiff@v0.9.1/gitdiff; grep -v '^\s*//' patch_header.go | grep -v '^$' | sed -n 60,330p
+$ cd /root/go/pkg/mod/github.com/gitleaks/go-gitdiff@v0.9.1/gitdiff; grep -v '^\s*//' text.go | grep -v '^$' | sed -n 1,140p
+$ cd /root/go/pkg/mod/github.com/gitleaks/go-gitdiff@v0.9.1/gitdiff; grep -v '^\s*//' file_header.go | grep -v '^$' | sed -n 1,120p; grep -n 'func (p \*parser) ParseBinaryFragments' -A 30 binary.go | grep -v '//'
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src/report; sed -n 1,126p finding.go | grep -v '^\s*//'; cat ../testdata/expected/report/json_simple.json; cat ../testdata/expected/report/csv_simple.csv ../testdata/expected/report/empty.json | od -c | tail -3
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src/report; sed -n 20,78p csv.go; cat ../testdata/expected/report/csv_simple.csv; cat ../testdata/expected/report/junit_simple.xml ../testdata/expected/report/junit_empty.xml
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src/report; sed -n 1,20p csv.go | grep -n len; sed -n 15,75p junit.go; sed -n 20,140p sarif.go
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src/report; sed -n 140,217p sarif.go | grep -v '^$'; sed -n 75,107p junit.go; head -40 ../testdata/expected/report/sarif_simple.sarif; cat ../testdata/report/*.tmpl; cat constants.go
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src; /tmp/goref/gitleaks dir testdata/repos/nogit -v --report-path - -f json 2>/tmp/err.txt; echo "exit=$?"; cat -A /tmp/err.txt | head -20
+$ cd /root/go/pkg/mod/github.com/rs/zerolog@v1.33.0; sed -n '/func (w ConsoleWriter) writeFields/,/^}/p' console.go | grep -v '^\s*//' | head -90; grep -n 'LevelColors\|colorBlue\|colorBold\b' console.go | head; grep -n 'func consoleDefaultFormatFieldName\|func consoleDefaultFormatFieldValue\|func consoleDefaultFormatErrFieldName\|func consoleDefaultFormatErrFieldValue\|func consoleDefaultFormatMessage' -A 12 console.go | grep -v '^\S*-\s*$'
+$ cd /root/go/pkg/mod/github.com/rs/zerolog@v1.33.0; grep -n 'LevelColors = ' -A 9 console.go; grep -n 'func colorize' -A 8 console.go; grep -n 'func needsQuote' -A 10 console.go; grep -n 'FormattedLevels = ' -A 9 console.go
+$ cd /root/go/pkg/mod/github.com/rs/zerolog@v1.33.0; grep -rn 'TraceLevel: *color\|DebugLevel: *\|WarnLevel: *color\|ErrorLevel: *color\|TraceLevel: *"' *.go | head -20
+$ cd /tmp; /tmp/goref/gitleaks > /tmp/h_root.txt; echo $?; /tmp/goref/gitleaks git --help > /tmp/h_git.txt; /tmp/goref/gitleaks dir --help > /tmp/h_dir.txt; /tmp/goref/gitleaks stdin --help >/tmp/h_stdin.txt; /tmp/goref/gitleaks version; /tmp/goref/gitleaks --version; cat /tmp/h_root.txt; cat /tmp/h_git.txt | head -20; /tmp/goref/gitleaks --bogus; echo "exit=$?"; /tmp/goref/gitleaks bogus; echo "exit=$?"
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/dst && mkdir -p src/help && cp ../src/config/gitleaks.toml src/gitleaks.toml && for c in git dir stdin version detect protect; do /tmp/goref/gitleaks $c --help > src/help/$c.txt; done; cp /tmp/h_root.txt src/help/root.txt; /tmp/goref/gitleaks completion --help > src/help/completion.txt; cat src/help/version.txt; cat > Cargo.toml <<'EOF'
+[package]
+name = "gitleaks"
+version = "8.0.0"
+edition = "2021"
+
+[[bin]]
+name = "gitleaks"
+path = "src/main.rs"
+
+[dependencies]
+regex = "1"
+aho-corasick = "1"
+chrono = "0.4"
+
+[profile.release]
+opt-level = 3
+debug = false
+EOF
+ls ~/.cargo/registry/cache/*/ | grep -E 'chrono|iana|num-traits'
+$ sed -i 's/^chrono = .*/libc = "0.2"/' Cargo.toml && echo 'fn main(){}' > src/main.rs && cargo build --release --offline 2>&1 | tail -3
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src; /tmp/goref/gitleaks dir testdata/repos/nogit -v --no-banner 2>/dev/null | cat -A | head -3; printf 'a\tb aws_key = "AKIALALEMEL33243OLIA" tail tail tail tail tail tail\n' | /tmp/goref/gitleaks stdin -v --no-banner 2>/dev/null | cat -A
+$ cd /root/go/pkg/mod/github.com/h2non/filetype@v1.1.3; grep -n 'newType(' types/*.go matchers/*.go | grep application | sed 's/^.*newType(//' | head -60; grep -n 'Map{' -A 40 matchers/archive.go | head -45
+$ cd /root/go/pkg/mod/github.com/h2non/filetype@v1.1.3/matchers; sed -n 82,400p archive.go | grep -v '^\s*//' | grep -v '^$' | head -150
+$ cd /root/go/pkg/mod/github.com/gitleaks/go-gitdiff@v0.9.1/gitdiff; grep -n 'func ParsePatchIdentity' -A 30 patch_header.go | grep -v '//'; grep -n 'func parseGitHeaderData' -A 40 file_header.go | grep -v '//' | head -50
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/dst && sed -i 's/if !(-4..21).contains(&exp) {/if !(-4..6).contains(\&exp) {/' src/template.rs && cargo build --release --offline 2>&1 | grep -E '^(error|warning: unused)' -A 6 | head -80
+$ cargo build --release --offline 2>&1 | grep -E '^error' -A 8 | head -100; ls -la target/release/gitleaks 2>/dev/null
+$ cd ../src && R=../dst/target/release/gitleaks; G=/tmp/goref/gitleaks; for t in "dir testdata/repos/nogit" "dir testdata/archives" "dir testdata/repos/small" "dir testdata" ; do $G $t -f json -r /tmp/g.json --no-banner 2>/tmp/ge.txt; ge=$?; $R $t -f json -r /tmp/r.json --no-banner 2>/tmp/re.txt; re=$?; echo "== $t exit go=$ge rust=$re"; python3 -c "
+import json
+g=json.load(open('/tmp/g.json')); r=json.load(open('/tmp/r.json'))
+k=lambda f:(f['File'],f['StartLine'],f['RuleID'],f['StartColumn'])
+g=sorted(g,key=k); r=sorted(r,key=k)
+print(len(g),len(r))
+gs={json.dumps(x,sort_keys=True) for x in g}; rs={json.dumps(x,sort_keys=True) for x in r}
+for x in sorted(gs-rs)[:3]: print('GO ONLY',x)
+for x in sorted(rs-gs)[:3]: print('RUST ONLY',x)
+"; done; tail -3 /tmp/re.txt
+$ mkdir -p /tmp/gt && rm -rf /tmp/gt/* && cp -r testdata/repos/* /tmp/gt/ && for d in /tmp/gt/*; do [ -d $d/dotGit ] && mv $d/dotGit $d/.git; done; cat > /tmp/cmp.sh <<'EOF'
+#!/bin/bash
+# usage: cmp.sh <args...>   (run from src dir)
+R=/tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/dst/target/release/gitleaks; G=/tmp/goref/gitleaks
+$G "$@" -f json -r /tmp/g.json --no-banner 2>/tmp/ge.txt >/tmp/go.txt; ge=$?
+$R "$@" -f json -r /tmp/r.json --no-banner 2>/tmp/re.txt >/tmp/ro.txt; re=$?
+python3 - "$ge" "$re" "$*" <<'PY'
+import json,sys
+def load(p):
+    try: return json.load(open(p))
+    except Exception as e: return None
+g=load('/tmp/g.json'); r=load('/tmp/r.json')
+st = "OK" if sys.argv[1]==sys.argv[2] else "EXITDIFF"
+if g is None or r is None:
+    print(st, sys.argv[3], "exit", sys.argv[1], sys.argv[2], "nojson", g is None, r is None); sys.exit()
+gs=sorted(json.dumps(x,sort_keys=True) for x in g); rs=sorted(json.dumps(x,sort_keys=True) for x in r)
+if gs!=rs: st="DIFF"
+print(st, sys.argv[3], "exit", sys.argv[1], sys.argv[2], "n", len(g), len(r))
+if gs!=rs:
+    for x in sorted(set(gs)-set(rs))[:3]: print('  GO  ',x[:600])
+    for x in sorted(set(rs)-set(gs))[:3]: print('  RUST',x[:600])
+PY
+EOF
+chmod +x /tmp/cmp.sh; for r in small staged archives; do /tmp/cmp.sh git /tmp/gt/$r; done; /tmp/cmp.sh git /tmp/gt/small --log-opts="--all foo..."; /tmp/cmp.sh git /tmp/gt/staged --staged; /tmp/cmp.sh git /tmp/gt/staged --pre-commit; /tmp/cmp.sh git /tmp/gt/archives --max-archive-depth 3
+$ for c in testdata/config/*.toml testdata/config/valid/*.toml testdata/config/invalid/*.toml; do /tmp/cmp.sh dir testdata -c $c --max-archive-depth 2 --max-decode-depth 3 | head -3; done 2>&1 | grep -v '^OK' ; echo done
+$ for c in testdata/config/*.toml testdata/config/valid/*.toml testdata/config/invalid/*.toml; do /tmp/cmp.sh dir testdata -c $c --max-decode-depth 3 | head -3; done 2>&1 | grep -v '^OK'; for c in testdata/config/invalid/*.toml; do /tmp/goref/gitleaks dir testdata/repos/nogit -c $c --no-banner 2>&1 | tail -1 | sed 's/^.*FTL/GO  /'; ../dst/target/release/gitleaks dir testdata/repos/nogit -c $c --no-banner 2>&1 | tail -1 | sed 's/^.*FTL/RS  /'; done
+$ mkdir -p /tmp/in && cd /tmp/in && cat > enc.txt <<'EOF'
+password = "c2VjcmV0X3Bhc3N3b3JkX3ZhbHVlXzEyMzQ1Njc4OTA="
+aws: QUtJQUxBTEVNRUwzMzI0M09MSUE=
+hex 414b49414c414c454d454c33333234334f4c4941 end
+url %41%4b%49%41%4c%41%4c%45%4d%45%4c%33%33%32%34%33%4f%4c%49%41 done
+uni AKIALALEMEL33243OLIA
+nested: UVV0SlFVeEJURVZOUlV3ek16STBNMDlNU1VFPQ==
+github_token = "ghp_abcdefghijklmnopqrstuvwxyz0123456789"
+api_key=ab12cd34ef56gh78ij90klmnop
+const slack = "xoxb-123456789012-1234567890123-abcdefghijABCDEFGHIJabcd"
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEAu1SU1LfVLPHCozMxH2Mo4lgOEePzNm0tRgeLezV6ffAt0gun
+VTLw7onLRnrq0/IzW7yWR7QkrmBL7jTKEn5u+qKhbwKfBstIs+bMY2Zkp18gnTxK
+-----END RSA PRIVATE KEY-----
+EOF
+cd -; cd ../src; for opts in "" "--max-decode-depth 0" "--redact" "--redact=40" "-v" "-v --no-color" "--ignore-gitleaks-allow" "--enable-rule aws-access-token,generic-api-key"; do cat /tmp/in/enc.txt | /tmp/cmp.sh stdin $opts; cmp -s /tmp/go.txt /tmp/ro.txt || { echo STDOUT DIFF; diff /tmp/go.txt /tmp/ro.txt | head -10; }; done
+$ cd ../src; printf 'aws_key = "AKIALALEMEL33243OLIA"\n' | ../dst/target/release/gitleaks stdin --no-banner -l trace 2>&1 | head; printf 'aws_key = "AKIALALEMEL33243OLIA"\n' > /tmp/in/a.txt; ../dst/target/release/gitleaks dir /tmp/in/a.txt --no-banner 2>&1 | tail -2
+$ sed -i 's|^\$G "\$@"|[ -n "$STDIN" ] \&\& exec 0<"$STDIN"; $G "$@"|; s|^\$R "\$@"|[ -n "$STDIN" ] \&\& exec 0<"$STDIN"; $R "$@"|' /tmp/cmp.sh; cd /tmp; for opts in "" "--max-decode-depth 0" "--redact" "--redact=40" "-v" "-v --no-color" "--ignore-gitleaks-allow" "--enable-rule aws-access-token,generic-api-key" "-v --redact=30"; do STDIN=/tmp/in/enc.txt /tmp/cmp.sh stdin $opts; cmp -s /tmp/go.txt /tmp/ro.txt || { echo STDOUT DIFF; diff /tmp/go.txt /tmp/ro.txt | head -10; }; done
+$ cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src && for fmt in csv junit sarif; do for t in "dir testdata/repos/nogit" "git /tmp/gt/small" "dir testdata/archives"; do /tmp/goref/gitleaks $t -f $fmt -r /tmp/g.out --no-banner 2>/dev/null; ../dst/target/release/gitleaks $t -f $fmt -r /tmp/r.out --no-banner 2>/dev/null; cmp -s /tmp/g.out /tmp/r.out && echo "OK $fmt $t" || { echo "DIFF $fmt $t"; diff /tmp/g.out /tmp/r.out | head -6; }; done; done; for tp in testdata/report/*.tmpl; do /tmp/goref/gitleaks git /tmp/gt/small -f template --report-template $tp -r /tmp/g.out --no-banner 2>/dev/null; ../dst/target/release/gitleaks git /tmp/gt/small -f template --report-template $tp -r /tmp/r.out --no-banner 2>/dev/null;  cmp -s /tmp/g.out /tmp/r.out && echo "OK $tp" || { echo "DIFF $tp"; diff /tmp/g.out /tmp/r.out | head -6; }; done
+$ tp=testdata/report/jsonextra.tmpl; /tmp/goref/gitleaks git /tmp/gt/small -f template --report-template $tp -r /tmp/g.out --no-banner 2>/dev/null; ../dst/target/release/gitleaks git /tmp/gt/small -f template --report-template $tp -r /tmp/r.out --no-banner 2>/dev/null; diff <(sort /tmp/g.out) <(sort /tmp/r.out) && echo SAME; python3 -c "import json;json.load(open('/tmp/r.out'))" && echo validjson; /tmp/goref/gitleaks dir testdata/repos/small -f template --report-template $tp -r /tmp/g.out --no-banner 2>/dev/null; ../dst/target/release/gitleaks dir testdata/repos/small -f template --report-template $tp -r /tmp/r.out --no-banner 2>/dev/null; cmp /tmp/g.out /tmp/r.out && echo EMPTYSAME; cat -A /tmp/r.out | head
+$ /tmp/goref/gitleaks git /tmp/gt/small -r /tmp/base.json --no-banner 2>/dev/null; /tmp/cmp.sh git /tmp/gt/small -b /tmp/base.json; /tmp/cmp.sh dir testdata -b testdata/baseline/baseline.json; /tmp/cmp.sh dir testdata -b testdata/baseline/baseline.csv; /tmp/cmp.sh dir testdata/repos/nogit -i testdata/repos/nogit; /tmp/cmp.sh dir testdata/repos/nogit --exit-code 7; /tmp/cmp.sh git /tmp/gt/small --platform gitlab; /tmp/cmp.sh git /tmp/gt/small --platform bogus; /tmp/cmp.sh dir nonexist; /tmp/cmp.sh dir testdata/repos/nogit --max-target-megabytes 1; for a in "--bogus" "git a b" "dir --exit-code x" "stdin -x" ; do /tmp/goref/gitleaks $a </dev/null >/dev/null 2>/tmp/e1; e1=$?; ../dst/target/release/gitleaks $a </dev/null > /dev/null 2>/tmp/e2; e2=$?; echo "$a: $e1 $e2"; diff <(sed 's/^.*M //' /tmp/e1 | grep -v '^\s*$') <(sed 's/^.*M //' /tmp/e2| grep -v '^\s*$') | head -5; done
+$ cd ../dst && sed -i 's/if msg.contains("unknown flag") || msg.contains("unknown shorthand flag") {/if msg.contains("unknown flag") {/' src/main.rs && grep -n 'contains("unknown flag")' src/main.rs; cd ../src; xxd testdata/archives/files.7z | head -3; xxd testdata/archives/files.7z | tail -6; ls -la testdata/archives/
+$ python3 -c "
+d=open('testdata/archives/files.7z','rb').read()
+import struct
+print(d[:32].hex())
+off=struct.unpack('<Q',d[12:20])[0]; sz=struct.unpack('<Q',d[20:28])[0]
+h=d[32+off:32+off+sz]; print(off,sz,h.hex())
+"; python3 -c "
+d=open('testdata/archives/files.tar.xz','rb').read(); print(d[:40].hex()); print(d[-16:].hex())"; python3 -c "
+d=open('testdata/archives/files.tar.zst','rb').read(); print(d[:24].hex())"
+$ cd ../dst && python3 - <<'EOF'
+p='src/sources.rs'; s=open(p).read()
+s=s.replace('''        Comp::Zlib => crate::inflate::zlib_decompress(data),''','''        Comp::Zlib => crate::inflate::zlib_decompress(data),
+        Comp::Xz => crate::lzma::xz_decode(data),
+        Comp::Zstd => crate::zstd::decode(data),''')
+s=s.replace('''                    Arch::Zip => zip_entries(&data),''','''                    Arch::Zip => zip_entries(&data),
+                    Arch::SevenZip => crate::lzma::sevenzip_entries(&data).map(|v| {
+                        v.into_iter().map(|(name, is_dir, d)| ArchiveEntry { name, is_dir, data: Ok(d) }).collect()
+                    }),''')
+open(p,'w').write(s)
+p='src/main.rs'; s=open(p).read()
+s=s.replace("mod logging;","mod logging;\nmod lzma;\nmod zstd;")
+open(p,'w').write(s)
+EOF
+cargo build --release --offline 2>&1 | grep -E '^error' -A 8 | head -40; cd ../src; /tmp/cmp.sh git /tmp/gt/archives --max-archive-depth 3; for c in testdata/config/archives.toml testdata/config/simple.toml; do /tmp/cmp.sh dir testdata -c $c --max-archive-depth 2; done; /tmp/cmp.sh dir testdata/archives --max-archive-depth 1
+$ mkdir -p /tmp/big && python3 - <<'EOF'
+import random, base64
+random.seed(1)
+lines=[]
+for i in range(9000):
+    r=random.random()
+    if r<0.01: lines.append('aws_token = "AKIA%s"' % ''.join(random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ234567') for _ in range(16)))
+    elif r<0.02: lines.append('password = "%s"' % ''.join(random.choice('abcdef0123456789') for _ in range(24)))
+    elif r<0.025: lines.append('enc: %s' % base64.b64encode(('secret_key = "%s"' % ''.join(random.choice('abcdefXYZ0123456789') for _ in range(20))).encode()).decode())
+    elif r<0.03: lines.append('')
+    elif r<0.035: lines.append('url=https://user:p%40ssw0rd%21%21longer@example.com/x ghp_' + ''.join(random.choice('abcdefABCDEF0123456789') for _ in range(36)))
+    elif r<0.04: lines.append('\\u0041\\u004b\\u0049\\u0041LALEMEL33243OLIA  U+0041 U+004B héllo wörld ünïcode 日本語 key="%s"' % ''.join(random.choice('abcdefghij0123456789') for _ in range(20)))
+    else: lines.append('x'*random.randint(0,120) + ' some text  ' + str(i))
+open('/tmp/big/big.txt','w').write('\n'.join(lines))
+open('/tmp/big/crlf.txt','w').write('\r\n'.join(lines[:3000]))
+EOF
+ls -la /tmp/big; /tmp/cmp.sh dir /tmp/big; STDIN=/tmp/big/big.txt /tmp/cmp.sh stdin; /tmp/cmp.sh dir /tmp/big --max-decode-depth 10 --redact=50
+$ norm(){ sed -E 's/^.{0,12}[0-9]+:[0-9]+[AP]M.{0,5} //; s/in [0-9.]+[µm]?s/in X/' "$1"; }; for t in "dir /tmp/big" "git /tmp/gt/small" "dir testdata/archives --max-archive-depth 2" "git /tmp/gt/small -l debug"; do /tmp/cmp.sh $t >/dev/null; diff <(norm /tmp/ge.txt) <(norm /tmp/re.txt) > /tmp/d.txt && echo "SAME $t" || { echo "DIFF $t"; head -20 /tmp/d.txt; }; done
+$ cd ../dst && python3 - <<'EOF'
+p='src/sources.rs'; s=open(p).read()
+s=s.replace('''    GitCmd { args, repo_path: source_clean }
+}
+
+pub fn new_git_diff_cmd''','''    log_executing(&args);
+    GitCmd { args, repo_path: source_clean }
+}
+
+fn log_executing(args: &[String]) {
+    if !logging::enabled(logging::Level::Debug) {
+        return;
+    }
+    let mut git = "git".to_string();
+    if let Ok(path) = std::env::var("PATH") {
+        for dir in path.split(':') {
+            let cand = util::join(if dir.is_empty() { "." } else { dir }, "git");
+            if std::fs::metadata(&cand).map(|m| m.is_file()).unwrap_or(false) {
+                git = cand;
+                break;
+            }
+        }
+    }
+    logging::debug().msg(&format!("executing: {} {}", git, args.join(" ")));
+}
+
+pub fn new_git_diff_cmd''')
+s=s.replace('''    args.push(".".into());
+    GitCmd {''','''    args.push(".".into());
+    log_executing(&args);
+    GitCmd {''')
+open(p,'w').write(s)
+EOF
+cargo build --release --offline 2>&1 | grep -E '^error' -A 8 | head -20; cd ../src; norm(){ sed -E 's/^.{0,12}[0-9]+:[0-9]+[AP]M.{0,5} //; s/in [0-9.]+[µm]?s/in X/' "$1"; }; for t in "git /tmp/gt/small -l debug" "git /tmp/gt/staged --staged -l debug" "dir testdata/repos/nogit -l debug" ; do /tmp/cmp.sh $t >/dev/null; diff <(norm /tmp/ge.txt) <(norm /tmp/re.txt) > /tmp/d.txt && echo "SAME $t" || { echo "DIFF $t"; head -20 /tmp/d.txt; }; done
+$ grep -n 'cfgName:\|Raw: ' detect/detect_test.go | head -80; grep -c 'Raw: ' detect/detect_test.go
+$ cat > detect/zz_dump_test.go <<'EOF'
+package detect
+
+import ("os"; "testing")
+
+func TestZZDump(t *testing.T) {
+	os.WriteFile("/tmp/in/encoded.txt", []byte(encodedTestValues), 0644)
+	os.WriteFile("/tmp/in/multili.txt", []byte(multili), 0644)
+}
+EOF
+GOFLAGS=-mod=mod GOPROXY=off go test ./detect/ -run TestZZDump 2>&1 | tail -2; rm detect/zz_dump_test.go; ls -la /tmp/in; for c in encoded composite simple generic; do for f in encoded multili enc; do STDIN=/tmp/in/$f.txt /tmp/cmp.sh stdin -c testdata/config/$c.toml; STDIN=/tmp/in/$f.txt /tmp/cmp.sh stdin -c testdata/config/$c.toml --max-decode-depth 2; done; done
+$ pkill -f cmp.sh; pkill -f 'gitleaks stdin'; sleep 0; cd /tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src; GOFLAGS=-mod=mod GOPROXY=off go vet ./detect/ 2>&1 | head -5; sed -n 1,30p detect/detect_test.go | grep -n 'package\|import' 
+$ python3 - <<'EOF'
+import re
+s=open('detect/detect_test.go').read()
+for name in ['encodedTestValues','multili']:
+    m=re.search(name+r'\s*=\s*`(.*?)`', s, re.S)
+    if m: open('/tmp/in/%s.txt'%name,'w').write(m.group(1)); print(name, len(m.group(1)))
+EOF
+for c in encoded composite simple; do for f in encodedTestValues multili enc; do timeout 20 env STDIN=/tmp/in/$f.txt /tmp/cmp.sh stdin -c testdata/config/$c.toml; timeout 20 env STDIN=/tmp/in/$f.txt /tmp/cmp.sh stdin -c testdata/config/$c.toml --max-decode-depth 2; done; done 2>&1 | grep -v '^OK' | cut -c1-900
+$ ls -la testdata/repos/symlinks/*; /tmp/cmp.sh dir testdata/repos/symlinks/file_symlink --follow-symlinks; /tmp/cmp.sh dir testdata/repos/symlinks --follow-symlinks; /tmp/cmp.sh dir testdata/repos/symlinks; /tmp/cmp.sh dir testdata/repos/symlinks/file_symlink/symlinked_id_ed25519 --follow-symlinks; GITLEAKS_CONFIG=testdata/config/simple.toml /tmp/cmp.sh dir testdata/repos/nogit; GITLEAKS_CONFIG_TOML="$(cat testdata/config/generic.toml)" /tmp/cmp.sh dir testdata/repos/nogit; /tmp/cmp.sh dir testdata -c testdata/config/valid/rule_path_only.toml; /tmp/cmp.sh dir testdata/repos/nogit/main.go; /tmp/cmp.sh dir testdata/repos/nogit -i testdata/gitleaksignore/.windowspaths
+$ rm -rf /tmp/sl && mkdir -p /tmp/sl/a /tmp/sl/b && cp testdata/repos/nogit/.env.prod /tmp/sl/a/real.env && ln -s ../a/real.env /tmp/sl/b/link.env && ln -s ../a /tmp/sl/b/dirlink && cd /tmp && for o in "" "--follow-symlinks"; do /tmp/cmp.sh dir sl $o; /tmp/cmp.sh dir sl/b $o; /tmp/cmp.sh dir /tmp/sl/b $o; done; cd - >/dev/null; diff <(python3 -c "import json;print(json.load(open('/tmp/g.json'))[0]['File'],json.load(open('/tmp/g.json'))[0]['SymlinkFile'])") <(python3 -c "import json;print(json.load(open('/tmp/r.json'))[0]['File'],json.load(open('/tmp/r.json'))[0]['SymlinkFile'])") && echo samepaths
+$ cd /tmp; S=/tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src; R=$S/../dst/target/release/gitleaks; G=/tmp/goref/gitleaks; for a in "-r /tmp/o.csv" "-r /tmp/o.sarif" "-r /tmp/o.txt" "-r /tmp/o.json -f junit" "-r /tmp/nodir/x.json" "-r /tmp/o.json --report-template $S/testdata/report/markdown.tmpl" "-r /tmp/o.json -f template" "-r /tmp/o.json -f bogus" "-r /tmp/o.json -f template --report-template /nonexist" "-r - -f csv" "-r - -f junit" "-r - -f sarif"; do for tgt in "$S/testdata/repos/nogit" "$S/testdata/repos/small"; do $G dir $tgt $a --no-banner > /tmp/go1 2>/tmp/ge1; e1=$?; f=$(echo $a | awk '{print $2}'); [ -f "$f" ] && cp $f /tmp/gof || rm -f /tmp/gof; $R dir $tgt $a --no-banner > /tmp/ro1 2>/tmp/re1; e2=$?; [ -f "$f" ] && cp $f /tmp/rof || rm -f /tmp/rof; r="OK"; [ $e1 != $e2 ] && r="EXIT $e1 $e2"; cmp -s /tmp/go1 /tmp/ro1 || r="$r STDOUT"; if [ -f /tmp/gof ] || [ -f /tmp/rof ]; then cmp -s /tmp/gof /tmp/rof || r="$r FILE"; fi; echo "$r :: $a $(basename $tgt)"; [ "$r" != OK ] && { tail -1 /tmp/ge1 | cut -c 1-200; tail -1 /tmp/re1 | cut -c1-200; }; done; done 2>&1 | grep -v '^OK'
+$ cd /tmp; S=/tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src; R=$S/../dst/target/release/gitleaks; G=/tmp/goref/gitleaks; for a in "-r /tmp/o.csv" "-r /tmp/o.sarif" "-r /tmp/o.json -f junit" "-r - -f csv" "-r - -f junit" "-r - -f sarif" "-r /tmp/o.txt" "-r /tmp/o.json -f bogus"; do for tgt in "$S/testdata/repos/nogit" "$S/testdata/repos/small"; do $G dir $tgt $a --no-banner > /tmp/go1 2>/tmp/ge1; e1=$?; f=$(echo $a | awk '{print $2}'); [ -f "$f" ] && mv $f /tmp/gof || rm -f /tmp/gof; $R dir $tgt $a --no-banner > /tmp/ro1 2>/tmp/re1; e2=$?; [ -f "$f" ] && mv $f /tmp/rof || rm -f /tmp/rof; r=""; [ $e1 != $e2 ] && r="EXIT $e1 $e2"; cmp -s /tmp/go1 /tmp/ro1 || r="$r STDOUT"; if [ -f /tmp/gof ] || [ -f /tmp/rof ]; then cmp -s /tmp/gof /tmp/rof || r="$r FILE"; fi; echo "[$r] :: $a $(basename $tgt)"; done; done 2>&1 | grep -v '^\[\]'; diff /tmp/go1 /tmp/ro1 | head
+$ cd /tmp; S=/tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port/runs/atlas/workspace/src; R=$S/../dst/target/release/gitleaks; G=/tmp/goref/gitleaks; for a in "-f csv" "-f junit" "-f sarif"; do for tgt in nogit small; do $G dir $S/testdata/repos/$tgt $a -r - --no-banner > /tmp/go1 2>/dev/null; $R dir $S/testdata/repos/$tgt $a -r - --no-banner > /tmp/ro1 2>/dev/null; cmp -s /tmp/go1 /tmp/ro1 && echo "SAME $a $tgt" || { diff <(sort /tmp/go1) <(sort /tmp/ro1) >/dev/null && echo "ORDER $a $tgt" || { echo "DIFF $a $tgt"; diff /tmp/go1 /tmp/ro1 | head -5; }; }; done; done
+$ cd src; /tmp/cmp.sh detect -s /tmp/gt/small; /tmp/cmp.sh detect -s testdata/repos/nogit --no-git; /tmp/cmp.sh detect --source=/tmp/gt/small --log-opts="--all"; STDIN=/tmp/in/enc.txt /tmp/cmp.sh detect --pipe; /tmp/cmp.sh protect -s /tmp/gt/staged --staged; /tmp/cmp.sh protect -s /tmp/gt/staged; /tmp/cmp.sh file testdata/repos/nogit; /tmp/cmp.sh directory testdata/repos/nogit; /tmp/cmp.sh -v dir testdata/repos/nogit; cmp /tmp/go.txt /tmp/ro.txt && echo verbose-same
+$ /tmp/cmp.sh git /tmp/gt/small -v >/dev/null; diff <(sort /tmp/go.txt) <(sort /tmp/ro.txt) && echo verbose-git-same; /tmp/cmp.sh git testdata/repos/nogit; norm(){ sed -E 's/^.{0,12}[0-9]+:[0-9]+[AP]M.{0,5} //; s/in [0-9.]+[µm]?s/in X/' "$1"; }; diff <(norm /tmp/ge.txt) <(norm /tmp/re.txt); R=../dst/target/release/gitleaks; for a in "" "--help" "git -h" "dir --help" "version" "--version" "help git" "stdin --help"; do diff <(/tmp/goref/gitleaks $a 2>&1) <($R $a 2>&1) >/dev/null && echo "same: $a" || echo "DIFF: $a"; done
+$ cd ../dst && cargo clean -q && timeout 300 cargo build --release 2>&1 | grep -E '^(warning|error)' | sort | uniq -c | head; ls -la target/release/gitleaks
+$ sed -i '1i #![allow(dead_code)]' src/main.rs && cargo build --release 2>&1 | tail -1 && cd ../src && /tmp/cmp.sh dir testdata --max-archive-depth 3
