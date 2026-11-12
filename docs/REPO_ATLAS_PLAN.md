@@ -113,3 +113,25 @@ and problems: [results/repo_atlas/README.md](../results/repo_atlas/README.md).*
 * **Before a full stage 1 (re-estimated at ~$40-45):** change the task so that it can fail: keep only tasks the
   `tree` arm misses, score the functions or lines rather than the files, or use issues from after the model's
   training data. As planned, it would most likely buy another tie.
+
+## SWE-QA results (2026-11-12)
+
+*SWE-QA (Peng et al., arXiv 2509.14635): all 144 questions of requests, flask and pytest, the three SWE-QA
+repositories whose atlas fits one request at the benchmark's pinned commits (20k / 36k / 141k image tokens). Opus 5.5
+at high effort, the benchmark's own judge rubric applied by Opus 5.5, 5-100 scale. $20.83 of a $22 cap.
+Pre-registration, tables and problems: [results/repo_atlas_qa/README.md](../results/repo_atlas_qa/README.md).*
+
+* **The atlas adds nothing over memory.** Closed-book (no code) 75.6, map 76.1, atlas 75.4, text 75.5; atlas −
+  closed-book −0.1 (−0.9 to +0.6), atlas − map −0.6 (−1.3 to +0.0), atlas − text +1.1 (+0.4 to +1.8). Closed-book
+  already names 71% of the code entities in the reference answers: these repositories are too well known.
+* **Only Claude Code searching the checkout beats memory:** 79.1 on a 72-question subset, +3.5 over closed-book and
+  +3.3 (2.3 to 4.4) over the atlas, at $0.045 per question (4.3 turns) against the atlas's $0.023 (8 questions per
+  call, context read from cache). A one-question-per-call closed-book control gains only +1.0, so the agent's lead is
+  mostly from reading code, partly from tests the atlas leaves out.
+* Predictions: S1 (context ≥ 10 points over closed-book) FAIL; S2 (atlas > map) FAIL; S3 (atlas ≈ text) PASS, but
+  both sit at the closed-book level; S4 (atlas within 3 of the agent and cheaper) FAIL; S5 (atlas gain largest on
+  cross-file questions) FAIL.
+* All atlas pages arrived (102-109% of the image-token formula). Batching needs the context as its own first user
+  message: in one message with the questions, `claude -p` never reads it from the prompt cache.
+* Like the pilot, this cannot show a benefit of the atlas on code the model already knows. The next test of the idea
+  needs repositories or code from after the model's training data.

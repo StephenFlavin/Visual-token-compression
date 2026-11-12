@@ -201,6 +201,132 @@ could take the total (`spend.jsonl`, harness checks included) over $22.
   repository, 3 per repository and category), judged the same way. Estimated ~$1.1. It is reported as exploratory
   and changes no verdict of S1-S5.
 
-## Results
+## Results (2026-11-12)
 
-*(after the calls)*
+### Verdict
+
+**No. On SWE-QA the atlas does not help Opus 5.5 answer questions about requests, flask and pytest.** Its answers
+score the same as answers written with no code at all (atlas − closed-book: −0.1 points on a 5-100 scale, interval
+−0.9 to +0.6, 144 questions). The repo map and the full text do no better. Only Claude Code searching the checkout
+beats memory, by about 3.5 points, and it beats the atlas by 3.3 (2.3 to 4.4), at about twice the atlas's cost per
+question ($0.045 vs $0.023). Fairly sure: every arm has 72-144 paired questions and the intervals are narrow. The
+catch is the size of the effect: on these well-known repositories the model already knows most of what the
+references say (closed-book names 71% of the reference's code entities), so the test measures what context adds on
+top of memory, and for the atlas, map and text that is nothing.
+
+### Per arm (judge total 5-100, entity recall 0-1; 95% bootstrap intervals over questions)
+
+| arm | questions | judge score | entity recall | recall, non-test entities | mean input tokens | cost per question | seconds per question | turns |
+|---|---|---|---|---|---|---|---|---|
+| closed | 144 | 75.6 (74.5-76.6) | 0.71 (0.68-0.75) | 0.71 (0.68-0.75) | 1,271 | $0.012 | 5 | 1 |
+| map | 144 | 76.1 (75.2-76.9) | 0.71 (0.68-0.74) | 0.72 (0.68-0.75) | 28,402 | $0.016 | 5 | 1 |
+| atlas | 144 | 75.4 (74.4-76.4) | 0.70 (0.67-0.74) | 0.72 (0.69-0.75) | 67,918 | $0.023 | 5 | 1 |
+| text (requests, flask) | 96 | 75.5 (74.2-76.7) | 0.71 (0.66-0.75) | 0.71 (0.67-0.76) | 97,062 | $0.028 | 4 | 1 |
+| agent (subset) | 72 | **79.1 (77.8-80.3)** | **0.79 (0.76-0.83)** | 0.78 (0.74-0.82) | 25,081 | $0.045 | 11 | 4.3 (2-9) |
+| closed1 (exploratory, one question per call) | 36 | 76.2 (73.8-78.2) | 0.74 (0.68-0.79) | 0.73 (0.67-0.79) | 819 | $0.022 | 9 | 1 |
+
+Arms 1-4: cost and seconds are a call's (8 questions) divided by 8; input tokens are the question turn's prompt (the
+context plus the questions). No answer was missing, refused or cut off; no judge reply was unparsable; every atlas
+call arrived whole (input tokens 102-109% of the image-token formula: 22.2k / 37.4k / 144.0k for 20.4k / 35.6k /
+140.6k image tokens).
+
+### Paired differences (same questions)
+
+| difference | questions | judge score | entity recall |
+|---|---|---|---|
+| atlas − map | 144 | −0.6 (−1.3 to +0.0) | −0.004 (−0.024 to +0.015) |
+| atlas − text | 96 | +1.1 (+0.4 to +1.8) | +0.016 (−0.010 to +0.043) |
+| atlas − agent | 72 | **−3.3 (−4.4 to −2.3)** | **−0.115 (−0.152 to −0.079)** |
+| atlas − closed | 144 | −0.1 (−0.9 to +0.6) | −0.008 (−0.032 to +0.015) |
+| map − closed | 144 | +0.5 (−0.2 to +1.2) | −0.003 (−0.027 to +0.021) |
+| text − closed | 96 | −0.8 (−1.7 to +0.1) | −0.025 (−0.057 to +0.007) |
+| agent − closed | 72 | +3.5 (+2.3 to +4.7) | +0.077 (+0.045 to +0.108) |
+| agent − closed1 (exploratory) | 36 | +3.1 (+1.7 to +4.7) | +0.030 (−0.011 to +0.072) |
+| closed1 − closed (exploratory) | 36 | +1.0 (−0.3 to +2.4) | +0.027 (−0.021 to +0.078) |
+
+### Per category (judge score; questions in brackets)
+
+| category | closed | map | atlas | text | agent | atlas − map | atlas − agent |
+|---|---|---|---|---|---|---|---|
+| What | 73.5 (37) | 74.4 (37) | 74.3 (37) | 72.6 (25) | 77.9 (18) | −0.0 (−1.2 to +1.2) | −4.4 (−7.2 to −1.9) |
+| Why | 75.4 (35) | 75.7 (35) | 75.1 (35) | 75.6 (23) | 79.5 (18) | −0.6 (−1.6 to +0.3) | −3.8 (−5.1 to −2.6) |
+| Where | 77.4 (36) | 77.7 (36) | 76.0 (36) | 76.5 (24) | 81.1 (18) | −1.8 (−3.6 to −0.1) | −4.0 (−5.9 to −2.1) |
+| How | 76.0 (36) | 76.5 (36) | 76.4 (36) | 77.3 (24) | 77.8 (18) | −0.1 (−1.4 to +1.1) | −1.1 (−3.2 to +0.9) |
+| cross-file stand-in (reference names ≥ 2 .py files) | 75.9 (100) | 76.4 (100) | 75.5 (100) | 75.4 (64) | 78.8 (53) | −0.9 (−1.8 to −0.1) | −3.4 (−4.8 to −2.0) |
+| the other questions | 74.9 (44) | 75.4 (44) | 75.3 (44) | 75.6 (32) | 79.8 (19) | −0.0 (−1.2 to +1.1) | −3.2 (−4.3 to −1.8) |
+
+Per repository (judge score): flask closed 75.8, map 77.1, atlas 76.7, text 75.7, agent 79.7; pytest 74.2, 74.1,
+73.2, —, 77.5; requests 76.8, 76.9, 76.4, 75.2, 80.1. Full output: `summary.md`.
+
+### Ceiling and spread
+
+Not a ceiling: the judge is strict (all 600+ answers: min 46, quartiles 74 / 77 / 80, max 89; no answer above 89).
+It is a **floor of memory**: closed-book already scores 75.6 and names 71% of the reference's code entities (69% of
+those not named in the question). These are three of the best-known Python repositories, and the benchmark (2025)
+may itself be in the training data. The judge does see real differences: the largest atlas − closed gain (+17,
+flask/Q39) is the closed-book answer naming `TagList` where the code has `PassList`, which the atlas got right; the
+largest loss (−19, pytest/Q38) is a question about a test in `testing/`, which the atlas leaves out, where the atlas
+answer guessed the fixture's scope wrong.
+
+### Predictions
+
+* **S1** closed-book at least 10 points below every context arm: **FAIL.** map +0.5, atlas −0.1, text −0.8, agent
+  +3.5 above closed-book. Memory carries almost everything here.
+* **S2** atlas beats map (interval above 0): **FAIL.** −0.6 (−1.3 to +0.0); if anything the map is slightly better.
+* **S3** atlas and text within 3 points (whole interval inside ±3): **PASS**, +1.1 (+0.4 to +1.8), but empty: both
+  are at the closed-book level, so pages and text tie because neither is used to any effect.
+* **S4** atlas within 3 points of the agent and cheaper per question: **FAIL.** −3.3 (−4.4 to −2.3), point estimate
+  outside ±3. The cost half passes ($0.023 vs $0.045 per question), but only because 8 questions share one atlas
+  call and the context is read from cache; one question per atlas call would cost ~$0.11-0.85 (written context).
+* **S5** atlas − map largest on the cross-file stand-in: **FAIL.** −0.9 on cross-file questions vs −0.0 on the
+  others. (The stand-in is not the paper's label; the data has none.)
+
+### Exploratory control: is the agent's lead just one question per call?
+
+The agent answers one question per run and writes longer answers (108 words vs 85-94 for arms 1-4 on the same
+questions). `closed1` (amendment 2) asks the closed-book question one at a time: its answers are as long (101
+words) and it thinks less per question, yet it gains only +1.0 (−0.3 to +2.4) over batched closed-book, and the
+agent stays +3.1 (+1.7 to +4.7) above it. So most of the agent's lead comes from reading the code, not from the call
+format. Part of it can come from the tests: 62 of 144 references cite test files, which only the agent can open;
+over non-test entities its recall lead shrinks a little (0.78 vs 0.72), it does not vanish.
+
+### Cost
+
+| part | calls | spent (list price) |
+|---|---|---|
+| closed | 18 | $1.73 |
+| map | 18 | $2.30 |
+| atlas | 18 | $3.32 |
+| text | 12 | $2.69 |
+| agent | 72 runs (+4 cut off by the usage limit) | $3.32 |
+| closed1 (exploratory) | 36 | $0.78 |
+| judge | 636 | $6.01 |
+| harness checks | 16 | $0.68 |
+| **total** | | **$20.83** (estimate $19.07; cap $22) |
+
+The batched arms used ~2.2k thinking tokens per call (the closed batch cost about as much as estimated); the first
+call per repository and arm wrote the context (atlas: requests $0.21, flask $0.27, pytest $0.85), later calls read
+it ($0.09-0.17). Two first-wave requests calls were billed near the write price again (requests atlas b1/b2, text
+b1), probably a cache miss on a parallel route.
+
+### Problems
+
+1. **Memory dominates.** On repositories this well known, SWE-QA measures what the model already knows; context can
+   only add a few points, and the batched one-shot arms added none. A comprehension test of the atlas needs code the
+   model has not seen (private or recent repositories), as the pilot also concluded.
+2. **The atlas, map and text leave tests out; the agent sees the whole tree.** 62 of 144 references cite tests. This
+   favours the agent, as in the pilot; the non-test recall column shows the lead is not only that.
+3. **Batching.** Arms 1-4 answer 8 questions per call (needed for the cost); the agent one. The closed1 control
+   suggests this explains about 1 of the agent's 3.5 points at most.
+4. **Same model as answerer and judge** (Opus 5.5 at low effort), for every arm alike; the benchmark used GPT-5.
+5. **Usage limit.** The 5-hour subscription limit stopped the agent arm after 44 runs; the runner had written no row
+   for the failed runs, so they were rerun after the reset (amendment 1), and a usage-limit error now stops the
+   runner. A race on the shared export crashed the first agent start (fixed; no row affected).
+6. The cross-file category is a stand-in (≥ 2 `.py` files in the reference); the released data has no such labels.
+
+### Files
+
+`selection.json` (questions, categories, batches, entities), `contexts.json`, `index/` (atlas indexes),
+`calls.jsonl` (one row per batched call, with the raw reply), `answers.jsonl` (one row per question and arm),
+`judged.jsonl`, `spend.jsonl` (every uncached call), `summary.md` / `summary.json`. Clones, pages and agent
+transcripts stayed in a scratch directory.
