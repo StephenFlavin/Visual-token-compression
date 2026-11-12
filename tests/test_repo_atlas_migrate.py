@@ -163,3 +163,12 @@ def test_run_cost_and_exact_tests():
 def test_xor_round_trip():
     b = bytes(range(256)) * 3
     assert M.xor(M.xor(b)) == b and M.xor(b) != b and b"int main" not in M.xor(b"int main(void)")
+
+
+def test_limit_hit_separates_limits_from_agent_endings():
+    assert M.limit_hit({"is_error": True, "subtype": "success", "result": "You've hit your limit · resets 9:10am"}, "", 3, False)
+    assert M.limit_hit(None, "", 0, False)
+    assert not M.limit_hit(None, "", 12, True)                       # wall clock: graded as left
+    assert not M.limit_hit({"is_error": True, "subtype": "error_max_turns", "result": ""}, "", 60, False)
+    assert not M.limit_hit({"is_error": True, "subtype": "error_max_budget_usd", "result": ""}, "", 40, False)
+    assert not M.limit_hit({"is_error": False, "subtype": "success", "result": "DONE"}, "", 30, False)

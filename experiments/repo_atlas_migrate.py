@@ -533,6 +533,25 @@ def spent() -> float:
     return sum(r.get("cost_usd") or 0 for r in jl(OUT / "spend.jsonl"))
 
 
+class UsageLimit(RuntimeError):
+    """The subscription's usage limit (or an API outage) ended the run: not a result, not retried in a loop."""
+
+
+LIMIT = re.compile(r"usage limit|limit reached|hit your limit|resets? at|rate.?limit|overloaded|api_error|\b429\b|\b529\b", re.I)
+
+
+def limit_hit(res: dict | None, stderr: str, n_messages: int, timed_out: bool) -> bool:
+    """A run that ended on a usage limit or an API error rather than on the agent's own terms."""
+    if timed_out:
+        return False
+    if res is None:
+        return n_messages == 0 or bool(LIMIT.search(stderr))
+    if res.get("subtype") in ("error_max_turns", "error_max_budget_usd"):
+        return False
+    return bool(res.get("is_error")) and bool(LIMIT.search(str(res.get("result")) + " " + stderr
+                                                           + " " + str(res.get("api_error_status"))))
+
+
 def run_one(project: str, arm: str, budget: float) -> dict:
     from vbpe import claude_eval as CE
     sel = json.loads((OUT / "selection.json").read_text())
@@ -604,6 +623,10 @@ def run_one(project: str, arm: str, budget: float) -> dict:
         u = {k: sum(x.get(k, 0) for x in usages) for k in ("input_tokens", "cache_creation_input_tokens",
                                                            "cache_read_input_tokens", "output_tokens")}
     append("spend.jsonl", {"what": f"{project} {arm}", "cost_usd": cost, "estimated": cost_est})
+    err = stderr.decode("utf-8", "replace")
+    if limit_hit(res, err, len(usages), timed_out):
+        shutil.rmtree(base, ignore_errors=True)
+        raise UsageLimit(f"{project} {arm}: {str((res or {}).get('result'))[:300]} {err[-300:]}")
     # ---- integrity, then grading on the work dir as the agent left it (tests restored if touched)
     pristine = read_tree(WORK / "pristine" / project)
     final = read_tree(crate)
@@ -709,6 +732,11 @@ def run(projects: list[str] | None, workers: int) -> None:
                       f"iface_ok={row['integrity']['interfaces_ok']} suspect={row['audit']['suspect']} {row['subtype']}",
                       flush=True)
                 ok = True
+            except UsageLimit as e:
+                print(f"[mig] USAGE LIMIT, not recorded, stopping: {e}", flush=True)
+                ok = False
+                with state["lock"]:
+                    jobs.clear()
             except Exception as e:  # noqa: BLE001
                 print(f"[mig] ERROR {j}: {e!r}", flush=True)
                 ok = False

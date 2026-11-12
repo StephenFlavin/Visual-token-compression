@@ -33,3 +33,5 @@
 {"what": "microsoft__fabric-cicd-465 screen", "cost_usd": 0.020478000000000003, "input_tokens": 3212, "output_tokens": 221}
 {"what": "pgmpy__pgmpy-2271 screen", "cost_usd": 0.021933, "input_tokens": 3359, "output_tokens": 257}
 {"what": "pypa__virtualenv-2940 screen", "cost_usd": 0.034318, "input_tokens": 3800, "output_tokens": 766}
+{"what": "MAIF__arta-50 screen", "cost_usd": 0.009978, "input_tokens": 1380, "output_tokens": 154}
+{"what": "tobymao__sqlglot-5359 screen", "cost_usd": 0.018848, "input_tokens": 2290, "output_tokens": 370}
