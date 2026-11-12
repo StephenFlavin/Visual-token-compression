@@ -875,7 +875,7 @@ def run_judge(work: Path, ids: list[str] | None, cap: float, workers: int) -> No
 
 
 # --------------------------------------------------------------------------- layer 3 workers
-LEAK_EXTRA = r"|/pq/(ds|ctx|co|git|x|transcripts)\b|visual-bpe|plan_quality|repo_atlas"
+LEAK_EXTRA = r"|/pq/(ds|ctx|co|git|x|transcripts)\b|/home/user/visual-bpe|plan_quality|repo_atlas"
 # (the run's own checkout and venv live under /pq/runs/<hash>/: not a leak)
 
 
