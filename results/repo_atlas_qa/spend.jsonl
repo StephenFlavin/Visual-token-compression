@@ -1,0 +1,11 @@
+{"what": "harness check: prompt-cache probes (6 calls, repo_atlas_eval.py text, no rows)", "cost_usd": 0.3106, "t": "2026-11-12T06:50:00"}
+{"what": "harness check streamlink agent", "cost_usd": 0.045435, "input_tokens": 18993, "output_tokens": 909, "error": null, "t": "2026-11-12T06:43:25"}
+{"what": "harness check streamlink agent", "cost_usd": 0.046227199999999996, "input_tokens": 26572, "output_tokens": 841, "error": null, "t": "2026-11-12T06:43:27"}
+{"what": "harness check streamlink agent", "cost_usd": 0.0819608, "input_tokens": 56332, "output_tokens": 1317, "error": null, "t": "2026-11-12T06:43:32"}
+{"what": "harness check streamlink closed", "cost_usd": 0.098414, "input_tokens": 1206, "output_tokens": 4459, "error": null, "t": "2026-11-12T06:43:59"}
+{"what": "harness check streamlink judge", "cost_usd": 0.016158, "input_tokens": 3056, "output_tokens": 44, "error": null, "t": "2026-11-12T06:44:02"}
+{"what": "harness check streamlink judge", "cost_usd": 0.017107999999999998, "input_tokens": 3246, "output_tokens": 44, "error": null, "t": "2026-11-12T06:44:02"}
+{"what": "harness check streamlink judge", "cost_usd": 0.016298, "input_tokens": 3084, "output_tokens": 44, "error": null, "t": "2026-11-12T06:44:02"}
+{"what": "harness check streamlink judge", "cost_usd": 0.016038, "input_tokens": 3032, "output_tokens": 44, "error": null, "t": "2026-11-12T06:44:02"}
+{"what": "harness check streamlink judge", "cost_usd": 0.015853, "input_tokens": 2995, "output_tokens": 44, "error": null, "t": "2026-11-12T06:44:02"}
+{"what": "harness check streamlink judge", "cost_usd": 0.015948, "input_tokens": 3014, "output_tokens": 44, "error": null, "t": "2026-11-12T06:44:03"}
