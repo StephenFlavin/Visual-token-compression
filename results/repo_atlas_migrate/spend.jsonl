@@ -1,2 +1,7 @@
 {"what": "smoke: stream-json agent setup (cat a.txt, cargo --version), effort low", "cost_usd": 0.0171872, "estimated": false}
 {"what": "Genetic_neural_network_for_simple_control plain", "cost_usd": 1.7209219999999996, "estimated": false}
+{"what": "recordManager plain", "cost_usd": 1.7920502, "estimated": false}
+{"what": "recordManager atlas", "cost_usd": 1.9709282, "estimated": false}
+{"what": "Genetic_neural_network_for_simple_control atlas", "cost_usd": 2.576817600000001, "estimated": false}
+{"what": "recordManager atlas_only", "cost_usd": 2.5143202, "estimated": false}
+{"what": "Genetic_neural_network_for_simple_control atlas_only", "cost_usd": 2.1407912, "estimated": false}
