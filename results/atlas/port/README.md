@@ -1,8 +1,8 @@
 # Repo atlas, Q2: does a whole-repository port (Go to Rust) go better with the source as page images?
 
 *Pre-registration, 2026-11-12, written and pushed before the first scored agent run. Runner:
-`experiments/atlas/repo_atlas_port.py` (tests `tests/test_repo_atlas_port.py`). Plan: [docs/claude/REPO_ATLAS_PLAN.md](../../docs/claude/REPO_ATLAS_PLAN.md)
-(Queued, Q2). Earlier migration test: [results/repo_atlas_migrate](../repo_atlas_migrate/README.md).*
+`experiments/atlas/repo_atlas_port.py` (tests `tests/test_repo_atlas_port.py`). Plan: [docs/claude/REPO_ATLAS_PLAN.md](../../../docs/claude/REPO_ATLAS_PLAN.md)
+(Queued, Q2). Earlier migration test: [results/atlas/migrate](../migrate/README.md).*
 
 **One run per arm on one project. This is an anecdote, not a measurement:** a difference of a few tests or turns
 between two single runs says nothing about the arms. The write-up will say so.

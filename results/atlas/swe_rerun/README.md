@@ -3,7 +3,7 @@
 *Pre-registered 2026-11-12, before the first scored agent run. Design: `docs/claude/REPO_ATLAS_PLAN.md`, "Queued
 (2026-11-12)", Q1. Code: `experiments/atlas/repo_atlas_swe_rerun.py` (tests `tests/test_repo_atlas_swe_rerun.py`), which
 imports the first test's runner `experiments/atlas/repo_atlas_swe.py` unchanged. First test:
-[results/repo_atlas_swe/README.md](../repo_atlas_swe/README.md). Results go below the "Results" heading; nothing above
+[results/atlas/swe/README.md](../swe/README.md). Results go below the "Results" heading; nothing above
 it changes after the first scored run, except dated amendments.*
 
 ## Question
@@ -37,7 +37,7 @@ runs shared one. This re-run still turns memory off, as the user asked, and chec
 The first test's 16 compared tasks (17 accepted, minus celestoai__smolvm-172, left out there for a leak): fromager-1124,
 hermes-webui-330_interface, tox-3904, pyfakefs-1286, pyjanitor-1593, docstub-123, jsonpickle-588, jsonpickle-587,
 pyinaturalist-643, fabric-cicd-670, sqlglot-6067, anyio-975, dspy-8607, virtualenv-2940, arta-50, sqlglot-5359 (ids,
-dates and sizes: `results/repo_atlas_swe/selection.json`).
+dates and sizes: `results/atlas/swe/selection.json`).
 
 Environments are rebuilt from the first test's records: the base commit alone from today's bare git stores
 (`pq/git`, re-used, not re-downloaded), a fresh one-commit repository, a uv venv with the task's Python and install

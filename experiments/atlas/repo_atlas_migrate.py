@@ -2,7 +2,7 @@
 
 Benchmark: CRUST-Bench (github.com/anirudhkhatry/CRUST-bench): 100 C repositories, each with hand-written Rust
 interfaces (bodies ``unimplemented!()``) and Rust tests, graded by ``cargo test``. Pre-registration, arms, scores and
-results: results/repo_atlas_migrate/README.md.
+results: results/atlas/migrate/README.md.
 
     python3 experiments/atlas/repo_atlas_migrate.py prepare      # clone, unpack, select, validate, atlases (no Claude calls)
     python3 experiments/atlas/repo_atlas_migrate.py run [--projects ...] [--workers 2]   # agent runs, resumable
@@ -36,7 +36,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas"), str(ROOT / "experiments" / "readhook")]
 WORK = Path(os.environ.get("MIG_WORK", "/tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/mig"))
-OUT = ROOT / "results" / "repo_atlas_migrate"
+OUT = ROOT / "results" / "atlas" / "migrate"
 BENCH_URL = "https://github.com/anirudhkhatry/CRUST-bench.git"
 
 MODEL, EFFORT = "claude-opus-5-5", "high"

@@ -2,7 +2,7 @@
 
 Benchmark: SWE-QA (Peng et al., arXiv 2509.14635; data github.com/peng-weihan/SWE-QA-Bench, HF swe-qa/SWE-QA-Benchmark):
 48 questions per Python repository with reference answers, pinned commits in ``repo_commit.txt``, an LLM-judge
-rubric (5 criteria x 1-20). Design, predictions and results: results/repo_atlas_qa/README.md.
+rubric (5 criteria x 1-20). Design, predictions and results: results/atlas/qa/README.md.
 
 Arms (Opus 5.5, high effort): closed (no context), map (repo map), atlas (pages + index), text (source as text),
 agent (Claude Code, read-only tools, one question per run). Arms 1-4 answer 8 questions per call; every call is two
@@ -17,7 +17,7 @@ from the prompt cache (a single message is never reused: measured, see the READM
     python3 experiments/atlas/repo_atlas_qa.py analyse
 
 Clones, page images and agent transcripts stay in --work; rows, selection, sizes, indexes and the summary go to
-results/repo_atlas_qa/. Rows are appended; finished (question, arm) pairs and judged answers are skipped (resumable).
+results/atlas/qa/. Rows are appended; finished (question, arm) pairs and judged answers are skipped (resumable).
 """
 from __future__ import annotations
 
@@ -38,7 +38,7 @@ sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
 import repo_atlas as RA  # noqa: E402
 import repo_atlas_eval as RE  # noqa: E402
 
-OUT = ROOT / "results" / "repo_atlas_qa"
+OUT = ROOT / "results" / "atlas" / "qa"
 CACHE = ROOT / "results" / "cache" / "claude"
 MODEL = "claude-opus-5-5"
 EFFORT = "high"

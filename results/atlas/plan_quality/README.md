@@ -1,7 +1,7 @@
 # Plan quality: can an orchestrator that reads the repo atlas once write good briefs for worker agents?
 
 *Pre-registered 2026-11-12, before the first scored call (selection screens and a model-id smoke test came before
-it; $0.50). Design: [docs/claude/PLAN_QUALITY_TEST.md](../../docs/claude/PLAN_QUALITY_TEST.md), kept as written; this file fixes
+it; $0.50). Design: [docs/claude/PLAN_QUALITY_TEST.md](../../../docs/claude/PLAN_QUALITY_TEST.md), kept as written; this file fixes
 what the design leaves open. Code: `experiments/atlas/plan_quality.py` (tests `tests/test_plan_quality.py`). Results go
 below the "Results" heading. Nothing above it changes after the first scored call, except dated amendments written
 before the runs they affect. Run by an Opus 5.5 subagent; hard cap **$45** at list price over every call.*
@@ -16,7 +16,7 @@ brief help the worker?
 
 ## Tickets
 
-**Source:** SWE-rebench leaderboard, the fresh-task test's rules ([results/repo_atlas_swe/README.md](../repo_atlas_swe/README.md)):
+**Source:** SWE-rebench leaderboard, the fresh-task test's rules ([results/atlas/swe/README.md](../swe/README.md)):
 Python tasks newest first, one per (base commit, patch), fix changes at least 3 source files, atlas at the base
 commit at most 150k image tokens, and the closed-book screen (issue + file list, Opus 5.5 high effort) does not
 name every fix file in its top 5. The install rule (no apt / conda / uv sync) is **not** applied here: layers 1-2
@@ -222,7 +222,7 @@ The worker gets no atlas and no pages.
 | `opus_tree` | claude-opus-5-5 | high | tree planner's |
 | `sonnet_atlas` | claude-sonnet-5-5 | medium | atlas planner's |
 | `haiku_atlas` | claude-haiku-5-5 | low | atlas planner's |
-| no brief | claude-opus-5-5 | high | none: the fresh-task test's `plain` rows (`results/repo_atlas_swe/runs.jsonl`); its first four tasks ran before its package-index block |
+| no brief | claude-opus-5-5 | high | none: the fresh-task test's `plain` rows (`results/atlas/swe/runs.jsonl`); its first four tasks ran before its package-index block |
 
 Per run: resolved, turns (summed over all result events), cost, seconds, tokens, share of fix files touched, a scan
 of Bash commands for the web, git history, package releases and this repository's result files, and Read/Edit/Write

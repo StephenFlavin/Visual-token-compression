@@ -7,7 +7,7 @@ fixed later, and reports up to 5 findings (file | function | weakness class | wh
 
 Arms (Opus 5.5, high effort): closed (file paths only), atlas (pages + index, one call), agent (Claude Code, read-only
 tools in an export of the vulnerable commit), agent_atlas (the same agent with the pages in its first message).
-Design, predictions and results: results/repo_atlas_sec/README.md.
+Design, predictions and results: results/atlas/sec/README.md.
 
     python3 experiments/atlas/repo_atlas_sec.py select   [--work DIR]     # advisory funnel, clones, atlas sizes (no model calls)
     python3 experiments/atlas/repo_atlas_sec.py prepare  [--work DIR]     # exports, atlases, contexts, gold (no model calls)
@@ -15,7 +15,7 @@ Design, predictions and results: results/repo_atlas_sec/README.md.
     python3 experiments/atlas/repo_atlas_sec.py analyse
 
 Clones, exports, page images and agent transcripts stay in --work; rows, the selection and the summary go to
-results/repo_atlas_sec/. Rows are appended per (task, arm); finished pairs are skipped (resumable). Errors are
+results/atlas/sec/. Rows are appended per (task, arm); finished pairs are skipped (resumable). Errors are
 retried on the next start, never recorded as results; a usage-limit error stops the run.
 """
 from __future__ import annotations
@@ -40,7 +40,7 @@ import repo_atlas as RA  # noqa: E402
 import repo_atlas_eval as RE  # noqa: E402
 from vbhook.minify.base import REGISTRY, detect  # noqa: E402
 
-OUT = ROOT / "results" / "repo_atlas_sec"
+OUT = ROOT / "results" / "atlas" / "sec"
 DEFAULT_WORK = Path(os.environ.get("REPO_ATLAS_SEC_WORK",
                                    "/tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/sec"))
 MODEL = "claude-opus-5-5"

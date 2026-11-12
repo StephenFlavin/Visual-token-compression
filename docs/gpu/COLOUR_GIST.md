@@ -295,7 +295,7 @@ trains on this CPU.
 * **Measure:** the analyse_colour.py measure, on fixed val targets (each test page's whole stream, 24 pages). Each
   run also records an eval-time blind (every val item shown the next page's image).
 
-**Stages and gates** (runner `results/run_s1.sh`):
+**Stages and gates** (runner `results/archive/logs/run_s1.sh`):
 1. **Learnability:** rgb1s_p16. If its val loss is not ≥ 0.3 nats/token below the swapped-image loss, the
    from-scratch encoder has not learned to read at this budget. S1 is then inconclusive and stops: no overlay
    conclusion.
@@ -342,7 +342,7 @@ stopped after ~150 steps, its checkpoint deleted, and S1 relaunched with these c
     information. The LLM can still ignore them, and then the gap stays honestly 0.
   * **Collapse monitor:** at every eval the run logs the swapped-image val loss, the gap and `image_spread`
     (std of the encoder output across images ÷ its RMS).
-  * **Early check:** `results/run_s1r.sh` exits 4 at step 500 if the spread is below 0.01.
+  * **Early check:** `results/archive/logs/run_s1r.sh` exits 4 at step 500 if the spread is below 0.01.
   * **Memory (no effect on results):** the first `s1r` launch was OOM-killed at step ~235 (RSS 13.9 GB of the
     15.7 GB cgroup; glibc malloc fragmentation; run 1 sat at 13.2 GB and slowed from 5.8 to 9.2 s/step). The
     runner now preloads jemalloc, and the vocabulary CE is computed in checkpointed chunks (identical values).
@@ -360,7 +360,7 @@ stopped after ~150 steps, its checkpoint deleted, and S1 relaunched with these c
   3000 training pages' text, which is cheaper than learning to read.
 * **Rule:** if the s1r gap at step 750 is still < 0.02 nats/token, s1r stops and S1 relaunches as `s1a`.
 * **Outcome: s1r stopped at step 750** (val 2.9775 vs swapped 2.9774, gap -0.0002, image spread 0.74; no row
-  written). `s1a` launched at ~20:15 UTC (`results/run_s1a.sh`).
+  written). `s1a` launched at ~20:15 UTC (`results/archive/logs/run_s1a.sh`).
 * **`s1a` design:** the s1r recipe plus a LLaVA-style alignment stage, `--align-steps 500 --align-chars 120`.
   * Steps 1-500: the LLM is fully frozen (LoRA not updated). The encoder (+ reconstruction head) learns from
     transcriptions of ≤ 120-char windows of a random stream, so the loss can fall only through the image.
@@ -389,8 +389,8 @@ stopped after ~150 steps, its checkpoint deleted, and S1 relaunched with these c
   * Or start from a small pretrained OCR encoder.
   * Train ~10x longer.
   * Then the alignment gate, then the same stages.
-* **Rows and logs:** run 1 `encoder_probe/results/s1/runs.jsonl` + `results/s1.log`; s1r and s1a have no rows
-  (stopped before their first arm finished): `results/s1r.log`, `results/s1a.log`.
+* **Rows and logs:** run 1 `encoder_probe/results/s1/runs.jsonl` + `results/archive/logs/s1.log`; s1r and s1a have no rows
+  (stopped before their first arm finished): `results/archive/logs/s1r.log`, `results/archive/logs/s1a.log`.
 
 **What S1 can and cannot show:** it tests the overlay *mechanism*, whether a model with no pretrained bias reads
 two colour streams for more information per token than one. It is a different model from Qwen2.5-VL, so it says

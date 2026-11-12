@@ -1,7 +1,7 @@
 # scripts/
 
 Setup, housekeeping and figure scripts. Run from the repo root. Experiments live in `experiments/`,
-`learned_glyphs/experiments/` and `encoder_probe/experiments/` (commands in [AGENTS.md](../AGENTS.md)).
+`learned_glyphs/experiments/` and `encoder_probe/experiments/` (commands in [docs/RUNNING.md](../docs/RUNNING.md)).
 
 | Script | What it does |
 |---|---|
@@ -11,6 +11,7 @@ Setup, housekeeping and figure scripts. Run from the repo root. Experiments live
 | `job_queue.py` | Runs one single-core command per line of a queue file, backfilling free cores; per-job logs in `--log-dir` |
 | `autosave_results.sh` | Commits and pushes `runs.jsonl` and other result files every N seconds while long jobs run |
 | `merge_phase2.py` | Keeps the longest run per (scheme, em) -> `results/phase2/merged/runs.jsonl`, the Phase-2 rows to cite |
+| `check_links.py` | Checks that every relative link and image in the tracked `.md` files exists (exit code 1 if not) and lists inline-code paths that do not exist as warnings |
 | `make_readme_figures.py` | Draws the README demo figures (`docs/img/glyphs.png`, `colour.png`, `rgb.png`) |
 | `make_claude_qa_figures.py` | Draws the figures for `docs/claude/CLAUDE_QA.md` (verdict grid, pages at actual pixels, per-question-type grid, cost vs accuracy) from `results/claude_qa/analysis_v2*/` and the calls' token counts |
 | `make_docs_figures.py` | Draws the docs figures (`docs/img/ctx_*.png`, context-window budget per encoding) |

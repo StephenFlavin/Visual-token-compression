@@ -1,7 +1,7 @@
 """Repo atlas on hard coding tasks, again (REPO_ATLAS_PLAN.md Q1): plain vs atlas, two fresh runs per task and arm,
 auto-memory off, package index blocked for every run.
 
-Same 16 SWE-rebench tasks as the first test (``results/repo_atlas_swe/``, smolvm-172 left out there for a leak), same
+Same 16 SWE-rebench tasks as the first test (``results/atlas/swe/``, smolvm-172 left out there for a leak), same
 prompt, tools, model, effort, atlas pages and grading: everything comes from ``experiments/atlas/repo_atlas_swe.py``
 (imported, not edited). What differs: ``CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`` in the child env, each run's project
 store under ``~/.claude/projects/`` checked and deleted before and after, the package index blocked from the first
@@ -14,7 +14,7 @@ its own neutral directory (a hash of task, arm and run number).
     python3 experiments/atlas/repo_atlas_swe_rerun.py run --cap 40 [--max-runs N] [--workers 2]
     python3 experiments/atlas/repo_atlas_swe_rerun.py analyse
 
-Rows: results/repo_atlas_swe_rerun/{validate,runs,spend}.jsonl. Work dir (checkouts, venvs, transcripts) in the
+Rows: results/atlas/swe_rerun/{validate,runs,spend}.jsonl. Work dir (checkouts, venvs, transcripts) in the
 scratchpad; it links the first test's atlas builds (``ra_swe/ctx``) and today's git stores (``pq/git``).
 """
 from __future__ import annotations
@@ -39,8 +39,8 @@ sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
 
 import repo_atlas_swe as sw  # noqa: E402
 
-OUT = ROOT / "results" / "repo_atlas_swe_rerun"
-FIRST = ROOT / "results" / "repo_atlas_swe"                 # read only
+OUT = ROOT / "results" / "atlas" / "swe_rerun"
+FIRST = ROOT / "results" / "atlas" / "swe"                 # read only
 SCRATCH = Path("/tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad")
 DEFAULT_WORK = Path(os.environ.get("RA_SWE2_WORK", str(SCRATCH / "swe_rerun")))
 ARMS = ("plain", "atlas")

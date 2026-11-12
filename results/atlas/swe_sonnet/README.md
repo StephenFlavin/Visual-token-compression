@@ -91,9 +91,9 @@ price), seconds, tokens. Per task and arm: resolved runs of 2.
 * **Bootstrap 95% interval over tasks** (10,000 resamples, seed 20261113) for atlas minus plain resolved task-runs.
 * **Flips** between run 1 and run 2 per arm; atlas vs plain within run 1 and within run 2.
 * Cost per run and seconds per arm.
-* **Shown beside, never pooled:** Q1's Opus rows (`results/repo_atlas_swe_rerun/runs.jsonl`, read at analysis time;
+* **Shown beside, never pooled:** Q1's Opus rows (`results/atlas/swe_rerun/runs.jsonl`, read at analysis time;
   it may still be gaining its last runs) and the plan-quality test's Sonnet-medium-with-atlas-brief rows
-  (`results/plan_quality/work.jsonl`, arm `sonnet_atlas`, 8 of 16, one run each).
+  (`results/atlas/plan_quality/work.jsonl`, arm `sonnet_atlas`, 8 of 16, one run each).
 
 ## Predictions (from the design, unchanged)
 

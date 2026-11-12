@@ -14,7 +14,7 @@ and the plan-quality test's Sonnet rows beside its own (never pooled).
     python3 experiments/atlas/repo_atlas_swe_sonnet.py run --cap 20 [--max-runs N] [--workers 2]
     python3 experiments/atlas/repo_atlas_swe_sonnet.py analyse                       # standalone, on whatever rows exist
 
-Rows: results/repo_atlas_swe_sonnet/{gate_questions.json,gate.jsonl,validate,runs,spend}.jsonl. Work dir in the
+Rows: results/atlas/swe_sonnet/{gate_questions.json,gate.jsonl,validate,runs,spend}.jsonl. Work dir in the
 scratchpad (``swe_sonnet``): links to the first test's atlas builds and dataset and to today's git stores (read only).
 """
 from __future__ import annotations
@@ -39,9 +39,9 @@ sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
 import repo_atlas_swe as sw  # noqa: E402
 import repo_atlas_swe_rerun as rr  # noqa: E402
 
-OUT = ROOT / "results" / "repo_atlas_swe_sonnet"
-Q1 = ROOT / "results" / "repo_atlas_swe_rerun"               # read only
-PQ = ROOT / "results" / "plan_quality" / "work.jsonl"        # read only
+OUT = ROOT / "results" / "atlas" / "swe_sonnet"
+Q1 = ROOT / "results" / "atlas" / "swe_rerun"               # read only
+PQ = ROOT / "results" / "atlas" / "plan_quality" / "work.jsonl"        # read only
 SCRATCH = rr.SCRATCH
 DEFAULT_WORK = Path(os.environ.get("RA_SWE3_WORK", str(SCRATCH / "swe_sonnet")))
 MODEL = "claude-sonnet-5-5"

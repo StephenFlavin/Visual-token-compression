@@ -158,7 +158,7 @@ recipe can reach.
   nohup bash -c 'for r in 4 80 16 32 8; do
     python3 encoder_probe/experiments/text_compress.py --ratio $r --steps 3000 --run-name stage0 || break
     git add encoder_probe/results/stage0 && git commit -qm "Stage 0: ratio $r" && git push -q
-  done' > results/stage0.log 2>&1 &
+  done' > results/archive/logs/stage0.log 2>&1 &
   ```
   Rerunning the same command resumes the current arm from its last checkpoint (every 250 steps) and skips
   finished arms.
@@ -212,7 +212,7 @@ calls, no model IDs in commits. Stop the pod (or tell me to) when finished: it b
 * bf16 autocast, SDPA attention, gradient checkpointing.
 
 Rows: `encoder_probe/results/stage0/runs.jsonl`. Table and curves: `python3
-encoder_probe/experiments/analyse_stage0.py`. Logs: `results/stage0.log` (3000 steps), `results/stage0_8k.log`.
+encoder_probe/experiments/analyse_stage0.py`. Logs: `results/archive/logs/stage0.log` (3000 steps), `results/archive/logs/stage0_8k.log`.
 Every row has 64 test windows, 480 tokens each.
 
 **Arms that ran:**

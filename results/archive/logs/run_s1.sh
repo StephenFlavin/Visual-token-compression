@@ -1,8 +1,8 @@
 #!/bin/bash
-# Colour gist S1 (docs/COLOUR_GIST.md): small VLM, encoder from scratch, CPU. Rerunnable: finished runs are
+# Colour gist S1 (docs/gpu/COLOUR_GIST.md): small VLM, encoder from scratch, CPU. Rerunnable: finished runs are
 # skipped, the current one resumes from its checkpoint. Stops after the first arm if the learnability gate fails.
 set -e
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/../../.."
 export OMP_NUM_THREADS=4
 R="python3 encoder_probe/experiments/small_vlm.py --steps 1500 --device cpu --run-name s1"
 $R --encoding rgb1s_p16

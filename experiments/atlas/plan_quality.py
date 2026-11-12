@@ -1,6 +1,6 @@
 """Plan-quality test: an orchestrator reads the repository once and writes a brief per ticket for worker agents.
 
-Design: docs/claude/PLAN_QUALITY_TEST.md. Pre-registration, ticket lists, rows and results: results/plan_quality/README.md.
+Design: docs/claude/PLAN_QUALITY_TEST.md. Pre-registration, ticket lists, rows and results: results/atlas/plan_quality/README.md.
 Tickets come from SWE-rebench (the fresh-task test's source, experiments/atlas/repo_atlas_swe.py); its funnel rows are
 reused, its runner functions (checkouts, environments, grading) are imported, nothing of it is edited.
 
@@ -22,7 +22,7 @@ Layer 3: Claude Code workers with edit tools, graded by the ticket's own tests: 
     python3 experiments/atlas/plan_quality.py extend --cap 45               # layer 1 beyond the layer-3 tickets, whole tickets
     python3 experiments/atlas/plan_quality.py analyse
 
-Rows: results/plan_quality/{funnel,briefs,judge,groups,work,spend}.jsonl, tickets.json. Clones, exports, venvs,
+Rows: results/atlas/plan_quality/{funnel,briefs,judge,groups,work,spend}.jsonl, tickets.json. Clones, exports, venvs,
 pages and transcripts in --work (scratchpad), never in the repository. Every step skips finished rows (resumable).
 """
 from __future__ import annotations
@@ -45,8 +45,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
 
-OUT = ROOT / "results" / "plan_quality"
-SWE_OUT = ROOT / "results" / "repo_atlas_swe"          # read only
+OUT = ROOT / "results" / "atlas" / "plan_quality"
+SWE_OUT = ROOT / "results" / "atlas" / "swe"          # read only
 DEFAULT_WORK = Path(os.environ.get("PQ_WORK", "/tmp/claude-0/-home-user-visual-bpe/"
                                    "588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/pq"))
 MODEL = "claude-opus-5-5"

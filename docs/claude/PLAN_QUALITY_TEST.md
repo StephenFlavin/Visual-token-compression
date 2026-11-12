@@ -1,7 +1,7 @@
 # Plan-quality test: an orchestrator that reads the atlas once (design and result)
 
 *2026-11-12. Run the same day by an Opus subagent for $44.25 of the $45 cap: the Results section is at the end,
-the pre-registration, tables and caveats are in `results/plan_quality/README.md`. In short: atlas briefs are no
+the pre-registration, tables and caveats are in `results/atlas/plan_quality/README.md`. In short: atlas briefs are no
 better than file-list briefs, and the planner can neither size the work nor pick the worker. The design below is
 as approved by the user before the run.*
 
@@ -39,7 +39,7 @@ must then say why in RISKS.
 ## Tasks
 
 Fresh tickets with a known fix, from the benchmark the fresh-task test uses (SWE-rebench; its selection, clones
-and validation records are in `results/repo_atlas_swe/`), in repositories whose atlas fits and not located by a
+and validation records are in `results/atlas/swe/`), in repositories whose atlas fits and not located by a
 bare file list. They are not newer than the model (created 2025-07 to 2026-05; nothing later exists in the
 benchmark), so the bare-file-list screen is the guard against memorised tickets. Layers 1 and 2 need only the real fix, so they use
 every such ticket (target 40 or more). Layer 3 needs tests that run here, so it uses the tickets that test
@@ -104,7 +104,7 @@ whole tickets fit under the cap. With 17 tickets layer 3 can only show large dif
 ## Results (2026-11-12)
 
 Run by an Opus subagent, $44.25 of the $45 cap; pre-registration, tables and caveats in
-[results/plan_quality/README.md](../../results/plan_quality/README.md). Layer 1 on 33 tickets with all four planners,
+[results/atlas/plan_quality/README.md](../../results/atlas/plan_quality/README.md). Layer 1 on 33 tickets with all four planners,
 layer 2 not evaluable (only one repository had 3+ tickets), layer 3 on all 16 tickets.
 
 * **Atlas briefs are no better than file-list briefs and match scouting:** fix files named, atlas 50.1%, tree 48.1%,

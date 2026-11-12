@@ -1,8 +1,8 @@
 #!/bin/bash
-# Colour-gist A1-cpu (docs/COLOUR_GIST.md, amendment 2). Rerunnable: finished steps are skipped, the fine-tune
+# Colour-gist A1-cpu (docs/gpu/COLOUR_GIST.md, amendment 2). Rerunnable: finished steps are skipped, the fine-tune
 # resumes from its last checkpoint.
 set -e
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/../../.."
 export OMP_NUM_THREADS=4
 E=encoder_probe/experiments
 if [ ! -s encoder_probe/results/z0_info_w400/runs.jsonl ]; then

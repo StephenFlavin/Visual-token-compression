@@ -2,7 +2,7 @@
 
 Benchmark: RepoMod-Bench (github.com/Modelcode-ai/mcode-benchmark, commit 73093fc): whole-repository ports graded by
 pytest suites that drive the built CLI. Project: ``gitleaks`` (Go -> Rust, v8.30.0 at ca20267, 35 tests). Design,
-pre-registration and results: results/repo_atlas_port/README.md; plan: docs/claude/REPO_ATLAS_PLAN.md (Q2).
+pre-registration and results: results/atlas/port/README.md; plan: docs/claude/REPO_ATLAS_PLAN.md (Q2).
 
     python3 experiments/atlas/repo_atlas_port.py prepare             # atlas (pages + index) and its size (no Claude calls)
     python3 experiments/atlas/repo_atlas_port.py reference           # build the Go original, run the hidden tests on it
@@ -43,7 +43,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
 WORK = Path(os.environ.get("PORT_WORK", "/tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port"))
-OUT = ROOT / "results" / "repo_atlas_port"
+OUT = ROOT / "results" / "atlas" / "port"
 PROJECT = "gitleaks"
 SRC_REPO = "https://github.com/gitleaks/gitleaks"
 SRC_COMMIT = "ca20267a84aa1fa2c2a9c1a13cdb50cafb48eeb0"      # metadata.yml source_commit (v8.30.0 tag + 2 fixes)
@@ -825,7 +825,7 @@ def finish() -> None:
 
 
 def grade() -> None:
-    """Clean release build of each port's source (results/repo_atlas_port/ports/<arm>), then the hidden suite."""
+    """Clean release build of each port's source (results/atlas/port/ports/<arm>), then the hidden suite."""
     ref = json.loads((OUT / "reference.json").read_text())
     if any((load_state(a) or {}).get("status") != "finished" for a in ARMS):
         raise SystemExit("finish every arm before grading (the tests must stay hidden while any agent runs)")

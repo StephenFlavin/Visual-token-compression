@@ -13,7 +13,7 @@ import repo_atlas_swe_sonnet as S  # noqa: E402
 
 def test_own_dirs_and_tags_never_q1s():
     assert S.DEFAULT_WORK != rr.DEFAULT_WORK and S.OUT != rr.OUT
-    assert S.DEFAULT_WORK.name == "swe_sonnet" and S.OUT.name == "repo_atlas_swe_sonnet"
+    assert S.DEFAULT_WORK.name == "swe_sonnet" and S.OUT.name == "swe_sonnet"
     for a in S.ARMS:
         for k in S.REPS:
             assert S.run_dir_tag("org__pkg-1", a, k) != rr.run_dir_tag("org__pkg-1", a, k)

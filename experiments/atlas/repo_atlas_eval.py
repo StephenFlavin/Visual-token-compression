@@ -1,4 +1,4 @@
-"""Repo atlas, stage 1: where does the change go? (docs/claude/REPO_ATLAS_PLAN.md, results/repo_atlas/README.md)
+"""Repo atlas, stage 1: where does the change go? (docs/claude/REPO_ATLAS_PLAN.md, results/atlas/pilot/README.md)
 
 One question per SWE-bench task: the issue, then "list the files that must change, most likely first". Arms:
 
@@ -16,7 +16,7 @@ One question per SWE-bench task: the issue, then "list the files that must chang
     python3 experiments/atlas/repo_atlas_eval.py analyse
 
 Clones, checkouts, page images and agent transcripts live in --work (outside the repo); rows, the selection, the
-context sizes and the atlas indexes go to results/repo_atlas/. Rows are appended per (task, arm); finished pairs
+context sizes and the atlas indexes go to results/atlas/pilot/. Rows are appended per (task, arm); finished pairs
 are skipped, so ``run`` resumes. One-shot calls go through vbpe.claude_eval (cache, clean env).
 """
 from __future__ import annotations
@@ -39,7 +39,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
 import repo_atlas as RA  # noqa: E402
 
-OUT = ROOT / "results" / "repo_atlas"
+OUT = ROOT / "results" / "atlas" / "pilot"
 REPOS = {"psf/requests": "princeton-nlp/SWE-bench_Verified", "gin-gonic/gin": "SWE-bench/SWE-bench_Multilingual",
          "sharkdp/bat": "SWE-bench/SWE-bench_Multilingual", "preactjs/preact": "SWE-bench/SWE-bench_Multilingual"}
 PER_REPO = 2

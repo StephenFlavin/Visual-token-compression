@@ -2,7 +2,7 @@
 
 *Pre-registration, 2026-11-12, written and pushed before the first agent run. Runner:
 `experiments/atlas/repo_atlas_migrate.py` (tests `tests/test_repo_atlas_migrate.py`). Plan and earlier atlas results:
-[docs/claude/REPO_ATLAS_PLAN.md](../../docs/claude/REPO_ATLAS_PLAN.md), [results/repo_atlas/README.md](../repo_atlas/README.md).*
+[docs/claude/REPO_ATLAS_PLAN.md](../../../docs/claude/REPO_ATLAS_PLAN.md), [results/atlas/pilot/README.md](../pilot/README.md).*
 
 ## Results (2026-11-12)
 
@@ -101,7 +101,7 @@ ceiling would add nothing.
 In the bug-fix pilot the atlas had nothing to add: Claude Code found the right files by searching, for a few cents.
 A migration is different: every line of the C code has to be read and carried over. So if pages that hold the whole
 project ever help a coding agent, it should be here. Against that: pages lose about 3 points where one small word or
-symbol decides ([docs/claude/CLAUDE_QA.md](../../docs/claude/CLAUDE_QA.md), repeat calls), and a translation needs every constant
+symbol decides ([docs/claude/CLAUDE_QA.md](../../../docs/claude/CLAUDE_QA.md), repeat calls), and a translation needs every constant
 and operator exact.
 
 ## The benchmark (what is actually there)

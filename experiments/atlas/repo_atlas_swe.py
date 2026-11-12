@@ -18,7 +18,7 @@ Arms (Claude Code headless, Opus 5.5, --effort high, tools Bash/Read/Edit/Write,
     python3 experiments/atlas/repo_atlas_swe.py run --cap 35 [--ids ...] [--max-tasks N]
     python3 experiments/atlas/repo_atlas_swe.py analyse
 
-Rows: results/repo_atlas_swe/{funnel,validate,screen,runs,spend}.jsonl. Clones, venvs, pages and transcripts in
+Rows: results/atlas/swe/{funnel,validate,screen,runs,spend}.jsonl. Clones, venvs, pages and transcripts in
 --work (scratchpad), never in the repository.
 """
 from __future__ import annotations
@@ -41,7 +41,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
 
-OUT = ROOT / "results" / "repo_atlas_swe"
+OUT = ROOT / "results" / "atlas" / "swe"
 DEFAULT_WORK = Path(os.environ.get("RA_SWE_WORK", "/tmp/claude-0/-home-user-visual-bpe/"
                                    "588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/ra_swe"))
 HF = "https://huggingface.co/datasets/nebius/SWE-rebench-leaderboard/resolve/main/data/test-00000-of-00001.parquet"
@@ -529,7 +529,7 @@ def agent_env(env: dict) -> dict:
 
 def contaminated() -> dict[str, str]:
     """Tasks left out of the paired comparisons: an arm read a release or upstream copy of the fix (confirmed by
-    reading the transcript; results/repo_atlas_swe/contaminated.json)."""
+    reading the transcript; results/atlas/swe/contaminated.json)."""
     p = OUT / "contaminated.json"
     return json.loads(p.read_text()) if p.exists() else {}
 
