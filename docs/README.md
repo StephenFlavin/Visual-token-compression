@@ -1,59 +1,59 @@
 # docs/ index
 
-Start with [HANDOFF.md](HANDOFF.md) (current state and next steps), then [RESULTS.md](glyphs/RESULTS.md). The repo
-overview is the top-level [README.md](../README.md); how to run things and the gotchas are in [AGENTS.md](../AGENTS.md).
+The story in order is the top-level [README.md](../README.md); setup and working rules are in
+[AGENTS.md](../AGENTS.md). The research is wound down (2026-11-12): every document below is a record unless its
+line says otherwise.
 
-## Current status
-* [REVIEW_2026-11-11.md](background/REVIEW_2026-11-11.md): review of goals, methods and next steps (the goals were reframed
-  from it): keep the Claude page-image line, stop the dense codes after the queued runs, and two tests of text-side
-  compression.
-* [LOCAL_QWEN.md](gpu/LOCAL_QWEN.md): the last planned run, pre-registered: page images and generation speed on a local
-  Qwen3.8-27B (RTX 3090), no training; runbook and the 3090 prompt.
-* [PLAN_QUALITY_TEST.md](claude/PLAN_QUALITY_TEST.md): design, queued: are briefs an orchestrator writes from the atlas
-  good enough to replace scouting and to pick the right worker model and reasoning level per ticket?
-* [REPO_ATLAS_PLAN.md](claude/REPO_ATLAS_PLAN.md): draft for approval: a whole repository as page images read up front
-  (`experiments/atlas/repo_atlas.py`, built), which repositories fit, and a two-stage test against a repo map and a
-  searching agent.
-* [TEXT_SLOTS.md](gpu/TEXT_SLOTS.md): Test B (built, not scheduled as of 2026-11-12), pre-registered: slots made from text tokens against vision tokens made from
-  a page, same reader and budget, on the 3090. Test A (prune the text, then render it, on Claude):
-  [results/claude_qa/prune](../results/claude_qa/prune/README.md).
-* [HANDOFF.md](HANDOFF.md): where the work stands (being wound down), the prompt for the 3090, status table, where the rows are.
-* [PLAN_3090.md](gpu/PLAN_3090.md): the current go-forward plan (user's 3090 research plan, reviewed 2026-11-06): capacity curve, trained-ViT Latin vs glyphs, colour as Run 4.
-* [COLOUR_GIST.md](gpu/COLOUR_GIST.md): (parked 2026-11-06 for PLAN_3090.md; colour returns as Run 4) gist through colour channels. Latin in 2 then 3
-  channels, then glyphs without BPE, then merge; zero-shot result (A0) and the A1 gate.
-* [OWN_ENCODER.md](gpu/OWN_ENCODER.md): training our own encoder for the moonshot: what it involves, GPUs, time and
-  cost, compute grants, and Stage 0 (text-side compression ceiling), pre-registered with a RunPod prompt.
-* [ANALYSIS.md](background/ANALYSIS.md): the results measured against blind controls (significance, information per vision
-  token, where the glyph codes lose their information), an outlook per code and what to run next.
+## Top level
 
-## Results
-* [RESULTS.md](glyphs/RESULTS.md): cross-project summary: Phases 1-2 (KILL), learned glyphs (qualified GO), frozen encoders, round 3.
-* [CLAUDE_QA.md](claude/CLAUDE_QA.md): can Claude answer questions from page images as well as from text? Pre-registered: 2.2x fewer tokens lossless, 4.2x loses multi-step questions; charts and cost table.
-* [CONTEXT_BUDGET.md](claude/CONTEXT_BUDGET.md): chars per context position per encoding, turned into context, KV and
-  compute on Qwen2.5-VL-3B; potential vs measured (chart `img/ctx_budget.png`).
-* [learned_glyphs/RESULTS.md](../learned_glyphs/RESULTS.md): learned glyph alphabet, full report.
-* [encoder_probe/RESULTS.md](../encoder_probe/RESULTS.md): frozen-encoder probe, rounds 1-2 (SigLIP, DeepEncoder).
-* [encoder_probe/ROUND3.md](../encoder_probe/ROUND3.md): round 3 (Qwen2.5-VL-3B) design, gates, amendments and results (G0, Q1, G2-lite, R3-1).
+* [HANDOFF.md](HANDOFF.md): where the work stands, the status table, where the rows are, and the prompts for the RTX 3090. Current.
+* [RUNNING.md](RUNNING.md): every command, one row per experiment. Current.
+* [GOTCHAS.md](GOTCHAS.md): things that don't work, by area (network, Claude as a reader, PP-OCR, rendering, training, GPU runners, cloud runner, git). Current.
+* [FINDINGS.md](FINDINGS.md): the findings log in the order they were made, with numbers and row locations. Current.
+* `img/`: figures used by the docs and the README (`scripts/make_*_figures.py` write them).
 
-## Runbooks
-* [GPU_RUNNER.md](gpu/GPU_RUNNER.md): any Linux + NVIDIA GPU, time-boxed: measure in the smoke, then size equal-step arms with blind controls.
-* [LOCAL_GPU.md](gpu/LOCAL_GPU.md): the user's Windows RTX 3090 PC: setup, round-2 queue, round 3 (section 8).
+## claude/: page images as context for Claude
 
-## Plans and ideas
-* [PLAN.md](glyphs/PLAN.md): original design, pre-registered predictions and kill criteria (Phases 1-2).
-* [learned_glyphs/PLAN.md](../learned_glyphs/PLAN.md), [encoder_probe/PLAN.md](../encoder_probe/PLAN.md),
-  [encoder_probe/ROUND2.md](../encoder_probe/ROUND2.md), [encoder_probe/RGB_OVERLAY.md](../encoder_probe/RGB_OVERLAY.md): sub-project plans.
-* [IDEAS.md](background/IDEAS.md): idea backlog (RGB overlay, rgb6, braille control, fallbacks if the moonshot fails), each with a dated status.
-* [MOONSHOT_BRIEF.md](gpu/MOONSHOT_BRIEF.md): brief for the external research task on the RGB-overlaid learned-glyph code.
+* [CLAUDE_QA.md](claude/CLAUDE_QA.md): questions answered from page images vs text on long documents. Result: 2.2x fewer tokens lossless on the original questions, 4.2x loses multi-step questions.
+* [SWE_IMAGES.md](claude/SWE_IMAGES.md): coding agents reading code and output as page images on SWE-bench. Result: cost does not fall.
+* [RAG_PLAN.md](claude/RAG_PLAN.md): RAG with page images. Plan; rows and result in [results/rag](../results/rag/README.md).
+* [ERB_PLAN.md](claude/ERB_PLAN.md): EnterpriseRAG-Bench with page images. Plan, prep done ([results/erb](../results/erb/README.md)).
+* [REPO_ATLAS_PLAN.md](claude/REPO_ATLAS_PLAN.md): a whole repository as page images. Plan; the tests are closed, results in [results/atlas](../results/README.md).
+* [PLAN_QUALITY_TEST.md](claude/PLAN_QUALITY_TEST.md): briefs an orchestrator writes from the atlas. Design and result: not worth its cost.
+* [CONTEXT_BUDGET.md](claude/CONTEXT_BUDGET.md): chars per context position per encoding, as context, KV and compute on Qwen2.5-VL-3B. Living table, dated 2026-11-05.
+* [claude-eval-notes.md](claude/claude-eval-notes.md): Claude as a zero-shot OCR reader: token formula, legibility, cost. Reference.
 
-## Reference
+## gpu/: runbooks and plans for GPU work
+
+* [GPU_RUNNER.md](gpu/GPU_RUNNER.md): runbook for any Linux GPU, time-boxed, with blind controls.
+* [LOCAL_GPU.md](gpu/LOCAL_GPU.md): runbook for the Windows RTX 3090 PC: setup, round 2, round 3, Test B.
+* [LOCAL_QWEN.md](gpu/LOCAL_QWEN.md): page images and generation speed on a local Qwen3.8-27B. Pre-registered, not run: the one test left.
+* [PLAN_3090.md](gpu/PLAN_3090.md): capacity curve, trained-ViT Latin vs glyphs, channel capacity; amendments 1-6 and results. Run 0 done; the Runs 1-2 driver is stopped.
+* [TEXT_SLOTS.md](gpu/TEXT_SLOTS.md): Test B, text slots against page pixels. Pre-registered and built, not scheduled.
+* [OWN_ENCODER.md](gpu/OWN_ENCODER.md): training an own encoder; Stage 0 (text-side compression ceiling). Result: inconclusive.
+* [COLOUR_GIST.md](gpu/COLOUR_GIST.md): Latin in 2-3 colour channels, gist as the target. A0, A1-cpu and S1 results; Run 4 closed.
+* [MOONSHOT_BRIEF.md](gpu/MOONSHOT_BRIEF.md): brief for the external research task on the RGB-overlaid learned-glyph code. Kept as sent.
+
+## glyphs/: the original idea, Phases 1-2
+
+* [PLAN.md](glyphs/PLAN.md): original design, pre-registered predictions and kill criteria (was the root `PLAN.md`).
+* [RESULTS.md](glyphs/RESULTS.md): cross-project results: Phases 1-2 (KILL), learned glyphs (qualified GO), frozen encoders, round 3.
+* [dictionary-report.md](glyphs/dictionary-report.md): the Visual-BPE dictionary and kill check K1 (`scripts/build_data.py --report` writes it).
+
+## background/: prior art, reviews, history
+
 * [prior-art.md](background/prior-art.md): prior art for Visual BPE (Glyph, DeepSeek-OCR, PIXEL, text-side compression).
-* [learned_glyphs/docs/prior-art.md](../learned_glyphs/docs/prior-art.md): prior art for learned glyph alphabets.
-* [research/2026-11-04_rgb3_lg_go_no_go_report.md](background/research/2026-11-04_rgb3_lg_go_no_go_report.md): external literature report (go region ~30-90 chars/token).
-* [claude-eval-notes.md](claude/claude-eval-notes.md): measurements of Claude as a zero-shot OCR reader (token formula, legibility, cost).
-* [dictionary-report.md](glyphs/dictionary-report.md): Visual-BPE dictionary and kill check K1.
-* `img/`: figures; `ctx_*.png` come from `python3 scripts/make_docs_figures.py`, `readme_*` from `scripts/make_readme_figures.py`.
+* [IDEAS.md](background/IDEAS.md): idea backlog, each with a dated status.
+* [ANALYSIS.md](background/ANALYSIS.md): the results against blind controls: significance, information per vision token, where the glyph codes lose their information.
+* [REVIEW_2026-11-11.md](background/REVIEW_2026-11-11.md): review of goals, methods and next steps; the goals were reframed from it.
+* [history/HANDOFF_2026-11.md](background/history/HANDOFF_2026-11.md): the session hand-offs of 2026-11-04/05, verbatim.
+* [research/2026-11-04_rgb3_lg_go_no_go_report.md](background/research/2026-11-04_rgb3_lg_go_no_go_report.md): external literature report on the moonshot code.
 
-## History
-* [history/HANDOFF_2026-11.md](background/history/HANDOFF_2026-11.md): the stacked session hand-offs of 2026-11-04/05 (local
-  3090 round 2, cloud CPU round 3, RTX 4090 R3-1 session with hardware, sizing and samples), verbatim.
+## In the packages
+
+* [learned_glyphs/PLAN.md](../learned_glyphs/PLAN.md), [learned_glyphs/RESULTS.md](../learned_glyphs/RESULTS.md), [learned_glyphs/docs/prior-art.md](../learned_glyphs/docs/prior-art.md): the learned glyph alphabet.
+* [encoder_probe/PLAN.md](../encoder_probe/PLAN.md), [RGB_OVERLAY.md](../encoder_probe/RGB_OVERLAY.md), [ROUND2.md](../encoder_probe/ROUND2.md), [ROUND3.md](../encoder_probe/ROUND3.md), [RESULTS.md](../encoder_probe/RESULTS.md): the frozen-encoder probe, rounds 1-3.
+* [experiments/readhook/README.md](../experiments/readhook/README.md): the vbhook hooks that show files and command output as page images.
+* [results/README.md](../results/README.md): where each stage's rows live. [scripts/README.md](../scripts/README.md): setup, housekeeping and figure scripts.
+
+`python3 scripts/check_links.py` checks every link in these files.
