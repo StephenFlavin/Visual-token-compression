@@ -1,0 +1,1104 @@
+{
+ "arms": {
+  "none": {
+   "docs": [
+    0,
+    1,
+    2
+   ],
+   "invalid": [],
+   "input_tokens": 7181.333333333333,
+   "cost_usd": 0.276414,
+   "ratio_vs_text": 34.66949781182726,
+   "acc_all": [
+    0.05,
+    0.0338268772604763,
+    0.07331893244253394,
+    480
+   ],
+   "diff_all": {
+    "arm_minus_text": -0.95,
+    "lo": -0.9661731227395236,
+    "hi": -0.9253664283422093,
+    "text_only": 456,
+    "arm_only": 0,
+    "p": 1.0748601772107342e-137,
+    "n": 480,
+    "lossless": false,
+    "loss": true
+   },
+   "acc_original": [
+    0.06666666666666667,
+    0.04520541590536091,
+    0.0972785661351754,
+    360
+   ],
+   "diff_original": {
+    "arm_minus_text": -0.9333333333333333,
+    "lo": -0.9547945840946391,
+    "hi": -0.9009517172288964,
+    "text_only": 336,
+    "arm_only": 0,
+    "p": 1.4287342391028437e-101,
+    "n": 360,
+    "lossless": false,
+    "loss": true
+   },
+   "acc_small": [
+    0.0,
+    -3.469446951953614e-18,
+    0.031020271055929513,
+    120
+   ],
+   "diff_small": {
+    "arm_minus_text": -1.0,
+    "lo": -1.0,
+    "hi": -0.956130711964215,
+    "text_only": 120,
+    "arm_only": 0,
+    "p": 1.504632769052528e-36,
+    "n": 120,
+    "lossless": false,
+    "loss": true
+   },
+   "acc_needle": [
+    0.0,
+    -3.469446951953614e-18,
+    0.031020271055929513,
+    120
+   ],
+   "diff_needle": {
+    "arm_minus_text": -1.0,
+    "lo": -1.0,
+    "hi": -0.956130711964215,
+    "text_only": 120,
+    "arm_only": 0,
+    "p": 1.504632769052528e-36,
+    "n": 120,
+    "lossless": false,
+    "loss": true
+   },
+   "acc_number": [
+    0.2,
+    0.13824380919983048,
+    0.2803683534337273,
+    120
+   ],
+   "diff_number": {
+    "arm_minus_text": -0.8,
+    "lo": -0.8617561908001696,
+    "hi": -0.7138528616259842,
+    "text_only": 96,
+    "arm_only": 0,
+    "p": 2.524354896707238e-29,
+    "n": 120,
+    "lossless": false,
+    "loss": true
+   },
+   "acc_complex": [
+    0.0,
+    -3.469446951953614e-18,
+    0.031020271055929513,
+    120
+   ],
+   "diff_complex": {
+    "arm_minus_text": -1.0,
+    "lo": -1.0,
+    "hi": -0.956130711964215,
+    "text_only": 120,
+    "arm_only": 0,
+    "p": 1.504632769052528e-36,
+    "n": 120,
+    "lossless": false,
+    "loss": true
+   },
+   "small_lure": 0.0,
+   "small_by_sub": {
+    "all_but": 0.0,
+    "before_after": 0.0,
+    "comparative": 0.0,
+    "from_to": 0.0,
+    "instead_of": 0.0,
+    "negated_count": 0.0,
+    "negation": 0.0,
+    "passive": 0.0
+   },
+   "by_sub": {
+    "needle": 0.0,
+    "number": 0.2,
+    "two_hop": 0.0,
+    "three_hop": 0.0,
+    "sum": 0.0,
+    "max": 0.0,
+    "count": 0.0,
+    "instead_of": 0.0,
+    "before_after": 0.0,
+    "all_but": 0.0,
+    "negation": 0.0,
+    "negated_count": 0.0,
+    "from_to": 0.0,
+    "comparative": 0.0,
+    "passive": 0.0
+   }
+  },
+  "text": {
+   "docs": [
+    0,
+    1,
+    2
+   ],
+   "invalid": [],
+   "input_tokens": 248971.33333333334,
+   "cost_usd": 4.112664,
+   "ratio_vs_text": 1.0,
+   "acc_all": [
+    1.0,
+    0.9920602114410997,
+    1.0,
+    480
+   ],
+   "acc_original": [
+    1.0,
+    0.9894415591839967,
+    1.0000000000000002,
+    360
+   ],
+   "acc_small": [
+    1.0,
+    0.9689797289440706,
+    1.0,
+    120
+   ],
+   "acc_needle": [
+    1.0,
+    0.9689797289440706,
+    1.0,
+    120
+   ],
+   "acc_number": [
+    1.0,
+    0.9689797289440706,
+    1.0,
+    120
+   ],
+   "acc_complex": [
+    1.0,
+    0.9689797289440706,
+    1.0,
+    120
+   ],
+   "small_lure": 0.0,
+   "small_by_sub": {
+    "all_but": 1.0,
+    "before_after": 1.0,
+    "comparative": 1.0,
+    "from_to": 1.0,
+    "instead_of": 1.0,
+    "negated_count": 1.0,
+    "negation": 1.0,
+    "passive": 1.0
+   },
+   "by_sub": {
+    "needle": 1.0,
+    "number": 1.0,
+    "two_hop": 1.0,
+    "three_hop": 1.0,
+    "sum": 1.0,
+    "max": 1.0,
+    "count": 1.0,
+    "instead_of": 1.0,
+    "before_after": 1.0,
+    "all_but": 1.0,
+    "negation": 1.0,
+    "negated_count": 1.0,
+    "from_to": 1.0,
+    "comparative": 1.0,
+    "passive": 1.0
+   }
+  },
+  "page118": {
+   "docs": [
+    0,
+    1,
+    2
+   ],
+   "invalid": [],
+   "input_tokens": 114188.0,
+   "cost_usd": 2.127394,
+   "ratio_vs_text": 2.180365682602311,
+   "acc_all": [
+    0.9770833333333333,
+    0.9594342159747407,
+    0.9871565691086419,
+    480
+   ],
+   "diff_all": {
+    "arm_minus_text": -0.022916666666666696,
+    "lo": -0.040565784025259344,
+    "hi": -0.01009050896667713,
+    "text_only": 11,
+    "arm_only": 0,
+    "p": 0.0009765625,
+    "n": 480,
+    "lossless": false,
+    "loss": true
+   },
+   "acc_original": [
+    1.0,
+    0.9894415591839967,
+    1.0000000000000002,
+    360
+   ],
+   "diff_original": {
+    "arm_minus_text": -0.0,
+    "lo": -0.010558440816003323,
+    "hi": 0.010558440816003323,
+    "text_only": 0,
+    "arm_only": 0,
+    "p": 1.0,
+    "n": 360,
+    "lossless": true,
+    "loss": false
+   },
+   "acc_small": [
+    0.9083333333333333,
+    0.843290092093749,
+    0.9480433532105753,
+    120
+   ],
+   "diff_small": {
+    "arm_minus_text": -0.09166666666666667,
+    "lo": -0.15670990790625094,
+    "hi": -0.041276758003976226,
+    "text_only": 11,
+    "arm_only": 0,
+    "p": 0.0009765625,
+    "n": 120,
+    "lossless": false,
+    "loss": true
+   },
+   "acc_needle": [
+    1.0,
+    0.9689797289440706,
+    1.0,
+    120
+   ],
+   "diff_needle": {
+    "arm_minus_text": -0.0,
+    "lo": -0.031020271055929416,
+    "hi": 0.031020271055929416,
+    "text_only": 0,
+    "arm_only": 0,
+    "p": 1.0,
+    "n": 120,
+    "lossless": false,
+    "loss": false
+   },
+   "acc_number": [
+    1.0,
+    0.9689797289440706,
+    1.0,
+    120
+   ],
+   "diff_number": {
+    "arm_minus_text": -0.0,
+    "lo": -0.031020271055929416,
+    "hi": 0.031020271055929416,
+    "text_only": 0,
+    "arm_only": 0,
+    "p": 1.0,
+    "n": 120,
+    "lossless": false,
+    "loss": false
+   },
+   "acc_complex": [
+    1.0,
+    0.9689797289440706,
+    1.0,
+    120
+   ],
+   "diff_complex": {
+    "arm_minus_text": -0.0,
+    "lo": -0.031020271055929416,
+    "hi": 0.031020271055929416,
+    "text_only": 0,
+    "arm_only": 0,
+    "p": 1.0,
+    "n": 120,
+    "lossless": false,
+    "loss": false
+   },
+   "small_lure": 0.08333333333333333,
+   "small_by_sub": {
+    "all_but": 1.0,
+    "before_after": 1.0,
+    "comparative": 1.0,
+    "from_to": 1.0,
+    "instead_of": 1.0,
+    "negated_count": 1.0,
+    "negation": 0.9333333333333333,
+    "passive": 0.3333333333333333
+   },
+   "by_sub": {
+    "needle": 1.0,
+    "number": 1.0,
+    "two_hop": 1.0,
+    "three_hop": 1.0,
+    "sum": 1.0,
+    "max": 1.0,
+    "count": 1.0,
+    "instead_of": 1.0,
+    "before_after": 1.0,
+    "all_but": 1.0,
+    "negation": 0.9333333333333333,
+    "negated_count": 1.0,
+    "from_to": 1.0,
+    "comparative": 1.0,
+    "passive": 0.3333333333333333
+   }
+  },
+  "page88": {
+   "docs": [
+    0,
+    1,
+    2
+   ],
+   "invalid": [],
+   "input_tokens": 87445.0,
+   "cost_usd": 1.802889,
+   "ratio_vs_text": 2.847170350023477,
+   "acc_all": [
+    0.9895833333333334,
+    0.975849580284769,
+    0.9955427100846411,
+    480
+   ],
+   "diff_all": {
+    "arm_minus_text": -0.01041666666666663,
+    "lo": -0.02415041971523102,
+    "hi": -0.0004892091057363511,
+    "text_only": 5,
+    "arm_only": 0,
+    "p": 0.0625,
+    "n": 480,
+    "lossless": false,
+    "loss": false
+   },
+   "acc_original": [
+    0.9916666666666667,
+    0.975788867588452,
+    0.9971619989424781,
+    360
+   ],
+   "diff_original": {
+    "arm_minus_text": -0.008333333333333304,
+    "lo": -0.024211132411548042,
+    "hi": 0.0035695801455852064,
+    "text_only": 3,
+    "arm_only": 0,
+    "p": 0.25,
+    "n": 360,
+    "lossless": false,
+    "loss": false
+   },
+   "acc_small": [
+    0.9833333333333333,
+    0.9412628731870861,
+    0.9954175314588486,
+    120
+   ],
+   "diff_small": {
+    "arm_minus_text": -0.01666666666666672,
+    "lo": -0.058737126812913876,
+    "hi": 0.016624248921824382,
+    "text_only": 2,
+    "arm_only": 0,
+    "p": 0.5,
+    "n": 120,
+    "lossless": false,
+    "loss": false
+   },
+   "acc_needle": [
+    1.0,
+    0.9689797289440706,
+    1.0,
+    120
+   ],
+   "diff_needle": {
+    "arm_minus_text": -0.0,
+    "lo": -0.031020271055929416,
+    "hi": 0.031020271055929416,
+    "text_only": 0,
+    "arm_only": 0,
+    "p": 1.0,
+    "n": 120,
+    "lossless": false,
+    "loss": false
+   },
+   "acc_number": [
+    1.0,
+    0.9689797289440706,
+    1.0,
+    120
+   ],
+   "diff_number": {
+    "arm_minus_text": -0.0,
+    "lo": -0.031020271055929416,
+    "hi": 0.031020271055929416,
+    "text_only": 0,
+    "arm_only": 0,
+    "p": 1.0,
+    "n": 120,
+    "lossless": false,
+    "loss": false
+   },
+   "acc_complex": [
+    0.975,
+    0.9290687625956524,
+    0.9914619799012145,
+    120
+   ],
+   "diff_complex": {
+    "arm_minus_text": -0.025000000000000022,
+    "lo": -0.07093123740434759,
+    "hi": 0.010117716307461153,
+    "text_only": 3,
+    "arm_only": 0,
+    "p": 0.25,
+    "n": 120,
+    "lossless": false,
+    "loss": false
+   },
+   "small_lure": 0.016666666666666666,
+   "small_by_sub": {
+    "all_but": 1.0,
+    "before_after": 0.9333333333333333,
+    "comparative": 1.0,
+    "from_to": 1.0,
+    "instead_of": 1.0,
+    "negated_count": 1.0,
+    "negation": 1.0,
+    "passive": 0.9333333333333333
+   },
+   "by_sub": {
+    "needle": 1.0,
+    "number": 1.0,
+    "two_hop": 1.0,
+    "three_hop": 1.0,
+    "sum": 1.0,
+    "max": 1.0,
+    "count": 0.8333333333333334,
+    "instead_of": 1.0,
+    "before_after": 0.9333333333333333,
+    "all_but": 1.0,
+    "negation": 1.0,
+    "negated_count": 1.0,
+    "from_to": 1.0,
+    "comparative": 1.0,
+    "passive": 0.9333333333333333
+   }
+  },
+  "page59": {
+   "docs": [
+    0,
+    1,
+    2
+   ],
+   "invalid": [],
+   "input_tokens": 60701.333333333336,
+   "cost_usd": 1.7697540000000003,
+   "ratio_vs_text": 4.101573073381931,
+   "acc_all": [
+    0.90625,
+    0.8768524150853853,
+    0.9291965067105082,
+    480
+   ],
+   "diff_all": {
+    "arm_minus_text": -0.09375,
+    "lo": -0.12314758491461475,
+    "hi": -0.06946868181964899,
+    "text_only": 45,
+    "arm_only": 0,
+    "p": 5.684341886080802e-14,
+    "n": 480,
+    "lossless": false,
+    "loss": true
+   },
+   "acc_original": [
+    0.9333333333333333,
+    0.9027214338648246,
+    0.954794584094639,
+    360
+   ],
+   "diff_original": {
+    "arm_minus_text": -0.06666666666666665,
+    "lo": -0.09727856613517538,
+    "hi": -0.04274876632602872,
+    "text_only": 24,
+    "arm_only": 0,
+    "p": 1.1920928955078125e-07,
+    "n": 360,
+    "lossless": false,
+    "loss": true
+   },
+   "acc_small": [
+    0.825,
+    0.7472413105195714,
+    0.8825955132940744,
+    120
+   ],
+   "diff_small": {
+    "arm_minus_text": -0.17500000000000004,
+    "lo": -0.25275868948042857,
+    "hi": -0.10958210972531116,
+    "text_only": 21,
+    "arm_only": 0,
+    "p": 9.5367431640625e-07,
+    "n": 120,
+    "lossless": false,
+    "loss": true
+   },
+   "acc_needle": [
+    0.9833333333333333,
+    0.9412628731870861,
+    0.9954175314588486,
+    120
+   ],
+   "diff_needle": {
+    "arm_minus_text": -0.01666666666666672,
+    "lo": -0.058737126812913876,
+    "hi": 0.016624248921824382,
+    "text_only": 2,
+    "arm_only": 0,
+    "p": 0.5,
+    "n": 120,
+    "lossless": false,
+    "loss": false
+   },
+   "acc_number": [
+    1.0,
+    0.9689797289440706,
+    1.0,
+    120
+   ],
+   "diff_number": {
+    "arm_minus_text": -0.0,
+    "lo": -0.031020271055929416,
+    "hi": 0.031020271055929416,
+    "text_only": 0,
+    "arm_only": 0,
+    "p": 1.0,
+    "n": 120,
+    "lossless": false,
+    "loss": false
+   },
+   "acc_complex": [
+    0.8166666666666667,
+    0.7379892641067634,
+    0.8756978975578147,
+    120
+   ],
+   "diff_complex": {
+    "arm_minus_text": -0.18333333333333335,
+    "lo": -0.26201073589323665,
+    "hi": -0.11664792685704828,
+    "text_only": 22,
+    "arm_only": 0,
+    "p": 4.76837158203125e-07,
+    "n": 120,
+    "lossless": false,
+    "loss": true
+   },
+   "small_lure": 0.08333333333333333,
+   "small_by_sub": {
+    "all_but": 0.8666666666666667,
+    "before_after": 0.5333333333333333,
+    "comparative": 0.6666666666666666,
+    "from_to": 0.9333333333333333,
+    "instead_of": 0.9333333333333333,
+    "negated_count": 0.9333333333333333,
+    "negation": 0.8666666666666667,
+    "passive": 0.8666666666666667
+   },
+   "by_sub": {
+    "needle": 0.9833333333333333,
+    "number": 1.0,
+    "two_hop": 0.8333333333333334,
+    "three_hop": 0.875,
+    "sum": 1.0,
+    "max": 1.0,
+    "count": 0.2222222222222222,
+    "instead_of": 0.9333333333333333,
+    "before_after": 0.5333333333333333,
+    "all_but": 0.8666666666666667,
+    "negation": 0.8666666666666667,
+    "negated_count": 0.9333333333333333,
+    "from_to": 0.9333333333333333,
+    "comparative": 0.6666666666666666,
+    "passive": 0.8666666666666667
+   }
+  },
+  "ptext22": {
+   "docs": [
+    0,
+    1,
+    2
+   ],
+   "invalid": [],
+   "input_tokens": 115114.33333333333,
+   "cost_usd": 2.4173290000000005,
+   "ratio_vs_text": 2.1627757205275246,
+   "acc_all": [
+    0.8604166666666667,
+    0.8265428407140029,
+    0.8885672283664566,
+    480
+   ],
+   "diff_all": {
+    "arm_minus_text": -0.13958333333333328,
+    "lo": -0.17345715928599714,
+    "hi": -0.11033449803389404,
+    "text_only": 67,
+    "arm_only": 0,
+    "p": 1.3552527156068805e-20,
+    "n": 480,
+    "lossless": false,
+    "loss": true
+   },
+   "acc_original": [
+    0.9638888888888889,
+    0.9392046234258701,
+    0.978777267594838,
+    360
+   ],
+   "diff_original": {
+    "arm_minus_text": -0.036111111111111094,
+    "lo": -0.06079537657412992,
+    "hi": -0.017858864866968915,
+    "text_only": 13,
+    "arm_only": 0,
+    "p": 0.000244140625,
+    "n": 360,
+    "lossless": false,
+    "loss": true
+   },
+   "acc_small": [
+    0.55,
+    0.46081381811060756,
+    0.6360841547837995,
+    120
+   ],
+   "diff_small": {
+    "arm_minus_text": -0.44999999999999996,
+    "lo": -0.5391861818893924,
+    "hi": -0.358497328338324,
+    "text_only": 54,
+    "arm_only": 0,
+    "p": 1.1102230246251565e-16,
+    "n": 120,
+    "lossless": false,
+    "loss": true
+   },
+   "acc_needle": [
+    1.0,
+    0.9689797289440706,
+    1.0,
+    120
+   ],
+   "diff_needle": {
+    "arm_minus_text": -0.0,
+    "lo": -0.031020271055929416,
+    "hi": 0.031020271055929416,
+    "text_only": 0,
+    "arm_only": 0,
+    "p": 1.0,
+    "n": 120,
+    "lossless": false,
+    "loss": false
+   },
+   "acc_number": [
+    0.925,
+    0.8635894316089088,
+    0.9600433379935513,
+    120
+   ],
+   "diff_number": {
+    "arm_minus_text": -0.07499999999999996,
+    "lo": -0.13641056839109122,
+    "hi": -0.028199436391068824,
+    "text_only": 9,
+    "arm_only": 0,
+    "p": 0.00390625,
+    "n": 120,
+    "lossless": false,
+    "loss": true
+   },
+   "acc_complex": [
+    0.9666666666666667,
+    0.9174184205147198,
+    0.9869626598330794,
+    120
+   ],
+   "diff_complex": {
+    "arm_minus_text": -0.033333333333333326,
+    "lo": -0.08258157948528022,
+    "hi": 0.003736662013232396,
+    "text_only": 4,
+    "arm_only": 0,
+    "p": 0.125,
+    "n": 120,
+    "lossless": false,
+    "loss": false
+   },
+   "small_lure": 0.425,
+   "small_by_sub": {
+    "all_but": 0.0,
+    "before_after": 0.4666666666666667,
+    "comparative": 1.0,
+    "from_to": 0.8666666666666667,
+    "instead_of": 1.0,
+    "negated_count": 0.7333333333333333,
+    "negation": 0.3333333333333333,
+    "passive": 0.0
+   },
+   "by_sub": {
+    "needle": 1.0,
+    "number": 0.925,
+    "two_hop": 1.0,
+    "three_hop": 0.9166666666666666,
+    "sum": 1.0,
+    "max": 1.0,
+    "count": 0.8888888888888888,
+    "instead_of": 1.0,
+    "before_after": 0.4666666666666667,
+    "all_but": 0.0,
+    "negation": 0.3333333333333333,
+    "negated_count": 0.7333333333333333,
+    "from_to": 0.8666666666666667,
+    "comparative": 1.0,
+    "passive": 0.0
+   }
+  },
+  "ptext15": {
+   "docs": [
+    0,
+    1,
+    2
+   ],
+   "invalid": [],
+   "input_tokens": 168210.33333333334,
+   "cost_usd": 2.964509,
+   "ratio_vs_text": 1.4801714010812883,
+   "acc_all": [
+    0.9645833333333333,
+    0.9440171961507995,
+    0.9777720836465558,
+    480
+   ],
+   "diff_all": {
+    "arm_minus_text": -0.03541666666666665,
+    "lo": -0.05598280384920051,
+    "hi": -0.020022402241739786,
+    "text_only": 17,
+    "arm_only": 0,
+    "p": 1.52587890625e-05,
+    "n": 480,
+    "lossless": false,
+    "loss": true
+   },
+   "acc_original": [
+    0.9944444444444445,
+    0.9799725903182546,
+    0.9984751737636977,
+    360
+   ],
+   "diff_original": {
+    "arm_minus_text": -0.005555555555555536,
+    "lo": -0.020027409681745434,
+    "hi": 0.005746101460569674,
+    "text_only": 2,
+    "arm_only": 0,
+    "p": 0.5,
+    "n": 360,
+    "lossless": false,
+    "loss": false
+   },
+   "acc_small": [
+    0.875,
+    0.8039690855177497,
+    0.9227657111903032,
+    120
+   ],
+   "diff_small": {
+    "arm_minus_text": -0.125,
+    "lo": -0.1960309144822503,
+    "hi": -0.068045453369386,
+    "text_only": 15,
+    "arm_only": 0,
+    "p": 6.103515625e-05,
+    "n": 120,
+    "lossless": false,
+    "loss": true
+   },
+   "acc_needle": [
+    0.9916666666666667,
+    0.9543025846256777,
+    0.9985274821693252,
+    120
+   ],
+   "diff_needle": {
+    "arm_minus_text": -0.008333333333333304,
+    "lo": -0.04569741537432226,
+    "hi": 0.023436589640209636,
+    "text_only": 1,
+    "arm_only": 0,
+    "p": 1.0,
+    "n": 120,
+    "lossless": false,
+    "loss": false
+   },
+   "acc_number": [
+    1.0,
+    0.9689797289440706,
+    1.0,
+    120
+   ],
+   "diff_number": {
+    "arm_minus_text": -0.0,
+    "lo": -0.031020271055929416,
+    "hi": 0.031020271055929416,
+    "text_only": 0,
+    "arm_only": 0,
+    "p": 1.0,
+    "n": 120,
+    "lossless": false,
+    "loss": false
+   },
+   "acc_complex": [
+    0.9916666666666667,
+    0.9543025846256777,
+    0.9985274821693252,
+    120
+   ],
+   "diff_complex": {
+    "arm_minus_text": -0.008333333333333304,
+    "lo": -0.04569741537432226,
+    "hi": 0.023436589640209636,
+    "text_only": 1,
+    "arm_only": 0,
+    "p": 1.0,
+    "n": 120,
+    "lossless": false,
+    "loss": false
+   },
+   "small_lure": 0.125,
+   "small_by_sub": {
+    "all_but": 0.0,
+    "before_after": 1.0,
+    "comparative": 1.0,
+    "from_to": 1.0,
+    "instead_of": 1.0,
+    "negated_count": 1.0,
+    "negation": 1.0,
+    "passive": 1.0
+   },
+   "by_sub": {
+    "needle": 0.9916666666666667,
+    "number": 1.0,
+    "two_hop": 1.0,
+    "three_hop": 1.0,
+    "sum": 1.0,
+    "max": 1.0,
+    "count": 0.9444444444444444,
+    "instead_of": 1.0,
+    "before_after": 1.0,
+    "all_but": 0.0,
+    "negation": 1.0,
+    "negated_count": 1.0,
+    "from_to": 1.0,
+    "comparative": 1.0,
+    "passive": 1.0
+   }
+  },
+  "ppage15": {
+   "docs": [
+    0,
+    1,
+    2
+   ],
+   "invalid": [],
+   "input_tokens": 73812.0,
+   "cost_usd": 1.6591339999999999,
+   "ratio_vs_text": 3.3729767181338417,
+   "acc_all": [
+    0.90625,
+    0.8768524150853853,
+    0.9291965067105082,
+    480
+   ],
+   "diff_all": {
+    "arm_minus_text": -0.09375,
+    "lo": -0.12314758491461475,
+    "hi": -0.06946868181964899,
+    "text_only": 45,
+    "arm_only": 0,
+    "p": 5.684341886080802e-14,
+    "n": 480,
+    "lossless": false,
+    "loss": true
+   },
+   "acc_original": [
+    0.9777777777777777,
+    0.9567686710641643,
+    0.9886977077116545,
+    360
+   ],
+   "diff_original": {
+    "arm_minus_text": -0.022222222222222254,
+    "lo": -0.0432313289358357,
+    "hi": -0.007032569750035026,
+    "text_only": 8,
+    "arm_only": 0,
+    "p": 0.0078125,
+    "n": 360,
+    "lossless": false,
+    "loss": true
+   },
+   "acc_small": [
+    0.6916666666666667,
+    0.6041683512553176,
+    0.7672738781732428,
+    120
+   ],
+   "diff_small": {
+    "arm_minus_text": -0.30833333333333335,
+    "lo": -0.39583164874468235,
+    "hi": -0.22660997285309203,
+    "text_only": 37,
+    "arm_only": 0,
+    "p": 1.4551915228366852e-11,
+    "n": 120,
+    "lossless": false,
+    "loss": true
+   },
+   "acc_needle": [
+    1.0,
+    0.9689797289440706,
+    1.0,
+    120
+   ],
+   "diff_needle": {
+    "arm_minus_text": -0.0,
+    "lo": -0.031020271055929416,
+    "hi": 0.031020271055929416,
+    "text_only": 0,
+    "arm_only": 0,
+    "p": 1.0,
+    "n": 120,
+    "lossless": false,
+    "loss": false
+   },
+   "acc_number": [
+    0.9416666666666667,
+    0.8844727405319686,
+    0.9714593533686271,
+    120
+   ],
+   "diff_number": {
+    "arm_minus_text": -0.05833333333333335,
+    "lo": -0.11552725946803144,
+    "hi": -0.01532331825190722,
+    "text_only": 7,
+    "arm_only": 0,
+    "p": 0.015625,
+    "n": 120,
+    "lossless": false,
+    "loss": true
+   },
+   "acc_complex": [
+    0.9916666666666667,
+    0.9543025846256777,
+    0.9985274821693252,
+    120
+   ],
+   "diff_complex": {
+    "arm_minus_text": -0.008333333333333304,
+    "lo": -0.04569741537432226,
+    "hi": 0.023436589640209636,
+    "text_only": 1,
+    "arm_only": 0,
+    "p": 1.0,
+    "n": 120,
+    "lossless": false,
+    "loss": false
+   },
+   "small_lure": 0.3,
+   "small_by_sub": {
+    "all_but": 0.0,
+    "before_after": 0.8666666666666667,
+    "comparative": 1.0,
+    "from_to": 1.0,
+    "instead_of": 1.0,
+    "negated_count": 1.0,
+    "negation": 0.6666666666666666,
+    "passive": 0.0
+   },
+   "by_sub": {
+    "needle": 1.0,
+    "number": 0.9416666666666667,
+    "two_hop": 1.0,
+    "three_hop": 1.0,
+    "sum": 1.0,
+    "max": 1.0,
+    "count": 0.9444444444444444,
+    "instead_of": 1.0,
+    "before_after": 0.8666666666666667,
+    "all_but": 0.0,
+    "negation": 0.6666666666666666,
+    "negated_count": 1.0,
+    "from_to": 1.0,
+    "comparative": 1.0,
+    "passive": 0.0
+   }
+  }
+ },
+ "ppage15_vs_pages": {
+  "ppage15_vs_page59_all": {
+   "diff": -0.0,
+   "lo": -0.035576216017998506,
+   "hi": 0.035576216017998506,
+   "ref_only": 37,
+   "ppage_only": 37,
+   "p": 1.0,
+   "n": 480
+  },
+  "ppage15_vs_page59_original": {
+   "diff": 0.0444444444444444,
+   "lo": 0.014945691908526602,
+   "hi": 0.07658108014786133,
+   "ref_only": 7,
+   "ppage_only": 23,
+   "p": 0.005222879350185394,
+   "n": 360
+  },
+  "ppage15_vs_page88_all": {
+   "diff": -0.08333333333333337,
+   "lo": -0.11310963746758958,
+   "hi": -0.05703530463951357,
+   "ref_only": 44,
+   "ppage_only": 4,
+   "p": 1.5138326148189662e-09,
+   "n": 480
+  },
+  "ppage15_vs_page88_original": {
+   "diff": -0.01388888888888895,
+   "lo": -0.03567815867591933,
+   "hi": 0.005505482275640253,
+   "ref_only": 8,
+   "ppage_only": 3,
+   "p": 0.2265625,
+   "n": 360
+  }
+ }
+}

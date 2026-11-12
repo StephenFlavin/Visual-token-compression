@@ -1,8 +1,110 @@
 # Test A: pruned text against page images (Claude QA)
 
-*Pre-registered 2026-11-12, written and committed before any scored call.* Design draft:
-[docs/REVIEW_2026-11-11.md](../../../docs/REVIEW_2026-11-11.md), "Test A". It extends the v2 test in
-[docs/CLAUDE_QA.md](../../../docs/CLAUDE_QA.md) (A1, A4).
+*2026-11-12.* Pre-registered (commit 4fb07a5, before any scored call; the pre-registration is unchanged below the
+results). Design draft: [docs/REVIEW_2026-11-11.md](../../../docs/REVIEW_2026-11-11.md), "Test A". It extends the v2
+test in [docs/CLAUDE_QA.md](../../../docs/CLAUDE_QA.md) (A1, A4).
+
+## Verdict
+
+**Pruning the text does not replace pages, and it does not stack with them.** At the same token count as 2.2x pages,
+pruned text is 11.7 points worse (86.0% against 97.7%), and it is worse on the original 120 questions too (−3.6
+points, where the pages lose nothing). Pruned text drawn as pages (3.4x fewer tokens) loses 9.4 points against text:
+no better than pages alone at 4.1x, and clearly worse than pages at 2.85x. The loss sits where the review expected:
+LLMLingua-2 deletes the small words ("not", "all but", "was ... by"), and Claude then answers with the other number
+in the sentence. Lookups survive pruning almost untouched.
+
+All 24 calls (3 documents x 8 arms) completed; none was refused, cut off, flagged by the engagement check, or lost
+pages. Opus 5.5, effort high, 160 questions per call, pooled over 3 documents (480 paired questions per arm; 360
+original, 120 small-word).
+
+| arm | input tokens (mean) | fewer than text | all 480 | original 120 | small-word | arm − text, all (95% CI) | original | small-word | verdict (all) |
+|---|---|---|---|---|---|---|---|---|---|
+| text | 248,971 | 1x | 100.0% | 100.0% | 100.0% | (reference) | | | |
+| pages 117.6 px²/char | 114,188 | 2.18x | 97.7% | 100.0% | 90.8% | −2.3 (−4.1 to −1.0) | 0.0 (−1.1 to +1.1) | −9.2 (−15.7 to −4.1) | loss (small-word only) |
+| **pruned text, matched to those pages** | 115,114 | 2.16x | **86.0%** | 96.4% | **55.0%** | **−14.0 (−17.3 to −11.0)** | −3.6 (−6.1 to −1.8) | −45.0 (−53.9 to −35.8) | loss |
+| lightly pruned text | 168,210 | 1.48x | 96.5% | 99.4% | 87.5% | −3.5 (−5.6 to −2.0) | −0.6 (−2.0 to +0.6) | −12.5 (−19.6 to −6.8) | loss |
+| **lightly pruned text as pages** | 73,812 | 3.37x | **90.6%** | 97.8% | 69.2% | **−9.4 (−12.3 to −6.9)** | −2.2 (−4.3 to −0.7) | −30.8 (−39.6 to −22.7) | loss |
+| pages 88.2 px²/char | 87,445 | 2.85x | 99.0% | 99.2% | 98.3% | −1.0 (−2.4 to 0.0) | −0.8 (−2.4 to +0.4) | −1.7 (−5.9 to +1.7) | not shown lossless (borderline) |
+| pages 58.8 px²/char | 60,701 | 4.10x | 90.6% | 93.3% | 82.5% | −9.4 (−12.3 to −6.9) | −6.7 (−9.7 to −4.3) | −17.5 (−25.3 to −11.0) | loss |
+| no document | 7,181 | - | 5.0% | 6.7% | 0.0% | −95.0 | | | |
+
+"Loss": the interval excludes 0 and the exact McNemar test rejects (p < 0.001 for every "loss" above). Text never got a
+question wrong, so every difference is text-only errors. Real token ratios per document: matched pruned text used
+0.4-1.2% more input tokens than the 117.6 pages (within the 5% aim); light pruning 1.48-1.49x; pruned pages
+3.34-3.40x. Tables per question type: [analysis/summary.md](analysis/summary.md).
+
+### Predictions
+
+* **P1, pruned text at 2.2x is not lossless and loses most on small-word and sentence-anchor questions: PASS.** −14.0
+  points (worst −17.3). Losses by kind: small-word −45.0, number −7.5, complex −3.3, needle 0.0.
+* **P2, pruned pages (3.4x) lossless on the original 120: FAIL.** −2.2 points (−4.3 to −0.7, McNemar p = 0.008): a
+  measurable loss, mostly number questions (−5.8; their quoted openings are no longer in the document).
+* **P3, pruned pages beat pages alone at 4.2x and are not worse than pages at 2.9x: FAIL.** Against 58.8 pages: 0.0
+  points on all 480 (−3.6 to +3.6; 37 questions each way). Against 88.2 pages: −8.3 points (−11.3 to −5.7). On the
+  original 120 alone, pruned pages do beat 58.8 pages (+4.4, +1.5 to +7.7, p = 0.005) and are close to 88.2 pages
+  (−1.4, −3.6 to +0.6), but the small-word questions cancel that.
+* **P4, full wording reads the small words and no document does not: FAIL**, on one arm. Text 100% and no document
+  0% as predicted, but the 117.6 pages scored 90.8% (below the 95% bar) because of one question type (below).
+
+### What broke
+
+* **"All but" never survived.** LLMLingua-2 dropped the phrase in every one of the 15 sentences at both rates; all
+  three pruned arms scored 0% on it, answering the lure 44 times out of 45 ("Tobin Wentis planted 837 pear trees Vardra
+  206 died" → 206, not 631).
+* **Passives flip.** Heavy pruning keeps "paid" and drops "was" and, in 12 of 15 sentences, "by": "Osric Falpel paid 531 crowns Floris
+  Tisquen Floris Tisquen 194 by Anselm Gavgav". Pruned text 2.2x and pruned pages scored 0% on passives; light pruning
+  kept "by" in all 15 and scored 100% as text, but 0% as pages.
+* **Negation:** the "not" of "did not receive" was dropped 15 times in 15 at 2.2x and 14 in 15 at 1.5x ("museum
+  Moroth 340 maps Kasimir Bryvar received 369"). Claude often still picked the number after "received" (all 15 right
+  with light pruning), but 10 of 15 were wrong at 2.2x.
+* **Answering the lure** (the number that is right under the wrong reading): 42% of small-word answers for pruned
+  text at 2.2x, 30% for pruned pages, 12% for light pruning, 0-8% for pages and text. The errors are misreadings, not
+  failed lookups.
+* **Pruning and pages compound.** The same lightly pruned document scored 87.5% on small-word questions as text and
+  69.2% as pages: the pages' own loss adds to the pruning loss.
+* **Sentence-anchor questions** (find the sentence that begins "..."): no quoted opening survived whole (on average
+  27% of its words survive at 2.2x, 48% at 1.5x), yet Claude still found 92.5% of them at 2.2x by partial match.
+* **Pages at 117.6 px²/char flipped the passive questions in two of three calls.** In documents 1 and 2 all 5 passive
+  questions were answered with the lure; in document 0 all 5 were right; text, 88.2 pages and 58.8 pages got 13-15 of
+  15 right. So the call, not the sentence, chose the reading: one decision repeated five times. This is the whole of
+  the 117.6 arm's small-word loss (11 errors, 10 of them passives), and it shows that the small-word questions are
+  correlated within a call, so their intervals are too narrow.
+* **The free survival check was not an upper bound.** It counted a question lost if any needed word was dropped; Claude
+  often recovered the meaning from what was left (light pruning: 45% of small-word questions kept every needed word,
+  87.5% were answered right; "paid 531 crowns by Floris Tisquen" without "was" was enough).
+
+Examples of pruned sentences that changed meaning (document 1; light pruning = 1.5x):
+
+| type | original | pruned, 2.2x | pruned, 1.5x | answers (right / 2.2x / 1.5x text / 1.5x pages) |
+|---|---|---|---|---|
+| all but | Tobin Wentis planted 837 pear trees at Vardra, and all but 206 of them died in the first winter. | Tobin Wentis planted 837 pear trees Vardra 206 died | Tobin Wentis planted 837 pear trees at Vardra 206 died first winter | 631 / 206 / 206 / 206 |
+| passive | At the horse fair in Keltor, Osric Falpel was paid 531 crowns by Floris Tisquen, and Floris Tisquen was paid 194 crowns by Anselm Gavgav. | Osric Falpel paid 531 crowns Floris Tisquen Floris Tisquen 194 by Anselm Gavgav | horse fair Keltor Osric Falpel paid 531 crowns by Floris Tisquen Floris Tisquen paid 194 crowns by Anselm Gavgav | 531 / 194 / 531 / 194 |
+| negated count | Of the 928 coins that Elof Ellbak catalogued at Gavvar, 244 were not silver. | 928 coins 244 not silver | Of 928 coins Ellbak catalogued at Gavvar 244 not silver | 684 / 684 / 684 / 684 |
+| negation | The museum at Moroth did not receive 340 maps from Kasimir Bryvar; it received 369. | museum Moroth 340 maps Kasimir Bryvar received 369 | museum at Moroth receive 340 maps from Kasimir Bryvar received 369. | 369 / 369 / 369 / 369 |
+
+### Cost
+
+List price, from each call's `total_cost_usd` (`spend.jsonl`): **$17.52 in all** ($0.39 for unscored calibration
+calls, $17.13 for the 24 scored calls), under the $25 cap. Per document: text $1.37, pruned text at 2.2x $0.81 (more
+than the matched pages, $0.71, because it thought longer: 8.8-15.1k output tokens against 6.8-7.1k), light pruning
+$0.99, pruned pages $0.55, 88.2 pages $0.60, 58.8 pages $0.59, no document $0.09. Pruning itself ran on the CPU (~7
+minutes per document). These calls drew on the subscription quota; they are not amounts billed.
+
+### Not run, and limits
+
+* One pruner (LLMLingua-2, off the shelf, MeetingBank-trained) with the deviations listed below; a pruner trained to
+  keep function words, or one trained on this kind of text, was not tested (the review's 3090 follow-up only makes
+  sense if one is).
+* Not run: the base-size pruner (the large one was fast enough), low effort, other models, and a rate between 1.5x
+  and 2.2x.
+* One call per arm and document; small-word questions are correlated within a call (see the passive flip), so their
+  intervals overstate the precision.
+* Small-word questions are templated (5 sentences of each of 8 types per document) and planted; real text puts less
+  weight on single function words.
+
+---
+
+# Pre-registration (committed before any scored call; unchanged)
 
 ## The question
 

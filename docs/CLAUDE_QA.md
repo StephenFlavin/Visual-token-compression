@@ -209,6 +209,21 @@ Opus 5.5 at high effort, text vs pages, same tasks:
   extra Reads and smaller Edits the hooks' notes induced). Full analysis, figures and the remaining levers:
   [SWE_IMAGES.md](SWE_IMAGES.md).
 
+### Tested: pruned text
+
+Can deleting words from the text (LLMLingua-2, off the shelf) do what the pages do, or add to them? Pre-registered,
+same 3 documents plus 40 new questions each whose answer depends on small words ("did not", "all but", "was paid
+by"), Opus 5.5 at high effort, 480 paired questions per arm ([results/claude_qa/prune](../results/claude_qa/prune/README.md)):
+
+* **No, on both counts.** Pruned text with the same tokens as 2.2x pages scored 86.0% against 97.7% for the pages and
+  100% for text, and lost 3.6 points even on the original 120 questions, where the pages lost nothing. Lightly pruned
+  text drawn as pages (3.4x fewer tokens) scored 90.6%: no better than pages alone at 4.1x, worse than at 2.85x.
+* **The pruner deletes the words that carry the meaning:** "all but" in every sentence, "was" in every passive, the
+  "not" of "did not receive" 29 times in 30. Claude then answers with the other number in the sentence (42% of small-word answers at 2.2x).
+* Pages at 117.6 px² per character also lost points on the small-word questions (90.8%), all but one of them passives
+  answered the wrong way round in two of the three calls; text and the 88.2 pages did not.
+* Cost $17.52 at list price for 24 calls and calibration.
+
 **Where not to use it**
 
 * **Counting and aggregation over the whole input** ("how many errors are in this log?"): counts are the first thing
