@@ -1,2 +1,16 @@
 {"what": "scientific-python__docstub-123 plain r1", "cost_usd": 0.2044642, "input_tokens": 124023, "output_tokens": 4451, "t": "2026-11-12T17:13:20"}
 {"what": "pyjanitor-devs__pyjanitor-1593 atlas r1", "cost_usd": 3.6096914, "input_tokens": 1851293, "output_tokens": 9526, "t": "2026-11-12T17:56:19"}
+{"what": "pypa__virtualenv-2940 atlas r1", "cost_usd": 0.3336852, "input_tokens": 314976, "output_tokens": 2926, "t": "2026-11-12T17:58:16"}
+{"what": "jsonpickle__jsonpickle-587 plain r1", "cost_usd": 0.188995, "input_tokens": 137393, "output_tokens": 4697, "t": "2026-11-12T17:58:31"}
+{"what": "nesquena__hermes-webui-330_interface plain r1", "cost_usd": 0.30143759999999997, "input_tokens": 287310, "output_tokens": 5884, "t": "2026-11-12T17:59:44"}
+{"what": "microsoft__fabric-cicd-670 plain r1", "cost_usd": 0.1644208, "input_tokens": 137582, "output_tokens": 3752, "t": "2026-11-12T18:00:41"}
+{"what": "tobymao__sqlglot-5359 plain r1", "cost_usd": 0.25373959999999995, "input_tokens": 181348, "output_tokens": 4854, "t": "2026-11-12T18:02:26"}
+{"what": "python-wheel-build__fromager-1124 atlas r1", "cost_usd": 0.8527534000000001, "input_tokens": 1222271, "output_tokens": 5868, "t": "2026-11-12T18:03:49"}
+{"what": "tox-dev__tox-3904 plain r1", "cost_usd": 0.44335420000000003, "input_tokens": 611109, "output_tokens": 5897, "t": "2026-11-12T18:07:01"}
+{"what": "pyjanitor-devs__pyjanitor-1593 plain r1", "cost_usd": 0.3951299999999999, "input_tokens": 241632, "output_tokens": 10904, "t": "2026-11-12T18:09:09"}
+{"what": "python-wheel-build__fromager-1124 plain r1", "cost_usd": 0.3520054, "input_tokens": 293209, "output_tokens": 7997, "t": "2026-11-12T18:10:41"}
+{"what": "agronholm__anyio-975 plain r1", "cost_usd": 0.3355446, "input_tokens": 190611, "output_tokens": 6954, "t": "2026-11-12T18:13:56"}
+{"what": "tobymao__sqlglot-6067 plain r1", "cost_usd": 0.151387, "input_tokens": 100593, "output_tokens": 3986, "t": "2026-11-12T18:14:32"}
+{"what": "MAIF__arta-50 atlas r1", "cost_usd": 0.1449884, "input_tokens": 112108, "output_tokens": 2656, "t": "2026-11-12T18:15:07"}
+{"what": "niconoe__pyinaturalist-643 atlas r1", "cost_usd": 0.3445692, "input_tokens": 308630, "output_tokens": 2401, "t": "2026-11-12T18:16:31"}
+{"what": "MAIF__arta-50 plain r1", "cost_usd": 0.071189, "input_tokens": 37125, "output_tokens": 1223, "t": "2026-11-12T18:16:50"}
