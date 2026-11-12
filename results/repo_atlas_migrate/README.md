@@ -4,6 +4,98 @@
 `experiments/repo_atlas_migrate.py` (tests `tests/test_repo_atlas_migrate.py`). Plan and earlier atlas results:
 [docs/REPO_ATLAS_PLAN.md](../../docs/REPO_ATLAS_PLAN.md), [results/repo_atlas/README.md](../repo_atlas/README.md).*
 
+## Results (2026-11-12)
+
+*14 C projects (2 large: 3,759-3,889 C lines; 12 small: 806-1,083) x 3 arms = 42 Claude Code runs, Opus 5.5 high
+effort. $24.01 at list price of the $30 cap ($0.02 smoke, $12.72 pilot, $11.27 smaller end). Rows `runs.jsonl`,
+tables `summary.md` (`repo_atlas_migrate.py report`). The pre-registration and its three amendments follow below.*
+
+**Verdict: the atlas neither helps nor hurts a migration, and here the pages could stand in for the source, but this
+test cannot show much.** All three arms have the same outcome on every one of the 14 projects: 12 pass every test in
+every arm, lib2bit fails its one test in every arm, and Genetic passes 22 of 23 in every arm (the 23rd runs 50,000 GA
+generations and times out everywhere). Turns, cost and time differ by noise. The `atlas` agents still opened the C
+files in all 14 runs, usually with one `cat` of everything, so the pages saved them about one tool call. `atlas_only`
+agents never saw the C files and did just as well, so the tests could not tell pages from source. Two reasons limit
+what this shows. First, the task was easy where it was cheap: the small projects were done in 4-9 turns and about a
+minute, at the ceiling. Second, the Rust interfaces and tests specify much of the behaviour, and CRUST-Bench and its C
+projects have been public since 2025. So "pages replaced the source" means only that nothing here needed the source
+beyond what the pages, the interfaces and memory gave. How sure: the arms tie exactly, so there is no sign of an
+effect, but 14 projects at the ceiling cannot rule out a few-point difference on harder migrations.
+
+| Arm | Projects | All tests pass | Mean share passing | Builds | Median turns | Mean cost | Median seconds (agent) | Median output tokens | `unsafe` |
+|---|---|---|---|---|---|---|---|---|---|
+| plain | 14 | 12 | 92.5% | 14 | 6.5 | $0.54 | 72 | 8,210 | 0 |
+| atlas | 14 | 12 | 92.5% | 14 | 6.0 | $0.57 | 63 | 7,139 | 0 |
+| atlas_only | 14 | 12 | 92.5% | 14 | 6.5 | $0.60 | 80 | 9,525 | 0 |
+
+Large end (pilot, 2 projects): each arm 1 of 2 all-pass, 97.8% of tests. Smaller end (12): each arm 11 of 12, 91.7%.
+First 10 projects (the planned size): each arm 8 of 10, 89.6%. No arm left an `unimplemented!()`.
+
+| Project | C lines | Tests | plain: passed / turns / $ / s | atlas | atlas_only |
+|---|---|---|---|---|---|
+| Genetic_neural_network_for_simple_control | 3,889 | 23 | 22 / 26 / 1.72 / 488 | 22 / 28 / 2.58 / 991 | 22 / 31 / 2.14 / 746 |
+| recordManager | 3,759 | 3 | 3 all / 17 / 1.79 / 428 | 3 all / 19 / 1.97 / 468 | 3 all / 18 / 2.51 / 636 |
+| SimpleXML | 806 | 3 | 3 all / 7 / 0.29 / 65 | 3 all / 5 / 0.22 / 51 | 3 all / 6 / 0.29 / 78 |
+| utf8 | 806 | 25 | 25 all / 6 / 0.27 / 58 | 25 all / 7 / 0.26 / 53 | 25 all / 4 / 0.22 / 49 |
+| clhash | 824 | 5 | 5 all / 6 / 0.25 / 56 | 5 all / 5 / 0.26 / 55 | 5 all / 6 / 0.40 / 103 |
+| Simple_Sparsehash | 845 | 12 | 12 all / 6 / 0.30 / 76 | 12 all / 8 / 0.28 / 75 | 12 all / 5 / 0.23 / 63 |
+| proj_2DPartInt | 855 | 6 | 6 all / 7 / 0.35 / 67 | 6 all / 6 / 0.38 / 70 | 6 all / 7 / 0.41 / 97 |
+| Phills_DHT | 875 | 29 | 29 all / 4 / 0.11 / 23 | 29 all / 5 / 0.12 / 23 | 29 all / 5 / 0.11 / 23 |
+| lib2bit | 911 | 1 | 0 / 9 / 0.56 / 143 | 0 / 6 / 0.46 / 111 | 0 / 7 / 0.58 / 164 |
+| rubiksolver | 923 | 6 | 6 all / 7 / 0.29 / 54 | 6 all / 5 / 0.26 / 48 | 6 all / 7 / 0.31 / 74 |
+| c_string | 929 | 15 | 15 all / 4 / 0.21 / 50 | 15 all / 4 / 0.19 / 39 | 15 all / 4 / 0.20 / 48 |
+| simple_lang | 944 | 3 | 3 all / 6 / 0.45 / 92 | 3 all / 5 / 0.28 / 55 | 3 all / 7 / 0.33 / 81 |
+| clog | 1,060 | 1 | 1 all / 8 / 0.59 / 154 | 1 all / 7 / 0.31 / 79 | 1 all / 4 / 0.24 / 60 |
+| roaring_bitmap | 1,083 | 15 | 15 all / 6 / 0.42 / 111 | 15 all / 9 / 0.43 / 109 | 15 all / 8 / 0.43 / 122 |
+
+**Paired tests** (14 projects): all-tests-pass is identical in every pair (McNemar: 0 discordant pairs, p = 1).
+atlas vs plain: turns 7 fewer / 6 more / 1 tie (median -0.5, sign test p = 1.0); cost 8 lower / 6 higher (median
+-$0.01, p = 0.79); agent seconds 10 faster / 3 slower (median -3.5 s, p = 0.09); output tokens median -517 (p = 0.42).
+atlas_only vs plain: turns 5 / 5 / 4 ties (p = 1.0), cost 7 / 7 (p = 1.0), seconds median +12 s (p = 0.58), output
+tokens median +1,440 (p = 0.79).
+
+**Predictions:**
+* **M1** (plain and atlas differ by at most 1 project on all-tests-pass): **PASS** (they differ by 0).
+* **M2** (atlas uses fewer turns than plain, paired median): **PASS on the letter only**: median -0.5 turns, but 7
+  fewer against 6 more (p = 1.0). There is no real difference.
+* **M3** (atlas_only at least 2 projects or 10 points worse than plain): **FAIL**: identical on every project (12 of 14,
+  92.5% both).
+* **M4** (atlas cost within 20% of plain): **PASS**: mean $0.57 vs $0.54 (+5%); paired median -$0.01.
+
+**Funnel:** 100 projects -> 100 matched to their Rust crate -> 55 with 800-4,000 C lines -> 52 with at least 3 C files
+-> 50 validate. Run: the 2 largest (pilot), then (amendment 2) the 12 smallest of the 50.
+
+**Cost:** the large projects cost $1.72-2.58 per run ($12.72 for 6 runs), the small ones $0.11-0.59 ($11.27 for 36).
+At the pilot's cost only 4 large projects would have fit, so the pre-registered switch to the smaller end applied.
+$5.99 of the cap is unspent. Amendment 3 bounded the extension at the 12 queued projects, and more projects at the
+ceiling would add nothing.
+
+**Checks and problems (all reported, none changes a score):**
+* Pages arrived on all 28 atlas runs (first-turn input 1.5 to 4.5 times the image-token formula; the turn also holds
+  the system prompt and the tool definitions).
+* No run used `unsafe`, added a dependency or changed an interface type (two flags were artifacts: a parameter rename
+  in utf8 and a trailing comma removed by rustfmt in proj_2DPartInt).
+* All three roaring_bitmap agents rewrote `src/bin/benchmark.rs` (a benchmark binary next to the tests); it was
+  restored before grading, and the 15 tests passed with the original. The Genetic `atlas` and `atlas_only` agents
+  added `opt-level = 3` to Cargo.toml to speed up the slow test; it still timed out.
+* No `atlas_only` run touched anything outside its work directory: no network, no filesystem-wide search, no other
+  run's files (audit flags read by hand: Rust `use` lines and string literals). **One contamination, between other
+  arms:** Claude Code's auto-memory (`~/.claude/projects/<cwd>/memory/`) is visible to every run. The recordManager
+  `atlas` agent read the Genetic `atlas` agent's notes there (`cat ~/.claude/projects/*/memory/...`: generic porting
+  notes about another project, such as stdin defaults and a faster build profile). From the smaller-end runs on, each
+  run's store was deleted when it ended, and the audit shows no further reads. Next time, turn auto-memory off.
+* Harness faults fixed during the test (amendments 1-3): per-binary grading (one hours-long test hid the other
+  binaries' results); tests keyed by binary; turns, time and usage summed over the result events that a background
+  task's wake-up adds. The pilot rows were re-graded from the kept crates (the old scores are in each row as
+  `grade_v1`). Every fix applies to all arms alike.
+* lib2bit's single test compares output with an `expected` file that no arm matched (the agents saw the failure and
+  stopped). It may be a defect in the benchmark's expected output; it is the same in every arm.
+* Two runs (Genetic `atlas`, `atlas_only`) were killed at the 30-minute wall clock after they had answered, because a
+  long test they had started in the background was still running. They are graded as left, and "seconds" is the agent's
+  own time.
+* Usage limit: the stop at about 10:18 UTC hit this session, not a child run (every child run ended with its own
+  result). No run was lost or retried.
+
 ## Why this test
 
 In the bug-fix pilot the atlas had nothing to add: Claude Code found the right files by searching, for a few cents.

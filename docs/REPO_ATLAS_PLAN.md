@@ -179,3 +179,29 @@ message. Graded by the tasks' own tests. $28.45 of a $35 cap. Pre-registration, 
   holding the fix. That task is left out, and later runs had no package index.
 * Next step, if wanted: the same 16 tasks with 2-3 repeats per arm (about $45 at these prices), to tell a 3-task
   effect from noise.
+
+## Migration to Rust: results (2026-11-12)
+
+*CRUST-Bench (C to safe Rust over whole repositories; hand-written Rust interfaces and tests, graded by `cargo test`).
+14 C projects (the 2 largest validated ones, 3,759-3,889 C lines, then the 12 smallest, 806-1,083) x 3 arms of Claude
+Code (Opus 5.5, high effort): `plain` (C source + Rust skeleton), `atlas` (the same plus the C source as 1-3 pages in
+the first message), `atlas_only` (Rust skeleton and pages, no C files). $24.01 of a $30 cap. Pre-registration,
+amendments, tables and problems: [results/repo_atlas_migrate/README.md](../results/repo_atlas_migrate/README.md).*
+
+* **The atlas changes nothing in a migration:** every arm has the same outcome on every project (12 of 14 pass all
+  tests; lib2bit fails its one test and Genetic 1 of 23 in every arm). Turns, cost and time differ by noise (atlas vs
+  plain: median -0.5 turns, p = 1.0; mean cost $0.57 vs $0.54). The atlas agents still opened the C files in all 14
+  runs, usually with one `cat`: at 1-4k lines, reading everything costs the plain agent about one tool call.
+* **Pages could stand in for the source here:** `atlas_only` matched `plain` on every project. That says little about
+  page fidelity, since the Rust interfaces and tests carry much of the behaviour and the benchmark has been public
+  since 2025.
+* Predictions: M1 (plain and atlas within 1 project) PASS; M2 (fewer turns with the atlas) PASS on the letter only
+  (7 fewer, 6 more); M3 (atlas_only worse) FAIL; M4 (atlas cost within 20%) PASS (+5%).
+* Large projects cost about $2 per run, small ones about $0.30, so the pre-registered switch to the smaller end
+  applied after the pilot. Fixed along the way, for all arms alike: per-binary grading (an hours-long test hid other
+  binaries), and turns summed over the extra result events that background tasks add. Claude Code's auto-memory under
+  `~/.claude/projects/` is readable by every run: one `atlas` run read another project's notes there (no `atlas_only`
+  run did). Turn it off in future agent tests.
+* A migration test that can separate the arms needs projects large enough that reading the source is real work
+  (beyond what one `cat` delivers), tests that the interfaces do not give away, and code from after the model's
+  training data.

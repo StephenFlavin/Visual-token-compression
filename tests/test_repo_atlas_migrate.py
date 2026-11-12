@@ -103,6 +103,7 @@ def test_integrity_flags_test_edits_additions_and_signature_changes():
     ok = {**pristine, "src/buf.rs": impl.encode()}
     r = M.integrity(pristine, ok)
     assert r["tests_ok"] and r["interfaces_ok"] and not r["cargo_toml_changed"]
+    assert M.integrity(pristine, {**ok, "src/bin/result.txt": b"output"})["tests_ok"]
     bad = {**ok, "src/bin/test_buf.rs": b"#[test] fn t() { assert!(true) }", "src/bin/extra.rs": b"",
            "src/buf.rs": impl.replace("length: usize", "length: u32").encode(), "Cargo.toml": b"[package]\n[deps]"}
     r = M.integrity(pristine, bad)
@@ -198,3 +199,7 @@ def test_result_summary_sums_segments_and_keeps_cumulative_cost():
     s = M.result_summary(ev)
     assert s["usage"]["output_tokens"] == 0 and s["turns"] == 31 and s["cost_usd"] == 2.14 and s["agent_s"] == 746 and s["n_results"] == 2 and s["final"] == "DONE"
     assert M.result_summary([]) == {}
+
+
+def test_pub_signatures_ignore_trailing_comma():
+    assert M.pub_signatures("pub fn w(a: i32,\n b: &str,\n) {}") == M.pub_signatures("pub fn w(a: i32, b: &str) {}")

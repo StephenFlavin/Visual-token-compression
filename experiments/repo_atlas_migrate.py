@@ -126,7 +126,8 @@ def pub_signatures(src: str) -> list[str]:
         sigs.append("fn " + sig)
     for m in re.finditer(r"\bpub(?:\([^)]*\))?\s+(struct|enum|trait|type|const|static|mod)\s+([A-Za-z_][A-Za-z0-9_]*)", s):
         sigs.append(f"{m.group(1)} {m.group(2)}")
-    return sorted(set(re.sub(r"\s*([(),:<>&\[\]])\s*", r"\1", x) for x in sigs))
+    norm = (re.sub(r"\s*([(),:<>&\[\]])\s*", r"\1", x) for x in sigs)
+    return sorted(set(re.sub(r",\)", ")", x) for x in norm))           # rustfmt drops trailing commas
 
 
 def integrity(pristine: dict[str, bytes], final: dict[str, bytes]) -> dict:
@@ -134,7 +135,8 @@ def integrity(pristine: dict[str, bytes], final: dict[str, bytes]) -> dict:
     Tests (src/bin/) must be byte-identical and no test file may be added; every public signature of every
     pristine interface file must still be present in the same file."""
     tests_changed = sorted(p for p in pristine if p.startswith("src/bin/") and final.get(p) != pristine[p])
-    tests_added = sorted(p for p in final if p.startswith("src/bin/") and p not in pristine)
+    tests_added = sorted(p for p in final if p.startswith("src/bin/") and p.endswith(".rs") and p not in pristine)
+    # (other new files under src/bin/, such as lib2bit's result.txt, are output the tests themselves write)
     missing = {}
     for p, b in pristine.items():
         if p.startswith("src/") and not p.startswith("src/bin/") and p.endswith(".rs"):
@@ -887,6 +889,14 @@ def report() -> str:
     projects = [p for p in dict.fromkeys(r[0] for r in rows) if all((p, a) in rows for a in ARMS)]
     sel = json.loads((OUT / "selection.json").read_text())
     L = [f"*{len(projects)} projects with all three arms; spend ${spent():.2f} at list price (cap ${CAP}).*", ""]
+    large = [p for p in projects if p in sel["selected"]]
+    first10 = large + [p for p in sel["smaller_end_order"] if p in projects and p not in large][:10 - len(large)]
+    for title, ps in (("Large end (pilot)", large), ("Smaller end", [p for p in projects if p not in large]),
+                      ("First 10 projects", first10)):
+        L.append(f"{title}: " + ", ".join(f"{a} {sum(rows[(p, a)]['all_pass'] for p in ps)}/{len(ps)} all pass, "
+                                          f"{100 * sum(rows[(p, a)]['share'] for p in ps) / max(1, len(ps)):.1f}% tests"
+                                          for a in ARMS) + ".")
+    L.append("")
     L += ["| Arm | Projects | All tests pass | Mean share passing | Builds | Median turns | Mean cost | Median seconds | "
           "Median output tokens | unsafe (total) |", "|---|---|---|---|---|---|---|---|---|---|"]
     for a in ARMS:
