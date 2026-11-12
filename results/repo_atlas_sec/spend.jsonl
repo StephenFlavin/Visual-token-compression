@@ -1,0 +1,12 @@
+{"what": "filegator__filegator@c6715ff7 agent_atlas", "cost_usd": 0.5310071999999999, "input_tokens": 312598, "error": null, "t": "2026-11-12T09:53:52"}
+{"what": "filegator__filegator@c6715ff7 agent", "cost_usd": 0.6274966, "input_tokens": 589387, "error": null, "t": "2026-11-12T09:54:11"}
+{"what": "filegator__filegator@c6715ff7 closed", "cost_usd": 0.029588000000000003, "input_tokens": 2186, "error": null, "t": "2026-11-12T09:54:22"}
+{"what": "filegator__filegator@c6715ff7 atlas", "cost_usd": 0.231093, "input_tokens": 29967, "error": null, "t": "2026-11-12T09:54:35"}
+{"what": "zeroturnaround__zt-zip@0a9d0e1f agent", "cost_usd": 0.1091008, "input_tokens": 50430, "error": null, "t": "2026-11-12T09:54:55"}
+{"what": "zeroturnaround__zt-zip@0a9d0e1f agent_atlas", "cost_usd": 0.27281880000000003, "input_tokens": 131968, "error": null, "t": "2026-11-12T09:54:56"}
+{"what": "zeroturnaround__zt-zip@0a9d0e1f closed", "cost_usd": 0.035118, "input_tokens": 2440, "error": null, "t": "2026-11-12T09:55:08"}
+{"what": "zeroturnaround__zt-zip@0a9d0e1f atlas", "cost_usd": 0.21942799999999998, "input_tokens": 37278, "error": null, "t": "2026-11-12T09:55:13"}
+{"what": "nuxt__content@d8fed0c3 agent", "cost_usd": 0.18109739999999996, "input_tokens": 86639, "error": null, "t": "2026-11-12T09:55:53"}
+{"what": "nuxt__content@d8fed0c3 agent_atlas", "cost_usd": 0.3545456, "input_tokens": 200060, "error": null, "t": "2026-11-12T09:55:53"}
+{"what": "nuxt__content@d8fed0c3 closed", "cost_usd": 0.026588, "input_tokens": 2450, "error": null, "t": "2026-11-12T09:56:02"}
+{"what": "nuxt__content@d8fed0c3 atlas", "cost_usd": 0.245693, "input_tokens": 39499, "error": null, "t": "2026-11-12T09:56:18"}

@@ -180,6 +180,14 @@ gold functions are approximate; class families are coarse.
   ~$1-2 (40 turns at most), `agent_atlas` ~$1.5-3 (the pages are re-read from the cache each turn). About $3-5 per
   task, so the cap most likely covers **5 to 8 tasks, not 14**. That makes the McNemar tests weaker still.
 
+## Amendment 1 (2026-11-12, after the pilot; nothing above changed)
+
+Pilot (tasks 1-3, 12 rows): $2.86 at list price, about $1 per task (closed $0.03, atlas $0.22-0.25, agent
+$0.11-0.63, agent_atlas $0.27-0.53). Far below the $3-5 estimate. Re-estimate for tasks 4-14 (atlases 35k-119k image
+tokens): ~$1-2 per task, ~$13-20 in all, so all 14 tasks should fit under the $25 cap; `task_bound` still guards
+each start. All atlas pages arrived (first-turn input 104-122% of the formula). No tool call left the export; no
+permission denials. No refusals.
+
 ## Results
 
 *(added after the runs)*
