@@ -5,3 +5,11 @@
 {"what": "Genetic_neural_network_for_simple_control atlas", "cost_usd": 2.576817600000001, "estimated": false}
 {"what": "recordManager atlas_only", "cost_usd": 2.5143202, "estimated": false}
 {"what": "Genetic_neural_network_for_simple_control atlas_only", "cost_usd": 2.1407912, "estimated": false}
+{"what": "SimpleXML atlas", "cost_usd": 0.2159834, "estimated": false}
+{"what": "SimpleXML plain", "cost_usd": 0.289908, "estimated": false}
+{"what": "utf8 plain", "cost_usd": 0.27251279999999994, "estimated": false}
+{"what": "SimpleXML atlas_only", "cost_usd": 0.2895992, "estimated": false}
+{"what": "utf8 atlas", "cost_usd": 0.264652, "estimated": false}
+{"what": "clhash plain", "cost_usd": 0.2467644, "estimated": false}
+{"what": "utf8 atlas_only", "cost_usd": 0.220175, "estimated": false}
+{"what": "clhash atlas", "cost_usd": 0.2604948, "estimated": false}

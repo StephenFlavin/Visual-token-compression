@@ -87,8 +87,11 @@ pub const MAX: usize = 4;
 
 def test_pub_signatures_normalise_whitespace():
     sig = M.pub_signatures(IFACE)
-    assert "fn push(&mut self,src:&[u8],length:usize)" in sig
-    assert "fn new(size:usize)->Self" in sig
+    assert "fn push(&mut self,&[u8],usize)" in sig
+    assert "fn new(usize)->Self" in sig
+    # renaming a parameter (e.g. dropping a leading underscore) does not change the interface; a type change does
+    assert M.pub_signatures("pub fn f(_a: &mut X) {}") == M.pub_signatures("pub fn f(a: &mut X) {}")
+    assert M.pub_signatures("pub fn f(a: u32) {}") != M.pub_signatures("pub fn f(a: u64) {}")
     assert "struct Buf" in sig and "const MAX" in sig
     assert not any("private" in s for s in sig)
 

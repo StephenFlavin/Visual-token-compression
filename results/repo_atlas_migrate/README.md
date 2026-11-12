@@ -207,3 +207,14 @@ the last result (Genetic `atlas_only` showed 2 turns instead of 31). Now turns, 
 all result events, and the answer is the first result's text. "Seconds" in the tables is the agent's own time (sum of
 `duration_ms`): the wall clock also counts a background test left running until the 30-minute kill (Genetic
 `atlas` and `atlas_only`: 1800 s wall vs 991 s and 746 s agent time). Wall seconds stay in the rows (`wall_s`).
+
+## Amendment 3 (2026-11-12, 13:45 UTC, after 4 smaller-end runs, before any project past the 10th)
+
+* The smaller-end projects cost about $0.25 per run (5-7 turns, about a minute), so the budget no longer binds at 10
+  projects. The runner was started with the first 12 projects of the smaller-end order; it runs them all, each in all
+  three arms, as long as the next one fits under the cap. That makes up to 14 projects instead of 10. This does not
+  favour any arm (every project is paired), and the cap rule is unchanged. Results are also given for the first 10
+  projects (the 2 pilot projects and the first 8 of the smaller end) to show the extension changes nothing.
+* The interface check counted a parameter rename as a signature change (utf8: `_owned_str` -> `owned_str`).
+  Parameter names are not part of a Rust function's type, so the check now compares parameter types only. Integrity is
+  recomputed from the kept crates when the report is written.

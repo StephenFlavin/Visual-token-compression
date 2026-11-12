@@ -121,7 +121,9 @@ def pub_signatures(src: str) -> list[str]:
     s = strip_comments(src)
     sigs = []
     for m in re.finditer(r"\bpub(?:\([^)]*\))?\s+(?:const\s+|async\s+)?fn\s+[^{;]*", s):
-        sigs.append("fn " + " ".join(m.group(0).split()).split(" fn ", 1)[-1].rstrip())
+        sig = " ".join(m.group(0).split()).split(" fn ", 1)[-1].rstrip()
+        sig = re.sub(r"\b(?:mut\s+)?[A-Za-z_]\w*\s*:(?!:)", "", sig)     # parameter names are not part of the type
+        sigs.append("fn " + sig)
     for m in re.finditer(r"\bpub(?:\([^)]*\))?\s+(struct|enum|trait|type|const|static|mod)\s+([A-Za-z_][A-Za-z0-9_]*)", s):
         sigs.append(f"{m.group(1)} {m.group(2)}")
     return sorted(set(re.sub(r"\s*([(),:<>&\[\]])\s*", r"\1", x) for x in sigs))
@@ -878,6 +880,10 @@ def run(projects: list[str] | None, workers: int) -> None:
 
 def report() -> str:
     rows = {(r["project"], r["arm"]): r for r in jl(OUT / "runs.jsonl")}
+    for (p, a), r in rows.items():                     # integrity from the kept crates, with the current signature rule
+        fin = WORK / "finals" / p / a
+        if fin.exists():
+            r["integrity"] = integrity(read_tree(WORK / "pristine" / p), read_tree(fin))
     projects = [p for p in dict.fromkeys(r[0] for r in rows) if all((p, a) in rows for a in ARMS)]
     sel = json.loads((OUT / "selection.json").read_text())
     L = [f"*{len(projects)} projects with all three arms; spend ${spent():.2f} at list price (cap ${CAP}).*", ""]
