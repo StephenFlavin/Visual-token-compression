@@ -17,3 +17,13 @@
 {"what": "stanfordnlp__dspy-8607 plain r1", "cost_usd": 0.0678743, "input_tokens": 101829, "output_tokens": 2915, "t": "2026-11-12T20:14:55"}
 {"what": "tobymao__sqlglot-6067 atlas r1", "cost_usd": 0.4662511, "input_tokens": 774705, "output_tokens": 2130, "t": "2026-11-12T20:15:08"}
 {"what": "stanfordnlp__dspy-8607 atlas r1", "cost_usd": 0.30813360000000006, "input_tokens": 643946, "output_tokens": 2675, "t": "2026-11-12T20:17:45"}
+{"what": "pyjanitor-devs__pyjanitor-1593 atlas r1", "cost_usd": 0.5791352999999999, "input_tokens": 1506557, "output_tokens": 6296, "t": "2026-11-12T20:18:47"}
+{"what": "MAIF__arta-50 atlas r1", "cost_usd": 0.041904, "input_tokens": 59668, "output_tokens": 705, "t": "2026-11-12T20:19:25"}
+{"what": "microsoft__fabric-cicd-670 atlas r1", "cost_usd": 0.181639, "input_tokens": 473240, "output_tokens": 1346, "t": "2026-11-12T20:19:57"}
+{"what": "jsonpickle__jsonpickle-588 plain r1", "cost_usd": 0.07880939999999999, "input_tokens": 128640, "output_tokens": 3078, "t": "2026-11-12T20:21:10"}
+{"what": "python-wheel-build__fromager-1124 atlas r1", "cost_usd": 0.32545060000000003, "input_tokens": 597018, "output_tokens": 2665, "t": "2026-11-12T20:21:12"}
+{"what": "MAIF__arta-50 plain r1", "cost_usd": 0.0236993, "input_tokens": 30069, "output_tokens": 825, "t": "2026-11-12T20:21:38"}
+{"what": "niconoe__pyinaturalist-643 plain r1", "cost_usd": 0.027118, "input_tokens": 23158, "output_tokens": 1353, "t": "2026-11-12T20:21:59"}
+{"what": "nesquena__hermes-webui-330_interface atlas r1", "cost_usd": 0.3763445999999999, "input_tokens": 937188, "output_tokens": 3285, "t": "2026-11-12T20:22:31"}
+{"what": "nesquena__hermes-webui-330_interface plain r1", "cost_usd": 0.1003382, "input_tokens": 163116, "output_tokens": 3089, "t": "2026-11-12T20:22:48"}
+{"what": "jsonpickle__jsonpickle-587 plain r1", "cost_usd": 0.048492900000000005, "input_tokens": 67759, "output_tokens": 2172, "t": "2026-11-12T20:23:23"}
