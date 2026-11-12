@@ -192,6 +192,15 @@ could take the total (`spend.jsonl`, harness checks included) over $22.
 * **Reservation floor.** Before the agent arm started, its per-run cost reservation was lowered from $0.50 to $0.25
   (measured runs $0.03-0.08) so that in-flight bookings would not skip the tail of the subset under the cap.
 
+* **2026-11-12, ~09:45 UTC, after all pre-registered arms were judged (exploratory, not a prediction).** The agent
+  arm scored ~3.5 points above every other arm, but it differs from them in two ways besides searching the code: it
+  answers one question per call (arms 1-4 answer 8 per call) and its answers are longer (108 words on average vs
+  85-93; the judge rewards completeness). To see how much of the gap the call format alone explains, one control is
+  added with the money left (~$2.30 under the cap): `closed1`, the closed-book arm asked **one question per call**
+  (same system prompt, context message and instruction), on the first 36 questions of `agent_subset` (12 per
+  repository, 3 per repository and category), judged the same way. Estimated ~$1.1. It is reported as exploratory
+  and changes no verdict of S1-S5.
+
 ## Results
 
 *(after the calls)*

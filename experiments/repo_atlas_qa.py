@@ -49,7 +49,8 @@ TEXT_MAX_TOKENS = 130_000
 AGENT_TURNS = 40
 PAGE_ARRIVAL = 0.97
 WORDS = 120
-ARMS = ("closed", "map", "atlas", "text", "agent")
+CLOSED1_N = 36          # exploratory control (amendment 2): closed-book, one question per call, agent_subset(36)
+ARMS = ("closed", "map", "atlas", "text", "agent", "closed1")   # closed1: exploratory, one question per call
 CATS = ("what", "why", "where", "how")
 PRICE_IN, PRICE_WRITE, PRICE_READ, PRICE_OUT = 4e-6, 5e-6, 0.2e-6, 20e-6
 
@@ -567,8 +568,10 @@ def batch_jobs(work: Path, arms: list[str]) -> list[dict]:
         for arm in arms:
             if arm == "text" and name not in sel["text_repos"]:
                 continue
-            ctx = (work / "ctx" / name / f"{arm}.txt").read_text()
-            for b, qids in enumerate(sel["batches"][name]):
+            ctx = (work / "ctx" / name / f"{arm.rstrip('1')}.txt").read_text()
+            groups = sel["batches"][name] if arm != "closed1" else \
+                [[k.split("/")[1]] for k in agent_subset(CLOSED1_N) if k.startswith(name + "/")]
+            for b, qids in enumerate(groups):
                 keys = [f"{name}/{q}" for q in qids]
                 if all((k, arm) in done for k in keys):
                     continue
@@ -862,7 +865,7 @@ def analyse() -> str:
         return len(d), bootstrap_ci(d)
 
     pairs = [("atlas", "map"), ("atlas", "agent"), ("atlas", "text"), ("atlas", "closed"), ("map", "closed"),
-             ("text", "closed"), ("agent", "closed")]
+             ("text", "closed"), ("agent", "closed"), ("agent", "closed1"), ("closed1", "closed"), ("atlas", "closed1")]
     L += ["### Paired differences (same questions; 95% bootstrap intervals)", "",
           "| difference | questions | judge score | entity recall |", "|---|---|---|---|"]
     diffs = {}
