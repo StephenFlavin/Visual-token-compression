@@ -146,6 +146,22 @@ one cache write (~$0.3 for 60k) plus a cache read per turn (~$0.4 over 30 turns)
 before each task ($4 until measured, then 1.5x the dearest task so far) and does not start a task that could pass the
 cap; a started task is finished in all three arms. At most 2 agent runs at once (shared machine).
 
+## Amendment 1 (2026-11-12, after the pilot's 4 tasks, before task 5)
+
+* **Leak found in the pilot.** On celestoai__smolvm-172 the `map` arm ran `pip download smolvm==0.0.36` (a PyPI
+  release made after the base commit), unzipped it, read the released `smolvm/host/setup.py` and
+  `smolvm/cli/main.py` (which already hold the fix's `for_bake`, `skip_kvm_check` and `firecracker_version`), then
+  wrote its change. That run resolved the task; plain and atlas did not.
+* **Change, for every arm from task 5 on:** the agent's environment has no package index (`PIP_NO_INDEX=1`,
+  `UV_OFFLINE=1`, index URLs pointed at a closed local port). The agent can still reach the web through other tools,
+  so every run's Bash commands are still scanned (now also for any `pip download` / `pip index` and `pypi.org`), and
+  each hit is read by hand.
+* **Analysis rule:** a task where any arm read a release or an upstream copy of the fix is left out of the paired
+  comparisons and listed (`contaminated.json`). smolvm-172 is left out on this rule. The other pilot runs' flagged
+  commands were read and are harmless: the run's own venv path, `git log` of the one-commit checkout, and
+  listing the run's own installed package.
+* Two concurrent agent runs, not three (the coordinator's limit; the machine is shared).
+
 ## Results
 
 *(added after the runs)*

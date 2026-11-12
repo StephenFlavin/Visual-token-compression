@@ -35,3 +35,15 @@
 {"what": "pypa__virtualenv-2940 screen", "cost_usd": 0.034318, "input_tokens": 3800, "output_tokens": 766}
 {"what": "MAIF__arta-50 screen", "cost_usd": 0.009978, "input_tokens": 1380, "output_tokens": 154}
 {"what": "tobymao__sqlglot-5359 screen", "cost_usd": 0.018848, "input_tokens": 2290, "output_tokens": 370}
+{"what": "python-wheel-build__fromager-1124 plain", "cost_usd": 0.2700764, "input_tokens": 222976, "output_tokens": 5267}
+{"what": "python-wheel-build__fromager-1124 map", "cost_usd": 0.4814531999999999, "input_tokens": 547982, "output_tokens": 6487}
+{"what": "python-wheel-build__fromager-1124 atlas", "cost_usd": 0.8290221999999998, "input_tokens": 1117925, "output_tokens": 5522}
+{"what": "celestoai__smolvm-172 map", "cost_usd": 0.9575205999999998, "input_tokens": 1293971, "output_tokens": 16298}
+{"what": "celestoai__smolvm-172 plain", "cost_usd": 0.7678282, "input_tokens": 670555, "output_tokens": 19089}
+{"what": "celestoai__smolvm-172 atlas", "cost_usd": 1.6257268, "input_tokens": 2992896, "output_tokens": 17248}
+{"what": "nesquena__hermes-webui-330_interface map", "cost_usd": 0.4368438, "input_tokens": 479327, "output_tokens": 7494}
+{"what": "nesquena__hermes-webui-330_interface plain", "cost_usd": 0.5228104, "input_tokens": 450598, "output_tokens": 11066}
+{"what": "nesquena__hermes-webui-330_interface atlas", "cost_usd": 0.8301618, "input_tokens": 972987, "output_tokens": 4824}
+{"what": "tox-dev__tox-3904 map", "cost_usd": 0.7604285999999999, "input_tokens": 1095035, "output_tokens": 7356}
+{"what": "tox-dev__tox-3904 plain", "cost_usd": 0.5024842, "input_tokens": 658559, "output_tokens": 7089}
+{"what": "tox-dev__tox-3904 atlas", "cost_usd": 1.0594500000000002, "input_tokens": 1756066, "output_tokens": 8322}

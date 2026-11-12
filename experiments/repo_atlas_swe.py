@@ -164,9 +164,10 @@ def exclude_files(patch: str, drop: set[str]) -> str:
     return "".join(keep)
 
 
-LEAK = re.compile(r"(pip3?\s+(download|install)\s+(?!-e\b|-r\b|--editable)[^\n]*\b{pkg}\b|git\s+(log|fetch|pull|clone)|"
-                  r"curl\s|wget\s|github\.com|huggingface|parquet|SWE-?rebench|site-packages/{pkg}|ra_swe|scratchpad|"
-                  r"transcripts)", re.I)
+LEAK = re.compile(r"(pip3?\s+(download|index)\b|pypi\.org|pip3?\s+(download|install)\s+(?!-e\b|-r\b|--editable)[^\n]*\b{pkg}\b|git\s+(fetch|pull|clone|remote)|"
+                  r"curl\s|wget\s|github\.com|huggingface|parquet|SWE-?rebench|site-packages/{pkg}|"
+                  r"ra_swe/(ds|transcripts|ctx|git|co|validate)\b|ra_swe/?\s|ra_swe/runs/?\s)", re.I)
+# (the run's own venv path contains ra_swe/runs/<task>/<hash>/venv; a one-commit repository's git log is harmless)
 
 
 def leak_hits(commands: list[str], pkg: str) -> list[str]:
@@ -516,6 +517,23 @@ def contexts(work: Path, t: dict) -> dict:
     return meta
 
 
+NO_INDEX = {"PIP_NO_INDEX": "1", "PIP_INDEX_URL": "http://127.0.0.1:9/simple", "UV_OFFLINE": "1",
+            "UV_INDEX_URL": "http://127.0.0.1:9/simple", "UV_DEFAULT_INDEX": "http://127.0.0.1:9/simple"}
+
+
+def agent_env(env: dict) -> dict:
+    """Amendment 1 (after the pilot): no package index for the agent, so it cannot fetch a release of the package
+    that already holds the fix (the pilot's smolvm-172 map run did). Same for every arm."""
+    return {**env, **NO_INDEX}
+
+
+def contaminated() -> dict[str, str]:
+    """Tasks left out of the paired comparisons: an arm read a release or upstream copy of the fix (confirmed by
+    reading the transcript; results/repo_atlas_swe/contaminated.json)."""
+    p = OUT / "contaminated.json"
+    return json.loads(p.read_text()) if p.exists() else {}
+
+
 def run_one(work: Path, t: dict, arm: str, broken: set) -> dict:
     from vbpe import claude_eval as CE
     meta = contexts(work, t)
@@ -539,7 +557,8 @@ def run_one(work: Path, t: dict, arm: str, broken: set) -> dict:
            "--no-session-persistence", "--max-turns", str(MAX_TURNS)]
     t0 = time.time()
     try:
-        p = subprocess.run(cmd, input=stdin, capture_output=True, env=CE.build_env(), cwd=repo, timeout=AGENT_TIMEOUT)
+        p = subprocess.run(cmd, input=stdin, capture_output=True, env=agent_env(CE.build_env()), cwd=repo,
+                           timeout=AGENT_TIMEOUT)
         stdout, rc = p.stdout.decode("utf-8", "replace"), p.returncode
     except subprocess.TimeoutExpired as e:
         stdout, rc = (e.stdout or b"").decode("utf-8", "replace"), -9
@@ -593,6 +612,10 @@ def run_one(work: Path, t: dict, arm: str, broken: set) -> dict:
             "final": (res.get("result") or "")[-300:]}
 
 
+USAGE_LIMIT = re.compile(r"hit your .*limit|usage limit|rate limit|resets \d", re.I)
+STOP: dict = {}
+
+
 def run(work: Path, cap: float, ids: list[str] | None, max_tasks: int | None, workers: int) -> None:
     tm = task_map(work)
     vrows = {v["id"]: v for v in jl(OUT / "validate.jsonl") if v.get("valid")}
@@ -608,6 +631,9 @@ def run(work: Path, cap: float, ids: list[str] | None, max_tasks: int | None, wo
         todo = [a for a in ARMS if (tid, a) not in done]
         if not todo:
             continue
+        if STOP.get("why"):
+            print(f"[run] STOP: usage limit ({STOP['why'][-200:]})", flush=True)
+            break
         started = any((tid, a) in done for a in ARMS)
         if not started and spent() + bound[0] > cap:
             print(f"[run] STOP before {tid}: ${spent():.2f} spent + bound ${bound[0]:.2f} > cap ${cap}", flush=True)
@@ -625,6 +651,10 @@ def run(work: Path, cap: float, ids: list[str] | None, max_tasks: int | None, wo
                     continue
                 append("spend.jsonl", {"what": f"{tid} {arm}", "cost_usd": row["cost_usd"],
                                        "input_tokens": row["input_tokens"], "output_tokens": row["output_tokens"]})
+                if USAGE_LIMIT.search(row["final"] or "") and (row["is_error"] or row["rc"]):
+                    STOP["why"] = row["final"]
+                    print(f"[run] {tid} {arm}: USAGE LIMIT, not recorded: {row['final'][-200:]}", flush=True)
+                    return None
                 if row["subtype"] is None and row["cost_usd"] == 0 and attempt == 0:
                     print(f"[run] {tid} {arm}: no result event (rc={row['rc']}); retry", flush=True)
                     continue
@@ -654,8 +684,11 @@ def _per_task_costs() -> list[float]:
 def analyse() -> str:
     rows = jl(OUT / "runs.jsonl")
     by = {(r["id"], r["arm"]): r for r in rows}
-    ids = [i for i in dict.fromkeys(r["id"] for r in rows) if all((i, a) in by for a in ARMS)]
-    L = [f"Complete tasks (all three arms): {len(ids)}", "",
+    full = [i for i in dict.fromkeys(r["id"] for r in rows) if all((i, a) in by for a in ARMS)]
+    bad = contaminated()
+    ids = [i for i in full if i not in bad]
+    L = [f"Complete tasks (all three arms): {len(full)}; left out as contaminated: {len(full) - len(ids)} "
+         f"({', '.join(f'{k}: {v}' for k, v in bad.items() if k in full) or 'none'}); compared: {len(ids)}", "",
          "| arm | tasks | resolved | mean share of gold files touched | median turns | mean cost | median cost | "
          "median seconds | median input tokens | median output tokens | pages dropped |",
          "|---|---|---|---|---|---|---|---|---|---|---|"]
@@ -670,12 +703,13 @@ def analyse() -> str:
                  f"{med('input_tokens'):,.0f} | {med('output_tokens'):,.0f} | {sum(not r['pages_arrived'] for r in rs)} |")
     L += ["", "| task | gold files | " + " | ".join(f"{a}: resolved / gold touched / turns / cost" for a in ARMS) + " |",
           "|---|---|" + "---|" * len(ARMS)]
-    for i in ids:
+    for i in full:
         cells = []
         for a in ARMS:
             r = by[(i, a)]
             cells.append(f"{'yes' if r['resolved'] else 'no'} / {r['gold_touched']:.2f} / {r['turns']} / ${r['cost_usd']:.2f}")
-        L.append(f"| {i} | {len(by[(i, ARMS[0])]['gold'])} | " + " | ".join(cells) + " |")
+        L.append(f"| {i}{' (contaminated, left out)' if i in bad else ''} | {len(by[(i, ARMS[0])]['gold'])} | "
+                 + " | ".join(cells) + " |")
     if ids:
         g = lambda a, k: [by[(i, a)][k] for i in ids]  # noqa: E731
         L += ["", "Paired tests (exact):"]
@@ -693,6 +727,8 @@ def analyse() -> str:
             L.append(f"* gold files touched, {a} vs {b}: {a} higher on {sum(x > y for x, y in zip(ga, gb))}, lower on "
                      f"{sum(x < y for x, y in zip(ga, gb))}, equal on {sum(x == y for x, y in zip(ga, gb))}; means "
                      f"{statistics.mean(ga):.2f} vs {statistics.mean(gb):.2f}")
+        for r in rows:                                   # re-apply the current pattern to stored commands
+            r["leak_suspects"] = leak_hits(r.get("leak_suspects") or [], r["id"].split("__")[1].split("-")[0])
         leaks = [(r["id"], r["arm"], r["leak_suspects"]) for r in rows if r.get("leak_suspects")]
         L.append(f"* leak suspects (commands reaching the web, git history, a release of the package): {len(leaks)} runs")
         for x in leaks:
@@ -730,7 +766,7 @@ def main(argv=None) -> int:
     elif a.cmd == "select":
         select(a.work, a.workers, a.min_gold)
     elif a.cmd == "run":
-        run(a.work, a.cap, a.ids, a.max_tasks, min(a.workers, 3))
+        run(a.work, a.cap, a.ids, a.max_tasks, min(a.workers, 2))
     else:
         txt = analyse()
         (OUT / "summary.md").write_text(txt + "\n")

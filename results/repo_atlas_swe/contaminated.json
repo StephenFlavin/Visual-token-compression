@@ -1,0 +1,1 @@
+{"celestoai__smolvm-172": "map arm ran `pip download smolvm==0.0.36` (a release after the base commit), unzipped it and read the fixed setup.py and cli/main.py before writing its change (pilot, before amendment 1)"}

@@ -94,6 +94,7 @@ def test_exact_tests():
 
 def test_leak_hits():
     cmds = ["/v/bin/python -m pytest tests", "pip install -U schemathesis", "pip install -e .", "git log --oneline",
-            "curl https://example.com", "cat ../../ra_swe/ds/x"]
+            "curl https://example.com", "cat ../../ra_swe/ds/x", "git fetch origin",
+            "V=/s/ra_swe/runs/t/68c46e/venv/bin/python; $V -m pytest tests"]
     hits = S.leak_hits(cmds, "schemathesis")
-    assert len(hits) == 4 and "pip install -e ." not in hits
+    assert hits == ["pip install -U schemathesis", "curl https://example.com", "cat ../../ra_swe/ds/x", "git fetch origin"]
