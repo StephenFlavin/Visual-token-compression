@@ -9,6 +9,9 @@ overview is the top-level [README.md](../README.md); how to run things and the g
   compression.
 * [LOCAL_QWEN.md](LOCAL_QWEN.md): the last planned run, pre-registered: page images and generation speed on a local
   Qwen3.8-27B (RTX 3090), no training; runbook and the 3090 prompt.
+* [REPO_ATLAS_PLAN.md](REPO_ATLAS_PLAN.md): draft for approval: a whole repository as page images read up front
+  (`experiments/repo_atlas.py`, built), which repositories fit, and a two-stage test against a repo map and a
+  searching agent.
 * [TEXT_SLOTS.md](TEXT_SLOTS.md): Test B (built, not scheduled as of 2026-11-12), pre-registered: slots made from text tokens against vision tokens made from
   a page, same reader and budget, on the 3090. Test A (prune the text, then render it, on Claude):
   [results/claude_qa/prune](../results/claude_qa/prune/README.md).
