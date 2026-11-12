@@ -1,0 +1,1423 @@
+{
+ "project": "gitleaks",
+ "rule": "repo_atlas.py build with default settings (88.2 px2/char, tests/testdata/vendored dirs excluded, files > 200 kB skipped, line number on every 10th line)",
+ "files": 199,
+ "pages": 18,
+ "image_tokens": 81834,
+ "image_tokens_formula": 81834,
+ "text_tokens_est": 330988,
+ "uncovered": [
+  ".gitignore",
+  "cmd/generate/config/rules/config.tmpl",
+  "go.mod",
+  "go.sum",
+  "report_templates/basic.tmpl",
+  "report_templates/leet.tmpl",
+  "report_templates/myspace.tmpl",
+  "report_templates/w98.tmpl",
+  "report_templates/wxp.tmpl"
+ ],
+ "fits": true,
+ "index": [
+  {
+   "path": ".gitleaks.toml",
+   "pages": [
+    1,
+    1
+   ]
+  },
+  {
+   "path": ".gitleaksignore",
+   "pages": [
+    1,
+    2
+   ]
+  },
+  {
+   "path": ".golangci.yaml",
+   "pages": [
+    2,
+    2
+   ]
+  },
+  {
+   "path": ".goreleaser.yml",
+   "pages": [
+    2,
+    2
+   ]
+  },
+  {
+   "path": ".pre-commit-hooks.yaml",
+   "pages": [
+    2,
+    2
+   ]
+  },
+  {
+   "path": "CONTRIBUTING.md",
+   "pages": [
+    2,
+    2
+   ]
+  },
+  {
+   "path": "Dockerfile",
+   "pages": [
+    2,
+    2
+   ]
+  },
+  {
+   "path": "Makefile",
+   "pages": [
+    2,
+    2
+   ]
+  },
+  {
+   "path": "README.md",
+   "pages": [
+    2,
+    3
+   ]
+  },
+  {
+   "path": "\u2502a\u2502  \u250c\u2500\u2510  \u2514\u2500\u2518        \u2502 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 \u00a7 \u2502  \u2502\u2514\u2500\u2518 \u2502\u2502a\u2502",
+   "pages": [
+    3,
+    3
+   ]
+  },
+  {
+   "path": "USERS.md",
+   "pages": [
+    3,
+    3
+   ]
+  },
+  {
+   "path": "cmd/detect.go",
+   "pages": [
+    3,
+    3
+   ]
+  },
+  {
+   "path": "cmd/diagnostics.go",
+   "pages": [
+    3,
+    3
+   ]
+  },
+  {
+   "path": "cmd/directory.go",
+   "pages": [
+    3,
+    3
+   ]
+  },
+  {
+   "path": "cmd/generate/config/base/config.go",
+   "pages": [
+    3,
+    3
+   ]
+  },
+  {
+   "path": "cmd/generate/config/main.go",
+   "pages": [
+    3,
+    3
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/1password.go",
+   "pages": [
+    3,
+    4
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/adafruit.go",
+   "pages": [
+    4,
+    4
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/adobe.go",
+   "pages": [
+    4,
+    4
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/age.go",
+   "pages": [
+    4,
+    4
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/airtable.go",
+   "pages": [
+    4,
+    4
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/algolia.go",
+   "pages": [
+    4,
+    4
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/alibaba.go",
+   "pages": [
+    4,
+    4
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/anthropic.go",
+   "pages": [
+    4,
+    4
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/artifactory.go",
+   "pages": [
+    4,
+    4
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/asana.go",
+   "pages": [
+    4,
+    4
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/atlassian.go",
+   "pages": [
+    4,
+    4
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/authress.go",
+   "pages": [
+    4,
+    4
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/aws.go",
+   "pages": [
+    4,
+    4
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/azure.go",
+   "pages": [
+    4,
+    4
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/beamer.go",
+   "pages": [
+    4,
+    4
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/bitbucket.go",
+   "pages": [
+    4,
+    4
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/bittrex.go",
+   "pages": [
+    4,
+    4
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/clickhouse.go",
+   "pages": [
+    4,
+    4
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/clojars.go",
+   "pages": [
+    4,
+    4
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/cloudflare.go",
+   "pages": [
+    4,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/codecov.go",
+   "pages": [
+    5,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/cohere.go",
+   "pages": [
+    5,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/coinbase.go",
+   "pages": [
+    5,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/confluent.go",
+   "pages": [
+    5,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/contentful.go",
+   "pages": [
+    5,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/curl.go",
+   "pages": [
+    5,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/databricks.go",
+   "pages": [
+    5,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/datadog.go",
+   "pages": [
+    5,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/definednetworking.go",
+   "pages": [
+    5,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/digitalocean.go",
+   "pages": [
+    5,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/discord.go",
+   "pages": [
+    5,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/doppler.go",
+   "pages": [
+    5,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/droneci.go",
+   "pages": [
+    5,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/dropbox.go",
+   "pages": [
+    5,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/duffel.go",
+   "pages": [
+    5,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/dynatrace.go",
+   "pages": [
+    5,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/easypost.go",
+   "pages": [
+    5,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/etsy.go",
+   "pages": [
+    5,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/facebook.go",
+   "pages": [
+    5,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/fastly.go",
+   "pages": [
+    5,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/finicity.go",
+   "pages": [
+    5,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/finnhub.go",
+   "pages": [
+    5,
+    5
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/flickr.go",
+   "pages": [
+    5,
+    6
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/flutterwave.go",
+   "pages": [
+    6,
+    6
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/flyio.go",
+   "pages": [
+    6,
+    6
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/frameio.go",
+   "pages": [
+    6,
+    6
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/freemius.go",
+   "pages": [
+    6,
+    6
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/freshbooks.go",
+   "pages": [
+    6,
+    6
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/gcp.go",
+   "pages": [
+    6,
+    6
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/generic.go",
+   "pages": [
+    6,
+    6
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/github.go",
+   "pages": [
+    6,
+    6
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/gitlab.go",
+   "pages": [
+    6,
+    6
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/gitter.go",
+   "pages": [
+    6,
+    6
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/gocardless.go",
+   "pages": [
+    6,
+    7
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/grafana.go",
+   "pages": [
+    7,
+    7
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/harness.go",
+   "pages": [
+    7,
+    7
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/hashicorp.go",
+   "pages": [
+    7,
+    7
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/hashicorp_vault.go",
+   "pages": [
+    7,
+    7
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/heroku.go",
+   "pages": [
+    7,
+    7
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/hubspot.go",
+   "pages": [
+    7,
+    7
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/huggingface.go",
+   "pages": [
+    7,
+    7
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/infracost.go",
+   "pages": [
+    7,
+    7
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/intercom.go",
+   "pages": [
+    7,
+    7
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/intra42.go",
+   "pages": [
+    7,
+    7
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/jfrog.go",
+   "pages": [
+    7,
+    7
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/jwt.go",
+   "pages": [
+    7,
+    8
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/kraken.go",
+   "pages": [
+    8,
+    8
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/kubernetes.go",
+   "pages": [
+    8,
+    8
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/kucoin.go",
+   "pages": [
+    8,
+    8
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/launchdarkly.go",
+   "pages": [
+    8,
+    8
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/linear.go",
+   "pages": [
+    8,
+    8
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/linkedin.go",
+   "pages": [
+    8,
+    8
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/lob.go",
+   "pages": [
+    8,
+    8
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/looker.go",
+   "pages": [
+    8,
+    8
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/mailchimp.go",
+   "pages": [
+    8,
+    8
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/mailgun.go",
+   "pages": [
+    8,
+    8
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/mapbox.go",
+   "pages": [
+    8,
+    8
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/mattermost.go",
+   "pages": [
+    8,
+    8
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/maxmind.go",
+   "pages": [
+    8,
+    8
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/meraki.go",
+   "pages": [
+    8,
+    8
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/messagebird.go",
+   "pages": [
+    8,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/netlify.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/newrelic.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/notion.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/npm.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/nuget.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/nytimes.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/octopusdeploy.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/okta.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/openai.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/openshift.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/perplexity.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/plaid.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/planetscale.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/postman.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/prefect.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/privateai.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/privatekey.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/pulumi.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/pypi.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/rapidapi.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/readme.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/rubygems.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/scalingo.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/sendbird.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/sendgrid.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/sendinblue.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/sentry.go",
+   "pages": [
+    9,
+    9
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/settlemint.go",
+   "pages": [
+    9,
+    10
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/shippo.go",
+   "pages": [
+    10,
+    10
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/shopify.go",
+   "pages": [
+    10,
+    10
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/sidekiq.go",
+   "pages": [
+    10,
+    10
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/slack.go",
+   "pages": [
+    10,
+    10
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/snyk.go",
+   "pages": [
+    10,
+    10
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/sonar.go",
+   "pages": [
+    10,
+    10
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/sourcegraph.go",
+   "pages": [
+    10,
+    10
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/square.go",
+   "pages": [
+    10,
+    10
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/squarespace.go",
+   "pages": [
+    10,
+    10
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/stopwords.go",
+   "pages": [
+    10,
+    11
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/stripe.go",
+   "pages": [
+    11,
+    11
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/sumologic.go",
+   "pages": [
+    11,
+    11
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/teams.go",
+   "pages": [
+    11,
+    11
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/telegram.go",
+   "pages": [
+    11,
+    11
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/travisci.go",
+   "pages": [
+    11,
+    11
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/trello.go",
+   "pages": [
+    11,
+    11
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/twilio.go",
+   "pages": [
+    11,
+    11
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/twitch.go",
+   "pages": [
+    11,
+    11
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/twitter.go",
+   "pages": [
+    11,
+    11
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/typeform.go",
+   "pages": [
+    11,
+    11
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/yandex.go",
+   "pages": [
+    11,
+    11
+   ]
+  },
+  {
+   "path": "cmd/generate/config/rules/zendesk.go",
+   "pages": [
+    11,
+    11
+   ]
+  },
+  {
+   "path": "cmd/generate/config/utils/generate.go",
+   "pages": [
+    11,
+    11
+   ]
+  },
+  {
+   "path": "cmd/generate/config/utils/patterns.go",
+   "pages": [
+    11,
+    11
+   ]
+  },
+  {
+   "path": "cmd/generate/config/utils/validate.go",
+   "pages": [
+    11,
+    11
+   ]
+  },
+  {
+   "path": "cmd/generate/secrets/regen.go",
+   "pages": [
+    11,
+    12
+   ]
+  },
+  {
+   "path": "cmd/git.go",
+   "pages": [
+    12,
+    12
+   ]
+  },
+  {
+   "path": "cmd/protect.go",
+   "pages": [
+    12,
+    12
+   ]
+  },
+  {
+   "path": "cmd/root.go",
+   "pages": [
+    12,
+    12
+   ]
+  },
+  {
+   "path": "cmd/scm/scm.go",
+   "pages": [
+    12,
+    12
+   ]
+  },
+  {
+   "path": "cmd/stdin.go",
+   "pages": [
+    12,
+    12
+   ]
+  },
+  {
+   "path": "cmd/version.go",
+   "pages": [
+    12,
+    12
+   ]
+  },
+  {
+   "path": "config/allowlist.go",
+   "pages": [
+    12,
+    12
+   ]
+  },
+  {
+   "path": "config/config.go",
+   "pages": [
+    12,
+    13
+   ]
+  },
+  {
+   "path": "config/gitleaks.toml",
+   "pages": [
+    13,
+    15
+   ]
+  },
+  {
+   "path": "config/rule.go",
+   "pages": [
+    15,
+    15
+   ]
+  },
+  {
+   "path": "config/utils.go",
+   "pages": [
+    15,
+    15
+   ]
+  },
+  {
+   "path": "detect/baseline.go",
+   "pages": [
+    15,
+    15
+   ]
+  },
+  {
+   "path": "detect/codec/ascii.go",
+   "pages": [
+    15,
+    15
+   ]
+  },
+  {
+   "path": "detect/codec/base64.go",
+   "pages": [
+    15,
+    15
+   ]
+  },
+  {
+   "path": "detect/codec/decoder.go",
+   "pages": [
+    15,
+    15
+   ]
+  },
+  {
+   "path": "detect/codec/encodings.go",
+   "pages": [
+    15,
+    15
+   ]
+  },
+  {
+   "path": "detect/codec/hex.go",
+   "pages": [
+    15,
+    15
+   ]
+  },
+  {
+   "path": "detect/codec/percent.go",
+   "pages": [
+    15,
+    15
+   ]
+  },
+  {
+   "path": "detect/codec/segment.go",
+   "pages": [
+    15,
+    16
+   ]
+  },
+  {
+   "path": "detect/codec/start_end.go",
+   "pages": [
+    16,
+    16
+   ]
+  },
+  {
+   "path": "detect/codec/unicode.go",
+   "pages": [
+    16,
+    16
+   ]
+  },
+  {
+   "path": "detect/detect.go",
+   "pages": [
+    16,
+    16
+   ]
+  },
+  {
+   "path": "detect/files.go",
+   "pages": [
+    16,
+    17
+   ]
+  },
+  {
+   "path": "detect/git.go",
+   "pages": [
+    17,
+    17
+   ]
+  },
+  {
+   "path": "detect/location.go",
+   "pages": [
+    17,
+    17
+   ]
+  },
+  {
+   "path": "detect/reader.go",
+   "pages": [
+    17,
+    17
+   ]
+  },
+  {
+   "path": "detect/utils.go",
+   "pages": [
+    17,
+    17
+   ]
+  },
+  {
+   "path": "logging/log.go",
+   "pages": [
+    17,
+    17
+   ]
+  },
+  {
+   "path": "main.go",
+   "pages": [
+    17,
+    17
+   ]
+  },
+  {
+   "path": "regexp/stdlib_regex.go",
+   "pages": [
+    17,
+    17
+   ]
+  },
+  {
+   "path": "regexp/wasilibs_regex.go",
+   "pages": [
+    17,
+    17
+   ]
+  },
+  {
+   "path": "report/constants.go",
+   "pages": [
+    17,
+    17
+   ]
+  },
+  {
+   "path": "report/csv.go",
+   "pages": [
+    17,
+    17
+   ]
+  },
+  {
+   "path": "report/finding.go",
+   "pages": [
+    17,
+    17
+   ]
+  },
+  {
+   "path": "report/json.go",
+   "pages": [
+    17,
+    17
+   ]
+  },
+  {
+   "path": "report/junit.go",
+   "pages": [
+    17,
+    17
+   ]
+  },
+  {
+   "path": "report/report.go",
+   "pages": [
+    17,
+    17
+   ]
+  },
+  {
+   "path": "report/sarif.go",
+   "pages": [
+    17,
+    17
+   ]
+  },
+  {
+   "path": "report/template.go",
+   "pages": [
+    17,
+    17
+   ]
+  },
+  {
+   "path": "report_templates/README.md",
+   "pages": [
+    17,
+    17
+   ]
+  },
+  {
+   "path": "scripts/pre-commit.py",
+   "pages": [
+    17,
+    17
+   ]
+  },
+  {
+   "path": "scripts/profile.sh",
+   "pages": [
+    17,
+    17
+   ]
+  },
+  {
+   "path": "sources/common.go",
+   "pages": [
+    17,
+    17
+   ]
+  },
+  {
+   "path": "sources/file.go",
+   "pages": [
+    17,
+    18
+   ]
+  },
+  {
+   "path": "sources/files.go",
+   "pages": [
+    18,
+    18
+   ]
+  },
+  {
+   "path": "sources/fragment.go",
+   "pages": [
+    18,
+    18
+   ]
+  },
+  {
+   "path": "sources/git.go",
+   "pages": [
+    18,
+    18
+   ]
+  },
+  {
+   "path": "sources/source.go",
+   "pages": [
+    18,
+    18
+   ]
+  },
+  {
+   "path": "version/version.go",
+   "pages": [
+    18,
+    18
+   ]
+  }
+ ]
+}
