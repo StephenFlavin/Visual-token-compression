@@ -1,0 +1,114 @@
+{
+ "psf__requests-1142": {
+  "files": 71,
+  "pages": 16,
+  "image_tokens": 71415,
+  "chars": {
+   "tree": 2571,
+   "map": 20479,
+   "text": 641995,
+   "atlas_index": 3550
+  },
+  "gold_outside_fileset": [],
+  "gold_missing_at_base": [],
+  "uncovered": 2
+ },
+ "psf__requests-1724": {
+  "files": 75,
+  "pages": 17,
+  "image_tokens": 78315,
+  "chars": {
+   "tree": 2761,
+   "map": 24112,
+   "text": 711295,
+   "atlas_index": 3779
+  },
+  "gold_outside_fileset": [],
+  "gold_missing_at_base": [],
+  "uncovered": 2
+ },
+ "gin-gonic__gin-1957": {
+  "files": 53,
+  "pages": 7,
+  "image_tokens": 29187,
+  "chars": {
+   "tree": 882,
+   "map": 23799,
+   "text": 267081,
+   "atlas_index": 1659
+  },
+  "gold_outside_fileset": [],
+  "gold_missing_at_base": [],
+  "uncovered": 3
+ },
+ "gin-gonic__gin-1805": {
+  "files": 56,
+  "pages": 7,
+  "image_tokens": 28635,
+  "chars": {
+   "tree": 926,
+   "map": 22691,
+   "text": 261911,
+   "atlas_index": 1727
+  },
+  "gold_outside_fileset": [],
+  "gold_missing_at_base": [],
+  "uncovered": 3
+ },
+ "sharkdp__bat-1892": {
+  "files": 52,
+  "pages": 7,
+  "image_tokens": 28842,
+  "chars": {
+   "tree": 1309,
+   "map": 20802,
+   "text": 279678,
+   "atlas_index": 2078
+  },
+  "gold_outside_fileset": [],
+  "gold_missing_at_base": [],
+  "uncovered": 58
+ },
+ "sharkdp__bat-2393": {
+  "files": 59,
+  "pages": 8,
+  "image_tokens": 33396,
+  "chars": {
+   "tree": 1548,
+   "map": 22868,
+   "text": 322667,
+   "atlas_index": 2375
+  },
+  "gold_outside_fileset": [],
+  "gold_missing_at_base": [],
+  "uncovered": 57
+ },
+ "preactjs__preact-3689": {
+  "files": 128,
+  "pages": 8,
+  "image_tokens": 37536,
+  "chars": {
+   "tree": 2856,
+   "map": 24209,
+   "text": 317686,
+   "atlas_index": 4235
+  },
+  "gold_outside_fileset": [],
+  "gold_missing_at_base": [],
+  "uncovered": 11
+ },
+ "preactjs__preact-3010": {
+  "files": 121,
+  "pages": 8,
+  "image_tokens": 35052,
+  "chars": {
+   "tree": 2682,
+   "map": 22649,
+   "text": 296160,
+   "atlas_index": 4005
+  },
+  "gold_outside_fileset": [],
+  "gold_missing_at_base": [],
+  "uncovered": 11
+ }
+}
