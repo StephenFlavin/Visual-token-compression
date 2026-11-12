@@ -259,24 +259,22 @@ something bigger and harder, with concurrency and locks, such as Java to Rust.
   passes every test on gitleaks; (B2) the two arms' test shares differ by less than 15 points; (B3) the atlas arm uses
   fewer turns.
 
-### Q3. Haiku with the atlas on the hard coding tasks (cap $15; asked by the user 2026-11-12)
+### Q3. Sonnet with the atlas on the hard coding tasks (cap $20; asked by the user 2026-11-12)
 
 *Why:* every atlas test so far used Opus, which solves these tasks about as often with or without the atlas. A
-cheaper model explores less and plans less, so a map of the whole repository could matter more to it. Against that:
-Haiku reads page images worse (long-document test: -5.8 points at 2.2x fewer tokens, and the atlas is rendered
-denser, at 2.9x), and it may downscale the 1932-px pages Opus reads whole.
+cheaper model explores and plans less, so a map of the whole repository could matter more to it. Haiku was
+considered first and dropped by the user: it loses 5.8 points reading pages at 2.2x. Sonnet read pages without loss
+at 2.2x at high effort only, and the atlas is rendered denser (2.9x), so legibility is checked first.
 
-* **Gate first (a few cents): can Haiku read the atlas?** 20 lookups with known answers on two atlases (the name
-  defined at a tagged line of a named file, a constant's value, an argument list), Haiku against Opus. Under 80%
-  for Haiku: re-render for it (117.6 px² per character, pages of at most 1568 px, if the repository still fits
-  150k image tokens) and ask again. Still under 80%: stop; "Haiku cannot read the atlas" is the result.
+* **Gate first (under $1): can Sonnet read the atlas?** 20 lookups with known answers on two atlases (the name
+  defined at a tagged line of a named file, a constant's value, an argument list), Sonnet against Opus. Under 80%
+  for Sonnet: re-render for it (117.6 px² per character, pages of at most 1568 px, if the repository still fits
+  150k image tokens) and ask again. Still under 80%: stop; "Sonnet cannot read the atlas" is the result.
 * Same 16 SWE-rebench tasks, environments and runner as Q1 (`experiments/repo_atlas_swe_rerun.py`), auto-memory off,
-  package index blocked. Worker: Claude Code on Haiku 5.5. Arms `plain` and `atlas`, at low effort (the level of
-  the plan-quality test's Haiku rows) and at high effort; 2 runs per task, arm and effort = 128 runs, about $10.
-* Scores and tests as Q1 (resolved task-runs, paired over tasks; turns; cost), per effort level. Beside them, not
-  pooled: Opus plain and Opus with the atlas from Q1, and Haiku at low effort with an atlas brief from the
-  plan-quality test (8 of 16).
-* Predictions: (H1) the gate passes only after re-rendering, or not at all; (H2) Haiku with the atlas solves no more
-  task-runs than Haiku plain (difference under 3 of 32 at each effort); (H3) Haiku with the atlas stays below Opus
-  plain; (H4) the atlas multiplies Haiku's cost per run by at least 3.
-
+  package index blocked. Worker: Claude Code on Sonnet 5.5 at high effort. Arms `plain` and `atlas`, 2 runs per
+  task and arm = 64 runs.
+* Scores and tests as Q1 (resolved task-runs, paired over tasks; turns; cost). Beside them, not pooled: Opus plain
+  and Opus with the atlas from Q1, and Sonnet at medium effort with an atlas brief from the plan-quality test (8 of 16).
+* Predictions: (S1) the gate passes without re-rendering; (S2) Sonnet with the atlas solves no more task-runs than
+  Sonnet plain (difference under 3 of 32); (S3) Sonnet with the atlas stays below Opus plain; (S4) the atlas
+  multiplies Sonnet's cost per run by at least 3.
