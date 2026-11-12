@@ -77,7 +77,7 @@ def parse(argv=None):
     ap.add_argument("--val-windows", type=int, default=16)
     ap.add_argument("--eval-every", type=int, default=250)
     ap.add_argument("--ckpt-every", type=int, default=500)
-    ap.add_argument("--gen-batch", type=int, default=8)
+    ap.add_argument("--gen-batch", type=int, default=32, help="windows per greedy-decoding batch (eval only)")
     ap.add_argument("--log-every", type=int, default=10)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--device", default="auto")

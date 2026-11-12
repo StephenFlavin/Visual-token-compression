@@ -380,9 +380,13 @@ python -m pytest -q encoder_probe/tests/test_text_slots.py encoder_probe/tests/t
   pass at batch 8 over at most 969 positions (ratio 1; 729 at ratio 2), so expect 10-18 GB. If `nvidia-smi` shows more than 20 GB
   in the smoke, use `--batch-size 4` and twice the steps for every arm. Windows pages GPU memory instead of
   raising an error: a sudden slowdown means the job no longer fits.
-* **Time (estimate):** 1-2 s/step. The LoRA ladder is 12,000 steps and the frozen-reader arms 5,750, plus ~5 min
-  of evaluation per arm (two text sets, real and blind, 64 windows each): 6-10 h in all, so two power-on
-  stretches. Every arm checkpoints every 500 steps and resumes exactly with the same command.
+* **Time (estimate, scaled from Stage 0's measured 0.93 s/step on an RTX 4090: ~5,200 token positions per second
+  with LoRA gradients and checkpointing):** on a 4090, 0.8 s/step at ratio 16 to 1.5 at ratio 1, so 2.9 h for the
+  LoRA ladder (12,000 steps) and 1.5 h for the frozen-reader arms (5,750), plus ~5 min of loading and evaluation per
+  arm: ~5 h. **On this 3090 (a 4090 is 1.3-1.8x faster in FP16 training): ~8 h, two power-on stretches.** Gates G1
+  and G2 are known after ~1.2 h, and the same-budget arm L4 (8x) after ~3.5 h. An A100 is in the 4090's class
+  (~5 h, ~4 h with `--no-grad-ckpt`, which its 80 GB allows); an H100 ~2.5-3 h. Every arm checkpoints every 500
+  steps and resumes exactly with the same command.
 * **Disk:** a checkpoint is up to ~2 GB (written next to the old one), each finished arm keeps ~0.2-0.7 GB in
   `encoder_probe/cache/ts_encoders/`, about 4 GB for all nine arms. The next ratio needs the previous arm's file,
   so do not delete them before the ladder is done.
