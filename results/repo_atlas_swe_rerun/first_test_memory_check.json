@@ -1,0 +1,270 @@
+{
+ "runs": 51,
+ "tool_hits": [
+  {
+   "run": "jsonpickle__jsonpickle-587 map",
+   "tool": "result",
+   "input": "\"<persisted-output>\\nOutput too large (47.2KB). Full output saved to: /root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-jsonpickle--jsonpickle-587-37745e-jsonpickle/20b3da68-44ea-4e7b-8a35-08d96070751c/tool-results/bsl1f6oln.txt\\n\\"
+  }
+ ],
+ "stores": {
+  "MAIF__arta-50 atlas": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-MAIF--arta-50-ece8f4-arta/memory/",
+   "exists": true,
+   "files": []
+  },
+  "MAIF__arta-50 map": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-MAIF--arta-50-37745e-arta/memory/",
+   "exists": true,
+   "files": []
+  },
+  "MAIF__arta-50 plain": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-MAIF--arta-50-68c46e-arta/memory/",
+   "exists": true,
+   "files": []
+  },
+  "agronholm__anyio-975 atlas": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-agronholm--anyio-975-ece8f4-anyio/memory/",
+   "exists": true,
+   "files": []
+  },
+  "agronholm__anyio-975 map": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-agronholm--anyio-975-37745e-anyio/memory/",
+   "exists": true,
+   "files": []
+  },
+  "agronholm__anyio-975 plain": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-agronholm--anyio-975-68c46e-anyio/memory/",
+   "exists": true,
+   "files": []
+  },
+  "celestoai__smolvm-172 atlas": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-celestoai--smolvm-172-ece8f4-SmolVM/memory/",
+   "exists": true,
+   "files": []
+  },
+  "celestoai__smolvm-172 map": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-celestoai--smolvm-172-37745e-SmolVM/memory/",
+   "exists": true,
+   "files": []
+  },
+  "celestoai__smolvm-172 plain": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-celestoai--smolvm-172-68c46e-SmolVM/memory/",
+   "exists": true,
+   "files": []
+  },
+  "jsonpickle__jsonpickle-587 atlas": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-jsonpickle--jsonpickle-587-ece8f4-jsonpickle/memory/",
+   "exists": true,
+   "files": []
+  },
+  "jsonpickle__jsonpickle-587 map": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-jsonpickle--jsonpickle-587-37745e-jsonpickle/memory/",
+   "exists": true,
+   "files": []
+  },
+  "jsonpickle__jsonpickle-587 plain": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-jsonpickle--jsonpickle-587-68c46e-jsonpickle/memory/",
+   "exists": true,
+   "files": []
+  },
+  "jsonpickle__jsonpickle-588 atlas": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-jsonpickle--jsonpickle-588-ece8f4-jsonpickle/memory/",
+   "exists": true,
+   "files": []
+  },
+  "jsonpickle__jsonpickle-588 map": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-jsonpickle--jsonpickle-588-37745e-jsonpickle/memory/",
+   "exists": true,
+   "files": []
+  },
+  "jsonpickle__jsonpickle-588 plain": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-jsonpickle--jsonpickle-588-68c46e-jsonpickle/memory/",
+   "exists": true,
+   "files": []
+  },
+  "microsoft__fabric-cicd-670 atlas": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-microsoft--fabric-cicd-670-ece8f4-fabric-cicd/memory/",
+   "exists": true,
+   "files": []
+  },
+  "microsoft__fabric-cicd-670 map": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-microsoft--fabric-cicd-670-37745e-fabric-cicd/memory/",
+   "exists": true,
+   "files": []
+  },
+  "microsoft__fabric-cicd-670 plain": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-microsoft--fabric-cicd-670-68c46e-fabric-cicd/memory/",
+   "exists": true,
+   "files": []
+  },
+  "nesquena__hermes-webui-330_interface atlas": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-nesquena--hermes-webui-330-interface-ece8f4-hermes-webui/memory/",
+   "exists": true,
+   "files": []
+  },
+  "nesquena__hermes-webui-330_interface map": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-nesquena--hermes-webui-330-interface-37745e-hermes-webui/memory/",
+   "exists": true,
+   "files": []
+  },
+  "nesquena__hermes-webui-330_interface plain": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-nesquena--hermes-webui-330-interface-68c46e-hermes-webui/memory/",
+   "exists": true,
+   "files": []
+  },
+  "niconoe__pyinaturalist-643 atlas": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-niconoe--pyinaturalist-643-ece8f4-pyinaturalist/memory/",
+   "exists": true,
+   "files": []
+  },
+  "niconoe__pyinaturalist-643 map": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-niconoe--pyinaturalist-643-37745e-pyinaturalist/memory/",
+   "exists": true,
+   "files": []
+  },
+  "niconoe__pyinaturalist-643 plain": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-niconoe--pyinaturalist-643-68c46e-pyinaturalist/memory/",
+   "exists": true,
+   "files": []
+  },
+  "pyjanitor-devs__pyjanitor-1593 atlas": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-pyjanitor-devs--pyjanitor-1593-ece8f4-pyjanitor/memory/",
+   "exists": true,
+   "files": []
+  },
+  "pyjanitor-devs__pyjanitor-1593 map": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-pyjanitor-devs--pyjanitor-1593-37745e-pyjanitor/memory/",
+   "exists": true,
+   "files": []
+  },
+  "pyjanitor-devs__pyjanitor-1593 plain": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-pyjanitor-devs--pyjanitor-1593-68c46e-pyjanitor/memory/",
+   "exists": true,
+   "files": []
+  },
+  "pypa__virtualenv-2940 atlas": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-pypa--virtualenv-2940-ece8f4-virtualenv/memory/",
+   "exists": true,
+   "files": []
+  },
+  "pypa__virtualenv-2940 map": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-pypa--virtualenv-2940-37745e-virtualenv/memory/",
+   "exists": true,
+   "files": []
+  },
+  "pypa__virtualenv-2940 plain": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-pypa--virtualenv-2940-68c46e-virtualenv/memory/",
+   "exists": true,
+   "files": []
+  },
+  "pytest-dev__pyfakefs-1286 atlas": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-pytest-dev--pyfakefs-1286-ece8f4-pyfakefs/memory/",
+   "exists": true,
+   "files": []
+  },
+  "pytest-dev__pyfakefs-1286 map": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-pytest-dev--pyfakefs-1286-37745e-pyfakefs/memory/",
+   "exists": true,
+   "files": []
+  },
+  "pytest-dev__pyfakefs-1286 plain": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-pytest-dev--pyfakefs-1286-68c46e-pyfakefs/memory/",
+   "exists": true,
+   "files": []
+  },
+  "python-wheel-build__fromager-1124 atlas": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-python-wheel-build--fromager-1124-ece8f4-fromager/memory/",
+   "exists": true,
+   "files": []
+  },
+  "python-wheel-build__fromager-1124 map": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-python-wheel-build--fromager-1124-37745e-fromager/memory/",
+   "exists": true,
+   "files": []
+  },
+  "python-wheel-build__fromager-1124 plain": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-python-wheel-build--fromager-1124-68c46e-fromager/memory/",
+   "exists": true,
+   "files": []
+  },
+  "scientific-python__docstub-123 atlas": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-scientific-python--docstub-123-ece8f4-docstub/memory/",
+   "exists": true,
+   "files": []
+  },
+  "scientific-python__docstub-123 map": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-scientific-python--docstub-123-37745e-docstub/memory/",
+   "exists": true,
+   "files": []
+  },
+  "scientific-python__docstub-123 plain": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-scientific-python--docstub-123-68c46e-docstub/memory/",
+   "exists": true,
+   "files": []
+  },
+  "stanfordnlp__dspy-8607 atlas": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-stanfordnlp--dspy-8607-ece8f4-dspy/memory/",
+   "exists": true,
+   "files": []
+  },
+  "stanfordnlp__dspy-8607 map": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-stanfordnlp--dspy-8607-37745e-dspy/memory/",
+   "exists": true,
+   "files": []
+  },
+  "stanfordnlp__dspy-8607 plain": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-stanfordnlp--dspy-8607-68c46e-dspy/memory/",
+   "exists": true,
+   "files": []
+  },
+  "tobymao__sqlglot-5359 atlas": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-tobymao--sqlglot-5359-ece8f4-sqlglot/memory/",
+   "exists": true,
+   "files": []
+  },
+  "tobymao__sqlglot-5359 map": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-tobymao--sqlglot-5359-37745e-sqlglot/memory/",
+   "exists": true,
+   "files": []
+  },
+  "tobymao__sqlglot-5359 plain": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-tobymao--sqlglot-5359-68c46e-sqlglot/memory/",
+   "exists": true,
+   "files": []
+  },
+  "tobymao__sqlglot-6067 atlas": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-tobymao--sqlglot-6067-ece8f4-sqlglot/memory/",
+   "exists": true,
+   "files": []
+  },
+  "tobymao__sqlglot-6067 map": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-tobymao--sqlglot-6067-37745e-sqlglot/memory/",
+   "exists": true,
+   "files": []
+  },
+  "tobymao__sqlglot-6067 plain": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-tobymao--sqlglot-6067-68c46e-sqlglot/memory/",
+   "exists": true,
+   "files": []
+  },
+  "tox-dev__tox-3904 atlas": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-tox-dev--tox-3904-ece8f4-tox/memory/",
+   "exists": true,
+   "files": []
+  },
+  "tox-dev__tox-3904 map": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-tox-dev--tox-3904-37745e-tox/memory/",
+   "exists": true,
+   "files": []
+  },
+  "tox-dev__tox-3904 plain": {
+   "auto": "/root/.claude/projects/-tmp-claude-0--home-user-visual-bpe-588efa4c-1231-5348-b908-e0ab20b8aad7-scratchpad-ra-swe-runs-tox-dev--tox-3904-68c46e-tox/memory/",
+   "exists": true,
+   "files": []
+  }
+ },
+ "missing": false,
+ "distinct_store_paths": 51,
+ "stores_with_files": {}
+}
