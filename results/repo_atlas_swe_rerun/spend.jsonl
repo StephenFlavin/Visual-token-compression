@@ -22,3 +22,11 @@
 {"what": "tobymao__sqlglot-5359 atlas r1", "cost_usd": 1.1077742, "input_tokens": 1569793, "output_tokens": 5495, "t": "2026-11-12T18:25:30"}
 {"what": "nesquena__hermes-webui-330_interface atlas r1", "cost_usd": 0.955889, "input_tokens": 1132421, "output_tokens": 8673, "t": "2026-11-12T18:27:14"}
 {"what": "microsoft__fabric-cicd-670 atlas r1", "cost_usd": 0.3411944, "input_tokens": 318432, "output_tokens": 1762, "t": "2026-11-12T18:27:29"}
+{"what": "pytest-dev__pyfakefs-1286 atlas r1", "cost_usd": 1.1959518, "input_tokens": 1896869, "output_tokens": 21400, "t": "2026-11-12T18:31:36"}
+{"what": "pypa__virtualenv-2940 plain r1", "cost_usd": 0.1471774, "input_tokens": 103367, "output_tokens": 3212, "t": "2026-11-12T18:32:45"}
+{"what": "jsonpickle__jsonpickle-588 plain r1", "cost_usd": 0.42622280000000007, "input_tokens": 385360, "output_tokens": 9822, "t": "2026-11-12T18:36:04"}
+{"what": "pytest-dev__pyfakefs-1286 plain r1", "cost_usd": 0.3160114, "input_tokens": 259057, "output_tokens": 7647, "t": "2026-11-12T18:37:33"}
+{"what": "agronholm__anyio-975 atlas r1", "cost_usd": 0.616162, "input_tokens": 781216, "output_tokens": 8135, "t": "2026-11-12T18:37:33"}
+{"what": "niconoe__pyinaturalist-643 plain r1", "cost_usd": 0.07325219999999999, "input_tokens": 36381, "output_tokens": 1720, "t": "2026-11-12T18:38:29"}
+{"what": "jsonpickle__jsonpickle-588 atlas r1", "cost_usd": 0.392391, "input_tokens": 332311, "output_tokens": 5977, "t": "2026-11-12T18:40:00"}
+{"what": "stanfordnlp__dspy-8607 atlas r1", "cost_usd": 0.9163752, "input_tokens": 1501618, "output_tokens": 6248, "t": "2026-11-12T18:43:25"}
