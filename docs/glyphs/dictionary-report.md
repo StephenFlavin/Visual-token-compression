@@ -1,6 +1,6 @@
 # Visual-BPE dictionary report (WP-A, kill check K1)
 
-> **Status: a generated record (2026-11-02), not edited by hand apart from this note.** It is the arithmetic
+> **Status: a generated record from the start of the work (early November 2026), not edited by hand apart from this note.** It is the arithmetic
 > check K1 of [PLAN.md](PLAN.md): does drawing frequent character runs ("chunks") as one full-width symbol make
 > lines narrower at all, before any reader is involved? It does (32% at 1000 chunks), but on a fixed page that
 > lets the font grow only 1.19x, and Phases 1-2 then showed the symbols need more than that to stay legible
