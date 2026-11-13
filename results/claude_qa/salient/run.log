@@ -1,1 +1,14 @@
 [run] 12 calls, at most $1.00 each; spent $0.00; cap $12
+[run] d1 salient_small r0: all 0.175 {'complex': 0.025, 'needle': 0.0, 'number': 0.5}; in 59,140 (formula 53,028) out 3,456 $0.36 38s incomplete False refused False unanswered 0 disengaged None; spent $0.36
+[run] d2 salient_small r0: all 0.192 {'complex': 0.0, 'needle': 0.0, 'number': 0.575}; in 59,268 (formula 53,166) out 3,791 $0.37 44s incomplete False refused False unanswered 0 disengaged None; spent $0.74
+[run] d0 salient_small r0: all 0.175 {'complex': 0.0, 'needle': 0.0, 'number': 0.525}; in 59,304 (formula 53,235) out 5,409 $0.40 55s incomplete False refused False unanswered 0 disengaged None; spent $1.14
+[run] d2 salient_large r0: all 0.917 {'complex': 0.85, 'needle': 1.0, 'number': 0.9}; in 59,269 (formula 53,166) out 8,138 $0.46 72s incomplete False refused False unanswered 0 disengaged None; spent $1.60
+[run] d0 salient_large r0: all 0.917 {'complex': 0.85, 'needle': 1.0, 'number': 0.9}; in 59,303 (formula 53,235) out 8,170 $0.46 71s incomplete False refused False unanswered 0 disengaged None; spent $2.06
+[run] d0 salient_small r1: all 0.167 {'complex': 0.05, 'needle': 0.0, 'number': 0.45}; in 59,304 (formula 53,235) out 4,429 $0.10 48s incomplete False refused False unanswered 0 disengaged None; spent $2.16
+[run] d1 salient_large r0: all 0.867 {'complex': 0.825, 'needle': 0.975, 'number': 0.8}; in 59,279 (formula 53,166) out 11,286 $0.52 105s incomplete False refused False unanswered 0 disengaged None; spent $2.68
+[run] d1 salient_large r1: all 0.858 {'complex': 0.825, 'needle': 0.975, 'number': 0.775}; in 59,279 (formula 53,166) out 5,670 $0.13 49s incomplete False refused False unanswered 0 disengaged None; spent $2.81
+[run] d1 salient_small r1: all 0.250 {'complex': 0.075, 'needle': 0.0, 'number': 0.675}; in 59,142 (formula 53,028) out 3,994 $0.09 41s incomplete False refused False unanswered 0 disengaged None; spent $2.90
+[run] d2 salient_small r1: all 0.208 {'complex': 0.05, 'needle': 0.0, 'number': 0.575}; in 59,268 (formula 53,166) out 2,807 $0.07 30s incomplete False refused False unanswered 0 disengaged None; spent $2.97
+[run] d0 salient_large r1: all 0.925 {'complex': 0.85, 'needle': 1.0, 'number': 0.925}; in 59,305 (formula 53,235) out 11,448 $0.24 103s incomplete False refused False unanswered 0 disengaged None; spent $3.22
+[run] d2 salient_large r1: all 0.950 {'complex': 0.85, 'needle': 1.0, 'number': 1.0}; in 59,266 (formula 53,166) out 8,598 $0.19 76s incomplete False refused False unanswered 0 disengaged None; spent $3.40
+[run] done; spent $3.40

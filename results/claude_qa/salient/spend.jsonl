@@ -1,0 +1,12 @@
+{"what": "d1 salient_small r0", "cost_usd": 0.364818, "input_tokens": 59140, "output_tokens": 3456, "error": null}
+{"what": "d2 salient_small r0", "cost_usd": 0.372158, "input_tokens": 59268, "output_tokens": 3791, "error": null}
+{"what": "d0 salient_small r0", "cost_usd": 0.404698, "input_tokens": 59304, "output_tokens": 5409, "error": null}
+{"what": "d2 salient_large r0", "cost_usd": 0.45910300000000004, "input_tokens": 59269, "output_tokens": 8138, "error": null}
+{"what": "d0 salient_large r0", "cost_usd": 0.459913, "input_tokens": 59303, "output_tokens": 8170, "error": null}
+{"what": "d0 salient_small r1", "cost_usd": 0.10194119999999998, "input_tokens": 59304, "output_tokens": 4429, "error": null}
+{"what": "d1 salient_large r0", "cost_usd": 0.522113, "input_tokens": 59279, "output_tokens": 11286, "error": null}
+{"what": "d1 salient_large r1", "cost_usd": 0.12675619999999999, "input_tokens": 59279, "output_tokens": 5670, "error": null}
+{"what": "d1 salient_small r1", "cost_usd": 0.09321360000000001, "input_tokens": 59142, "output_tokens": 3994, "error": null}
+{"what": "d2 salient_small r1", "cost_usd": 0.069494, "input_tokens": 59268, "output_tokens": 2807, "error": null}
+{"what": "d0 salient_large r1", "cost_usd": 0.24232620000000002, "input_tokens": 59305, "output_tokens": 11448, "error": null}
+{"what": "d2 salient_large r1", "cost_usd": 0.185304, "input_tokens": 59266, "output_tokens": 8598, "error": null}
