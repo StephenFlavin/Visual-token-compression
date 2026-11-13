@@ -109,8 +109,8 @@ def fig_px_at_3(d: dict) -> None:
     ax.set_axisbelow(True)
     fig.text(0.02, 1 - 0.18 / H, "Only the learned alphabet needs fewer pixels than plain Latin", ha="left",
              va="top", fontsize=12, fontweight="bold", color=M.INK_1)
-    fig.text(0.02, 1 - 0.50 / H, "Hand-picked glyphs (substitution, quadrant cells) need more. "
-             "'≤' = already under 3% at the smallest size trained.", ha="left", va="top", fontsize=8.5, color=M.INK_2)
+    fig.text(0.02, 1 - 0.50 / H, "Hand-picked glyphs (substitution, quadrant cells) need more: 1.25x to 3.9x Latin's "
+             "pixels with the same trained reader.", ha="left", va="top", fontsize=8.5, color=M.INK_2)
     M.save_small(fig, "glyphs_px_at_3pct.png")
     plt.close(fig)
     print("glyphs_px_at_3pct:", [(n, v and (round(v[0], 2), v[1])) for n, v, _ in rows])
