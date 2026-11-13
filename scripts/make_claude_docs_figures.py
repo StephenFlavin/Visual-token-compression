@@ -346,71 +346,82 @@ def fig_salient():
     plt = M.chart_style()
     g = load("claude_qa/gradient/summary.json")["arms"]
     s = load("claude_qa/salient/summary.json")["arms"]
-    H = 5.6
-    fig, (axl, axr) = plt.subplots(1, 2, figsize=(10.4, H), dpi=150, gridspec_kw={"width_ratios": [1.45, 1]})
-    fig.subplots_adjust(left=0.07, right=0.985, top=1 - 1.75 / H, bottom=0.62 / H, wspace=0.22)
+    H = 5.7
+    fig, (axl, axr) = plt.subplots(1, 2, figsize=(10.4, H), dpi=150, gridspec_kw={"width_ratios": [1.3, 1]})
+    fig.subplots_adjust(left=0.07, right=0.985, top=1 - 1.75 / H, bottom=0.62 / H, wspace=0.2)
     # left: overall accuracy against input tokens, every arm on the uniform curve's axes
+    ylo = 84
     ux = [s[f"uniform {b}"]["input_tokens_mean"] / 1000 for b in (58.8, 88.2, 117.6)]
     uy = [100 * s[f"uniform {b}"]["all"]["acc"] for b in (58.8, 88.2, 117.6)]
     axl.plot(ux, uy, color=PAGE_C, lw=1.2, alpha=0.5, zorder=1)
     pts = [(s["text"], "text", TEXT_C, "*", (0, -15), "center")]
     pts += [(s[f"uniform {b}"], f"uniform {b:g}", DENSITY_C[b], "o", off, ha) for b, off, ha in
-            ((117.6, (0, -15), "center"), (88.2, (0, 11), "center"), (58.8, (-9, 0), "right"))]
-    pts += [(g["recent_sharp"], "graded by position\n(recent sharp)", "#5f8fc9", "D", (9, -6), "left"),
-            (g["old_sharp"], "(old sharp)", "#5f8fc9", "s", (9, 6), "left")]
-    pts += [(s[a], lab, SALIENT_C, mk, off, ha) for a, lab, mk, off, ha in
-            (("salient_large", "facts large,\nfiller small", "^", (10, 0), "left"),
-             ("salient_small", "facts small,\nfiller large", "v", (10, 0), "left")) if a in s]
+            ((117.6, (0, -15), "center"), (88.2, (0, 11), "center"), (58.8, (9, 6), "left"))]
+    pts += [(g["recent_sharp"], "graded by position (yesterday)", "#5f8fc9", "D", (9, -2), "left"),
+            (g["old_sharp"], "", "#5f8fc9", "s", (9, 0), "left")]
+    pts += [(s["salient_large"], "facts large, filler small", SALIENT_C, "^", (9, -7), "left")]
     for a, lab, col, mk, off, ha in pts:
         x, y = a["input_tokens_mean"] / 1000, 100 * a["all"]["acc"]
-        axl.plot([x, x], [100 * a["all"]["lo"], 100 * a["all"]["hi"]], color=col, lw=1.4, alpha=0.6, zorder=2)
+        axl.plot([x, x], [max(ylo, 100 * a["all"]["lo"]), 100 * a["all"]["hi"]], color=col, lw=1.4, alpha=0.6, zorder=2)
         axl.scatter([x], [y], s=150 if mk == "*" else 58, marker=mk, color=col, edgecolor=M.INK_2, lw=0.7, zorder=3)
-        axl.annotate(f"{lab} {y:.1f}%" if "\n" not in lab else f"{lab}\n{y:.1f}%", (x, y), xytext=off,
-                     textcoords="offset points", ha=ha, va="center", fontsize=8, color=M.INK_1, linespacing=1.15)
-    ys = [100 * a["all"]["lo"] for a, *_ in pts]
-    lo = max(0, 10 * int(min(ys) // 10) - 5)
+        if lab:
+            if mk == "D":
+                lab = f"{lab}\n{y:.1f}% and {100 * g['old_sharp']['all']['acc']:.1f}%"
+            else:
+                lab = f"{lab} {y:.1f}%"
+            axl.annotate(lab, (x, y), xytext=off, textcoords="offset points", ha=ha, va="center", fontsize=8,
+                         color=M.INK_1, linespacing=1.15)
+    ss = s["salient_small"]
+    x = ss["input_tokens_mean"] / 1000
+    axl.annotate("", (x, ylo + 0.15), xytext=(x, ylo + 2.0), arrowprops=dict(arrowstyle="-|>", color=SALIENT_C, lw=1.4))
+    axl.annotate(f"control, facts small and filler large: {100 * ss['all']['acc']:.1f}% (off the scale)", (x, ylo + 1.0),
+                 xytext=(9, 0), textcoords="offset points", ha="left", va="center", fontsize=8, color=M.INK_1)
     axl.set_xlim(35, 265)
-    axl.set_ylim(lo, 102)
+    axl.set_ylim(ylo, 101)
+    axl.set_yticks(range(ylo, 101, 2), [str(v) for v in range(ylo, 100, 2)] + ["100%"])
     axl.grid(color=M.GRID, lw=0.8)
     axl.set_axisbelow(True)
     axl.set_xlabel("input tokens per call (thousands)")
     axl.set_ylabel("all 120 questions right (%), 95% interval")
-    axl.set_title("Overall: at uniform 58.8's tokens, mixing sizes by content falls below it", fontsize=9.5,
+    axl.set_title("Overall: no better than uniform 58.8 at the same tokens", fontsize=9.5,
                   fontweight="bold", loc="left", color=M.INK_1)
     # right: what each question type gets at the same token count
-    cats = [("needle", "invented\nfacts"), ("number", "numbers in\nsentences"), ("complex", "multi-step")]
-    arms = [("uniform 58.8", "uniform 58.8", DENSITY_C[58.8]), ("salient_large", "facts large", SALIENT_C),
-            ("salient_small", "facts small", "#e3c48f")]
-    arms = [x for x in arms if x[0] in s]
-    w = 0.26
+    def pooled(arm, subs):
+        k = sum(s[arm]["complex_by_sub"][x]["k"] for x in subs)
+        n = sum(s[arm]["complex_by_sub"][x]["n"] for x in subs)
+        return k / n
+    cats = [("invented\nfacts", lambda a: s[a]["needle"]["acc"]),
+            ("numbers in\nsentences", lambda a: s[a]["number"]["acc"]),
+            ("chains, sums,\nlargest-of-3", lambda a: pooled(a, ("two_hop", "three_hop", "sum", "max"))),
+            ("counts", lambda a: pooled(a, ("count",)))]
+    arms = [("uniform 58.8", "uniform 58.8", DENSITY_C[58.8]), ("salient_large", "facts large, filler small", SALIENT_C)]
+    w = 0.36
     for i, (key, lab, col) in enumerate(arms):
-        for j, (c, _) in enumerate(cats):
-            v = s[key][c]
-            x = j + (i - (len(arms) - 1) / 2) * w
-            axr.bar(x, 100 * v["acc"], width=w - 0.03, color=col, edgecolor=M.SURFACE, lw=1, zorder=2)
-            axr.text(x, 100 * v["acc"] + 1.2, f"{100 * v['acc']:.0f}", ha="center", va="bottom", fontsize=7.6,
-                     color=M.INK_1)
-    axr.legend(handles=[plt.Rectangle((0, 0), 1, 1, color=col, label=lab) for _, lab, col in arms], loc="upper right",
-               fontsize=7.6, frameon=True, framealpha=1, edgecolor=M.GRID, bbox_to_anchor=(1.0, 1.0))
-    axr.set_xticks(range(len(cats)), [lab for _, lab in cats])
+        for j, (_, f) in enumerate(cats):
+            v = 100 * f(key)
+            x = j + (i - 0.5) * w
+            axr.bar(x, v, width=w - 0.04, color=col, edgecolor=M.SURFACE, lw=1, zorder=2)
+            axr.text(x, v + 1.2, f"{v:.0f}", ha="center", va="bottom", fontsize=7.8, color=M.INK_1)
+    axr.legend(handles=[plt.Rectangle((0, 0), 1, 1, color=col, label=lab) for _, lab, col in arms],
+               loc="upper right", fontsize=7.6, frameon=True, framealpha=1, edgecolor=M.GRID)
+    axr.set_xticks(range(len(cats)), [lab for lab, _ in cats], fontsize=8.2)
     axr.tick_params(axis="x", length=0)
-    axr.set_ylim(0, 118)
+    axr.set_ylim(0, 125)
     axr.set_yticks([0, 20, 40, 60, 80, 100], ["0", "20", "40", "60", "80", "100%"])
     axr.grid(axis="y", color=M.GRID, lw=0.8)
     axr.set_axisbelow(True)
     axr.set_ylabel("questions right (%)")
-    axr.set_title("By question type, same token count", fontsize=9.5, fontweight="bold", loc="left", color=M.INK_1)
-    sl = s.get("salient_large", s["uniform 58.8"])
-    header(fig, H, "Facts large, filler small: at a fixed token budget the unreadable filler costs more than the large "
-           "facts recover",
+    axr.set_title("Same tokens, different losses", fontsize=9.5, fontweight="bold",
+                  loc="left", color=M.INK_1)
+    sl = s["salient_large"]
+    header(fig, H, "Facts large, filler small: the large words carry chains, the unreadable filler loses counts",
            "Opus 5.5, high effort, 3 documents x 120 questions. Mixed arms: every word a rule-based detector marks "
-           "(numbers, names, negations) drawn at the em of\n117.6 px²/char pages, the rest at the em that brings the "
-           "document to uniform 58.8's image tokens (em 3.5-4.1 px, unreadable); the control swaps them.\n"
-           f"Mixed arms: {sl['calls']} calls each; uniform arms and text: the v2 rows, 3 calls each; graded-by-position "
-           "arms: yesterday's test (uniform 88.2's tokens).")
+           "(numbers, names, negations; 30-34% of characters)\ndrawn at the em of 117.6 px²/char pages, the rest at the "
+           "em that brings the document to uniform 58.8's image tokens (em 3.5-4.1 px); the control swaps\nthem. "
+           f"Mixed arms {sl['calls']} calls each; uniform arms and text: the v2 rows, 3 calls each; graded by position: "
+           "yesterday's test, at uniform 88.2's tokens.")
     save(fig, "claude_salient.png")
     plt.close(fig)
-
 
 if __name__ == "__main__":
     fig_overview()

@@ -830,9 +830,9 @@ def summary_md(res: dict) -> str:
             md.append(f"| {k} | {v['calls']} | {v['input_tokens_mean']:,.0f} | {fmt(v['small'])} | {fmt(v['small_lure'])} | "
                       f"{fmt(v['original'])} | " + " | ".join(fmt(v['small_by_sub'].get(s, {'n': 0})) if s in v['small_by_sub']
                                                          else "-" for s in subs) + " |")
-        md += ["", "Small-word wrong answers: " + "; ".join(f"{t}: {w['wrong']} (number large {w['number_salient']}, "
-                                                           f"small {w['number_not_salient']})"
-                                                           for t, w in sorted(res["small_words_wrong"].items()))]
+        ww = "; ".join(f"{t}: {w['wrong']} (number large {w['number_salient']}, small {w['number_not_salient']})"
+                       for t, w in sorted(res["small_words_wrong"].items()))
+        md += ["", "Small-word wrong answers: " + (ww or "none")]
     md += ["", "Paired tests (arm - reference, points; Newcombe 95% interval; exact McNemar on discordant pairs):", "",
            "| comparison | pairs | arm - ref | 95% interval | ref-only right | arm-only right | p |", "|---|---|---|---|---|---|---|"]
     for k, t in res["tests"].items():

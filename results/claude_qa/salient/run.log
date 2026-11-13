@@ -12,3 +12,8 @@
 [run] d0 salient_large r1: all 0.925 {'complex': 0.85, 'needle': 1.0, 'number': 0.925}; in 59,305 (formula 53,235) out 11,448 $0.24 103s incomplete False refused False unanswered 0 disengaged None; spent $3.22
 [run] d2 salient_large r1: all 0.950 {'complex': 0.85, 'needle': 1.0, 'number': 1.0}; in 59,266 (formula 53,166) out 8,598 $0.19 76s incomplete False refused False unanswered 0 disengaged None; spent $3.40
 [run] done; spent $3.40
+[run] 3 calls, at most $1.00 each; spent $3.40; cap $12
+[run] d2 salient_large_small_words r0: all 0.938 {'complex': 0.85, 'needle': 1.0, 'number': 0.9, 'small': 1.0}; in 60,685 (formula 53,442) out 11,521 $0.53 103s incomplete False refused False unanswered 0 disengaged None; spent $3.94
+[run] d1 salient_large_small_words r0: all 0.919 {'complex': 0.85, 'needle': 1.0, 'number': 0.825, 'small': 1.0}; in 60,690 (formula 53,442) out 12,967 $0.56 119s incomplete False refused False unanswered 0 disengaged None; spent $4.50
+[run] d0 salient_large_small_words r0: all 0.938 {'complex': 0.85, 'needle': 1.0, 'number': 0.9, 'small': 1.0}; in 60,726 (formula 53,511) out 13,945 $0.58 123s incomplete False refused False unanswered 0 disengaged None; spent $5.08
+[run] done; spent $5.08

@@ -211,3 +211,118 @@ python3 experiments/claude_qa/claude_qa_salient.py analyse                  # su
 
 Files: `runs.jsonl` (one row per call; per question: answer, given, correct, `num_cov`, `anchor_cov`),
 `spend.jsonl`, `dry_run.json`, `summary.md`, `summary.json`; rendered preview pages in `images/` (git-ignored).
+
+## Results
+
+*2026-11-13. All 15 calls made (12 main + 3 small-word), every one complete (input tokens = image formula + 6.0-7.3k
+prompt tokens), none refused, unanswered or disengaged. **$5.08 at list price** ($0.36-0.52 for first calls,
+$0.07-0.24 for salted repeats that read the prompt cache, $0.53-0.58 for the small-word calls). Full tables:
+[summary.md](summary.md). Chart: [docs/img/claude_salient.png](../../../docs/img/claude_salient.png).*
+
+![Content-chosen mixed resolution: overall accuracy against input tokens, and accuracy by question type](../../../docs/img/claude_salient.png)
+
+**Tokens.** Both mixed arms averaged 59,284 and 59,238 input tokens per call, the same as uniform 58.8 (59,283).
+
+| arm | calls | input tokens / call | all | lookups | invented facts | numbers in sentences | multi-step |
+|---|---|---|---|---|---|---|---|
+| text | 3 | 246,192 | 99.7% | 100.0% | 100.0% | 100.0% | 99.2% |
+| uniform 117.6 | 3 | 112,470 | 99.7% | 99.6% | 100.0% | 99.2% | 100.0% |
+| uniform 88.2 | 3 | 85,889 | 100.0% | 100.0% | 100.0% | 100.0% | 100.0% |
+| uniform 58.8 | 3 | 59,283 | 91.7% | 97.9% | 97.5% | 98.3% | 79.2% |
+| `salient_large` (facts 13.76, filler 3.5-4.1) | 6 | 59,284 | **90.6%** | 93.8% | 99.2% | 88.3% | 84.2% |
+| `salient_small` (control) | 6 | 59,238 | **19.4%** | 27.5% | 0.0% | 55.0% | 3.3% |
+
+Per call: `salient_large` 91.7, 92.5 / 86.7, 85.8 / 91.7, 95.0% (d0 / d1 / d2); `salient_small` 17.5, 16.7 / 17.5,
+25.0 / 19.2, 20.8%. Document 1, with the smallest filler (em 3.51), is lowest; its number questions score 80% and
+77.5% against 90-100% in the other two.
+
+Multi-step by type:
+
+| arm | two-hop | three-hop | sum | largest-of-3 | count |
+|---|---|---|---|---|---|
+| uniform 58.8 | 90.0% | 66.7% | 100.0% | 94.4% | 27.8% |
+| uniform 88.2 / 117.6 | 100% | 100% | 100% | 100% | 100% |
+| `salient_large` | **100.0% (60/60)** | **100.0% (48/48)** | 96.7% | 100.0% | **0.0% (0/36)** |
+| `salient_small` | 0.0% | 0.0% | 0.0% | 0.0% | 22.2% |
+
+**Paired tests** (first call per document, 360 pairs; arm − reference, Newcombe 95% interval, exact McNemar):
+
+| comparison | arm − ref | 95% interval | ref-only / arm-only right | p |
+|---|---|---|---|---|
+| `salient_large` vs uniform 58.8 (equal tokens) | −1.7 | −5.2 to +1.8 | 23 / 17 | 0.43 |
+| `salient_large` vs uniform 88.2 | −10.0 | −13.5 to −7.1 | 36 / 0 | 2.9e-11 |
+| `salient_large` vs uniform 117.6 | −9.7 | −13.2 to −6.9 | 35 / 0 | 5.8e-11 |
+| `salient_large` vs text | −9.7 | −13.2 to −6.9 | 35 / 0 | 5.8e-11 |
+| `salient_small` vs uniform 58.8 | −73.6 | −77.8 to −68.4 | 267 / 2 | 7.7e-77 |
+| `salient_large` vs `salient_small` | +71.9 | +66.1 to +76.7 | 11 / 270 | 9.5e-66 |
+
+All 12 calls pooled (720 pairs, descriptive): `salient_large` −1.1 points against uniform 58.8 (−3.5 to +1.3).
+
+**Where the errors are** (`salient_large`, 68 wrong answers over 6 calls):
+
+* **Counts: 36 of 36 wrong, every one answered "0".** The six count types differ only in a filler noun
+  ("keeps the lighthouse at", "restored the windmill at", ...), drawn at em 3.5-4.1: Claude found no lighthouse,
+  windmill, observatory, foundry, library or ferry at all, though every person and place in those facts was large.
+* **Number questions: 28 wrong.** In every one the number asked for was drawn large; the question finds its
+  sentence by its quoted opening, which is 63-65% filler. Most wrong answers are another number of the document
+  (a different sentence: 1990 for 1528, 2010 for 18, 500,000 for 7,500); a few are near misses on the right one
+  (1810 for 1811, 2014 for 2015, 10 for 11). So the tiny filler still let Claude find 88% of the sentences.
+* **Invented facts, chains, sums: 4 wrong** (one needle and one sum per call in document 1: 4525 for 4505 and the
+  sum built on it, a digit misread at the large size). Two- and three-hop chains are perfect (uniform 58.8: 90% and
+  67%): every link ("Sabine Sundwen", "Lentor Rowing Club", "owns 362 boats") is large.
+
+`salient_small` gets no invented fact right (names and numbers at em 3.5-4.1), but 55% of number questions (the
+quoted opening is readable at em 10.7-11.1, and the tiny number is read about half the time) and 22% of counts.
+
+**Small-word questions** (`salient_large` on Test A's document, 1 call per document, all 160 questions; filler em
+4.10 / 3.48 / 3.95; 60,700 input tokens, the same as Test A's `page59` pages):
+
+| arm | calls | input tokens / call | small-word | answers = lure | original 120 |
+|---|---|---|---|---|---|
+| text (Test A + repeats) | 6 | 248,971 | 100.0% | 0.0% | 100.0% |
+| pages 117.6 (Test A + repeats) | 15 | 114,188 | 97.2% | 2.0% | 99.9% |
+| pages 88.2 (Test A + repeats) | 15 | 87,445 | 96.2% | 3.8% | 99.3% |
+| pages 58.8 (Test A) | 3 | 60,701 | 82.5% | 8.3% | 93.3% |
+| `salient_large` | 3 | 60,700 | **100.0% (120/120)** | 0.0% | 90.8% |
+
+Every small-word type at 100%, passives included (15/15; 117.6 pages 84% over 15 calls). Paired with Test A's
+calls on the same 40 questions per document: +9.2 points against 117.6 pages (+4.1 to +15.7; 0 / 11 discordant,
+p = 0.001) and +17.5 against 58.8 pages (+11.0 to +25.3, p < 0.001); equal to text. On the original 120 questions
+of the same calls, 90.8%, as in the main arm.
+
+### Predictions
+
+- **M1 FAIL:** `salient_large` 90.6% vs uniform 58.8 91.7% (−1.1 points pooled; −1.7 on first calls, interval −5.2
+  to +1.8). At equal tokens the detector recovered none of the loss overall: it moved it.
+- **M2 FAIL:** lookups 93.8% (< 99%: number questions 88.3%, invented facts 99.2%); multi-step 84.2%, 15.8 points
+  below uniform 88.2 (that half holds). The multi-step loss is entirely counts (0%); chains, sums and maxima are at
+  99.0% (202/204).
+- **M3 PASS:** `salient_small` 19.4%, 71 points below `salient_large`: what is enlarged matters enormously.
+- **M4 FAIL:** small-word 100.0% against the 117.6 pages' 97.2% over 15 calls: better, not "no better". Caveat: the
+  flip-word list was drawn up knowing these question types, and only 3 calls were made; 117.6 pages also reached
+  100% in some single calls (6 of 15).
+- **R1 (mine) PASS, weakly:** below uniform 58.8 (90.6 vs 91.7), but the difference is not significant.
+- **R2 (mine) FAIL:** number questions 88.3%, not below 60% (the filler at em 3.5-4.1 is far more usable to Claude
+  than it is to my eye); invented facts 99.2% (>= 90%, that half holds).
+- **R3 (mine) PASS:** counts 0%; two- and three-hop 100%.
+- **R4 (mine) PASS:** `salient_small` lookups 27.5%.
+
+### What the sample can and cannot show
+
+It shows clearly that at uniform 58.8's tokens, drawing detector-marked words at the safe size and the rest at
+em 3.5-4.1 changes *which* questions are lost, not how many: chains and wording-sensitive facts whose every key
+word the detector marks become as safe as at 117.6, while anything that depends on a filler word (counting facts by
+their noun, finding a sentence by its opening) gets worse or fails outright. The equal-token difference overall
+(−1.1 points, interval −3.5 to +1.3 pooled) excludes a gain of 3 points or more. It cannot show how a real
+detector would do on real questions: the planted facts are numbers and invented names (the detector's best case),
+and the small-word list was written knowing the small-word types, so the 100% there is an upper bound. The
+layout rule (each line as tall as its largest word) forced the filler to em 3.5-4.1 because every line holds a
+salient word; a layout that packs filler lines more tightly, or a detector that marks far fewer words, would give a
+different trade and is untested. One model, one effort, 2 calls per document (1 for the small-word arm), and
+baselines of 1 call per document (3 to 15 for small words).
+
+### Deviations
+
+- None from the plan. The small-word arm ran because $8.60 of the cap was left after the 12 calls. The figure's
+  right panel splits lookups into invented facts and numbers in sentences, and multi-step into chains/sums/maxima
+  and counts, because that is where the two arms differ (the brief asked for lookups / multi-step).
