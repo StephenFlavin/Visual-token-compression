@@ -105,7 +105,7 @@ a 2x5 grid has 1,024 patterns for 95 chars, and a 4x5 grid has about 10^6 for 30
 (h5, widths 2/4 px, `pixel_block`, N=300) and score them through the E3 bridge and E2 transfer exactly like
 `e1long` `lg_learned_n300_pb_h5`:
 * `GlyphBank.random_binary(..., density≈0.3)`: random dots, already built and unit-tested
-  (`tests/test_render.py`) but never run;
+  (`learned_glyphs/tests/test_render.py`) but never run;
 * a designed max-distance code: choose the 395 patterns by greedy max-min Hamming distance, preferring isolated
   dots (after a 1-px blur), i.e. a "braille" built for this channel.
 

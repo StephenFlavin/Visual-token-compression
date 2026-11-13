@@ -3,7 +3,7 @@
 > **Status: a record, kept as received.** This is the external literature report commissioned on 2026-11-04 with
 > [MOONSHOT_BRIEF.md](../../gpu/MOONSHOT_BRIEF.md), about the densest code in the repo: three pages of learned
 > glyphs overlaid in the red, green and blue channels (`rgb3_lg_pb_h5`, 322 characters per vision token; "405" is
-> a denser variant). "You" is the user, "the assistant" is the session that wrote the brief. Its statements about
+> its grey-level variant `rgb3_lg_free_h4`, dropped on 2026-11-05). "You" is the user, "the assistant" is the session that wrote the brief. Its statements about
 > papers and models are the report's own and were not re-checked in the clean-up of 2026-11-13.
 >
 > **How it compared with what was then measured:** the report put the plausible range at 30-90 characters per
