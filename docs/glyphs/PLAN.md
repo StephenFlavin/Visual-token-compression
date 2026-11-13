@@ -1,18 +1,43 @@
-# Visual BPE — Validation Plan (CPU cloud runner)
+# Visual BPE: validation plan for Phases 1-2 (hand-picked glyphs against Latin)
 
-> **Status (2026-11-05).** This plan (phases 1-2, kill criteria K1-K3) is finished: **K3 KILL**. Trained CRNN
-> readers favour plain Latin over substitution and quadrant packing (latin 1.73% CER at 7.5 px²/char vs subst300
-> 2.26% at 8.9); K1 (~1.19x em) and K2 (PP-OCR 0.89x vs the 0.80 bar) were negative too. Results:
-> [docs/glyphs/RESULTS.md](RESULTS.md). Later sub-projects, each with its own plan:
-> * Learned glyph alphabet, [learned_glyphs/PLAN.md](../../learned_glyphs/PLAN.md): qualified GO with raw-pixel readers
->   (0.57x Latin's px²/char at 3% CER), [learned_glyphs/RESULTS.md](../../learned_glyphs/RESULTS.md).
-> * Frozen-encoder probe, [encoder_probe/PLAN.md](../../encoder_probe/PLAN.md): dense codes are lost through frozen SigLIP
->   and DeepEncoder, [encoder_probe/RESULTS.md](../../encoder_probe/RESULTS.md).
-> * Round 3, fine-tuning Qwen2.5-VL-3B to read the codes, [encoder_probe/ROUND3.md](../../encoder_probe/ROUND3.md): at 1000
->   steps only latin_p8 (28 chars/token) is read; the glyph codes sit at their blind floors; gate G3 undecided
->   ([docs/HANDOFF.md](../HANDOFF.md)).
->
-> The plan below is the pre-registered original, unchanged.
+**Status: finished, 2026-11-03. Outcome: KILL (criterion K3).** Results and charts:
+[RESULTS.md](RESULTS.md). This page is the plan as it was pre-registered before any run (the prior-art search it cites is dated 2026-11-02,
+K3's outcome 2026-11-03); only this
+header, the outcome table and file paths (which follow the 2026-11-12 restructure) were added later.
+
+## What was asked, and what was found
+
+**Asked:** would "Visual BPE" pack more text into the same pixels than plain Latin text? Visual BPE here means
+drawing each frequent character run (` the `, `ing `) as one glyph, either a Chinese character standing in for it
+("substitution") or several letters packed into one square cell ("quadrant"). The plan was to get a go / no-go on
+a CPU before paying for a GPU.
+
+**Found:** no. The plan set three kill criteria; the decisive one killed the idea in this hand-picked form.
+
+| Criterion | Bar set here | Outcome |
+|---|---|---|
+| K1, arithmetic | substitution with 1000 chunks makes lines at least 15% narrower than condensed Latin | 32% narrower: passes, but that allows only a 1.19x larger font on a fixed page |
+| K2, zero-shot reader | at least 20% fewer px² per character than the best Latin at 10% character error | 0.89x with PP-OCR (bar 0.80x): fails. Claude could not be used: it refuses coded and scrambled pages |
+| K3, trained reader (decisive) | at least 30% fewer px² per character than the best Latin at 3% character error | substitution needs 1.25x to 1.48x *more*: **KILL** |
+| Quadrant packing | killed if it needs at least as many pixels as Latin | 3.65x to 3.93x Latin: killed (prediction P1 confirmed) |
+
+Section 4 said what a failure would point to: "next step would be *learned* glyphs (end-to-end optimised against
+the reader), not hand-designed ones". That became [learned_glyphs/PLAN.md](../../learned_glyphs/PLAN.md), which
+did beat Latin in pixel space (0.57x), and then failed at every pretrained vision model
+([RESULTS.md, "What happened next"](RESULTS.md#what-happened-next)).
+
+Departures from the plan as run:
+
+* Phase 1's zero-shot comparison of schemes was done with PP-OCR ("Phase 1b"), because Claude's safety
+  classifiers refuse substitution, quadrant and word-scrambled pages. Claude was measured on natural Latin only.
+* Phase 2 used font sizes from 3 to 12 px (the plan said 5 to 12): Latin was still readable below 5 px.
+* Phase 2's critical points were re-run at 10,500 steps (the plan's budget gave 3,500), because the substitution
+  readers had not converged.
+* Phase 3 (a GPU fine-tune of these hand-picked schemes) was not run: K3 killed it.
+
+---
+
+## The plan as pre-registered
 
 Goal: reach a **go / no-go** on "Visual BPE" (render frequent multi-char chains as single
 glyphs / packed cells so text survives lower image resolution) *before* spending GPU money.
