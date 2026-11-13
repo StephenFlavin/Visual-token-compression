@@ -1,10 +1,10 @@
 import numpy as np
 import pytest
 
-from vbpe import config
-from vbpe.layout import GlyphUnit, LayoutParams, render_line, render_page
-from vbpe.schemes import get_scheme
-from vbpe.schemes.substitution import (CJKUnit, SubstitutionScheme, ink_extent, load_symbols,
+from vtc import config
+from vtc.layout import GlyphUnit, LayoutParams, render_line, render_page
+from vtc.schemes import get_scheme
+from vtc.schemes.substitution import (CJKUnit, SubstitutionScheme, ink_extent, load_symbols,
                                        make_substitution_scheme, normalize_fullwidth)
 
 STUB_TOKENS = [
@@ -16,7 +16,7 @@ STUB_TOKENS = [
 
 
 class StubDictionary:
-    """Greedy longest-match segmenter (stand-in for vbpe.dictionary.Dictionary)."""
+    """Greedy longest-match segmenter (stand-in for vtc.dictionary.Dictionary)."""
 
     def __init__(self, tokens):
         self.tokens = list(tokens)
@@ -168,7 +168,7 @@ def test_real_dictionary_if_available():
         s._setup()
     except (ImportError, FileNotFoundError, OSError) as e:
         pytest.skip(f"dictionary not available: {e}")
-    from vbpe.corpus import load_passages
+    from vtc.corpus import load_passages
     for t in TEXTS + [p["text"] for p in load_passages("natural")[:3] + load_passages("scrambled")[:2]]:
         assert s.decode(s.transcription_target(t)) == t
     assert abs(s.cjk_dy - 0.0211) < 0.003

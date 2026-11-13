@@ -6,7 +6,7 @@ passages as fit in T5's estimated text tokens, as pages), T15 (top-15 as text), 
 as pages within T5's estimated tokens).
 
 Resumable: every finished call is appended to results/rag/runs.jsonl at once and successful responses are cached on
-disk (vbpe.claude_eval, keyed on model + prompt + images); data preparation is deterministic, so a re-run rebuilds the
+disk (vtc.claude_eval, keyed on model + prompt + images); data preparation is deterministic, so a re-run rebuilds the
 same prompts, skips finished (dataset, question, arm) rows and serves cached calls free. Failed calls (e.g. a usage
 limit) are neither recorded nor cached; when most of a batch fails the run stops and prints the command to resume.
 
@@ -153,13 +153,13 @@ def text_block(ps: list[str]) -> str:
 
 
 def page_images(ps: list[str], start: int = 1):
-    from vbhook import render
+    from vtchook import render
     flow = " ".join(f"Document {i + start}: {' '.join(p.split())}" for i, p in enumerate(ps))
     return [pg.image for pg in render.render(flow, BUDGET)]
 
 
 def page_tokens(ps: list[str], start: int = 1) -> int:
-    from vbhook import render
+    from vtchook import render
     flow = " ".join(f"Document {i + start}: {' '.join(p.split())}" for i, p in enumerate(ps))
     return render.page_tokens(flow, BUDGET)
 
@@ -269,7 +269,7 @@ STAGES = {"A": ("planted", ds_planted, 60), "B": ("multihop", ds_multihop, 150),
 
 
 def run_stage(stage: str, a) -> bool:
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     name, fn, n = STAGES[stage]
     passages, qs = fn()
     if name == "planted":

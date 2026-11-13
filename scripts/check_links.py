@@ -6,7 +6,7 @@ whose target is not in the working tree. http(s) / mailto links and anchor-only 
 a path is dropped before the check.
 
 Warnings (exit code stays 0): inline-code spans that begin with a repository path (`docs/`, `experiments/`,
-`results/`, `scripts/`, `tests/`, `encoder_probe/`, `learned_glyphs/`, `vbpe/`) that does not exist. Some of these
+`results/`, `scripts/`, `tests/`, `encoder_probe/`, `learned_glyphs/`, `vtc/`) that does not exist. Some of these
 name git-ignored outputs or examples, so they are listed for a human to read. Patterns with `*`, `<...>` or
 `{a,b}` are checked up to their fixed prefix directory.
 
@@ -23,7 +23,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PREFIXES = ("docs/", "experiments/", "results/", "scripts/", "tests/", "encoder_probe/", "learned_glyphs/", "vbpe/")
+PREFIXES = ("docs/", "experiments/", "results/", "scripts/", "tests/", "encoder_probe/", "learned_glyphs/", "vtc/")
 LINK = re.compile(r"!?\[[^\]]*\]\(\s*<?([^)\s>]+)>?(?:\s+\"[^\"]*\")?\s*\)")
 ATTR = re.compile(r"(?:src|href)=[\"']([^\"']+)[\"']")
 CODE = re.compile(r"`([^`\n]+)`")

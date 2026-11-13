@@ -10,7 +10,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "experiments" / "claude_qa"))
 import claude_qa_salient as S  # noqa: E402
-from vbpe import metrics  # noqa: E402
+from vtc import metrics  # noqa: E402
 
 
 def marked(doc: str) -> list[str]:

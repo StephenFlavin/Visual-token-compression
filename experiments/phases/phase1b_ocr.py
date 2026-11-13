@@ -5,9 +5,9 @@ results/phase1/pilot), so it cannot score composite schemes. PP-OCR already know
 ~6k CJK glyphs and has no safety layer, so it answers "are these glyphs legible at this size for a
 reader that already knows them?". Caveats: its training is Chinese-heavy (biased towards CJK);
 it drops inter-word spaces, so ALL schemes are scored with whitespace-free CER (cer_nospace).
-Recognition-only on exact line strips (no detection), see vbpe/readers/rapidocr_reader.py.
+Recognition-only on exact line strips (no detection), see vtc/readers/rapidocr_reader.py.
 
-Rows use the Phase-1 schema so ``python3 -m vbpe.analysis`` works on the output.
+Rows use the Phase-1 schema so ``python3 -m vtc.analysis`` works on the output.
 
     python3 experiments/phases/phase1b_ocr.py --variant natural --n-passages 6
     python3 experiments/phases/phase1b_ocr.py --variant scrambled --n-passages 3
@@ -24,8 +24,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from vbpe import config  # noqa: E402
-from vbpe.metrics import cer, normalize  # noqa: E402
+from vtc import config  # noqa: E402
+from vtc.metrics import cer, normalize  # noqa: E402
 
 DEFAULT_SCHEMES = ["latin", "latin_condensed", "subst300", "subst1000", "subst3000"]
 DEFAULT_BUDGETS = [12, 14, 16, 18, 20, 23, 26, 30, 34, 40, 48, 60, 90]
@@ -34,9 +34,9 @@ DEFAULT_BUDGETS = [12, 14, 16, 18, 20, 23, 26, 30, 34, 40, 48, 60, 90]
 def _job(args):
     passage, variant, scheme_name, budget, run, img_dir = args
     from experiments.phases.phase1_sweep import canvas_size
-    from vbpe.layout import render_page
-    from vbpe.readers.rapidocr_reader import cer_nospace, read_lines
-    from vbpe.schemes import get_scheme
+    from vtc.layout import render_page
+    from vtc.readers.rapidocr_reader import cer_nospace, read_lines
+    from vtc.schemes import get_scheme
 
     scheme = get_scheme(scheme_name)
     text = passage["text"]
@@ -75,7 +75,7 @@ def main(argv=None):
     ap.add_argument("--save-images", action="store_true")
     a = ap.parse_args(argv)
 
-    from vbpe.corpus import load_passages
+    from vtc.corpus import load_passages
     run = a.run_name or f"ocr_{a.variant}"
     out_dir = config.RESULTS / "phase1b" / run
     out_dir.mkdir(parents=True, exist_ok=True)

@@ -19,10 +19,10 @@ from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from vbpe import claude_eval as ce  # noqa: E402
-from vbpe import config, metrics  # noqa: E402
-from vbpe.layout import fit_em, render_page  # noqa: E402
-from vbpe.schemes import get_scheme  # noqa: E402
+from vtc import claude_eval as ce  # noqa: E402
+from vtc import config, metrics  # noqa: E402
+from vtc.layout import fit_em, render_page  # noqa: E402
+from vtc.schemes import get_scheme  # noqa: E402
 
 OUT = config.RESULTS / "claude_checks"
 IMG = OUT / "img"

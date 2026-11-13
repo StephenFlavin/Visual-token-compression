@@ -4,7 +4,7 @@
 
 Measures the bank's intrinsic legibility (no reader/glyph co-adaptation): the joint run's reader is
 discarded, the bank's binarised glyphs are fixed and a new reader starts from random init with the
-Phase-2 budget (``vbpe.crnn.train.TrainConfig`` defaults: 3500 steps, batch 32, AdamW lr 2e-3,
+Phase-2 budget (``vtc.crnn.train.TrainConfig`` defaults: 3500 steps, batch 32, AdamW lr 2e-3,
 wd 1e-2, OneCycle pct_start 0.15, grad clip 5, eval every 250, best-val checkpoint).
 
 Reuse vs. duplication: ``lg.train.train_joint`` has no way to plug in a saved bank (with
@@ -29,7 +29,7 @@ from pathlib import Path
 
 import numpy as np
 
-from vbpe.metrics import normalize
+from vtc.metrics import normalize
 
 LG_ROOT = Path(__file__).resolve().parent.parent
 RESULTS = LG_ROOT / "results"
@@ -40,7 +40,7 @@ class TransferConfig:
     bank_path: str = ""
     channel: str = "default"
     hard: bool = True                      # binarised glyphs (learned banks); fixed banks: as stored
-    # Phase-2 budget (vbpe.crnn.train.TrainConfig defaults)
+    # Phase-2 budget (vtc.crnn.train.TrainConfig defaults)
     steps: int = 3500
     batch: int = 32
     lr: float = 2e-3
@@ -137,8 +137,8 @@ def train_reader_on_bank(bank_path, cfg: TransferConfig | None = None, log=print
     ``train_lines`` / ``eval_lines=(val, test)`` override the corpus (tests / smoke)."""
     import torch
     from torch import nn
-    from vbpe.crnn import data as D
-    from vbpe.crnn.model import CRNN, n_params
+    from vtc.crnn import data as D
+    from vtc.crnn.model import CRNN, n_params
 
     from . import train as T
     from .alphabet import Alphabet
@@ -184,7 +184,7 @@ def train_reader_on_bank(bank_path, cfg: TransferConfig | None = None, log=print
                            data_seed=cfg.data_seed, lines=train_lines)
     if train_lines is None:
         from itertools import islice
-        from vbpe.corpus import iter_lines
+        from vtc.corpus import iter_lines
         probe = [normalize(t) for t in islice(iter_lines("train", 30, 70, seed=cfg.data_seed),
                                               cfg.n_expand_probe)]
     else:
@@ -337,17 +337,17 @@ def bridge_phase2(bank_path, em: float, *, steps: int = 3500, run_name: str = "b
                   n_test: int = 1000, batch: int = 32, eval_every: int = 250, threads: int = 1,
                   seed: int = 0, render_workers: int = 1, allow_fallback: bool = False,
                   cache_dir: str | Path | None = None, log=print) -> list[dict]:
-    """E3: score a bank with the UNCHANGED Phase-2 pipeline (vbpe.crnn.data rendering via
-    vbpe.layout + vbpe.crnn.train.train_model) at layout em ``em``.
+    """E3: score a bank with the UNCHANGED Phase-2 pipeline (vtc.crnn.data rendering via
+    vtc.layout + vtc.crnn.train.train_model) at layout em ``em``.
 
     The bank is registered as scheme ``lg:<key>@<sha8>`` via the runtime hook (no parent edit).
-    Phase-2 data are built exactly as ``vbpe.crnn.train.load_data`` does, except that the render
+    Phase-2 data are built exactly as ``vtc.crnn.train.load_data`` does, except that the render
     cache lives in ``<out>/cache`` (git-ignored). Writes the raw Phase-2 row (phase=2) to
     ``<out>/phase2/runs.jsonl`` and a PLAN-schema row (phase="lg", train_mode="bridge",
     scheme = the bank's lg scheme name) to ``<out>/runs.jsonl``. Returns [lg row].
     """
-    from vbpe.crnn import data as D
-    from vbpe.crnn.train import TrainConfig, train_model
+    from vtc.crnn import data as D
+    from vtc.crnn.train import TrainConfig, train_model
 
     from .scheme import bank_sha8, install_phase2_hook, make_lg_scheme, scheme_name_for
 

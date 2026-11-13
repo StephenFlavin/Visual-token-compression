@@ -196,7 +196,7 @@ would fit if each code were readable, and which were read. Drawn by `scripts/mak
 python3 scripts/build_data.py --report                         # dictionaries and the K1 report
 python3 experiments/phases/phase1b_ocr.py --variant natural --n-passages 6      # Phase 1b (CPU, free)
 nohup python3 experiments/phases/phase2_driver.py > results/phase2_driver.log 2>&1 &   # Phase 2 grid, ~4.5 h on 4 cores
-python3 scripts/merge_phase2.py && python3 -m vbpe.analysis results/phase2/merged/runs.jsonl --out results/phase2/merged
+python3 scripts/merge_phase2.py && python3 -m vtc.analysis results/phase2/merged/runs.jsonl --out results/phase2/merged
 python3 scripts/make_glyphs_figures.py                         # the two charts above
 ```
 

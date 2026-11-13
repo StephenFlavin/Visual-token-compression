@@ -81,7 +81,7 @@ def overview_rows():
                  100 * (c["arms"]["B"]["after_reading_cost"] / c["arms"]["A"]["after_reading_cost"] - 1),
                  "9 sessions, 360 questions"))
     s = {(x["dataset"], x["arm"]): x for x in load("readhook_swe/analysis/summary.json")}
-    t, v = s[("all", "text")], s[("all", "vbhook")]
+    t, v = s[("all", "text")], s[("all", "vtchook")]
     rows.append(("works", "Coding agent: files and output as pages", (100 * (v["resolved"] - t["resolved"]) / t["runs"], None, None),
                  100 * (v["cost"] / t["cost"] - 1), f"{t['runs']} SWE-bench tasks solved"))
     rp = load("claude_qa/repeat/analysis/summary.json")

@@ -3,7 +3,7 @@ CLI instead of an API key (docs/claude/ERB_PLAN.md).
 
 Everything but the transport is theirs: prompts, citation stripping, correctness, per-fact completeness, document
 recall and the three-judge gold-document correction. Their Anthropic class is replaced by `CLILLM` before the
-evaluator imports it; each call is a single-shot CLI call (no tools), cached on disk by vbpe.claude_eval (re-runs and
+evaluator imports it; each call is a single-shot CLI call (no tools), cached on disk by vtc.claude_eval (re-runs and
 --resume are free) and logged with its usage to results/erb/judge/usage.jsonl.
 
 Judge model: $ERB_JUDGE_MODEL (default claude-sonnet-4-6, the evaluator's own Anthropic default) for every call the
@@ -74,7 +74,7 @@ def occurrence(key: str) -> int:
 def make_cli_llm(fake: bool):
     sys.path[:0] = [str(E.ERB), str(E.ROOT)]
     from src.llm.interface import LLMInterface                      # the benchmark's interface
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
 
     main_model = os.environ.get("ERB_JUDGE_MODEL", "claude-sonnet-4-6")
     cheap_model = os.environ.get("ERB_JUDGE_CHEAP_MODEL", "claude-haiku-4-5")

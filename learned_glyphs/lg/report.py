@@ -8,7 +8,7 @@
     of a saved reader). Alignment = Levenshtein edit ops on symbol sequences (chars by default;
     with an Alphabet the strings are segmented with ``Alphabet.encode`` first).
 (c) ``write_report``: rows from ``learned_glyphs/results/*/runs.jsonl`` (+ the parent's
-    ``results/phase2/phase2_main/runs.jsonl``) -> ``vbpe.analysis.write_summary`` (P@x, CIs,
+    ``results/phase2/phase2_main/runs.jsonl``) -> ``vtc.analysis.write_summary`` (P@x, CIs,
     ratios vs best Latin, cer_curves.png) on display names ``<scheme>/<train_mode>[/<channel>]``,
     plus the PLAN decision section (S1, S2, GO) prepended to summary.md.
 
@@ -57,7 +57,7 @@ def atlas_comparison(banks: list[tuple[str, object]], path: str | Path, symbols=
     bank's line pitch (the Phase-2 Latin reference) unless one is given."""
     from PIL import Image, ImageDraw, ImageFont
 
-    from vbpe import config
+    from vtc import config
 
     banks = [(lab, _load_any_bank(b)) for lab, b in banks]
     if not banks:
@@ -183,7 +183,7 @@ def test_pass(bank_path, reader_path, n_test: int = 1000, channel: str | None = 
     """Re-run a saved reader (joint: readers/<tag>.pt, transfer: checkpoints/<tag>.pt) on its bank's test
     lines -> (ref, hyp) pairs for ``confusions``."""
     import torch
-    from vbpe.crnn.model import CRNN
+    from vtc.crnn.model import CRNN
 
     from . import train as T
     from .transfer import _EvalCfg, _RenderCfg, alphabet_for_bank, load_frozen_bank
@@ -257,7 +257,7 @@ def display_name(r: dict) -> str:
 
 
 def analysis_rows(rows: list[dict]) -> list[dict]:
-    """Copies with scheme = display name and phase = 2 (so vbpe.analysis treats them uniformly)."""
+    """Copies with scheme = display name and phase = 2 (so vtc.analysis treats them uniformly)."""
     out = []
     for r in rows:
         if r.get("cer") is None or r.get("px_per_char") is None or r.get("em") is None:
@@ -271,7 +271,7 @@ def analysis_rows(rows: list[dict]) -> list[dict]:
 
 
 def p3(rows: list[dict], name: str, thr: float = THRESHOLD) -> tuple[float | None, str | None]:
-    from vbpe.analysis import CurveTable, crossing
+    from vtc.analysis import CurveTable, crossing
     t = CurveTable(rows, name)
     if t.empty:
         return None, "missing"
@@ -393,7 +393,7 @@ def write_report(out_dir: str | Path = RESULTS / "summary", rows: list[dict] | N
                  include_smoke: bool = False, n_boot: int = 1000, samples: bool = True,
                  title: str = "Learned glyphs vs Phase-2 typography") -> dict:
     """summary.md / summary.json / cer_curves.png / p_at_bars.png (+ decision.json)."""
-    from vbpe import analysis
+    from vtc import analysis
 
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)

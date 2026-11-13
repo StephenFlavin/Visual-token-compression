@@ -221,7 +221,7 @@ def cer_trunc(target: str, hyp: str) -> float:
     and then keeps transcribing past its last line (zero-shot Qwen ignores "lines a-b" on most pages) is not
     charged for the extra lines; stopping early or summarising still counts as errors."""
     from rapidfuzz.distance import Levenshtein
-    from vbpe.metrics import normalize
+    from vtc.metrics import normalize
     r, h = normalize(target), normalize(hyp)
     return Levenshtein.distance(r, h[:len(r)]) / max(1, len(r))
 
@@ -516,7 +516,7 @@ def main(argv=None) -> int:
     assert "real" in a.arms and len(a.arms) >= 2, "need the real arm and at least one reference arm"
     from encoder_probe.ep import qwen_ft as Q
     from encoder_probe.ep.encoders import resolve_device
-    from vbpe.metrics import cer as cer_fn
+    from vtc.metrics import cer as cer_fn
 
     shifts = ([(0, 0)] if a.shifts is None else
               [(a.shift_dx, dy) for dy in a.shifts] if a.shift_dx is not None else

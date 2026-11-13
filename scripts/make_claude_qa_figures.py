@@ -211,9 +211,9 @@ def fig_pages():
     with the 28-px token grid."""
     sys.path.insert(0, str(ROOT / "experiments" / "claude_qa"))
     import claude_qa_render as Q
-    from vbpe import metrics
-    from vbpe.layout import render_page
-    from vbpe.schemes import get_scheme
+    from vtc import metrics
+    from vtc.layout import render_page
+    from vtc.schemes import get_scheme
     sch = get_scheme("latin")
     doc, _ = Q.make_questions(Q.build_document(700000, 0), 40, 40, 0, 40)
     P, cw, ch, pad = 28, 31 * 28, 6 * 28, 24

@@ -3,9 +3,9 @@ import time
 import numpy as np
 import pytest
 
-from vbpe.layout import LayoutParams, render_line, render_page
-from vbpe.schemes import get_scheme
-from vbpe.schemes.quadrant import QuadCell, QuadrantScheme
+from vtc.layout import LayoutParams, render_line, render_page
+from vtc.schemes import get_scheme
+from vtc.schemes.quadrant import QuadCell, QuadrantScheme
 
 TEXT = ("The quick brown fox (aged 7) jumps over the lazy dog; a I, x... "
         "Internationalization is 20-character-long! ") * 12

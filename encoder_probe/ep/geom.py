@@ -26,9 +26,9 @@ from encoder_probe.ep import flock
 from encoder_probe.ep import pages as P1
 from encoder_probe.ep import rgb_overlay as R1
 from encoder_probe.ep.pages import LG_BANKS, LP, PRINTABLE, ROOT, Encoding, Page, clean_text
-from vbpe import config
-from vbpe.layout import _draw_lines, glyph_advance, wrap
-from vbpe.metrics import normalize
+from vtc import config
+from vtc.layout import _draw_lines, glyph_advance, wrap
+from vtc.metrics import normalize
 
 # EP_TRAIN_R2_CAP raises the cap for a fresh build (same prefix, so existing pages are unchanged); needed for
 # > ~1000 train pages of the densest encodings (see docs/gpu/LOCAL_GPU.md)
@@ -222,7 +222,7 @@ class SizedStreams(Sized, Encoding):
 
 def get_encoding_s(name: str, S: int) -> Encoding:
     if name.startswith("latin_p"):
-        from vbpe.schemes.latin import LatinScheme
+        from vtc.schemes.latin import LatinScheme
         return SizedScheme(name, "latin", int(name[len("latin_p"):]), LatinScheme(config.LATIN_FONT),
                            list(PRINTABLE), S)
     if name.startswith("col_b"):
@@ -256,7 +256,7 @@ def _locked_build_train_r2(path: Path, cap: int) -> None:
     try:
         if path.exists():
             return
-        from vbpe.corpus import _raw_split, clean_sentences
+        from vtc.corpus import _raw_split, clean_sentences
         tmp, total = path.with_suffix(".tmp"), 0
         with tmp.open("w") as f:
             for raw in _raw_split("train"):

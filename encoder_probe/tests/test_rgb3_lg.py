@@ -6,7 +6,7 @@ from encoder_probe.ep.geom import get_encoding_s, make_pages_s
 from encoder_probe.ep.pages import LP, get_encoding
 from encoder_probe.ep.probe import edit_distance
 from encoder_probe.ep.rgb_overlay import TAGS, RGB3BankEncoding, ctc_ok
-from vbpe.layout import _draw_lines
+from vtc.layout import _draw_lines
 
 NAMES = ("rgb3_lg_pb_h5", "rgb3_lg_free_h4")
 SIZES = (448, 512)                           # identity28/qwen25vl and identity32/deepencoder page sides

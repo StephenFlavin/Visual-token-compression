@@ -1,6 +1,6 @@
-from vbpe import metrics
-from vbpe.layout import LayoutParams, fit_em, render_line, render_page
-from vbpe.schemes import get_scheme
+from vtc import metrics
+from vtc.layout import LayoutParams, fit_em, render_line, render_page
+from vtc.schemes import get_scheme
 
 TEXT = ("The quick brown fox jumps over the lazy dog. " * 40).strip()
 

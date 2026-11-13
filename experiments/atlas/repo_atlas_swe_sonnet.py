@@ -240,7 +240,7 @@ def gate_build(work: Path) -> list[dict]:
         meta = sw.contexts(work, t)
         co = sw.fresh_repo(work, t, work / "gate" / "co" / iid / t["repo"].split("/")[1])
         files, _ = RA.collect(co, False, 10)
-        from vbhook import render
+        from vtchook import render
         flow = RA.atlas_flow(files)
         chunks = render.chunk(flow, render.page_chars(88.2))
         assert len(chunks) == meta["pages"], (iid, len(chunks), meta["pages"])
@@ -261,7 +261,7 @@ def gate_build(work: Path) -> list[dict]:
 
 def gate_call(model: str, pngs: list[bytes], context: str, questions: str, timeout: float = 1200.0) -> dict:
     """Message 1: the atlas pages + their index + "Reply only OK."; message 2: the questions (as the QA test)."""
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     c1 = [{"type": "image", "source": {"type": "base64", "media_type": "image/png",
                                        "data": base64.b64encode(b).decode("ascii")}} for b in pngs]
     c1.append({"type": "text", "text": context + ACK})

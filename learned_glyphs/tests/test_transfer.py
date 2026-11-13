@@ -37,7 +37,7 @@ need_lg2 = pytest.mark.skipif(not HAVE_LG2, reason="LG2 modules (alphabet/train)
 from learned_glyphs.lg import report  # noqa: E402
 from learned_glyphs.lg.scheme import (PUA_BASE, LearnedGlyphScheme, label_of,  # noqa: E402
                                       resample_cell)
-from vbpe.layout import LayoutParams, render_line, render_page  # noqa: E402
+from vtc.layout import LayoutParams, render_line, render_page  # noqa: E402
 
 TEXTS = ["The quick brown fox jumps over the lazy dog.",
          "In 1984, the band's album (and the tour) was released; it sold 3,000 copies!",
@@ -223,8 +223,8 @@ def test_bank_path_and_registry_name(tmp_path, monkeypatch):
     assert sch.symbols == alpha.symbols and sch.decode(sch.transcription_target("hi there")) == "hi there"
     with pytest.raises(ValueError):
         S.make_lg_scheme(name.split("@")[0] + "@00000000")
-    # runtime Phase-2 hook resolves the name through vbpe.crnn.data
-    from vbpe.crnn import data as D
+    # runtime Phase-2 hook resolves the name through vtc.crnn.data
+    from vtc.crnn import data as D
     monkeypatch.setattr(D, "resolve_scheme", D.resolve_scheme)
     S.install_phase2_hook()
     assert D.resolve_scheme(name) is sch

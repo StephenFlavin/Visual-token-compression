@@ -37,7 +37,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas"), str(ROOT / "experiments" / "readhook")]
-WORK = Path(os.environ.get("MIG_WORK", "/tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/mig"))
+WORK = Path(os.environ.get("MIG_WORK", "/tmp/claude-0/-home-user-visual-token-compression/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/mig"))
 OUT = ROOT / "results" / "atlas" / "migrate"
 BENCH_URL = "https://github.com/anirudhkhatry/CRUST-bench.git"
 
@@ -482,8 +482,8 @@ def build_atlas(project: str, c_project: str) -> dict:
     its directory (tests and examples included: the plain arm sees them too). Other files (Makefiles, READMEs, data)
     are listed in ``skipped``."""
     import repo_atlas as RA
-    from vbhook import render
-    from vbhook.minify import minify
+    from vtchook import render
+    from vtchook.minify import minify
     tmp = WORK / "tmp_c" / project
     shutil.rmtree(tmp, ignore_errors=True)
     extract_c(c_project, tmp)
@@ -668,7 +668,7 @@ USAGE_KEYS = ("input_tokens", "cache_creation_input_tokens", "cache_read_input_t
 
 
 def run_one(project: str, arm: str, budget: float) -> dict:
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     sel = json.loads((OUT / "selection.json").read_text())
     meta = sel["meta"][project]
     vrow = baselines()[project]

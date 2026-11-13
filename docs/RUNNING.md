@@ -42,7 +42,7 @@ model; Phase 2 trains a small reader (a CRNN) per rendering scheme and font size
 | Phase 2 grid | `nohup python3 experiments/phases/phase2_driver.py > results/phase2_driver.log 2>&1 &` | one process per (scheme, em), largest em first, keeps 4 cores busy; per-job logs in `results/phase2/<run>/driver/`. `experiments/phases/phase2_main.sh` is the older 3-worker wrapper |
 | Phase 2 single runs | `python3 experiments/phases/phase2_train.py --schemes latin --ems 5 8 --steps 3500 --parallel 3 --threads 1 --run-name X` | `--smoke` for a quick check |
 | Merge Phase 2 rows | `python3 scripts/merge_phase2.py` | keeps the longest run per (scheme, em) in `results/phase2/merged/`, the rows to cite. **Do not pass `--help`** ([GOTCHAS.md](GOTCHAS.md)) |
-| Analysis | `python3 -m vbpe.analysis <runs.jsonl> [more] --out DIR` | Phase 1, 1b and 2 rows; `summary.md` / `summary.json` and plots |
+| Analysis | `python3 -m vtc.analysis <runs.jsonl> [more] --out DIR` | Phase 1, 1b and 2 rows; `summary.md` / `summary.json` and plots |
 
 ## 2. Learned glyph alphabet (finished)
 
@@ -134,7 +134,7 @@ questions without calls.
 | Compaction with a page archive | `python3 experiments/compaction/run_compact.py --corpora 0 1 2` | [results/compaction](../results/compaction/README.md) |
 | Compaction at scale, real hooks | `python3 experiments/compaction/run_scale.py --sessions research:0 code:0 logs:0` (pilot), `--sessions all`; `analyse_scale.py` | [results/compaction_scale](../results/compaction_scale/README.md) |
 | Coding agents reading pages: smoke | `python3 experiments/readhook/smoke/run_smoke.py --arms text image --reps 1` | [experiments/readhook/README.md](../experiments/readhook/README.md) |
-| Coding agents on SWE-bench | in `experiments/readhook/swe/`: `run_swe.py validate`, `run --arms text vbhook`, `report`; `run_ml.py select`, `all` (run with the harness's own virtualenv) | [claude/SWE_IMAGES.md](claude/SWE_IMAGES.md) |
+| Coding agents on SWE-bench | in `experiments/readhook/swe/`: `run_swe.py validate`, `run --arms text vtchook`, `report`; `run_ml.py select`, `all` (run with the harness's own virtualenv) | [claude/SWE_IMAGES.md](claude/SWE_IMAGES.md) |
 
 ## 9. Claude: the repository atlas and plan quality (finished, closed)
 

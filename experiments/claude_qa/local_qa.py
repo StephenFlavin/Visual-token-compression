@@ -35,7 +35,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "experiments" / "claude_qa"))
 import analyse_claude_qa as AN  # noqa: E402
 import claude_qa_render as R  # noqa: E402
-from vbpe import config, metrics  # noqa: E402
+from vtc import config, metrics  # noqa: E402
 
 PATCH = 32                     # Qwen3.8: 16-px patches merged 2x2 -> one vision token per 32 x 32 px
 BUDGETS = {"page118": 117.6, "page88": 88.2, "page59": 58.8}     # px² per character, as in the Claude test
@@ -52,8 +52,8 @@ def vision_tokens(w: int, h: int, patch: int = PATCH) -> int:
 def render_pages(doc: str, budget: float, page_px: int, patch: int = PATCH) -> tuple[list, list[dict]]:
     """Square pages of side ``page_px`` (a multiple of ``patch``), the last page cut to the height its text needs.
     claude_qa_render.render_pages with the token grid as a parameter."""
-    from vbpe.layout import render_page
-    from vbpe.schemes import get_scheme
+    from vtc.layout import render_page
+    from vtc.schemes import get_scheme
     assert page_px % patch == 0
     sch = get_scheme("latin")
     max_chars = int(page_px * page_px / budget * 0.97)

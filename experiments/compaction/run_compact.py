@@ -42,7 +42,7 @@ sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "claude_qa"), str(ROOT / "
 import claude_qa_research as R  # noqa: E402
 import claude_qa_render as Q  # noqa: E402
 
-WORK = Path("/tmp/claude-0/-home-user-visual-bpe/9e274458-7352-5bb1-b191-52e96364b3f6/scratchpad/compaction")
+WORK = Path("/tmp/claude-0/-home-user-visual-token-compression/9e274458-7352-5bb1-b191-52e96364b3f6/scratchpad/compaction")
 OUT = ROOT / "results" / "compaction"
 MODEL = "claude-opus-5-5"
 BUDGET = 88.2
@@ -50,7 +50,7 @@ PART_CHARS = 50_000        # Read refuses files above ~25k tokens
 
 
 def claude(args: list[str], prompt: str, cwd: Path, tools: str, effort: str, timeout: int = 3600) -> dict:
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     cmd = [CE.CLAUDE_BIN, "-p", "--output-format", "stream-json", "--verbose", "--model", MODEL, "--effort", effort,
            "--tools", tools, "--allowedTools", tools or "Read", "--setting-sources", "project,local",
            "--strict-mcp-config", "--max-turns", "300", *args, prompt]
@@ -118,7 +118,7 @@ def archive_flow(tr: list[dict]) -> list[str]:
 
 def build_archive(flows: list[str], d: Path) -> dict:
     """Pages at BUDGET (d/archive_pages) and text parts with the same chunk boundaries (d/archive_text); one index."""
-    from vbhook import render
+    from vtchook import render
     chunks = render.chunk(" ".join(flows), render.page_chars(BUDGET))
     for sub in ("archive_pages", "archive_text"):
         (d / sub).mkdir(parents=True, exist_ok=True)

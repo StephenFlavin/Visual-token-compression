@@ -178,7 +178,7 @@ document 0's *measured input tokens* (never from its accuracy) if the pilot miss
 that would be logged as an amendment. The real ratios are reported from each call's usage.
 
 **Arms** (Opus 5.5, `--effort high`, one call per arm and document, all 160 questions in one call, through
-`vbpe/claude_eval.py` as in v2):
+`vtc/claude_eval.py` as in v2):
 
 | arm | what Claude gets | estimated input tokens (doc 0) | vs text |
 |---|---|---|---|

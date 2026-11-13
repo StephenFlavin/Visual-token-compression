@@ -44,7 +44,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
 
 OUT = ROOT / "results" / "atlas" / "swe"
-DEFAULT_WORK = Path(os.environ.get("RA_SWE_WORK", "/tmp/claude-0/-home-user-visual-bpe/"
+DEFAULT_WORK = Path(os.environ.get("RA_SWE_WORK", "/tmp/claude-0/-home-user-visual-token-compression/"
                                    "588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/ra_swe"))
 HF = "https://huggingface.co/datasets/nebius/SWE-rebench-leaderboard/resolve/main/data/test-00000-of-00001.parquet"
 ARMS = ("plain", "map", "atlas")
@@ -372,7 +372,7 @@ def screen(work: Path, t: dict, f: dict) -> dict:
     """Closed-book call: the issue and the file list only (the pilot's ``tree`` arm)."""
     import repo_atlas as RA
     import repo_atlas_eval as E
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     co = Path(f["checkout"])
     paths = [x["path"] for x in RA.collect(co, False, 10)[0]]
     tree = (f"Repository {t['repo']}: its {len(paths)} source files (tests, docs and data files left out).\n\n"
@@ -564,7 +564,7 @@ def repair(work: Path) -> int:
 
 
 def run_one(work: Path, t: dict, arm: str, broken: set) -> dict:
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     meta = contexts(work, t)
     tag = hashlib.sha1(arm.encode()).hexdigest()[:6]          # neutral directory name: the arm is not in any path
     base = work / "runs" / t["instance_id"] / tag

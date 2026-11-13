@@ -30,7 +30,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 from encoder_probe.ep import qwen_ft as Q  # noqa: E402
 from encoder_probe.ep.encoders import resolve_device  # noqa: E402
-from vbpe import config  # noqa: E402
+from vtc import config  # noqa: E402
 
 S = 448
 LETTERS = "ABCD"

@@ -17,7 +17,7 @@ One question per SWE-bench task: the issue, then "list the files that must chang
 
 Clones, checkouts, page images and agent transcripts live in --work (outside the repo); rows, the selection, the
 context sizes and the atlas indexes go to results/atlas/pilot/. Rows are appended per (task, arm); finished pairs
-are skipped, so ``run`` resumes. One-shot calls go through vbpe.claude_eval (cache, clean env).
+are skipped, so ``run`` resumes. One-shot calls go through vtc.claude_eval (cache, clean env).
 """
 from __future__ import annotations
 
@@ -439,7 +439,7 @@ def one_shot_jobs(work: Path, arms: list[str], todo: set) -> list[dict]:
 
 
 def run_one_shot(work: Path, arms: list[str], cap: float, workers: int) -> None:
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     todo = {(s["id"], a) for s in selection() for a in arms} - done_pairs()
     jobs = one_shot_jobs(work, arms, todo)
     print(f"[ra] {len(jobs)} one-shot calls to make; spent so far ${spent():.2f} (cap ${cap})", flush=True)
@@ -480,7 +480,7 @@ def run_one_shot(work: Path, arms: list[str], cap: float, workers: int) -> None:
 
 
 def agent_once(work: Path, s: dict, issue: str) -> dict:
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     cwd = export(work, s)
     cmd = [CE.CLAUDE_BIN, "-p", prompt_for("agent", "", issue, s["repo"]), "--output-format", "stream-json", "--verbose",
            "--model", MODEL, "--effort", EFFORT, "--tools", "Read,Grep,Glob", "--setting-sources", "",

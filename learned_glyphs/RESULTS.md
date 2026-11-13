@@ -259,7 +259,7 @@ This report ends at pixels. The follow-up is written up where it ran; the number
 
 * Score banks by the bridge, not by the joint CER.
 * Train at least 10,500 steps. Chunks look useless at 3,500.
-* `vbpe.analysis` groups rows by font size. Banks with different cell widths share one, so set
+* `vtc.analysis` groups rows by font size. Banks with different cell widths share one, so set
   `budget = px_per_char` on the rows first.
 * Restarting `scripts/job_queue.py` on the same queue file re-runs it from line 1. Use a new file per round.
 

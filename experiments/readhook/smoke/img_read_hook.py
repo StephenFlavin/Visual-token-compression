@@ -22,9 +22,9 @@ except Exception:                                  # unparsable (e.g. after a ba
             ind = len(l) - len(l.lstrip(" "))
             parts.append(f"§{no} {'»' * (ind // 4)}{l.strip()}")
     flow = " ".join(parts)
-from vbpe import config, metrics
-from vbpe.layout import render_page
-from vbpe.schemes import get_scheme
+from vtc import config, metrics
+from vtc.layout import render_page
+from vtc.schemes import get_scheme
 import claude_qa_render as Q
 BUDGET, W = 117.6, 1932
 sch = get_scheme("latin")

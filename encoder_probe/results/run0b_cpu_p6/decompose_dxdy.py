@@ -1,7 +1,7 @@
 """Post-hoc dx / dy decomposition of a Run 0b alignment matrix (interpretation only, not the verdict).
   python3 encoder_probe/results/run0b_cpu_p6/decompose_dxdy.py encoder_probe/results/run0b_cpu_p6 latin_p6"""
 import sys, numpy as np
-sys.path.insert(0, '/home/user/visual-bpe'); sys.path.insert(0, '/home/user/visual-bpe/encoder_probe/experiments')
+sys.path.insert(0, '/home/user/visual-token-compression'); sys.path.insert(0, '/home/user/visual-token-compression/encoder_probe/experiments')
 import capacity_curve as C
 from pathlib import Path
 S = C.load_jsonl(Path(sys.argv[1]) / "samples.jsonl")

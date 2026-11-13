@@ -33,7 +33,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "experiments" / "claude_qa"))
 import analyse_claude_qa as A  # noqa: E402
 import claude_qa_render as R  # noqa: E402
-from vbpe import config  # noqa: E402
+from vtc import config  # noqa: E402
 
 OUT = config.RESULTS / "claude_qa" / "gradient"
 QA = config.RESULTS / "claude_qa"
@@ -246,7 +246,7 @@ def cmd_check(a) -> None:
 
 # --------------------------------------------------------------------------- run
 def cmd_run(a) -> None:
-    from vbpe import claude_eval
+    from vtc import claude_eval
     OUT.mkdir(parents=True, exist_ok=True)
     jobs = todo_jobs(load_rows(), a.docs)
     if a.limit:

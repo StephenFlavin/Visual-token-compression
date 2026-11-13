@@ -44,7 +44,7 @@ low-resolution rendering. This sub-project tests whether that beats ordinary typ
 ```
 text --segment--> symbol ids --GlyphBank--> ink cells (4x supersampled) --compose--> line canvas
      --Channel (random sub-pixel phase, area-downsample, blur, contrast, noise, 8-bit)--> line image
-     --CRNN reader (vbpe.crnn.model.CRNN, CTC)--> symbol ids --decode--> text      (CER vs source)
+     --CRNN reader (vtc.crnn.model.CRNN, CTC)--> symbol ids --decode--> text      (CER vs source)
 ```
 Budget metric is the same as the parent project: **px²/char = line pitch (px) × line width (px) / source chars**.
 Primary result: P@3% (px²/char needed for CER ≤ 3%), compared with Phase-2 Latin (≈ 10–15 px²/char).
@@ -58,7 +58,7 @@ reasons irrelevant to real rendering / VLM encoders. Guards (all mandatory):
 2. **Harsher channel check:** every headline result is re-run with the `harsh` preset; gains that vanish are exploitation.
 3. **Transfer (E2):** freeze a learned bank, train a FRESH reader from scratch (same budget as Phase 2).
    Measures intrinsic legibility, not reader/glyph co-adaptation.
-4. **Bridge (E3):** export a learned bank as a vbpe `Scheme` (bitmap font) and run it through the unchanged
+4. **Bridge (E3):** export a learned bank as a vtc `Scheme` (bitmap font) and run it through the unchanged
    Phase-2 pipeline (`experiments/phases/phase2_train.py`), so it is scored exactly like latin/subst.
 
 ## Experiments
@@ -66,7 +66,7 @@ reasons irrelevant to real rendering / VLM encoders. Guards (all mandatory):
 |---|---|---|
 | E0 | fixed DejaVu bank through channel presets, heights 4–8 px | calibrate channel vs Phase 2 |
 | E1 | 2×2: {fixed font, learned} × {chars only (N=0), chars + N=300 tokens}, pitch h ∈ {4,5,6,8} px | separates "better font" from "more symbols" (the Visual-BPE effect) |
-| E1b | fixed CJK subst300 bank (same symbols as ../vbpe/schemes/substitution.py) | cross-check vs Phase-2 subst300 |
+| E1b | fixed CJK subst300 bank (same symbols as ../vtc/schemes/substitution.py) | cross-check vs Phase-2 subst300 |
 | E2 | transfer: fresh reader on frozen learned banks | intrinsic legibility |
 | E3 | bridge best banks into Phase-2 pipeline | apples-to-apples with Phase 2 |
 | E4 | if promising: N=1000, width policies, harsh channel, more steps | robustness / scaling |
@@ -113,7 +113,7 @@ class Alphabet:
     symbols: list[str]          # 95 printable ASCII chars (32..126) first, then N dictionary tokens (priority order)
     n_chars: int                # = 95
     @classmethod
-    def build(cls, n_tokens: int) -> "Alphabet"      # tokens = vbpe.dictionary.Dictionary.load(3000).prefix(n_tokens)
+    def build(cls, n_tokens: int) -> "Alphabet"      # tokens = vtc.dictionary.Dictionary.load(3000).prefix(n_tokens)
     def encode(self, text: str) -> list[int]          # Dictionary.segment (min-width DP) -> symbol ids; N=0 -> per char
     def decode(self, ids: list[int]) -> str
     def is_token(self, i: int) -> bool
@@ -139,7 +139,7 @@ def compose(ink, ids_batch: list[list[int]], widths_ss) -> tuple[torch.Tensor, t
 class Channel:
     def __init__(self, preset: str = "default", ss: int = 4)   # presets: clean | default | harsh
     def __call__(self, canvas_ss, widths_ss, generator=None, train=True) -> tuple[torch.Tensor, torch.Tensor]
-        # -> images (B,1,H,W) float32, ink=1 bg=0 (same as vbpe.crnn.data.collate), widths_px (B,)
+        # -> images (B,1,H,W) float32, ink=1 bg=0 (same as vtc.crnn.data.collate), widths_px (B,)
         # differentiable w.r.t. canvas; eval (train=False) uses fixed mid-range degradation, seeded
 
 # lg/train.py  (WP-LG2)
@@ -149,10 +149,10 @@ def train_joint(cfg) -> list[dict]     # rows (schema below), saves bank.pt + at
 # lg/transfer.py  (WP-LG3)
 def train_reader_on_bank(bank_path, cfg) -> list[dict]     # fresh CRNN, frozen bank
 # lg/scheme.py  (WP-LG3)
-class LearnedGlyphScheme(vbpe.schemes.base.Scheme)          # bitmap-font Scheme for the Phase-2 pipeline
+class LearnedGlyphScheme(vtc.schemes.base.Scheme)          # bitmap-font Scheme for the Phase-2 pipeline
 ```
 
-Rows (`learned_glyphs/results/<run>/runs.jsonl`) use the parent schema so `python3 -m vbpe.analysis` works:
+Rows (`learned_glyphs/results/<run>/runs.jsonl`) use the parent schema so `python3 -m vtc.analysis` works:
 `phase="lg", scheme (e.g. lg_learned_n300 / lg_fixed_n0), em (= h/1.2 for comparability), height_px,
 px_per_char, cer, symbol_cer, steps, train_mode ("joint"|"transfer"|"bridge"), channel, n_tokens, learn_glyphs, train_time_s`.
 

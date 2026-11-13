@@ -1,4 +1,4 @@
-"""SWE-bench Multilingual, Rust and Java (Maven/Gradle) without Docker: text vs vbhook, 2026-11-11.
+"""SWE-bench Multilingual, Rust and Java (Maven/Gradle) without Docker: text vs vtchook, 2026-11-11.
 
 Tasks: the Rust and Java tasks that the two Opus submissions on the SWE-bench Multilingual leaderboard both resolved
 (mini-SWE-agent v2.0.0a0 with Opus 4.6 and Opus 4.5), hardest first (mean agent steps). Lombok's tasks need Apache Ant,
@@ -30,7 +30,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
 sys.path[:0] = [str(ROOT), str(HERE.parent)]
-SCR = Path("/tmp/claude-0/-home-user-visual-bpe/9e274458-7352-5bb1-b191-52e96364b3f6/scratchpad")
+SCR = Path("/tmp/claude-0/-home-user-visual-token-compression/9e274458-7352-5bb1-b191-52e96364b3f6/scratchpad")
 WORK = SCR / "swe" / "ml"
 OUT = ROOT / "results" / "readhook_swe_ml"
 RUST = ["burntsushi/ripgrep", "sharkdp/bat", "tokio-rs/axum", "tokio-rs/tokio", "uutils/coreutils", "nushell/nushell",
@@ -180,15 +180,15 @@ changing the source code; do not modify the existing tests. The project's build 
 
 
 def run_one(t, arm: str, model: str, effort: str) -> dict:
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     base = WORK / slug(t["repo"]) / "runs" / t["instance_id"] / arm
     shutil.rmtree(base, ignore_errors=True)
     repo = worktree(t, base / "repo")
-    if arm == "vbhook":
-        from vbhook.install import settings as vb_settings
+    if arm == "vtchook":
+        from vtchook.install import settings as vb_settings
         (repo / ".claude").mkdir(exist_ok=True)
         (repo / ".claude" / "settings.local.json").write_text(json.dumps(vb_settings(
-            budget=float(os.environ.get("VBHOOK_BUDGET", "88.2")), cache=str(base / "cache"), log=str(base / "hook.jsonl"),
+            budget=float(os.environ.get("VTCHOOK_BUDGET", "88.2")), cache=str(base / "cache"), log=str(base / "hook.jsonl"),
             python=shutil.which("python3", path="/usr/local/bin:/usr/bin") or "python3")))
     tools = "cargo, rustc" if t["repo"] in RUST else "Java 21, mvn, and the Gradle wrapper ./gradlew where the project has one"
     env = CE.build_env()
@@ -286,7 +286,7 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("cmd", choices=["select", "all"])
     ap.add_argument("--repos", nargs="*")
-    ap.add_argument("--arms", nargs="+", default=["text", "vbhook"])
+    ap.add_argument("--arms", nargs="+", default=["text", "vtchook"])
     ap.add_argument("--model", default="claude-opus-5-5")
     ap.add_argument("--effort", default="high")
     ap.add_argument("--workers", type=int, default=2)

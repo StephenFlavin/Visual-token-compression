@@ -145,7 +145,7 @@ Changes, all decided before any non-smoke run and none tuned on results:
    job as in round 1.
 6. **Encodings**: the requested set (latin_p{5,6,8,10,16}, col_b{1,2,4}, lg_free_h4, lg_pb_h5, rgb3_p{6,8},
    mono_p{6,8}) plus the Latin anchors latin_p24 (both geometries) and latin_p32 (512 only), 15 / 16 encodings.
-7. Rows carry `round: 2`, S, P, G, n_tokens, d, `px_per_char`, `budget` = px_per_char (so `vbpe.analysis.p_at`
+7. Rows carry `round: 2`, S, P, G, n_tokens, d, `px_per_char`, `budget` = px_per_char (so `vtc.analysis.p_at`
    works), `chars_per_token`, `chars_per_vlm_token`, test_pages and a test-page digest. C@x for a VLM =
    P²/P@x (Qwen 784, DeepEncoder 4096).
 

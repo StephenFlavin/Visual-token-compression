@@ -38,11 +38,11 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas"), str(ROOT / "experiments" / "readhook")]
 import repo_atlas as RA  # noqa: E402
 import repo_atlas_eval as RE  # noqa: E402
-from vbhook.minify.base import REGISTRY, detect  # noqa: E402
+from vtchook.minify.base import REGISTRY, detect  # noqa: E402
 
 OUT = ROOT / "results" / "atlas" / "sec"
 DEFAULT_WORK = Path(os.environ.get("REPO_ATLAS_SEC_WORK",
-                                   "/tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/sec"))
+                                   "/tmp/claude-0/-home-user-visual-token-compression/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/sec"))
 MODEL = "claude-opus-5-5"
 EFFORT = "high"
 ARMS = ("closed", "atlas", "agent", "agent_atlas")
@@ -684,7 +684,7 @@ def pngs_of(meta: dict) -> list[bytes]:
 
 def one_shot(arm: str, t: dict, meta: dict) -> dict:
     from PIL import Image
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     index = (Path(meta["atlas_dir"]) / "index.txt").read_text()
     prompt = prompt_text(arm, repo=t["repo"], sha=t["parent"][:7], paths=meta["paths"], index=index)
     imgs = [Image.open(Path(meta["atlas_dir"]) / f"page_{i + 1:03d}.png") for i in range(meta["pages"])] \
@@ -697,7 +697,7 @@ def one_shot(arm: str, t: dict, meta: dict) -> dict:
 
 
 def agent_run(arm: str, t: dict, meta: dict, work: Path) -> dict:
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     index = (Path(meta["atlas_dir"]) / "index.txt").read_text()
     text = prompt_text(arm, repo=t["repo"], sha=t["parent"][:7], paths=meta["paths"], index=index)
     content = [{"type": "image", "source": {"type": "base64", "media_type": "image/png",

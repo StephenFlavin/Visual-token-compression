@@ -57,7 +57,7 @@ def test_leak_hits_ignore_own_venv_but_flag_scratch_and_web():
             "pip download pkg==2.0",
             "curl https://example.com",
             "cat ~/.claude/projects/foo/memory/MEMORY.md",
-            "grep -r foo /home/user/visual-bpe"]
+            "grep -r foo /home/user/visual-token-compression"]
     hits = R.leak_hits(cmds, "pkg", own)
     assert cmds[0][:200] not in hits and cmds[1][:200] not in hits
     assert all(c[:200] in hits for c in cmds[2:])

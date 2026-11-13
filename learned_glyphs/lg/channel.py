@@ -7,7 +7,7 @@ a seeded generator for the remaining randomness, so eval is deterministic):
 2. Sub-pixel phase: shift right by sx and down by sy ss-pixels, sx, sy ~ U{0..ss-1}
    (resolution 1/ss px, like Phase 2's supersampled phase; Phase 2 has x phase only, the y phase
    is an extra guard against row-aligned "barcode" glyphs - ``phase_y=False`` disables it).
-3. Area downsample by ss (avg_pool = PIL BOX resize used by vbpe.layout).
+3. Area downsample by ss (avg_pool = PIL BOX resize used by vtc.layout).
 4. Resampling round trip (``scale``, harsh only): resize by a non-integer factor s (log-uniform in
    [scale]) and back to the original size, each direction with a filter drawn from ``filters``
    (torch ``area`` = box, ``bilinear``/``bicubic`` with antialias). This injects real resampling
@@ -15,7 +15,7 @@ a seeded generator for the remaining randomness, so eval is deterministic):
    so widths, CTC lengths and px^2/char accounting are unchanged.
 5. Gaussian blur, sigma ~ U[blur] px (separable per-sample kernels, grouped conv; 0 = identity).
 6. Ink gamma x**g, g log-uniform in [gamma]; contrast: x = b + x*(c - b), c ~ U[contrast],
-   background lift b ~ U[bg] (same form as vbpe.crnn.data.augment_batch).
+   background lift b ~ U[bg] (same form as vtc.crnn.data.augment_batch).
 7. Additive Gaussian noise, sigma ~ U[noise]; clamp to [0,1].
 8. JPEG (``jpeg`` quality range, harsh only): differentiable approximation - 8x8 block DCT with the
    IJG luminance table scaled by quality, quantised with the Shin & Song (2017) cubic rounding
@@ -28,7 +28,7 @@ only, operations never used by any training preset: a PIL LANCZOS resampling rou
 0.87 and REAL PIL JPEG at quality 50 (both non-differentiable, wrapped straight-through). Calling a
 test-only channel with ``train=True`` raises.
 
-Output convention = vbpe.crnn.data.collate: (B,1,H,W) float32, ink = 1, background = 0,
+Output convention = vtc.crnn.data.collate: (B,1,H,W) float32, ink = 1, background = 0,
 H = height_px + 2*margin, widths_px = ceil(widths_ss / ss) + 2*margin. Everything except the
 held-out ops is differentiable w.r.t. the canvas (quantisation via straight-through).
 """

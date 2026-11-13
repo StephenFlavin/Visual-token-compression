@@ -107,7 +107,7 @@ from learned_glyphs.lg import train as T  # noqa: E402
 
 @pytest.fixture(scope="module")
 def lines():
-    from vbpe.corpus import iter_lines
+    from vtc.corpus import iter_lines
     return list(itertools.islice(iter_lines("val", seed=3), 400))
 
 
@@ -127,7 +127,7 @@ def test_alphabet_roundtrip(lines, n):
 
 
 def test_alphabet_matches_phase2_segmentation(lines):
-    from vbpe.dictionary import Dictionary
+    from vtc.dictionary import Dictionary
     a = Alphabet.build(300)
     d = Dictionary.load(300)
     assert a.tokens == d.tokens

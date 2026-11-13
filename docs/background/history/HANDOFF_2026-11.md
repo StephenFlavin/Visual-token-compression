@@ -204,7 +204,7 @@ open.
   (stay whole-pixel). No family reaches 10%, so the decision rules hold only in weaker form. P2 (RGB overlay grid on
   SigLIP) and P3 (rgb6) were gated off and not run. Clean rows other than latin_p32/p16/rgb3_p8 ran 5k steps (time).
 * **Code fixes pushed:** portable file lock (`ep/flock.py`, msvcrt on Windows), `phase2_driver.py` imports on Windows
-  (so `job_queue.py` runs), DejaVu fallback to `assets/fonts` in `vbpe/config.py`, VLM encoders in fp32 on CUDA with
+  (so `job_queue.py` runs), DejaVu fallback to `assets/fonts` in `vtc/config.py`, VLM encoders in fp32 on CUDA with
   TF32 off (CUDA bf16 gave corr 0.9974 vs CPU fp32). The cloud session's own CUDA support (`--device`, page cache,
   `--pages-only`) worked first time on the GPU. None of this changes the Linux CPU path.
 
@@ -231,8 +231,8 @@ open.
    clean rows at 10k steps, P2 for completeness.
 
 ## Local PC state (for the next local session)
-* Clone `C:\git\visual-bpe-run` (sparse checkout: three `learned_glyphs/results/*/phase2/samples` dirs excluded,
-  their files have `:` in names; `git update-index --skip-worktree` on them after each pull). `C:\git\visual-bpe` is
+* Clone `C:\git\visual-token-compression-run` (sparse checkout: three `learned_glyphs/results/*/phase2/samples` dirs excluded,
+  their files have `:` in names; `git update-index --skip-worktree` on them after each pull). `C:\git\visual-token-compression` is
   the broken original checkout (every file staged as deleted by the failed Windows checkout): leave it or delete it.
 * venv `.venv` (Python 3.12, torch 2.11 cu128, transformers 5.22.1); env: `PYTHONUTF8=1 EP_PAGE_CACHE=1
   EP_TRAIN_R2_CAP=400000000`, PATH with `.venv/Scripts` first; queue lines use `python`. Helper:

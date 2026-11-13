@@ -11,7 +11,7 @@ One single-shot call per question and arm, no tools, effort low, the benchmark's
           pages, in the context tokens T10 used for the same question (measured: T10 input - closed input), max 50
 
 Resumable like experiments/rag/run_rag.py: each finished call is appended to results/erb/runs.jsonl at once and cached
-on disk (vbpe.claude_eval, keyed on model + prompt + images); a re-run skips finished (question, arm) rows. Failed
+on disk (vtc.claude_eval, keyed on model + prompt + images); a re-run skips finished (question, arm) rows. Failed
 calls are not recorded or cached; when most of a batch fails (e.g. the usage limit) the run stops and prints how to
 resume. Pmatch is built after T10 and closed exist for the question (it needs their measured token counts).
 
@@ -78,12 +78,12 @@ def flow(uuids: list[str]) -> str:
 
 
 def page_images(uuids: list[str]):
-    from vbhook import render
+    from vtchook import render
     return [pg.image for pg in render.render(flow(uuids), BUDGET)]
 
 
 def page_tokens(uuids: list[str]) -> int:
-    from vbhook import render
+    from vtchook import render
     return render.page_tokens(flow(uuids), BUDGET)
 
 
@@ -137,7 +137,7 @@ def measured_budget(rows: dict, qid: str) -> float | None:
 
 
 def run(qs: list[dict], arms: list[str], a) -> bool:
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     rk = ranking()
     E.OUT.mkdir(parents=True, exist_ok=True)
     for phase in (["closed", "T10", "P10"], ["Pmatch"]):          # Pmatch needs T10 and closed measured first

@@ -605,7 +605,7 @@ Ways to push density past the literature's 30-90 chars/token, each testable on i
 * Fairness guard: Latin and every code get the same steps, data, LoRA config and unfrozen layers.
 
 ## Runbook notes (this PC: Windows, RTX 3090, see docs/gpu/LOCAL_GPU.md and AGENTS.md gotchas)
-* Clone at `C:\git\visual-bpe-run` (sparse: three learned_glyphs sample dirs have `:` in file names); venv `.venv`,
+* Clone at `C:\git\visual-token-compression-run` (sparse: three learned_glyphs sample dirs have `:` in file names); venv `.venv`,
   `PYTHONUTF8=1 EP_PAGE_CACHE=1 EP_TRAIN_R2_CAP=400000000`, queue lines use `python`, not `python3`.
 * At most 3 GPU jobs (2 for Qwen-token jobs): Windows pages VRAM instead of OOM and jobs stall silently. Watch for
   checkpoints not updating. Keep `--ckpt-every`.

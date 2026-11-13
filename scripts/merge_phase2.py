@@ -1,7 +1,7 @@
 """Merge Phase-2 runs: for each (scheme, em) keep the row with the most training steps
 (phase2_long 10.5k-step reruns supersede phase2_main 3.5k rows) -> results/phase2/merged/runs.jsonl.
 
-    python3 scripts/merge_phase2.py && python3 -m vbpe.analysis results/phase2/merged/runs.jsonl --out results/phase2/merged
+    python3 scripts/merge_phase2.py && python3 -m vtc.analysis results/phase2/merged/runs.jsonl --out results/phase2/merged
 """
 import json
 import sys

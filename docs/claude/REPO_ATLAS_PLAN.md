@@ -50,7 +50,7 @@ flowchart LR
 
 * **Code:** `experiments/atlas/repo_atlas.py` (`stats` for sizes, `build` for pages and index; tests
   `tests/test_repo_atlas.py`). It reuses the minifiers and the renderer of the coding hooks in
-  `experiments/readhook/vbhook`.
+  `experiments/readhook/vtchook`.
 * **Density:** 88.2 px² per character, the setting at which Opus reads 2.9 times fewer tokens than the same text
   ([CLAUDE_QA.md](CLAUDE_QA.md)). A file header looks like `▶path◀`; every tenth line carries its line number as
   `§n`.

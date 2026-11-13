@@ -3,12 +3,12 @@
 
 Reads the hook input ({"transcript_path", "session_id", "cwd", "trigger"}) from stdin, turns every message of the
 transcript into one flow in order (the user's prompts, the agent's text, each tool call with its result), renders it
-at 88.2 px²/char (vbhook) and writes
+at 88.2 px²/char (vtchook) and writes
 
     <cwd>/.claude/compact_archive/<session>-<n>/page_NN.png, INDEX.txt
     <cwd>/.claude/compact_archive/LATEST          (the directory just written; read by sessionstart_archive.py)
 
-Files read and command output keep their line structure through vbhook's minifiers (`§n` = original line n, `»` =
+Files read and command output keep their line structure through vtchook's minifiers (`§n` = original line n, `»` =
 one indentation level), so code, configs and logs stay readable and line numbers stay quotable. Never blocks
 compaction: any error is logged to <cwd>/.claude/compact_archive/errors.log and the hook exits 0.
 
@@ -45,8 +45,8 @@ def _one_line(s: str) -> str:
 
 def entry_flows(transcript: list[dict], cwd: str) -> list[tuple[str, str]]:
     """-> [(index label, flow)] in transcript order."""
-    from vbhook.common import minify_output, shift_tags
-    from vbhook.minify import minify
+    from vtchook.common import minify_output, shift_tags
+    from vtchook.minify import minify
     calls, out, done, seen = {}, [], set(), set()              # forks copy history: dedupe results and texts
     for e in transcript:
         if e.get("isCompactSummary") or e.get("isMeta"):
@@ -112,7 +112,7 @@ def entry_flows(transcript: list[dict], cwd: str) -> list[tuple[str, str]]:
 
 
 def build(transcript_path: str, cwd: str, session_id: str) -> Path:
-    from vbhook import render
+    from vtchook import render
     tr = [json.loads(l) for l in open(transcript_path) if l.strip()]
     flows = entry_flows(tr, cwd)
     root = Path(cwd) / ".claude" / "compact_archive"

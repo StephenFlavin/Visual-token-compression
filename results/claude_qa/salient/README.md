@@ -64,10 +64,10 @@ detector.
 
 Two type sizes inline on the same page, in reading order, sharing a baseline: salient words at one size, all other
 words at the other (a space is drawn at the salient size only between two salient words). Dedicated renderer in
-`claude_qa_salient.py` (`Flow`, `layout`, `draw`), because `vbpe/layout.py` draws one em per page: DejaVu Sans (the
+`claude_qa_salient.py` (`Flow`, `layout`, `draw`), because `vtc/layout.py` draws one em per page: DejaVu Sans (the
 font of every Latin page in this repo), one glyph at a time with its advance (as `GlyphUnit` does), greedy word
 wrap on 1932-px-wide pages with 4-px margins, **each line's pitch = 1.2 x the largest em on it** and its baseline
-0.9 x that em below the line's top (as `vbpe/layout.py` places a uniform line), pages filled line by line up to
+0.9 x that em below the line's top (as `vtc/layout.py` places a uniform line), pages filled line by line up to
 1932 px, the last page cut to the height its text needs (a multiple of 28). Image tokens per page =
 ceil(W/28) x ceil(H/28) + 3.
 
@@ -135,7 +135,7 @@ questions in one call), with the small size re-solved to the image tokens of Tes
 The 3 documents (`qav2_d0/d1/d2`: offsets 0, 1150, 2480; seeds 0, 1, 2), the 120 questions per document (ids,
 wording and answers checked equal to `qav2_d*_high_b88/questions.json`), the system prompt and the prompt
 (`claude_qa_render.SYSTEM`, `prompt_for("image", ...)` with the page count), 1932-px-wide pages, Opus 5.5
-(`claude-opus-5-5`), `--effort high`, headless `claude -p` through `vbpe/claude_eval.py` (`hires=True`).
+(`claude-opus-5-5`), `--effort high`, headless `claude -p` through `vtc/claude_eval.py` (`hires=True`).
 
 Baselines (existing rows, not re-run, paired by question): uniform 117.6, 88.2 and 58.8 and text
 (`qav2_d{0,1,2}_high_b{118,88,59}`, one call per document). Small words: Test A's `page118`, `page88`, `page59` and

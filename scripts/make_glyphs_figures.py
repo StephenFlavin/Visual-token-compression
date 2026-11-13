@@ -11,7 +11,7 @@ Every number is read from result rows:
   learned_glyphs/results/e3_bridge_long/runs.jsonl   learned banks, bridge scoring
   learned_glyphs/results/e2_transfer_long/runs.jsonl learned banks, fresh reader (transfer)
   learned_glyphs/results/e3_bridge_align{,_md}/runs.jsonl  grid-aligned banks, bridge scoring
-P@3% is computed exactly as vbpe.analysis does (isotonic fit, log-x interpolation).
+P@3% is computed exactly as vtc.analysis does (isotonic fit, log-x interpolation).
 
     python3 scripts/make_glyphs_figures.py
 """
@@ -26,7 +26,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import make_readme_figures as M  # noqa: E402  (house style: palette, chart_style, save_small)
 
-from vbpe.analysis import crossing, load_runs, p_at  # noqa: E402
+from vtc.analysis import crossing, load_runs, p_at  # noqa: E402
 
 ROOT = M.ROOT
 LG = ROOT / "learned_glyphs" / "results"

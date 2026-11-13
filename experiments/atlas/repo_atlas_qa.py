@@ -493,7 +493,7 @@ def call_two(images, system: str, context: str, questions: str, effort: str, tim
     """Message 1: images + context + "Reply only OK."; message 2: the questions. Cached on disk like
     claude_eval.transcribe (errors never cached). Usage = the second request's (its prompt is the whole context plus
     the questions); cost = the CLI's cumulative total."""
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     for img in images:
         CE.check_image_bounds(img, hires=True)
     pngs = [CE.png_bytes(i) for i in images]
@@ -652,7 +652,7 @@ def agent_subset(n: int | None) -> list[str]:
 
 
 def agent_once(work: Path, q: dict, meta: dict) -> dict:
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     cwd = export(work, q["repo"], meta["commit"])
     prompt = (AGENT_INTRO.format(repo=meta["repo"], sha=meta["commit"][:7]) + "\n\n"
               + INSTRUCTION.format(repo=meta["repo"], sha=meta["commit"][:7], words=WORDS) + "\n\n"
@@ -746,7 +746,7 @@ def run_agent(work: Path, cap: float, workers: int, n: int | None) -> None:
 def judge(cap: float, workers: int) -> None:
     """One judge call per answer, the benchmark's rubric, blind: the judge sees question, reference and the answer
     text only; calls go in a seeded random order. Empty answers (missing) are not judged: they score the minimum (5)."""
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     sel = sel_load()
     qs = {q["key"]: q for q in sel["questions"]}
     done = {(r["key"], r["arm"]) for r in jl("judged.jsonl")}
