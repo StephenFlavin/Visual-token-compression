@@ -1,4 +1,33 @@
-# Plan: EnterpriseRAG-Bench with page images (2026-11-11; prep done, no Claude calls yet)
+# EnterpriseRAG-Bench with page images: plan (prepared, not run)
+
+*Status: parked. The preparation was done on 2026-11-11 (corpus parsed, retrieval rebuilt and checked, runner and
+judge written); no Claude call was made, and the study was wound down on 2026-11-12 before the pilot was approved
+(its cost, ~$75-85 for 50 questions, is mostly the judge). The retrieval figures below were recomputed from
+[`results/erb/retrieval.jsonl`](../../results/erb/README.md) in the clean-up and match. What page images do for
+retrieval was measured instead on three smaller sets: [RAG_PLAN.md](RAG_PLAN.md),
+[results/rag](../../results/rag/README.md). Statements about the benchmark and its leaderboard are as read on
+2026-11-11 and were not re-checked.*
+
+**In one paragraph.** EnterpriseRAG-Bench is a public benchmark of 500 questions over about half a million
+synthetic company documents. The plan was to give Opus 5.5 the benchmark's own top-10 retrieved documents either as
+text or as page images, and to test whether pages lose nothing (the same 10 documents at about a third of the
+tokens) and whether spending the saved tokens on more documents (about 29 instead of 10) raises the score. Terms:
+BM25 is a standard keyword ranking; recall@10 is the share of the right ("gold") documents among the first 10
+retrieved.
+
+```mermaid
+flowchart LR
+    Q["Question"] --> R["Official BM25 top-10,<br/>then our ranks 11-50"]
+    R --> T["T10: top 10 as text<br/>(~25k tokens)"]
+    R --> P["P10: the same 10<br/>as pages (~8.5k)"]
+    R --> M["Pmatch: pages up to<br/>T10's tokens<br/>(~29 documents)"]
+    T --> O["Opus 5.5 answers"]
+    P --> O
+    M --> O
+    O --> J["Benchmark's own judge:<br/>correct x fact completeness"]
+```
+
+The rest of this file is the plan as written on 2026-11-11.
 
 ## Why this benchmark
 

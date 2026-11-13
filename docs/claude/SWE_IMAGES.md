@@ -1,7 +1,11 @@
 # Coding agents reading page images: SWE-bench results, and why the cost does not fall
 
-*2026-11-11.* Claude Code with Opus 5.5 (high effort) solved real SWE-bench tasks twice: once reading code and command
-output as text, once through the vbhook hooks, which show file contents and long command output as page images at
+*Status: finished (2026-11-11; checked against the rows 2026-11-12). The hooks work and are kept; for coding they do
+not pay. This is the detail behind the "coding agents" row of [CLAUDE_QA.md](CLAUDE_QA.md).*
+
+Claude Code with Opus 5.5 (high effort) solved real SWE-bench tasks (a benchmark of real GitHub issues, each graded
+by the project's own tests) twice: once reading code and command
+output as text, once through the vbhook hooks (this repo's Claude Code hooks), which show file contents and long command output as page images at
 88.2 px² per character (the density where Opus answered document questions as well as from text). Details:
 [Django](../../results/readhook_swe/README.md), [Rust and Java](../../results/readhook_swe_ml/README.md), hooks
 [`experiments/readhook/vbhook/`](../../experiments/readhook/vbhook/), analysis
@@ -13,8 +17,8 @@ output as text, once through the vbhook hooks, which show file contents and long
   29/29 with images (the one difference, a ruff task the text arm missed, is not significant: p = 1). Every task was
   one recent Opus models solve, so this rules out a large accuracy loss, not a small one.
 * **Images were 3.1x cheaper than the text they replaced** (88k image tokens for 275k tokens of text).
-* **But the total did not fall: $10.82 with images against $10.61 with text** over all 79 tasks. The reason is
-  the one you suspected: **coding is not dominated by reading.** File contents and command output are about 17% of
+* **But the total did not fall: $10.82 with images against $10.61 with text** over all 79 tasks. The reason:
+  **coding is not dominated by reading.** File contents and command output are about 17% of
   what the agent costs; even if all of it were 3.1x cheaper, the run would cost at most 12% less. The image arm then
   spent that saving on more output and more calls.
 
@@ -33,7 +37,7 @@ $20 per million (prices fitted exactly from the CLI's own cost, 100 runs). Acros
 |---|---|---|
 | output | **46%** | the model's reasoning, tool calls, edits and answers |
 | starting context | 20% | Claude Code's system prompt, tool definitions and the issue: ~6.9k tokens re-read on every call |
-| the agent's own messages | 18% | earlier reasoning and tool calls, re-sent as context |
+| the agent's own messages | 17% | earlier reasoning and tool calls, re-sent as context |
 | tool results | **17%** | file contents, test output, grep results: the only part images change |
 
 Three things keep the tool-result slice small:
@@ -49,15 +53,19 @@ Three things keep the tool-result slice small:
 
 ![Cost bridge from the text arm to the image arm](../img/swe_cost_bridge.png)
 
-*How to read it:* the grey bars are the two arms' total cost over the same tasks; the steps between them are the
-change in each slice. The y axis does not start at zero.
+*How to read it:* the light grey bars are the two arms' total cost over the same tasks; the steps between them are
+the change in each slice. The y axis does not start at zero. The dark grey step is bookkeeping: the slices are built
+from each call's usage record, and for the image arm they add up to $0.32 (2.9%) more than the total the command
+line reported, against $0.02 for the text arm. So the red steps overstate the rise by up to $0.30 between them; the
+transcripts needed to say which slice holds it are not kept in the repo.
 
 * **Tool results: −$0.75.** The images did what they should.
 * **Output: +$0.52** (270k output tokens against 244k, +11%). The model reasons a little more when it reads images,
   and it re-checks exact text before editing: Claude Code requires an Edit's `old_string` to match the file exactly,
   so the agent sometimes prints lines again (e.g. `sed -n ... | cat -A`) before it edits.
-* **Re-read context: +$0.74.** More calls (median 7 against 6; Rust and Java 11 against 8), each re-sending the
-  conversation, plus the hooks' short format notes. In Rust and Java the image arm also made twice as many edit calls
+* **Re-read context: +$0.74 at most** (+$0.67 for the agent's own messages, +$0.07 for the starting context; see the
+  note on the dark grey step). More API calls (median 7 against 6; in Rust and Java 9 against 7 calls, or 11 against
+  8 turns as Claude Code counts them), each re-sending the conversation, plus the hooks' short format notes. In Rust and Java the image arm also made twice as many edit calls
   (37 against 18), none of which failed.
 
 ## Where page images do pay off
@@ -72,7 +80,7 @@ were lossless (99.7% against 99.4% from text, 360 questions). For coding agents 
 * **Fewer verification turns:** an Edit that does not need exact text (or a hook-visible fallback) would remove the
   re-check calls.
 * **Older context instead of tool results:** rendering the conversation history itself as pages, rather than only new
-  tool results, targets the slice that grew (the agent's own messages, 18-24%).
+  tool results, targets the slice that grew (the agent's own messages, 17-23%).
 
 ## Method and caveats
 
@@ -87,6 +95,10 @@ were lossless (99.7% against 99.4% from text, 360 questions). For coding agents 
   not be installed; nushell's tests did not pass with the gold patches.
 * **One model, one harness:** Opus 5.5 at high effort in Claude Code. Costs are list prices (subscription quota in
   practice). Text tool-result tokens are estimated from length (2.6 characters per token).
+* **Reproducing the figures:** `python3 scripts/make_swe_figures.py` draws both from
+  `results/readhook_swe/analysis/summary.json`. That file and `per_run.json` were written by
+  `experiments/readhook/swe/analyse.py` from each run's full transcript (`stream.jsonl`), which is not kept in the
+  repo. Do not re-run `analyse.py` without the transcripts: it overwrites both files with empty results.
 * **Engineering notes:** making the hooks behave took several fixes, each written up in
   [`results/readhook_smoke/README.md`](../../results/readhook_smoke/README.md) and the hooks' code: Claude Code checks an
   Edit's `old_string` before hooks run (so code pages are edit-safe: spaces kept, indentation shown as `»`); it does
@@ -95,10 +107,12 @@ were lossless (99.7% against 99.4% from text, 360 questions). For coding agents 
 
 ## Remaining levers (2026-11-11)
 
-Measured against the text arm's $10.61 over the 79 tasks:
+None of these was pursued: the work moved to the uses where reading dominates, and lever 7 is the one that was
+tested. Measured against the text arm's $10.61 over the 79 tasks:
 
 1. **Remove the overhead the hooks add (~12%, the quick win).** The image arm made 85 more tool calls (633 against
-   548), almost all Reads (+55) and Edits (+43). The Bash-image note ("use the Read tool on a file before you Edit or
+   548), almost all Reads (+55) and Edits (+43) (counted from the run transcripts, which are not kept in the repo;
+   not re-checked in the clean-up). The Bash-image note ("use the Read tool on a file before you Edit or
    Write it", added after Write refusals in the smoke tests) makes the model re-read files it has seen, and exact
    `old_string` matching against `»`-levels probably makes it edit in smaller pieces. Narrowing the note to Write and
    returning narrow line ranges as text would put the image arm near −7% instead of +2%.

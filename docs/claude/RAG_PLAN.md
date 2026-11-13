@@ -1,4 +1,51 @@
-# Plan: testing RAG with page images (2026-11-11, draft for approval; nothing run yet)
+# RAG with page images: the plan as pre-registered, and what was found
+
+*Status: run and finished on 2026-11-11 (1,848 calls, $24.22 at list price against an estimate of ~$105). Rows,
+tables and the scoring fixes: [results/rag](../../results/rag/README.md). Summary in context:
+[CLAUDE_QA.md](CLAUDE_QA.md#tested-retrieval-rag).*
+
+RAG (retrieval-augmented generation) means the model answers a question from a few passages that a search step
+retrieved. The question here: do those passages work as well as page images, and what does the token saving buy?
+
+## What was found
+
+![Accuracy against cost per question, three datasets](../img/rag_cost_accuracy.png)
+
+*How to read it:* one panel per dataset; each mark is one way of giving the model its passages. Up is more answers
+right, left is cheaper. Compare the green circle (top-5 passages as pages) with the blue square (the same passages
+as text), and the green diamond (as many passages as fit in the same tokens, as pages) with both.
+
+| Prediction (numbered as below) | Outcome |
+|---|---|
+| 1. The top-5 as pages are within 2 points of the top-5 as text, with at least 2x fewer context tokens | **PASS** on point estimates (0, +0.7, +2.0 points) and tokens (2.6x, 2.6x, 2.2x fewer). The 95% interval is inside 2 points only on MultiHop-RAG; the other sets have 60 and 100 questions |
+| 2. Budget-matched pages beat the top-5 as text by at least 3 points on MultiHop-RAG and HotpotQA | **PASS on MultiHop-RAG** (+8.8, p = 0.001). HotpotQA +5.0, not significant (p = 0.18) |
+| 3. Text head plus paged tail is at least as accurate as budget-matched pages | **FAIL** on all three sets |
+| 4. On planted facts, budget-matched pages and the top-5 as text tie | **PASS** (+1.7, p = 1) |
+| 5. Cost, reported without a threshold | the same passages as pages cost 27-43% less per question, including the command line's fixed ~5k-token prompt |
+
+Deviations from the plan: all three stages were run; the planted-fact set used 60 questions, not 120; MultiHop-RAG
+has 148 usable questions, not 150; the scorer was fixed twice after the first stage, for every arm, from the cached
+responses ([results/rag](../../results/rag/README.md) explains both fixes). Dense retrieval was not run.
+
+## The plan as pre-registered
+
+*Written 2026-11-11 as a draft for approval, before any call, and committed (9810725) before the first one. Kept as
+written.*
+
+```mermaid
+flowchart LR
+    Q["Question"] --> R["BM25 ranks<br/>~1,200-character<br/>passages"]
+    R --> T5["T5: top 5<br/>as text"]
+    R --> P5["P5: the same 5<br/>as pages"]
+    R --> PM["Pmatch: as many as fit<br/>in T5's tokens,<br/>as pages (11-14)"]
+    R --> T15["T15: top 15<br/>as text"]
+    R --> HY["hybrid: top 3 as text,<br/>the rest as pages"]
+    T5 --> A["One Opus call<br/>per question and arm"]
+    P5 --> A
+    PM --> A
+    T15 --> A
+    HY --> A
+```
 
 ## Question
 

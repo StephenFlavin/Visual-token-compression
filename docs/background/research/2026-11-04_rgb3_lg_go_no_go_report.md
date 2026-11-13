@@ -1,5 +1,19 @@
 # Visual BPE (rgb3_lg): Literature-Calibrated Go/No-Go Report
 
+> **Status: a record, kept as received.** This is the external literature report commissioned on 2026-11-04 with
+> [MOONSHOT_BRIEF.md](../../gpu/MOONSHOT_BRIEF.md), about the densest code in the repo: three pages of learned
+> glyphs overlaid in the red, green and blue channels (`rgb3_lg_pb_h5`, 322 characters per vision token; "405" is
+> a denser variant). "You" is the user, "the assistant" is the session that wrote the brief. Its statements about
+> papers and models are the report's own and were not re-checked in the clean-up of 2026-11-13.
+>
+> **How it compared with what was then measured:** the report put the plausible range at 30-90 characters per
+> vision token and expected a cliff. Measured on Qwen2.5-VL-3B: after a 1,000-step fine-tune only Latin at 28
+> characters per token was read (55% character error against 88.5% for its blind control); the 322 page ended at
+> its blind control. Without training, the model recovers at most 12.6 bits per vision token, at 28 characters per
+> token, and 1.7 bits at 72. So the cliff was there, and lower than the report's range. The staged gates it
+> proposes were not run as written; the trained-encoder runs that replaced them were parked
+> ([PLAN_3090.md](../../gpu/PLAN_3090.md)). Summary of the whole line: [README](../../../README.md), sections 3-4.
+
 **Bottom line: published results put a plausible go region at about 30–90 characters per vision token, not 322–405. The moonshot point is about 7x beyond the best trained optical result at high accuracy and about 2x beyond the best text-side learned compressor. Re-scope the project as a density sweep, with trained-merger gates and a matched-KV QA test against a text-side compressor.** DeepSeek-OCR's trained 16x compressor reaches 96.5% precision at 10.5 text tokens per vision token. That is about 42–47 characters per token, on prose where language priors help. Context Cascade Compression (C3; Liu & Qiu, arXiv 2511.15244), which has no pixel bottleneck at all, reaches 98.4% when compressing 1,200–1,300 text tokens into 64 latents (nearly 20x) and 93.3% into 32 latents (nearly 40x). That works out to about 86 and 170 characters per latent. A go at 30–60 characters per token would still fit about 1–2M characters in a 32k window, which is 7–14x the text baseline.
 
 ## TL;DR

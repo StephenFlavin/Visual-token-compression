@@ -1,5 +1,22 @@
 # Prior art for Visual BPE (WP-G)
 
+**Status: a record.** This is the literature search done on 2026-11-02, before Phases 1-2 ran. It is kept as
+written. Its claims about other people's work come from the papers in [References](#references) and were not
+re-checked in the clean-up of 2026-11-13; entries marked "unverified" were never checked at all. A second search,
+for learned alphabets, is in [learned_glyphs/docs/prior-art.md](../../learned_glyphs/docs/prior-art.md), and an
+external report on the densest code is in
+[research/](research/2026-11-04_rgb3_lg_go_no_go_report.md).
+
+**How its expectations held up** (our own results, each re-checked against the rows):
+
+| Expectation here | What was measured | Where |
+|---|---|---|
+| A condensed font may lose for a vision-language model despite fitting more per line (point 2) | Confirmed for Claude: the condensed font needs 1.11x the pixels of DejaVu Sans at 3% character error | [docs/glyphs/RESULTS.md](../glyphs/RESULTS.md) |
+| Below about 9 px² per character every scheme is illegible (section 5, item 2) | True for readers used as they come (Claude needs 29.4, PP-OCR 38.1). Not true for a reader trained for one font: Latin reads at 3% error on 6.54 px² per character | same |
+| The gain from a larger hand-picked alphabet is small at best; the stronger idea is a learned alphabet (point 5) | Confirmed: hand-picked substitution needs 1.25x to 1.48x *more* pixels than Latin; a learned alphabet needs 0.57x | same, [learned_glyphs/RESULTS.md](../../learned_glyphs/RESULTS.md) |
+| Text-side compression matches or beats the vision path (point 3) | Not tested here on a model that can be trained (Test B was built, not run). On Claude, where only text and images go in, page images of plain text give 2.2x fewer input tokens with no measured loss, in line with "Text or Pixels? It Takes Half" | [CLAUDE_QA.md](../claude/CLAUDE_QA.md), [TEXT_SLOTS.md](../gpu/TEXT_SLOTS.md) |
+| A third Latin baseline, `latin_verdana` (section 5, item 1) | Not added. DejaVu Sans, a wide Verdana-like face, was the wide-font baseline | [PLAN.md](../glyphs/PLAN.md) |
+
 *Searched 2026-11-02. "Unverified" means I saw it only in an abstract, snippet or secondary source. "(ours)" marks our own arithmetic from published settings.*
 
 ## Bottom line on novelty and expected upside

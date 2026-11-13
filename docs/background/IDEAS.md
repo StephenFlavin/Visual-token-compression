@@ -1,7 +1,20 @@
 # Idea backlog
 
-Ideas recorded for later. Each one gets a status, a short assessment, and the cheapest test that would settle it.
-The dated status line under each idea is the current state; the text above it is the assessment as first written.
+**Status: closed (2026-11-12). Nothing here is waiting to be run.** These are ideas recorded during the work
+(2026-11-03/04), each with a short assessment and the cheapest test that would settle it. The text of each idea
+is as first written; the dated status lines under it are in order, and the last one is where it ended.
+
+| Idea | Where it ended |
+|---|---|
+| RGB word overlay | Works from raw pixels (three times the text). Lost by every pretrained encoder; a fine-tuned model reads two layers as one blended text. Closed |
+| More than three layers (intensity levels) | Never built: gated on the overlay, which failed |
+| Braille-style fixed dot code | Never run. It was a control for the learned glyphs, and the learned-glyph line closed first |
+| Other avenues if the densest code fails | All tried or parked: fine-tuned Latin read only at 28 characters per token; the own-encoder and text-side tests were inconclusive or not scheduled. What remained is plain Latin pages on Claude |
+
+Terms used below: `identity` = a probe reading raw pixels with no encoder (the ceiling); `col_b*` = one colour
+block per character; `rgb3_p8` = three Latin text streams, one per colour channel, 8-px lines; "moonshot" =
+`rgb3_lg_pb_h5`, three learned-glyph pages overlaid in the colour channels; G0, Q1, G2-lite, R3-1 = the steps of
+round 3 on Qwen2.5-VL-3B ([encoder_probe/ROUND3.md](../../encoder_probe/ROUND3.md)); CER = character error rate.
 
 ## RGB word overlay (user idea, 2026-11-03)
 
@@ -40,6 +53,12 @@ in [encoder_probe/RGB_OVERLAY.md](../../encoder_probe/RGB_OVERLAY.md). Only a 30
 grid (P2) was gated off. In frozen Qwen, rgb3_p8 stops being linearly pixel-decodable by block 24 (Q1); it has no
 fine-tuned arm yet. The overlay lives on in the moonshot (`rgb3_lg_pb_h5`, below and in ROUND3.md).
 
+**Status (2026-11-12): closed.** The fine-tuned arms ran as the "colour gist" line
+([COLOUR_GIST.md](../gpu/COLOUR_GIST.md)): untrained Qwen2.5-VL reads a two-layer overlay as one blended text
+(information per vision token 0.51x that of one layer), and a CPU fine-tune of the language side reached 0.72x
+(interval 0.54 to 0.94), short of the > 1 that would make a second layer worth having. The GPU run with the
+vision encoder trained (Run 4) was closed unrun when the work was wound down.
+
 ## More layers per pixel: intensity levels within each channel (follow-up, 2026-11-03)
 
 **Idea (user):** go beyond 3 overlaid layers by adding more colours, e.g. yellow and black.
@@ -69,6 +88,8 @@ classes, 6 interleaved labels per cell; check the CTC frame budget) and run it w
 **Status (2026-11-05): gated off, not built.** rgb3 failed through the encoder (DeepEncoder floor), so rgb6 (P3)
 was not run.
 
+**Status (2026-11-12): closed, never built.**
+
 ## Braille-style fixed dot code (control for learned glyphs, 2026-11-04)
 
 **Observation (user):** the converged whole-pixel learned glyphs look like braille. They nearly are: single-char
@@ -96,6 +117,12 @@ learned bank's lead was largest (h7: 3.5% vs DejaVu 43%).
 
 **Status (2026-11-05): still not queued.** Still the cheapest open control for the learned-glyph GO; pixel-space
 only, so not blocked by the VLM results.
+
+**Status (2026-11-12): closed, never run.** A related step was taken on 2026-11-07: whole-pixel banks on a 7-px
+grid, retrained so that no two glyphs are closer than 2 px, which made them about 4x easier for a fresh reader
+([learned_glyphs/RESULTS.md](../../learned_glyphs/RESULTS.md#minimum-glyph-distance-2026-11-07)). That is a
+learned code with a designed-code constraint, not the fixed-code control asked for here, so the question "how
+much of the gain is learning" stays open.
 
 ## If the moonshot fails: other avenues (user questions, 2026-11-04)
 
@@ -146,3 +173,15 @@ and G2-lite put the loss in the ViT output / merger ("ViT output is the wall at 
 reads latin_p8 (28 chars/token, 55% CER vs blind 88.5%) but leaves every denser code at its blind floor. Next: a
 short vision-side diagnostic (higher `--lr-vision`, more `--vision-blocks`; a light version of 2a) and the 5000-step
 Latin arms, which also size option 1 ([HANDOFF.md](../HANDOFF.md)).
+
+**Status (2026-11-12): closed; the ladder ended at its step 3, without the last rung being fully climbed.**
+* Option 1 (fine-tuned Latin + 4-bit KV + YaRN) was not built as a demo. Its first ingredient was measured:
+  without training Qwen2.5-VL-3B recovers at most 12.6 bits per vision token, at 28 characters per token
+  ([PLAN_3090.md](../gpu/PLAN_3090.md), Run 0).
+* Option 2a (train the vision side on the codes) became Runs 1-2 of [PLAN_3090.md](../gpu/PLAN_3090.md). The
+  driver was stopped during the Latin stages; the dense-glyph stage (C) and the colour run were closed unrun.
+* Option 2b (text-side compression): Stage 0 ran and was inconclusive ([OWN_ENCODER.md](../gpu/OWN_ENCODER.md));
+  Test B was built and pre-registered but not scheduled ([TEXT_SLOTS.md](../gpu/TEXT_SLOTS.md)).
+* What came out instead was not on this list: plain Latin page images as cheaper context for Claude
+  ([CLAUDE_QA.md](../claude/CLAUDE_QA.md)). One run is left, the same test on a local Qwen3.8-27B
+  ([LOCAL_QWEN.md](../gpu/LOCAL_QWEN.md)).
