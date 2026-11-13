@@ -1,4 +1,4 @@
-# Visual BPE
+# Visual text compression
 
 **Claude Opus reading a long document for about a third of the input tokens was not the goal. It is where this
 ended up.** Render the document as page images of ordinary small text and Opus answers lookups, chains and counts
@@ -42,7 +42,8 @@ That belief was wrong, and most of this repo is the work of finding out why (sec
 Braille is built to be read at very low resolution: six dots a cell. A model's reader could be given an alphabet
 made for small bitmaps instead of one made for pens. And once the alphabet is ours to design, there is no reason to
 stop at letters: byte-pair encoding merges frequent letter runs (`the`, `ing`, ` of the `) into single tokens, so
-each of those can have its own glyph. That is the name of the repo.
+each of those can have its own glyph. That was "Visual BPE", the working name of this project (the code package is
+still `vbpe`).
 
 ![Plain text vs learned glyphs](docs/img/glyphs.png)
 
@@ -83,7 +84,9 @@ on its raw pixels reads it at 1.07% error.
 ![A strip of a real moonshot page, magnified, with its three channels](docs/img/rgb3_lg_pb_h5_strip.png)
 
 At which point it became clear what this is: a small bitmap alphabet, packed on a grid, in three colour layers. I
-had re-invented the colour QR code. 🙄
+had re-invented the colour barcode, which already has a standard: [JAB Code](https://en.wikipedia.org/wiki/JAB_Code)
+(ISO/IEC 23634:2022, "JAB Code polychrome bar code symbology specification"), a QR-like grid of coloured
+modules in 4 or 8 colours. Three on-off colour channels are exactly 8 colours. 🙄
 
 ## 3. What happened when a real model had to read them
 
@@ -127,8 +130,23 @@ facts but loses chains and counts, and at 7.8x it can transcribe a page at 3% er
 over a document.
 
 And for a model you can train, pixels are a detour: a compressor built on the text side reaches the same slots
-without a rendering step. That has been published by others, and current local models get much of the payoff from
-their architecture, so it was built here but not run ([docs/gpu/TEXT_SLOTS.md](docs/gpu/TEXT_SLOTS.md)).
+without a rendering step. Two papers say this directly:
+
+* **[Context Cascade Compression: Exploring the Upper Limits of Text Compression](https://arxiv.org/abs/2511.15244)**
+  (Liu and Qiu, 2025) compresses text with a small language model instead of a vision encoder. Its abstract: "at a
+  20x compression ratio (where the number of text tokens is 20 times the number of latent tokens), our model
+  achieves 98% decoding accuracy, compared to approximately 60% for DeepSeek-OCR."
+* **[Optical Context Compression Is Just (Bad) Autoencoding](https://arxiv.org/abs/2512.03643)** (Lee, Yang and
+  Berg-Kirkpatrick, 2025) compares DeepSeek-OCR's vision encoder with mean pooling and a learned text encoder and
+  finds that "these simple approaches match or surpass vision for reconstruction at matched compression ratios";
+  for language modelling the first version says vision "fails to beat truncation", softened in the second to
+  performing comparably to it. Its conclusion is that the excitement around optical compression outpaces the
+  evidence.
+
+So the vision route is a text compressor with a lossy rendering step in front, and not a good one. Current local
+models also get much of the payoff from their architecture. A text-side compressor was therefore built here but not
+run ([docs/gpu/TEXT_SLOTS.md](docs/gpu/TEXT_SLOTS.md); more prior work in
+[docs/background/prior-art.md](docs/background/prior-art.md)).
 
 ## 5. The accident: plain Latin pages on a closed model
 
@@ -170,15 +188,36 @@ packaged as read and bash-output hooks in [experiments/readhook/vbhook](experime
 for coding they do not pay). A harness that adopts this should re-run a page of planted facts whenever the model
 changes: "lossless" is per model and per release.
 
-## What is left
+## Read next, and what is left
 
-* **The full Claude write-up, with every use case tried, worked or failed:** [docs/claude/CLAUDE_QA.md](docs/claude/CLAUDE_QA.md).
-* **One GPU run to finish:** does the page-image trick carry over to a local model with no training? Qwen3.8-27B on
-  an RTX 3090, the Claude QA test in small, one evening. Plan in [docs/gpu/LOCAL_QWEN.md](docs/gpu/LOCAL_QWEN.md);
-  **the prompt to run is at the top of [docs/HANDOFF.md](docs/HANDOFF.md)**.
-* **Stopped, not finished:** the trained-encoder runs on Latin (the fair last test of the original idea) are
-  parked in [docs/gpu/PLAN_3090.md](docs/gpu/PLAN_3090.md); the dense-glyph and colour stages after them are
-  closed.
+**Finished: the Claude write-up.** Every use case tried, with what worked and what failed, is in
+[docs/claude/CLAUDE_QA.md](docs/claude/CLAUDE_QA.md). Nothing in it is waiting on a run.
+
+**Left to do: one GPU run.** Does the page-image trick carry over to a local model with no training? Qwen3.8-27B
+on an RTX 3090, the Claude QA test in small, one evening. Plan in
+[docs/gpu/LOCAL_QWEN.md](docs/gpu/LOCAL_QWEN.md); **the prompt to run is at the top of
+[docs/HANDOFF.md](docs/HANDOFF.md)**.
+
+**Further work, first look done: graded resolution.** DeepSeek-OCR suggests re-rendering older context at lower
+resolution, like forgetting. A quick test on the long-document Q&A (thirds of the document at 4.2x, 2.9x and 2.2x,
+in either order, 12 calls) found that each third reads exactly like its density, and that at equal tokens the graded
+page scores 3 to 5 points below a uniform one: a trade, not a gain.
+[Details](docs/claude/CLAUDE_QA.md#further-work-first-look-graded-resolution-2026-11-13)
+
+![Graded resolution: lookups by third of the document, and overall accuracy against input tokens](docs/img/claude_gradient.png)
+
+**Further work, first look done: facts large, filler small.** Mixed resolution throughout the page: a rule-based
+detector (regular expressions and word lists, no model) marks numbers, names and words that flip meaning; those
+are drawn large and the rest is shrunk until the page costs what a 4.2x page costs. Overall it scores the same as
+a uniform 4.2x page (90.6% against 91.7%), but it loses different questions: every chain is right and every
+wording-sensitive question is right (120 of 120, better than the safe 2.2x pages), while every count is wrong,
+because the filler ended up too small to read. A version that keeps the filler legible is the next test.
+[Details](docs/claude/CLAUDE_QA.md#further-work-first-look-facts-large-filler-small-2026-11-13)
+
+![Facts large, filler small: overall accuracy against tokens, and where the losses are](docs/img/claude_salient.png)
+
+**Parked:** the trained-encoder runs on Latin, the fair last test of the original idea
+([docs/gpu/PLAN_3090.md](docs/gpu/PLAN_3090.md)). **Closed:** the dense-glyph and colour stages after them.
 
 ## Terms
 

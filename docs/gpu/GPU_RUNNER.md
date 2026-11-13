@@ -49,7 +49,7 @@ below show the mechanics with the first session's arms.
 
 ## 1. Setup (~20-30 min, mostly downloads; run the steps in parallel where marked)
 ```bash
-git clone https://github.com/StephenFlavin/visual-bpe && cd visual-bpe && git checkout claude/validation-harness
+git clone https://github.com/StephenFlavin/visual-text-compression && cd visual-text-compression && git checkout claude/validation-harness
 python3 -m venv .venv && . .venv/bin/activate
 pip install -r requirements.txt
 pip install --index-url https://download.pytorch.org/whl/cu128 torch   # pick the wheel your driver supports

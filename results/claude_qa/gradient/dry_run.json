@@ -1,0 +1,194 @@
+{
+ "d0 recent_sharp": {
+  "pages": 18,
+  "pages_per_tier": [
+   4,
+   6,
+   8
+  ],
+  "tokens_per_tier": [
+   17745,
+   26652,
+   35490
+  ],
+  "tokens": 79887,
+  "uniform88_tokens": 79887,
+  "ratio_to_uniform88": 1.0,
+  "px_per_char_per_tier": [
+   58.881781304215636,
+   88.49946504991912,
+   117.7928949678565
+  ],
+  "bounds": [
+   0,
+   236124,
+   472191,
+   708279
+  ],
+  "lookups_per_tier": [
+   25,
+   32,
+   23
+  ]
+ },
+ "d0 old_sharp": {
+  "pages": 18,
+  "pages_per_tier": [
+   8,
+   6,
+   4
+  ],
+  "tokens_per_tier": [
+   35490,
+   26652,
+   17745
+  ],
+  "tokens": 79887,
+  "uniform88_tokens": 79887,
+  "ratio_to_uniform88": 1.0,
+  "px_per_char_per_tier": [
+   117.76644815945022,
+   88.49946504991912,
+   58.89196286472254
+  ],
+  "bounds": [
+   0,
+   236124,
+   472191,
+   708279
+  ],
+  "lookups_per_tier": [
+   25,
+   32,
+   23
+  ]
+ },
+ "d1 recent_sharp": {
+  "pages": 18,
+  "pages_per_tier": [
+   4,
+   6,
+   8
+  ],
+  "tokens_per_tier": [
+   17745,
+   26583,
+   35421
+  ],
+  "tokens": 79749,
+  "uniform88_tokens": 79749,
+  "ratio_to_uniform88": 1.0,
+  "px_per_char_per_tier": [
+   59.00311955524234,
+   88.37995316167631,
+   117.74703021208154
+  ],
+  "bounds": [
+   0,
+   235703,
+   471406,
+   707105
+  ],
+  "lookups_per_tier": [
+   25,
+   28,
+   27
+  ]
+ },
+ "d1 old_sharp": {
+  "pages": 18,
+  "pages_per_tier": [
+   8,
+   6,
+   4
+  ],
+  "tokens_per_tier": [
+   35421,
+   26583,
+   17745
+  ],
+  "tokens": 79749,
+  "uniform88_tokens": 79749,
+  "ratio_to_uniform88": 1.0,
+  "px_per_char_per_tier": [
+   117.74484363384133,
+   88.37995316167631,
+   59.00415033100044
+  ],
+  "bounds": [
+   0,
+   235703,
+   471406,
+   707105
+  ],
+  "lookups_per_tier": [
+   25,
+   28,
+   27
+  ]
+ },
+ "d2 recent_sharp": {
+  "pages": 18,
+  "pages_per_tier": [
+   4,
+   6,
+   8
+  ],
+  "tokens_per_tier": [
+   17745,
+   26583,
+   35490
+  ],
+  "tokens": 79818,
+  "uniform88_tokens": 79749,
+  "ratio_to_uniform88": 1.0008652146108414,
+  "px_per_char_per_tier": [
+   58.97319498590519,
+   88.32989401583662,
+   118.00105418187377
+  ],
+  "bounds": [
+   0,
+   235807,
+   471614,
+   707419
+  ],
+  "lookups_per_tier": [
+   29,
+   24,
+   27
+  ]
+ },
+ "d2 old_sharp": {
+  "pages": 18,
+  "pages_per_tier": [
+   8,
+   6,
+   4
+  ],
+  "tokens_per_tier": [
+   35490,
+   26583,
+   17745
+  ],
+  "tokens": 79818,
+  "uniform88_tokens": 79749,
+  "ratio_to_uniform88": 1.0008652146108414,
+  "px_per_char_per_tier": [
+   117.99773101413143,
+   88.32989401583662,
+   58.97353635613311
+  ],
+  "bounds": [
+   0,
+   235807,
+   471614,
+   707419
+  ],
+  "lookups_per_tier": [
+   29,
+   24,
+   27
+  ]
+ }
+}
