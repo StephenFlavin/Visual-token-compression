@@ -1,15 +1,35 @@
 # Does any of this help a local model? One evening on Qwen3.8-27B (RTX 3090)
 
+**Status (2026-11-13): pre-registered, not run. This is the one run left in the repo.** The prompt to paste into
+a session on the RTX 3090 PC is at the top of [HANDOFF.md](../HANDOFF.md); this file is the plan it follows and
+where its results go.
+
 *Pre-registered 2026-11-12, before any row. No training. Code: `experiments/claude_qa/local_qa.py` (tests
-`tests/test_local_qa.py`, against a mock server: it has not talked to a real model yet). The prompt for the 3090
-session is at the end and in [HANDOFF.md](../HANDOFF.md).*
+`tests/test_local_qa.py`, against a mock server: it has not talked to a real model yet). The design, predictions
+and outcome table below are unchanged since then; the clean-up of 2026-11-13 added this status block, the diagram,
+the source notes on model facts, and replaced a second copy of the session prompt with the link above.*
+
+**In one paragraph.** On Claude, a long document rendered as page images of small text is answered as well as the
+text itself at 2.2x fewer input tokens ([CLAUDE_QA.md](../claude/CLAUDE_QA.md)). This test asks whether the same
+holds on a model you run yourself, where the saving would be memory and prompt-processing time instead of money:
+three documents, 100 questions each, read as text and as pages at three densities, by Qwen3.8-27B served by
+llama.cpp. It also times the model's built-in multi-token prediction module.
+
+```mermaid
+flowchart LR
+    D["3 documents<br/>~205k chars,<br/>100 questions each"] --> R["5 arms: none, text,<br/>pages at 117.6 / 88.2 / 58.8<br/>px² per character"]
+    R --> S["llama-server<br/>Qwen3.8-27B"]
+    S --> Q["document once,<br/>questions in<br/>batches of 20"]
+    Q --> A["analyse: each page arm<br/>against text, paired"]
+    A --> V["lossless / not shown<br/>lossless / loss"]
+```
 
 ## Why this test, and why only this
 
 On your own GPU nothing is billed per token. What costs is how much text fits in memory, how long the prompt
 takes to process, and how fast the answer is written. Qwen3.8-27B already attacks all three inside the model:
 
-| What costs locally | What Qwen3.8-27B already does (from its config and model card) |
+| What costs locally | What Qwen3.8-27B already does (source: its config and model card on Hugging Face, read 2026-11-12; not re-checkable from this repo) |
 |---|---|
 | Memory per token of context | Only 16 of its 64 layers are full attention; the other 48 keep a fixed-size state. About 64 KB per token at 16 bits (my arithmetic from the config: 16 layers x 2 x 4 heads x 256 dims x 2 bytes), a quarter of a same-size all-attention model |
 | Speed of writing | A multi-token prediction module ships with the model; llama.cpp can use it to draft several tokens per pass |
@@ -24,21 +44,24 @@ Claude carries over **with no training**:
    a text token: 2.0x fewer positions, so twice the document in the same memory and half the prompt-processing
    time. Whether it still answers correctly is the question.
 2. **How much faster does it write with its multi-token module?** One published figure for the previous 27B model on
-   a 3090 is 38 to 65 tokens per second; that is a blog measurement, not ours.
+   a 3090 is 38 to 65 tokens per second; that is a blog measurement, not ours (not re-checked).
 
 ## Design
 
 Same test as [CLAUDE_QA.md](../claude/CLAUDE_QA.md), smaller, against a local server.
 
 * **Model:** `unsloth/Qwen3.8-27B-GGUF`: `Qwen3.8-27B-UD-Q4_K_M.gguf` (16.6 GB), `mmproj-F16.gguf` (0.9 GB, the
-  vision projector), and for the speed check `MTP/mtp-Qwen3.8-27B-Q4_0.gguf` (1.4 GB). Server: llama.cpp's
+  vision projector), and for the speed check `MTP/mtp-Qwen3.8-27B-Q4_0.gguf` (1.4 GB). File names and sizes are
+  from the repository's file list on Hugging Face (read 2026-11-12, not re-checked). Server: llama.cpp's
   `llama-server` (OpenAI-compatible; any other such server works with `--base-url`).
 * **Documents:** 3 non-overlapping documents of ~205k characters of held-out WikiText (~48k text tokens each, the
   smallest size the question generator supports and about what fits next to the weights), with invented facts.
 * **Questions:** 100 per document, exact numeric answers: 40 invented facts, 40 numbers in real sentences, 20
   multi-step (8 two-hop, 6 sums, 3 largest-of-three, 3 counts). 300 paired questions per arm.
 * **Arms:** no document; text; pages at 117.6, 88.2 and 58.8 px² per character (10, 8 and 5 pages of 1600 px;
-  23.9k, 17.9k and 11.9k vision tokens: 2.0x, 2.7x and 4.0x fewer positions than text by the formula).
+  23.9k, 17.9k and 11.9k vision tokens: 2.0x, 2.7x and 4.0x fewer positions than text by the formula). In the
+  harness the arms are named `none`, `text`, `page118`, `page88` and `page59`. (Checked with the dry run,
+  2026-11-13: a full page is 1600 x 1568 px, 2450 tokens.)
 * **Calls:** the document first, then the questions in batches of 20, so the server processes the document once
   per arm and reuses it. Temperature 0. Thinking off for the main run (it is on by default in this model).
 * **Checks:** the prompt tokens the server reports must cover the pages' tokens (otherwise the server downscaled
@@ -122,37 +145,12 @@ under an hour of GPU time for 15 arms, plus the speed runs.
 
 ## Prompt for the 3090 session
 
-```text
-Work in /c/git/visual-bpe-run (Git Bash; `. .venv/env.sh`; `python`, not `python3`; PYTHONUTF8=1). Read AGENTS.md
-(gotchas, especially GPU runners and Windows), docs/HANDOFF.md and docs/gpu/LOCAL_QWEN.md. LOCAL_QWEN.md is
-pre-registered: do not change its arms, checks, predictions or outcome table after seeing data; if something must
-change, write a dated amendment in it first. No training in this session.
-
-0. State. Show the tail of results/r12_logs/driver.log, results/r12_logs/done.txt, nvidia-smi and free disk (the
-   downloads need ~19 GB). If the Runs 1-2 driver is running: wait for the current run's next checkpoint (every
-   250 steps), stop the driver process first and its python child second, delete a STOP file if the kill left one,
-   and commit and push any finished r12 rows on claude/validation-harness. Leave the driver stopped: resuming it
-   is the user's decision (command in docs/HANDOFF.md).
-1. Code. git fetch origin claude/sharp-mendel-kkhg4g && git merge origin/claude/sharp-mendel-kkhg4g. If it
-   conflicts, stop and report. Then python -m pytest -q tests/test_local_qa.py and the dry run of the runbook.
-2. Server. Install the newest llama.cpp Windows CUDA release, download the three model files, start llama-server
-   as in the runbook (check the flag names against --help). Record the llama.cpp build, the exact command and
-   nvidia-smi after loading. One request with a small image to confirm vision works.
-3. Document 0, all five arms, thinking off. Then analyse. Check before going on: text >= 90%; reasoning_chars = 0;
-   no arm marked INVALID (prompt tokens below the pages' tokens = the server downscaled the pages: raise
-   --image-max-tokens or lower --page-px to a multiple of 32, write that down as a dated amendment, rerun the
-   page arms). If the text arm does not fit in memory, follow the runbook's memory steps and record which was used.
-4. Documents 1 and 2. Then the two speed runs (plain, then the server restarted with the multi-token module).
-5. Write-up. A dated "Results" section in docs/gpu/LOCAL_QWEN.md: the summary table, each prediction as PASS / FAIL /
-   not evaluable, which row of the outcome table applies, prompt-processing and generation speeds, memory used,
-   the server command, problems. One line in AGENTS.md "Findings" and one row in the docs/HANDOFF.md table. Commit
-   results/local_qa and the docs, push.
-
-Stop and ask if the server cannot load the model or the projector, if text scores below 90%, or if a result would
-change the plan. Report failures as plainly as successes. No pull requests, no Claude API calls, no model IDs in
-commits beyond what the rows record.
-```
+The prompt is kept in one place, the top of [HANDOFF.md](../HANDOFF.md), so that the two copies cannot drift
+apart. It follows the runbook above step by step: state, code and tests, server, document 0 with its checks,
+documents 1 and 2, the two speed runs, the write-up.
 
 ## Results
 
-Not run yet.
+Not run yet (2026-11-13). The session fills this section: the `summary.md` table, each prediction as PASS / FAIL /
+not evaluable, the row of the outcome table that applies, speeds, memory, the llama.cpp build and server command,
+and problems.
