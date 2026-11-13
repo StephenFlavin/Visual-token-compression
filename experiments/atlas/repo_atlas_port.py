@@ -42,7 +42,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
-WORK = Path(os.environ.get("PORT_WORK", "/tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port"))
+WORK = Path(os.environ.get("PORT_WORK", "/tmp/claude-0/-home-user-visual-token-compaction/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port"))
 OUT = ROOT / "results" / "atlas" / "port"
 PROJECT = "gitleaks"
 SRC_REPO = "https://github.com/gitleaks/gitleaks"
@@ -500,7 +500,7 @@ def save_state(arm: str, st: dict) -> None:
 
 
 def agent_env(arm_dir: Path) -> dict:
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     env = CE.build_env()
     env.update({k: os.environ[k] for k in ("CARGO_HOME", "RUSTUP_HOME", "GOPATH", "GOROOT") if k in os.environ})
     env.update(CARGO_BUILD_JOBS="2", CLAUDE_CODE_DISABLE_AUTO_MEMORY="1", TMPDIR=str(arm_dir / "tmp"))
@@ -508,7 +508,7 @@ def agent_env(arm_dir: Path) -> dict:
 
 
 def cli_command(session: str, resume: bool, guard_left: float) -> list[str]:
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     cmd = [CE.CLAUDE_BIN, "-p", "--input-format", "stream-json", "--output-format", "stream-json", "--verbose",
            "--model", MODEL, "--effort", EFFORT, "--tools", "Bash,Read,Edit,Write",
            "--allowedTools", "Bash,Read,Edit,Write",

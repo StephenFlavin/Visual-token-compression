@@ -1,7 +1,7 @@
 """RGB overlay encodings: up to three text streams per line, one per colour channel (docs/background/IDEAS.md).
 
 All pages are 224x224 RGB uint8 with lines of integer pitch p (line i = rows [i*p, (i+1)*p)), rendered like
-``latin_p``: em = p/1.2, line spacing 1.2, no margin, 4x supersampled then BOX-downsampled (vbpe.layout).
+``latin_p``: em = p/1.2, line spacing 1.2, no margin, 4x supersampled then BOX-downsampled (vtc.layout).
 
 Families
   mono_p<p>      DejaVu Sans Mono black on white, fixed cells (0.60 em), fixed-length chunks of n_cells chars per
@@ -54,10 +54,10 @@ import numpy as np
 from PIL import Image, ImageDraw
 
 from encoder_probe.ep.pages import H, LG_BANKS, LP, PRINTABLE, ROOT, W, Encoding, Page
-from vbpe import config
-from vbpe.layout import _draw_lines, get_font, glyph_advance, wrap
-from vbpe.metrics import normalize
-from vbpe.schemes.latin import LatinScheme
+from vtc import config
+from vtc.layout import _draw_lines, get_font, glyph_advance, wrap
+from vtc.metrics import normalize
+from vtc.schemes.latin import LatinScheme
 
 EXPAND = 3                    # probe frames per pixel column (Probe.expand)
 T_FRAMES = W * EXPAND         # CTC frames per line

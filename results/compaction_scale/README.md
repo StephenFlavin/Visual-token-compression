@@ -16,7 +16,7 @@ Follow-up to [results/compaction](../compaction/README.md) (3 research sessions:
 |---|---|---|
 | sessions | 3, all reading Wikipedia sources | **9 in 3 kinds**: research (Read, 14 Wikipedia articles with planted facts, new seeds), codebase exploration (Read, ~22 Python files of this repository), log triage (Bash, synthetic service logs with planted events) |
 | archive delivery | pointer written into the question prompt | **real hooks** (`experiments/compaction/hooks/`): PreCompact renders the whole transcript (files read, command output, the agent's own messages) to 88.2 px²/char pages plus an index; SessionStart(compact) tells the model where it is |
-| archive content | Read results only | everything in the transcript, code and logs minified with their line structure (`vbhook` minifiers) |
+| archive content | Read results only | everything in the transcript, code and logs minified with their line structure (`vtchook` minifiers) |
 | questions | 120 in one turn | 40 per session in **4 turns of 10**, then a **task turn**: write a file that needs 5 details from before the compaction |
 
 Arms per session (Opus 5.5; reading at low effort, everything after it at high effort):

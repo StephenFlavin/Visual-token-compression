@@ -1,7 +1,7 @@
 """Symbol alphabet for the learned-glyph channel (WP-LG2).
 
 ``symbols`` = the 95 printable ASCII characters (32..126, in code-point order) followed by the first
-``n_tokens`` tokens of the vbpe master dictionary (``Dictionary.load(3000)``, priority order), so
+``n_tokens`` tokens of the vtc master dictionary (``Dictionary.load(3000)``, priority order), so
 ``Alphabet.build(n)`` for n < 3000 is a prefix of every larger alphabet (nested experiments) and the
 token set equals Phase-2 ``subst{n}``.
 
@@ -25,7 +25,7 @@ MASTER_N = 3000
 
 @lru_cache(maxsize=1)
 def _master():
-    from vbpe.dictionary import Dictionary
+    from vtc.dictionary import Dictionary
     return Dictionary.load(MASTER_N)
 
 
@@ -48,7 +48,7 @@ class Alphabet:
         self.index = {s: i for i, s in enumerate(self.symbols)}
         self._dict = dictionary
         if self.n_tokens and dictionary is None:
-            from vbpe.dictionary import Dictionary
+            from vtc.dictionary import Dictionary
             self._dict = Dictionary(tokens)
 
     @classmethod

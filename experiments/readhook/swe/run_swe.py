@@ -1,4 +1,4 @@
-"""SWE-bench Verified (Django subset) without Docker: text vs vbhook (code and output as page images), 2026-11-11.
+"""SWE-bench Verified (Django subset) without Docker: text vs vtchook (code and output as page images), 2026-11-11.
 
 Each task: check out the base commit, build a uv virtualenv with the version's Python, install Django editable plus
 tests/requirements/py3.txt (line by line, failures ignored). Grading follows SWE-bench: apply the model patch (its
@@ -7,7 +7,7 @@ patch touches, parse the log with swebench's Django parser; resolved = every FAI
 `validate` checks the environment first: the gold patch must resolve the task and the unpatched code must not.
 
     harness-venv/bin/python run_swe.py validate            # no Claude calls
-    harness-venv/bin/python run_swe.py run --arms text vbhook [--ids ...]
+    harness-venv/bin/python run_swe.py run --arms text vtchook [--ids ...]
     harness-venv/bin/python run_swe.py report
 """
 from __future__ import annotations
@@ -26,7 +26,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
 sys.path[:0] = [str(ROOT), str(HERE.parent)]
-WORK = Path(os.environ.get("SWE_WORK", "/tmp/claude-0/-home-user-visual-bpe/9e274458-7352-5bb1-b191-52e96364b3f6/scratchpad/swe"))
+WORK = Path(os.environ.get("SWE_WORK", "/tmp/claude-0/-home-user-visual-token-compaction/9e274458-7352-5bb1-b191-52e96364b3f6/scratchpad/swe"))
 OUT = ROOT / "results" / "readhook_swe"
 PY = {"3.0": "3.8", "3.1": "3.8", "3.2": "3.8", "4.0": "3.8", "4.1": "3.9", "4.2": "3.9", "5.0": "3.11"}
 # SWE-bench uses Python 3.6 for Django 3.0-3.2; uv has no 3.6 build, and Django 3.0-3.2 support 3.8. The gold-patch
@@ -167,16 +167,16 @@ resolved, reply DONE.
 
 
 def run_one(t, arm: str, model: str, effort: str) -> dict:
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     base = WORK / "runs" / t["instance_id"] / arm
     repo = base / "repo"
     checkout(t, repo)
     venv = make_env(t, repo)
-    if arm == "vbhook":
-        from vbhook.install import settings as vb_settings
+    if arm == "vtchook":
+        from vtchook.install import settings as vb_settings
         (repo / ".claude").mkdir()
         (repo / ".claude" / "settings.local.json").write_text(json.dumps(vb_settings(
-            budget=float(os.environ.get("VBHOOK_BUDGET", "88.2")), cache=str(base / "cache"), log=str(base / "hook.jsonl"),
+            budget=float(os.environ.get("VTCHOOK_BUDGET", "88.2")), cache=str(base / "cache"), log=str(base / "hook.jsonl"),
             python=shutil.which("python3", path="/usr/local/bin:/usr/bin") or "python3")))   # hooks need the renderer's deps
         sh("echo .claude/ >> .git/info/exclude", cwd=repo)
     cmd = [CE.CLAUDE_BIN, "-p", PROMPT.format(venv=venv, issue=t["problem_statement"]), "--output-format", "stream-json",
@@ -223,7 +223,7 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("cmd", choices=["select", "validate", "run", "report"])
     ap.add_argument("--ids", nargs="*")
-    ap.add_argument("--arms", nargs="+", default=["text", "vbhook"])
+    ap.add_argument("--arms", nargs="+", default=["text", "vtchook"])
     ap.add_argument("--model", default="claude-opus-5-5")
     ap.add_argument("--effort", default="high")
     ap.add_argument("--workers", type=int, default=4)

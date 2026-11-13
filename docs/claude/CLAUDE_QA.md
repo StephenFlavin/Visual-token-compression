@@ -343,7 +343,7 @@ reading is done.
 
 *2026-11-11. Opus 5.5, high effort, Claude Code. Full analysis: [SWE_IMAGES.md](SWE_IMAGES.md).*
 
-Hooks for Claude Code ([`experiments/readhook/vbhook/`](../../experiments/readhook/vbhook/)) show file contents
+Hooks for Claude Code ([`experiments/readhook/vtchook/`](../../experiments/readhook/vtchook/)) show file contents
 and long command output as pages at 88.2 px² per character. The code is minified first (40+ languages and output
 kinds), in a way that keeps it safe to edit from: spaces inside lines are kept and indentation is shown as `»`
 marks. An image is used only when it costs fewer tokens than the text.
@@ -543,7 +543,7 @@ whenever the model changes.
 ## How the tests work
 
 * **Calls:** headless Claude Code (`claude -p`, no tools, isolated environment;
-  [`vbpe/claude_eval.py`](../../vbpe/claude_eval.py)). One call per arm: the document (as text, or as page images
+  [`vtc/claude_eval.py`](../../vtc/claude_eval.py)). One call per arm: the document (as text, or as page images
   in order), then all the questions. The system prompt asks for a number per question and a best guess when
   unsure, so there is no abstaining. The image arm cannot see the source text. Input tokens come from the
   command line's usage report.

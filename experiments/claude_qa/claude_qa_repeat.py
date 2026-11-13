@@ -32,7 +32,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "experiments" / "claude_qa"))
 import claude_qa_prune as P  # noqa: E402
 import claude_qa_render as R  # noqa: E402
-from vbpe import config  # noqa: E402
+from vtc import config  # noqa: E402
 
 OUT = config.RESULTS / "claude_qa" / "repeat"
 ARMS = {"page118": 117.6, "page88": 88.2, "text": None}
@@ -139,7 +139,7 @@ def cmd_check(a) -> None:
     the key under which Test A's response is stored, and the rendered pages must equal Test A's saved PNGs."""
     from PIL import Image
 
-    from vbpe import claude_eval
+    from vtc import claude_eval
     ta = test_a_rows()
     cache: dict = {}
     for d in a.docs:
@@ -167,9 +167,9 @@ def cmd_check(a) -> None:
 
 def page_lines(doc: str, budget: float) -> list[list[str]]:
     """The text of every rendered line, per page, exactly as ``render_pages`` lays it out (same chunks and em)."""
-    from vbpe import metrics
-    from vbpe.layout import LayoutParams, fits
-    from vbpe.schemes import get_scheme
+    from vtc import metrics
+    from vtc.layout import LayoutParams, fits
+    from vtc.schemes import get_scheme
     pages, info = R.render_pages(doc, budget, P.PAGE_PX)
     sch = get_scheme("latin")
     max_chars = int(P.PAGE_PX * P.PAGE_PX / budget * 0.97)
@@ -231,7 +231,7 @@ def cmd_locate(a) -> None:
 
 # --------------------------------------------------------------------------- run
 def cmd_run(a) -> None:
-    from vbpe import claude_eval
+    from vtc import claude_eval
     OUT.mkdir(parents=True, exist_ok=True)
     ta = test_a_rows()
     jobs = todo_jobs(load_rows(), a.docs)

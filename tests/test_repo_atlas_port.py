@@ -185,10 +185,10 @@ def test_audit_flags_outside_and_store(tmp_path):
              {"name": "Read", "input": {"file_path": "/root/.cargo/registry/src/x/lib.rs"}},
              {"name": "Bash", "input": {"command": "cat ~/.claude/projects/x/memory/notes.md"}},
              {"name": "Bash", "input": {"command": "find / -name '*.py' -path '*gitleaks*'"}},
-             {"name": "Read", "input": {"file_path": "/home/user/visual-bpe/README.md"}}]
+             {"name": "Read", "input": {"file_path": "/home/user/visual-token-compaction/README.md"}}]
     a = P.audit(calls, arm_dir)
     assert a["suspect"] and a["claude_store"] and a["fs_searches"]
-    assert "/home/user/visual-bpe/README.md" in a["outside_paths"]
+    assert "/home/user/visual-token-compaction/README.md" in a["outside_paths"]
     assert not any(p.startswith(str(arm_dir)) or p.startswith("/root/.cargo") for p in a["outside_paths"])
     assert not P.audit(calls[:2], arm_dir)["suspect"]
 

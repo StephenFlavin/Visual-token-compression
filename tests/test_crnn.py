@@ -1,4 +1,4 @@
-"""Fast tests for the Phase-2 CRNN harness (vbpe/crnn)."""
+"""Fast tests for the Phase-2 CRNN harness (vtc/crnn)."""
 import json
 import string
 
@@ -6,9 +6,9 @@ import numpy as np
 import pytest
 import torch
 
-from vbpe.crnn import data as D
-from vbpe.crnn.model import CRNN, greedy_decode
-from vbpe.crnn.train import TrainConfig, evaluate, train_model, train_run
+from vtc.crnn import data as D
+from vtc.crnn.model import CRNN, greedy_decode
+from vtc.crnn.train import TrainConfig, evaluate, train_model, train_run
 
 torch.set_num_threads(1)
 
@@ -52,7 +52,7 @@ def test_render_sample_shapes_and_labels():
 def test_subpixel_phase_shifts_ink():
     sch = D.resolve_scheme("latin")
     units = sch.encode("ill ill")
-    from vbpe.layout import render_line
+    from vtc.layout import render_line
     cents = []
     for ph in (0.0, 0.5):
         im = 255 - np.asarray(render_line([D.PhaseOffset(ph, 8)] + units, 8, D.RenderParams().layout()),

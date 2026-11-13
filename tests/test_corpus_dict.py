@@ -12,8 +12,8 @@ from functools import lru_cache
 
 import pytest
 
-from vbpe import config, corpus
-from vbpe.dictionary import Dictionary, dict_path, text_width_em
+from vtc import config, corpus
+from vtc.dictionary import Dictionary, dict_path, text_width_em
 
 
 def _need(*names: str) -> None:

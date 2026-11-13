@@ -17,9 +17,9 @@ from pathlib import Path
 
 import numpy as np
 
-from vbpe import config
-from vbpe.layout import LayoutParams, _draw_lines, wrap
-from vbpe.metrics import normalize
+from vtc import config
+from vtc.layout import LayoutParams, _draw_lines, wrap
+from vtc.metrics import normalize
 
 ROOT = Path(__file__).resolve().parents[2]
 W = H = 224
@@ -90,7 +90,7 @@ class Encoding:
 
 
 class SchemeEncoding(Encoding):
-    """Any vbpe Scheme (Latin font or learned-glyph bank) rendered with the shared layout engine."""
+    """Any vtc Scheme (Latin font or learned-glyph bank) rendered with the shared layout engine."""
 
     def __init__(self, name, family, pitch, scheme, classes):
         super().__init__(name, family, pitch, classes)
@@ -156,7 +156,7 @@ def get_encoding(name: str) -> Encoding:
         from encoder_probe.ep.rgb_overlay import get_rgb_encoding
         return get_rgb_encoding(name)
     if name.startswith("latin_p"):
-        from vbpe.schemes.latin import LatinScheme
+        from vtc.schemes.latin import LatinScheme
         p = int(name[len("latin_p"):])
         return SchemeEncoding(name, "latin", p, LatinScheme(config.LATIN_FONT), list(PRINTABLE))
     if name.startswith("col_b"):

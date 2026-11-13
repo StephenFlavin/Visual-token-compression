@@ -15,8 +15,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from vbpe import config, corpus, dictionary  # noqa: E402
-from vbpe.layout import Unit, fit_em  # noqa: E402
+from vtc import config, corpus, dictionary  # noqa: E402
+from vtc.layout import Unit, fit_em  # noqa: E402
 
 SIZES = (100, 300, 1000, 3000)
 
@@ -70,7 +70,7 @@ class _Box(Unit):
 
 
 def _fit_ratio(d: dictionary.Dictionary, text: str, W: int = 768, H: int = 768) -> float:
-    """em(subst) / em(condensed) when a passage is fitted to a W x H page by vbpe.layout."""
+    """em(subst) / em(condensed) when a passage is fitted to a W x H page by vtc.layout."""
     cond = [_Box(c, d.char_width(c)) for c in text]
     sub = [_Box(s, d.segment_width(s)) for s in d.segment(text)]
     return fit_em(sub, W, H) / fit_em(cond, W, H)
@@ -123,7 +123,7 @@ same em, which is exactly what Phases 1-2 test (PLAN R3).
 Columns: (a) segments / source chars; (b) rendered width vs condensed Latin (leftovers in Archivo Narrow +
 1.0 em per symbol) and the resulting line-width saving; (c) width vs DejaVu Sans Latin; (d) fraction of source
 chars covered by tokens; implied max em gain on a fixed page = sqrt(1 / width ratio) vs condensed / vs DejaVu;
-"layout em gain" = em(subst) / em(condensed) actually found by `vbpe.layout.fit_em` for the 12 natural
+"layout em gain" = em(subst) / em(condensed) actually found by `vtc.layout.fit_em` for the 12 natural
 passages on a 768x768 page (includes line-breaking and line-quantisation effects); unused = tokens never
 used on val.
 

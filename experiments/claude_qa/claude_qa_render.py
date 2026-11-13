@@ -15,7 +15,7 @@ Questions (all with exact answers, scored automatically):
               sentence's opening words and asks for the number.
 
 Tokens come from the CLI's usage report (input incl. cache creation / read). Calls go through
-vbpe.claude_eval (isolated, no tools, cached on disk). Paired exact McNemar test, text vs image.
+vtc.claude_eval (isolated, no tools, cached on disk). Paired exact McNemar test, text vs image.
 
     python3 experiments/claude_qa/claude_qa_render.py --chars 500000 --dry-run      # build pages + questions, no calls
     python3 experiments/claude_qa/claude_qa_render.py --chars 500000 --yes
@@ -33,8 +33,8 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
-from vbpe import config, corpus, metrics  # noqa: E402
-from vbpe.layout import render_page  # noqa: E402
+from vtc import config, corpus, metrics  # noqa: E402
+from vtc.layout import render_page  # noqa: E402
 
 FIRST = ["Alma", "Bertil", "Cora", "Dmitri", "Edda", "Floris", "Greta", "Henrik", "Ilse", "Joram", "Katja",
          "Lorcan", "Maren", "Niels", "Odile", "Pavo", "Quilla", "Rasmus", "Sabine", "Tobin", "Ulla", "Viggo",
@@ -300,7 +300,7 @@ def render_pages(doc: str, budget: float, page_px: int = 0) -> tuple[list, list[
     """page_px = 0: near-square pages <= 1.15 MP (standard tier, Phase 1's canvas_size). page_px > 0: square pages
     of that side (a multiple of 28; the high-resolution tier allows 1932 = 69 x 69 = 4761 visual tokens), the last
     page cut to the height its text needs."""
-    from vbpe.schemes import get_scheme
+    from vtc.schemes import get_scheme
     sys.path.insert(0, str(ROOT / "experiments" / "phases"))
     from phase1_sweep import canvas_size
     sch = get_scheme("latin")
@@ -381,7 +381,7 @@ def main(argv=None) -> int:
                     help="square pages of this side (e.g. 1932, high-resolution tier); 0 = Phase 1's <= 1.15 MP pages")
     ap.add_argument("--arms", nargs="+", default=["none", "image", "text"])
     ap.add_argument("--effort", default="low")
-    ap.add_argument("--model", default=None, help="Claude model id (default: vbpe.claude_eval.DEFAULT_MODEL)")
+    ap.add_argument("--model", default=None, help="Claude model id (default: vtc.claude_eval.DEFAULT_MODEL)")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--run-name", default="qa500k")
     ap.add_argument("--dry-run", action="store_true")
@@ -407,7 +407,7 @@ def main(argv=None) -> int:
     if not a.yes:
         print("[qa] add --yes to call Claude", flush=True)
         return 0
-    from vbpe import claude_eval
+    from vtc import claude_eval
     rows = []
     for arm in a.arms:
         imgs = pages if arm == "image" else []

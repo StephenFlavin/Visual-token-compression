@@ -12,7 +12,7 @@ Outputs (results/phase1/<run>/):
   runs.jsonl          one row per (passage, scheme, budget); resumable (existing rows are skipped)
   images/<scheme>/    rendered target images (+ _key_<i>.png instruction images, if any)
   config.json         CLI arguments of the latest invocation
-  summary.{json,md}, cer_curves.png, p_at_bars.png   (vbpe.analysis, unless --no-analysis)
+  summary.{json,md}, cer_curves.png, p_at_bars.png   (vtc.analysis, unless --no-analysis)
 
 Examples
   # free, offline smoke test (fake transcriber, built-in sample text if the corpus is missing)
@@ -40,8 +40,8 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from vbpe import config, metrics  # noqa: E402
-from vbpe.layout import render_page  # noqa: E402
+from vtc import config, metrics  # noqa: E402
+from vtc.layout import render_page  # noqa: E402
 
 DEFAULT_SCHEMES = ["latin", "latin_condensed", "subst300", "subst1000", "quad3"]
 DEFAULT_BUDGETS = [8, 11, 14, 17, 20, 23, 27, 32, 40, 60]
@@ -55,13 +55,13 @@ _REFUSAL = re.compile(
     r"too (?:small|blurry|low[- ]resolution|pixelated)|no (?:legible|readable) text)", re.I)
 
 # Cost heuristic ($ per 1M tokens, input/output), by model-name substring. Used ONLY for the
-# pre-flight estimate; real rows record the cost reported by vbpe.claude_eval.
+# pre-flight estimate; real rows record the cost reported by vtc.claude_eval.
 PRICES = [("fable", 10.0, 50.0), ("mythos", 10.0, 50.0), ("opus-5-5", 4.0, 20.0), ("opus", 5.0, 25.0),
           ("sonnet-5", 2.0, 10.0), ("sonnet", 3.0, 15.0), ("haiku-5", 0.10, 0.50), ("haiku", 1.0, 5.0)]
 DEFAULT_PRICE = (5.0, 25.0)
 CALL_OVERHEAD_USD = 0.013   # measured probe cost of a near-empty `claude -p` image call (PLAN §3)
 
-# Clearly-labelled fallback text for DRY RUNS ONLY when vbpe.corpus is not available.
+# Clearly-labelled fallback text for DRY RUNS ONLY when vtc.corpus is not available.
 BUILTIN_SAMPLE_ID = "BUILTIN_SAMPLE"
 BUILTIN_SAMPLE = (
     "The river rises in the northern hills and flows south for about two hundred kilometres before "
@@ -142,14 +142,14 @@ def builtin_passages(variant: str, n: int) -> list[dict]:
 
 def get_passages(variant: str, n: int | None, dry_run: bool) -> tuple[list[dict], str]:
     try:
-        from vbpe import corpus  # lazy: WP-A
+        from vtc import corpus  # lazy: WP-A
         ps = corpus.load_passages(variant)
         src = "corpus"
     except Exception as e:  # ImportError, missing data, ...
         if not dry_run:
-            raise SystemExit(f"vbpe.corpus.load_passages({variant!r}) unavailable ({e!r}); "
+            raise SystemExit(f"vtc.corpus.load_passages({variant!r}) unavailable ({e!r}); "
                              "real runs need the corpus (scripts/build_data.py).")
-        print(f"WARNING: vbpe.corpus unavailable ({type(e).__name__}: {e}); using the BUILT-IN SAMPLE "
+        print(f"WARNING: vtc.corpus unavailable ({type(e).__name__}: {e}); using the BUILT-IN SAMPLE "
               "paragraph (dry run only, not WikiText).", file=sys.stderr)
         ps = builtin_passages(variant, n or 2)
         src = "builtin_sample"
@@ -160,7 +160,7 @@ def get_passages(variant: str, n: int | None, dry_run: bool) -> tuple[list[dict]
 
 # ------------------------------------------------------------------------------- schemes & costs
 def load_schemes(names: list[str]) -> dict:
-    from vbpe.schemes import get_scheme
+    from vtc.schemes import get_scheme
     out = {}
     for n in names:
         try:
@@ -257,7 +257,7 @@ def parse_args(argv=None):
     ap.add_argument("--n-passages", type=int, default=None, help="first N passages (default: all)")
     ap.add_argument("--passage-chars", type=int, default=None,
                     help="truncate passages at a sentence/word boundary to ~N chars")
-    ap.add_argument("--model", default=None, help="Claude model (default: vbpe.claude_eval.DEFAULT_MODEL)")
+    ap.add_argument("--model", default=None, help="Claude model (default: vtc.claude_eval.DEFAULT_MODEL)")
     ap.add_argument("--effort", default="low",
                     help="CLI effort passed to claude_eval.transcribe (low|medium|high|xhigh|max; "
                          "'none' = CLI default). Adaptive thinking ~doubles cost with no CER gain.")
@@ -268,7 +268,7 @@ def parse_args(argv=None):
     ap.add_argument("--fake-noise", type=float, default=0.03,
                     help="dry run: char corruption rate at em=8 px (grows ~1/em^2)")
     ap.add_argument("--pilot", action="store_true",
-                    help="preset: 1 passage, all schemes in vbpe.schemes.SCHEMES, budgets 2..100")
+                    help="preset: 1 passage, all schemes in vtc.schemes.SCHEMES, budgets 2..100")
     ap.add_argument("--max-cost", type=float, default=None, help="abort if estimated USD exceeds this")
     ap.add_argument("--cost-per-call", type=float, default=None, help="override the per-call estimate (USD)")
     ap.add_argument("--price-in", type=float, default=None, help="USD per 1M input tokens (estimate)")
@@ -280,7 +280,7 @@ def parse_args(argv=None):
     ap.add_argument("--no-analysis", action="store_true")
     a = ap.parse_args(argv)
     if a.pilot:
-        from vbpe.schemes import SCHEMES
+        from vtc.schemes import SCHEMES
         a.schemes = a.schemes or list(SCHEMES)
         a.budgets = a.budgets or list(PILOT_BUDGETS)
         a.n_passages = a.n_passages or 1
@@ -305,7 +305,7 @@ def main(argv=None) -> int:
     if a.dry_run:
         model = "fake"
     else:
-        from vbpe import claude_eval  # lazy: WP-E1
+        from vtc import claude_eval  # lazy: WP-E1
         model = a.model or getattr(claude_eval, "DEFAULT_MODEL", "default")
 
     passages, src = get_passages(a.variant, a.n_passages, a.dry_run)
@@ -383,7 +383,7 @@ def main(argv=None) -> int:
     est_model = model
     if a.dry_run:   # estimate what the real run would cost (importing claude_eval makes no calls)
         try:
-            from vbpe import claude_eval as _ce
+            from vtc import claude_eval as _ce
             est_model = a.model or _ce.DEFAULT_MODEL
         except Exception:
             est_model = a.model or ""
@@ -451,7 +451,7 @@ def main(argv=None) -> int:
             break
 
     if not a.no_analysis and runs_path.exists():
-        from vbpe import analysis
+        from vtc import analysis
         rows = analysis.load_runs(runs_path)
         s = analysis.write_summary(rows, run_dir, title=f"Phase 1 {a.run_name}")
         for v in s["headline"]["verdicts"].values():

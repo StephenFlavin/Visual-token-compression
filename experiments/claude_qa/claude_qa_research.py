@@ -37,7 +37,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "experiments" / "claude_qa"))
-from vbpe import config, corpus  # noqa: E402
+from vtc import config, corpus  # noqa: E402
 import claude_qa_render as Q  # noqa: E402
 import analyse_claude_qa as A  # noqa: E402
 
@@ -290,7 +290,7 @@ def main(argv=None) -> int:
     if a.dry_run or not a.yes:
         print("[dr] dry run" if a.dry_run else "[dr] add --yes to call Claude", flush=True)
         return 0
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     # 1. notes, one call per source, without the questions
     jobs = [{"images": [], "system": NOTES_SYSTEM, "prompt": notes_prompt(s), "effort": a.notes_effort,
              "timeout": 600.0, "meta": (b["k"], i)} for b in built for i, s in enumerate(b["src"])]

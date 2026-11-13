@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "experiments" / "claude_qa"))
 import claude_qa_render as R  # noqa: E402
-from vbpe import config  # noqa: E402
+from vtc import config  # noqa: E402
 
 OUT = config.RESULTS / "claude_qa" / "prune"
 CACHE = config.RESULTS / "claude_qa" / "prune" / "cache"          # git-ignored (results/**/cache/)
@@ -510,7 +510,7 @@ def cmd_calibrate(a) -> None:
     """Small unscored calls (effort low) on an excerpt of document 0: Claude input tokens per character of full text
     and of text pruned at the two candidate rates. Rates are then set per document so that ptext22's pruned
     document has as many Claude tokens as page118's image tokens, and ptext15's total is text's total / 1.5."""
-    from vbpe import claude_eval
+    from vtc import claude_eval
     st = load_state()
     b = doc_bundle(0)
     full, spans0 = assemble(b["chunks"])
@@ -570,7 +570,7 @@ def cmd_set_rates(a) -> None:
 
 def cmd_run(a) -> None:
     from analyse_claude_qa import engagement
-    from vbpe import claude_eval
+    from vtc import claude_eval
     st = load_state()
     stopped = set(st.get("stopped_arms", []))
     for d in a.docs:

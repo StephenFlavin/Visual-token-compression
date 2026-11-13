@@ -3,7 +3,7 @@
 For each em (Phase-2 ems 4..8 -> pitch h = round(1.2 em)) a FIXED DejaVu bank
 (``GlyphBank.from_font(..., em=em)``) composes real 'val' lines (the first n lines = the Phase-2
 test lines) which go through each Channel preset, and are compared with the Phase-2 rendering of
-the same lines (``vbpe.crnn.data.render_sample`` with the Phase-2 ``RenderParams``):
+the same lines (``vtc.crnn.data.render_sample`` with the Phase-2 ``RenderParams``):
 
   stats   pixel statistics per (em, source): mean ink, ink histogram, peak ink (p99), edge sharpness
           (mean |dx|+|dy|), background noise; pixel-aligned relative MAD (phase forced to 0 on both
@@ -11,8 +11,8 @@ the same lines (``vbpe.crnn.data.render_sample`` with the Phase-2 ``RenderParams
           PIL-vs-PIL quarter-pixel-phase MAD as yardstick. Sources: pil_eval (Phase-2 test images),
           pil_train (Phase-2 train rendering + augment_batch), <preset>_eval, <preset>_train.
   strips  side-by-side PNGs (PIL vs each preset, eval and train mode), nearest-upscaled.
-  --train train a vbpe CRNN reader (same model/optimiser/schedule/eval/checkpoint rule as
-          vbpe.crnn.train.train_model) on bank+channel lines per (em, preset) and report test CER
+  --train train a vtc CRNN reader (same model/optimiser/schedule/eval/checkpoint rule as
+          vtc.crnn.train.train_model) on bank+channel lines per (em, preset) and report test CER
           (+ P@3% per preset vs Phase-2 latin from results/phase2/phase2_main/runs.jsonl).
           ``--pil-ref`` also trains the unchanged Phase-2 trainer for the same steps (use when
           --steps differs from Phase 2's 3500).
@@ -40,8 +40,8 @@ if str(ROOT) not in sys.path:
 
 import numpy as np  # noqa: E402
 
-from vbpe import config  # noqa: E402
-from vbpe.crnn import data as D  # noqa: E402
+from vtc import config  # noqa: E402
+from vtc.crnn import data as D  # noqa: E402
 
 LG = ROOT / "learned_glyphs"
 OUT = LG / "results" / "calibration"
@@ -133,7 +133,7 @@ def stat_distance(s: dict, ref: dict) -> float:
 def aligned_mad(bank, channel, lines, em, prefix_chars: int = 12) -> dict:
     """Relative MAD (sum|a-b| / sum a) vs the PIL phase-0 rendering, both at phase 0 (channel in
     eval mode); 'prefix' = first ``prefix_chars`` chars (free of cumulative advance-rounding drift)."""
-    from vbpe.layout import render_line
+    from vtc.layout import render_line
     rp = D.RenderParams(phase=False)
     scheme = D.resolve_scheme("latin")
     xb, wb = bank_lines(bank, channel, lines, train=False, phase=0)
@@ -286,7 +286,7 @@ class BankLines:
 def _evaluate(model, sets_x, data: BankLines, vocab) -> dict:
     import torch
     from rapidfuzz.distance import Levenshtein
-    from vbpe.crnn.model import greedy_decode
+    from vtc.crnn.model import greedy_decode
     model.eval()
     edits = chars = 0
     preds = [None] * len(data.texts)
@@ -324,7 +324,7 @@ def train_job(job: dict) -> dict:
     from torch import nn
     from learned_glyphs.lg.channel import Channel
     from learned_glyphs.lg.compose import compose
-    from vbpe.crnn.model import CRNN, n_params
+    from vtc.crnn.model import CRNN, n_params
 
     em, preset, steps = float(job["em"]), job["preset"], int(job["steps"])
     out = Path(job["out"])
@@ -426,7 +426,7 @@ def train_job(job: dict) -> dict:
 def pil_ref_job(job: dict) -> dict:
     """Unchanged Phase-2 trainer (latin, same steps) for a same-budget reference."""
     _torch(1)
-    from vbpe.crnn.train import TrainConfig, train_run
+    from vtc.crnn.train import TrainConfig, train_run
     cfg = TrainConfig(scheme="latin", em=float(job["em"]), steps=int(job["steps"]), batch=job["batch"],
                       eval_every=job["eval_every"], n_train=job["n_train"], n_val=job["n_val"],
                       n_test=job["n_test"], threads=1, render_workers=1)
@@ -454,7 +454,7 @@ def phase2_latin_cer(path: Path = PHASE2_RUNS) -> dict[float, float]:
 
 
 def summarise_training(out: Path) -> str:
-    from vbpe.analysis import p_at
+    from vtc.analysis import p_at
     rows = [json.loads(x) for x in (out / "runs.jsonl").read_text().splitlines() if x.strip()]
     p2 = [json.loads(x) for x in PHASE2_RUNS.read_text().splitlines()] if PHASE2_RUNS.exists() else []
     p2 = [r for r in p2 if r.get("scheme") == "latin"]
@@ -464,7 +464,7 @@ def summarise_training(out: Path) -> str:
         ex = " ".join(f"{k}={v:.4f}" for k, v in (r.get("extra_eval_cer") or {}).items())
         L.append(f"| {r['channel']} | {r['em']:g} | {r['height_px']} | {r['px_per_char']:.2f} | "
                  f"{r['cer']:.4f} | {ex} | {r.get('phase2_latin_cer')} | {r['steps']} |")
-    L += ["", "P@3% (px2/char at CER 3%, isotonic + log-linear interpolation, vbpe.analysis.p_at):", ""]
+    L += ["", "P@3% (px2/char at CER 3%, isotonic + log-linear interpolation, vtc.analysis.p_at):", ""]
     ref = p_at(p2, "latin", 0.03) if p2 else None
     L.append(f"* Phase-2 latin (phase2_main): {ref}")
     for ch in sorted({r["channel"] for r in rows}):

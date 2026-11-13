@@ -15,7 +15,7 @@ if str(ROOT) not in sys.path:
 from learned_glyphs.lg.channel import Channel, jpeg_approx, pil_jpeg  # noqa: E402
 from learned_glyphs.lg.compose import compose, line_widths_ss  # noqa: E402
 from learned_glyphs.lg.glyphs import GlyphBank, coverage, min_feature_penalty  # noqa: E402
-from vbpe import config  # noqa: E402
+from vtc import config  # noqa: E402
 
 torch.set_num_threads(1)
 SYMS = [chr(c) for c in range(32, 127)]
@@ -204,7 +204,7 @@ def test_jpeg_approx_close_to_pil():
 # ------------------------------------------------------------------ calibration vs Phase 2
 @pytest.mark.skipif(not HAVE_FONT, reason="DejaVu font missing")
 def test_fixed_dejavu_bank_matches_phase2_pil_em8():
-    """Fixed DejaVu bank + clean channel (phase 0) vs vbpe Phase-2 PIL rendering (phase 0) at em 8.
+    """Fixed DejaVu bank + clean channel (phase 0) vs vtc Phase-2 PIL rendering (phase 0) at em 8.
 
     Threshold: relative MAD (sum|a-b| / sum a) over the first 12 chars must be < 0.25. Rationale:
     shifting the SAME PIL rendering by a quarter pixel (the Phase-2 phase resolution, which the
@@ -213,8 +213,8 @@ def test_fixed_dejavu_bank_matches_phase2_pil_em8():
     compared because rounding each advance to whole ss pixels accumulates drift along the line
     (random walk, ~0.5 px after 50 chars). Mean ink must agree within 3%.
     """
-    from vbpe.crnn import data as D
-    from vbpe.layout import render_line
+    from vtc.crnn import data as D
+    from vtc.layout import render_line
 
     em = 8
     bank = GlyphBank.from_font(SYMS, config.LATIN_FONT, 10, ss=4, em=em)

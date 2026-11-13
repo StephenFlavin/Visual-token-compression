@@ -4,7 +4,7 @@ Tooling: `learned_glyphs/experiments/calibrate_channel.py`. Modules: `lg/glyphs.
 `lg/compose.py`, `lg/channel.py`. Tests: `learned_glyphs/tests/test_render.py`.
 
 The fixed DejaVu bank is `GlyphBank.from_font(ASCII95, DejaVuSans, h=round(1.2·em), em=em)`. It holds PIL
-coverage at 4x supersampling, uses the vbpe baseline (0.9·em below the top of the line box) and cells
+coverage at 4x supersampling, uses the vtc baseline (0.9·em below the top of the line box) and cells
 that are each glyph's advance at 4·em, rounded to whole ss px. It is composed and pushed through each preset,
 then compared with the Phase-2 rendering of the same lines (`render_sample`, `RenderParams()`).
 The comparison uses the first 256 val lines, which are the Phase-2 test lines.

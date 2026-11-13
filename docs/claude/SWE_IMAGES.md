@@ -5,10 +5,10 @@ not pay. This is the detail behind the "coding agents" row of [CLAUDE_QA.md](CLA
 
 Claude Code with Opus 5.5 (high effort) solved real SWE-bench tasks (a benchmark of real GitHub issues, each graded
 by the project's own tests) twice: once reading code and command
-output as text, once through the vbhook hooks (this repo's Claude Code hooks), which show file contents and long command output as page images at
+output as text, once through the vtchook hooks (this repo's Claude Code hooks), which show file contents and long command output as page images at
 88.2 px² per character (the density where Opus answered document questions as well as from text). Details:
 [Django](../../results/readhook_swe/README.md), [Rust and Java](../../results/readhook_swe_ml/README.md), hooks
-[`experiments/readhook/vbhook/`](../../experiments/readhook/vbhook/), analysis
+[`experiments/readhook/vtchook/`](../../experiments/readhook/vtchook/), analysis
 [`experiments/readhook/swe/analyse.py`](../../experiments/readhook/swe/analyse.py).
 
 ## The answer

@@ -3,10 +3,10 @@
 > **In brief (added in the clean-up, 2026-11-12).** The Django test of
 > [results/readhook_swe](../readhook_swe/README.md) repeated on other languages: 29 Rust and Java tasks from
 > SWE-bench Multilingual (Opus 5.5, high effort). 28 of 29 resolved with text and 29 of 29 with page images; cost
-> $4.83 against $4.75; no failed edit in either arm. `vbhook` is the arm with the page-image hooks. Summary over
+> $4.83 against $4.75; no failed edit in either arm. `vtchook` is the arm with the page-image hooks. Summary over
 > both tests: [docs/claude/SWE_IMAGES.md](../../docs/claude/SWE_IMAGES.md).
 
-Same question and arms as `results/readhook_swe/` (Django), now on brace languages, where vbhook's minifier drops
+Same question and arms as `results/readhook_swe/` (Django), now on brace languages, where vtchook's minifier drops
 cosmetic whitespace and shows indentation as `»` levels (edit-safe mode; +3.5% page tokens over no levels).
 
 * **Tasks:** `selection.json`: the Rust and Java tasks of SWE-bench Multilingual that both Opus submissions on its
@@ -21,12 +21,12 @@ cosmetic whitespace and shows indentation as `»` levels (edit-safe mode; +3.5% 
   patch must pass FAIL_TO_PASS and the base must not; PASS_TO_PASS tests that fail with the gold patch here are left
   out for every arm (at most half, or the task is dropped).
 * **Arms:** as for Django: Claude Code headless, Opus 5.5 at high effort, tools Bash/Read/Edit/Write, `text` vs
-  `vbhook` (88.2 px²/char), same prompt.
+  `vtchook` (88.2 px²/char), same prompt.
 
 Predictions (same as Django):
 1. `text` resolves at least 80% of the valid tasks.
-2. `vbhook` resolves within 10 points of `text` (paired; exact McNemar).
-3. The content the vbhook arm saw as images cost at least 2x fewer tokens than as text.
+2. `vtchook` resolves within 10 points of `text` (paired; exact McNemar).
+3. The content the vtchook arm saw as images cost at least 2x fewer tokens than as text.
 4. Reported: total input tokens and cost by arm, turns, wall time, failure causes for every discordant task; and
    whether multi-line Edits in brace languages fail more often with images (the `»`-level fix is new).
 
@@ -36,7 +36,7 @@ Valid here: ripgrep 2, bat 5, axum 3, tokio 8, coreutils 2, ruff 4 (Rust); Lucen
 validation: gson 4 and javaparser 2 (do not build or pass with JDK 21), RxJava 1 and Lucene 1 (Gradle under JDK 21),
 Druid 2, nushell 5 (gold patches fail here), bat 1, axum 1 (test code does not compile with Rust 1.97), ruff 1.
 
-| | text | vbhook (pages at 88.2) |
+| | text | vtchook (pages at 88.2) |
 |---|---|---|
 | resolved | 28/29 | 29/29 |
 | list-price cost | $4.83 | $4.75 |
@@ -46,7 +46,7 @@ Druid 2, nushell 5 (gold patches fail here), bat 1, axum 1 (test code does not c
 
 Pre-registered verdicts:
 1. text resolves >= 80%: **PASS** (97%).
-2. vbhook within 10 points of text: **PASS** (+3.4 points; one discordant task, astral-sh__ruff-15443, resolved only
+2. vtchook within 10 points of text: **PASS** (+3.4 points; one discordant task, astral-sh__ruff-15443, resolved only
    with images; exact McNemar p = 1).
 3. images >= 2x fewer tokens than the same content as text: **PASS** (3.15x).
 4. Reported: cost $4.75 vs $4.83; no failed Edit or Write in either arm (the `»` indentation levels for brace languages

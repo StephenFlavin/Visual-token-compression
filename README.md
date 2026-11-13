@@ -42,8 +42,8 @@ That belief was wrong, and most of this repo is the work of finding out why (sec
 Braille is built to be read at very low resolution: six dots a cell. A model's reader could be given an alphabet
 made for small bitmaps instead of one made for pens. And once the alphabet is ours to design, there is no reason to
 stop at letters: byte-pair encoding merges frequent letter runs (`the`, `ing`, ` of the `) into single tokens, so
-each of those can have its own glyph. That is "Visual BPE", the first idea and the project's first name (the code package is still
-`vbpe`).
+each of those can have its own glyph. That is "Visual BPE", the first idea and the
+project's first name.
 
 ![Plain text vs learned glyphs](docs/img/glyphs.png)
 
@@ -184,7 +184,7 @@ where a text token holds about 2.9.
 **Using it in a harness.** The compaction result needs no change to the model: Claude Code hooks render the
 transcript to pages when the session compacts and let the agent open them when a question needs the detail
 ([experiments/compaction/hooks](experiments/compaction/hooks)). The same renderer and a set of code minifiers are
-packaged as read and bash-output hooks in [experiments/readhook/vbhook](experiments/readhook/vbhook) (they work;
+packaged as read and bash-output hooks in [experiments/readhook/vtchook](experiments/readhook/vtchook) (they work;
 for coding they do not pay). A harness that adopts this should re-run a page of planted facts whenever the model
 changes: "lossless" is per model and per release.
 
@@ -233,7 +233,7 @@ because the filler ended up too small to read. A version that keeps the filler l
 | Path | What |
 |---|---|
 | [docs/](docs/README.md) | every write-up: `claude/` (page images on Claude), `glyphs/` (phases 1-2), `gpu/` (local-model runs and runbooks), `background/` (prior art, ideas, analysis, review), plus [HANDOFF](docs/HANDOFF.md), [FINDINGS](docs/FINDINGS.md), [RUNNING](docs/RUNNING.md), [GOTCHAS](docs/GOTCHAS.md) |
-| `vbpe/` | layout engine, rendering schemes, CRNN reader, Claude and OCR readers, analysis |
+| `vtc/` | layout engine, rendering schemes, CRNN reader, Claude and OCR readers, analysis |
 | `learned_glyphs/` | the learned glyph alphabet: plan, code, results, saved glyph banks |
 | `encoder_probe/` | frozen-encoder probes and the Qwen2.5-VL rounds |
 | `experiments/` | drivers: `phases/` (1-2), `claude_qa/`, `rag/`, `erb/`, `compaction/`, `readhook/`, `atlas/` |

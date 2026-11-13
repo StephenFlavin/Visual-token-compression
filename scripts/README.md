@@ -12,7 +12,7 @@ Setup, housekeeping and figure scripts. Run from the repo root (`python3 scripts
 | `check_claude_vision.py` | Claude vision checks (token formula, legibility, latency, determinism, hidden calls) -> `results/claude_checks/`; spends ~$0.3-0.5 |
 | `job_queue.py` | Runs one single-core command per line of a queue file, backfilling free cores; per-job logs in `--log-dir` |
 | `autosave_results.sh` | Commits and pushes `runs.jsonl` and other result files every N seconds while long jobs run |
-| `merge_phase2.py` | Keeps the longest run per (scheme, font size) from `phase2_main` and `phase2_long` -> `results/phase2/merged/runs.jsonl`, the Phase 2 rows to cite. Follow it with `python3 -m vbpe.analysis results/phase2/merged/runs.jsonl --out results/phase2/merged`, or the summary there goes stale |
+| `merge_phase2.py` | Keeps the longest run per (scheme, font size) from `phase2_main` and `phase2_long` -> `results/phase2/merged/runs.jsonl`, the Phase 2 rows to cite. Follow it with `python3 -m vtc.analysis results/phase2/merged/runs.jsonl --out results/phase2/merged`, or the summary there goes stale |
 | `check_links.py` | Checks that every relative link and image in the tracked `.md` files exists (exit code 1 if not) and lists inline-code paths that do not exist as warnings |
 
 ## Figure scripts

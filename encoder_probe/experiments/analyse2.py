@@ -4,7 +4,7 @@
 
 A setting is (encoder, cond, train_pages). chars/VLM token = the paired VLM's P^2 / px^2 per char (DeepEncoder:
 4096, Qwen: 784), so identity32 rows read on DeepEncoder's token axis. C@x = P^2 / P@x with P@x from
-vbpe.analysis.p_at per family curve ('>=' = left-censored, '-' = never reached). The guard column is the
+vtc.analysis.p_at per family curve ('>=' = left-censored, '-' = never reached). The guard column is the
 identity ceiling of the same geometry (ROUND2.md: a row is interpreted only if its ceiling is < 10% CER).
 Duplicate (setting, encoding) rows: the later row wins. Smoke rows are dropped.
 """
@@ -17,7 +17,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
-from vbpe.analysis import CurveTable, crossing, p_at, usable_rows  # noqa: E402
+from vtc.analysis import CurveTable, crossing, p_at, usable_rows  # noqa: E402
 
 FAMILIES = ["latin", "mono", "rgb3", "lg_pb", "lg_free", "colour"]
 VLM_P2 = {"identity28": 784, "qwen25vl": 784, "identity32": 4096, "deepencoder": 4096}

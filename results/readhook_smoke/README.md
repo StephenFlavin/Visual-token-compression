@@ -3,7 +3,7 @@
 > **In brief (added in the clean-up, 2026-11-12).** A first check that Claude Code can refactor code it only sees
 > as page images. On 6 small Python tasks, 3 runs each, every run in both arms produced code equivalent to the
 > original (18 of 18 with text; 18 of 18 with images in each of the hook versions tried). The second half of this
-> file is the engineering log of the full hook set (`experiments/readhook/vbhook/`): three versions, each fixing what
+> file is the engineering log of the full hook set (`experiments/readhook/vtchook/`): three versions, each fixing what
 > the one before exposed. The larger test is [results/readhook_swe](../readhook_swe/README.md); the summary is
 > [docs/claude/SWE_IMAGES.md](../../docs/claude/SWE_IMAGES.md).
 
@@ -42,7 +42,7 @@ Limits: small single-page files (~2-4k chars), so this tests reading and editing
 
 ## Full hook set at 88.2 px²/char (2.9x), 2026-11-11
 
-`experiments/readhook/vbhook/` (minifiers for 40+ file and output kinds; Read, Edit/Write and Bash hooks; installer).
+`experiments/readhook/vtchook/` (minifiers for 40+ file and output kinds; Read, Edit/Write and Bash hooks; installer).
 Same 6 tasks x 3 runs, Opus 5.5 high effort; Bash no longer restricted to pytest (file dumps and long output are
 converted to images instead of blocked). Three iterations, each fixing what the previous run exposed:
 

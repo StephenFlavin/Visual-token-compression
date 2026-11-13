@@ -75,8 +75,8 @@ CER = Levenshtein(normalise(ref), normalise(decode(output))) / len(ref); normali
 ## 3. Phases
 
 ### Phase 0 — harness (foundation done; WPs below)
-* `vbpe/layout.py` shared layout engine (units → wrapped lines → largest em that fits W×H).
-* `vbpe/schemes/*` — one class per rendering scheme, common interface (`base.py`).
+* `vtc/layout.py` shared layout engine (units → wrapped lines → largest em that fits W×H).
+* `vtc/schemes/*` — one class per rendering scheme, common interface (`base.py`).
 * Corpus/dictionary, Claude client, sweep runner, CRNN trainer.
 * **K1 (analytic, free):** report width ratio `width(subst_N encoding) / width(condensed Latin)` at equal em on held-out text for N ∈ {100, 300, 1000, 3000}.
 
@@ -109,7 +109,7 @@ Predictions: (P1) quadrant needs ≥ 30 % *more* px²/char than best Latin. (P2)
 ## 5. Interfaces (contract for all work packages)
 
 ```python
-# vbpe/layout.py  (owner: lead — do not edit; report needed changes)
+# vtc/layout.py  (owner: lead — do not edit; report needed changes)
 class Unit: source: str; labels: tuple[str,...]; is_space: bool; advance(em)->px; draw(d, x, baseline, em)
 GlyphUnit(char, font_path, source=None, labels=None)
 LayoutParams(margin=4, line_spacing=1.2, supersample=1)
@@ -118,25 +118,25 @@ render_line(units, em, params=None) -> PIL.Image          # Phase 2
 fit_em(units, W, H, params=None) -> float
 # Ink must stay within [baseline-0.85em, baseline+0.25em]. Breaks only after units whose source ends in whitespace.
 
-# vbpe/schemes/base.py
+# vtc/schemes/base.py
 class Scheme: name; encode(text)->list[Unit]; decode(transcription)->str;
     transcription_target(text)->str   # ''.join(all unit labels)
     vlm_system_prompt()->str; vlm_prompt()->str; vlm_key_images()->list[PIL.Image]
-get_scheme(name) in vbpe/schemes/__init__.py
+get_scheme(name) in vtc/schemes/__init__.py
 
-# vbpe/corpus.py (WP-A)
+# vtc/corpus.py (WP-A)
 load_passages(variant: "natural"|"scrambled") -> list[{"id": str, "text": str}]
 iter_lines(split: "train"|"val", min_chars=30, max_chars=70, seed=0) -> Iterator[str]   # Phase 2
-# vbpe/dictionary.py (WP-A)
+# vtc/dictionary.py (WP-A)
 class Dictionary: tokens: list[str]  (ordered by priority); segment(text)->list[str]  # each = token or 1 char
     @classmethod load(n: int) -> Dictionary      # reads data/dict_{n}.json, builds on demand
 
-# vbpe/claude_eval.py (WP-E1)
+# vtc/claude_eval.py (WP-E1)
 transcribe(images: list[PIL.Image], system: str, prompt: str, model: str = DEFAULT_MODEL) -> dict
    # keys: text, model, input_tokens, output_tokens, cost_usd, latency_s, cached(bool), error(str|None)
 transcribe_many(jobs: list[dict], workers=8) -> list[dict]   # job = kwargs of transcribe (+ any passthrough "meta")
 
-# vbpe/metrics.py: normalize, cer, px_per_char, vision_tokens, text_tokens_est
+# vtc/metrics.py: normalize, cer, px_per_char, vision_tokens, text_tokens_est
 ```
 
 All text is ASCII after corpus cleaning. Data in `data/` (git-ignored), outputs in `results/`.
@@ -145,12 +145,12 @@ All text is ASCII after corpus cleaning. Data in `data/` (git-ignored), outputs 
 
 | WP | Owner files | Depends on |
 |---|---|---|
-| A corpus + dictionary + K1 report | `vbpe/corpus.py`, `vbpe/dictionary.py`, `scripts/build_data.py`, `tests/test_corpus_dict.py`, `docs/glyphs/dictionary-report.md` | — |
-| C substitution scheme | `vbpe/schemes/substitution.py`, `assets/cjk_symbols.txt`, `tests/test_substitution.py` | Dictionary interface (stub until A lands) |
-| D quadrant scheme | `vbpe/schemes/quadrant.py`, `tests/test_quadrant.py` | layout |
-| E1 Claude client + vision checks | `vbpe/claude_eval.py`, `scripts/check_claude_vision.py`, `tests/test_claude_eval.py`, `docs/claude/claude-eval-notes.md` | — |
-| E2 Phase-1 runner + analysis | `experiments/phases/phase1_sweep.py`, `vbpe/analysis.py`, `tests/test_analysis.py` | E1 interface (fake transcriber for dry-run) |
-| F Phase-2 CRNN | `vbpe/crnn/*`, `experiments/phases/phase2_train.py`, `tests/test_crnn.py` | layout, schemes, corpus interface |
+| A corpus + dictionary + K1 report | `vtc/corpus.py`, `vtc/dictionary.py`, `scripts/build_data.py`, `tests/test_corpus_dict.py`, `docs/glyphs/dictionary-report.md` | — |
+| C substitution scheme | `vtc/schemes/substitution.py`, `assets/cjk_symbols.txt`, `tests/test_substitution.py` | Dictionary interface (stub until A lands) |
+| D quadrant scheme | `vtc/schemes/quadrant.py`, `tests/test_quadrant.py` | layout |
+| E1 Claude client + vision checks | `vtc/claude_eval.py`, `scripts/check_claude_vision.py`, `tests/test_claude_eval.py`, `docs/claude/claude-eval-notes.md` | — |
+| E2 Phase-1 runner + analysis | `experiments/phases/phase1_sweep.py`, `vtc/analysis.py`, `tests/test_analysis.py` | E1 interface (fake transcriber for dry-run) |
+| F Phase-2 CRNN | `vtc/crnn/*`, `experiments/phases/phase2_train.py`, `tests/test_crnn.py` | layout, schemes, corpus interface |
 | G prior art | `docs/background/prior-art.md` | — |
 
 Integration (lead): merge, full tests, pilot → main Phase-1 sweep → Phase-2 grid → `docs/glyphs/RESULTS.md`.

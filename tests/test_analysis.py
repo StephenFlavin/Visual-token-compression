@@ -1,4 +1,4 @@
-"""Tests for vbpe/analysis.py and experiments/phases/phase1_sweep.py (fake transcriber; never calls Claude)."""
+"""Tests for vtc/analysis.py and experiments/phases/phase1_sweep.py (fake transcriber; never calls Claude)."""
 from __future__ import annotations
 
 import importlib.util
@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from vbpe import analysis, config
+from vtc import analysis, config
 
 ROOT = Path(__file__).resolve().parent.parent
 GRID = [2, 4, 8, 16, 32, 64, 128, 256]
@@ -229,8 +229,8 @@ def test_phase1_dry_run_end_to_end(tmp_path):
 def test_real_run_requires_yes_and_respects_max_cost(tmp_path, monkeypatch):
     """Without --yes nothing is submitted; over --max-cost aborts. transcribe_many must never run."""
     m = _sweep_module()
-    pytest.importorskip("vbpe.claude_eval")
-    from vbpe import claude_eval
+    pytest.importorskip("vtc.claude_eval")
+    from vtc import claude_eval
 
     def boom(*a, **k):
         raise AssertionError("Claude must not be called in tests")

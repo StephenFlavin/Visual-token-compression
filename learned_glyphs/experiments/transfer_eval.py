@@ -120,7 +120,7 @@ def main(argv=None) -> int:
                f"--threads 1 --run-name {a.run_name or 'lg_bridge'}")
         print(cmd)
         if not phase2_hook_installed():
-            print("\n# parent hook missing: vbpe/crnn/data.py::resolve_scheme does not know 'lg:' names.\n"
+            print("\n# parent hook missing: vtc/crnn/data.py::resolve_scheme does not know 'lg:' names.\n"
                   "# Apply this patch (or use --bridge, which installs the same hook at runtime):\n")
             print(BRIDGE_PATCH)
             return 2

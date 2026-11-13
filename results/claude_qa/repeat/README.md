@@ -127,7 +127,7 @@ text. Settle which.
 * **Repeats.** 4 new calls per document for `page118` and for `page88` (5 per document and density with Test A's, 15
   per density), 1 new call per document for `text` (2 per document, 6 in all). 27 new calls.
 * **Cache salt.** The response cache keys on model + system + prompt + image bytes + effort, so a repeat would return
-  Test A's answer. `vbpe/claude_eval.py` gains an optional `cache_salt` (default None = the old keys, unit-tested)
+  Test A's answer. `vtc/claude_eval.py` gains an optional `cache_salt` (default None = the old keys, unit-tested)
   that enters only the cache key; repeat r uses salt `repeat{r}`. The request sent to the CLI is unchanged.
 * **Concurrency:** up to 8 calls at once. Rows are appended per call (`runs.jsonl`); finished calls are skipped on
   re-run.

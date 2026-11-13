@@ -2,7 +2,7 @@
 
     python3 encoder_probe/experiments/analyse.py encoder_probe/results/{main,controls}/runs.jsonl [--json out.json]
 
-C@x = 256 / P@x, with P@x from vbpe.analysis.p_at on (budget = px^2/char, CER) per family curve.
+C@x = 256 / P@x, with P@x from vtc.analysis.p_at on (budget = px^2/char, CER) per family curve.
 '<' marks left-censored values (already below x at the densest encoding in the family: the true C@x is
 at least the printed value); '-' = never reached within the family's range.
 """
@@ -15,7 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
-from vbpe.analysis import CurveTable, crossing, p_at, usable_rows  # noqa: E402
+from vtc.analysis import CurveTable, crossing, p_at, usable_rows  # noqa: E402
 
 FAMILIES = ["latin", "lg_free", "lg_pb", "colour"]
 SETTINGS = [("identity", "clean"), ("siglip", "clean"), ("siglip_l6", "clean"), ("siglip_l6", "jpeg75"),

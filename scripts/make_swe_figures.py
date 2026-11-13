@@ -35,8 +35,8 @@ def header(fig, H, title, sub):
 
 def fig_anatomy():
     plt = M.chart_style()
-    rows = [("django", "text", "Django, text"), ("django", "vbhook", "Django, page images"),
-            ("rust/java", "text", "Rust and Java, text"), ("rust/java", "vbhook", "Rust and Java, page images")]
+    rows = [("django", "text", "Django, text"), ("django", "vtchook", "Django, page images"),
+            ("rust/java", "text", "Rust and Java, text"), ("rust/java", "vtchook", "Rust and Java, page images")]
     rows = [r for r in rows if (r[0], r[1]) in S]
     H = 1.9 + 0.55 * len(rows)
     fig, ax = plt.subplots(figsize=(10.4, H), dpi=150)
@@ -65,7 +65,7 @@ def fig_anatomy():
     header(fig, H, "Where a coding agent's money goes: output first; file contents are a small slice",
            "Share of list-price cost, SWE-bench tasks solved by Opus 5.5 (Claude Code, high effort). Only the orange "
            "slice can be shrunk by showing\nfile contents and command output as page images; it fell from "
-           f"{100 * S[('django', 'text')]['share_tool_results']:.0f}% to {100 * S[('django', 'vbhook')]['share_tool_results']:.0f}% "
+           f"{100 * S[('django', 'text')]['share_tool_results']:.0f}% to {100 * S[('django', 'vtchook')]['share_tool_results']:.0f}% "
            "(Django), but output and re-read context grew.")
     save(fig, "swe_cost_anatomy.png")
     plt.close(fig)
@@ -73,7 +73,7 @@ def fig_anatomy():
 
 def fig_bridge():
     plt = M.chart_style()
-    t, v = S[("all", "text")], S[("all", "vbhook")]
+    t, v = S[("all", "text")], S[("all", "vtchook")]
     comp = lambda d, k: d[k] * d["cost"]  # noqa: E731
     steps = [("tool results\n(page images)", comp(v, "share_tool_results") - comp(t, "share_tool_results")),
              ("output\n(more reasoning)", comp(v, "share_output") - comp(t, "share_output")),

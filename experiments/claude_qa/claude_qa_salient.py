@@ -39,8 +39,8 @@ sys.path.insert(0, str(ROOT / "experiments" / "claude_qa"))
 import analyse_claude_qa as A  # noqa: E402
 import claude_qa_gradient as G  # noqa: E402
 import claude_qa_render as R  # noqa: E402
-from vbpe import config  # noqa: E402
-from vbpe.layout import get_font, glyph_advance  # noqa: E402
+from vtc import config  # noqa: E402
+from vtc.layout import get_font, glyph_advance  # noqa: E402
 
 OUT = config.RESULTS / "claude_qa" / "salient"
 QA = config.RESULTS / "claude_qa"
@@ -48,7 +48,7 @@ FONT = str(config.LATIN_FONT)            # DejaVu Sans, the font of every Latin 
 PAGE_W = 1932
 PAGE_MAX_H = 1932
 PATCH = 28
-MARGIN = 4                               # vbpe.layout.LayoutParams defaults
+MARGIN = 4                               # vtc.layout.LayoutParams defaults
 LINE_SPACING = 1.2
 EM_LARGE = 13.76                         # em of the 117.6 px²/char pages: median over the 67 full pages of d0-d2
 SAFE_PPC = 117.6
@@ -218,7 +218,7 @@ class Flow:
 
 def layout(flow: Flow, em_sal: float, em_fill: float, W: int = PAGE_W, H: int = PAGE_MAX_H) -> list[dict]:
     """Greedy word wrap at mixed sizes, then greedy pagination. Each line's pitch = 1.2 x the largest em on it;
-    its baseline sits 0.9 x that em below the line's top (as vbpe.layout places a uniform line). A page takes lines
+    its baseline sits 0.9 x that em below the line's top (as vtc.layout places a uniform line). A page takes lines
     while margin + pitches + the last line's ink box (0.1 + 0.8 + 0.25 em) + margin <= H.
     -> pages: {'lines': [(first word, end word, em_max, baseline y)], 'H': height (multiple of 28)}."""
     ww, ems, sp = flow.widths(em_sal, em_fill)
@@ -579,7 +579,7 @@ def cmd_check(a) -> None:
 
 # --------------------------------------------------------------------------- run
 def cmd_run(a) -> None:
-    from vbpe import claude_eval
+    from vtc import claude_eval
     OUT.mkdir(parents=True, exist_ok=True)
     jobs = todo_jobs(load_rows(), a.docs, a.small_words)
     if a.limit:

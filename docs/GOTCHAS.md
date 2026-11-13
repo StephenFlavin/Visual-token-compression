@@ -31,7 +31,7 @@ run = the same training with images swapped between pages; ViT = the vision tran
 
 ## Claude as a reader (headless `claude -p`)
 
-- Send images as base64 in `--input-format stream-json`; no tools needed. `vbpe/claude_eval.py` does this correctly.
+- Send images as base64 in `--input-format stream-json`; no tools needed. `vtc/claude_eval.py` does this correctly.
 - **Run the child CLI with a clean env** (`env -i` + PATH/HOME/proxy/CA vars) in an empty temp dir. Otherwise it reuses the parent session id, adds an extra haiku summary call and ~830 cached tokens per call.
 - Image tokens = `ceil(W/28)*ceil(H/28)+3` (not W·H/750). No downscaling up to 1568×1568. Use canvas sides that are multiples of 28.
 - **Many-image calls silently lose their earliest pages above some image-token total:** ~175k image tokens arrived whole (122 small or 38 large pages); ~345k were cut to ~145-157k (243 small pages / 30 MB, and 75 large pages / 27 MB), with no error. Not bytes or image count: 7 noise pages of 26 MB arrived whole. Not in the vision docs (600 images, 128 MB). `experiments/claude_qa/claude_qa_render.py` compares `input_tokens` with the image-token formula and marks such arms invalid. Opus 5.5 reads images up to 1932x1932 px (4,764 tokens) without downscaling: `claude_eval.transcribe(..., hires=True)`.
@@ -42,7 +42,7 @@ run = the same training with images swapped between pages; ViT = the vision tran
 
 ## PP-OCR via rapidocr_onnxruntime 1.2.3
 
-- It **ignores `use_det=False`** (detects on any crop taller than 30 px) and **resets `text_score` to 0.5 whenever any kwarg is passed**, silently dropping lines. Call `engine.text_recognizer([bgr_crops])` directly (`vbpe/readers/rapidocr_reader.py::read_lines`).
+- It **ignores `use_det=False`** (detects on any crop taller than 30 px) and **resets `text_score` to 0.5 whenever any kwarg is passed**, silently dropping lines. Call `engine.text_recognizer([bgr_crops])` directly (`vtc/readers/rapidocr_reader.py::read_lines`).
 - Full-page detection + reading-order stitching drops/reorders lines. Use exact line strips from the layout: strip i = `[margin + i*pitch, margin + (i+1)*pitch)`; do NOT pad (neighbour ascenders kill recognition).
 - It drops inter-word spaces and emits full-width punctuation → score with `cer_nospace` (NFKC + whitespace removed). Its training is Chinese-heavy: biased towards CJK glyphs.
 
@@ -58,8 +58,8 @@ run = the same training with images swapped between pages; ViT = the vision tran
 - **Mixed-em training learns far slower per step** than per-em models (latin em7 18% vs ~2% at 1500 steps). Use per-em runs.
 - **Render caches written before per-line `heights.npy` existed load 1 row taller** than fresh batches (latin em4: 62% CER vs 3.8% fresh). `build_lineset` treats them as misses. Low train loss + terrible val CER → suspect train/val geometry mismatch first.
 - GroupNorm worse than BatchNorm. Substitution (1000+ classes) and quadrant models learn much slower than Latin: check `curves/` for convergence before trusting a crossing; re-run critical ems with more steps if still improving.
-- Cite `results/phase2/merged/` (`scripts/merge_phase2.py`: longest run per scheme/em), not single runs. After merging, regenerate its summary with `python3 -m vbpe.analysis results/phase2/merged/runs.jsonl --out results/phase2/merged` (the summary went stale once: 28 rows summarised, 32 merged).
-- Learned banks: train ≥ 10.5k steps (tokens look useless at 3.5k); judge banks by the bridge (frozen bank, Phase-2 pipeline), not joint CER. `vbpe.analysis` keys rows by em: set `budget=px_per_char` for banks with non-default cell widths.
+- Cite `results/phase2/merged/` (`scripts/merge_phase2.py`: longest run per scheme/em), not single runs. After merging, regenerate its summary with `python3 -m vtc.analysis results/phase2/merged/runs.jsonl --out results/phase2/merged` (the summary went stale once: 28 rows summarised, 32 merged).
+- Learned banks: train ≥ 10.5k steps (tokens look useless at 3.5k); judge banks by the bridge (frozen bank, Phase-2 pipeline), not joint CER. `vtc.analysis` keys rows by em: set `budget=px_per_char` for banks with non-default cell widths.
 
 ## Analysis
 

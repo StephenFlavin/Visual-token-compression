@@ -1,6 +1,6 @@
 """Repo atlas: a whole repository as page images, for one up-front read (docs/claude/REPO_ATLAS_PLAN.md).
 
-Every tracked source file is minified with the coding hooks' minifiers (experiments/readhook/vbhook: only
+Every tracked source file is minified with the coding hooks' minifiers (experiments/readhook/vtchook: only
 whitespace is removed, indentation that carries meaning is kept as ``»``), joined into one flow with a header per
 file, and rendered as pages at the hooks' density (88.2 px² per character). Next to the pages it writes an index
 (which pages hold which file) that costs a few hundred text tokens.
@@ -22,8 +22,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "readhook")]
-from vbhook import render  # noqa: E402
-from vbhook.minify import minify  # noqa: E402
+from vtchook import render  # noqa: E402
+from vtchook.minify import minify  # noqa: E402
 
 FIT_TOKENS = 150_000        # under the ~175k image tokens that arrived whole, with room for the task and tools
 MAX_FILE_BYTES = 200_000    # larger tracked files are data or generated code

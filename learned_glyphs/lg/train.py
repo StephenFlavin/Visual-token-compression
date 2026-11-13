@@ -2,12 +2,12 @@
 
     text -> Alphabet.encode -> ids -> GlyphBank(tau, hard) -> compose -> Channel(train) -> CRNN -> CTC
 
-Conventions mirrored from Phase 2 (``vbpe/crnn``):
+Conventions mirrored from Phase 2 (``vtc/crnn``):
   * Source text: test = first ``n_test`` lines of ``iter_lines('val', 30, 70, seed=data_seed)``,
-    val (checkpoint selection) = the next ``n_val`` lines (``vbpe.crnn.data.source_lines``, so the
+    val (checkpoint selection) = the next ``n_val`` lines (``vtc.crnn.data.source_lines``, so the
     lines and their order are identical to Phase 2). Train lines are streamed from
     ``iter_lines('train', 30, 70, seed=data_seed)`` and bucketed by rendered width.
-  * Reader: ``vbpe.crnn.model.CRNN`` (same architecture), col_stride = ``col_stride_for_em(em)``
+  * Reader: ``vtc.crnn.model.CRNN`` (same architecture), col_stride = ``col_stride_for_em(em)``
     (2 px), expand E = ``choose_expand`` over val + test + the first ``n_expand_probe`` train lines
     (T >= 2L+1), em = height_px / 1.2. CTC blank = 0, symbol i -> class i + 1.
   * Optimiser: AdamW + OneCycleLR (pct_start 0.15), grad clipping, eval every 250 steps on val,
@@ -91,8 +91,8 @@ from pathlib import Path
 
 import numpy as np
 
-from vbpe import config
-from vbpe.metrics import normalize
+from vtc import config
+from vtc.metrics import normalize
 
 from .alphabet import Alphabet
 
@@ -236,7 +236,7 @@ def lg1():
 
 def _cjk_map(cfg: JointConfig, alphabet: Alphabet):
     if alphabet.n_tokens and cfg.token_glyphs == "cjk":
-        from vbpe.schemes.substitution import load_symbols
+        from vtc.schemes.substitution import load_symbols
         return dict(zip(alphabet.tokens, load_symbols()[: alphabet.n_tokens]))
     return None
 
@@ -480,7 +480,7 @@ def heldout_channel(cfg: JointConfig, Channel):
 # ============================================================================ data
 def load_eval_lines(cfg: JointConfig) -> tuple[list[str], list[str]]:
     """(val, test) lines exactly as Phase 2 (test first in the 'val' stream, then val)."""
-    from vbpe.crnn.data import source_lines
+    from vtc.crnn.data import source_lines
     test, _ = source_lines("val", cfg.n_test, skip=0, seed=cfg.data_seed)
     val, _ = source_lines("val", cfg.n_val, skip=cfg.n_test, seed=cfg.data_seed)
     return val, test
@@ -496,7 +496,7 @@ class TrainStream:
 
     def __init__(self, alphabet: Alphabet, widths_ss: np.ndarray, batch: int, bucket_mult: int = 20,
                  seed: int = 0, data_seed: int = 0, lines=None, line_weight: np.ndarray | None = None):
-        from vbpe.corpus import iter_lines
+        from vtc.corpus import iter_lines
         self.alphabet, self.wss, self.batch, self.mult = alphabet, widths_ss, batch, bucket_mult
         self.it = iter(lines) if lines is not None else iter_lines("train", 30, 70, seed=data_seed)
         self.rng = random.Random(seed)
@@ -597,7 +597,7 @@ def _ctc_targets(ids_batch):
 
 def load_frozen_reader(path: str, alphabet: Alphabet):
     import torch
-    from vbpe.crnn.model import CRNN
+    from vtc.crnn.model import CRNN
     ck = torch.load(path, map_location="cpu", weights_only=False)
     vocab = ck["vocab"]
     model_kw = (ck.get("config") or {}).get("model") or {}
@@ -617,7 +617,7 @@ def evaluate(ink, reader, alphabet: Alphabet, texts: list[str], ids: list[list[i
              chan_kw: dict | None = None) -> dict:
     import torch
     from rapidfuzz.distance import Levenshtein
-    from vbpe.crnn.model import greedy_decode
+    from vtc.crnn.model import greedy_decode
 
     cmap = cmap or ClassMap(alphabet)
     was_training = reader.training
@@ -720,8 +720,8 @@ def train_joint(cfg: JointConfig, log=print, train_lines=None, eval_lines=None,
     checkpoint is deleted once the row is written. ``stop_at`` (tests) returns [] after that step."""
     import torch
     from torch import nn
-    from vbpe.crnn import data as D
-    from vbpe.crnn.model import CRNN, n_params
+    from vtc.crnn import data as D
+    from vtc.crnn.model import CRNN, n_params
 
     torch.set_num_threads(cfg.threads)
     try:
@@ -754,7 +754,7 @@ def train_joint(cfg: JointConfig, log=print, train_lines=None, eval_lines=None,
     test_ids = [alphabet.encode(t) for t in test_t]
     if train_lines is None:
         from itertools import islice
-        from vbpe.corpus import iter_lines
+        from vtc.corpus import iter_lines
         probe = [normalize(t) for t in islice(iter_lines("train", 30, 70, seed=cfg.data_seed),
                                               cfg.n_expand_probe)]
     else:

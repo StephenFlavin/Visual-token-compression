@@ -116,7 +116,7 @@ an empty `workspace/dst/` and `workspace/prompt.md`.
 
 Claude Code headless (`claude -p`, CLI 2.1.322), model `claude-opus-5-5`, `--effort high`, tools Bash, Read, Edit,
 Write (WebFetch and WebSearch off; `curl`, `wget`, `git clone` and `cargo install` denied), no settings files, no MCP,
-no slash commands, a clean environment (the `vbpe/claude_eval.py` whitelist, own `TMPDIR`), auto-memory off
+no slash commands, a clean environment (the `vtc/claude_eval.py` whitelist, own `TMPDIR`), auto-memory off
 (`CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`), `CARGO_BUILD_JOBS=2`, cwd = the run's own `workspace/` in an empty run
 directory. The two arms run **in parallel** (same time of day, same machine load).
 

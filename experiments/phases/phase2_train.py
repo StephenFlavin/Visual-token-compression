@@ -23,7 +23,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from vbpe.crnn.train import TrainConfig, default_out, load_data, train_model  # noqa: E402
+from vtc.crnn.train import TrainConfig, default_out, load_data, train_model  # noqa: E402
 
 DEFAULT_SCHEMES = ["latin", "latin_condensed", "subst300", "subst1000", "quad3", "quad4"]
 # latin already reaches CER ~2% at em 5 (smoke), so the grid starts at em 4; quad needs the top end

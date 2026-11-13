@@ -54,7 +54,7 @@ Flips between run 1 and run 2:
 ## Checks
 Leak suspects: 2 runs
   * microsoft__fabric-cicd-670 atlas r1: ["sed -i '36,39d' README.md; sed -i '35a\\\n' README.md; sed -n 28,42p README.md; sed -i 's/^pip install fabric-cicd$/&/' docs/index.md; sed -n 15,28p docs/index.md"]
-  * tobymao__sqlglot-6067 plain r1: ['cd /tmp/claude-0/*/*/scratchpad/swe_sonnet/runs/abfa9aa131/sqlglot 2>/dev/null || true; V=/tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/swe_sonnet/runs/abfa9aa131']
+  * tobymao__sqlglot-6067 plain r1: ['cd /tmp/claude-0/*/*/scratchpad/swe_sonnet/runs/abfa9aa131/sqlglot 2>/dev/null || true; V=/tmp/claude-0/-home-user-visual-token-compaction/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/swe_sonnet/runs/abfa9aa131']
 Memory: runs with a memory file before or after: 0 of 64; init events naming an auto-memory path: 0
 Pages dropped (atlas runs): 0; models served: ['claude-sonnet-5-5']
 Runs with more than one result event: 1; timeouts: 0; errors: 0

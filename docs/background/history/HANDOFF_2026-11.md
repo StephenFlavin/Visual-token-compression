@@ -204,7 +204,7 @@ open.
   (stay whole-pixel). No family reaches 10%, so the decision rules hold only in weaker form. P2 (RGB overlay grid on
   SigLIP) and P3 (rgb6) were gated off and not run. Clean rows other than latin_p32/p16/rgb3_p8 ran 5k steps (time).
 * **Code fixes pushed:** portable file lock (`ep/flock.py`, msvcrt on Windows), `phase2_driver.py` imports on Windows
-  (so `job_queue.py` runs), DejaVu fallback to `assets/fonts` in `vbpe/config.py`, VLM encoders in fp32 on CUDA with
+  (so `job_queue.py` runs), DejaVu fallback to `assets/fonts` in `vtc/config.py`, VLM encoders in fp32 on CUDA with
   TF32 off (CUDA bf16 gave corr 0.9974 vs CPU fp32). The cloud session's own CUDA support (`--device`, page cache,
   `--pages-only`) worked first time on the GPU. None of this changes the Linux CPU path.
 

@@ -1,6 +1,6 @@
 """GlyphBank: one ink cell per symbol at supersampled resolution (WP-LG1).
 
-Geometry (all cells share it, so composed lines follow vbpe.layout conventions)
+Geometry (all cells share it, so composed lines follow vtc.layout conventions)
 -------------------------------------------------------------------------------
 * ``height_px`` = line pitch h (px at 1x); a cell is ``height_ss = h * ss`` rows tall and covers the
   line box only (the Phase-2 margin is added later by the Channel).
@@ -9,7 +9,7 @@ Geometry (all cells share it, so composed lines follow vbpe.layout conventions)
 * Baseline (font banks) at ``((line_spacing - 1)/2 + 0.8) * em`` from the top of the line box, i.e.
   ``0.9 * em * ss`` ss-rows: identical to ``LayoutParams.first_baseline`` minus the margin.
 * Cell width: per symbol, ``widths_ss`` (ss pixels). Font banks use the glyph's advance at the
-  supersampled em (``vbpe.layout.glyph_advance``, rounded), i.e. proportional like Phase 2; ink
+  supersampled em (``vtc.layout.glyph_advance``, rounded), i.e. proportional like Phase 2; ink
   outside [0, advance) (negative side bearings, e.g. 'j') is clipped (``clip_frac`` records it).
 
 Representation
@@ -45,8 +45,8 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 
-from vbpe import config
-from vbpe.layout import get_font, glyph_advance
+from vtc import config
+from vtc.layout import get_font, glyph_advance
 
 LINE_SPACING = 1.2
 
@@ -56,14 +56,14 @@ def em_for_height(height_px: int) -> float:
 
 
 def baseline_ss(em: float, ss: int, line_spacing: float = LINE_SPACING) -> float:
-    """Baseline row (ss pixels, fractional) inside the line box, margin excluded (vbpe.layout)."""
+    """Baseline row (ss pixels, fractional) inside the line box, margin excluded (vtc.layout)."""
     return ((line_spacing - 1) / 2 * em + 0.8 * em) * ss
 
 
 def _cjk_dy(cjk_font: str) -> float:
-    """Vertical shift (em, + = down) used by vbpe SubstitutionScheme/CJKUnit (computed over the
+    """Vertical shift (em, + = down) used by vtc SubstitutionScheme/CJKUnit (computed over the
     whole symbol pool, cjk_scale = 1)."""
-    from vbpe.schemes.substitution import ink_extent, load_symbols, vertical_shift
+    from vtc.schemes.substitution import ink_extent, load_symbols, vertical_shift
     top, bot = ink_extent(str(cjk_font), tuple(load_symbols()))
     return vertical_shift(top, bot, 1.0)
 
@@ -71,7 +71,7 @@ def _cjk_dy(cjk_font: str) -> float:
 def render_font_cells(symbols: Sequence[str], font_path, height_px: int, ss: int = 4,
                       em: float | None = None, cjk_map: dict | None = None,
                       cjk_font=config.CJK_FONT) -> tuple[list[np.ndarray], list[int], list[float]]:
-    """Render each symbol with PIL at ss resolution, as vbpe renders it at ``em``.
+    """Render each symbol with PIL at ss resolution, as vtc renders it at ``em``.
 
     -> (cells: list of float32 (height_ss, w_ss) coverage in [0,1], widths_ss, clip_frac).
     Tokens: if ``cjk_map`` maps the symbol to an ideograph it is drawn with ``cjk_font`` at a 1.0 em

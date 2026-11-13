@@ -1,6 +1,6 @@
 # Hooks that show Claude Code its files and command output as page images
 
-*Status: finished (2026-11-11). `vbhook/` is the working hook set; the files beside it (`hook.py`, `javamin.py`,
+*Status: finished (2026-11-11). `vtchook/` is the working hook set; the files beside it (`hook.py`, `javamin.py`,
 `pymin.py`, `bash_output_hook.py`, `smoke/`) are the prototypes it grew from, kept because the measurements below
 were made with them. Result with Opus 5.5: no task lost on 79 SWE-bench tasks, but no money saved, because reading
 is about 17% of a coding agent's cost ([docs/claude/SWE_IMAGES.md](../../docs/claude/SWE_IMAGES.md)). The same
@@ -96,12 +96,12 @@ reached the model as an image and it read a printed value and a numbered line co
 PreToolUse hook to a wrapper that prints the data URI works too. Output under 800 characters stays text (an image
 costs at least ~140 tokens).
 
-## vbhook: the full hook set (2026-11-11)
+## vtchook: the full hook set (2026-11-11)
 
-`vbhook/` supersedes the prototypes above. Install for a project with
-`python3 experiments/readhook/vbhook/install.py [--budget 88.2] > .claude/settings.local.json` (hooks: Read and
+`vtchook/` supersedes the prototypes above. Install for a project with
+`python3 experiments/readhook/vtchook/install.py [--budget 88.2] > .claude/settings.local.json` (hooks: Read and
 Edit/Write PreToolUse; Bash PreToolUse (exit-code line) and PostToolUse (output to image); plus one allow rule for
-that exact `echo` line). Contract and rules for minifiers: `vbhook/SPEC.md`. Families, each checked on real files:
+that exact `echo` line). Contract and rules for minifiers: `vtchook/SPEC.md`. Families, each checked on real files:
 
 | family | kinds | savings as pages at 88.2 vs text |
 |---|---|---|
@@ -111,7 +111,7 @@ that exact `echo` line). Contract and rules for minifiers: `vbhook/SPEC.md`. Fam
 | `outputs.py` | pytest, tracebacks, compiler/linter diagnostics, logs, git diff/log/status, grep, find, listings | 3.8-8x on large outputs; output under 400 characters stays text |
 
 Policy (`policy.py`): an image only when it costs at most 0.8x the text tokens of the same lines or output. Tests:
-`cd experiments/readhook && python3 -m pytest -q vbhook/tests` (335 tests, about 20 s; 334 pass and 1 is skipped on
+`cd experiments/readhook && python3 -m pytest -q vtchook/tests` (335 tests, about 20 s; 334 pass and 1 is skipped on
 this runner). Results with Opus:
 `results/readhook_smoke/README.md`.
 

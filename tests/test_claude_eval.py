@@ -1,4 +1,4 @@
-"""Unit tests for vbpe.claude_eval. The CLI subprocess is monkeypatched: no real Claude calls."""
+"""Unit tests for vtc.claude_eval. The CLI subprocess is monkeypatched: no real Claude calls."""
 from __future__ import annotations
 
 import json
@@ -8,8 +8,8 @@ import time
 import pytest
 from PIL import Image
 
-from vbpe import claude_eval as ce
-from vbpe import config
+from vtc import claude_eval as ce
+from vtc import config
 
 
 def _result_stream(text: str, *, model: str = "claude-opus-5-5", cost: float = 0.01,
@@ -250,7 +250,7 @@ def test_transcribe_many_isolates_bad_jobs(fake, capsys):
 
 def test_hires_bounds():
     from PIL import Image
-    from vbpe import claude_eval as ce
+    from vtc import claude_eval as ce
     ce.check_image_bounds(Image.new("L", (1932, 1932)), hires=True)          # 69 x 69 = 4761 tokens
     with pytest.raises(ValueError):
         ce.check_image_bounds(Image.new("L", (1932, 1932)))                  # standard tier

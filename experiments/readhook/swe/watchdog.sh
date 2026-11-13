@@ -2,7 +2,7 @@
 # Kill programs started from the Rust build dirs that run too long (the built tool itself: 3 minutes; test binaries in
 # target/*/deps: 15 minutes): an orphaned `target/debug/bat` held a `cargo test | grep` pipe open and hung agent runs in both arms.
 # Same rule for every arm; each kill is logged.
-ROOT=/tmp/claude-0/-home-user-visual-bpe/9e274458-7352-5bb1-b191-52e96364b3f6/scratchpad/swe/ml
+ROOT=/tmp/claude-0/-home-user-visual-token-compaction/9e274458-7352-5bb1-b191-52e96364b3f6/scratchpad/swe/ml
 LOG=$ROOT/watchdog.log
 while true; do
   for pid in $(pgrep -f "$ROOT/[^ ]*/target/"); do

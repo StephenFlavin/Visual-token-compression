@@ -1,6 +1,6 @@
-"""Bridge (E3): a learned (or fixed) GlyphBank as a vbpe ``Scheme`` -- a bitmap font.
+"""Bridge (E3): a learned (or fixed) GlyphBank as a vtc ``Scheme`` -- a bitmap font.
 
-``LearnedGlyphScheme(bank, alphabet)`` renders text through the unchanged vbpe layout engine, so a
+``LearnedGlyphScheme(bank, alphabet)`` renders text through the unchanged vtc layout engine, so a
 bank can be scored by the Phase-2 pipeline (``experiments/phases/phase2_train.py``) exactly like
 latin / subst, at any em.
 
@@ -23,7 +23,7 @@ Geometry (bank = cells of height ``height_ss`` at supersampling ``ss``; its line
     ``width_ss * s``, cell top = ``baseline - 0.9 E``. For learned banks the cell therefore
     occupies exactly one line pitch ``[baseline - 0.9 E, baseline + 0.3 E]`` -- 0.05 E beyond the
     layout contract's em box on each side, but never outside the line (render_line's canvas /
-    page pitch), so lines can't overlap. A font bank (from_font) reproduces vbpe's glyph advances
+    page pitch), so lines can't overlap. A font bank (from_font) reproduces vtc's glyph advances
     and baseline at every em.
   * Native em = ``em_ref``: at the Phase-2 supersampled resolution (ss=4 -> drawing em =
     4 * em_ref) the scale is exactly 1, all cell origins are integers, and the drawn canvas equals
@@ -38,7 +38,7 @@ path relative to ``learned_glyphs/results`` with ``/`` written as ``+`` and a tr
 Names must not contain ``/`` because Phase 2 uses the scheme name in cache / log / checkpoint
 file names. ``@sha8`` (first 8 hex chars of the bank file's sha1) is verified on load so cached
 Phase-2 renders are content-addressed. ``make_lg_scheme(name)`` resolves such names; the parent
-hook is a 3-line addition to ``vbpe.crnn.data.resolve_scheme`` (``BRIDGE_PATCH`` below);
+hook is a 3-line addition to ``vtc.crnn.data.resolve_scheme`` (``BRIDGE_PATCH`` below);
 ``install_phase2_hook()`` applies the same hook at runtime, so ``lg.transfer.bridge_phase2`` needs
 no parent edit.
 """
@@ -57,16 +57,16 @@ _HERE = Path(__file__).resolve()
 LG_ROOT = _HERE.parent.parent            # learned_glyphs/
 REPO_ROOT = LG_ROOT.parent               # the repo root
 RESULTS = LG_ROOT / "results"
-if str(REPO_ROOT) not in sys.path:     # vbpe (normally already importable)
+if str(REPO_ROOT) not in sys.path:     # vtc (normally already importable)
     sys.path.append(str(REPO_ROOT))
 
-from vbpe.layout import Unit  # noqa: E402
-from vbpe.schemes.base import Scheme  # noqa: E402
+from vtc.layout import Unit  # noqa: E402
+from vtc.schemes.base import Scheme  # noqa: E402
 
 PUA_BASE = 0xE000
 PUA_MAX = 0xF8FF
 LINE_SPACING = 1.2
-TOP_EM = 0.9                             # vbpe.layout / lg.glyphs: baseline 0.9 em below the line-box top
+TOP_EM = 0.9                             # vtc.layout / lg.glyphs: baseline 0.9 em below the line-box top
 _Q = 4                                   # sub-pixel quantisation of origins (1/4 drawing px)
 
 
@@ -298,10 +298,10 @@ def make_lg_scheme(name: str) -> LearnedGlyphScheme:
 
 
 def phase2_hook_installed() -> bool:
-    """True if ``vbpe.crnn.data.resolve_scheme`` resolves ``lg:`` names (parent patch or runtime hook)."""
+    """True if ``vtc.crnn.data.resolve_scheme`` resolves ``lg:`` names (parent patch or runtime hook)."""
     import inspect
 
-    from vbpe.crnn import data as D
+    from vtc.crnn import data as D
     if getattr(D.resolve_scheme, "_lg_hook", False):
         return True
     try:
@@ -314,7 +314,7 @@ def install_phase2_hook() -> None:
     """Runtime equivalent of the parent patch (BRIDGE_PATCH): make the unchanged Phase-2 data /
     training code resolve ``lg:`` scheme names in THIS process (and forked render workers).
     Idempotent; a no-op when the parent already has the hook."""
-    from vbpe.crnn import data as D
+    from vtc.crnn import data as D
     if phase2_hook_installed():
         return
     orig = D.resolve_scheme
@@ -330,16 +330,16 @@ def install_phase2_hook() -> None:
 
 
 BRIDGE_PATCH = '''\
---- a/vbpe/crnn/data.py
-+++ b/vbpe/crnn/data.py
+--- a/vtc/crnn/data.py
++++ b/vtc/crnn/data.py
 @@ def resolve_scheme(name: str):
      """``get_scheme`` plus the synthetic stub schemes used for tests (``stub_*``)."""
      if name.startswith("stub_"):
-         from vbpe.crnn.stubs import make_stub_scheme
+         from vtc.crnn.stubs import make_stub_scheme
          return make_stub_scheme(name)
 +    if name.startswith("lg:"):         # learned glyph bank: lg:<key>[@sha8] (learned_glyphs/lg/scheme.py)
 +        from learned_glyphs.lg.scheme import make_lg_scheme
 +        return make_lg_scheme(name)
-     from vbpe.schemes import get_scheme
+     from vtc.schemes import get_scheme
      return get_scheme(name)
 '''

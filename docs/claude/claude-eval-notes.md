@@ -22,7 +22,7 @@ Raw data: `results/claude_checks/{tokens,tokens_large,legibility,determinism,eff
 rendered test images in `results/claude_checks/img/`. Reproduce with `python scripts/check_claude_vision.py all`
 (about $0.45).
 
-## 1. Invocation (vbpe/claude_eval.py)
+## 1. Invocation (vtc/claude_eval.py)
 
 ```
 cd <fresh empty temp dir>

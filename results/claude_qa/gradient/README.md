@@ -32,7 +32,7 @@ The 3 documents (v2 `qav2_d0/d1/d2`: 700k characters, paragraph offsets 0, 1150,
 questions per document (40 invented facts, 40 numbers in sentences, 40 multi-step; ids, wording and answers checked
 equal to `qav2_d*_high_b88/questions.json`), the system prompt and the prompt (`claude_qa_render.SYSTEM`,
 `prompt_for("image", ...)` with the total page count), the font and renderer, 1932-px pages, Opus 5.5
-(`claude-opus-5-5`), `--effort high`, headless `claude -p` through `vbpe/claude_eval.py`.
+(`claude-opus-5-5`), `--effort high`, headless `claude -p` through `vtc/claude_eval.py`.
 
 **Dry run (free, `check`):** each mixed arm is 18 pages per document (4 + 6 + 8 or 8 + 6 + 4), the same page
 count as uniform 88.2, and its image-token formula total is 79,887 / 79,749 / 79,818 for d0 / d1 / d2 against

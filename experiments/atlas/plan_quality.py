@@ -49,7 +49,7 @@ sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
 
 OUT = ROOT / "results" / "atlas" / "plan_quality"
 SWE_OUT = ROOT / "results" / "atlas" / "swe"          # read only
-DEFAULT_WORK = Path(os.environ.get("PQ_WORK", "/tmp/claude-0/-home-user-visual-bpe/"
+DEFAULT_WORK = Path(os.environ.get("PQ_WORK", "/tmp/claude-0/-home-user-visual-token-compaction/"
                                    "588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/pq"))
 MODEL = "claude-opus-5-5"
 PLAN_EFFORT = "high"
@@ -501,7 +501,7 @@ def screen_call(t: dict, co: Path) -> dict:
     """The fresh-task test's closed-book screen, same prompt (so its cached answers are reused)."""
     import repo_atlas as RA
     import repo_atlas_eval as E
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     paths = [x["path"] for x in RA.collect(co, False, 10)[0]]
     tree = TREE_HEAD.format(repo=t["repo"], n=len(paths)) + "\n".join(paths) + "\n"
     rec = CE.transcribe([], E.SYSTEM, E.prompt_for("tree", tree, t["problem_statement"], t["repo"]), model=MODEL,
@@ -707,7 +707,7 @@ def memory_check_and_clear(cwd: Path) -> dict:
 
 
 def scout_once(work: Path, t: dict, items: list[tuple[str, str]]) -> dict:
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     cwd = export(work, t)
     memory_check_and_clear(cwd)
     prompt = SCOUT_HEAD.format(repo=t["repo"]) + plan_prompt("", items).lstrip("\n")
@@ -753,7 +753,7 @@ def scout_once(work: Path, t: dict, items: list[tuple[str, str]]) -> dict:
 
 def one_shot(work: Path, planner: str, t: dict, items: list[tuple[str, str]], meta: dict) -> dict:
     from PIL import Image
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     d = work / "ctx" / t["instance_id"]
     ctx = (d / f"{planner}.txt").read_text()
     imgs = [Image.open(Path(meta["atlas_dir"]) / f"page_{i + 1:03d}.png") for i in range(meta["pages"])] \
@@ -833,7 +833,7 @@ def run_plans(work: Path, layer: int, planners: list[str], ids: list[str] | None
 
 # --------------------------------------------------------------------------- judge
 def run_judge(work: Path, ids: list[str] | None, cap: float, workers: int) -> None:
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     tm = task_map(work)
     done = {(r["unit"], r["planner"]) for r in jl(OUT / "judge.jsonl")}
     rows = [r for r in jl(OUT / "briefs.jsonl") if r["layer"] == 1 and (r["unit"], r["planner"]) not in done
@@ -877,7 +877,7 @@ def run_judge(work: Path, ids: list[str] | None, cap: float, workers: int) -> No
 
 
 # --------------------------------------------------------------------------- layer 3 workers
-LEAK_EXTRA = r"|/pq/(ds|ctx|co|git|x|transcripts)\b|/home/user/visual-bpe|plan_quality|repo_atlas"
+LEAK_EXTRA = r"|/pq/(ds|ctx|co|git|x|transcripts)\b|/home/user/visual-token-compaction|plan_quality|repo_atlas"
 # (the run's own checkout and venv live under /pq/runs/<hash>/: not a leak)
 
 
@@ -897,7 +897,7 @@ def apply_bytes(repo: Path, patch: str) -> bool:
 
 
 def worker_once(work: Path, t: dict, arm: str, brief_text: str, broken: set) -> dict:
-    from vbpe import claude_eval as CE
+    from vtc import claude_eval as CE
     sw = S()
     tier, _ = WORK_ARMS[arm]
     model, effort = TIERS[tier]

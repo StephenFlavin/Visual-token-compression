@@ -80,7 +80,7 @@ The CRNN results so far (Phase 2, learned_glyphs) read pixels directly, with no 
      before the fix were re-run after the grid.
   Pilot rows in results/pilot are from probe 1 and are not used.
 * Metric: CER on held-out pages vs **chars per vision token** = 256 / px²/char (text tokens ≈ 4 chars/token).
-  C@3% = chars per token at which CER reaches 3% (from `vbpe.analysis.p_at` on px²/char).
+  C@3% = chars per token at which CER reaches 3% (from `vtc.analysis.p_at` on px²/char).
 
 ## Pre-registered predictions (written before the grid ran)
 1. identity/clean: col_b1 reaches < 3% CER (the probe can read 1-px colour codes when nothing destroys them).
