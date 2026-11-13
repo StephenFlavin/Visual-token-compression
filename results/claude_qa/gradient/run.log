@@ -1,0 +1,8 @@
+[run] 6 calls, at most $1.00 each; spent $0.00; cap $12
+[run] d2 old_sharp r0: all 0.975 {'complex': 0.925, 'needle': 1.0, 'number': 1.0}; in 85,919 (formula 79,818) out 5,453 $0.54 45s incomplete False refused False unanswered 0 disengaged None; spent $0.54
+[run] d1 old_sharp r0: all 0.967 {'complex': 0.9, 'needle': 1.0, 'number': 1.0}; in 85,862 (formula 79,749) out 5,678 $0.54 51s incomplete False refused False unanswered 0 disengaged None; spent $1.08
+[run] d2 recent_sharp r0: all 0.925 {'complex': 0.825, 'needle': 0.975, 'number': 0.975}; in 85,920 (formula 79,818) out 7,021 $0.57 56s incomplete False refused False unanswered 0 disengaged None; spent $1.65
+[run] d0 old_sharp r0: all 0.958 {'complex': 0.9, 'needle': 0.975, 'number': 1.0}; in 85,957 (formula 79,887) out 8,390 $0.60 64s incomplete False refused False unanswered 0 disengaged None; spent $2.25
+[run] d1 recent_sharp r0: all 0.925 {'complex': 0.8, 'needle': 0.975, 'number': 1.0}; in 85,861 (formula 79,749) out 8,226 $0.59 67s incomplete False refused False unanswered 0 disengaged None; spent $2.84
+[run] d0 recent_sharp r0: all 0.992 {'complex': 0.975, 'needle': 1.0, 'number': 1.0}; in 85,956 (formula 79,887) out 9,241 $0.61 73s incomplete False refused False unanswered 0 disengaged None; spent $3.46
+[run] done; spent $3.46

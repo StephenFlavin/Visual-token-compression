@@ -1,0 +1,6 @@
+{"what": "d2 old_sharp r0", "cost_usd": 0.538653, "input_tokens": 85919, "output_tokens": 5453, "error": null}
+{"what": "d1 old_sharp r0", "cost_usd": 0.542868, "input_tokens": 85862, "output_tokens": 5678, "error": null}
+{"what": "d2 recent_sharp r0", "cost_usd": 0.570018, "input_tokens": 85920, "output_tokens": 7021, "error": null}
+{"what": "d0 old_sharp r0", "cost_usd": 0.597583, "input_tokens": 85957, "output_tokens": 8390, "error": null}
+{"what": "d1 recent_sharp r0", "cost_usd": 0.593823, "input_tokens": 85861, "output_tokens": 8226, "error": null}
+{"what": "d0 recent_sharp r0", "cost_usd": 0.614598, "input_tokens": 85956, "output_tokens": 9241, "error": null}
