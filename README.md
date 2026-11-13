@@ -117,6 +117,11 @@ where the text sits on the page). The moonshot page asks
 for about 270 bits per token. Legibility in pixels was never the constraint; the page can be perfectly crisp and
 the token still cannot hold it. → Run 0 in [docs/gpu/PLAN_3090.md](docs/gpu/PLAN_3090.md)
 
+![Bits recovered per vision token against characters drawn per vision token, frozen Qwen2.5-VL](docs/img/gpu_capacity_curve.png)
+
+*Draw more characters into a vision token and it delivers more, up to 28 characters; past that it delivers less.
+Natural text sits below shuffled text because the model can guess part of it without looking.*
+
 It also explains why denser *plain text* fails the same way on Claude: at 4.2x fewer tokens it still finds single
 facts but loses chains and counts, and at 7.8x it can transcribe a page at 3% error and yet cannot answer questions
 over a document.
@@ -137,6 +142,8 @@ where a text token holds about 2.9.
 *Accuracy change in points from reading pages instead of text (negative = worse); ✓ marks the pre-registered
 "no loss larger than 2 points" verdict.*
 
+![Every tested use of page images on Claude: accuracy change and cost change](docs/img/claude_uses_overview.png)
+
 | Use, tested with a pre-registration | What was measured | Result | Reference |
 |---|---|---|---|
 | Long-document Q&A | 3 documents of ~240k tokens, 360 questions per setting | **2.2x fewer tokens, no measured loss** on Opus and on Sonnet at high effort; Opus also at 2.9x at high effort; about half the list price per call | [CLAUDE_QA.md](docs/claude/CLAUDE_QA.md) |
@@ -149,7 +156,7 @@ where a text token holds about 2.9.
 
 * **Wording that turns on one small word** (negation, passive voice, "all but"): pages lose about 3 points at 2.2x
   and 2.9x alike. In about 1 page call in 6, every "A was paid n by B" sentence is read backwards.
-* **Denser pages:** 4.2x loses 8-15 points; chains and counts go first.
+* **Denser pages:** at 4.2x Opus loses 8-15 points (Sonnet and Haiku more); chains and counts go first.
 * **Haiku:** loses 5.8 points already at 2.2x. Use text.
 * **Pruning the text instead** (deleting words a model can restore): 86.0% against 97.7% for pages at the same
   tokens, and it does not stack with pages.
