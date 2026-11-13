@@ -26,7 +26,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
 sys.path[:0] = [str(ROOT), str(HERE.parent)]
-WORK = Path(os.environ.get("SWE_WORK", "/tmp/claude-0/-home-user-visual-token-compaction/9e274458-7352-5bb1-b191-52e96364b3f6/scratchpad/swe"))
+WORK = Path(os.environ.get("SWE_WORK", "/tmp/claude-0/-home-user-visual-token-compression/9e274458-7352-5bb1-b191-52e96364b3f6/scratchpad/swe"))
 OUT = ROOT / "results" / "readhook_swe"
 PY = {"3.0": "3.8", "3.1": "3.8", "3.2": "3.8", "4.0": "3.8", "4.1": "3.9", "4.2": "3.9", "5.0": "3.11"}
 # SWE-bench uses Python 3.6 for Django 3.0-3.2; uv has no 3.6 build, and Django 3.0-3.2 support 3.8. The gold-patch

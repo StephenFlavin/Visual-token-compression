@@ -42,7 +42,7 @@ from vtchook.minify.base import REGISTRY, detect  # noqa: E402
 
 OUT = ROOT / "results" / "atlas" / "sec"
 DEFAULT_WORK = Path(os.environ.get("REPO_ATLAS_SEC_WORK",
-                                   "/tmp/claude-0/-home-user-visual-token-compaction/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/sec"))
+                                   "/tmp/claude-0/-home-user-visual-token-compression/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/sec"))
 MODEL = "claude-opus-5-5"
 EFFORT = "high"
 ARMS = ("closed", "atlas", "agent", "agent_atlas")

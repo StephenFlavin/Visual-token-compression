@@ -1,4 +1,4 @@
-# AGENTS.md: how to work in this repo (visual-token-compaction)
+# AGENTS.md: how to work in this repo (visual-token-compression)
 
 **State (2026-11-12): a finished study, wound down.** The story and results are in [README.md](README.md). One run
 is left, on the user's local GPU.
@@ -33,7 +33,7 @@ OMP_NUM_THREADS=1 python3 -m pytest -q tests encoder_probe/tests learned_glyphs/
 python3 scripts/check_links.py                        # every markdown link and path must resolve
 ```
 
-Start cloud sessions in the `visual-token-compaction` environment: the Default one cannot reach Hugging Face.
+Start cloud sessions in the `visual-token-compression` environment: the Default one cannot reach Hugging Face.
 `data/`, fonts, caches, checkpoints and adapters are git-ignored and regenerate from these commands.
 
 ## Rules

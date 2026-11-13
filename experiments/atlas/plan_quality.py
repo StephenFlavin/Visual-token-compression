@@ -49,7 +49,7 @@ sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
 
 OUT = ROOT / "results" / "atlas" / "plan_quality"
 SWE_OUT = ROOT / "results" / "atlas" / "swe"          # read only
-DEFAULT_WORK = Path(os.environ.get("PQ_WORK", "/tmp/claude-0/-home-user-visual-token-compaction/"
+DEFAULT_WORK = Path(os.environ.get("PQ_WORK", "/tmp/claude-0/-home-user-visual-token-compression/"
                                    "588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/pq"))
 MODEL = "claude-opus-5-5"
 PLAN_EFFORT = "high"
@@ -877,7 +877,7 @@ def run_judge(work: Path, ids: list[str] | None, cap: float, workers: int) -> No
 
 
 # --------------------------------------------------------------------------- layer 3 workers
-LEAK_EXTRA = r"|/pq/(ds|ctx|co|git|x|transcripts)\b|/home/user/visual-token-compaction|plan_quality|repo_atlas"
+LEAK_EXTRA = r"|/pq/(ds|ctx|co|git|x|transcripts)\b|/home/user/visual-token-compression|plan_quality|repo_atlas"
 # (the run's own checkout and venv live under /pq/runs/<hash>/: not a leak)
 
 

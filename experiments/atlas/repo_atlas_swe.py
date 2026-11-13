@@ -44,7 +44,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
 
 OUT = ROOT / "results" / "atlas" / "swe"
-DEFAULT_WORK = Path(os.environ.get("RA_SWE_WORK", "/tmp/claude-0/-home-user-visual-token-compaction/"
+DEFAULT_WORK = Path(os.environ.get("RA_SWE_WORK", "/tmp/claude-0/-home-user-visual-token-compression/"
                                    "588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/ra_swe"))
 HF = "https://huggingface.co/datasets/nebius/SWE-rebench-leaderboard/resolve/main/data/test-00000-of-00001.parquet"
 ARMS = ("plain", "map", "atlas")

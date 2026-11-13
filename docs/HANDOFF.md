@@ -12,7 +12,7 @@ model write with the multi-token prediction module it ships with? The plan and p
 [gpu/LOCAL_QWEN.md](gpu/LOCAL_QWEN.md).
 
 ```text
-Work in /c/git/visual-token-compaction-run (if the folder is still called /c/git/visual-token-compaction-run, rename it first
+Work in /c/git/visual-token-compression-run (if the folder is still called /c/git/visual-token-compression-run, rename it first
 or use that path throughout; Windows, Git Bash; run `. .venv/env.sh` first; use `python`, not `python3`;
 PYTHONUTF8=1). This is a measurement session: no training, no Claude API calls, no pull requests.
 
@@ -146,7 +146,7 @@ The three parked stages are 13 training runs, about 90 GPU-hours (two weeks of t
 whatever `results/r12_logs/done.txt` on the PC already lists. The driver resumes where it stopped:
 
 ```bash
-cd /c/git/visual-token-compaction-run && . .venv/env.sh && git pull --rebase origin claude/validation-harness
+cd /c/git/visual-token-compression-run && . .venv/env.sh && git pull --rebase origin claude/validation-harness
 tail results/r12_logs/driver.log; ls results/r12_logs/STOP 2>/dev/null   # a STOP file = a failed check: read it first
 nohup python encoder_probe/experiments/run12_driver.py --steps 6000 --stages A chan B >> results/r12_logs/driver.out 2>&1 &
 ```

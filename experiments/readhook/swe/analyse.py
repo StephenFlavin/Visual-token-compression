@@ -22,7 +22,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
-SCR = Path("/tmp/claude-0/-home-user-visual-token-compaction/9e274458-7352-5bb1-b191-52e96364b3f6/scratchpad/swe")
+SCR = Path("/tmp/claude-0/-home-user-visual-token-compression/9e274458-7352-5bb1-b191-52e96364b3f6/scratchpad/swe")
 P_IN, P_OUT, P_W, P_R = 4e-6, 20e-6, 5e-6, 0.2e-6
 CPT = 2.6
 

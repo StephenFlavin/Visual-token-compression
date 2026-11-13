@@ -231,8 +231,8 @@ open.
    clean rows at 10k steps, P2 for completeness.
 
 ## Local PC state (for the next local session)
-* Clone `C:\git\visual-token-compaction-run` (sparse checkout: three `learned_glyphs/results/*/phase2/samples` dirs excluded,
-  their files have `:` in names; `git update-index --skip-worktree` on them after each pull). `C:\git\visual-token-compaction` is
+* Clone `C:\git\visual-token-compression-run` (sparse checkout: three `learned_glyphs/results/*/phase2/samples` dirs excluded,
+  their files have `:` in names; `git update-index --skip-worktree` on them after each pull). `C:\git\visual-token-compression` is
   the broken original checkout (every file staged as deleted by the failed Windows checkout): leave it or delete it.
 * venv `.venv` (Python 3.12, torch 2.11 cu128, transformers 5.22.1); env: `PYTHONUTF8=1 EP_PAGE_CACHE=1
   EP_TRAIN_R2_CAP=400000000`, PATH with `.venv/Scripts` first; queue lines use `python`. Helper:

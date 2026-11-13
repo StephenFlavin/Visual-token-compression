@@ -42,7 +42,7 @@ sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "claude_qa"), str(ROOT / "
 import claude_qa_research as R  # noqa: E402
 import claude_qa_render as Q  # noqa: E402
 
-WORK = Path("/tmp/claude-0/-home-user-visual-token-compaction/9e274458-7352-5bb1-b191-52e96364b3f6/scratchpad/compaction")
+WORK = Path("/tmp/claude-0/-home-user-visual-token-compression/9e274458-7352-5bb1-b191-52e96364b3f6/scratchpad/compaction")
 OUT = ROOT / "results" / "compaction"
 MODEL = "claude-opus-5-5"
 BUDGET = 88.2

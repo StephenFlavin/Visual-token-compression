@@ -1,4 +1,4 @@
-# Prior art for visual token compaction (WP-G)
+# Prior art for visual token compression (WP-G)
 
 **Status: a record.** This is the literature search done on 2026-11-02, before Phases 1-2 ran. It is kept as
 written. Its claims about other people's work come from the papers in [References](#references) and were not

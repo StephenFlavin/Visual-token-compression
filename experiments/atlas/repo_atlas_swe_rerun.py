@@ -41,7 +41,7 @@ import repo_atlas_swe as sw  # noqa: E402
 
 OUT = ROOT / "results" / "atlas" / "swe_rerun"
 FIRST = ROOT / "results" / "atlas" / "swe"                 # read only
-SCRATCH = Path("/tmp/claude-0/-home-user-visual-token-compaction/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad")
+SCRATCH = Path("/tmp/claude-0/-home-user-visual-token-compression/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad")
 DEFAULT_WORK = Path(os.environ.get("RA_SWE2_WORK", str(SCRATCH / "swe_rerun")))
 ARMS = ("plain", "atlas")
 REPS = (1, 2)
@@ -83,7 +83,7 @@ def smoke_first(order: list[tuple[str, str, int]]) -> list[tuple[str, str, int]]
     return firsts + [x for x in order if x not in firsts]
 
 
-LEAK_EXTRA = (r"|/ra_swe\b|/pq/|/swe_rerun/(ds|ctx|git|co|validate|transcripts)\b|/home/user/visual-token-compaction|"
+LEAK_EXTRA = (r"|/ra_swe\b|/pq/|/swe_rerun/(ds|ctx|git|co|validate|transcripts)\b|/home/user/visual-token-compression|"
               r"repo_atlas|plan_quality|\.claude/projects|MEMORY\.md|/memory/")
 OUTSIDE = re.compile(r"/tmp/claude-0|scratchpad|/root/\.claude")
 

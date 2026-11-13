@@ -30,7 +30,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
 sys.path[:0] = [str(ROOT), str(HERE.parent)]
-SCR = Path("/tmp/claude-0/-home-user-visual-token-compaction/9e274458-7352-5bb1-b191-52e96364b3f6/scratchpad")
+SCR = Path("/tmp/claude-0/-home-user-visual-token-compression/9e274458-7352-5bb1-b191-52e96364b3f6/scratchpad")
 WORK = SCR / "swe" / "ml"
 OUT = ROOT / "results" / "readhook_swe_ml"
 RUST = ["burntsushi/ripgrep", "sharkdp/bat", "tokio-rs/axum", "tokio-rs/tokio", "uutils/coreutils", "nushell/nushell",

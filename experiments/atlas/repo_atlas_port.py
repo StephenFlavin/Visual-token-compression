@@ -42,7 +42,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas")]
-WORK = Path(os.environ.get("PORT_WORK", "/tmp/claude-0/-home-user-visual-token-compaction/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port"))
+WORK = Path(os.environ.get("PORT_WORK", "/tmp/claude-0/-home-user-visual-token-compression/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/port"))
 OUT = ROOT / "results" / "atlas" / "port"
 PROJECT = "gitleaks"
 SRC_REPO = "https://github.com/gitleaks/gitleaks"

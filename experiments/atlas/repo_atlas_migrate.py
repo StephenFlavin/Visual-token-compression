@@ -37,7 +37,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "atlas"), str(ROOT / "experiments" / "readhook")]
-WORK = Path(os.environ.get("MIG_WORK", "/tmp/claude-0/-home-user-visual-token-compaction/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/mig"))
+WORK = Path(os.environ.get("MIG_WORK", "/tmp/claude-0/-home-user-visual-token-compression/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/mig"))
 OUT = ROOT / "results" / "atlas" / "migrate"
 BENCH_URL = "https://github.com/anirudhkhatry/CRUST-bench.git"
 
