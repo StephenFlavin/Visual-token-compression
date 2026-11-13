@@ -8,6 +8,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+if any(a.startswith("-") for a in sys.argv[1:]):
+    sys.exit("usage: merge_phase2.py [run_name ...]   (default: phase2_main phase2_long; takes no options)")
 SRC = [ROOT / "results/phase2" / r / "runs.jsonl" for r in (sys.argv[1:] or ["phase2_main", "phase2_long"])]
 best: dict = {}
 for f in SRC:

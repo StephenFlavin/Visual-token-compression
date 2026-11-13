@@ -112,7 +112,8 @@ DeepSeek-OCR's published operating point (approximate: converted at 4.33 charact
 
 A vision token is one vector, and the encoder that makes it was trained to describe pictures and ordinary text. The
 measurement that settled it: frozen Qwen2.5-VL recovers **at most 12.6 bits per vision token** on natural text, at
-28 characters per token, and falls apart beyond that (1.7 bits at 72 characters per token). The moonshot page asks
+28 characters per token, and falls apart beyond that (1.7 to 6 bits at about 70 characters per token, depending on
+where the text sits on the page). The moonshot page asks
 for about 270 bits per token. Legibility in pixels was never the constraint; the page can be perfectly crisp and
 the token still cannot hold it. → Run 0 in [docs/gpu/PLAN_3090.md](docs/gpu/PLAN_3090.md)
 

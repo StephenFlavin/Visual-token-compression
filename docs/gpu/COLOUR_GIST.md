@@ -454,7 +454,7 @@ nothing about whether Qwen's pretrained ViT can be retrained to do so (that is A
   characters per vision token is the comparison.
 * **Model, as I read "pure VLM":** a vision encoder with no pretrained bias towards Latin. A small ViT/CNN trained
   from scratch feeds a small LLM (Qwen2.5-0.5B), with Latin trained identically as the control. The cheaper
-  alternative is Qwen with its ViT trained from block 8 (stage A' in [HANDOFF.md](../HANDOFF.md)).
+  alternative is Qwen with its ViT trained from block 8 (stage A' in [the hand-off of 2026-11-12](../background/history/HANDOFF_2026-11-12.md)).
 * **Gate:** glyph pages give at least Latin's gist (MC, bits per vision token) at equal chars/token. If not, glyphs
   are dropped and the merged phase uses Latin in colour channels.
 

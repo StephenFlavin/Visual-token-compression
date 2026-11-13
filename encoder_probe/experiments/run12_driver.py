@@ -1,4 +1,4 @@
-"""Resumable driver for docs/HANDOFF.md "Prompt for the 3090" steps 3-6 (PLAN_3090 Runs 1-2, amendments 3-6).
+"""Resumable driver for the 3090 prompt in docs/background/history/HANDOFF_2026-11-12.md, steps 3-6 (PLAN_3090 Runs 1-2, amendments 3-6).
 
 Runs the pre-registered commands one at a time, in order, and records each finished step in
 results/r12_logs/done.txt, so a restart (the PC is on only in 6-7 h stretches) skips finished steps;
