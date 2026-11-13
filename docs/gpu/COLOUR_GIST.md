@@ -1,13 +1,54 @@
-# Gist through colour channels: plan and first result (2026-11-06)
+# Text in colour layers, read for the gist: what was tested and what was found
 
-**User's direction (2026-11-06):**
-* Target **gist**, not exact reconstruction.
-* **"System 1" context:** bulk-load the subject matter as dense, low-resolution pages, and keep the user's own
-  context as ordinary full-resolution text.
-* **One variable at a time:**
-  1. Latin text in 2 colour channels, then 3. No BPE chunks, no learned glyphs, large font first.
-  2. A separate test of learned glyphs without BPE, to decide whether glyphs are worth pursuing.
-  3. Only then merge the two.
+**Status: closed 2026-11-11. The CPU steps ran on 2026-11-06 (A0, A0b, A1-cpu, the diagnostics, S1); the GPU steps
+(A1, A2, A3, phases B and C, the use test) were never run** and are not scheduled: the colour stage ("Run 4" in
+[PLAN_3090.md](PLAN_3090.md)) was closed when the project wound down. The runbook for A1 is kept below in case it
+is ever picked up.
+
+## The result
+
+**The model does not read two colour layers as two texts. It reads them as one blended text, and two layers
+deliver less per vision token than one.**
+
+* The idea: an image has three colour channels and black text uses them as one, so put a different text in each
+  channel (borrowed from fibre-optic multiplexing, where several signals share one fibre on different wavelengths).
+  Each layer owns its channel, so every layer is fully recoverable from the pixels.
+* **Untrained** Qwen2.5-VL-3B takes 0.51 times as much information per vision token from a two-layer page as from
+  a one-layer page at the same text size (16-px lines; 95% interval 0.31-0.72), and 0.21 times from a three-layer
+  page. It gets worse at smaller text.
+* **After a short fine-tune** (500 steps, language model only, on CPU) the two-layer page reaches 0.72 times
+  (0.54-0.94): still below 1. The model got better at the layer it could already see and did not learn to see the
+  other.
+* **Why:** both layers' pixels survive equally through the first half of the vision tower, then blend where the
+  tower turns pixels into letter features. Asked for either colour, the untrained model writes a mix of both
+  texts ("Robert Dull Safe Hadgott Bolter starred as ...").
+* **The fairest test could not be completed:** a small model with a vision encoder trained from scratch (S1) never
+  learned to read even one layer on CPU, so it says nothing about the overlay.
+
+![Bits per vision token from pages with 1, 2 and 3 text layers, untrained Qwen2.5-VL](../img/probe_colour_layers.png)
+
+*How to read it: each group is one text size; the bars are pages with one, two and three text layers. Height is
+how much the model takes from the page per vision token (the gap between its loss with the wrong page's image and
+with the right one). The number in brackets is the share of the one-layer value, the measure R(k) used below. If
+layers were free, the two-layer bar would be twice the one-layer bar; it is about half or less. Drawn by
+`scripts/make_probe_figures.py` from `encoder_probe/results/z0_info/`.*
+
+## Terms
+
+* **Stream / layer:** one text drawn in its own colour channel. With two streams, one is drawn in cyan ink (it
+  darkens only the red channel) and one in magenta ink (it darkens only green); a third would be yellow (blue).
+* **Arms** `rgb1s_p16`, `rgb2s_p16`, `rgb3s_p16`: pages with 1, 2 or 3 streams of plain DejaVu Sans text with
+  16-px lines (`_p12`, `_p8`: 12-px and 8-px lines). `rgb1s` is an ordinary black-on-white page.
+* **Vision token:** one 28x28-px patch as Qwen2.5-VL hands it to its language model (256 per 448-px page).
+* **Blind control:** the same measurement with each page's image swapped for another page's. The image then says
+  nothing, so the gap between the blind loss and the real loss is the information the image supplied.
+* **R(k):** information per vision token from the k-stream page divided by that from the 1-stream page at the same
+  text size. R(2) > 1 would mean the overlay pays.
+* **MC:** four-way multiple choice (which phrase appears in the named stream). The **lure** is a phrase from the
+  other stream on the same page; answering with it means the model read the wrong layer.
+* **Gist:** knowing what a text says without reproducing its words. The user's direction on 2026-11-06 was to aim
+  for gist, not exact reconstruction, and to change one variable at a time: Latin in 2 colour channels, then 3
+  (phase A); learned glyphs without chunks (phase B); only then the two together (phase C).
 
 Every phase compares against plain single-stream Latin under the same recipe. That comparison is a **control**,
 not a goal (see [ANALYSIS.md](../background/ANALYSIS.md)).
@@ -23,10 +64,10 @@ images swapped between pages) × text tokens per vision token. R(k) = that of th
 | A0b | How much information does untrained Qwen take per stream? | (look only: zero-shot R(2), R(3)) | CPU | **done**: R(2) = 0.51 at 16 px, below 1 at every size |
 | A1-cpu | 2 streams, LoRA-only fine-tune on CPU (amendment 2) | interim: R(2) > 1, CI above 1 | CPU (~4 h) | **missed**: R(2) = 0.72 (0.54-0.94). Magenta is read well; cyan still isn't |
 | A1-diag | Where are the streams blended? | (diagnostic) | CPU | both survive equally to ViT block 16, then blend; untrained Qwen reads the superposition as one text |
-| **A1** | 2 streams, fine-tuned (1000 steps, R3-1 recipe, 16 px) | **Headline: R(2) > 1, 95% CI above 1.** Strong: R(2) ≥ 1.5, each stream's MC ≥ 0.8x 1-stream MC, other-stream lure ≤ 15% | GPU (~2 h on a 4090) | built, CPU-tested, waiting for a GPU |
+| **A1** | 2 streams, fine-tuned (1000 steps, R3-1 recipe, 16 px) | **Headline: R(2) > 1, 95% CI above 1.** Strong: R(2) ≥ 1.5, each stream's MC ≥ 0.8x 1-stream MC, other-stream lure ≤ 15% | GPU (~2 h on a 4090) | built, CPU-tested, **never run** (closed 2026-11-11) |
 | S1 | Fairest overlay test: small VLM with a vision encoder trained **from scratch** (no pretrained text features), Qwen2.5-0.5B + LoRA, 224-px pages, CPU | learnability first; then **gist headline: 2 streams carry > 1x the gist (content words known) per vision token of 1 stream**, CI above 1; equal-density gist bar | CPU (~17 h, staged) | **closed, inconclusive** (alignment gate failed: gap 0.001 < 0.05). Run 1: encoder collapsed (gap 0.000); s1r: encoder alive, LLM ignores it (gap -0.0002 at step 750); s1a: LLM frozen, still no gap. No overlay conclusion |
-| A2 | 3 streams | R(3) ≥ 1.3 R(2), same per-stream rules | GPU (~1 h) | after A1 |
-| A3 | Smaller font (16 → 12 → 8 px) on the best stream count | R(k) holds at each step, vs 1 stream at the same size | GPU | after A2 |
+| A2 | 3 streams | R(3) ≥ 1.3 R(2), same per-stream rules | GPU (~1 h) | not run |
+| A3 | Smaller font (16 → 12 → 8 px) on the best stream count | R(k) holds at each step, vs 1 stream at the same size | GPU | not run |
 | B | Learned glyphs without BPE, read by a "pure" VLM | Glyph pages give at least Latin's gist at equal chars/token | GPU | not started |
 | C | Merge: glyph streams in colour channels, then BPE | Each step pays for itself | GPU | not started |
 | Use | "System 1": bulk background context as colour pages | Beats a text summary at equal KV bytes on gist QA | GPU | not started |
@@ -34,7 +75,7 @@ images swapped between pages) × text tokens per vision token. R(k) = that of th
 **The bar that makes it useful (equal density).** Beating one stream at the same font size (R(k) > 1) shows the
 overlay works. To be worth using, an overlay must also carry at least as much information per vision token as a
 single stream **shrunk to the same characters per token**. For example, rgb2s_p16 (13.7 chars/token) against
-rgb1s_p12 (12.2). Zero-shot reference, single stream: 5.5 / 7.8 / 11.6 bits per vision token at 16 / 12 / 8 px
+rgb1s_p12 (12.2). Zero-shot reference, single stream: 5.4 / 7.8 / 11.6 bits per vision token at 16 / 12 / 8 px
 (A0b).
 
 ## Why gist, and what it has to beat
@@ -61,7 +102,8 @@ pixels. Two streams per page double the characters per vision token; three tripl
 | 16 px (large: phase A starts here) | 6.8 chars/vision token (plain text: 4.3 per token) | ~14 | ~20 |
 | 8 px (later, if A passes) | 28 | ~56 | ~84 |
 
-(1 stream = latin_p16 / latin_p8 as measured in rounds 2-3; multi-stream values are those x the stream count.)
+(1 stream = latin_p16 / latin_p8 as measured in rounds 2-3; multi-stream values are those x the stream count.
+BPE = byte-pair-encoding chunks, the frequent letter runs that get their own glyph in the learned alphabet.)
 
 At 16 px the test is a mechanism test (can streams be separated and understood?), not yet a context saving.
 Density comes after.
@@ -143,7 +185,7 @@ on this page." Teacher-forced loss of the true text with the page's own image, a
 
 ### A1-cpu results (2026-11-06, CPU, 500 steps, LoRA only, vision encoder frozen)
 Rows: `encoder_probe/results/colour_a1cpu/` (fine-tune eval), `a1cpu_info/` (trained measurement),
-`z0_info_w400/` (zero-shot reference, same targets); log `results/a1cpu.log` (not committed). 23 s/step, no
+`z0_info_w400/` (zero-shot reference, same targets); the log was not committed. 23 s/step, no
 restarts.
 
 Information per text token (nats). Blind = the lower of the trained model with another page's image and the
@@ -203,7 +245,7 @@ flags to run the original recipe): train where the blending happens.**
   measured in the smoke.
 * **Gates:** unchanged.
 
-### A1: two streams, fine-tuned (GPU, next)
+### A1: two streams, fine-tuned (GPU; designed and built, never run)
 * **Recipe:** R3-1's (LoRA r = 16 + merger + last 4 ViT blocks, 1000 steps, 1000 train pages). One `fair_hash`;
   every arm with its own blind control.
 * **Arms:**
@@ -276,7 +318,9 @@ slower, so measure in the smoke). Totals:
 rgb3s is analysed under the A2 gate only if A1's headline passes. A1-cpu numbers are not comparable (frozen ViT,
 other blind).
 
-**Prompt for the GPU session:** in [HANDOFF.md](../HANDOFF.md) ("Prompt for the next GPU session").
+**Prompt for the GPU session:** parked; it is kept in
+[history/HANDOFF_2026-11-12.md](../background/history/HANDOFF_2026-11-12.md). The current
+[HANDOFF.md](../HANDOFF.md) no longer carries it, because the stage is closed.
 
 ### S1: small VLM with a from-scratch vision encoder (CPU; pre-registered 2026-11-06, before any S1 row)
 **Why:** in Qwen2.5-VL both streams survive to ViT block 16, then its pretrained letter and word features blend
@@ -396,13 +440,13 @@ stopped after ~150 steps, its checkpoint deleted, and S1 relaunched with these c
 two colour streams for more information per token than one. It is a different model from Qwen2.5-VL, so it says
 nothing about whether Qwen's pretrained ViT can be retrained to do so (that is A1 on a GPU).
 
-### A2: three streams (only if A1 passes)### A2: three streams (only if A1 passes)
+### A2: three streams (only if A1 passes; not run)
 * **Arm:** the same recipe with a third stream darkening B (yellow ink).
 * **Gate:** each stream's MC ≥ 0.8x the 1-stream arm's, and bits per vision token ≥ 1.3x the 2-stream arm's.
 * **Then density:** shrink the pitch (16 → 12 → 8) on the best channel count, each step against a 1-stream arm at
   the same pitch.
 
-## Phase B: learned glyphs without BPE ("pure VLM" for glyphs)
+## Phase B: learned glyphs without BPE ("pure VLM" for glyphs; not run)
 * **Code:** the learned **characters-only** alphabet (`lg_learned_n0_pb_h5`: 95 whole-pixel glyphs, 5 px tall),
   no chunk glyphs. In raw pixels it already needs ~0.82x Latin's area for the same accuracy (8.0 vs ~9.8
   px²/char at ~0.6% CER, [learned_glyphs/RESULTS.md](../../learned_glyphs/RESULTS.md)): a modest prior.
@@ -414,11 +458,11 @@ nothing about whether Qwen's pretrained ViT can be retrained to do so (that is A
 * **Gate:** glyph pages give at least Latin's gist (MC, bits per vision token) at equal chars/token. If not, glyphs
   are dropped and the merged phase uses Latin in colour channels.
 
-## Phase C: merge
+## Phase C: merge (not run)
 1. Glyph streams in colour channels: the moonshot without BPE.
 2. Then BPE chunk glyphs on top, only if each earlier step paid for itself.
 
-## System-1 use test (after phase A passes)
+## System-1 use test (after phase A passes; not run)
 * **Setup:** long documents in the passing colour format as background context, then gist questions (topic,
   claims, relations; not needles).
 * **Baselines:** no context, plain text cut to equal KV bytes, a text summary at equal KV bytes.
