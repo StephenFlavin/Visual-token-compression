@@ -1,13 +1,35 @@
 # Test B: text-side slots against page pixels, same reader, same budget
 
-**Status 2026-11-12: built, not scheduled.** The code and tests are on the branch and nothing has run on a GPU. It
-was set aside because it would repeat published work (C3, ARC-Encoder) for a payoff that current local models get
-from their architecture ([LOCAL_QWEN.md](LOCAL_QWEN.md)). The design below stands if it is ever run; the 3090 prompt
-for it is in the git history of [HANDOFF.md](../HANDOFF.md) (commit a46cd47).
+**Status (2026-11-13): closed without being run.** The code and its tests (tiny CPU model) are in the repo; no
+row exists and none is planned. It was set aside on 2026-11-12 because it would repeat published work (C3,
+ARC-Encoder: text compressed into a few embedding slots of a language model; see
+[prior-art.md](../background/prior-art.md)) for a payoff that current local models already get from their
+architecture ([LOCAL_QWEN.md](LOCAL_QWEN.md)). The design below stands if it is ever run. Its 3090 session prompt
+was removed from the hand-off when the test was set aside; it is in the git history
+(`git show a46cd47:docs/HANDOFF.md`), and the GPU limits and time estimates are in
+[LOCAL_GPU.md](LOCAL_GPU.md) section 9.
 
 *Pre-registered 2026-11-11, before any row. Code: `encoder_probe/experiments/text_slots.py`, analysis
 `analyse_slots.py`, tests `encoder_probe/tests/test_text_slots.py` (tiny CPU model). Background:
-[REVIEW_2026-11-11.md](../background/REVIEW_2026-11-11.md). The 3090 prompt is in [HANDOFF.md](../HANDOFF.md).*
+[REVIEW_2026-11-11.md](../background/REVIEW_2026-11-11.md). The text below is unchanged from the
+pre-registration.*
+
+**In one paragraph.** Every code in this repo tries to put more text into one position of a model's context by
+drawing it and sending it through the vision encoder. For a model that can be trained there is a shortcut: build
+the "slot" (one context position holding several tokens' worth of text) directly from the text tokens, with no
+image. Test B would have compared the two at the same training budget, with the same reader and the same measure
+(bits per position, as in [PLAN_3090.md](PLAN_3090.md)). A win for the text side would have closed the dense-glyph
+line; that line was closed anyway when the goals were reframed.
+
+```mermaid
+flowchart LR
+    T["480 text tokens"] --> E["Encoder: each slot =<br/>a linear map of its own<br/>r token embeddings"]
+    E --> S["480 / r slots"]
+    S --> L["Qwen2.5-VL's language model<br/>(LoRA, or frozen)"]
+    L --> O["rebuilds the 480 tokens"]
+    P["The same text as<br/>a page image"] --> V["Vision encoder"] --> VT["vision tokens"] --> L
+    O --> M["Compare bits per position:<br/>slots against vision tokens"]
+```
 
 ## Question
 
@@ -126,4 +148,4 @@ once its row exists. Each finished arm leaves its encoder and LoRA in `encoder_p
 
 ## Results
 
-Not run yet.
+Not run, and closed (2026-11-12).

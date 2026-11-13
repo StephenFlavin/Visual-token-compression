@@ -1,9 +1,22 @@
 # GPU runner: 3-hour plan (any Linux + NVIDIA GPU)
 
+**Status (2026-11-13): a record and a reusable runbook; nothing is scheduled on a rented GPU.** It was used once,
+on 2026-11-05 (RTX 4090, the fine-tune called R3-1: results below and in
+[ANALYSIS.md](../background/ANALYSIS.md)), and once more for the text-side compressor
+([OWN_ENCODER.md](OWN_ENCODER.md)). The "next session" arms it mentions (a vision-side diagnostic, a Latin density
+sweep, 5000-step Latin arms) were overtaken by the 3090 plan ([PLAN_3090.md](PLAN_3090.md)) and then by the
+wind-down; they are listed in [history/HANDOFF_2026-11-12.md](../background/history/HANDOFF_2026-11-12.md). The one
+run still to do needs no rented GPU: [HANDOFF.md](../HANDOFF.md). Where this file says "AGENTS.md" for a pitfall,
+read [GOTCHAS.md](../GOTCHAS.md).
+
+Terms: "R3-1" is round 3's fine-tune of Qwen2.5-VL-3B (LoRA on the language model plus the last vision blocks);
+"G3" is its gate (does the model read a dense code at 3% character error); a "blind" run is the same training with
+the images swapped between pages; `latin_p8` is plain text at 28 characters per vision token, `latin_p5` at 72,
+`lg_pb_h5` learned glyphs at 107, the "moonshot" (`rgb3_lg_pb_h5`) glyphs in three colour layers at 322.
+
 For a rented or borrowed Linux machine with one NVIDIA GPU, for a limited time (planned: about 3 h). Nothing here
 assumes a particular GPU or CPU: measure first, then size the run. The Windows/RTX 3090 specifics live in
-[LOCAL_GPU.md](LOCAL_GPU.md); the design is in [encoder_probe/ROUND3.md](../../encoder_probe/ROUND3.md); current state
-and open items are in [HANDOFF.md](../HANDOFF.md). Every time and memory figure below is an **estimate** unless it says
+[LOCAL_GPU.md](LOCAL_GPU.md); the design is in [encoder_probe/ROUND3.md](../../encoder_probe/ROUND3.md). Every time and memory figure below is an **estimate** unless it says
 measured.
 
 ## Goal for the session
@@ -13,9 +26,9 @@ The CPU probe can't measure Latin through Qwen at feasible data sizes, so the LL
 In about 3 h: setup, smoke, then short arms at equal steps. A short result is a signal, not a verdict. Label it so.
 
 **Done once (2026-11-05, RTX 4090, 1000 steps):** latin_p8 is read (55% CER vs blind 88.5%); latin_p5 gets the
-gist only (val loss 10% below blind); lg_pb_h5 and the moonshot are not read ([ANALYSIS.md](../background/ANALYSIS.md)). **The next session's arms and order are in [HANDOFF.md](../HANDOFF.md)**
-(stage A' vision-side diagnostic with blinds, a Latin density sweep, then 5000-step Latin arms); sections 3-4 below show the
-mechanics with the first session's arms.
+gist only (val loss 10% below blind); lg_pb_h5 and the moonshot are not read ([ANALYSIS.md](../background/ANALYSIS.md)). A follow-up session was planned (a vision-side diagnostic
+with blinds, a Latin density sweep, then 5000-step Latin arms) and never run: see the status above. Sections 3-4
+below show the mechanics with the first session's arms.
 
 ## 0. Before you start (5 min)
 * Check `git push` works from the runner. The machine is ephemeral: anything not pushed is lost. If push doesn't
@@ -75,7 +88,7 @@ If it fails, fix minimally, keep the CPU tests green, commit the fix, rerun. If 
 ## 3. Size the run from the smoke
 * Time left for training: `T_min = (minutes remaining) - 25` (eval ~5-10 min per arm + write-up + push margin).
 * Arms, in priority order (first session): `latin_p8` (~28 chars/token), `rgb3_lg_pb_h5` (moonshot, 322),
-  `latin_p5` (~72, the pushed Latin baseline), then `lg_pb_h5` (~107) if time allows. Next session: HANDOFF.md.
+  `latin_p5` (~72, the pushed Latin baseline), then `lg_pb_h5` (~107) if time allows.
 * **Blind controls (required for every arm):** a `--blind-images` run of each arm at the same settings. Each
   page's image is swapped for another page's, the text targets stay with the true page, and the run name gets
   `_blind`. An LLM can write fluent English from any image, so a CER is only evidence of reading when it is well
@@ -107,7 +120,7 @@ nohup scripts/autosave_results.sh 600 > results/autosave.log 2>&1 &     # commit
 * `--cores K`: the number of concurrent GPU jobs from section 3 (replace the `--cores 1` above).
 * Resume after a crash: start the queue again with a **new** `--log-dir`. Finished rows are skipped, and a job continues
   from its last checkpoint (every 250 steps). Never edit a running queue except by atomically rewriting its unclaimed
-  tail (AGENTS.md).
+  tail ([GOTCHAS.md](../GOTCHAS.md), "Cloud runner").
 * Watch: `tail -f results/queue_logs/gpu3h_1/*.log`, plus `nvidia-smi` and `df -h .` (keep ≥ 3 GB free; the CPU
   runner died of a full disk once).
 * Optional, only if a GPU slot and memory are free: the frozen-Qwen probe for the moonshot (R3-0),

@@ -1,18 +1,29 @@
 # Running the encoder-probe experiments on the local Windows PC (RTX 3090 + Ryzen 9 5900X)
 
+**Status (2026-11-13): one job left for this PC, section 10** (page images on a local Qwen3.8-27B, no training;
+the prompt is at the top of [HANDOFF.md](../HANDOFF.md)). Everything else here is a record of finished or parked
+rounds, kept for its setup notes, limits and measured speeds.
+
 For any other GPU machine (rented, cloud, unknown hardware) start from [GPU_RUNNER.md](GPU_RUNNER.md) instead.
 
-Runbook for the user's PC with an RTX 3090 (24 GB, Ampere, native bf16) and a Ryzen 9 5900X (12 cores / 24 threads,
-AVX2 only). Sections 1-7 were written for Linux before the PC turned out to be **Windows 11**: there, use Git Bash,
-the venv's `python` (not `python3`) and `PYTHONUTF8=1` (section 8; AGENTS.md has the Windows gotchas). Round 2 (sections
-4-7) ran here on 2026-11-04; Runs 1-2 of PLAN_3090 have been running here since 2026-11-09 (HANDOFF.md). Times are
+The PC: RTX 3090 (24 GB, native bf16), Ryzen 9 5900X (12 cores / 24 threads, AVX2 only), **Windows 11**. Use Git
+Bash, the venv's `python` (not `python3`) and `PYTHONUTF8=1`; the repo is at `/c/git/visual-bpe-run` and
+`. .venv/env.sh` sets the environment. Sections 1-7 were written for Linux before the PC turned out to be Windows,
+so their commands say `python3`. Windows pitfalls: [GOTCHAS.md](../GOTCHAS.md), "GPU runners". Times are
 **estimates** unless marked measured.
 
-**Current work (2026-11-12): section 10, one evening on Qwen3.8-27B with no training.** The work is being wound
-down ([REVIEW_2026-11-11.md](../background/REVIEW_2026-11-11.md), README "Where it stands"): this PC's last job is to measure
-whether page images let a local model hold more text, and how fast it writes with its built-in multi-token module.
-The prompt is at the top of [HANDOFF.md](../HANDOFF.md). Section 9 (Test B) is built but not scheduled. Sections 4-8
-are earlier rounds, kept for their setup notes and measured speeds.
+| Section | What | Status |
+|---|---|---|
+| 1-3 | Setup, CUDA notes, smoke test for the encoder-probe code | Reference; used for round 2 |
+| 4-7 | Round 2: probes on DeepSeek-OCR's frozen DeepEncoder | **Finished 2026-11-04.** Only sparse Latin (8.5 characters per vision token) is read: 18.9% character error at 1000 training pages, 14.9% at 5000; every denser code sits at the floor. [encoder_probe/RESULTS.md](../../encoder_probe/RESULTS.md) |
+| 8 | Round 3 on Qwen2.5-VL-3B: frozen probe (R3-0), fine-tune (R3-1), long-context benchmark (R3-2) | **Not run on this PC.** R3-1 ran once on a rented RTX 4090 ([GPU_RUNNER.md](GPU_RUNNER.md)); R3-0 on CUDA and R3-2 never ran. The setup block is still what the PLAN_3090 runs use |
+| 8 (setup) + [PLAN_3090.md](PLAN_3090.md) | Runs 1-2: Qwen's vision encoder trained on Latin and glyphs | **Parked.** Frozen baseline and smoke measured here on 2026-11-09 (3.93 s/step at batch 8, 17.9 GB); the driver was stopped in the wind-down. Resume command: [HANDOFF.md](../HANDOFF.md) section 3 |
+| 9 | Test B: text slots against page pixels | **Closed, never run** ([TEXT_SLOTS.md](TEXT_SLOTS.md)) |
+| 10 | Qwen3.8-27B: page images and generation speed | **Ready to run** ([LOCAL_QWEN.md](LOCAL_QWEN.md)) |
+
+**Measured on this PC** (for sizing anything new): probe 0.015-0.06 s/step; DeepEncoder ~0.05 s/page; Latin
+rendering ~45 s per 1000 pages; Qwen2.5-VL-3B with 16 vision blocks trained, batch 8: 3.93 s/step, 17.9 GB;
+at most 3 probe jobs or one fine-tune at a time (Windows pages GPU memory instead of raising out-of-memory).
 
 ## 1. Setup
 
@@ -81,7 +92,7 @@ print('corr', torch.corrcoef(torch.stack([a.flatten(), b.flatten()]))[0, 1].item
 The log line should say `device=cuda bf16=True train-data-on-gpu=True`. These are smoke rows (`smoke: true`), not results.
 The first run also builds the `tr20` DeepEncoder token cache on the GPU. If anything fails here, fix it before queueing.
 
-## 4. Status in brief (2026-11-04, superseded)
+## 4. Round 2: state before the run (2026-11-04, superseded by the result)
 
 *Superseded 2026-11-04 evening: round 2 finished on this PC (1000-5000 pages). Only latin_p32 (8.5 chars/token) reads
 through DeepEncoder (18.9% at 1000 pages, 14.9% at 5000); every denser code sits at the floor. Results:
@@ -222,10 +233,11 @@ git pull --rebase origin claude/validation-harness && git push origin claude/val
 ## 8. Round 3 on the 3090 (encoder_probe/ROUND3.md)
 
 **Status (2026-11-05):** `finetune_qwen.py` ran as built on a Linux RTX 4090 (smoke + 1000-step arms with blind
-controls, [GPU_RUNNER.md](GPU_RUNNER.md); results in [HANDOFF.md](../HANDOFF.md)): 1.2 s/step, peak 11.4 GB at batch 4.
+controls, [GPU_RUNNER.md](GPU_RUNNER.md); results in [ANALYSIS.md](../background/ANALYSIS.md)): 1.2 s/step, peak 11.4 GB at batch 4.
 Nothing below has run on this Windows PC yet, and R3-0 (frozen Qwen probe on CUDA) and R3-2 (`longctx_bench.py`)
-have not run on any GPU. **The next arms and their order are in HANDOFF.md** (latin_p8/p6/p5 at 5000 steps with
-blinds, then a short vision-side diagnostic); the R3-1 block below is the original grid. Run the smokes first.
+have not run on any GPU. The follow-up arms planned then (latin_p8/p6/p5 at 5000 steps with blinds, then a short vision-side diagnostic)
+were overtaken by [PLAN_3090.md](PLAN_3090.md), whose runs use this section's setup; the R3-1 block below is the
+original grid and was never run here. *(Status updated 2026-11-13.)*
 
 ### Setup (Windows, Git Bash, the round-2 venv)
 ```bash
@@ -355,14 +367,14 @@ git pull --rebase origin claude/validation-harness && git push origin claude/val
 
 ## 9. Test B on the 3090: text slots against page pixels (docs/gpu/TEXT_SLOTS.md)
 
-**Not scheduled (2026-11-12).** It would repeat published work for a payoff current local models already get from
-their architecture. The section is kept so the test can be run as written if that changes.
+**Closed without being run (2026-11-12).** It would repeat published work for a payoff current local models
+already get from their architecture. The section is kept so the test can be run as written if that changes.
 
-**Why this runs before the remaining image arms.** It needs about one evening of GPU time and decides what the
+**Why it was to run before the remaining image arms (as written on 2026-11-11).** It needs about one evening of GPU time and decides what the
 other arms are for: if slots made from the text tokens carry more per position than vision tokens at the same
 budget, the dense glyph arms (Stage C) and the colour overlay (Run 4) are dropped; the Latin arms stay, as the
 image side of the comparison. Design, gates, rules and predictions are pre-registered in
-[TEXT_SLOTS.md](TEXT_SLOTS.md); the session prompt is at the top of [HANDOFF.md](../HANDOFF.md).
+[TEXT_SLOTS.md](TEXT_SLOTS.md); the session prompt is in the git history (`git show a46cd47:docs/HANDOFF.md`).
 
 **Nothing here has run on a GPU.** The code passed its tests on the tiny CPU model only, so the smoke is the first
 real run: read its log before queueing anything.
@@ -378,7 +390,7 @@ python -m pytest -q encoder_probe/tests/test_text_slots.py encoder_probe/tests/t
 
 ### GPU job limits
 * **One job at a time**, and not while the Runs 1-2 driver is training (17.9 GB per run): stop the driver at a
-  checkpoint first (HANDOFF.md prompt, step 0).
+  checkpoint first (step 0 of the prompt in [HANDOFF.md](../HANDOFF.md)).
 * **Memory (estimate):** Stage 0 peaked at 10.1 GB at batch 4 with two passes through the LLM. Test B makes one
   pass at batch 8 over at most 969 positions (ratio 1; 729 at ratio 2), so expect 10-18 GB. If `nvidia-smi` shows more than 20 GB
   in the smoke, use `--batch-size 4` and twice the steps for every arm. Windows pages GPU memory instead of
@@ -435,10 +447,24 @@ only. The first real request (step 2 of the prompt) is the check.
   `Q4_K_S` weights. Windows pages GPU memory instead of failing: a sudden slowdown means it no longer fits.
 * **Disk:** ~19 GB of model files under `models/qwen38/` (git-ignored: add `models/` to `.git/info/exclude` if
   `git status` lists it).
-* **Time (estimate):** under an hour of GPU time for the 15 arms with thinking off, plus downloads and setup.
+* **Time (estimate):** under an hour of GPU time for the 15 arms (3 documents x 5 arms) with thinking off, plus
+  downloads and setup.
+* **Commands** (the same as in the prompt and in [LOCAL_QWEN.md](LOCAL_QWEN.md); checked against
+  `local_qa.py --help` on 2026-11-13):
+```bash
+cd /c/git/visual-bpe-run && . .venv/env.sh
+python -m pytest -q tests/test_local_qa.py                           # 5 tests, mock server
+python experiments/claude_qa/local_qa.py run --dry-run --doc 0 1 2   # sizes only, no server
+llama-server -m models/qwen38/Qwen3.8-27B-UD-Q4_K_M.gguf --mmproj models/qwen38/mmproj-F16.gguf \
+  -ngl 99 -c 57344 -np 1 --image-max-tokens 4096 --port 8080          # in its own terminal; check flags with --help
+X='--extra {"chat_template_kwargs":{"enable_thinking":false}}'
+python experiments/claude_qa/local_qa.py run --doc 0 $X              # then analyse and the checks, then --doc 1 2
+python experiments/claude_qa/local_qa.py speed --label plain $X      # and --label mtp after restarting the server
+python experiments/claude_qa/local_qa.py analyse                     # -> results/local_qa/qwen38_27b/summary.md
+```
 * **Sending results back:**
 ```bash
-python experiments/claude_qa/local_qa.py analyse
-git add results/local_qa docs/gpu/LOCAL_QWEN.md && git commit -m "Local Qwen3.8-27B: <what ran>"
-git pull --rebase origin claude/validation-harness && git push origin claude/validation-harness
+git add results/local_qa docs/gpu/LOCAL_QWEN.md docs/FINDINGS.md docs/HANDOFF.md
+git commit -m "Local Qwen3.8-27B: page images vs text, results"
+git pull --rebase origin claude/validation-harness && git push origin HEAD:claude/validation-harness
 ```
