@@ -12,9 +12,9 @@ Design, predictions and results: results/atlas/sec/README.md.
     python3 experiments/atlas/repo_atlas_sec.py select   [--work DIR]     # advisory funnel, clones, atlas sizes (no model calls)
     python3 experiments/atlas/repo_atlas_sec.py prepare  [--work DIR]     # exports, atlases, contexts, gold (no model calls)
     python3 experiments/atlas/repo_atlas_sec.py run      [--work DIR] --tasks 3 --cap 25    # first n tasks, all arms
-    python3 experiments/atlas/repo_atlas_sec.py analyse
+    python3 experiments/atlas/repo_atlas_sec.py analyse                   # prints the tables, writes summary.json
 
-Clones, exports, page images and agent transcripts stay in --work; rows, the selection and the summary go to
+Clones, exports, page images and agent transcripts stay in --work; rows, the selection and summary.json go to
 results/atlas/sec/. Rows are appended per (task, arm); finished pairs are skipped (resumable). Errors are
 retried on the next start, never recorded as results; a usage-limit error stops the run.
 """

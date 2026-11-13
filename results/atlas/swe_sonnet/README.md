@@ -1,5 +1,13 @@
 # Sonnet with the repo atlas on the hard coding tasks (Q3)
 
+> **In brief** *(added in the clean-up, 2026-11-12; nothing below this block was changed except links)*
+>
+> **Test 8 of the repo atlas ("Q3"): the atlas does not help a cheaper model either.** Sonnet 5.5 at high effort
+> on the 16 hard tasks, two runs per task and arm, $11.38. Sonnet reads the atlas (20 of 20 lookups, as Opus), but
+> solves 14 of 32 task-runs plain and 13 with the atlas, at 3.7 times the cost ($0.26 against $0.07 per run).
+> Turns lean lower with the atlas (11 of 14 untied tasks, p = 0.057). All atlas tests side by side: [the atlas
+> report](../../../docs/claude/REPO_ATLAS_PLAN.md).
+
 *Pre-registered 2026-11-12, after the legibility gate and the environment validation, before the first scored agent
 run. Design: `docs/claude/REPO_ATLAS_PLAN.md`, "Queued", Q3. Code: `experiments/atlas/repo_atlas_swe_sonnet.py` (tests
 `tests/test_repo_atlas_swe_sonnet.py`), a thin runner that imports Q1's runner `experiments/atlas/repo_atlas_swe_rerun.py`

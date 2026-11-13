@@ -14,7 +14,7 @@ from the prompt cache (a single message is never reused: measured, see the READM
     python3 experiments/atlas/repo_atlas_qa.py run      --work DIR --arms closed map atlas text --cap 22
     python3 experiments/atlas/repo_atlas_qa.py run      --work DIR --arms agent --cap 22 [--agent-n N]
     python3 experiments/atlas/repo_atlas_qa.py judge    --work DIR --cap 22
-    python3 experiments/atlas/repo_atlas_qa.py analyse
+    python3 experiments/atlas/repo_atlas_qa.py analyse                           # prints the tables (kept as summary.md), writes summary.json
 
 Clones, page images and agent transcripts stay in --work; rows, selection, sizes, indexes and the summary go to
 results/atlas/qa/. Rows are appended; finished (question, arm) pairs and judged answers are skipped (resumable).

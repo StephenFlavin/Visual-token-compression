@@ -13,7 +13,7 @@ One question per SWE-bench task: the issue, then "list the files that must chang
     python3 experiments/atlas/repo_atlas_eval.py estimate --work DIR            # list-price estimate per arm
     python3 experiments/atlas/repo_atlas_eval.py run      --work DIR --arms tree map atlas text [--cap 12]
     python3 experiments/atlas/repo_atlas_eval.py run      --work DIR --arms agent --cap 12
-    python3 experiments/atlas/repo_atlas_eval.py analyse
+    python3 experiments/atlas/repo_atlas_eval.py analyse                        # prints the tables (no file written)
 
 Clones, checkouts, page images and agent transcripts live in --work (outside the repo); rows, the selection, the
 context sizes and the atlas indexes go to results/atlas/pilot/. Rows are appended per (task, arm); finished pairs

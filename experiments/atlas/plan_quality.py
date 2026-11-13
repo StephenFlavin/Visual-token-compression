@@ -15,14 +15,16 @@ Layer 3: Claude Code workers with edit tools, graded by the ticket's own tests: 
 
     python3 experiments/atlas/plan_quality.py select                 # fit + closed-book screen beyond the first 80 (cheap)
     python3 experiments/atlas/plan_quality.py prepare                # contexts, groups, size estimate (no calls)
+    python3 experiments/atlas/plan_quality.py estimate               # list-price estimate per layer (no calls)
     python3 experiments/atlas/plan_quality.py plan  --layer 1 [--ids ...] [--planners ...] --cap 45
     python3 experiments/atlas/plan_quality.py judge [--ids ...] --cap 45
     python3 experiments/atlas/plan_quality.py plan  --layer 2 --cap 45
     python3 experiments/atlas/plan_quality.py work  --cap 45 [--max-tickets N]
     python3 experiments/atlas/plan_quality.py extend --cap 45               # layer 1 beyond the layer-3 tickets, whole tickets
-    python3 experiments/atlas/plan_quality.py analyse
+    python3 experiments/atlas/plan_quality.py analyse                # tables and predictions -> summary.md
 
-Rows: results/atlas/plan_quality/{funnel,briefs,judge,groups,work,spend}.jsonl, tickets.json. Clones, exports, venvs,
+Rows: results/atlas/plan_quality/{funnel,briefs,judge,work,spend}.jsonl, tickets.json, summary.md (layer 2 was not
+evaluable and wrote no rows). Clones, exports, venvs,
 pages and transcripts in --work (scratchpad), never in the repository. Every step skips finished rows (resumable).
 """
 from __future__ import annotations

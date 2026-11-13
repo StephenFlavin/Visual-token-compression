@@ -1,5 +1,5 @@
-"""Sonnet with the repo atlas on the hard coding tasks (REPO_ATLAS_PLAN.md Q3): plain vs atlas, two fresh runs per
-task and arm, Claude Code on Sonnet 5.5 at high effort.
+"""Sonnet with the repo atlas on the hard coding tasks (docs/claude/REPO_ATLAS_PLAN.md, test 8 / Q3): plain vs atlas,
+two fresh runs per task and arm, Claude Code on Sonnet 5.5 at high effort.
 
 A thin runner over Q1's (``experiments/atlas/repo_atlas_swe_rerun.py``, imported, not edited): same 16 tasks, prompt,
 tools, flags, atlas pages, environments, grading, memory-off, index blocking and leak scan. What this file adds: the

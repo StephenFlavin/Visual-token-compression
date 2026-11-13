@@ -1,5 +1,12 @@
 # Repo atlas against SWE-QA: does the atlas help answer questions about a repository?
 
+> **In brief** *(added in the clean-up, 2026-11-12; nothing below this block was changed except links)*
+>
+> **Test 2 of the repo atlas: the atlas adds nothing over memory.** SWE-QA, 144 questions on requests, flask and
+> pytest, $20.83. Judge score of 100: no code 75.6, repo map 76.1, atlas 75.4, code as text 75.5 (96 questions),
+> searching agent 79.1 (72 questions; 3.3 points above the atlas, interval 2.3 to 4.4). Predictions S1, S2, S4, S5
+> fail; S3 passes. All atlas tests side by side: [the atlas report](../../../docs/claude/REPO_ATLAS_PLAN.md).
+
 *Pre-registered 2026-11-12, before any scored call. Plan and the earlier pilot: [docs/claude/REPO_ATLAS_PLAN.md](../../../docs/claude/REPO_ATLAS_PLAN.md),
 [results/atlas/pilot/README.md](../pilot/README.md). Code: `experiments/atlas/repo_atlas_qa.py` (tests
 `tests/test_repo_atlas_qa.py`). Results go below the "Results" heading; nothing above it changes after the first

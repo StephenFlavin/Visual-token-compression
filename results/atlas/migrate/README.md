@@ -1,5 +1,13 @@
 # Repo atlas, migration test: does the C project as page images help Claude Code migrate it to Rust?
 
+> **In brief** *(added in the clean-up, 2026-11-12; nothing below this block was changed except links)*
+>
+> **Test 5 of the repo atlas: no effect on a C-to-Rust migration.** 14 CRUST-Bench projects x 3 arms, $24.01.
+> Every arm (C files; C files and atlas; atlas only, no C files) passes all tests on the same 12 of 14 projects;
+> turns and cost are equal within noise. The projects are small (atlases of 2k-13k image tokens) and the Rust
+> interfaces and tests carry much of the behaviour. All atlas tests side by side: [the atlas
+> report](../../../docs/claude/REPO_ATLAS_PLAN.md).
+
 *Pre-registration, 2026-11-12, written and pushed before the first agent run. Runner:
 `experiments/atlas/repo_atlas_migrate.py` (tests `tests/test_repo_atlas_migrate.py`). Plan and earlier atlas results:
 [docs/claude/REPO_ATLAS_PLAN.md](../../../docs/claude/REPO_ATLAS_PLAN.md), [results/atlas/pilot/README.md](../pilot/README.md).*

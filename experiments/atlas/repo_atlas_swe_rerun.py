@@ -1,5 +1,5 @@
-"""Repo atlas on hard coding tasks, again (REPO_ATLAS_PLAN.md Q1): plain vs atlas, two fresh runs per task and arm,
-auto-memory off, package index blocked for every run.
+"""Repo atlas on hard coding tasks, again (docs/claude/REPO_ATLAS_PLAN.md, test 6 / Q1): plain vs atlas, two fresh
+runs per task and arm, auto-memory off, package index blocked for every run.
 
 Same 16 SWE-rebench tasks as the first test (``results/atlas/swe/``, smolvm-172 left out there for a leak), same
 prompt, tools, model, effort, atlas pages and grading: everything comes from ``experiments/atlas/repo_atlas_swe.py``

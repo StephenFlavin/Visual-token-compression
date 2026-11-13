@@ -1,5 +1,14 @@
 # Plan quality: can an orchestrator that reads the repo atlas once write good briefs for worker agents?
 
+> **In brief** *(added in the clean-up, 2026-11-12; nothing below this block was changed except links)*
+>
+> **The plan-quality test: an orchestrator that plans from the atlas is not worth its cost.** 33 tickets x 4
+> planners, 16 tickets x 4 worker arms, $44.25. Briefs name the same share of the fix's files from the atlas
+> (50.1%), a file list (48.1%) and a searching scout (49.8%), at $0.41 / $0.05 / $0.15 per brief. The planner's
+> size estimate does not track the real fix (rank correlation 0.24) and its worker choice solved 8 of 16 against
+> 11 for always-Opus. Haiku and Sonnet solved the same 8 tickets, Opus 3 more. Summary with charts:
+> [docs/claude/PLAN_QUALITY_TEST.md](../../../docs/claude/PLAN_QUALITY_TEST.md).
+
 *Pre-registered 2026-11-12, before the first scored call (selection screens and a model-id smoke test came before
 it; $0.50). Design: [docs/claude/PLAN_QUALITY_TEST.md](../../../docs/claude/PLAN_QUALITY_TEST.md), kept as written; this file fixes
 what the design leaves open. Code: `experiments/atlas/plan_quality.py` (tests `tests/test_plan_quality.py`). Results go

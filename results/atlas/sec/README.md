@@ -1,5 +1,13 @@
 # Repo atlas: does it help find a security flaw?
 
+> **In brief** *(added in the clean-up, 2026-11-12; nothing below this block was changed except links)*
+>
+> **Test 3 of the repo atlas: the atlas alone does not help find a flaw.** 12 advisories newer than the model, 4
+> arms, $20.70. Fixed file in the top 5 findings: file list 10, atlas 9, searching agent 7, agent with the atlas
+> 10 of 12. The agent with the atlas beat the plain agent 3 tasks to 0 (p = 0.25) in about half the turns at 1.5
+> times the cost; that hint was never repeated, and the similar hint in the hard-task test vanished on repeat. All
+> atlas tests side by side: [the atlas report](../../../docs/claude/REPO_ATLAS_PLAN.md).
+
 *Pre-registered 2026-11-12, before any scored call. Code: `experiments/atlas/repo_atlas_sec.py` (tests
 `tests/test_repo_atlas_sec.py`). Plan of the atlas: [docs/claude/REPO_ATLAS_PLAN.md](../../../docs/claude/REPO_ATLAS_PLAN.md).
 Results are added below this pre-registration once the calls are in; nothing above the "Results" heading changes

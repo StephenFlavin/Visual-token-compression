@@ -1,5 +1,13 @@
 # Repo atlas, stage 1 pilot: where does the change go?
 
+> **In brief** *(added in the clean-up, 2026-11-12; nothing below this block was changed except links)*
+>
+> **Test 1 of the repo atlas: no result, the score hit its ceiling.** 8 SWE-bench tasks, 5 arms, 36 calls, $7.49.
+> Every arm named every changed source file on every task (file list, repo map, atlas and searching agent 8 of 8;
+> code as text 4 of 4), so the arms cannot be told apart. The searching agent cost $0.038 per task, the atlas
+> $0.23, the code as text $1.18. The full stage 1 was not run. All atlas tests side by side: [the atlas
+> report](../../../docs/claude/REPO_ATLAS_PLAN.md).
+
 *Pre-registered 2026-11-12, before any scored call. Plan: [docs/claude/REPO_ATLAS_PLAN.md](../../../docs/claude/REPO_ATLAS_PLAN.md).
 Code: `experiments/atlas/repo_atlas_eval.py` (tests `tests/test_repo_atlas_eval.py`). Results are added below this
 pre-registration once the calls are in; nothing above the "Results" heading changes after the first call, except

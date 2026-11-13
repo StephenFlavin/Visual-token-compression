@@ -9,7 +9,7 @@ file, and rendered as pages at the hooks' density (88.2 px² per character). Nex
     python3 experiments/atlas/repo_atlas.py build <repo dir> --out <dir>               # pages + index.json + index.txt
 
 Not one image: a model reads pages of at most 1932 px, and a request above ~175k image tokens silently loses its
-first pages (AGENTS.md), so ``fits`` in the stats means the atlas is at most FIT_TOKENS image tokens.
+first pages (docs/GOTCHAS.md), so ``fits`` in the stats means the atlas is at most FIT_TOKENS image tokens.
 """
 from __future__ import annotations
 

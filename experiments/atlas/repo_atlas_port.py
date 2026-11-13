@@ -2,7 +2,7 @@
 
 Benchmark: RepoMod-Bench (github.com/Modelcode-ai/mcode-benchmark, commit 73093fc): whole-repository ports graded by
 pytest suites that drive the built CLI. Project: ``gitleaks`` (Go -> Rust, v8.30.0 at ca20267, 35 tests). Design,
-pre-registration and results: results/atlas/port/README.md; plan: docs/claude/REPO_ATLAS_PLAN.md (Q2).
+pre-registration and results: results/atlas/port/README.md; plan: docs/claude/REPO_ATLAS_PLAN.md (test 7 / Q2).
 
     python3 experiments/atlas/repo_atlas_port.py prepare             # atlas (pages + index) and its size (no Claude calls)
     python3 experiments/atlas/repo_atlas_port.py reference           # build the Go original, run the hidden tests on it

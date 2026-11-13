@@ -1,5 +1,13 @@
 # Repo atlas on hard coding tasks, again: two clean runs per task and arm (Q1)
 
+> **In brief** *(added in the clean-up, 2026-11-12; nothing below this block was changed except links)*
+>
+> **Test 6 of the repo atlas, the repeat of the hard-task test ("Q1"): the atlas's lead is gone.** The same 16
+> tasks, two fresh runs per task and arm, auto-memory off, 64 runs, $35.07. Task-runs solved of 32: plain 19,
+> atlas 17. Turns lower with the atlas on 10 of 15 untied tasks (p = 0.30); cost 3.1 times ($0.83 against $0.27
+> per run). The first test's transcripts show no shared memory, so its 11 against 8 was run-to-run variation. All
+> atlas tests side by side: [the atlas report](../../../docs/claude/REPO_ATLAS_PLAN.md).
+
 *Pre-registered 2026-11-12, before the first scored agent run. Design: `docs/claude/REPO_ATLAS_PLAN.md`, "Queued
 (2026-11-12)", Q1. Code: `experiments/atlas/repo_atlas_swe_rerun.py` (tests `tests/test_repo_atlas_swe_rerun.py`), which
 imports the first test's runner `experiments/atlas/repo_atlas_swe.py` unchanged. First test:

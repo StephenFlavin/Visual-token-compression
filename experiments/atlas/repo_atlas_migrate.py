@@ -7,6 +7,8 @@ results: results/atlas/migrate/README.md.
     python3 experiments/atlas/repo_atlas_migrate.py prepare      # clone, unpack, select, validate, atlases (no Claude calls)
     python3 experiments/atlas/repo_atlas_migrate.py run [--projects ...] [--workers 2]   # agent runs, resumable
     python3 experiments/atlas/repo_atlas_migrate.py report       # tables + paired tests -> summary.md
+    python3 experiments/atlas/repo_atlas_migrate.py rebaseline   # re-validate with per-binary grading -> validate_v2.jsonl
+    python3 experiments/atlas/repo_atlas_migrate.py regrade      # re-grade kept crates per binary (old score: grade_v1)
 
 Arms (Claude Code headless, Opus 5.5, --effort high, tools Bash/Read/Edit/Write, 60 turns, 30 min, $5 per run):
 ``plain`` (C source + Rust skeleton), ``atlas`` (the same plus the C project as pages in the first message),

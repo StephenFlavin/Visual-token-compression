@@ -16,9 +16,11 @@ Arms (Claude Code headless, Opus 5.5, --effort high, tools Bash/Read/Edit/Write,
     python3 experiments/atlas/repo_atlas_swe.py inspect                 # dataset sizes and dates (no calls)
     python3 experiments/atlas/repo_atlas_swe.py select [--workers 2]    # fit, closed-book screen, local validation
     python3 experiments/atlas/repo_atlas_swe.py run --cap 35 [--ids ...] [--max-tasks N]
-    python3 experiments/atlas/repo_atlas_swe.py analyse
+    python3 experiments/atlas/repo_atlas_swe.py analyse                 # tables and paired tests -> summary.md
+    python3 experiments/atlas/repo_atlas_swe.py repair                  # recount turns and tokens over all result events
 
-Rows: results/atlas/swe/{funnel,validate,screen,runs,spend}.jsonl. Clones, venvs, pages and transcripts in
+Rows: results/atlas/swe/{funnel,validate,runs,spend}.jsonl (the closed-book screen's answer is in each funnel
+row), contaminated.json (tasks left out for a leak), summary.md. Clones, venvs, pages and transcripts in
 --work (scratchpad), never in the repository.
 """
 from __future__ import annotations

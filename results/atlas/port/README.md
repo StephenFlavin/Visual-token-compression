@@ -1,5 +1,13 @@
 # Repo atlas, Q2: does a whole-repository port (Go to Rust) go better with the source as page images?
 
+> **In brief** *(added in the clean-up, 2026-11-12; nothing below this block was changed except links)*
+>
+> **Test 7 of the repo atlas ("Q2"): no effect on a larger port, and only one run per arm.** gitleaks, 22k lines
+> of Go to Rust, $23.14. Plain and atlas both pass 35 of 35 hidden tests; 102 against 99 turns, $11.32 against
+> $11.20. Neither port scans concurrently (the automatic counter in `summary.md` flags the plain port for one
+> pipe-reading thread; read by hand, neither is concurrent). All atlas tests side by side: [the atlas
+> report](../../../docs/claude/REPO_ATLAS_PLAN.md).
+
 *Pre-registration, 2026-11-12, written and pushed before the first scored agent run. Runner:
 `experiments/atlas/repo_atlas_port.py` (tests `tests/test_repo_atlas_port.py`). Plan: [docs/claude/REPO_ATLAS_PLAN.md](../../../docs/claude/REPO_ATLAS_PLAN.md)
 (Queued, Q2). Earlier migration test: [results/atlas/migrate](../migrate/README.md).*

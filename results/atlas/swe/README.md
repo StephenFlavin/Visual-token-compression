@@ -1,5 +1,14 @@
 # Repo atlas on hard, fresh coding tasks: does it change what Claude Code solves?
 
+> **In brief** *(added in the clean-up, 2026-11-12; nothing below this block was changed except links)*
+>
+> **Test 4 of the repo atlas: a lead for the atlas that did not repeat.** 16 hard SWE-rebench tasks, one run per
+> arm, $28.45. Solved: plain agent 8, with a repo map 9, with the atlas 11 (3 tasks to 0, p = 0.25); fewer turns
+> with the atlas (median 10 against 12.5, p = 0.006) at 2.6 times the cost. **The repeat
+> ([swe_rerun](../swe_rerun/README.md), two runs per arm) found plain 19 and atlas 17 of 32 task-runs:** this
+> test's lead was run-to-run variation. All atlas tests side by side: [the atlas
+> report](../../../docs/claude/REPO_ATLAS_PLAN.md).
+
 *Pre-registered 2026-11-12, before the first agent run. Code: `experiments/atlas/repo_atlas_swe.py` (tests
 `tests/test_repo_atlas_swe.py`). Plan and pilot: [docs/claude/REPO_ATLAS_PLAN.md](../../../docs/claude/REPO_ATLAS_PLAN.md),
 [results/atlas/pilot/README.md](../pilot/README.md). Results go below the "Results" heading. Nothing above it
