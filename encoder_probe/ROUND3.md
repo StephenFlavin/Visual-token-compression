@@ -1,36 +1,85 @@
-# Round 3: can a small VLM learn to read dense codes, and does it shrink the KV cache?
+# Round 3: can a small vision-language model learn to read the dense codes?
 
-## Status and summary (2026-11-05)
-**Read this block, then skip to what you need.** Everything below it is the dated pre-registered record (design,
-predictions, decision rules, amendments), unchanged except for short "superseded" pointers. Tables and figures:
-[RESULTS.md, round 3](RESULTS.md#round-3-qwen25-vl-3b-can-a-vlm-learn-to-read-the-codes-2026-11-05).
-Model: Qwen2.5-VL-3B (448 px page = 256 tokens). Moonshot = `rgb3_lg_pb_h5`, three learned-glyph streams in R/G/B.
+**Status: finished at a short budget on 2026-11-05; closed on 2026-11-12.** Four of the planned steps ran (G0, Q1,
+G2-lite, R3-1). The longer runs and the long-context benchmark (R3-2) were never run: later measurements made them
+pointless for the glyph codes (see "What overtook it"). The page below the line is the dated pre-registered record.
 
-| gate | what it tested | result | verdict |
+## The result
+
+**The moonshot page is readable from its raw pixels (1.07% character error) and is not read by Qwen2.5-VL-3B, frozen
+or fine-tuned.** After 1000 fine-tuning steps the model reads only plain Latin at 28 characters per vision token,
+and that only partly (55% error against 88.5% for its blind control). Latin at 72 characters per token gets the
+gist. The learned glyphs (107) and the moonshot (322) score exactly as their blind controls: the model takes
+nothing from those images.
+
+Terms used here:
+* **Qwen2.5-VL-3B:** an open vision-language model. Its vision tower (ViT, 32 transformer blocks) turns a 448-px
+  page into 14-px patch features; a **merger** joins each 2x2 group of patches into one **vision token** of 28x28
+  px (256 per page); its language model (LLM) reads those tokens. A Qwen text token holds 4.33 characters of this
+  text.
+* **Moonshot** (`rgb3_lg_pb_h5`): three streams of the learned whole-pixel glyph alphabet, one per colour channel,
+  322 characters per vision token. In effect a colour QR code.
+* **Arms:** `latin_p8` and `latin_p5` are plain DejaVu Sans text with 8-px and 5-px lines (28 and 72 characters
+  per token); `lg_pb_h5` is one layer of the learned glyphs (107); `rgb3_p8` is three layers of plain text (73);
+  `rgb3_lg_free_h4` is a grey-level variant of the moonshot (406), dropped after Q1.
+* **CER:** character error rate. Fluent text unrelated to the page scores about 80%, so values above about 75%
+  mean "not read".
+* **Blind control:** the same run with each page's image swapped for another page's. The image then says nothing,
+  so the blind score is what the model reaches from its knowledge of English alone. An arm has read its page only
+  by as much as it beats its own blind control.
+* **Gate:** a pass/fail check that decides whether the next step is worth running (G0 to G4 below).
+
+```mermaid
+flowchart TD
+    G0["G0: is the moonshot page<br/>readable from raw pixels?"] -->|"yes: 1.07% error"| Q1
+    Q1["Q1: at which block of the frozen<br/>vision tower do its pixels fade?"] -->|"steadily with depth; nearly gone<br/>after the 2x2 patch merger"| G2
+    G2["G2-lite: can a probe read it from<br/>the frozen tower, with the merger<br/>frozen, trained or bypassed?"] -->|"no: 86% / 85% / 72% error;<br/>bypassing the merger helps a little"| R31
+    R31["R3-1: fine-tune the model,<br/>its language model reads,<br/>each arm against a blind control"] -->|"Latin at 28 chars/token read (55% vs 88.5%);<br/>Latin at 72: gist only;<br/>glyphs and moonshot: same as blind"| END["Gate G3 cannot be decided:<br/>no arm is near 3% error"]
+```
+
+| Step | What it tested | Result | Verdict |
 |---|---|---|---|
-| G0 | is the moonshot page (322 chars/token) readable from raw pixels? identity28, 200 pages, CPU | **1.07% CER** | pass (< 3%) |
-| Q1 | linear pixel readout of each frozen ViT block | glyph codes stay pixel-like to the last block (lg_pb_h5 final 0.65, moonshot 0.47 ink MCC); every code is at <= 0.30 after the 2x2 merger; Latin loses its readout by block 24 although Qwen reads it | pixels are lost at the merger; rgb3_lg_free_h4 dropped |
-| G2-lite | frozen / trained (LR 1e-4) / no merger, GridProbe, 500 pages, 3000 steps, CPU | moonshot 86.1 / 84.6 / **71.9%**, blind floor 99.5%; reference chars matched ~15 / 15 / **29%** | pre-registered branch: **"the ViT output is the wall at this budget"**; post hoc, the direct arm reads ~2x the merger arms |
-| R3-1 (G3) | LoRA fine-tune, the LLM as reader, **1000 steps** (5000 planned), RTX 4090, each arm vs its own blind control | latin_p8 (28): **55.0% CER vs blind 88.5%**, MC 0.88 vs 0.25, val loss 1.12 vs 2.48. latin_p5 (72): gist only (val loss 9.9% below blind, MC p = 0.02); lg_pb_h5 (107), moonshot (322): not read (loss = blind's) | latin_p8 read, latin_p5 partly; **G3 undecidable** (no arm near 3%). Analysis: [docs/background/ANALYSIS.md](../docs/background/ANALYSIS.md) |
-| R3-0, G1, G4, R3-2 | frozen-Qwen probe grid, glyph-ID probe, QA vs KV bytes | not run | - |
+| G0 | Is the moonshot page (322 chars/token) readable from raw pixels? A small reader trained on the pixel patches, 200 pages, CPU | **1.07% CER** | pass (bar: under 3%) |
+| Q1 | A linear map from each block of the frozen vision tower back to the page's pixels: how much of the ink is still there? (MCC: 1 = exact, 0 = chance) | Glyph codes fade slowly (`lg_pb_h5` 0.65 and the moonshot 0.47 at the last block), then every code is at 0.30 or below after the merger. Latin loses its pixel readout by block 24 although Qwen reads Latin | The pixels are lost by the merger. A linear readout is a lower bound, not a readability score. `rgb3_lg_free_h4` dropped |
+| G2-lite | A small probe reading the moonshot from the frozen vision tower with the merger frozen / trained (learning rate 1e-4) / bypassed; 500 pages, 3000 steps, CPU | 86.1 / 84.6 / **71.9%** CER against a blind control at 99.5%; share of the true characters matched about 15 / 15 / **29%** | Pre-registered branch: **"the vision tower's output is the wall at this budget"**. Post hoc: bypassing the merger reads about twice as much |
+| R3-1 (gate G3) | Fine-tune (LoRA adapters on the language model, plus the merger and the last 4 vision blocks), the language model as reader, **1000 steps** (5000 planned), RTX 4090, each arm with its own blind control | `latin_p8` (28): **55.0% CER against 88.5% blind**, multiple choice 0.88 against 0.25, validation loss 1.12 against 2.48. `latin_p5` (72): gist only (validation loss 9.9% below blind, multiple choice p = 0.02). `lg_pb_h5` (107) and the moonshot (322): not read (loss equal to blind's) | `latin_p8` read, `latin_p5` partly; **G3 undecidable** (no arm near 3%) |
+| R3-0, G1, G4, R3-2 | A frozen-Qwen probe grid, a glyph-identity probe, question answering against cache size | not run | - |
 
 ![R3-1: each arm against its blind control](img/r31_vs_blind.png)
 
-* **Pre-registered predictions** (end of file): 1 (R3-0) not tested; 2 (R3-1: a code < 3% at >= 1.5x Latin)
-  not decidable at 1000 steps; 3 (R3-2) not tested. No decision rule (Go / Latin-only / Kill) applies yet.
-* **Amendments that changed the protocol** (all dated below): Latin is swept up to ~100 chars/token (amendment 1);
-  pretrained modules get LR <= 1e-4 because the merger collapses at 2e-3 (amendment 2); GridProbe under-reads Latin,
-  so the Latin comparison moves to G3 (limitation); every CER is quoted against its own blind floor with its op
-  split (required reference). Blind floors differ by code (R3-1: 77.8% to 89.9%).
-* **Reading of the evidence.** The moonshot's fine-tuned losses equal its blind run's to 3 decimals, and lg_pb_h5
-  (107) is at its floor too, so density alone does not explain the failure. A 1000-step result is "not reached at
-  this budget", not "impossible".
-* **Analysis** ([docs/background/ANALYSIS.md](../docs/background/ANALYSIS.md)): measured against its blind, latin_p5 gets the gist
-  (val loss 9.9% below blind, MC p = 0.02); the glyph codes get nothing. Q1, G2-lite and R3-1 put the glyph codes'
-  loss inside the frozen ViT, upstream of R3-1's trained blocks 28-31.
-* **Next** (R3-1b stage A', proposed below): a 1000-step vision-side diagnostic (ViT blocks 8-31, LR 1e-4) on
-  latin_p8, lg_pb_h5 and the moonshot with blinds; a Latin density sweep (p12, p10); then 5000-step Latin arms on
-  the better recipe. R3-2 only after a code passes G3.
+*Each blue bar is a fine-tuned arm, the grey bar next to it its blind control. Only where they differ has the
+model read the page.*
+
+Full tables and the other figures:
+[RESULTS.md, round 3](RESULTS.md#round-3-qwen25-vl-3b-can-a-vlm-learn-to-read-the-codes-2026-11-05). Analysis
+against the blind controls: [docs/background/ANALYSIS.md](../docs/background/ANALYSIS.md).
+
+## How the pre-registration fared
+
+* **Predictions** (end of this file): 1 (R3-0) not tested; 2 (after equal fine-tuning a dense code reaches under
+  3% CER at 1.5 times Latin's density) not decidable at 1000 steps, and no dense code showed any reading at all;
+  3 (R3-2) not tested. None of the decision rules (Go / Latin-only / Kill) could be applied.
+* **G2-lite's own predictions:** trained merger beats frozen by 20 points: **failed** (1.5 points). Bypassing the
+  merger no better than the trained merger: **failed** (12.7 points better). `latin_p8` under 5%: **failed**
+  (79.2%). Moonshot not under 10%: **passed**.
+* **Amendments that changed the protocol** (all dated below): Latin is pushed up to about 100 characters per token
+  so that codes are compared with a fair baseline (amendment 1); pretrained modules get a learning rate of at most
+  1e-4, because the merger collapses at 2e-3 (amendment 2); the probe under-reads Latin, so the Latin comparison
+  moved to the fine-tune; every error rate is quoted against its own blind control, with its split into
+  substitutions, insertions and deletions.
+
+## What overtook it
+
+The next steps written here on 2026-11-05 (a vision-side diagnostic "stage A'", a Latin density sweep, 5000-step
+Latin arms) are kept below as written, but were replaced:
+
+* **Run 0** ([docs/gpu/PLAN_3090.md](../docs/gpu/PLAN_3090.md)) measured what the frozen model takes from a page:
+  at most 12.6 bits per vision token on natural text, at 28 characters per token, and 1.7 bits at 72. The moonshot
+  needs about 270. That, not a longer fine-tune, is what closed the glyph line.
+* The trained-vision-tower runs on Latin (the fair last test) are parked in the same document; the dense-glyph and
+  colour stages after them are closed.
+* The overlay was tested on its own with plain Latin ([docs/gpu/COLOUR_GIST.md](../docs/gpu/COLOUR_GIST.md)), and
+  an own encoder was tried ([docs/gpu/OWN_ENCODER.md](../docs/gpu/OWN_ENCODER.md)).
 
 <details><summary>G2-lite and Q1 figures</summary>
 
@@ -40,6 +89,12 @@ Model: Qwen2.5-VL-3B (448 px page = 256 tokens). Moonshot = `rgb3_lg_pb_h5`, thr
 </details>
 
 ---
+
+# The pre-registered record (design, gates, amendments and results as they were written)
+
+Everything below is dated and unchanged except for short "superseded" pointers and four rounding corrections of Q1
+values marked "(corrected 2026-11-12)". KV cache = the per-position memory a language model keeps for its context;
+the original aim was to fit more document per GB of it.
 
 Written 2026-11-04, before any round-3 code or run. Rounds 1-2 (RESULTS.md, ROUND2.md) are unchanged.
 
@@ -86,9 +141,9 @@ panel `docs/img/q1_readout_rgb3_lg_pb_h5.png` (one test page, readout per layer,
 from each feature to the clean pixels it covers. 64 train pages (lambda chosen on 16 of them), 16 held-out test
 pages, 448 px. Hidden states are put back in raster order: the merger rebuilt from them equals pooler_output exactly,
 and the patch-embed readout gives R^2 = 1. Ink MCC (0 = chance) by depth, b8 / b16 / b24 / b28 / final / merger:
-rgb3_lg_pb_h5 (322 chars/token) 0.86 / 0.79 / 0.64 / 0.56 / 0.47 / 0.29; rgb3_lg_free_h4 (406) 0.57 / 0.43 / 0.22
-/ 0.16 / 0.08 / 0.00; lg_pb_h5 (107) 1.00 / 1.00 / 0.91 / 0.81 / 0.65 / 0.30; rgb3_p8 (73) 0.63 / 0.48 / 0.19 /
-0.07 / 0.05 / 0.10; latin_p8 (28) 0.89 / 0.67 / 0.18 / 0.02 / 0.02 / 0.03; latin_p16 (6.8) 0.94 / 0.85 / 0.39 /
+rgb3_lg_pb_h5 (322 chars/token) 0.85 / 0.79 / 0.64 / 0.57 / 0.47 / 0.29 (corrected 2026-11-12 from 0.86 and 0.56); rgb3_lg_free_h4 (406) 0.57 / 0.43 / 0.22
+/ 0.16 / 0.08 / 0.00; lg_pb_h5 (107) 1.00 / 1.00 / 0.91 / 0.81 / 0.65 / 0.30; rgb3_p8 (73) 0.64 / 0.48 / 0.19 /
+0.07 / 0.04 / 0.10 (corrected from 0.63 and 0.05); latin_p8 (28) 0.89 / 0.67 / 0.18 / 0.02 / 0.02 / 0.03; latin_p16 (6.8) 0.93 / 0.85 / 0.39 /
 0.08 / 0.04 / 0.06. DeepEncoder calibration: latin_p8 0.00, rgb3_lg_pb_h5 0.29.
 What it shows:
 * The Latin controls lose their linear pixel readout by b24-b28, yet Qwen reads Latin. **A linear readout is a lower
@@ -198,9 +253,11 @@ Latin gets the identical recipe, steps and data. Memory and time figures are est
   amount of model training helps; drop that code.
 * **Stage A = R3-1 as above** (LoRA r=16 + merger + last 4 ViT blocks, 5k steps). Go to stage B for a code only if
   its held-out CER is still falling at 5k, or it plateaus well above its ceiling while Latin converges.
+* *(2026-11-12: stage A' and stage B below were not run in this form; the trained-ViT runs moved to
+  [docs/gpu/PLAN_3090.md](../docs/gpu/PLAN_3090.md), where they are parked.)*
 * **Stage A' (proposed 2026-11-05 from docs/background/ANALYSIS.md, after R3-1's 1000-step rows, before any A' row):** the
   same recipe with `--vision-blocks 24 --lr-vision 1e-4` (trains from block 8, where Q1's moonshot ink MCC is still
-  0.86; R3-1 trained only from block 28, MCC 0.56, at 2e-5). 1000 steps, one run name, arms latin_p8 (positive
+  0.85; R3-1 trained only from block 28, MCC 0.57, at 2e-5; both corrected 2026-11-12). 1000 steps, one run name, arms latin_p8 (positive
   control), lg_pb_h5, rgb3_lg_pb_h5, each with `--blind-images`. Estimated peak ~18-19 GB.
   * Primary metric: val-loss gain vs the arm's own blind at step 1000, on the same targets. Noise in the R3-1 glyph
     arms is <= 0.005 nats per text token.
@@ -251,7 +308,7 @@ Source: [docs/background/research/2026-11-04_rgb3_lg_go_no_go_report.md](../docs
 | Code (chars/token) | block 8 | block 24 | final | after merger |
 |---|---|---|---|---|
 | latin_p8 (~28) | 0.89 | 0.18 | 0.02 | 0.03 |
-| rgb3_p8 (~73) | ~0.64 | ~0.19 | ~0.05 | ~0.10 |
+| rgb3_p8 (~73) | ~0.64 | ~0.19 | ~0.04 | ~0.10 |
 | lg_pb_h5 (~107) | 1.00 | 0.91 | 0.65 | 0.30 |
 | rgb3_lg_pb_h5 (322) | ~0.85 | ~0.64 | ~0.47 | 0.29 |
 | rgb3_lg_free_h4 (405) | ~0.57 | ~0.22 | ~0.08 | ~0.00 |
@@ -446,7 +503,7 @@ chars, the share of reference characters the alignment matches.
 |---|---|---|---|---|---|
 | latin_p8 (28.1) | not run | 79.2%: del 74 / sub 5, len 0.26, **correct 21%**, CTC 2.79 | not run | 77.8% (collapsed merger), CTC 2.77 | not run |
 | lg_pb_h5 (~107) | not run | not run | not run | not run | not run |
-| rgb3_lg_pb_h5 (321.6) | 86.1%, CTC 4.55; 3 stored samples: del 83 / sub 2, len 0.17, correct ~15% | 84.6%: del 82 / sub 2, len 0.18, **correct 15%**, CTC 4.51 | 71.9%: del 46 / sub 25, len 0.55, **correct 29%**, CTC 3.31 | stopped at step 600 (99.8% at 500, collapsed) | 99.5% at 1500 steps: del 99, len 0.005, correct 1%, CTC 4.73 |
+| rgb3_lg_pb_h5 (321.6) | 86.1%, CTC 4.55; 3 stored samples: del 83 / sub 2, len 0.17, correct ~15% | 84.6%: del 82 / sub 2, len 0.18, **correct 15%**, CTC 4.51 | 71.9%: del 46 / sub 25, len 0.55, **correct 29%**, CTC 3.31 | stopped at step 600 (99.8% at 500, collapsed) | 99.5% at 1500 steps: del 99, len 0.005, correct 0.5%, CTC 4.73 |
 | latin_p16 (6.8; 100 pages, 1000 steps, diagnostic) | 75.5% (run_probe2: 74.5%); 3 stored samples: len 0.31, correct ~27% | - | - | - | 87.3%: del 81 / sub 6, len 0.19, correct 13%, CTC 1.07 |
 
 * Val curves (steps 500-3000):
@@ -510,6 +567,7 @@ Ways to push density past the literature's 30-90 chars/token, each testable on i
 6. **Stage B / C.** Full ViT training, then larger models or continued pretraining (R3-1b).
 
 ### R3-2: long-context benchmark (the goal)
+*Status 2026-11-12: built and CPU-tested, never run. It was gated on a code passing G3, and none did.*
 * Documents: concatenated held-out WikiText, 10k-1M chars. Inputs: (a) plain text tokens, (b) Latin page images,
   (c) dense-code page images, all into the fine-tuned model (and (a), (b) into the base model as references).
 * Tasks: needle-in-a-haystack (a random fact sentence inserted at depth 0-100%), and short-answer QA / cloze on
