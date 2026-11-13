@@ -1,9 +1,50 @@
-# Own encoder for the moonshot: plan, costs, and Stage 0 (2026-11-05)
+# Training an encoder ourselves: the plan, and the one experiment that ran (Stage 0)
 
-Why this exists: Qwen2.5-VL-3B's pretrained ViT loses the glyph codes. Q1, G2-lite and R3-1 all locate the loss
-inside it ([ANALYSIS.md](../background/ANALYSIS.md)). The remaining route for the moonshot is an encoder we train ourselves. This
-page covers what that involves, what it costs, and the first experiment (Stage 0), which is pre-registered below and
-ready to run on a rented RTX 4090. Time, memory and cost figures are **estimates** unless marked measured.
+**Status: Stage 0 ran on 2026-11-05/06 on a rented RTX 4090 and was inconclusive. Stages 1 and 2 were never run.
+Closed 2026-11-12.** The follow-up design on the text side (Test B, [TEXT_SLOTS.md](TEXT_SLOTS.md)) was built but
+not scheduled.
+
+## The result
+
+**The control that was supposed to work did not, so nothing can be concluded about density.**
+
+* **Why this was tried.** Qwen2.5-VL-3B's pretrained vision tower loses the glyph pages
+  ([ANALYSIS.md](../background/ANALYSIS.md)), so the remaining route for the moonshot (learned glyphs in three
+  colour channels, 322 characters per vision token) was an encoder trained for it.
+* **The observation that reshaped it.** Once the encoder is ours, the pixels do no work: we would render text we
+  already have and train a network to undo the rendering. Whether one vector can carry 75 text tokens' worth of
+  content can be asked without images. That is Stage 0: a compressor on the text side packs a 480-token window
+  into a few vectors ("slots"), and the unmodified language model has to rebuild the text from them.
+* **What happened.** At 4 text tokens per slot, which published work reports as nearly lossless, the rebuilt text
+  had 64.0% character error after 8000 steps (its blind control: 77.8%). At 16 tokens per slot: 78.1% (blind
+  80.3%). The model writes fluent text on the right topic and keeps some names, but does not copy: gist, not
+  reconstruction, at both ratios. The moonshot's ratio (80) was not run.
+* **How to read it.** The pre-registered rule for a failed control says: conclude nothing about density. The
+  recipe learns too slowly at this budget; that is not evidence for or against any ratio.
+* **The other own-encoder attempt** was a small vision encoder trained from scratch on CPU (S1, in
+  [COLOUR_GIST.md](COLOUR_GIST.md#s1-small-vlm-with-a-from-scratch-vision-encoder-cpu-pre-registered-2026-11-06-before-any-s1-row)).
+  Its one-layer control never became readable either.
+
+| Text tokens per slot | Steps | Characters per slot | Character error (blind control) | Loss (blind), nats per token |
+|---:|---:|---:|---:|---:|
+| 4 | 3000 | 17.6 | 74.8% (79.0%) | 1.64 (2.48) |
+| 4 | 8000 | 17.6 | 64.0% (77.8%) | 1.09 (3.04) |
+| 16 | 8000 | 70.2 | 78.1% (80.3%) | 2.12 (2.54) |
+
+Rows: `encoder_probe/results/stage0/runs.jsonl`; full results under
+[Stage 0 results](#stage-0-results-2026-11-06-runpod-rtx-4090).
+
+**Terms.** *Slot:* one vector placed in the language model's input in place of several text tokens. *Ratio:* text
+tokens per slot. *Blind control:* the same trained model rebuilding each window from another window's slots, so
+the slots say nothing about the text; it shows what the decoder writes from its knowledge of English alone.
+*CER:* character error rate; unrelated fluent text scores about 80%. *LoRA:* small trainable matrices added to a
+frozen model. *KV cache:* the memory a language model keeps per context position; fewer positions per character
+was the saving being chased. *ICAE, C3, gist tokens:* published text-side compressors (figures quoted from their
+papers below are not re-checked here).
+
+The rest of this page is the plan as written on 2026-11-05 (what an own encoder involves, what it would cost),
+then the pre-registered Stage 0 design, its runbook, the amendment and the full results. Time, memory and cost
+figures are **estimates** unless marked measured.
 
 ## What an own encoder is
 The current pipeline is: moonshot page → Qwen ViT (32 blocks) → 2x2 merger → 256 vectors → Qwen LLM. An own encoder
@@ -72,6 +113,7 @@ s/step, 3B LLM with LoRA). Assumed: a 3090 does ~60% of a 4090, one H100 ~3-4x.
   GPU-days).
 
 ## Stages and gates
+*(2026-11-12: only Stage 0 ran. Stages 1 and 2 were not started.)*
 1. **Stage 0: text-side ceiling (this page, below).** How many chars per slot survive a learned compressor into
    Qwen's frozen LLM? This sets the density target for everything after it.
 2. **Stage 1: the pixel encoder** at the density Stage 0 supports, run head-to-head with the Stage-0 compressor at
@@ -164,6 +206,7 @@ recipe can reach.
   finished arms.
 
 ## Prompt for the RunPod session
+*(Kept as sent on 2026-11-05. The branch name and paths in it are those of that date.)*
 ```text
 Pull branch claude/validation-harness. Read AGENTS.md (gotchas), then docs/gpu/OWN_ENCODER.md: the Stage 0 design,
 its predictions and decision rules are pre-registered there, and its runbook is for this RunPod RTX 4090 pod.
