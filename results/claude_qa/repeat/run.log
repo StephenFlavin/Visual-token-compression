@@ -1,0 +1,29 @@
+[run] 27 calls, estimate $21.82; spent here $0.00; cap $25
+[run] d0 page118 r2: all 0.994 small 0.975 passive 5/5; in 114,239 (formula 107,022) out 6,984 $0.71 53s incomplete False refused False unanswered 0 disengaged None; spent $0.71
+[run] d0 page118 r4: all 0.994 small 0.975 passive 5/5; in 114,240 (formula 107,022) out 7,031 $0.71 53s incomplete False refused False unanswered 0 disengaged None; spent $1.42
+[run] d0 page118 r3: all 0.994 small 0.975 passive 5/5; in 114,237 (formula 107,022) out 7,102 $0.71 54s incomplete False refused False unanswered 0 disengaged None; spent $2.14
+[run] d0 page118 r1: all 0.994 small 0.975 passive 5/5; in 114,239 (formula 107,022) out 7,209 $0.72 55s incomplete False refused False unanswered 0 disengaged None; spent $2.85
+[run] d0 page88 r2: all 1.000 small 1.000 passive 5/5; in 87,519 (formula 80,301) out 7,977 $0.60 59s incomplete False refused False unanswered 0 disengaged None; spent $3.45
+[run] d0 page88 r4: all 1.000 small 1.000 passive 5/5; in 87,519 (formula 80,301) out 8,082 $0.60 60s incomplete False refused False unanswered 0 disengaged None; spent $4.05
+[run] d0 page88 r3: all 1.000 small 1.000 passive 5/5; in 87,518 (formula 80,301) out 8,066 $0.60 64s incomplete False refused False unanswered 0 disengaged None; spent $4.65
+[run] d0 page88 r1: all 1.000 small 1.000 passive 5/5; in 87,519 (formula 80,301) out 8,204 $0.60 65s incomplete False refused False unanswered 0 disengaged None; spent $5.25
+[run] d0 text r1: all 1.000 small 1.000 passive 5/5; in 250,253 (formula 0) out 6,337 $1.38 45s incomplete False refused False unanswered 0 disengaged None; spent $6.63
+[run] d1 page118 r4: all 1.000 small 1.000 passive 5/5; in 114,133 (formula 106,884) out 6,115 $0.69 45s incomplete False refused False unanswered 0 disengaged None; spent $7.32
+[run] d1 page118 r2: all 0.994 small 1.000 passive 5/5; in 114,132 (formula 106,884) out 6,031 $0.69 52s incomplete False refused False unanswered 0 disengaged None; spent $8.01
+[run] d1 page118 r3: all 1.000 small 1.000 passive 5/5; in 114,133 (formula 106,884) out 6,584 $0.70 56s incomplete False refused False unanswered 0 disengaged None; spent $8.71
+[run] d1 page118 r1: all 1.000 small 1.000 passive 5/5; in 114,132 (formula 106,884) out 7,569 $0.72 62s incomplete False refused False unanswered 0 disengaged None; spent $9.43
+[run] d1 page88 r2: all 0.950 small 0.850 passive 0/5; in 87,411 (formula 80,163) out 7,839 $0.18 57s incomplete False refused False unanswered 0 disengaged None; spent $9.61
+[run] d1 page88 r1: all 0.994 small 0.975 passive 5/5; in 87,412 (formula 80,163) out 8,143 $0.60 61s incomplete False refused False unanswered 0 disengaged None; spent $10.21
+[run] d1 page88 r3: all 0.975 small 0.975 passive 5/5; in 87,411 (formula 80,163) out 8,438 $0.19 60s incomplete False refused False unanswered 0 disengaged None; spent $10.40
+[run] d1 text r1: all 1.000 small 1.000 passive 5/5; in 251,112 (formula 0) out 5,988 $1.38 42s incomplete False refused False unanswered 0 disengaged None; spent $11.77
+[run] d1 page88 r4: all 0.950 small 0.850 passive 0/5; in 87,412 (formula 80,163) out 7,726 $0.17 56s incomplete False refused False unanswered 0 disengaged None; spent $11.95
+[run] d2 page118 r2: all 0.994 small 0.975 passive 4/5; in 114,195 (formula 106,953) out 6,910 $0.71 49s incomplete False refused False unanswered 0 disengaged None; spent $12.66
+[run] d2 page118 r1: all 1.000 small 1.000 passive 5/5; in 114,194 (formula 106,953) out 7,910 $0.73 64s incomplete False refused False unanswered 0 disengaged None; spent $13.39
+[run] d2 page118 r3: all 1.000 small 1.000 passive 5/5; in 114,194 (formula 106,953) out 7,783 $0.18 55s incomplete False refused False unanswered 0 disengaged None; spent $13.57
+[run] d2 page118 r4: all 0.994 small 0.975 passive 4/5; in 114,195 (formula 106,953) out 6,918 $0.16 51s incomplete False refused False unanswered 0 disengaged None; spent $13.73
+[run] d2 page88 r1: all 0.956 small 0.850 passive 0/5; in 87,404 (formula 80,163) out 7,237 $0.58 54s incomplete False refused False unanswered 0 disengaged None; spent $14.31
+[run] d2 page88 r2: all 1.000 small 1.000 passive 5/5; in 87,406 (formula 80,163) out 7,243 $0.16 52s incomplete False refused False unanswered 0 disengaged None; spent $14.47
+[run] d2 page88 r3: all 0.994 small 1.000 passive 5/5; in 87,405 (formula 80,163) out 7,781 $0.17 56s incomplete False refused False unanswered 0 disengaged None; spent $14.65
+[run] d2 text r1: all 1.000 small 1.000 passive 5/5; in 245,549 (formula 0) out 6,511 $1.36 46s incomplete False refused False unanswered 0 disengaged None; spent $16.01
+[run] d2 page88 r4: all 0.994 small 0.975 passive 5/5; in 87,404 (formula 80,163) out 7,346 $0.17 52s incomplete False refused False unanswered 0 disengaged None; spent $16.17
+[run] done; spent here $16.17

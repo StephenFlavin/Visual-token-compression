@@ -1,4 +1,4 @@
-"""Shared pieces for the EnterpriseRAG-Bench runs (docs/ERB_PLAN.md).
+"""Shared pieces for the EnterpriseRAG-Bench runs (docs/claude/ERB_PLAN.md).
 
 Data: the benchmark's GitHub repository cloned to data/erb/repo (git-ignored, ~3.8 GB without .git; commit
 d36685e2, 2026-05-07) and the leaderboard's published BM25 baseline files in data/erb/leaderboard/. Setup:

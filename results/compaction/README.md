@@ -1,5 +1,13 @@
 # Context compaction with a page-image archive: pre-registration (2026-11-11, before any agent call)
 
+> **In brief (added in the clean-up, 2026-11-12).** Question: when Claude Code compacts a long session into a
+> summary, can the full transcript be kept as page images that the model opens on demand? Answer, on 3 research
+> sessions: yes. With the page archive 100% of 360 questions were answered against 36.9% after normal compaction, at
+> 31% lower cost, and the same archive as text cost 2.2x more to answer from. The follow-up through real hooks on 9
+> sessions is [results/compaction_scale](../compaction_scale/README.md); the summary in context is
+> [docs/claude/CLAUDE_QA.md](../../docs/claude/CLAUDE_QA.md#tested-context-compaction). Arms: D = no compaction,
+> A = normal compaction, B = compaction plus page archive, C = compaction plus the same archive as text.
+
 Question (user): when Claude Code compacts a long session, can the full pre-compaction transcript be kept as page
 images that the model opens on demand, and what does that cost and gain against normal compaction?
 

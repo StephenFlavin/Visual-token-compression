@@ -1,13 +1,35 @@
-# RGB overlay through the frozen-encoder probe
+# The RGB overlay: design of the three-layer text code
 
-> **Status (2026-11-05): the round-1 grid below was never run; the idea was tested in rounds 2-3 instead.** From raw
-> pixels rgb3 holds 3.0x mono at equal CER (identity32 on the DeepEncoder page: rgb3_p6 0.01% at 677 chars per 64-px token). Through frozen DeepEncoder
-> it sits at the floor (83.5%, [ROUND2.md](ROUND2.md)), so the RGB overlay is **dead for frozen encoders**. Round 3
-> combined it with learned glyphs (the moonshot `rgb3_lg_pb_h5`, 322 chars per Qwen token): readable from raw pixels
-> (1.07%), but not read by a LoRA-fine-tuned Qwen2.5-VL after 1000 steps ([ROUND3.md](ROUND3.md)). This file is
-> the pre-registered design record.
+**Status: the grid designed here for round 1 was never run; the idea was tested in rounds 2 and 3 instead
+(finished 2026-11-05). This file is the pre-registered design record, kept as written.**
 
-Tests the user's RGB word-overlay idea (docs/IDEAS.md): put three text streams in one image, one per colour
+**The idea.** An image has three colour channels and black text uses them as one. Put a different line of text in
+each channel and the same pixels hold three lines. It came from fibre-optic multiplexing, where several signals
+share one fibre on different wavelengths.
+
+**What was found.**
+* **From raw pixels it works.** Three layers hold 3.0 times the text of one layer at equal error: on the
+  DeepEncoder page, `rgb3_p6` reads at 0.01% character error at 677 characters per 64-px token
+  ([RESULTS.md, round 2](RESULTS.md#round-2-deepseek-ocrs-deepencoder-at-its-own-geometry-2026-11-04)).
+  Prediction 1 below passed.
+* **Through a frozen encoder it does not.** Through DeepEncoder it scores 83.5%, worse than one layer of the same
+  text (72-73%), both at the level of reading nothing. The comparison through SigLIP (prediction 3 and the
+  decision rule below) was never run; the DeepEncoder result stands in for it.
+* **Combined with learned glyphs** (the "moonshot" `rgb3_lg_pb_h5`, 322 characters per Qwen token): readable from
+  raw pixels (1.07%), not read by Qwen2.5-VL after a 1000-step fine-tune ([ROUND3.md](ROUND3.md)).
+* **With plain Latin and a model that reads Latin**, the layers are read as one blended text
+  ([docs/gpu/COLOUR_GIST.md](../docs/gpu/COLOUR_GIST.md)).
+* Predictions 2 and 4 (JPEG damage per layer; the word-overlap variants `rgbw`) were never tested.
+
+**Terms.** `mono_p<N>`: one layer of fixed-width text with N-px lines. `rgb3_p<N>`: three such layers, one per
+colour channel. `identity`: the probe reading raw pixels (the ceiling). `siglip_l6`: SigLIP's middle layer. CER:
+character error rate. CTC: the probe's sequence loss, which needs at least 2L+1 output frames for a line of L
+labels. C@3%: the characters per token at which error reaches 3%. Full glossary:
+[RESULTS.md](RESULTS.md#terms-used-on-this-page).
+
+## The design as pre-registered
+
+Tests the user's RGB word-overlay idea ([docs/background/IDEAS.md](../docs/background/IDEAS.md)): put three text streams in one image, one per colour
 channel, for up to 3x the text per pixel. It uses the unchanged probe and `run_probe.py` from PLAN.md.
 The code is in `ep/rgb_overlay.py` (registered through one lazy branch in `pages.get_encoding`) and the tests are in
 `tests/test_rgb_overlay.py`.

@@ -1,0 +1,706 @@
+{
+ "source": "https://github.com/anirudhkhatry/CRUST-bench.git",
+ "commit": "4b4702544b800a3821feea128c5b9e413665dc83",
+ "projects": [
+  {
+   "project": "CircularBuffer",
+   "c_project": "CircularBuffer",
+   "c_files": 3,
+   "c_lines": 389,
+   "test_fns": 1
+  },
+  {
+   "project": "FastHamming",
+   "c_project": "FastHamming",
+   "c_files": 6,
+   "c_lines": 542,
+   "test_fns": 7
+  },
+  {
+   "project": "Genetic_neural_network_for_simple_control",
+   "c_project": "Genetic-neural-network-for-simple-control",
+   "c_files": 50,
+   "c_lines": 3889,
+   "test_fns": 23
+  },
+  {
+   "project": "Graph_recogniser",
+   "c_project": "Graph-recogniser",
+   "c_files": 14,
+   "c_lines": 728,
+   "test_fns": 2
+  },
+  {
+   "project": "Holdem_Odds",
+   "c_project": "Holdem-Odds",
+   "c_files": 17,
+   "c_lines": 1973,
+   "test_fns": 24
+  },
+  {
+   "project": "LTRE",
+   "c_project": "LTRE",
+   "c_files": 5,
+   "c_lines": 2194,
+   "test_fns": 1
+  },
+  {
+   "project": "Linear_Algebra_C",
+   "c_project": "Linear-Algebra-C",
+   "c_files": 6,
+   "c_lines": 1744,
+   "test_fns": 24
+  },
+  {
+   "project": "Math_Library_in_C",
+   "c_project": "Math-Library-in-C",
+   "c_files": 3,
+   "c_lines": 523,
+   "test_fns": 16
+  },
+  {
+   "project": "Megalania",
+   "c_project": "Megalania",
+   "c_files": 45,
+   "c_lines": 4314,
+   "test_fns": 7
+  },
+  {
+   "project": "NandC",
+   "c_project": "NandC",
+   "c_files": 2,
+   "c_lines": 126,
+   "test_fns": 11
+  },
+  {
+   "project": "Phills_DHT",
+   "c_project": "Phills_DHT",
+   "c_files": 3,
+   "c_lines": 875,
+   "test_fns": 29
+  },
+  {
+   "project": "Remimu",
+   "c_project": "Remimu",
+   "c_files": 2,
+   "c_lines": 1483,
+   "test_fns": 1
+  },
+  {
+   "project": "SimpleXML",
+   "c_project": "SimpleXML",
+   "c_files": 5,
+   "c_lines": 806,
+   "test_fns": 3
+  },
+  {
+   "project": "Simple_Config",
+   "c_project": "Simple-Config",
+   "c_files": 15,
+   "c_lines": 1922,
+   "test_fns": 7
+  },
+  {
+   "project": "Simple_Sparsehash",
+   "c_project": "Simple-Sparsehash",
+   "c_files": 3,
+   "c_lines": 845,
+   "test_fns": 12
+  },
+  {
+   "project": "SlothLang",
+   "c_project": "SlothLang",
+   "c_files": 10,
+   "c_lines": 574,
+   "test_fns": 3
+  },
+  {
+   "project": "VaultSync",
+   "c_project": "VaultSync",
+   "c_files": 26,
+   "c_lines": 6894,
+   "test_fns": 1
+  },
+  {
+   "project": "XOpt",
+   "c_project": "XOpt",
+   "c_files": 5,
+   "c_lines": 3087,
+   "test_fns": 2
+  },
+  {
+   "project": "aes128_SIMD",
+   "c_project": "aes128-SIMD",
+   "c_files": 9,
+   "c_lines": 474,
+   "test_fns": 4
+  },
+  {
+   "project": "amp",
+   "c_project": "amp",
+   "c_files": 3,
+   "c_lines": 188,
+   "test_fns": 1
+  },
+  {
+   "project": "approxidate",
+   "c_project": "approxidate",
+   "c_files": 3,
+   "c_lines": 1151,
+   "test_fns": 2
+  },
+  {
+   "project": "avalanche",
+   "c_project": "avalanche",
+   "c_files": 4,
+   "c_lines": 247,
+   "test_fns": 1
+  },
+  {
+   "project": "bhshell",
+   "c_project": "bhshell",
+   "c_files": 10,
+   "c_lines": 645,
+   "test_fns": 3
+  },
+  {
+   "project": "bigint",
+   "c_project": "bigint",
+   "c_files": 4,
+   "c_lines": 1178,
+   "test_fns": 8
+  },
+  {
+   "project": "bitset",
+   "c_project": "bitset",
+   "c_files": 3,
+   "c_lines": 522,
+   "test_fns": 12
+  },
+  {
+   "project": "blt",
+   "c_project": "blt",
+   "c_files": 8,
+   "c_lines": 1171,
+   "test_fns": 1
+  },
+  {
+   "project": "bostree",
+   "c_project": "bostree",
+   "c_files": 8,
+   "c_lines": 1106,
+   "test_fns": 3
+  },
+  {
+   "project": "btree_map",
+   "c_project": "btree-map",
+   "c_files": 3,
+   "c_lines": 476,
+   "test_fns": 6
+  },
+  {
+   "project": "cJSON",
+   "c_project": "cJSON",
+   "c_files": 4,
+   "c_lines": 1101,
+   "test_fns": 1
+  },
+  {
+   "project": "c_aces",
+   "c_project": "c-aces",
+   "c_files": 21,
+   "c_lines": 2227,
+   "test_fns": 13
+  },
+  {
+   "project": "c_blind_rsa_signatures",
+   "c_project": "c-blind-rsa-signatures",
+   "c_files": 3,
+   "c_lines": 1287,
+   "test_fns": 3
+  },
+  {
+   "project": "c_string",
+   "c_project": "c-string",
+   "c_files": 3,
+   "c_lines": 929,
+   "test_fns": 15
+  },
+  {
+   "project": "carrays",
+   "c_project": "carrays",
+   "c_files": 4,
+   "c_lines": 1702,
+   "test_fns": 3
+  },
+  {
+   "project": "cfsm",
+   "c_project": "cfsm",
+   "c_files": 22,
+   "c_lines": 5827,
+   "test_fns": 1
+  },
+  {
+   "project": "chtrie",
+   "c_project": "chtrie",
+   "c_files": 3,
+   "c_lines": 259,
+   "test_fns": 1
+  },
+  {
+   "project": "cissy",
+   "c_project": "cissy",
+   "c_files": 10,
+   "c_lines": 1470,
+   "test_fns": 3
+  },
+  {
+   "project": "clhash",
+   "c_project": "clhash",
+   "c_files": 5,
+   "c_lines": 824,
+   "test_fns": 5
+  },
+  {
+   "project": "clog",
+   "c_project": "clog",
+   "c_files": 3,
+   "c_lines": 1060,
+   "test_fns": 1
+  },
+  {
+   "project": "coroutine",
+   "c_project": "coroutine",
+   "c_files": 3,
+   "c_lines": 256,
+   "test_fns": 1
+  },
+  {
+   "project": "cset",
+   "c_project": "cset",
+   "c_files": 2,
+   "c_lines": 1153,
+   "test_fns": 15
+  },
+  {
+   "project": "csyncmers",
+   "c_project": "csyncmers",
+   "c_files": 4,
+   "c_lines": 336,
+   "test_fns": 1
+  },
+  {
+   "project": "dict",
+   "c_project": "dict",
+   "c_files": 8,
+   "c_lines": 1278,
+   "test_fns": 6
+  },
+  {
+   "project": "emlang",
+   "c_project": "emlang",
+   "c_files": 14,
+   "c_lines": 1281,
+   "test_fns": 1
+  },
+  {
+   "project": "expr",
+   "c_project": "expr",
+   "c_files": 3,
+   "c_lines": 1110,
+   "test_fns": 2
+  },
+  {
+   "project": "fft",
+   "c_project": "fft",
+   "c_files": 3,
+   "c_lines": 233,
+   "test_fns": 1
+  },
+  {
+   "project": "file2str",
+   "c_project": "file2str",
+   "c_files": 5,
+   "c_lines": 525,
+   "test_fns": 1
+  },
+  {
+   "project": "fleur",
+   "c_project": "fleur",
+   "c_files": 9,
+   "c_lines": 1457,
+   "test_fns": 8
+  },
+  {
+   "project": "fs_c",
+   "c_project": "fs_c",
+   "c_files": 3,
+   "c_lines": 752,
+   "test_fns": 17
+  },
+  {
+   "project": "fslib",
+   "c_project": "fslib",
+   "c_files": 27,
+   "c_lines": 2885,
+   "test_fns": 54
+  },
+  {
+   "project": "geofence",
+   "c_project": "geofence",
+   "c_files": 3,
+   "c_lines": 324,
+   "test_fns": 1
+  },
+  {
+   "project": "gfc",
+   "c_project": "gfc",
+   "c_files": 4,
+   "c_lines": 259,
+   "test_fns": 1
+  },
+  {
+   "project": "gorilla_paper_encode",
+   "c_project": "gorilla-paper-encode",
+   "c_files": 4,
+   "c_lines": 635,
+   "test_fns": 1
+  },
+  {
+   "project": "hamta",
+   "c_project": "hamta",
+   "c_files": 4,
+   "c_lines": 687,
+   "test_fns": 6
+  },
+  {
+   "project": "hydra",
+   "c_project": "hydra",
+   "c_files": 3,
+   "c_lines": 324,
+   "test_fns": 2
+  },
+  {
+   "project": "impcheck",
+   "c_project": "impcheck",
+   "c_files": 31,
+   "c_lines": 2336,
+   "test_fns": 6
+  },
+  {
+   "project": "inversion_list",
+   "c_project": "inversion_list",
+   "c_files": 17,
+   "c_lines": 1748,
+   "test_fns": 15
+  },
+  {
+   "project": "jccc",
+   "c_project": "jccc",
+   "c_files": 33,
+   "c_lines": 2036,
+   "test_fns": 4
+  },
+  {
+   "project": "kairoCompiler",
+   "c_project": "kairoCompiler",
+   "c_files": 15,
+   "c_lines": 2005,
+   "test_fns": 2
+  },
+  {
+   "project": "kd3",
+   "c_project": "kd3",
+   "c_files": 3,
+   "c_lines": 652,
+   "test_fns": 1
+  },
+  {
+   "project": "lambda_calculus_eval",
+   "c_project": "lambda-calculus-eval",
+   "c_files": 23,
+   "c_lines": 2170,
+   "test_fns": 22
+  },
+  {
+   "project": "leftpad",
+   "c_project": "leftpad",
+   "c_files": 4,
+   "c_lines": 154,
+   "test_fns": 1
+  },
+  {
+   "project": "lib2bit",
+   "c_project": "lib2bit",
+   "c_files": 3,
+   "c_lines": 911,
+   "test_fns": 1
+  },
+  {
+   "project": "libbase122",
+   "c_project": "libbase122",
+   "c_files": 8,
+   "c_lines": 1214,
+   "test_fns": 7
+  },
+  {
+   "project": "libbeaufort",
+   "c_project": "libbeaufort",
+   "c_files": 8,
+   "c_lines": 738,
+   "test_fns": 3
+  },
+  {
+   "project": "libfor",
+   "c_project": "libfor",
+   "c_files": 5,
+   "c_lines": 29489,
+   "test_fns": 0
+  },
+  {
+   "project": "libm17",
+   "c_project": "libm17",
+   "c_files": 12,
+   "c_lines": 7009,
+   "test_fns": 7
+  },
+  {
+   "project": "libpgn",
+   "c_project": "libpgn",
+   "c_files": 35,
+   "c_lines": 3142,
+   "test_fns": 21
+  },
+  {
+   "project": "libpsbt",
+   "c_project": "libpsbt",
+   "c_files": 12,
+   "c_lines": 1937,
+   "test_fns": 4
+  },
+  {
+   "project": "libqueue",
+   "c_project": "libqueue",
+   "c_files": 4,
+   "c_lines": 277,
+   "test_fns": 1
+  },
+  {
+   "project": "libtinyfseq",
+   "c_project": "libtinyfseq",
+   "c_files": 8,
+   "c_lines": 1126,
+   "test_fns": 2
+  },
+  {
+   "project": "libutf",
+   "c_project": "libutf",
+   "c_files": 45,
+   "c_lines": 2858,
+   "test_fns": 11
+  },
+  {
+   "project": "libvcd",
+   "c_project": "libvcd",
+   "c_files": 3,
+   "c_lines": 282,
+   "test_fns": 1
+  },
+  {
+   "project": "libwecan",
+   "c_project": "libwecan",
+   "c_files": 3,
+   "c_lines": 1482,
+   "test_fns": 1
+  },
+  {
+   "project": "ljmm",
+   "c_project": "ljmm",
+   "c_files": 4,
+   "c_lines": 478,
+   "test_fns": 2
+  },
+  {
+   "project": "matrix_multiplication",
+   "c_project": "matrix_multiplication",
+   "c_files": 6,
+   "c_lines": 742,
+   "test_fns": 2
+  },
+  {
+   "project": "mdb",
+   "c_project": "mdb",
+   "c_files": 6,
+   "c_lines": 2203,
+   "test_fns": 4
+  },
+  {
+   "project": "merkle_tree_c",
+   "c_project": "merkle-tree-c",
+   "c_files": 3,
+   "c_lines": 1227,
+   "test_fns": 6
+  },
+  {
+   "project": "morton",
+   "c_project": "morton",
+   "c_files": 4,
+   "c_lines": 268,
+   "test_fns": 1
+  },
+  {
+   "project": "murmurhash_c",
+   "c_project": "murmurhash_c",
+   "c_files": 5,
+   "c_lines": 324,
+   "test_fns": 1
+  },
+  {
+   "project": "mvptree",
+   "c_project": "mvptree",
+   "c_files": 4,
+   "c_lines": 2216,
+   "test_fns": 1
+  },
+  {
+   "project": "proj_2DPartInt",
+   "c_project": "2DPartInt",
+   "c_files": 10,
+   "c_lines": 855,
+   "test_fns": 8
+  },
+  {
+   "project": "proj_42_Kocaeli_Printf",
+   "c_project": "42-Kocaeli-Printf",
+   "c_files": 4,
+   "c_lines": 314,
+   "test_fns": 2
+  },
+  {
+   "project": "quadtree",
+   "c_project": "quadtree",
+   "c_files": 7,
+   "c_lines": 572,
+   "test_fns": 4
+  },
+  {
+   "project": "razz_simulation",
+   "c_project": "razz_simulation",
+   "c_files": 6,
+   "c_lines": 2232,
+   "test_fns": 1
+  },
+  {
+   "project": "rbtree_lab",
+   "c_project": "rbtree-lab",
+   "c_files": 12,
+   "c_lines": 1875,
+   "test_fns": 7
+  },
+  {
+   "project": "recordManager",
+   "c_project": "recordManager",
+   "c_files": 18,
+   "c_lines": 3759,
+   "test_fns": 3
+  },
+  {
+   "project": "rect_pack_h",
+   "c_project": "rect_pack_h",
+   "c_files": 3,
+   "c_lines": 527,
+   "test_fns": 6
+  },
+  {
+   "project": "rhbloom",
+   "c_project": "rhbloom",
+   "c_files": 3,
+   "c_lines": 497,
+   "test_fns": 1
+  },
+  {
+   "project": "roaring_bitmap",
+   "c_project": "roaring-bitmap",
+   "c_files": 4,
+   "c_lines": 1083,
+   "test_fns": 15
+  },
+  {
+   "project": "rubiksolver",
+   "c_project": "rubiksolver",
+   "c_files": 11,
+   "c_lines": 923,
+   "test_fns": 6
+  },
+  {
+   "project": "satc",
+   "c_project": "satc",
+   "c_files": 2,
+   "c_lines": 1715,
+   "test_fns": 4
+  },
+  {
+   "project": "simple_lang",
+   "c_project": "simple_lang",
+   "c_files": 20,
+   "c_lines": 944,
+   "test_fns": 3
+  },
+  {
+   "project": "skp",
+   "c_project": "skp",
+   "c_files": 5,
+   "c_lines": 2338,
+   "test_fns": 3
+  },
+  {
+   "project": "ted",
+   "c_project": "ted",
+   "c_files": 8,
+   "c_lines": 1879,
+   "test_fns": 1
+  },
+  {
+   "project": "tisp",
+   "c_project": "tisp",
+   "c_files": 10,
+   "c_lines": 4636,
+   "test_fns": 1
+  },
+  {
+   "project": "totp",
+   "c_project": "totp",
+   "c_files": 6,
+   "c_lines": 443,
+   "test_fns": 5
+  },
+  {
+   "project": "ulidgen",
+   "c_project": "ulidgen",
+   "c_files": 4,
+   "c_lines": 187,
+   "test_fns": 5
+  },
+  {
+   "project": "utf8",
+   "c_project": "utf8",
+   "c_files": 3,
+   "c_lines": 806,
+   "test_fns": 25
+  },
+  {
+   "project": "vec",
+   "c_project": "vec",
+   "c_files": 3,
+   "c_lines": 647,
+   "test_fns": 22
+  },
+  {
+   "project": "worsp",
+   "c_project": "worsp",
+   "c_files": 5,
+   "c_lines": 3227,
+   "test_fns": 4
+  }
+ ]
+}

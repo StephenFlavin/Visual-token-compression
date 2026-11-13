@@ -3,7 +3,7 @@
     python3 encoder_probe/experiments/make_figures.py        # writes encoder_probe/img/*.png
 
 No torch, no network. Every number is read from encoder_probe/results/*/(rows|runs).jsonl; the only values typed in
-here are the lg_pb_h5 blind val loss at step 500 (its job died before writing a row; logged in docs/history/HANDOFF_2026-11.md) and
+here are the lg_pb_h5 blind val loss at step 500 (its job died before writing a row; logged in docs/background/history/HANDOFF_2026-11.md) and
 the MC chance level (4 options).
 """
 from __future__ import annotations
@@ -139,7 +139,7 @@ def fig_g2lite() -> None:
 
 
 # (c) R3-1: each fine-tuned arm against its own blind control -------------------------------------------------------
-LG_PB_H5_BLIND_VAL_LOSS_500 = 2.285  # blind job died at step 500 (disk full), no row; docs/history/HANDOFF_2026-11.md
+LG_PB_H5_BLIND_VAL_LOSS_500 = 2.285  # blind job died at step 500 (disk full), no row; docs/background/history/HANDOFF_2026-11.md
 
 
 def fig_r31() -> None:

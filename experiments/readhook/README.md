@@ -1,4 +1,34 @@
-# Read-as-image hook (prototype, 2026-11-11)
+# Hooks that show Claude Code its files and command output as page images
+
+*Status: finished (2026-11-11). `vbhook/` is the working hook set; the files beside it (`hook.py`, `javamin.py`,
+`pymin.py`, `bash_output_hook.py`, `smoke/`) are the prototypes it grew from, kept because the measurements below
+were made with them. Result with Opus 5.5: no task lost on 79 SWE-bench tasks, but no money saved, because reading
+is about 17% of a coding agent's cost ([docs/claude/SWE_IMAGES.md](../../docs/claude/SWE_IMAGES.md)). The same
+renderer and minifiers are what the compaction archive hooks use
+([experiments/compaction/hooks](../compaction/hooks)), and there they pay.*
+
+**What it does.** Claude Code lets a project install hooks: small programs that run before or after a tool call
+and may change its input or output. These hooks replace the text of a file (`Read`) or of a long command output
+(`Bash`) with a picture of that text, drawn small, when the picture costs fewer tokens.
+
+```mermaid
+flowchart LR
+    A["Agent calls Read<br/>or Bash"] --> B["Hook gets the<br/>file lines / output"]
+    B --> C["Minifier for its kind:<br/>drop layout whitespace,<br/>tag lines §n, mark indent »"]
+    C --> D{"Image at most<br/>0.8x the text's<br/>tokens?"}
+    D -->|no| E["Text, unchanged"]
+    D -->|yes| F["Render pages at<br/>88.2 px² per character"]
+    F --> G["Agent sees the image"]
+    G --> H["Edit / Write hook:<br/>strip copied § and »<br/>before the file is touched"]
+```
+
+**Terms:** px² per character = image area per character shown (lower is denser; 88.2 is the setting at which Opus
+answered document questions as well as from text at high effort); `§n` = a tag for original line n; `»` = one
+level of indentation; edit-safe = spaces inside a line are kept, so text copied from the image matches the file.
+
+The sections below are in the order the work was done; the last two describe the finished hooks and their results.
+
+## Read-as-image hook (prototype, 2026-11-11)
 
 A Claude Code PreToolUse hook on `Read`: renders the requested lines of a text file as one PNG page (monospace,
 line numbers, header "lines a-b of N", long lines wrapped) and rewrites Read's `file_path` to the PNG, so the model
@@ -36,8 +66,8 @@ from rendering with the prose renderer on 1932-px pages:
 Minifying the text alone saves little (whitespace is cheap for the tokenizer); reflowed pages fill like prose, and
 Java tokenizes worse than prose (2.4 vs 2.9 chars/token), so pages save more than they do on prose. Pages vs the same
 minified text: 2.9-3.0x either way. Stripping comments is a separate, lossy text-level saving (these files are
-mostly Javadoc). Not tested: accuracy of reading and editing from minified pages; Edit needs a whitespace-insensitive
-match to the real file.
+mostly Javadoc). Not tested at this stage: accuracy of reading and editing from minified pages (tested later with
+the full hook set, below).
 
 ## Minified Python (2026-11-11)
 
@@ -78,10 +108,11 @@ that exact `echo` line). Contract and rules for minifiers: `vbhook/SPEC.md`. Fam
 | `python_family.py` | Python, shell, Makefile, Dockerfile | 3.5-4.8x (Python ~3.25x in the default edit-safe mode) |
 | `brace.py` | JS, TS/TSX, Java, Kotlin, Scala, C, C++, C#, Go, Rust, Swift, PHP, Dart | 3.6-4.4x dense, ~3.6x overall edit-safe |
 | `config_docs.py` | YAML, TOML, INI, JSON(L), XML/SVG/HTML, Markdown/RST/text, CSV/TSV, SQL; lock files and digit/hash-heavy files stay text | 2.7-5.5x |
-| `outputs.py` | pytest, tracebacks, compiler/linter diagnostics, logs, git diff/log/status, grep, find, listings | 3.8-8x on large outputs; text below ~300 chars |
+| `outputs.py` | pytest, tracebacks, compiler/linter diagnostics, logs, git diff/log/status, grep, find, listings | 3.8-8x on large outputs; output under 400 characters stays text |
 
 Policy (`policy.py`): an image only when it costs at most 0.8x the text tokens of the same lines or output. Tests:
-`cd experiments/readhook && python3 -m pytest -q vbhook/tests` (333 tests). Results with Opus:
+`cd experiments/readhook && python3 -m pytest -q vbhook/tests` (335 tests, about 20 s; 334 pass and 1 is skipped on
+this runner). Results with Opus:
 `results/readhook_smoke/README.md`.
 
 ## Results with Opus 5.5 (2026-11-11)
@@ -89,4 +120,4 @@ Policy (`policy.py`): an image only when it costs at most 0.8x the text tokens o
 Smoke tests (6 refactors x 3 runs per arm): [results/readhook_smoke](../../results/readhook_smoke/README.md).
 SWE-bench Verified, Django: [results/readhook_swe](../../results/readhook_swe/README.md); SWE-bench Multilingual,
 Rust and Java: [results/readhook_swe_ml](../../results/readhook_swe_ml/README.md); harnesses in `swe/`. Summary,
-cost anatomy and remaining levers: [docs/SWE_IMAGES.md](../../docs/SWE_IMAGES.md).
+cost anatomy and remaining levers: [docs/claude/SWE_IMAGES.md](../../docs/claude/SWE_IMAGES.md).

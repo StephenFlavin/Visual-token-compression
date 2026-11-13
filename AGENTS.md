@@ -1,144 +1,53 @@
-# AGENTS.md — how to work in this repo (read before running anything)
+# AGENTS.md: how to work in this repo
 
-Research harness testing **Visual BPE**: draw text more densely (substitution glyphs, packed cells, learned glyph
-banks, colour codes) to get more characters per image pixel / vision token. Overview and current state:
-`README.md`. Design, pre-registered predictions and kill criteria: `PLAN.md` (phases 1-2),
-`learned_glyphs/PLAN.md`, `encoder_probe/PLAN.md` and `ROUND3.md`. Results: `docs/RESULTS.md`,
-`encoder_probe/RESULTS.md`; where rows live: `results/README.md`; scripts: `scripts/README.md`.
+**State (2026-11-12): a finished study, wound down.** The story and results are in [README.md](README.md). One run
+is left, on the user's local GPU.
 
-## Environment setup
+## The one thing left to run
 
-Cloud CPU runner: 4 CPU, ~15.7 GB RAM (cgroup), ~39 GB disk, no GPU. GPU runners: `docs/GPU_RUNNER.md` (any Linux
-GPU) and `docs/LOCAL_GPU.md` (the user's Windows RTX 3090).
+**[docs/HANDOFF.md](docs/HANDOFF.md) starts with the prompt to paste into a session on the RTX 3090 PC.** It runs
+the Claude page-image test in small on a local Qwen3.8-27B (plan and predictions:
+[docs/gpu/LOCAL_QWEN.md](docs/gpu/LOCAL_QWEN.md); runbook: [docs/gpu/LOCAL_GPU.md](docs/gpu/LOCAL_GPU.md)).
+Everything else is parked or closed; do not restart parked runs unless the user asks.
+
+## Where things are
+
+| Need | Go to |
+|---|---|
+| What was found, in story order | [README.md](README.md) |
+| Every finding with its numbers, in date order | [docs/FINDINGS.md](docs/FINDINGS.md) |
+| Index of all write-ups | [docs/README.md](docs/README.md) |
+| The command for any experiment | [docs/RUNNING.md](docs/RUNNING.md) |
+| Things that go wrong (network, headless Claude, OCR, training, cloud runner, git) | [docs/GOTCHAS.md](docs/GOTCHAS.md): read the section for the area you touch |
+| Where result rows live | [results/README.md](results/README.md) |
+
+## Setup (cloud CPU runner: 4 CPU, ~15.7 GB RAM, no GPU)
 
 ```bash
-pip install -r requirements.txt                       # torch line may fail: use the CPU index below
+pip install -r requirements.txt                       # if the torch line fails, use the next line
 pip install --index-url https://download.pytorch.org/whl/cpu torch
-pip install rapidocr-onnxruntime                      # Phase 1b OCR reader (installs 1.2.3 on py3.13)
-scripts/fetch_fonts.sh                                # Noto Sans CJK SC, Archivo Narrow, Roboto Condensed
-python3 scripts/build_data.py                         # WikiText-103 -> data/ passages, splits, dict_{100,300,1000,3000}.json (~5 min)
-OMP_NUM_THREADS=1 python3 -m pytest -q tests encoder_probe/tests learned_glyphs/tests   # ~310 tests, ~4 min, no network, no Claude calls
+pip install rapidocr-onnxruntime
+scripts/fetch_fonts.sh
+python3 scripts/build_data.py                         # WikiText-103 passages and dictionaries (~5 min)
+OMP_NUM_THREADS=1 python3 -m pytest -q tests encoder_probe/tests learned_glyphs/tests
+python3 scripts/check_links.py                        # every markdown link and path must resolve
 ```
-Round 3 also needs `transformers` (runner: 5.22.1) and `peft`; Qwen/DeepEncoder weights download from HF Hub into
-`encoder_probe/cache/`. `data/`, fonts, image dirs, caches, checkpoints and adapters are git-ignored; everything
-regenerates from the commands above.
 
-## Running the experiments
+Start cloud sessions in the `visual-bpe` environment: the Default one cannot reach Hugging Face.
+`data/`, fonts, caches, checkpoints and adapters are git-ignored and regenerate from these commands.
 
-| What | Command | Notes |
-|---|---|---|
-| Phase 1 Claude pilot | `python3 experiments/phase1_sweep.py --pilot --max-cost 10` then add `--yes` | Prints estimate first; estimate is ~2x the real cost |
-| Phase 1 Claude, Latin only | `python3 experiments/phase1_sweep.py --variant natural --n-passages 6 --schemes latin latin_condensed --budgets 14 17 20 23 27 32 40 --run-name latin_natural --max-cost 5 --yes` | ~$1.9 for 84 calls |
-| Phase 1 dry run (free) | add `--dry-run [--fake-noise 0.03]` | fake transcriber, no Claude |
-| Phase 1b OCR zero-shot | `python3 experiments/phase1b_ocr.py --variant natural --n-passages 6` (and `--variant scrambled --n-passages 3`) | CPU, ~5 s/page, 2 workers; resumable |
-| Phase 2 CRNN grid | `nohup python3 experiments/phase2_driver.py > results/phase2_driver.log 2>&1 &` | one process per (scheme, em), largest em first, keeps 4 cores busy; per-job logs in `results/phase2/<run>/driver/`. (`experiments/phase2_main.sh` is the older 3-worker wrapper: leaves cores idle.) |
-| Phase 2 single runs | `python3 experiments/phase2_train.py --schemes latin --ems 5 8 --steps 3500 --parallel 3 --threads 1 --run-name X` | `--smoke` for a quick check |
-| CPU job queue (any experiments) | one single-core command per line in `results/queue_<round>.txt`; `nohup python3 scripts/job_queue.py results/queue_<round>.txt --log-dir results/queue_logs/<round> [--after-phase2] > results/queue_<round>.log 2>&1 &` | backfills free cores (subtracts busy Phase-2 processes only); lines can be appended while it runs. **Restarting re-claims from line 1**: new queue file + new `--log-dir` per round. Move finished queue files to `results/archive/` |
-| Learned glyphs | `learned_glyphs/experiments/train_joint.py`, `calibrate_channel.py`, `transfer_eval.py` | see `learned_glyphs/PLAN.md`; `--dry-run` prints configs; `--grid e1` for the 2x2 grid |
-| Frozen-encoder probe, round 1 | `python3 encoder_probe/experiments/run_probe.py --print-grid --steps 3000 --run-name main > results/queue_X.txt`, then the job queue; single run: `run_probe.py --encoding latin_p8 --encoder siglip_l6 --cond jpeg75` | ~20-30 min/run at 1 thread (+1-3 min SigLIP features); `analyse.py` prints the tables |
-| Frozen-encoder probe, round 2 | `python3 encoder_probe/experiments/run_probe2.py --device cuda --encoding latin_p32 --encoder deepencoder --cond clean --train-pages 1000 --run-name round2_gpu_tp1000` | `docs/LOCAL_GPU.md` (`EP_PAGE_CACHE=1`, P0-P3 queue, `analyse2.py`); `--device auto` = cuda if available; `--pages-only` pre-renders |
-| Round 3 R3-1: LoRA fine-tune Qwen2.5-VL-3B (GPU) | `python3 encoder_probe/experiments/finetune_qwen.py --encoding latin_p8 --smoke`, then `--steps N --run-name R` (and `--blind-images` → `R_blind`) | runbooks `docs/GPU_RUNNER.md` (any Linux GPU), `docs/LOCAL_GPU.md` §8 (3090); design `encoder_probe/ROUND3.md`. Every arm needs its blind control |
-| Round 3 G2-lite: probe on Qwen ViT states | `python3 encoder_probe/experiments/run_g2lite.py --print-queue` (arms frozen / trained / direct = no merger, plus blind) | `--merger-lr 1e-4`; `analyse_g2lite.py`; rows `encoder_probe/results/g2lite*/` |
-| Round 3 R3-2: long-context QA (GPU) | `python3 encoder_probe/experiments/longctx_bench.py --inputs text latin_p8 --lengths 10000 --tasks needle cloze [--adapter <finetune result>.pt]` | not run yet; `docs/LOCAL_GPU.md` §8 |
-| Analysis | `python3 -m vbpe.analysis <runs.jsonl> [more] --out DIR` | Phase 1, 1b and 2 rows; summary.md/json + plots. Phase 2: run `scripts/merge_phase2.py` first |
-| Own encoder, Stage 0: text-side compression ceiling (GPU) | `python3 encoder_probe/experiments/text_compress.py --ratio 16 --smoke`, then `--ratio R --steps 3000 --run-name stage0` for R in 4 80 16 32 8 | ICAE-style: LLM+LoRA encoder -> m slots -> frozen LLM rebuilds the text; blind = other window's slots; design, rules and runbook `docs/OWN_ENCODER.md`; tests `encoder_probe/tests/test_text_compress.py` |
-| Colour-channel Latin, zero-shot (A0) | `python3 encoder_probe/experiments/zeroshot_colour.py --pages 12 --transcribe-pages 3` | Qwen2.5-VL-3B bf16, ~6 min on an AMX CPU (needs the full weights, 7.5 GB); per-stream MC (other stream's phrase as a distractor) and CER; plan `docs/COLOUR_GIST.md` |
-| Colour-gist A1/A2: fine-tune on k-stream pages | `finetune_qwen.py --encoding rgb{1,2,3}s_p16 --steps 1000 --eval-mc 4 --eval-cloze 4 --val-samples 64 --run-name colour_a1` (+ `--blind-images`), then `analyse_colour.py --real colour_a1` | each colour channel = a latin page of its own span; per-stream questions with an other-stream lure; R(k) = info per vision token vs 1 stream, bootstrap CI; runbook and prompt `docs/COLOUR_GIST.md` |
-| R3-1 analysis vs blinds | `python3 encoder_probe/experiments/analyse_r3.py` | exact tests, val-loss gain, bits per vision token -> `encoder_probe/results/analysis_r3/summary.md`, `encoder_probe/img/r31_info.png`; written up in `docs/ANALYSIS.md` |
-| PLAN_3090 Runs 1-2 (3090): trained ViT, LLM frozen | `finetune_qwen.py --encoding latin_p6 --lora-r 0 --vision-blocks 16 --task-mix 1.0 --text shuffled --top-margin 7 ...` (+ `--blind-images`), then `capacity_curve.py --adapter <adapter> --pages 200 --shifts 7` and the dy sweep (`--shifts 7 14 21 28 --shift-dx 7 --shift-margin 28 --arms real blank`), then `analyse_run12.py --sweep` | recipe: `docs/PLAN_3090.md` amendment 3; budget, arm order (stage A learnability, B Latin, C dense glyphs) and gates: amendment 4; the > 20 bar's placement: amendment 5; prompt `docs/HANDOFF.md` |
-| PLAN_3090 channel capacity (3090, amendment 6) | `python3 encoder_probe/experiments/channel_capacity.py --cell {7,4,2} --steps S --device cuda --run-name r12_chan` (`--smoke` first) | random bits as 4-level colour blocks (96/294/1176 bits per token offered, 4704 bits per image), target = octal digits; recovered = 3 x digits - CE (exact, no blind); Stage A recipe, patch embed frozen; a floor on the pipe, not a gate; `analyse_run12.py --chan`. On CPU pass `--bf16 on` (fp32 OOMs) |
-| EnterpriseRAG-Bench (Claude, page images vs text) | setup in `experiments/erb/erb_common.py`; `build_bm25.py` (~4 min, 4 cores), then `run_erb.py --pilot [--dry-run]`, `judge.py`, `analyse_erb.py` | plan, gates, costs: `docs/ERB_PLAN.md`. Running the downloaded OpenSearch binary was blocked by the permission check; the published official top-10 + `build_bm25.py` (99.2% overlap@10) replace it |
-| Claude vision checks | `python3 scripts/check_claude_vision.py` | token formula, legibility, latency (~$0.5) |
+## Rules
 
-Outputs: `results/phase{1,1b,2}/<run>/`, `encoder_probe/results/<run>/`, `learned_glyphs/results/<run>/`, each with
-`runs.jsonl` (map in `results/README.md`). Claude responses are cached in `results/cache/claude/` (keyed on
-model+prompt+image bytes), so re-runs are free.
-
-## Things that DON'T work / gotchas (save yourself the time)
-
-**Network / installs**
-- `apt-get` packages (e.g. fonts-noto-cjk) are unavailable. `github.com/.../raw/...` returns 403 via the proxy, but **`raw.githubusercontent.com` works**. `fonts.gstatic.com` 404s. HF Hub and the PyTorch CPU wheel index work.
-
-**Claude as a reader (headless `claude -p`)**
-- Send images as base64 in `--input-format stream-json`; no tools needed. `vbpe/claude_eval.py` does this correctly.
-- **Run the child CLI with a clean env** (`env -i` + PATH/HOME/proxy/CA vars) in an empty temp dir. Otherwise it reuses the parent session id, adds an extra haiku summary call and ~830 cached tokens per call.
-- Image tokens = `ceil(W/28)*ceil(H/28)+3` (not W·H/750). No downscaling up to 1568×1568. Use canvas sides that are multiples of 28.
-- **Many-image calls silently lose their earliest pages above some image-token total:** ~175k image tokens arrived whole (122 small or 38 large pages); ~345k were cut to ~145-157k (243 small pages / 30 MB, and 75 large pages / 27 MB), with no error. Not bytes or image count: 7 noise pages of 26 MB arrived whole. Not in the vision docs (600 images, 128 MB). `experiments/claude_qa_render.py` compares `input_tokens` with the image-token formula and marks such arms invalid. Opus 5.5 reads images up to 1932x1932 px (4,764 tokens) without downscaling: `claude_eval.transcribe(..., hires=True)`.
-- Use `--effort low`: adaptive thinking doubles cost with no CER gain. 8 concurrent calls: no rate limiting. `total_cost_usd` is list price; on this runner calls draw from the user's subscription quota.
-- **Claude cannot score non-natural text.** Substitution, quadrant pages and even word-scrambled English get refused or cut off by safety classifiers; `subst*_legend` (cipher key in prompt) gets a hard API AUP error. Do NOT reword/disguise prompts to get past this: that is classifier evasion. Use Claude only for natural Latin; use PP-OCR (Phase 1b) or trained readers for everything else.
-- Below ~18 px²/char Claude hallucinates fluent English or refuses; the base OCR prompt says "never refuse, give best guess".
-- Condensed fonts LOSE for Claude (≈1.11–1.2x more px²/char at 3% CER) despite fitting more per line; Glyph's tuned config also picked a wide font.
-
-**PP-OCR via rapidocr_onnxruntime 1.2.3**
-- It **ignores `use_det=False`** (detects on any crop taller than 30 px) and **resets `text_score` to 0.5 whenever any kwarg is passed**, silently dropping lines. Call `engine.text_recognizer([bgr_crops])` directly (`vbpe/readers/rapidocr_reader.py::read_lines`).
-- Full-page detection + reading-order stitching drops/reorders lines. Use exact line strips from the layout: strip i = `[margin + i*pitch, margin + (i+1)*pitch)`; do NOT pad (neighbour ascenders kill recognition).
-- It drops inter-word spaces and emits full-width punctuation → score with `cer_nospace` (NFKC + whitespace removed). Its training is Chinese-heavy: biased towards CJK glyphs.
-
-**Layout / rendering**
-- `fit_em` must floor, not round (rounding up overflowed the canvas).
-- Breaks are allowed after units whose source ends in whitespace AND before units whose source starts with whitespace (dictionary tokens look like `" the "`).
-- Phase 2 renders with `supersample=4` (true sub-pixel phase, no hinting differences); Phase 1/1b render natively.
-
-**CRNN (Phase 2) and learned glyphs**
-- Keep 2-px columns (4-px stride: latin em8 2.35% vs 0.19% CER). CTC frames: each column expanded E times so T ≥ 2L+1.
-- **Mixed-em training learns far slower per step** than per-em models (latin em7 18% vs ~2% at 1500 steps). Use per-em runs.
-- **Render caches written before per-line `heights.npy` existed load 1 row taller** than fresh batches (latin em4: 62% CER vs 3.8% fresh). `build_lineset` treats them as misses. Low train loss + terrible val CER → suspect train/val geometry mismatch first.
-- GroupNorm worse than BatchNorm. Substitution (1000+ classes) and quadrant models learn much slower than Latin: check `curves/` for convergence before trusting a crossing; re-run critical ems with more steps if still improving.
-- Cite `results/phase2/merged/` (`scripts/merge_phase2.py`: longest run per scheme/em), not single runs.
-- Learned banks: train ≥ 10.5k steps (tokens look useless at 3.5k); judge banks by the bridge (frozen bank, Phase-2 pipeline), not joint CER. `vbpe.analysis` keys rows by em: set `budget=px_per_char` for banks with non-default cell widths.
-
-**Analysis**
-- K2 verdict text can say "neither subst nor best Latin reaches CER x" when only subst fails: read the table. With 1 passage, bootstrap CIs collapse to a point.
-
-**Frozen-encoder probe and round 3 (encoder_probe/)**
-- CTC alone cannot bootstrap a learned token->pixel map; it needs the auxiliary MSE loss (x10) to the clean page. Per-token output heads and extra "free" feature channels memorise the training pages (13.7% / 77% test CER). Check val CER, not train loss.
-- Through SigLIP the probe overfits (train CTC ~0, test 40-60%); more pages help. SigLIP's last layer loses much more than layer 6 (`--encoder siglip_l6`). The probe is the limit for Latin, so absolute probe CERs are upper bounds on the loss: decide on same-probe comparisons.
-- **GridProbe reads through a pixel reconstruction, so it favours pixel-like codes.** Latin stops being pixel-decodable from Qwen after block 24; through frozen Qwen it reads held-out Latin at ~75% (latin_p16). Probe Latin numbers through VLM encoders are lower bounds; compare Latin with codes only with the LLM as reader (R3-1).
-- **Above ~75% CER, CER can't separate partial reading from none** (unrelated fluent text scores ~80%). Judge fine-tune arms first on the val-loss gain vs their blind run (same targets, paired, noise ~0.005 nats/token), then MC; `encoder_probe/experiments/analyse_r3.py` computes both with exact tests.
-- **A from-scratch vision encoder trained only through an LLM's loss collapses to a constant soft prompt** (S1 run 1:
-  output std across images 2e-5, gap vs swapped images 0.000 after 4 h). Add an auxiliary reconstruction loss
-  (`small_vlm.py --recon`, default 10) and watch `image_spread` and the swapped-image gap at every eval.
-- **peft's `disable_adapter()` context does not switch off LoRA when the inner modules are called directly, and
-  gradient checkpointing recomputes layers in backward under whatever adapter state is current then.**
-  `text_compress.py` toggles the LoRA layers itself (`AdapterSwitch`) and passes a checkpoint `context_fn` that
-  restores the forward-time state (tested: same gradients with and without checkpointing).
-- **Every probe or fine-tune arm needs its own blind control** (images/features swapped between pages): floors differ by code (R3-1: latin_p5 77.8%, latin_p8 88.5% CER) and an LLM writes fluent English from any image.
-- Colour refs are raw fixed-length chunks with boundary spaces: do not whitespace-normalise colour hypotheses (~0.4% CER floor). Rows with `score_v: 2` are scored correctly.
-- **Quote the row's `cer` (16 test pages), not the last `curve` point (4 pages).** `analyse2.py` keys rows by (encoder, cond, train_pages, encoding), later row wins: pass runs.jsonl files explicitly (`round2/` 200-page rows collide with `round2_gpu_tp200`).
-- **Fine-tuning a pretrained module at the probe's LR (2e-3) wrecks it:** Qwen's merger lost 11-76% of output dims and token cosine rose to 0.81-0.91 (pretrained 0.10). Use LR ≤ 1e-4 for pretrained parameters (`run_g2lite.py --merger-lr`, `finetune_qwen.py --lr-vision 2e-5`) and check output std, dead dims and token cosine early.
-- **DeepEncoder on CUDA must run in fp32 with TF32 off** (bf16: corr 0.9974 vs CPU fp32). The probe uses bf16 autocast on CUDA. Rows record `device`, `enc_compute`, `bf16`.
-- **CPU bf16 depends on the host:** without AMX/AVX512-BF16 (`grep -o 'amx_bf16\|avx512_bf16' /proc/cpuinfo` empty) bf16 runs 3-10x slower than fp32. `encoder_probe/ep/vlm_encoders.cpu_has_bf16()` picks the dtype; do the same elsewhere. In fp32 call `torch.set_flush_denormal(True)` (denormals: 5.5x slower). Sudden slowdown after a restart → suspect this first.
-- **Runs 1-2 (`--vision-blocks 16 --lora-r 0`) train 352M fp32 parameters: a resume checkpoint is 4.0 GB, written next to the old one (8 GB at save), and each kept adapter ~1.4 GB.** On the 3090 PC the first save failed with `RuntimeError: [enforce fail at inline_container.cc:672] unexpected pos` when the disk ran short (2026-11-09); keep >= 10 GB free (`run12_driver.py` checks). Rendering 12000 train pages takes ~1 h single-threaded: `capacity_curve.PageSet` caches page sets on disk with `EP_PAGE_CACHE=1`.
-- `finetune_qwen.py` adapters go to `encoder_probe/cache/r3_adapters/` (~0.56 GB each, git-ignored): copy them off a rented GPU before it shuts down.
-
-**GPU runners**
-- **The user's RTX 3090 PC is Windows** (Git Bash, the venv's `python`, `PYTHONUTF8=1`). Its Pillow has no raqm, so Latin px²/char differs by up to ~3%, test-page digests differ and `test_rgb3_unsupported_pitch` fails for this reason only. Compare local rows with local rows.
-- **Windows pages GPU memory instead of raising OOM** (5 parallel jobs stalled): at most 3 on the 3090. Elsewhere size concurrency from the smoke's peak memory (sum < ~85% of VRAM).
-- Measured speeds: RTX 3090 probe 0.015-0.06 s/step (cloud CPU ~3), DeepEncoder ~0.05 s/page, Latin rendering ~45 s/1000 pages (`EP_PAGE_CACHE=1`). RTX 4090 R3-1: 1.2 s/step, 11.4 GB peak, ~7 min load+eval per job.
-
-**Cloud runner: resources, restarts, resuming**
-- Speed: ~0.6–0.8 s/step per Phase-2 run at 1 thread, so a 3500-step run ≈ 40 min; 26 runs ≈ 6 h on 3 cores, ~4.5 h on 4.
-- **Disk is fixed (~39 GB) and has filled up** (checkpoint saves crashed; a full disk also truncated docs in a commit). Checkpoints are atomic (.tmp then replace): delete `*.tmp` before restarting. Snapshots (~725 MB), qwen25vl_h32 caches (~1.35 GB/500 pages) and old checkpoints add up: keep ≥ 3 GB free and log `df`.
-- **cgroup memory ~15.7 GB:** the OOM killer took the largest job twice (5.2 GB probe, 5.8 GB cache build). Budget peak RSS per job; labels for 500 rgb3_lg pages alone are ~1.5 GB.
-- **The container is suspended soon after the session goes idle** (no turn, no running subagent): nohup'd jobs die 5-15 min later and the next wake shows `uptime` 0 min (not memory: logged < 7 GB). Keep a background subagent waiting on the queue (run_in_background loops that re-arm). The container can also restart when the session resumes. So **make long jobs checkpoint and resume** (`run_probe2.py --ckpt-every 200`, `finetune_qwen.py --ckpt-every 250`; resume is exact), and on every wake check `uptime`.
-- A *restart* keeps the disk (data/, fonts, caches, pip): restart `phase2_driver.py` / `job_queue.py` (fresh queue file with only the remaining runs, fresh `--log-dir`) / `autosave_results.sh` with nohup. A *reclaim* loses all git-ignored state: redo setup first. `nohup scripts/autosave_results.sh 600` commits+pushes `runs.jsonl` every 10 min.
-- Resuming: Phase 2 (no Claude calls) skips finished (scheme, em) rows; in-flight runs restart from step 0 (Phase 2 writes checkpoints only at the end). Phase 1 re-runs skip finished rows and read the Claude cache; errors (incl. usage limits) are not cached and are retried.
-- `job_queue.py` only subtracts Phase-2 processes, so two queues oversubscribe the cores. To reorder a running queue, atomically rewrite only its unclaimed tail, keeping the first <claimed> lines byte-identical (claimed = number of `start job` lines in its log).
-- Never edit a running bash script (bash reads it incrementally); to change plans, SIGKILL the wrapper bash only (its python child keeps running).
-
-**Git / shell**
-- Never `pkill -f <name>` from a shell whose command line contains <name> (it kills itself); a `while pgrep -f <name>` loop matches itself. Use `pgrep -f "[j]ob_queue.py"`, and only if the plain string appears nowhere else in that command line (`pkill -f "[r]un_probe.py --encoding x"` then `nohup python3 run_probe.py --encoding x` in one call kills its shell, exit 144). Put the pkill in its own call.
-- A stop hook demands a clean tree. Live Phase-2 logs/curves are git-ignored while running; `git add -f` them when a grid finishes. Other long jobs: snapshot-commit (`WIP:`) and push.
-
-## Findings so far (2026-11-06)
-Summary with figures: `README.md`; details per stage in the linked docs.
-- **Phases 1-2 (K1-K3): KILL.** Substitution saves only ~1.19x em (K1); PP-OCR zero-shot misses the K2 bar (0.89x); trained CRNNs: plain Latin wins (1.73% CER at 7.5 px²/char vs subst300 2.26% at 8.9). Claude reads natural Latin at 29.4 px²/char for 3% CER and cannot be used on codes. `docs/RESULTS.md`.
-- **Learned glyph alphabet: qualified GO for raw pixels.** Learned N=300 needs 0.57x Latin's px²/char at 3% CER (bridge), 0.88x for whole-pixel banks; the densest banks are brittle on held-out degradations. `docs/RESULTS.md`, `learned_glyphs/RESULTS.md`.
-- **Frozen encoders (rounds 1-2, SigLIP, DeepEncoder): dense codes are lost.** Colour/RGB codes are dead; grey-level banks are not supported; only low-density Latin is readable through the encoder. Learned glyphs should be whole-pixel. `encoder_probe/RESULTS.md`.
-- **Round 3 (Qwen2.5-VL-3B), CPU:** the moonshot `rgb3_lg_pb_h5` (322 chars/token) is readable from raw pixels (G0 1.07% CER); glyph codes stay pixel-like through the ViT but collapse at the merger (Q1); G2-lite: no arm usable. `encoder_probe/ROUND3.md`.
-- **Round 3 R3-1 (RTX 4090, 1000 steps, blind controls): only latin_p8 (28 chars/token) is read** (55% CER vs blind 88.5%; it reads the first line, then drifts). latin_p5 (72) gets the gist only (val loss 9.9% below blind, MC p = 0.02); lg_pb_h5 (107; blind died at step 500) and the moonshot are not read (losses = blind's). **G3 is undecidable** (no arm near 3% CER). `docs/HANDOFF.md`.
-- **Analysis (`docs/ANALYSIS.md`, `analyse_r3.py`):** Q1, G2-lite and R3-1 all put the glyph codes' loss inside the frozen ViT, upstream of R3-1's 4 trained blocks; the moonshot needs ~270 bits per vision token beyond the language prior vs 12.7 delivered by latin_p8.
-- **Own encoder Stage 0 (RTX 4090):** inconclusive; the 4x control reached 64% CER at 8000 steps (gist, not copying), ~8 bits per slot at both ratios. `docs/OWN_ENCODER.md`.
-- **Colour gist (2026-11-06, the user's current direction, `docs/COLOUR_GIST.md`):** Latin in 2-3 colour channels, gist as the target. Untrained Qwen reads the overlay as one blended text (R(2) = 0.51 at 16 px); A1-cpu (LoRA only, ViT frozen, 500 steps) R(2) = 0.72 (0.54-0.94), missing the > 1 headline; both streams survive equally in the frozen ViT to block 16, then blend (not a brightness effect: balanced inks flip which stream wins). S1 (small VLM, encoder from scratch, CPU): closed inconclusive, the 1-stream control never became readable (gap ≤ 0.001 in 3 runs).
-- **Run 0 (2026-11-07, CPU, `docs/PLAN_3090.md` Results):** frozen Qwen2.5-VL-3B recovers at most 12.6 bits per vision token on natural text (25.7 on word-shuffled) at latin_p8 (28 chars/token), then collapses (latin_p5: 1.7). Three regimes PASS, shuffled < natural in preservation PASS (6/6 pitches), NLL-tracks-CER narrowly FAIL (ρ = -0.78 vs ≤ -0.8): zero-shot greedy transcription runs past the requested lines, so use the NLL gap for zero-shot points. Tool: `capacity_curve.py`. Run 0b (grid shifts 0-21 px): no zero-shot grid-phase effect; small (8 px) text flush with the page's top edge loses ~1.2 bits/token (~10%, dy = 28 control), so render with a top margin. Grid-aligned whole-pixel banks (7-px rows; chars 2x7/4x7/7x7, BPE 2x7+4x7) in `learned_glyphs/results/e1align/`: bridge CER 0.08/0.03/0.01/0.11% (BPE: 76 chars/token vs Latin 0.58% at the same px²/char). Amendment 4 CPU tasks: min-distance banks (`train_joint.py --min-dist-px 2`) `lg_n0_pb_c2_h7md` / `lg_pb_c2t4_h7md` have 0 identical glyphs (was 35 / 13), min 2 px apart, bridge CER 0.021% / 0.025% (was 0.083% / 0.110%), 53.4 / 74.3 chars/token with the 7-px margin. Run 0b at latin_p6 with margins on every shift: a real phase effect (perm p < 0.001, cross-validated 1.9 bits, CI 0.9-2.8), all vertical, period 28 px not 14, on-grid (28, 28) not better; zero-shot, dy = 21 beats the `--top-margin 7` placement by 1.3 bits/token.
-- **Next (2026-11-06, user's 3090 plan, reviewed in `docs/PLAN_3090.md`):** capacity curve on natural + block-shuffled text (Run 0/0b on CPU first), then trained-ViT Latin vs glyphs on the 3090; colour returns as Run 4. Qwen's patch embed sums the two temporal frames (kernel cosine 0.999): frame multiplexing needs a trainable patch embed. Superseded: GPU A1 with the ViT trained from block 16 (amendment 3): rgb1s/rgb2s_p16, rgb1s_p12 (equal density), rgb3s_p16, each with a blind. Prompt in `docs/HANDOFF.md`. Earlier lines (stage A', Latin sweep, Stage 0 fix) are parked.
+1. **Validation runs go to an Opus subagent** (standing instruction from the user, 2026-11-12). Any test that checks
+   a claim is delegated with a written brief, a pre-registration committed before the first scored call, and a
+   hard spend cap. The main session designs, checks the returned rows itself and updates the docs.
+2. **Every trained or probed arm needs its own blind control**, and one run per task settles nothing: three
+   separate "3 to 0" hints in this repo vanished or stayed unrepeated.
+3. **Never reword or disguise a prompt to get past a refusal or a safety classifier.** Claude is measured on
+   natural text only.
+4. **Never weaken, skip or edit a test to get a pass.**
+5. **Keep the tree clean:** a stop hook requires everything committed and pushed; long jobs snapshot-commit their
+   rows (`WIP:`). The container is suspended when idle and can restart, so long jobs must resume from their rows.
+6. **When you add a result:** put the rows and a README under `results/`, add one entry to
+   [docs/FINDINGS.md](docs/FINDINGS.md), update the table in the write-up it belongs to, and add the command to
+   [docs/RUNNING.md](docs/RUNNING.md). New pitfalls go in [docs/GOTCHAS.md](docs/GOTCHAS.md). Keep this file short.

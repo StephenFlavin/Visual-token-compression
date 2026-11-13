@@ -15,7 +15,7 @@ CONDENSED_FONT = FONTS / "ArchivoNarrow.ttf"        # 0.37 em/char  (scripts/fet
 CONDENSED_FONT_2 = FONTS / "RobotoCondensed.ttf"    # 0.40 em/char
 CJK_FONT = FONTS / "NotoSansCJKsc-Regular.otf"      # CJK ideographs are 1.0 em wide; has Latin too
 
-# Claude vision cost model. Measured on this runner (docs/claude-eval-notes.md):
+# Claude vision cost model. Measured on this runner (docs/claude/claude-eval-notes.md):
 # tokens = ceil(W/28) * ceil(H/28) + ~3  (~784 px^2/token). Use canvas sides that are multiples of 28.
 # Nothing is downscaled up to 1568x1568; the limits below are conservative.
 CLAUDE_PATCH = 28

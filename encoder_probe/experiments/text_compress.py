@@ -1,4 +1,4 @@
-"""Stage 0 of the own-encoder plan (docs/OWN_ENCODER.md): the text-side compression ceiling.
+"""Stage 0 of the own-encoder plan (docs/gpu/OWN_ENCODER.md): the text-side compression ceiling.
 
 How many characters can one input position of Qwen2.5-VL-3B's LLM carry, if a learned encoder packs them into it?
 No pixels: the encoder reads the text tokens themselves, so this bounds any pixel encoder (a rendered page carries
@@ -49,7 +49,7 @@ from encoder_probe.ep.encoders import resolve_device  # noqa: E402
 PROMPT = "\nRepeat the text exactly:\n"
 FAIR_KEYS = ["seq_tokens", "steps", "batch_size", "lr", "warmup", "weight_decay", "clip", "lora_r", "lora_alpha",
              "lora_dropout", "seed", "eval_windows", "val_windows", "tiny"]
-CHARS_PER_TEXT_TOKEN = 4.33   # Qwen tokenizer on held-out WikiText (docs/CONTEXT_BUDGET.md); the row measures its own
+CHARS_PER_TEXT_TOKEN = 4.33   # Qwen tokenizer on held-out WikiText (docs/claude/CONTEXT_BUDGET.md); the row measures its own
 
 
 def parse(argv=None):
@@ -181,6 +181,8 @@ class Slots(nn.Module):
 class Compressor:
     """Encoder = LLM + LoRA over [text][memory]; decoder = the same LLM with the adapter disabled."""
 
+    dec_off = True   # the decoder pass runs with the adapter off (text_slots.py's reader keeps it on)
+
     def __init__(self, pm, tok, m: int, dev, autocast: bool, switch: AdapterSwitch):
         self.pm, self.tok, self.m, self.dev, self.autocast, self.sw = pm, tok, m, dev, autocast, switch
         hf = Q.hf_model(pm)
@@ -208,7 +210,7 @@ class Compressor:
         """Mean CE of reconstructing ids (+ eos) from the slots with the frozen decoder."""
         B, L = ids.shape
         tgt = torch.cat([ids, torch.full((B, 1), self.tok.eos, dtype=ids.dtype, device=ids.device)], 1)
-        with self.sw.state(True), self.ac():
+        with self.sw.state(self.dec_off), self.ac():
             pre = self.prefix(mem)
             inp = torch.cat([pre, self.emb(tgt[:, :-1])], 1)
             h = self.lm(inputs_embeds=inp, use_cache=False).last_hidden_state[:, pre.shape[1] - 1:]
@@ -231,7 +233,7 @@ class Compressor:
         B = mem.shape[0]
         out_ids = []
         done = torch.zeros(B, dtype=torch.bool, device=mem.device)
-        with self.sw.state(True), self.ac():
+        with self.sw.state(self.dec_off), self.ac():
             o = self.lm(inputs_embeds=self.prefix(mem), use_cache=True)
             past, h = o.past_key_values, o.last_hidden_state[:, -1]
             for _ in range(max_new):

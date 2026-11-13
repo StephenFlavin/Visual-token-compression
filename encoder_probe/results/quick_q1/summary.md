@@ -66,4 +66,4 @@ Check: merger output rebuilt from the raster/window bookkeeping vs the module's 
 ## Colour-gist rows (2026-11-06)
 `rows.jsonl` also holds rgb1s_p16 and rgb2s_p16 (one Latin stream per colour channel). The two streams' ink MCC is
 equal at every depth (cyan/magenta 0.98/0.98 at the embedding, 0.88/0.88 at b8, 0.71/0.71 at b16, 0.26/0.29 at b24,
-0.06/0.06 after the merger; single stream 0.85 at b16). Analysis in docs/COLOUR_GIST.md ("Why cyan is not read").
+0.06/0.06 after the merger; single stream 0.85 at b16). Analysis in docs/gpu/COLOUR_GIST.md ("Why cyan is not read").

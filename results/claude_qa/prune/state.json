@@ -1,0 +1,44 @@
+{
+ "calibration": {
+  "overhead": 591,
+  "full": {
+   "rate": 1.0,
+   "chars": 59993,
+   "tokens": 20188,
+   "cpt": 2.971715870814345
+  },
+  "ptext22": {
+   "rate": 0.37,
+   "chars": 23840,
+   "tokens": 9234,
+   "cpt": 2.581763049599307
+  },
+  "ptext15": {
+   "rate": 0.57,
+   "chars": 37761,
+   "tokens": 13505,
+   "cpt": 2.796075527582377
+  },
+  "questions": 6559
+ },
+ "prompt_overhead": 7150,
+ "chars_per_token": {
+  "full": 2.971715870814345,
+  "ptext22": 2.581763049599307,
+  "ptext15": 2.796075527582377
+ },
+ "rates": {
+  "d0": {
+   "ptext22": 0.36,
+   "ptext15": 0.56
+  },
+  "d1": {
+   "ptext22": 0.35,
+   "ptext15": 0.55
+  },
+  "d2": {
+   "ptext22": 0.36,
+   "ptext15": 0.55
+  }
+ }
+}

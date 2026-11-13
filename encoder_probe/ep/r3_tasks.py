@@ -171,7 +171,7 @@ def page_sample(page, flat: str, others: list[str], rng, max_chars: int, task_mi
     return transcribe_sample(page, rng, max_chars)
 
 
-# ----------------------------------------------------------------- colour-gist streams (docs/COLOUR_GIST.md)
+# ----------------------------------------------------------------- colour-gist streams (docs/gpu/COLOUR_GIST.md)
 # A StreamPage (geom.SizedStreams) holds k text streams, each in its own colour. Every question names the stream
 # by its ink colour; the MC "lure" is a phrase from ANOTHER stream on the same page (for 1 stream: from the text
 # that follows the page), so a model that cannot tell the streams apart picks it.

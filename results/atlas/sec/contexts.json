@@ -1,0 +1,295 @@
+{
+ "digitalbazaar__forge@2bd5146c": {
+  "files": 67,
+  "pages": 25,
+  "image_tokens": 116196,
+  "gold": [
+   "lib/ed25519.js"
+  ],
+  "gold_new": [],
+  "gold_in_atlas": [
+   "lib/ed25519.js"
+  ],
+  "funcs": [
+   "crypto_sign_open",
+   "_isCanonicalSignatureScalar",
+   "_isSmallOrder"
+  ],
+  "families": [
+   "crypto"
+  ],
+  "patch_lines": 26
+ },
+ "digitalbazaar__forge@326a4d09": {
+  "files": 67,
+  "pages": 26,
+  "image_tokens": 118818,
+  "gold": [
+   "lib/tls.js"
+  ],
+  "gold_new": [],
+  "gold_in_atlas": [
+   "lib/tls.js"
+  ],
+  "funcs": [
+   "parseHelloMessage"
+  ],
+  "families": [
+   "validation"
+  ],
+  "patch_lines": 11
+ },
+ "naturalintelligence__fast-xml-parser@56805655": {
+  "files": 93,
+  "pages": 11,
+  "image_tokens": 47541,
+  "gold": [
+   "src/xmlparser/OrderedObjParser.js"
+  ],
+  "gold_new": [],
+  "gold_in_atlas": [
+   "src/xmlparser/OrderedObjParser.js"
+  ],
+  "funcs": [
+   "readStopNodeData",
+   "sanitizeName"
+  ],
+  "families": [
+   "dos"
+  ],
+  "patch_lines": 23
+ },
+ "tmatens__compose-lint@8e4fac95": {
+  "files": 102,
+  "pages": 19,
+  "image_tokens": 86250,
+  "gold": [
+   "src/compose_lint/engine.py"
+  ],
+  "gold_new": [],
+  "gold_in_atlas": [
+   "src/compose_lint/engine.py"
+  ],
+  "funcs": [
+   "FindingLimitError",
+   "run_rules"
+  ],
+  "families": [
+   "info"
+  ],
+  "patch_lines": 13
+ },
+ "nuxt__content@d8fed0c3": {
+  "files": 123,
+  "pages": 8,
+  "image_tokens": 36432,
+  "gold": [
+   "src/runtime/internal/security.ts"
+  ],
+  "gold_new": [],
+  "gold_in_atlas": [
+   "src/runtime/internal/security.ts"
+  ],
+  "funcs": [
+   "assertSafeQuery",
+   "cleanupQuery",
+   "strippingFence"
+  ],
+  "families": [
+   "dos"
+  ],
+  "patch_lines": 106
+ },
+ "tmatens__compose-lint@c43204ad": {
+  "files": 101,
+  "pages": 18,
+  "image_tokens": 83214,
+  "gold": [
+   "src/compose_lint/_output.py"
+  ],
+  "gold_new": [],
+  "gold_in_atlas": [
+   "src/compose_lint/_output.py"
+  ],
+  "funcs": [
+   "_escape",
+   "sanitize",
+   "sanitize_line",
+   "_defuse_commands"
+  ],
+  "families": [
+   "injection",
+   "validation"
+  ],
+  "patch_lines": 22
+ },
+ "kiwitcms__kiwi@494385fc": {
+  "files": 342,
+  "pages": 22,
+  "image_tokens": 101223,
+  "gold": [
+   "tcms/kiwi_auth/views.py"
+  ],
+  "gold_new": [],
+  "gold_in_atlas": [
+   "tcms/kiwi_auth/views.py"
+  ],
+  "funcs": [
+   "get_redirect_url"
+  ],
+  "families": [
+   "redirect"
+  ],
+  "patch_lines": 4
+ },
+ "filegator__filegator@d876ac38": {
+  "files": 103,
+  "pages": 6,
+  "image_tokens": 27393,
+  "gold": [
+   "backend/Controllers/UploadController.php"
+  ],
+  "gold_new": [],
+  "gold_in_atlas": [
+   "backend/Controllers/UploadController.php"
+  ],
+  "funcs": [
+   "upload"
+  ],
+  "families": [
+   "access"
+  ],
+  "patch_lines": 18
+ },
+ "filegator__filegator@c6715ff7": {
+  "files": 103,
+  "pages": 6,
+  "image_tokens": 27255,
+  "gold": [
+   "backend/Controllers/DownloadController.php",
+   "backend/Services/Archiver/Adapters/ZipArchiver.php"
+  ],
+  "gold_new": [],
+  "gold_in_atlas": [
+   "backend/Controllers/DownloadController.php",
+   "backend/Services/Archiver/Adapters/ZipArchiver.php"
+  ],
+  "funcs": [
+   "batchDownloadCreate",
+   "batchDownloadStart",
+   "rememberBatchArchive",
+   "ownsBatchArchive",
+   "createArchive"
+  ],
+  "families": [
+   "access",
+   "crypto"
+  ],
+  "patch_lines": 51
+ },
+ "urwid__urwid@567e3006": {
+  "files": 77,
+  "pages": 24,
+  "image_tokens": 109917,
+  "gold": [
+   "urwid/display/web.py"
+  ],
+  "gold_new": [],
+  "gold_in_atlas": [
+   "urwid/display/web.py"
+  ],
+  "funcs": [
+   "set_input_timeouts",
+   "is_web_request",
+   "handle_short_request",
+   "_request_charset"
+  ],
+  "families": [
+   "dos",
+   "injection"
+  ],
+  "patch_lines": 43
+ },
+ "gradleup__shadow@e822f993": {
+  "files": 101,
+  "pages": 12,
+  "image_tokens": 51405,
+  "gold": [
+   "src/main/kotlin/com/github/jengelman/gradle/plugins/shadow/internal/Utils.kt"
+  ],
+  "gold_new": [],
+  "gold_in_atlas": [
+   "src/main/kotlin/com/github/jengelman/gradle/plugins/shadow/internal/Utils.kt"
+  ],
+  "funcs": [
+   "zipEntry"
+  ],
+  "families": [
+   "path"
+  ],
+  "patch_lines": 10
+ },
+ "agamnentzar__ag-psd@e64f0c96": {
+  "files": 34,
+  "pages": 15,
+  "image_tokens": 68586,
+  "gold": [
+   "src/psdReader.ts"
+  ],
+  "gold_new": [],
+  "gold_in_atlas": [
+   "src/psdReader.ts"
+  ],
+  "funcs": [
+   "decodeLayerImageData"
+  ],
+  "families": [
+   "dos"
+  ],
+  "patch_lines": 14
+ },
+ "zeroturnaround__zt-zip@780a2fd9": {
+  "files": 54,
+  "pages": 8,
+  "image_tokens": 35259,
+  "gold": [
+   "src/main/java/org/zeroturnaround/zip/ZipUtil.java"
+  ],
+  "gold_new": [],
+  "gold_in_atlas": [
+   "src/main/java/org/zeroturnaround/zip/ZipUtil.java"
+  ],
+  "funcs": [
+   "checkDestinationFileForTraversal",
+   "process",
+   "destinationIsOutputDir",
+   "isSafeDescendantEntryName"
+  ],
+  "families": [
+   "path"
+  ],
+  "patch_lines": 80
+ },
+ "zeroturnaround__zt-zip@0a9d0e1f": {
+  "files": 54,
+  "pages": 8,
+  "image_tokens": 34500,
+  "gold": [
+   "src/main/java/org/zeroturnaround/zip/ZipUtil.java",
+   "src/main/java/org/zeroturnaround/zip/Zips.java"
+  ],
+  "gold_new": [],
+  "gold_in_atlas": [
+   "src/main/java/org/zeroturnaround/zip/ZipUtil.java",
+   "src/main/java/org/zeroturnaround/zip/Zips.java"
+  ],
+  "funcs": [
+   "checkDestinationFileForTraversal",
+   "process"
+  ],
+  "families": [
+   "path"
+  ],
+  "patch_lines": 4
+ }
+}

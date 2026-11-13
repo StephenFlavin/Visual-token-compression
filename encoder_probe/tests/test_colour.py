@@ -1,4 +1,4 @@
-"""Colour-gist phase A (docs/COLOUR_GIST.md): stream encodings, per-stream tasks, per-stream eval rows and the
+"""Colour-gist phase A (docs/gpu/COLOUR_GIST.md): stream encodings, per-stream tasks, per-stream eval rows and the
 gate analysis. TINY Qwen on the CPU, ~1 min."""
 import json
 import sys

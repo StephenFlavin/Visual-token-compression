@@ -37,7 +37,7 @@ def _wrap_write(path: Path, text: str) -> None:
 
 def research(k: int, proj: Path) -> dict:
     import sys
-    sys.path[:0] = [str(ROOT), str(ROOT / "experiments")]
+    sys.path[:0] = [str(ROOT), str(ROOT / "experiments" / "claude_qa")]
     import claude_qa_research as R
     arts = R.articles()[k * 14:(k + 1) * 14]
     _, srcs, qs = R.build(arts, seed=100 + k)

@@ -1,6 +1,14 @@
 # RAG with page images
 
-Plan, arms and predictions: [docs/RAG_PLAN.md](../../docs/RAG_PLAN.md), committed (9810725) before any call.
+> **In brief (added in the clean-up, 2026-11-12).** Question: in retrieval-augmented generation (RAG), where the
+> model answers from a few retrieved passages, do the passages work as page images? Answer: yes. The same top-5
+> passages as pages gave the same accuracy at 27-43% lower cost per question, and spending the same tokens on more
+> passages as pages gained 8.8 points on MultiHop-RAG (308 questions on 3 datasets, Opus 5.5). Mixing text and pages
+> did worse than all pages. Arm names: `T5` / `T15` = top 5 / 15 passages as text, `P5` = the top 5 as pages,
+> `Pmatch` = as many passages as fit in `T5`'s tokens as pages, `hybrid` = top 3 as text plus pages, `closed` = no
+> passages. The numbers below reproduce from the rows with `python3 experiments/rag/analyse_rag.py`.
+
+Plan, arms and predictions: [docs/claude/RAG_PLAN.md](../../docs/claude/RAG_PLAN.md), committed (9810725) before any call.
 Harness: `experiments/rag/run_rag.py` (resumable: finished calls in `runs.jsonl`, responses cached; failed calls
 neither recorded nor cached; it stops itself when most of a batch fails, e.g. on a usage limit).
 
@@ -51,7 +59,7 @@ pages (2.6x, 2.6x, 2.2x fewer). Recall of the gold evidence: top-5 0.85 / 0.38 /
 * Chain questions in the planted set are 0% in every arm: BM25 on the question does not retrieve the intermediate
   facts (a multi-step retriever would be needed); this is a retrieval limit, not a reading one.
 
-Pre-registered verdicts (docs/RAG_PLAN.md):
+Pre-registered verdicts (docs/claude/RAG_PLAN.md):
 1. Top-5 as pages within 2 points of top-5 as text, with at least 2x fewer context tokens: **PASS** on point estimates
    (±0, +0.7, +2.0) and tokens (2.6x, 2.6x, 2.2x); the 95% bound is within 2 points only on MultiHop-RAG (the other
    sets have 60 and 100 questions).

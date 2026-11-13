@@ -5,7 +5,7 @@ requested line. Other files are left alone."""
 import hashlib, json, os, re, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
-sys.path[:0] = [HERE, ROOT, os.path.join(ROOT, "experiments")]
+sys.path[:0] = [HERE, ROOT, os.path.join(ROOT, "experiments", "claude_qa")]
 ev = json.load(sys.stdin)
 ti = ev.get("tool_input", {})
 p = ti.get("file_path", "")

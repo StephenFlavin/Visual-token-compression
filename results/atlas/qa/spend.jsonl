@@ -1,0 +1,825 @@
+{"what": "harness check: prompt-cache probes (6 calls, repo_atlas_eval.py text, no rows)", "cost_usd": 0.3106, "t": "2026-11-12T06:50:00"}
+{"what": "harness check streamlink agent", "cost_usd": 0.045435, "input_tokens": 18993, "output_tokens": 909, "error": null, "t": "2026-11-12T06:43:25"}
+{"what": "harness check streamlink agent", "cost_usd": 0.046227199999999996, "input_tokens": 26572, "output_tokens": 841, "error": null, "t": "2026-11-12T06:43:27"}
+{"what": "harness check streamlink agent", "cost_usd": 0.0819608, "input_tokens": 56332, "output_tokens": 1317, "error": null, "t": "2026-11-12T06:43:32"}
+{"what": "harness check streamlink closed", "cost_usd": 0.098414, "input_tokens": 1206, "output_tokens": 4459, "error": null, "t": "2026-11-12T06:43:59"}
+{"what": "harness check streamlink judge", "cost_usd": 0.016158, "input_tokens": 3056, "output_tokens": 44, "error": null, "t": "2026-11-12T06:44:02"}
+{"what": "harness check streamlink judge", "cost_usd": 0.017107999999999998, "input_tokens": 3246, "output_tokens": 44, "error": null, "t": "2026-11-12T06:44:02"}
+{"what": "harness check streamlink judge", "cost_usd": 0.016298, "input_tokens": 3084, "output_tokens": 44, "error": null, "t": "2026-11-12T06:44:02"}
+{"what": "harness check streamlink judge", "cost_usd": 0.016038, "input_tokens": 3032, "output_tokens": 44, "error": null, "t": "2026-11-12T06:44:02"}
+{"what": "harness check streamlink judge", "cost_usd": 0.015853, "input_tokens": 2995, "output_tokens": 44, "error": null, "t": "2026-11-12T06:44:02"}
+{"what": "harness check streamlink judge", "cost_usd": 0.015948, "input_tokens": 3014, "output_tokens": 44, "error": null, "t": "2026-11-12T06:44:03"}
+{"what": "flask text b0", "cost_usd": 0.6993765999999999, "input_tokens": 121651, "output_tokens": 3270, "error": null, "t": "2026-11-12T06:46:54"}
+{"what": "flask map b0", "cost_usd": 0.1393414, "input_tokens": 14251, "output_tokens": 3192, "error": null, "t": "2026-11-12T06:46:54"}
+{"what": "flask atlas b0", "cost_usd": 0.264847, "input_tokens": 37403, "output_tokens": 3448, "error": null, "t": "2026-11-12T06:46:58"}
+{"what": "flask closed b0", "cost_usd": 0.08179900000000001, "input_tokens": 1165, "output_tokens": 3639, "error": null, "t": "2026-11-12T06:46:58"}
+{"what": "pytest closed b0", "cost_usd": 0.09663900000000002, "input_tokens": 1279, "output_tokens": 4352, "error": null, "t": "2026-11-12T06:47:06"}
+{"what": "pytest map b0", "cost_usd": 0.4356506, "input_tokens": 64558, "output_tokens": 4929, "error": null, "t": "2026-11-12T06:47:10"}
+{"what": "requests closed b0", "cost_usd": 0.100744, "input_tokens": 1302, "output_tokens": 4553, "error": null, "t": "2026-11-12T06:47:37"}
+{"what": "requests map b0", "cost_usd": 0.1253492, "input_tokens": 6329, "output_tokens": 4554, "error": null, "t": "2026-11-12T06:47:41"}
+{"what": "requests atlas b0", "cost_usd": 0.21345600000000003, "input_tokens": 22240, "output_tokens": 4822, "error": null, "t": "2026-11-12T06:47:44"}
+{"what": "requests text b0", "cost_usd": 0.4593668000000001, "input_tokens": 72443, "output_tokens": 4065, "error": null, "t": "2026-11-12T06:47:46"}
+{"what": "pytest atlas b0", "cost_usd": 0.8484178, "input_tokens": 144044, "output_tokens": 4901, "error": null, "t": "2026-11-12T06:47:50"}
+{"what": "flask closed b1", "cost_usd": 0.071554, "input_tokens": 1193, "output_tokens": 3120, "error": null, "t": "2026-11-12T06:48:22"}
+{"what": "flask closed b4", "cost_usd": 0.074574, "input_tokens": 1181, "output_tokens": 3274, "error": null, "t": "2026-11-12T06:48:22"}
+{"what": "flask closed b3", "cost_usd": 0.090224, "input_tokens": 1199, "output_tokens": 4052, "error": null, "t": "2026-11-12T06:48:27"}
+{"what": "flask closed b2", "cost_usd": 0.087164, "input_tokens": 1203, "output_tokens": 3898, "error": null, "t": "2026-11-12T06:48:27"}
+{"what": "flask closed b5", "cost_usd": 0.090519, "input_tokens": 1200, "output_tokens": 4067, "error": null, "t": "2026-11-12T06:48:30"}
+{"what": "flask map b1", "cost_usd": 0.09718879999999999, "input_tokens": 14278, "output_tokens": 4297, "error": null, "t": "2026-11-12T06:48:31"}
+{"what": "flask map b2", "cost_usd": 0.0831588, "input_tokens": 14290, "output_tokens": 3592, "error": null, "t": "2026-11-12T06:48:56"}
+{"what": "flask map b3", "cost_usd": 0.09040880000000001, "input_tokens": 14285, "output_tokens": 3956, "error": null, "t": "2026-11-12T06:48:59"}
+{"what": "flask map b4", "cost_usd": 0.08011879999999999, "input_tokens": 14267, "output_tokens": 3446, "error": null, "t": "2026-11-12T06:49:00"}
+{"what": "flask atlas b1", "cost_usd": 0.09183, "input_tokens": 37431, "output_tokens": 3566, "error": null, "t": "2026-11-12T06:49:06"}
+{"what": "flask atlas b2", "cost_usd": 0.09434000000000001, "input_tokens": 37443, "output_tokens": 3688, "error": null, "t": "2026-11-12T06:49:07"}
+{"what": "flask map b5", "cost_usd": 0.09940380000000001, "input_tokens": 14288, "output_tokens": 4405, "error": null, "t": "2026-11-12T06:49:07"}
+{"what": "flask atlas b4", "cost_usd": 0.09164, "input_tokens": 37420, "output_tokens": 3559, "error": null, "t": "2026-11-12T06:49:35"}
+{"what": "flask text b1", "cost_usd": 0.11979920000000001, "input_tokens": 121678, "output_tokens": 3280, "error": null, "t": "2026-11-12T06:49:37"}
+{"what": "flask atlas b3", "cost_usd": 0.11100000000000002, "input_tokens": 37439, "output_tokens": 4522, "error": null, "t": "2026-11-12T06:49:37"}
+{"what": "flask text b2", "cost_usd": 0.12425920000000001, "input_tokens": 121689, "output_tokens": 3500, "error": null, "t": "2026-11-12T06:49:39"}
+{"what": "flask atlas b5", "cost_usd": 0.10910500000000001, "input_tokens": 37441, "output_tokens": 4427, "error": null, "t": "2026-11-12T06:49:41"}
+{"what": "flask text b3", "cost_usd": 0.1330192, "input_tokens": 121687, "output_tokens": 3938, "error": null, "t": "2026-11-12T06:49:44"}
+{"what": "flask text b4", "cost_usd": 0.12388920000000002, "input_tokens": 121667, "output_tokens": 3487, "error": null, "t": "2026-11-12T06:50:10"}
+{"what": "flask text b5", "cost_usd": 0.1250042, "input_tokens": 121687, "output_tokens": 3538, "error": null, "t": "2026-11-12T06:50:10"}
+{"what": "pytest closed b3", "cost_usd": 0.09534399999999998, "input_tokens": 1277, "output_tokens": 4288, "error": null, "t": "2026-11-12T06:50:22"}
+{"what": "pytest closed b2", "cost_usd": 0.11103400000000001, "input_tokens": 1370, "output_tokens": 5049, "error": null, "t": "2026-11-12T06:50:25"}
+{"what": "pytest closed b1", "cost_usd": 0.113964, "input_tokens": 1388, "output_tokens": 5191, "error": null, "t": "2026-11-12T06:50:27"}
+{"what": "pytest closed b4", "cost_usd": 0.119304, "input_tokens": 1284, "output_tokens": 5484, "error": null, "t": "2026-11-12T06:50:35"}
+{"what": "pytest closed b5", "cost_usd": 0.105834, "input_tokens": 1294, "output_tokens": 4808, "error": null, "t": "2026-11-12T06:50:57"}
+{"what": "pytest map b3", "cost_usd": 0.0990672, "input_tokens": 64557, "output_tokens": 3366, "error": null, "t": "2026-11-12T06:50:58"}
+{"what": "pytest map b1", "cost_usd": 0.1345772, "input_tokens": 64667, "output_tokens": 5114, "error": null, "t": "2026-11-12T06:51:00"}
+{"what": "pytest map b4", "cost_usd": 0.1324972, "input_tokens": 64561, "output_tokens": 5037, "error": null, "t": "2026-11-12T06:51:11"}
+{"what": "pytest map b2", "cost_usd": 0.15181719999999999, "input_tokens": 64648, "output_tokens": 5981, "error": null, "t": "2026-11-12T06:51:17"}
+{"what": "pytest map b5", "cost_usd": 0.1447872, "input_tokens": 64573, "output_tokens": 5648, "error": null, "t": "2026-11-12T06:51:26"}
+{"what": "pytest atlas b3", "cost_usd": 0.14221160000000002, "input_tokens": 144044, "output_tokens": 3933, "error": null, "t": "2026-11-12T06:51:47"}
+{"what": "pytest atlas b2", "cost_usd": 0.16229159999999998, "input_tokens": 144134, "output_tokens": 4915, "error": null, "t": "2026-11-12T06:51:50"}
+{"what": "pytest atlas b1", "cost_usd": 0.1670516, "input_tokens": 144153, "output_tokens": 5148, "error": null, "t": "2026-11-12T06:51:53"}
+{"what": "pytest atlas b4", "cost_usd": 0.1666616, "input_tokens": 144050, "output_tokens": 5154, "error": null, "t": "2026-11-12T06:52:02"}
+{"what": "pytest atlas b5", "cost_usd": 0.1480916, "input_tokens": 144058, "output_tokens": 4224, "error": null, "t": "2026-11-12T06:52:03"}
+{"what": "requests closed b1", "cost_usd": 0.096979, "input_tokens": 1292, "output_tokens": 4367, "error": null, "t": "2026-11-12T06:52:07"}
+{"what": "requests closed b2", "cost_usd": 0.083299, "input_tokens": 1308, "output_tokens": 3679, "error": null, "t": "2026-11-12T06:52:21"}
+{"what": "requests closed b3", "cost_usd": 0.09728900000000001, "input_tokens": 1359, "output_tokens": 4366, "error": null, "t": "2026-11-12T06:52:32"}
+{"what": "requests closed b4", "cost_usd": 0.09627400000000001, "input_tokens": 1341, "output_tokens": 4320, "error": null, "t": "2026-11-12T06:52:36"}
+{"what": "requests map b2", "cost_usd": 0.0875994, "input_tokens": 6335, "output_tokens": 3949, "error": null, "t": "2026-11-12T06:52:44"}
+{"what": "requests map b1", "cost_usd": 0.10182939999999999, "input_tokens": 6318, "output_tokens": 4665, "error": null, "t": "2026-11-12T06:52:45"}
+{"what": "requests closed b5", "cost_usd": 0.113494, "input_tokens": 1247, "output_tokens": 5204, "error": null, "t": "2026-11-12T06:52:49"}
+{"what": "requests map b3", "cost_usd": 0.0965294, "input_tokens": 6388, "output_tokens": 4382, "error": null, "t": "2026-11-12T06:53:03"}
+{"what": "requests map b4", "cost_usd": 0.09757439999999999, "input_tokens": 6370, "output_tokens": 4439, "error": null, "t": "2026-11-12T06:53:15"}
+{"what": "requests map b5", "cost_usd": 0.1033644, "input_tokens": 6275, "output_tokens": 4752, "error": null, "t": "2026-11-12T06:53:18"}
+{"what": "requests atlas b2", "cost_usd": 0.192981, "input_tokens": 22243, "output_tokens": 3798, "error": null, "t": "2026-11-12T06:53:23"}
+{"what": "requests atlas b3", "cost_usd": 0.10108300000000002, "input_tokens": 22294, "output_tokens": 4293, "error": null, "t": "2026-11-12T06:53:29"}
+{"what": "requests atlas b1", "cost_usd": 0.208341, "input_tokens": 22229, "output_tokens": 4569, "error": null, "t": "2026-11-12T06:53:30"}
+{"what": "requests atlas b4", "cost_usd": 0.11202800000000002, "input_tokens": 22278, "output_tokens": 4844, "error": null, "t": "2026-11-12T06:53:50"}
+{"what": "requests atlas b5", "cost_usd": 0.09357800000000001, "input_tokens": 22183, "output_tokens": 3945, "error": null, "t": "2026-11-12T06:53:52"}
+{"what": "requests text b1", "cost_usd": 0.4615518, "input_tokens": 72432, "output_tokens": 4177, "error": null, "t": "2026-11-12T06:53:58"}
+{"what": "requests text b2", "cost_usd": 0.1101246, "input_tokens": 72448, "output_tokens": 3753, "error": null, "t": "2026-11-12T06:53:59"}
+{"what": "requests text b3", "cost_usd": 0.11151459999999999, "input_tokens": 72499, "output_tokens": 3810, "error": null, "t": "2026-11-12T06:54:05"}
+{"what": "requests text b4", "cost_usd": 0.1209896, "input_tokens": 72482, "output_tokens": 4288, "error": null, "t": "2026-11-12T06:54:10"}
+{"what": "requests text b5", "cost_usd": 0.10470960000000001, "input_tokens": 72386, "output_tokens": 3498, "error": null, "t": "2026-11-12T06:54:22"}
+{"what": "judge pytest/Q47 closed", "cost_usd": 0.018293, "input_tokens": 3483, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:41"}
+{"what": "judge requests/Q28 text", "cost_usd": 0.009030199999999999, "input_tokens": 3465, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:43"}
+{"what": "judge requests/Q46 text", "cost_usd": 0.009185200000000001, "input_tokens": 3496, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:43"}
+{"what": "judge flask/Q16 map", "cost_usd": 0.009415199999999999, "input_tokens": 3542, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:43"}
+{"what": "judge flask/Q22 map", "cost_usd": 0.0092852, "input_tokens": 3516, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:44"}
+{"what": "judge requests/Q36 closed", "cost_usd": 0.009630200000000002, "input_tokens": 3585, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:44"}
+{"what": "judge flask/Q5 text", "cost_usd": 0.0111302, "input_tokens": 3885, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:44"}
+{"what": "judge requests/Q35 atlas", "cost_usd": 0.007760199999999999, "input_tokens": 3211, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:45"}
+{"what": "judge flask/Q3 atlas", "cost_usd": 0.0085252, "input_tokens": 3364, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:45"}
+{"what": "judge flask/Q39 closed", "cost_usd": 0.0082402, "input_tokens": 3307, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:46"}
+{"what": "judge requests/Q29 atlas", "cost_usd": 0.0081952, "input_tokens": 3298, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:46"}
+{"what": "judge requests/Q41 closed", "cost_usd": 0.0092502, "input_tokens": 3509, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:46"}
+{"what": "judge requests/Q40 atlas", "cost_usd": 0.0092702, "input_tokens": 3513, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:46"}
+{"what": "judge requests/Q10 text", "cost_usd": 0.0091602, "input_tokens": 3491, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:47"}
+{"what": "judge pytest/Q26 atlas", "cost_usd": 0.010285199999999998, "input_tokens": 3716, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:47"}
+{"what": "judge flask/Q46 closed", "cost_usd": 0.0090552, "input_tokens": 3470, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:48"}
+{"what": "judge flask/Q45 text", "cost_usd": 0.008245200000000001, "input_tokens": 3308, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:48"}
+{"what": "judge requests/Q42 closed", "cost_usd": 0.0073402, "input_tokens": 3127, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:48"}
+{"what": "judge requests/Q30 text", "cost_usd": 0.0077902, "input_tokens": 3217, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:49"}
+{"what": "judge flask/Q28 text", "cost_usd": 0.009425200000000002, "input_tokens": 3544, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:49"}
+{"what": "judge requests/Q17 text", "cost_usd": 0.0094652, "input_tokens": 3552, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:49"}
+{"what": "judge pytest/Q47 map", "cost_usd": 0.009310200000000001, "input_tokens": 3521, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:50"}
+{"what": "judge flask/Q34 map", "cost_usd": 0.009230200000000001, "input_tokens": 3505, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:50"}
+{"what": "judge requests/Q8 atlas", "cost_usd": 0.0096802, "input_tokens": 3595, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:50"}
+{"what": "judge requests/Q41 text", "cost_usd": 0.011295199999999998, "input_tokens": 3510, "output_tokens": 146, "error": null, "t": "2026-11-12T06:54:51"}
+{"what": "judge pytest/Q19 closed", "cost_usd": 0.010820199999999999, "input_tokens": 3823, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:52"}
+{"what": "judge requests/Q35 map", "cost_usd": 0.0076452, "input_tokens": 3188, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:52"}
+{"what": "judge pytest/Q32 atlas", "cost_usd": 0.008290200000000001, "input_tokens": 3317, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:52"}
+{"what": "judge pytest/Q24 closed", "cost_usd": 0.0083802, "input_tokens": 3335, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:52"}
+{"what": "judge flask/Q28 map", "cost_usd": 0.009405199999999999, "input_tokens": 3540, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:53"}
+{"what": "judge flask/Q23 map", "cost_usd": 0.009355200000000001, "input_tokens": 3530, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:53"}
+{"what": "judge flask/Q37 atlas", "cost_usd": 0.0097502, "input_tokens": 3609, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:54"}
+{"what": "judge pytest/Q32 map", "cost_usd": 0.008315200000000002, "input_tokens": 3322, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:54"}
+{"what": "judge pytest/Q48 atlas", "cost_usd": 0.008385199999999999, "input_tokens": 3336, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:54"}
+{"what": "judge requests/Q31 atlas", "cost_usd": 0.009380199999999998, "input_tokens": 3535, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:54"}
+{"what": "judge requests/Q10 atlas", "cost_usd": 0.0091152, "input_tokens": 3482, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:55"}
+{"what": "judge requests/Q34 closed", "cost_usd": 0.011170199999999998, "input_tokens": 3893, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:55"}
+{"what": "judge requests/Q16 atlas", "cost_usd": 0.0081002, "input_tokens": 3279, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:56"}
+{"what": "judge pytest/Q8 map", "cost_usd": 0.008430199999999999, "input_tokens": 3345, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:56"}
+{"what": "judge pytest/Q39 closed", "cost_usd": 0.0094902, "input_tokens": 3557, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:57"}
+{"what": "judge flask/Q48 atlas", "cost_usd": 0.0106452, "input_tokens": 3788, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:57"}
+{"what": "judge pytest/Q45 closed", "cost_usd": 0.0085252, "input_tokens": 3364, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:57"}
+{"what": "judge pytest/Q43 atlas", "cost_usd": 0.007490200000000001, "input_tokens": 3157, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:57"}
+{"what": "judge flask/Q14 text", "cost_usd": 0.010480200000000002, "input_tokens": 3755, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:58"}
+{"what": "judge requests/Q38 closed", "cost_usd": 0.0090802, "input_tokens": 3475, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:58"}
+{"what": "judge requests/Q13 text", "cost_usd": 0.0098302, "input_tokens": 3625, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:59"}
+{"what": "judge pytest/Q36 atlas", "cost_usd": 0.009765199999999998, "input_tokens": 3612, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:59"}
+{"what": "judge requests/Q37 atlas", "cost_usd": 0.0092852, "input_tokens": 3516, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:59"}
+{"what": "judge requests/Q46 map", "cost_usd": 0.0092402, "input_tokens": 3507, "output_tokens": 44, "error": null, "t": "2026-11-12T06:54:59"}
+{"what": "judge requests/Q37 closed", "cost_usd": 0.009415199999999999, "input_tokens": 3542, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:00"}
+{"what": "judge flask/Q4 text", "cost_usd": 0.010355199999999998, "input_tokens": 3730, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:00"}
+{"what": "judge flask/Q15 atlas", "cost_usd": 0.0100302, "input_tokens": 3665, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:01"}
+{"what": "judge requests/Q21 text", "cost_usd": 0.0093152, "input_tokens": 3522, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:02"}
+{"what": "judge flask/Q24 text", "cost_usd": 0.0101702, "input_tokens": 3693, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:02"}
+{"what": "judge requests/Q34 text", "cost_usd": 0.011350200000000001, "input_tokens": 3929, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:02"}
+{"what": "judge flask/Q21 map", "cost_usd": 0.009675199999999998, "input_tokens": 3594, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:02"}
+{"what": "judge flask/Q3 map", "cost_usd": 0.008630200000000001, "input_tokens": 3385, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:03"}
+{"what": "judge pytest/Q38 closed", "cost_usd": 0.010375200000000001, "input_tokens": 3734, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:04"}
+{"what": "judge flask/Q36 closed", "cost_usd": 0.009030199999999999, "input_tokens": 3465, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:04"}
+{"what": "judge pytest/Q41 atlas", "cost_usd": 0.011225200000000001, "input_tokens": 3904, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:04"}
+{"what": "judge requests/Q31 text", "cost_usd": 0.009390200000000001, "input_tokens": 3537, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:05"}
+{"what": "judge requests/Q47 closed", "cost_usd": 0.0086402, "input_tokens": 3387, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:05"}
+{"what": "judge requests/Q6 closed", "cost_usd": 0.0115702, "input_tokens": 3973, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:05"}
+{"what": "judge pytest/Q16 map", "cost_usd": 0.0112002, "input_tokens": 3899, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:06"}
+{"what": "judge flask/Q1 map", "cost_usd": 0.0080102, "input_tokens": 3261, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:06"}
+{"what": "judge flask/Q11 atlas", "cost_usd": 0.0109152, "input_tokens": 3842, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:07"}
+{"what": "judge flask/Q32 text", "cost_usd": 0.0089702, "input_tokens": 3453, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:07"}
+{"what": "judge pytest/Q42 map", "cost_usd": 0.007565199999999999, "input_tokens": 3172, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:07"}
+{"what": "judge flask/Q5 map", "cost_usd": 0.010765199999999999, "input_tokens": 3812, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:07"}
+{"what": "judge requests/Q3 map", "cost_usd": 0.009185200000000001, "input_tokens": 3496, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:08"}
+{"what": "judge flask/Q4 atlas", "cost_usd": 0.0101702, "input_tokens": 3693, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:09"}
+{"what": "judge requests/Q41 atlas", "cost_usd": 0.010710200000000001, "input_tokens": 3493, "output_tokens": 121, "error": null, "t": "2026-11-12T06:55:09"}
+{"what": "judge requests/Q15 text", "cost_usd": 0.0085402, "input_tokens": 3387, "output_tokens": 39, "error": null, "t": "2026-11-12T06:55:10"}
+{"what": "judge requests/Q37 text", "cost_usd": 0.009300200000000002, "input_tokens": 3519, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:10"}
+{"what": "judge pytest/Q40 closed", "cost_usd": 0.008905199999999999, "input_tokens": 3440, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:10"}
+{"what": "judge requests/Q4 text", "cost_usd": 0.009570200000000001, "input_tokens": 3573, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:11"}
+{"what": "judge pytest/Q24 atlas", "cost_usd": 0.008350199999999999, "input_tokens": 3329, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:11"}
+{"what": "judge requests/Q47 text", "cost_usd": 0.0082302, "input_tokens": 3305, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:11"}
+{"what": "judge flask/Q7 closed", "cost_usd": 0.0074002, "input_tokens": 3139, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:12"}
+{"what": "judge pytest/Q3 map", "cost_usd": 0.0096802, "input_tokens": 3595, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:12"}
+{"what": "judge flask/Q2 map", "cost_usd": 0.008725199999999999, "input_tokens": 3404, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:12"}
+{"what": "judge flask/Q45 closed", "cost_usd": 0.0082202, "input_tokens": 3303, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:13"}
+{"what": "judge requests/Q34 atlas", "cost_usd": 0.011340200000000002, "input_tokens": 3927, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:13"}
+{"what": "judge pytest/Q19 atlas", "cost_usd": 0.0111552, "input_tokens": 3890, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:13"}
+{"what": "judge requests/Q39 closed", "cost_usd": 0.0091702, "input_tokens": 3493, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:14"}
+{"what": "judge pytest/Q7 closed", "cost_usd": 0.0111652, "input_tokens": 3892, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:14"}
+{"what": "judge flask/Q2 closed", "cost_usd": 0.008520199999999999, "input_tokens": 3363, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:14"}
+{"what": "judge requests/Q25 atlas", "cost_usd": 0.009255199999999998, "input_tokens": 3510, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:15"}
+{"what": "judge flask/Q25 map", "cost_usd": 0.0102102, "input_tokens": 3701, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:15"}
+{"what": "judge requests/Q6 map", "cost_usd": 0.0114802, "input_tokens": 3955, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:16"}
+{"what": "judge requests/Q23 closed", "cost_usd": 0.0084502, "input_tokens": 3349, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:16"}
+{"what": "judge pytest/Q11 closed", "cost_usd": 0.009335199999999998, "input_tokens": 3546, "output_tokens": 39, "error": null, "t": "2026-11-12T06:55:17"}
+{"what": "judge requests/Q2 atlas", "cost_usd": 0.0072802, "input_tokens": 3115, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:17"}
+{"what": "judge pytest/Q33 map", "cost_usd": 0.012735199999999999, "input_tokens": 4206, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:17"}
+{"what": "judge requests/Q4 map", "cost_usd": 0.009560200000000001, "input_tokens": 3571, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:18"}
+{"what": "judge flask/Q8 closed", "cost_usd": 0.009280199999999999, "input_tokens": 3515, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:18"}
+{"what": "judge requests/Q13 map", "cost_usd": 0.009915199999999999, "input_tokens": 3642, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:18"}
+{"what": "judge requests/Q10 map", "cost_usd": 0.0089902, "input_tokens": 3457, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:19"}
+{"what": "judge pytest/Q34 closed", "cost_usd": 0.0088102, "input_tokens": 3421, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:19"}
+{"what": "judge pytest/Q3 atlas", "cost_usd": 0.009685200000000001, "input_tokens": 3596, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:19"}
+{"what": "judge flask/Q12 closed", "cost_usd": 0.0087452, "input_tokens": 3408, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:20"}
+{"what": "judge requests/Q40 closed", "cost_usd": 0.009400200000000001, "input_tokens": 3539, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:20"}
+{"what": "judge requests/Q20 atlas", "cost_usd": 0.009460199999999998, "input_tokens": 3551, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:21"}
+{"what": "judge flask/Q43 atlas", "cost_usd": 0.0083752, "input_tokens": 3334, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:21"}
+{"what": "judge pytest/Q46 closed", "cost_usd": 0.010525199999999998, "input_tokens": 3764, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:21"}
+{"what": "judge pytest/Q37 atlas", "cost_usd": 0.0070202, "input_tokens": 3063, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:21"}
+{"what": "judge flask/Q39 atlas", "cost_usd": 0.0083652, "input_tokens": 3332, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:22"}
+{"what": "judge requests/Q32 closed", "cost_usd": 0.0081502, "input_tokens": 3289, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:22"}
+{"what": "judge pytest/Q11 map", "cost_usd": 0.0096252, "input_tokens": 3584, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:23"}
+{"what": "judge requests/Q12 closed", "cost_usd": 0.0099752, "input_tokens": 3654, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:23"}
+{"what": "judge flask/Q19 atlas", "cost_usd": 0.009820200000000001, "input_tokens": 3623, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:24"}
+{"what": "judge pytest/Q26 map", "cost_usd": 0.010465200000000001, "input_tokens": 3752, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:24"}
+{"what": "judge flask/Q13 map", "cost_usd": 0.0086552, "input_tokens": 3390, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:25"}
+{"what": "judge pytest/Q33 atlas", "cost_usd": 0.012450200000000002, "input_tokens": 4149, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:25"}
+{"what": "judge flask/Q6 atlas", "cost_usd": 0.010715200000000001, "input_tokens": 3802, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:25"}
+{"what": "judge requests/Q14 text", "cost_usd": 0.0073652, "input_tokens": 3132, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:25"}
+{"what": "judge pytest/Q14 map", "cost_usd": 0.010345199999999999, "input_tokens": 3728, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:25"}
+{"what": "judge flask/Q8 map", "cost_usd": 0.0091252, "input_tokens": 3484, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:26"}
+{"what": "judge requests/Q23 text", "cost_usd": 0.0084552, "input_tokens": 3350, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:26"}
+{"what": "judge requests/Q26 atlas", "cost_usd": 0.0088752, "input_tokens": 3434, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:27"}
+{"what": "judge flask/Q10 map", "cost_usd": 0.0084852, "input_tokens": 3356, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:27"}
+{"what": "judge requests/Q32 text", "cost_usd": 0.0083552, "input_tokens": 3330, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:27"}
+{"what": "judge pytest/Q23 atlas", "cost_usd": 0.0080702, "input_tokens": 3273, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:27"}
+{"what": "judge flask/Q46 map", "cost_usd": 0.0091052, "input_tokens": 3480, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:28"}
+{"what": "judge pytest/Q31 closed", "cost_usd": 0.0094902, "input_tokens": 3557, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:28"}
+{"what": "judge requests/Q39 map", "cost_usd": 0.009085199999999998, "input_tokens": 3476, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:29"}
+{"what": "judge flask/Q22 closed", "cost_usd": 0.009310200000000001, "input_tokens": 3521, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:29"}
+{"what": "judge flask/Q24 map", "cost_usd": 0.0100652, "input_tokens": 3672, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:29"}
+{"what": "judge requests/Q8 closed", "cost_usd": 0.009790199999999999, "input_tokens": 3617, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:30"}
+{"what": "judge pytest/Q22 map", "cost_usd": 0.008645199999999999, "input_tokens": 3388, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:30"}
+{"what": "judge requests/Q46 atlas", "cost_usd": 0.009290199999999998, "input_tokens": 3517, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:30"}
+{"what": "judge pytest/Q4 atlas", "cost_usd": 0.010295200000000001, "input_tokens": 3718, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:31"}
+{"what": "judge requests/Q18 closed", "cost_usd": 0.010185200000000002, "input_tokens": 3696, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:31"}
+{"what": "judge requests/Q18 text", "cost_usd": 0.010130199999999999, "input_tokens": 3685, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:32"}
+{"what": "judge flask/Q22 atlas", "cost_usd": 0.009575199999999999, "input_tokens": 3574, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:32"}
+{"what": "judge pytest/Q25 closed", "cost_usd": 0.009255199999999998, "input_tokens": 3510, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:32"}
+{"what": "judge requests/Q43 text", "cost_usd": 0.0091252, "input_tokens": 3484, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:32"}
+{"what": "judge requests/Q26 map", "cost_usd": 0.008755200000000001, "input_tokens": 3410, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:32"}
+{"what": "judge requests/Q26 closed", "cost_usd": 0.008845200000000001, "input_tokens": 3428, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:33"}
+{"what": "judge flask/Q15 map", "cost_usd": 0.010105199999999998, "input_tokens": 3680, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:34"}
+{"what": "judge flask/Q11 closed", "cost_usd": 0.0107102, "input_tokens": 3801, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:34"}
+{"what": "judge flask/Q38 atlas", "cost_usd": 0.0092252, "input_tokens": 3504, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:34"}
+{"what": "judge pytest/Q10 closed", "cost_usd": 0.0089302, "input_tokens": 3445, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:34"}
+{"what": "judge requests/Q12 map", "cost_usd": 0.0101202, "input_tokens": 3683, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:34"}
+{"what": "judge pytest/Q8 atlas", "cost_usd": 0.0084502, "input_tokens": 3349, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:35"}
+{"what": "judge requests/Q3 closed", "cost_usd": 0.009235199999999999, "input_tokens": 3506, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:36"}
+{"what": "judge flask/Q40 atlas", "cost_usd": 0.009935199999999998, "input_tokens": 3646, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:36"}
+{"what": "judge flask/Q37 text", "cost_usd": 0.009765199999999998, "input_tokens": 3612, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:36"}
+{"what": "judge requests/Q23 map", "cost_usd": 0.008385199999999999, "input_tokens": 3336, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:37"}
+{"what": "judge requests/Q1 atlas", "cost_usd": 0.0088552, "input_tokens": 3430, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:37"}
+{"what": "judge flask/Q20 map", "cost_usd": 0.0105752, "input_tokens": 3774, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:37"}
+{"what": "judge requests/Q17 atlas", "cost_usd": 0.0094752, "input_tokens": 3554, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:38"}
+{"what": "judge flask/Q41 text", "cost_usd": 0.0100552, "input_tokens": 3670, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:38"}
+{"what": "judge pytest/Q27 map", "cost_usd": 0.011420200000000002, "input_tokens": 3943, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:39"}
+{"what": "judge flask/Q45 map", "cost_usd": 0.0081352, "input_tokens": 3286, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:39"}
+{"what": "judge requests/Q17 closed", "cost_usd": 0.009570200000000001, "input_tokens": 3573, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:39"}
+{"what": "judge flask/Q37 map", "cost_usd": 0.0095902, "input_tokens": 3577, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:40"}
+{"what": "judge pytest/Q2 atlas", "cost_usd": 0.0093152, "input_tokens": 3522, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:40"}
+{"what": "judge pytest/Q22 atlas", "cost_usd": 0.008460200000000001, "input_tokens": 3351, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:40"}
+{"what": "judge flask/Q4 map", "cost_usd": 0.010050199999999999, "input_tokens": 3669, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:41"}
+{"what": "judge requests/Q44 text", "cost_usd": 0.008520199999999999, "input_tokens": 3363, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:41"}
+{"what": "judge flask/Q25 atlas", "cost_usd": 0.0103952, "input_tokens": 3738, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:41"}
+{"what": "judge requests/Q7 map", "cost_usd": 0.010130199999999999, "input_tokens": 3685, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:42"}
+{"what": "judge requests/Q7 text", "cost_usd": 0.010320199999999998, "input_tokens": 3723, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:42"}
+{"what": "judge pytest/Q39 map", "cost_usd": 0.0094302, "input_tokens": 3545, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:43"}
+{"what": "judge pytest/Q5 atlas", "cost_usd": 0.0105302, "input_tokens": 3765, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:43"}
+{"what": "judge requests/Q43 map", "cost_usd": 0.0090552, "input_tokens": 3470, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:43"}
+{"what": "judge flask/Q38 map", "cost_usd": 0.0092852, "input_tokens": 3516, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:44"}
+{"what": "judge requests/Q20 map", "cost_usd": 0.0095102, "input_tokens": 3561, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:44"}
+{"what": "judge flask/Q9 closed", "cost_usd": 0.0088652, "input_tokens": 3432, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:44"}
+{"what": "judge flask/Q44 text", "cost_usd": 0.0088852, "input_tokens": 3436, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:45"}
+{"what": "judge flask/Q27 closed", "cost_usd": 0.0097152, "input_tokens": 3602, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:45"}
+{"what": "judge pytest/Q34 atlas", "cost_usd": 0.008665200000000001, "input_tokens": 3392, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:46"}
+{"what": "judge requests/Q37 map", "cost_usd": 0.009480200000000001, "input_tokens": 3555, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:46"}
+{"what": "judge flask/Q32 atlas", "cost_usd": 0.0088602, "input_tokens": 3431, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:46"}
+{"what": "judge pytest/Q21 map", "cost_usd": 0.008335200000000001, "input_tokens": 3326, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:46"}
+{"what": "judge pytest/Q40 map", "cost_usd": 0.009165200000000002, "input_tokens": 3492, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:47"}
+{"what": "judge requests/Q13 closed", "cost_usd": 0.009730199999999998, "input_tokens": 3605, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:47"}
+{"what": "judge requests/Q48 map", "cost_usd": 0.009480200000000001, "input_tokens": 3555, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:48"}
+{"what": "judge pytest/Q43 map", "cost_usd": 0.0076002, "input_tokens": 3179, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:48"}
+{"what": "judge flask/Q31 map", "cost_usd": 0.0099202, "input_tokens": 3643, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:48"}
+{"what": "judge requests/Q48 atlas", "cost_usd": 0.0095352, "input_tokens": 3566, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:48"}
+{"what": "judge pytest/Q41 closed", "cost_usd": 0.011035200000000002, "input_tokens": 3866, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:49"}
+{"what": "judge flask/Q19 closed", "cost_usd": 0.009820200000000001, "input_tokens": 3623, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:49"}
+{"what": "judge requests/Q25 text", "cost_usd": 0.009300200000000002, "input_tokens": 3519, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:50"}
+{"what": "judge requests/Q3 atlas", "cost_usd": 0.0090402, "input_tokens": 3467, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:50"}
+{"what": "judge requests/Q1 text", "cost_usd": 0.0087852, "input_tokens": 3416, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:51"}
+{"what": "judge flask/Q14 atlas", "cost_usd": 0.010425199999999999, "input_tokens": 3744, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:51"}
+{"what": "judge pytest/Q6 closed", "cost_usd": 0.009185200000000001, "input_tokens": 3496, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:51"}
+{"what": "judge flask/Q12 atlas", "cost_usd": 0.0089652, "input_tokens": 3452, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:52"}
+{"what": "judge requests/Q41 map", "cost_usd": 0.009220200000000001, "input_tokens": 3503, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:52"}
+{"what": "judge pytest/Q17 closed", "cost_usd": 0.011080200000000002, "input_tokens": 3875, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:52"}
+{"what": "judge requests/Q16 map", "cost_usd": 0.0081152, "input_tokens": 3282, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:53"}
+{"what": "judge flask/Q7 atlas", "cost_usd": 0.0076051999999999995, "input_tokens": 3180, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:53"}
+{"what": "judge pytest/Q11 atlas", "cost_usd": 0.009595200000000002, "input_tokens": 3578, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:53"}
+{"what": "judge pytest/Q26 closed", "cost_usd": 0.0102602, "input_tokens": 3711, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:54"}
+{"what": "judge flask/Q36 text", "cost_usd": 0.0092152, "input_tokens": 3502, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:55"}
+{"what": "judge requests/Q4 closed", "cost_usd": 0.009460199999999998, "input_tokens": 3551, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:55"}
+{"what": "judge flask/Q19 map", "cost_usd": 0.009835199999999999, "input_tokens": 3626, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:55"}
+{"what": "judge flask/Q31 atlas", "cost_usd": 0.009910200000000001, "input_tokens": 3641, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:55"}
+{"what": "judge pytest/Q31 atlas", "cost_usd": 0.0096702, "input_tokens": 3593, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:56"}
+{"what": "judge pytest/Q44 map", "cost_usd": 0.009675199999999998, "input_tokens": 3594, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:56"}
+{"what": "judge flask/Q21 atlas", "cost_usd": 0.0100302, "input_tokens": 3665, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:56"}
+{"what": "judge flask/Q41 atlas", "cost_usd": 0.0100552, "input_tokens": 3670, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:57"}
+{"what": "judge flask/Q8 text", "cost_usd": 0.009265200000000001, "input_tokens": 3512, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:57"}
+{"what": "judge flask/Q35 map", "cost_usd": 0.007295199999999999, "input_tokens": 3118, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:58"}
+{"what": "judge flask/Q25 text", "cost_usd": 0.010420200000000001, "input_tokens": 3743, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:58"}
+{"what": "judge requests/Q16 closed", "cost_usd": 0.008145199999999998, "input_tokens": 3288, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:58"}
+{"what": "judge pytest/Q42 atlas", "cost_usd": 0.007460199999999999, "input_tokens": 3151, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:59"}
+{"what": "judge pytest/Q21 atlas", "cost_usd": 0.0084152, "input_tokens": 3342, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:59"}
+{"what": "judge flask/Q14 map", "cost_usd": 0.010355199999999998, "input_tokens": 3730, "output_tokens": 44, "error": null, "t": "2026-11-12T06:55:59"}
+{"what": "judge flask/Q44 closed", "cost_usd": 0.0099502, "input_tokens": 3377, "output_tokens": 112, "error": null, "t": "2026-11-12T06:56:00"}
+{"what": "judge requests/Q22 text", "cost_usd": 0.0089802, "input_tokens": 3455, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:00"}
+{"what": "judge requests/Q5 map", "cost_usd": 0.009570200000000001, "input_tokens": 3573, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:01"}
+{"what": "judge requests/Q5 closed", "cost_usd": 0.0097852, "input_tokens": 3616, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:01"}
+{"what": "judge requests/Q29 text", "cost_usd": 0.0102752, "input_tokens": 3278, "output_tokens": 153, "error": null, "t": "2026-11-12T06:56:02"}
+{"what": "judge pytest/Q46 map", "cost_usd": 0.0107002, "input_tokens": 3799, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:02"}
+{"what": "judge requests/Q22 atlas", "cost_usd": 0.0089902, "input_tokens": 3457, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:02"}
+{"what": "judge requests/Q27 closed", "cost_usd": 0.009685200000000001, "input_tokens": 3596, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:03"}
+{"what": "judge pytest/Q18 closed", "cost_usd": 0.0087152, "input_tokens": 3402, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:03"}
+{"what": "judge requests/Q28 atlas", "cost_usd": 0.0089702, "input_tokens": 3453, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:04"}
+{"what": "judge pytest/Q45 atlas", "cost_usd": 0.0085902, "input_tokens": 3377, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:04"}
+{"what": "judge requests/Q24 atlas", "cost_usd": 0.009585199999999999, "input_tokens": 3576, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:04"}
+{"what": "judge requests/Q24 map", "cost_usd": 0.0094452, "input_tokens": 3548, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:05"}
+{"what": "judge requests/Q15 atlas", "cost_usd": 0.008680199999999999, "input_tokens": 3395, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:05"}
+{"what": "judge pytest/Q38 atlas", "cost_usd": 0.010295200000000001, "input_tokens": 3718, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:05"}
+{"what": "judge flask/Q27 map", "cost_usd": 0.010070200000000001, "input_tokens": 3673, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:06"}
+{"what": "judge pytest/Q2 closed", "cost_usd": 0.0090102, "input_tokens": 3461, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:06"}
+{"what": "judge pytest/Q9 atlas", "cost_usd": 0.010015199999999998, "input_tokens": 3662, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:06"}
+{"what": "judge pytest/Q4 closed", "cost_usd": 0.010265199999999999, "input_tokens": 3712, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:07"}
+{"what": "judge pytest/Q44 atlas", "cost_usd": 0.009695200000000001, "input_tokens": 3598, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:07"}
+{"what": "judge requests/Q35 closed", "cost_usd": 0.0075452, "input_tokens": 3168, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:07"}
+{"what": "judge flask/Q35 atlas", "cost_usd": 0.0074052, "input_tokens": 3140, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:08"}
+{"what": "judge requests/Q14 atlas", "cost_usd": 0.0073902, "input_tokens": 3137, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:08"}
+{"what": "judge requests/Q45 map", "cost_usd": 0.0102102, "input_tokens": 3701, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:08"}
+{"what": "judge flask/Q41 map", "cost_usd": 0.0099752, "input_tokens": 3654, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:09"}
+{"what": "judge requests/Q6 atlas", "cost_usd": 0.0115952, "input_tokens": 3978, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:09"}
+{"what": "judge flask/Q47 map", "cost_usd": 0.008465199999999999, "input_tokens": 3352, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:10"}
+{"what": "judge requests/Q28 map", "cost_usd": 0.0089302, "input_tokens": 3445, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:10"}
+{"what": "judge pytest/Q25 atlas", "cost_usd": 0.0093502, "input_tokens": 3529, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:10"}
+{"what": "judge flask/Q34 text", "cost_usd": 0.0090802, "input_tokens": 3475, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:10"}
+{"what": "judge flask/Q6 closed", "cost_usd": 0.010375200000000001, "input_tokens": 3734, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:11"}
+{"what": "judge requests/Q28 closed", "cost_usd": 0.008940199999999999, "input_tokens": 3447, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:11"}
+{"what": "judge flask/Q24 closed", "cost_usd": 0.0100552, "input_tokens": 3670, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:11"}
+{"what": "judge requests/Q45 atlas", "cost_usd": 0.0102352, "input_tokens": 3706, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:12"}
+{"what": "judge pytest/Q10 atlas", "cost_usd": 0.009325199999999999, "input_tokens": 3524, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:12"}
+{"what": "judge pytest/Q13 closed", "cost_usd": 0.009935199999999998, "input_tokens": 3646, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:13"}
+{"what": "judge requests/Q25 closed", "cost_usd": 0.009335200000000002, "input_tokens": 3526, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:13"}
+{"what": "judge flask/Q36 atlas", "cost_usd": 0.011045199999999998, "input_tokens": 3528, "output_tokens": 129, "error": null, "t": "2026-11-12T06:56:13"}
+{"what": "judge requests/Q45 closed", "cost_usd": 0.010175199999999999, "input_tokens": 3694, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:14"}
+{"what": "judge flask/Q42 text", "cost_usd": 0.0073502, "input_tokens": 3129, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:14"}
+{"what": "judge requests/Q1 closed", "cost_usd": 0.0088302, "input_tokens": 3425, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:14"}
+{"what": "judge flask/Q23 text", "cost_usd": 0.0094202, "input_tokens": 3543, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:15"}
+{"what": "judge flask/Q45 atlas", "cost_usd": 0.008145199999999998, "input_tokens": 3288, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:15"}
+{"what": "judge pytest/Q19 map", "cost_usd": 0.010920200000000001, "input_tokens": 3843, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:15"}
+{"what": "judge flask/Q6 map", "cost_usd": 0.010535200000000002, "input_tokens": 3766, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:16"}
+{"what": "judge pytest/Q24 map", "cost_usd": 0.008460200000000001, "input_tokens": 3351, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:16"}
+{"what": "judge flask/Q12 text", "cost_usd": 0.008835200000000001, "input_tokens": 3426, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:16"}
+{"what": "judge pytest/Q14 atlas", "cost_usd": 0.010295200000000001, "input_tokens": 3718, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:16"}
+{"what": "judge flask/Q17 atlas", "cost_usd": 0.009585199999999999, "input_tokens": 3576, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:17"}
+{"what": "judge requests/Q30 closed", "cost_usd": 0.0079252, "input_tokens": 3244, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:17"}
+{"what": "judge requests/Q8 text", "cost_usd": 0.0099652, "input_tokens": 3652, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:18"}
+{"what": "judge flask/Q20 text", "cost_usd": 0.0107102, "input_tokens": 3801, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:18"}
+{"what": "judge flask/Q17 map", "cost_usd": 0.0092602, "input_tokens": 3511, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:18"}
+{"what": "judge requests/Q35 text", "cost_usd": 0.007885199999999998, "input_tokens": 3236, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:19"}
+{"what": "judge pytest/Q42 closed", "cost_usd": 0.007565199999999999, "input_tokens": 3172, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:19"}
+{"what": "judge requests/Q22 closed", "cost_usd": 0.008925200000000001, "input_tokens": 3444, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:19"}
+{"what": "judge flask/Q9 text", "cost_usd": 0.009020199999999999, "input_tokens": 3463, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:20"}
+{"what": "judge pytest/Q21 closed", "cost_usd": 0.0083452, "input_tokens": 3328, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:20"}
+{"what": "judge flask/Q43 text", "cost_usd": 0.0083302, "input_tokens": 3325, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:21"}
+{"what": "judge flask/Q32 map", "cost_usd": 0.0085702, "input_tokens": 3373, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:21"}
+{"what": "judge pytest/Q13 map", "cost_usd": 0.0100452, "input_tokens": 3668, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:21"}
+{"what": "judge requests/Q22 map", "cost_usd": 0.008905199999999999, "input_tokens": 3440, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:22"}
+{"what": "judge requests/Q33 atlas", "cost_usd": 0.009190199999999999, "input_tokens": 3497, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:22"}
+{"what": "judge flask/Q25 closed", "cost_usd": 0.0099552, "input_tokens": 3650, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:22"}
+{"what": "judge flask/Q41 closed", "cost_usd": 0.0098952, "input_tokens": 3638, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:23"}
+{"what": "judge flask/Q1 atlas", "cost_usd": 0.007965199999999999, "input_tokens": 3252, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:23"}
+{"what": "judge pytest/Q46 atlas", "cost_usd": 0.010750199999999998, "input_tokens": 3809, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:23"}
+{"what": "judge requests/Q31 map", "cost_usd": 0.009480200000000001, "input_tokens": 3555, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:24"}
+{"what": "judge requests/Q21 atlas", "cost_usd": 0.0093952, "input_tokens": 3538, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:24"}
+{"what": "judge flask/Q31 text", "cost_usd": 0.009855200000000001, "input_tokens": 3630, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:24"}
+{"what": "judge flask/Q37 closed", "cost_usd": 0.009585199999999999, "input_tokens": 3576, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:25"}
+{"what": "judge requests/Q32 atlas", "cost_usd": 0.008340199999999999, "input_tokens": 3327, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:25"}
+{"what": "judge pytest/Q5 map", "cost_usd": 0.0105852, "input_tokens": 3776, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:25"}
+{"what": "judge requests/Q27 map", "cost_usd": 0.009575199999999999, "input_tokens": 3574, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:26"}
+{"what": "judge requests/Q27 text", "cost_usd": 0.009665199999999999, "input_tokens": 3592, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:26"}
+{"what": "judge flask/Q27 text", "cost_usd": 0.010220199999999999, "input_tokens": 3703, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:26"}
+{"what": "judge pytest/Q28 atlas", "cost_usd": 0.0101802, "input_tokens": 3695, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:27"}
+{"what": "judge flask/Q48 map", "cost_usd": 0.010535200000000002, "input_tokens": 3766, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:27"}
+{"what": "judge pytest/Q36 closed", "cost_usd": 0.0097852, "input_tokens": 3616, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:28"}
+{"what": "judge pytest/Q12 map", "cost_usd": 0.0092702, "input_tokens": 3513, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:28"}
+{"what": "judge pytest/Q35 closed", "cost_usd": 0.0143102, "input_tokens": 3677, "output_tokens": 255, "error": null, "t": "2026-11-12T06:56:28"}
+{"what": "judge flask/Q43 closed", "cost_usd": 0.0081502, "input_tokens": 3289, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:29"}
+{"what": "judge pytest/Q35 atlas", "cost_usd": 0.010060199999999998, "input_tokens": 3671, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:29"}
+{"what": "judge pytest/Q31 map", "cost_usd": 0.0095352, "input_tokens": 3566, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:29"}
+{"what": "judge flask/Q31 closed", "cost_usd": 0.009915199999999999, "input_tokens": 3642, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:30"}
+{"what": "judge flask/Q43 map", "cost_usd": 0.008090199999999999, "input_tokens": 3277, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:30"}
+{"what": "judge pytest/Q7 atlas", "cost_usd": 0.0112452, "input_tokens": 3908, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:30"}
+{"what": "judge requests/Q14 closed", "cost_usd": 0.0073051999999999995, "input_tokens": 3120, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:31"}
+{"what": "judge flask/Q33 map", "cost_usd": 0.010230199999999998, "input_tokens": 3705, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:31"}
+{"what": "judge flask/Q28 closed", "cost_usd": 0.009650200000000001, "input_tokens": 3589, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:31"}
+{"what": "judge flask/Q35 closed", "cost_usd": 0.0072152, "input_tokens": 3102, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:32"}
+{"what": "judge requests/Q31 closed", "cost_usd": 0.0095452, "input_tokens": 3568, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:32"}
+{"what": "judge requests/Q47 map", "cost_usd": 0.008340199999999999, "input_tokens": 3327, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:32"}
+{"what": "judge pytest/Q1 closed", "cost_usd": 0.0087052, "input_tokens": 3400, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:33"}
+{"what": "judge flask/Q47 text", "cost_usd": 0.0085452, "input_tokens": 3368, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:33"}
+{"what": "judge flask/Q48 text", "cost_usd": 0.0106552, "input_tokens": 3790, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:33"}
+{"what": "judge flask/Q29 closed", "cost_usd": 0.0094402, "input_tokens": 3547, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:34"}
+{"what": "judge flask/Q21 closed", "cost_usd": 0.009775200000000001, "input_tokens": 3614, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:34"}
+{"what": "judge requests/Q18 atlas", "cost_usd": 0.0103052, "input_tokens": 3720, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:35"}
+{"what": "judge requests/Q21 closed", "cost_usd": 0.0095102, "input_tokens": 3561, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:35"}
+{"what": "judge requests/Q7 closed", "cost_usd": 0.0100552, "input_tokens": 3670, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:35"}
+{"what": "judge flask/Q39 text", "cost_usd": 0.0084902, "input_tokens": 3357, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:35"}
+{"what": "judge requests/Q47 atlas", "cost_usd": 0.008440199999999998, "input_tokens": 3347, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:36"}
+{"what": "judge requests/Q36 text", "cost_usd": 0.009675199999999998, "input_tokens": 3594, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:36"}
+{"what": "judge flask/Q42 atlas", "cost_usd": 0.0072252, "input_tokens": 3104, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:37"}
+{"what": "judge flask/Q24 atlas", "cost_usd": 0.0100652, "input_tokens": 3672, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:37"}
+{"what": "judge requests/Q40 map", "cost_usd": 0.0093202, "input_tokens": 3523, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:38"}
+{"what": "judge pytest/Q6 map", "cost_usd": 0.009310200000000001, "input_tokens": 3521, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:38"}
+{"what": "judge requests/Q32 map", "cost_usd": 0.0123652, "input_tokens": 3340, "output_tokens": 242, "error": null, "t": "2026-11-12T06:56:38"}
+{"what": "judge pytest/Q37 map", "cost_usd": 0.0070052000000000005, "input_tokens": 3060, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:38"}
+{"what": "judge flask/Q10 atlas", "cost_usd": 0.0083252, "input_tokens": 3324, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:39"}
+{"what": "judge flask/Q12 map", "cost_usd": 0.0087902, "input_tokens": 3417, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:39"}
+{"what": "judge requests/Q33 closed", "cost_usd": 0.0091352, "input_tokens": 3486, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:40"}
+{"what": "judge requests/Q7 atlas", "cost_usd": 0.0102902, "input_tokens": 3717, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:40"}
+{"what": "judge flask/Q15 closed", "cost_usd": 0.010115200000000001, "input_tokens": 3682, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:40"}
+{"what": "judge flask/Q1 closed", "cost_usd": 0.0080252, "input_tokens": 3264, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:41"}
+{"what": "judge pytest/Q17 map", "cost_usd": 0.010965200000000001, "input_tokens": 3852, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:41"}
+{"what": "judge requests/Q45 text", "cost_usd": 0.0101702, "input_tokens": 3693, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:42"}
+{"what": "judge requests/Q19 closed", "cost_usd": 0.009310200000000001, "input_tokens": 3521, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:42"}
+{"what": "judge requests/Q12 text", "cost_usd": 0.010185200000000002, "input_tokens": 3696, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:43"}
+{"what": "judge requests/Q25 map", "cost_usd": 0.009280199999999999, "input_tokens": 3515, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:43"}
+{"what": "judge pytest/Q41 map", "cost_usd": 0.011000200000000002, "input_tokens": 3859, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:43"}
+{"what": "judge requests/Q29 map", "cost_usd": 0.008020200000000002, "input_tokens": 3263, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:44"}
+{"what": "judge flask/Q30 text", "cost_usd": 0.012420200000000001, "input_tokens": 3807, "output_tokens": 128, "error": null, "t": "2026-11-12T06:56:44"}
+{"what": "judge flask/Q30 map", "cost_usd": 0.010695199999999998, "input_tokens": 3798, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:45"}
+{"what": "judge requests/Q4 atlas", "cost_usd": 0.0095002, "input_tokens": 3559, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:46"}
+{"what": "judge flask/Q3 text", "cost_usd": 0.008890200000000001, "input_tokens": 3437, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:46"}
+{"what": "judge pytest/Q6 atlas", "cost_usd": 0.009360199999999999, "input_tokens": 3531, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:46"}
+{"what": "judge requests/Q5 atlas", "cost_usd": 0.009650200000000001, "input_tokens": 3589, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:46"}
+{"what": "judge pytest/Q38 map", "cost_usd": 0.010240200000000001, "input_tokens": 3707, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:47"}
+{"what": "judge requests/Q42 atlas", "cost_usd": 0.0073102, "input_tokens": 3121, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:47"}
+{"what": "judge flask/Q2 atlas", "cost_usd": 0.0088252, "input_tokens": 3424, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:48"}
+{"what": "judge requests/Q46 closed", "cost_usd": 0.0091702, "input_tokens": 3493, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:49"}
+{"what": "judge pytest/Q18 atlas", "cost_usd": 0.0086502, "input_tokens": 3389, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:49"}
+{"what": "judge requests/Q23 atlas", "cost_usd": 0.0084902, "input_tokens": 3357, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:49"}
+{"what": "judge requests/Q10 closed", "cost_usd": 0.0089752, "input_tokens": 3454, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:49"}
+{"what": "judge flask/Q10 closed", "cost_usd": 0.008440199999999998, "input_tokens": 3347, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:50"}
+{"what": "judge requests/Q2 map", "cost_usd": 0.0071002, "input_tokens": 3079, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:50"}
+{"what": "judge flask/Q17 closed", "cost_usd": 0.009355200000000001, "input_tokens": 3530, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:51"}
+{"what": "judge requests/Q18 map", "cost_usd": 0.010080200000000001, "input_tokens": 3675, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:51"}
+{"what": "judge flask/Q23 atlas", "cost_usd": 0.0092602, "input_tokens": 3511, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:51"}
+{"what": "judge requests/Q38 atlas", "cost_usd": 0.0088202, "input_tokens": 3423, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:52"}
+{"what": "judge requests/Q9 text", "cost_usd": 0.0084902, "input_tokens": 3357, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:52"}
+{"what": "judge flask/Q26 atlas", "cost_usd": 0.009120199999999998, "input_tokens": 3483, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:52"}
+{"what": "judge flask/Q33 text", "cost_usd": 0.010115200000000001, "input_tokens": 3682, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:53"}
+{"what": "judge flask/Q20 closed", "cost_usd": 0.010580199999999998, "input_tokens": 3775, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:53"}
+{"what": "judge pytest/Q13 atlas", "cost_usd": 0.0101652, "input_tokens": 3692, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:54"}
+{"what": "judge requests/Q26 text", "cost_usd": 0.0088402, "input_tokens": 3427, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:54"}
+{"what": "judge pytest/Q22 closed", "cost_usd": 0.008555199999999999, "input_tokens": 3370, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:54"}
+{"what": "judge pytest/Q37 closed", "cost_usd": 0.0071902, "input_tokens": 3097, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:54"}
+{"what": "judge pytest/Q32 closed", "cost_usd": 0.0083302, "input_tokens": 3325, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:55"}
+{"what": "judge flask/Q19 text", "cost_usd": 0.009880199999999999, "input_tokens": 3635, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:56"}
+{"what": "judge pytest/Q43 closed", "cost_usd": 0.0073852, "input_tokens": 3136, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:56"}
+{"what": "judge flask/Q5 closed", "cost_usd": 0.010730199999999999, "input_tokens": 3805, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:56"}
+{"what": "judge requests/Q33 text", "cost_usd": 0.0090752, "input_tokens": 3474, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:56"}
+{"what": "judge requests/Q6 text", "cost_usd": 0.011430199999999998, "input_tokens": 3945, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:57"}
+{"what": "judge requests/Q2 closed", "cost_usd": 0.0071452, "input_tokens": 3088, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:57"}
+{"what": "judge flask/Q28 atlas", "cost_usd": 0.009450199999999999, "input_tokens": 3549, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:58"}
+{"what": "judge flask/Q46 text", "cost_usd": 0.009140200000000001, "input_tokens": 3487, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:58"}
+{"what": "judge requests/Q27 atlas", "cost_usd": 0.0096252, "input_tokens": 3584, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:58"}
+{"what": "judge pytest/Q33 closed", "cost_usd": 0.012405199999999998, "input_tokens": 4140, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:59"}
+{"what": "judge flask/Q18 map", "cost_usd": 0.0090902, "input_tokens": 3477, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:59"}
+{"what": "judge pytest/Q3 closed", "cost_usd": 0.009540199999999999, "input_tokens": 3567, "output_tokens": 44, "error": null, "t": "2026-11-12T06:56:59"}
+{"what": "judge pytest/Q2 map", "cost_usd": 0.009235199999999999, "input_tokens": 3506, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:00"}
+{"what": "judge flask/Q2 text", "cost_usd": 0.008815199999999999, "input_tokens": 3422, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:00"}
+{"what": "judge requests/Q36 map", "cost_usd": 0.0095802, "input_tokens": 3575, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:01"}
+{"what": "judge requests/Q44 atlas", "cost_usd": 0.0083902, "input_tokens": 3337, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:01"}
+{"what": "judge pytest/Q29 closed", "cost_usd": 0.009120199999999998, "input_tokens": 3483, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:01"}
+{"what": "judge flask/Q23 closed", "cost_usd": 0.008960200000000001, "input_tokens": 3451, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:02"}
+{"what": "judge pytest/Q40 atlas", "cost_usd": 0.0089452, "input_tokens": 3448, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:02"}
+{"what": "judge flask/Q18 closed", "cost_usd": 0.009165200000000002, "input_tokens": 3492, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:02"}
+{"what": "judge requests/Q36 atlas", "cost_usd": 0.0096802, "input_tokens": 3595, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:04"}
+{"what": "judge flask/Q36 map", "cost_usd": 0.0089552, "input_tokens": 3450, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:04"}
+{"what": "judge requests/Q24 text", "cost_usd": 0.009290199999999998, "input_tokens": 3517, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:04"}
+{"what": "judge flask/Q26 map", "cost_usd": 0.009020199999999999, "input_tokens": 3463, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:04"}
+{"what": "judge pytest/Q34 map", "cost_usd": 0.008850199999999999, "input_tokens": 3429, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:05"}
+{"what": "judge requests/Q1 map", "cost_usd": 0.008770199999999999, "input_tokens": 3413, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:05"}
+{"what": "judge pytest/Q23 closed", "cost_usd": 0.0079452, "input_tokens": 3248, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:06"}
+{"what": "judge requests/Q5 text", "cost_usd": 0.009495199999999999, "input_tokens": 3558, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:07"}
+{"what": "judge requests/Q20 text", "cost_usd": 0.009390200000000001, "input_tokens": 3537, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:07"}
+{"what": "judge flask/Q30 closed", "cost_usd": 0.0106302, "input_tokens": 3785, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:07"}
+{"what": "judge requests/Q2 text", "cost_usd": 0.0070501999999999995, "input_tokens": 3069, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:07"}
+{"what": "judge pytest/Q35 map", "cost_usd": 0.010130199999999999, "input_tokens": 3685, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:07"}
+{"what": "judge pytest/Q23 map", "cost_usd": 0.007815200000000001, "input_tokens": 3222, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:08"}
+{"what": "judge flask/Q4 closed", "cost_usd": 0.0102152, "input_tokens": 3702, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:09"}
+{"what": "judge flask/Q13 atlas", "cost_usd": 0.0086952, "input_tokens": 3398, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:09"}
+{"what": "judge flask/Q8 atlas", "cost_usd": 0.0091252, "input_tokens": 3484, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:09"}
+{"what": "judge requests/Q19 atlas", "cost_usd": 0.009335200000000002, "input_tokens": 3526, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:10"}
+{"what": "judge flask/Q14 closed", "cost_usd": 0.010400199999999998, "input_tokens": 3739, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:10"}
+{"what": "judge pytest/Q28 closed", "cost_usd": 0.0100202, "input_tokens": 3663, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:10"}
+{"what": "judge pytest/Q28 map", "cost_usd": 0.010175199999999999, "input_tokens": 3694, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:12"}
+{"what": "judge flask/Q1 text", "cost_usd": 0.0081302, "input_tokens": 3285, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:12"}
+{"what": "judge pytest/Q36 map", "cost_usd": 0.0098152, "input_tokens": 3622, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:12"}
+{"what": "judge flask/Q33 atlas", "cost_usd": 0.0102352, "input_tokens": 3706, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:13"}
+{"what": "judge pytest/Q7 map", "cost_usd": 0.011100199999999998, "input_tokens": 3879, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:13"}
+{"what": "judge flask/Q47 atlas", "cost_usd": 0.008335200000000001, "input_tokens": 3326, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:13"}
+{"what": "judge flask/Q7 map", "cost_usd": 0.0075052, "input_tokens": 3160, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:13"}
+{"what": "judge requests/Q11 text", "cost_usd": 0.011065199999999997, "input_tokens": 3872, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:14"}
+{"what": "judge pytest/Q47 atlas", "cost_usd": 0.0091352, "input_tokens": 3486, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:15"}
+{"what": "judge pytest/Q29 atlas", "cost_usd": 0.009065199999999999, "input_tokens": 3472, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:15"}
+{"what": "judge requests/Q24 closed", "cost_usd": 0.0096152, "input_tokens": 3582, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:15"}
+{"what": "judge pytest/Q17 atlas", "cost_usd": 0.0108702, "input_tokens": 3833, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:15"}
+{"what": "judge flask/Q16 text", "cost_usd": 0.0095652, "input_tokens": 3572, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:15"}
+{"what": "judge flask/Q17 text", "cost_usd": 0.0094752, "input_tokens": 3554, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:16"}
+{"what": "judge flask/Q11 map", "cost_usd": 0.0110952, "input_tokens": 3878, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:17"}
+{"what": "judge pytest/Q14 closed", "cost_usd": 0.010300199999999999, "input_tokens": 3719, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:17"}
+{"what": "judge flask/Q38 text", "cost_usd": 0.009310200000000001, "input_tokens": 3521, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:18"}
+{"what": "judge pytest/Q8 closed", "cost_usd": 0.0083952, "input_tokens": 3338, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:18"}
+{"what": "judge flask/Q5 atlas", "cost_usd": 0.010840199999999998, "input_tokens": 3827, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:18"}
+{"what": "judge pytest/Q15 atlas", "cost_usd": 0.0088852, "input_tokens": 3436, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:18"}
+{"what": "judge pytest/Q20 map", "cost_usd": 0.009595200000000002, "input_tokens": 3578, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:19"}
+{"what": "judge pytest/Q27 closed", "cost_usd": 0.0115752, "input_tokens": 3974, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:19"}
+{"what": "judge requests/Q38 text", "cost_usd": 0.0090052, "input_tokens": 3460, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:20"}
+{"what": "judge pytest/Q15 map", "cost_usd": 0.0087902, "input_tokens": 3417, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:20"}
+{"what": "judge requests/Q39 text", "cost_usd": 0.0091702, "input_tokens": 3513, "output_tokens": 39, "error": null, "t": "2026-11-12T06:57:21"}
+{"what": "judge flask/Q22 text", "cost_usd": 0.0096252, "input_tokens": 3584, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:21"}
+{"what": "judge flask/Q9 map", "cost_usd": 0.0087652, "input_tokens": 3412, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:21"}
+{"what": "judge pytest/Q12 closed", "cost_usd": 0.0091452, "input_tokens": 3488, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:21"}
+{"what": "judge pytest/Q20 atlas", "cost_usd": 0.009790199999999999, "input_tokens": 3617, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:23"}
+{"what": "judge requests/Q43 atlas", "cost_usd": 0.009300200000000002, "input_tokens": 3519, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:23"}
+{"what": "judge flask/Q6 text", "cost_usd": 0.010685199999999999, "input_tokens": 3796, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:23"}
+{"what": "judge requests/Q20 closed", "cost_usd": 0.0094552, "input_tokens": 3550, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:23"}
+{"what": "judge pytest/Q16 closed", "cost_usd": 0.010730199999999999, "input_tokens": 3805, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:23"}
+{"what": "judge flask/Q34 atlas", "cost_usd": 0.0091452, "input_tokens": 3488, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:24"}
+{"what": "judge requests/Q21 map", "cost_usd": 0.0094752, "input_tokens": 3554, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:25"}
+{"what": "judge flask/Q18 text", "cost_usd": 0.0091352, "input_tokens": 3486, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:25"}
+{"what": "judge pytest/Q9 closed", "cost_usd": 0.009960199999999999, "input_tokens": 3651, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:26"}
+{"what": "judge pytest/Q16 atlas", "cost_usd": 0.0108352, "input_tokens": 3826, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:26"}
+{"what": "judge requests/Q38 map", "cost_usd": 0.0104752, "input_tokens": 3446, "output_tokens": 121, "error": null, "t": "2026-11-12T06:57:26"}
+{"what": "judge flask/Q29 atlas", "cost_usd": 0.0097602, "input_tokens": 3611, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:26"}
+{"what": "judge requests/Q30 atlas", "cost_usd": 0.007815200000000001, "input_tokens": 3222, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:27"}
+{"what": "judge flask/Q13 text", "cost_usd": 0.0087652, "input_tokens": 3412, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:27"}
+{"what": "judge flask/Q21 text", "cost_usd": 0.009835199999999999, "input_tokens": 3626, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:28"}
+{"what": "judge requests/Q9 closed", "cost_usd": 0.0086952, "input_tokens": 3398, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:28"}
+{"what": "judge flask/Q7 text", "cost_usd": 0.0075152, "input_tokens": 3162, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:28"}
+{"what": "judge pytest/Q27 atlas", "cost_usd": 0.0112552, "input_tokens": 3910, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:28"}
+{"what": "judge flask/Q47 closed", "cost_usd": 0.0082302, "input_tokens": 3305, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:29"}
+{"what": "judge requests/Q8 map", "cost_usd": 0.009605200000000001, "input_tokens": 3580, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:30"}
+{"what": "judge flask/Q16 closed", "cost_usd": 0.009380199999999998, "input_tokens": 3535, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:30"}
+{"what": "judge pytest/Q4 map", "cost_usd": 0.0103502, "input_tokens": 3729, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:30"}
+{"what": "judge pytest/Q30 closed", "cost_usd": 0.009685200000000001, "input_tokens": 3596, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:31"}
+{"what": "judge pytest/Q48 map", "cost_usd": 0.008260199999999999, "input_tokens": 3311, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:31"}
+{"what": "judge flask/Q40 map", "cost_usd": 0.0098502, "input_tokens": 3629, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:32"}
+{"what": "judge pytest/Q1 atlas", "cost_usd": 0.0089702, "input_tokens": 3453, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:32"}
+{"what": "judge requests/Q9 map", "cost_usd": 0.008585200000000001, "input_tokens": 3376, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:32"}
+{"what": "judge requests/Q29 closed", "cost_usd": 0.0081952, "input_tokens": 3298, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:32"}
+{"what": "judge pytest/Q18 map", "cost_usd": 0.0086852, "input_tokens": 3396, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:33"}
+{"what": "judge requests/Q14 map", "cost_usd": 0.007460199999999999, "input_tokens": 3151, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:33"}
+{"what": "judge requests/Q44 map", "cost_usd": 0.008405200000000002, "input_tokens": 3340, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:34"}
+{"what": "judge pytest/Q44 closed", "cost_usd": 0.009620199999999999, "input_tokens": 3583, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:34"}
+{"what": "judge flask/Q32 closed", "cost_usd": 0.0089452, "input_tokens": 3448, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:34"}
+{"what": "judge flask/Q9 atlas", "cost_usd": 0.0090102, "input_tokens": 3461, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:35"}
+{"what": "judge pytest/Q29 map", "cost_usd": 0.0091502, "input_tokens": 3489, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:35"}
+{"what": "judge flask/Q35 text", "cost_usd": 0.007335200000000001, "input_tokens": 3126, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:35"}
+{"what": "judge flask/Q33 closed", "cost_usd": 0.0100102, "input_tokens": 3661, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:36"}
+{"what": "judge flask/Q40 text", "cost_usd": 0.0098052, "input_tokens": 3620, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:36"}
+{"what": "judge requests/Q43 closed", "cost_usd": 0.0091252, "input_tokens": 3484, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:37"}
+{"what": "judge requests/Q11 atlas", "cost_usd": 0.011205199999999998, "input_tokens": 3900, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:37"}
+{"what": "judge pytest/Q10 map", "cost_usd": 0.0093752, "input_tokens": 3534, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:37"}
+{"what": "judge flask/Q42 map", "cost_usd": 0.0069752, "input_tokens": 3054, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:38"}
+{"what": "judge flask/Q29 map", "cost_usd": 0.009515200000000001, "input_tokens": 3562, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:38"}
+{"what": "judge requests/Q30 map", "cost_usd": 0.0078702, "input_tokens": 3233, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:39"}
+{"what": "judge requests/Q9 atlas", "cost_usd": 0.0086052, "input_tokens": 3380, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:39"}
+{"what": "judge flask/Q13 closed", "cost_usd": 0.008850199999999999, "input_tokens": 3429, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:39"}
+{"what": "judge requests/Q44 closed", "cost_usd": 0.0082752, "input_tokens": 3314, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:39"}
+{"what": "judge requests/Q19 text", "cost_usd": 0.0092702, "input_tokens": 3513, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:40"}
+{"what": "judge requests/Q48 closed", "cost_usd": 0.009525200000000001, "input_tokens": 3564, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:41"}
+{"what": "judge flask/Q18 atlas", "cost_usd": 0.0090752, "input_tokens": 3474, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:41"}
+{"what": "judge pytest/Q48 closed", "cost_usd": 0.0082652, "input_tokens": 3312, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:42"}
+{"what": "judge flask/Q44 map", "cost_usd": 0.008555199999999999, "input_tokens": 3370, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:42"}
+{"what": "judge flask/Q38 closed", "cost_usd": 0.0095102, "input_tokens": 3561, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:42"}
+{"what": "judge pytest/Q1 map", "cost_usd": 0.0089702, "input_tokens": 3453, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:42"}
+{"what": "judge requests/Q19 map", "cost_usd": 0.0093652, "input_tokens": 3532, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:43"}
+{"what": "judge flask/Q26 text", "cost_usd": 0.0091252, "input_tokens": 3484, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:43"}
+{"what": "judge requests/Q33 map", "cost_usd": 0.0091002, "input_tokens": 3479, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:44"}
+{"what": "judge requests/Q17 map", "cost_usd": 0.0094302, "input_tokens": 3545, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:44"}
+{"what": "judge flask/Q46 atlas", "cost_usd": 0.009210199999999998, "input_tokens": 3501, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:44"}
+{"what": "judge pytest/Q30 map", "cost_usd": 0.009890200000000002, "input_tokens": 3637, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:45"}
+{"what": "judge flask/Q39 map", "cost_usd": 0.008460200000000001, "input_tokens": 3351, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:45"}
+{"what": "judge requests/Q42 map", "cost_usd": 0.0073252000000000005, "input_tokens": 3124, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:45"}
+{"what": "judge pytest/Q9 map", "cost_usd": 0.009890200000000002, "input_tokens": 3637, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:46"}
+{"what": "judge flask/Q26 closed", "cost_usd": 0.009155199999999999, "input_tokens": 3490, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:46"}
+{"what": "judge flask/Q20 atlas", "cost_usd": 0.010615199999999998, "input_tokens": 3782, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:47"}
+{"what": "judge flask/Q48 closed", "cost_usd": 0.010490199999999998, "input_tokens": 3757, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:47"}
+{"what": "judge requests/Q39 atlas", "cost_usd": 0.009245199999999999, "input_tokens": 3508, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:47"}
+{"what": "judge pytest/Q20 closed", "cost_usd": 0.009595200000000002, "input_tokens": 3578, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:47"}
+{"what": "judge requests/Q42 text", "cost_usd": 0.0072452, "input_tokens": 3108, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:49"}
+{"what": "judge flask/Q27 atlas", "cost_usd": 0.0100102, "input_tokens": 3661, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:50"}
+{"what": "judge pytest/Q12 atlas", "cost_usd": 0.009390200000000001, "input_tokens": 3537, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:50"}
+{"what": "judge requests/Q11 map", "cost_usd": 0.011080200000000002, "input_tokens": 3875, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:50"}
+{"what": "judge flask/Q15 text", "cost_usd": 0.0102252, "input_tokens": 3704, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:51"}
+{"what": "judge flask/Q11 text", "cost_usd": 0.0111302, "input_tokens": 3885, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:51"}
+{"what": "judge pytest/Q30 atlas", "cost_usd": 0.0098252, "input_tokens": 3624, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:51"}
+{"what": "judge requests/Q12 atlas", "cost_usd": 0.010255199999999999, "input_tokens": 3710, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:52"}
+{"what": "judge requests/Q40 text", "cost_usd": 0.012380200000000001, "input_tokens": 3507, "output_tokens": 201, "error": null, "t": "2026-11-12T06:57:53"}
+{"what": "judge flask/Q3 closed", "cost_usd": 0.0087402, "input_tokens": 3407, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:53"}
+{"what": "judge flask/Q29 text", "cost_usd": 0.0098152, "input_tokens": 3622, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:54"}
+{"what": "judge flask/Q40 closed", "cost_usd": 0.009980200000000002, "input_tokens": 3655, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:54"}
+{"what": "judge flask/Q34 closed", "cost_usd": 0.0094102, "input_tokens": 3541, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:54"}
+{"what": "judge flask/Q10 text", "cost_usd": 0.0085152, "input_tokens": 3362, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:55"}
+{"what": "judge requests/Q15 map", "cost_usd": 0.008540200000000001, "input_tokens": 3367, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:55"}
+{"what": "judge requests/Q16 text", "cost_usd": 0.0079252, "input_tokens": 3244, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:56"}
+{"what": "judge pytest/Q45 map", "cost_usd": 0.0084202, "input_tokens": 3343, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:56"}
+{"what": "judge requests/Q3 text", "cost_usd": 0.009235199999999999, "input_tokens": 3506, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:56"}
+{"what": "judge pytest/Q39 atlas", "cost_usd": 0.009650200000000001, "input_tokens": 3589, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:57"}
+{"what": "judge flask/Q42 closed", "cost_usd": 0.0072802, "input_tokens": 3115, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:58"}
+{"what": "judge pytest/Q25 map", "cost_usd": 0.009355200000000001, "input_tokens": 3530, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:58"}
+{"what": "judge flask/Q44 atlas", "cost_usd": 0.0085252, "input_tokens": 3364, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:59"}
+{"what": "judge pytest/Q5 closed", "cost_usd": 0.0107202, "input_tokens": 3803, "output_tokens": 44, "error": null, "t": "2026-11-12T06:57:59"}
+{"what": "judge requests/Q15 closed", "cost_usd": 0.0086202, "input_tokens": 3383, "output_tokens": 44, "error": null, "t": "2026-11-12T06:58:00"}
+{"what": "judge requests/Q34 map", "cost_usd": 0.0110152, "input_tokens": 3862, "output_tokens": 44, "error": null, "t": "2026-11-12T06:58:00"}
+{"what": "judge requests/Q13 atlas", "cost_usd": 0.009845199999999998, "input_tokens": 3628, "output_tokens": 44, "error": null, "t": "2026-11-12T06:58:00"}
+{"what": "judge requests/Q11 closed", "cost_usd": 0.011205199999999998, "input_tokens": 3900, "output_tokens": 44, "error": null, "t": "2026-11-12T06:58:01"}
+{"what": "judge flask/Q30 atlas", "cost_usd": 0.010605199999999999, "input_tokens": 3780, "output_tokens": 44, "error": null, "t": "2026-11-12T06:58:02"}
+{"what": "judge pytest/Q15 closed", "cost_usd": 0.0088252, "input_tokens": 3424, "output_tokens": 44, "error": null, "t": "2026-11-12T06:58:02"}
+{"what": "judge flask/Q16 atlas", "cost_usd": 0.009620199999999999, "input_tokens": 3583, "output_tokens": 44, "error": null, "t": "2026-11-12T06:58:02"}
+{"what": "judge requests/Q48 text", "cost_usd": 0.009480200000000001, "input_tokens": 3555, "output_tokens": 44, "error": null, "t": "2026-11-12T06:58:02"}
+{"what": "flask/Q15 agent", "cost_usd": 0.027224200000000004, "input_tokens": 11537, "output_tokens": 485, "error": null, "t": "2026-11-12T06:58:26"}
+{"what": "flask/Q45 agent", "cost_usd": 0.0351826, "input_tokens": 18659, "output_tokens": 663, "error": null, "t": "2026-11-12T06:58:27"}
+{"what": "flask/Q28 agent", "cost_usd": 0.06642319999999999, "input_tokens": 44742, "output_tokens": 822, "error": null, "t": "2026-11-12T06:58:31"}
+{"what": "pytest/Q23 agent", "cost_usd": 0.07056219999999999, "input_tokens": 21573, "output_tokens": 1679, "error": null, "t": "2026-11-12T06:58:37"}
+{"what": "pytest/Q9 agent", "cost_usd": 0.049692999999999994, "input_tokens": 21455, "output_tokens": 954, "error": null, "t": "2026-11-12T06:58:38"}
+{"what": "requests/Q22 agent", "cost_usd": 0.0273056, "input_tokens": 11760, "output_tokens": 435, "error": null, "t": "2026-11-12T06:59:16"}
+{"what": "flask/Q8 agent", "cost_usd": 0.04711660000000001, "input_tokens": 30807, "output_tokens": 804, "error": null, "t": "2026-11-12T06:59:20"}
+{"what": "pytest/Q35 agent", "cost_usd": 0.0527068, "input_tokens": 29582, "output_tokens": 1204, "error": null, "t": "2026-11-12T06:59:24"}
+{"what": "pytest/Q46 agent", "cost_usd": 0.059608999999999995, "input_tokens": 30021, "output_tokens": 1340, "error": null, "t": "2026-11-12T06:59:24"}
+{"what": "requests/Q10 agent", "cost_usd": 0.0257374, "input_tokens": 18209, "output_tokens": 579, "error": null, "t": "2026-11-12T06:59:24"}
+{"what": "requests/Q30 agent", "cost_usd": 0.0200738, "input_tokens": 11849, "output_tokens": 409, "error": null, "t": "2026-11-12T06:59:30"}
+{"what": "requests/Q46 agent", "cost_usd": 0.048733399999999996, "input_tokens": 28779, "output_tokens": 1082, "error": null, "t": "2026-11-12T06:59:31"}
+{"what": "flask/Q19 agent", "cost_usd": 0.056452, "input_tokens": 23758, "output_tokens": 613, "error": null, "t": "2026-11-12T06:59:32"}
+{"what": "flask/Q11 agent", "cost_usd": 0.0369002, "input_tokens": 19335, "output_tokens": 745, "error": null, "t": "2026-11-12T06:59:34"}
+{"what": "pytest/Q4 agent", "cost_usd": 0.0239888, "input_tokens": 12236, "output_tokens": 508, "error": null, "t": "2026-11-12T06:59:38"}
+{"what": "flask/Q39 agent", "cost_usd": 0.039426, "input_tokens": 22528, "output_tokens": 602, "error": null, "t": "2026-11-12T06:59:38"}
+{"what": "flask/Q25 agent", "cost_usd": 0.0234942, "input_tokens": 17193, "output_tokens": 609, "error": null, "t": "2026-11-12T06:59:38"}
+{"what": "pytest/Q11 agent", "cost_usd": 0.0303178, "input_tokens": 18659, "output_tokens": 726, "error": null, "t": "2026-11-12T06:59:43"}
+{"what": "requests/Q20 agent", "cost_usd": 0.04992039999999999, "input_tokens": 30006, "output_tokens": 933, "error": null, "t": "2026-11-12T06:59:48"}
+{"what": "pytest/Q36 agent", "cost_usd": 0.058555399999999994, "input_tokens": 41859, "output_tokens": 1014, "error": null, "t": "2026-11-12T06:59:50"}
+{"what": "pytest/Q47 agent", "cost_usd": 0.09846940000000001, "input_tokens": 83461, "output_tokens": 1343, "error": null, "t": "2026-11-12T06:59:53"}
+{"what": "requests/Q11 agent", "cost_usd": 0.0440792, "input_tokens": 19670, "output_tokens": 1151, "error": null, "t": "2026-11-12T06:59:57"}
+{"what": "requests/Q47 agent", "cost_usd": 0.0259344, "input_tokens": 17622, "output_tokens": 696, "error": null, "t": "2026-11-12T06:59:57"}
+{"what": "requests/Q28 agent", "cost_usd": 0.0381296, "input_tokens": 19158, "output_tokens": 844, "error": null, "t": "2026-11-12T06:59:59"}
+{"what": "flask/Q14 agent", "cost_usd": 0.0386008, "input_tokens": 14924, "output_tokens": 563, "error": null, "t": "2026-11-12T07:00:00"}
+{"what": "flask/Q41 agent", "cost_usd": 0.0287394, "input_tokens": 18599, "output_tokens": 682, "error": null, "t": "2026-11-12T07:00:05"}
+{"what": "flask/Q32 agent", "cost_usd": 0.035031, "input_tokens": 19273, "output_tokens": 842, "error": null, "t": "2026-11-12T07:00:09"}
+{"what": "flask/Q5 agent", "cost_usd": 0.0669954, "input_tokens": 37539, "output_tokens": 1580, "error": null, "t": "2026-11-12T07:00:14"}
+{"what": "pytest/Q39 agent", "cost_usd": 0.0395, "input_tokens": 20542, "output_tokens": 597, "error": null, "t": "2026-11-12T07:00:17"}
+{"what": "pytest/Q5 agent", "cost_usd": 0.06842880000000001, "input_tokens": 50072, "output_tokens": 1267, "error": null, "t": "2026-11-12T07:00:21"}
+{"what": "pytest/Q29 agent", "cost_usd": 0.036123600000000006, "input_tokens": 19496, "output_tokens": 832, "error": null, "t": "2026-11-12T07:00:25"}
+{"what": "pytest/Q21 agent", "cost_usd": 0.12041400000000001, "input_tokens": 80640, "output_tokens": 2227, "error": null, "t": "2026-11-12T07:00:26"}
+{"what": "requests/Q16 agent", "cost_usd": 0.0369922, "input_tokens": 25309, "output_tokens": 917, "error": null, "t": "2026-11-12T07:00:27"}
+{"what": "requests/Q4 agent", "cost_usd": 0.0629778, "input_tokens": 25099, "output_tokens": 1217, "error": null, "t": "2026-11-12T07:00:34"}
+{"what": "flask/Q16 agent", "cost_usd": 0.045494, "input_tokens": 21976, "output_tokens": 645, "error": null, "t": "2026-11-12T07:00:35"}
+{"what": "requests/Q42 agent", "cost_usd": 0.0379408, "input_tokens": 26364, "output_tokens": 867, "error": null, "t": "2026-11-12T07:00:36"}
+{"what": "requests/Q31 agent", "cost_usd": 0.0332996, "input_tokens": 12794, "output_tokens": 841, "error": null, "t": "2026-11-12T07:00:37"}
+{"what": "flask/Q40 agent", "cost_usd": 0.0360764, "input_tokens": 19428, "output_tokens": 778, "error": null, "t": "2026-11-12T07:00:43"}
+{"what": "flask/Q6 agent", "cost_usd": 0.041561, "input_tokens": 20519, "output_tokens": 845, "error": null, "t": "2026-11-12T07:00:44"}
+{"what": "flask/Q30 agent", "cost_usd": 0.0473866, "input_tokens": 20847, "output_tokens": 965, "error": null, "t": "2026-11-12T07:00:48"}
+{"what": "pytest/Q26 agent", "cost_usd": 0.0525718, "input_tokens": 24293, "output_tokens": 801, "error": null, "t": "2026-11-12T07:00:48"}
+{"what": "pytest/Q43 agent", "cost_usd": 0.019232, "input_tokens": 11728, "output_tokens": 395, "error": null, "t": "2026-11-12T07:00:50"}
+{"what": "pytest/Q2 agent", "cost_usd": 0.0402876, "input_tokens": 27490, "output_tokens": 873, "error": null, "t": "2026-11-12T07:00:53"}
+{"what": "pytest/Q32 agent", "cost_usd": 0.0375982, "input_tokens": null, "output_tokens": null, "error": "rc=1 You've hit your 5-hour limit \u00b7 resets 9:10am (UTC) ", "t": "2026-11-12T07:00:55"}
+{"what": "requests/Q27 agent", "cost_usd": 0.0269484, "input_tokens": null, "output_tokens": null, "error": "rc=1 You've hit your 5-hour limit \u00b7 resets 9:10am (UTC) ", "t": "2026-11-12T07:00:55"}
+{"what": "requests/Q43 agent", "cost_usd": 0.025280999999999998, "input_tokens": null, "output_tokens": null, "error": "rc=1 You've hit your 5-hour limit \u00b7 resets 9:10am (UTC) ", "t": "2026-11-12T07:00:59"}
+{"what": "requests/Q24 agent", "cost_usd": 0.040825600000000004, "input_tokens": 27592, "output_tokens": 716, "error": null, "t": "2026-11-12T07:00:59"}
+{"what": "requests/Q25 agent", "cost_usd": 0.008546999999999999, "input_tokens": null, "output_tokens": null, "error": "rc=1 You've hit your 5-hour limit \u00b7 resets 9:10am (UTC) ", "t": "2026-11-12T07:01:01"}
+{"what": "requests/Q27 agent", "cost_usd": 0.0503228, "input_tokens": 22796, "output_tokens": 794, "error": null, "t": "2026-11-12T09:18:05"}
+{"what": "pytest/Q32 agent", "cost_usd": 0.038841, "input_tokens": 24905, "output_tokens": 731, "error": null, "t": "2026-11-12T09:18:06"}
+{"what": "requests/Q43 agent", "cost_usd": 0.08277439999999998, "input_tokens": 45842, "output_tokens": 1618, "error": null, "t": "2026-11-12T09:18:12"}
+{"what": "requests/Q36 agent", "cost_usd": 0.0307488, "input_tokens": 12848, "output_tokens": 699, "error": null, "t": "2026-11-12T09:18:14"}
+{"what": "flask/Q21 agent", "cost_usd": 0.057236600000000006, "input_tokens": 24265, "output_tokens": 657, "error": null, "t": "2026-11-12T09:18:15"}
+{"what": "flask/Q2 agent", "cost_usd": 0.0373874, "input_tokens": 19859, "output_tokens": 641, "error": null, "t": "2026-11-12T09:18:19"}
+{"what": "flask/Q43 agent", "cost_usd": 0.027096, "input_tokens": 13252, "output_tokens": 406, "error": null, "t": "2026-11-12T09:18:21"}
+{"what": "pytest/Q12 agent", "cost_usd": 0.05451819999999999, "input_tokens": 31599, "output_tokens": 948, "error": null, "t": "2026-11-12T09:18:33"}
+{"what": "flask/Q31 agent", "cost_usd": 0.0643684, "input_tokens": 39704, "output_tokens": 1511, "error": null, "t": "2026-11-12T09:18:34"}
+{"what": "pytest/Q16 agent", "cost_usd": 0.06268220000000001, "input_tokens": 34127, "output_tokens": 1413, "error": null, "t": "2026-11-12T09:18:37"}
+{"what": "pytest/Q48 agent", "cost_usd": 0.0364198, "input_tokens": 25339, "output_tokens": 950, "error": null, "t": "2026-11-12T09:18:46"}
+{"what": "requests/Q23 agent", "cost_usd": 0.0385146, "input_tokens": 19147, "output_tokens": 896, "error": null, "t": "2026-11-12T09:18:46"}
+{"what": "pytest/Q28 agent", "cost_usd": 0.06449500000000001, "input_tokens": 29803, "output_tokens": 1574, "error": null, "t": "2026-11-12T09:18:51"}
+{"what": "requests/Q1 agent", "cost_usd": 0.0443716, "input_tokens": 22836, "output_tokens": 827, "error": null, "t": "2026-11-12T09:18:56"}
+{"what": "requests/Q40 agent", "cost_usd": 0.0489298, "input_tokens": 24019, "output_tokens": 775, "error": null, "t": "2026-11-12T09:18:56"}
+{"what": "flask/Q24 agent", "cost_usd": 0.0181318, "input_tokens": 11247, "output_tokens": 460, "error": null, "t": "2026-11-12T09:19:01"}
+{"what": "requests/Q25 agent", "cost_usd": 0.0365984, "input_tokens": 18714, "output_tokens": 961, "error": null, "t": "2026-11-12T09:19:01"}
+{"what": "flask/Q7 agent", "cost_usd": 0.0284154, "input_tokens": 24525, "output_tokens": 610, "error": null, "t": "2026-11-12T09:19:05"}
+{"what": "flask/Q42 agent", "cost_usd": 0.026902, "input_tokens": 17988, "output_tokens": 560, "error": null, "t": "2026-11-12T09:19:08"}
+{"what": "flask/Q26 agent", "cost_usd": 0.055418, "input_tokens": 31502, "output_tokens": 1065, "error": null, "t": "2026-11-12T09:19:13"}
+{"what": "pytest/Q22 agent", "cost_usd": 0.0318768, "input_tokens": 19042, "output_tokens": 737, "error": null, "t": "2026-11-12T09:19:14"}
+{"what": "pytest/Q8 agent", "cost_usd": 0.0355888, "input_tokens": 18866, "output_tokens": 777, "error": null, "t": "2026-11-12T09:19:18"}
+{"what": "requests/Q14 agent", "cost_usd": 0.0242128, "input_tokens": 12140, "output_tokens": 542, "error": null, "t": "2026-11-12T09:19:25"}
+{"what": "pytest/Q25 agent", "cost_usd": 0.066086, "input_tokens": 32382, "output_tokens": 1328, "error": null, "t": "2026-11-12T09:19:29"}
+{"what": "pytest/Q38 agent", "cost_usd": 0.0911066, "input_tokens": 56943, "output_tokens": 1542, "error": null, "t": "2026-11-12T09:19:30"}
+{"what": "requests/Q38 agent", "cost_usd": 0.021307800000000002, "input_tokens": 11567, "output_tokens": 540, "error": null, "t": "2026-11-12T09:19:35"}
+{"what": "requests/Q8 agent", "cost_usd": 0.0401806, "input_tokens": 20349, "output_tokens": 908, "error": null, "t": "2026-11-12T09:19:35"}
+{"what": "requests/Q32 agent", "cost_usd": 0.0187428, "input_tokens": 11238, "output_tokens": 500, "error": null, "t": "2026-11-12T09:19:37"}
+{"what": "judge flask/Q32 agent", "cost_usd": 0.018338, "input_tokens": 3512, "output_tokens": 39, "error": null, "t": "2026-11-12T09:19:45"}
+{"what": "judge requests/Q22 agent", "cost_usd": 0.009020199999999999, "input_tokens": 3463, "output_tokens": 44, "error": null, "t": "2026-11-12T09:19:47"}
+{"what": "judge pytest/Q39 agent", "cost_usd": 0.0096602, "input_tokens": 3591, "output_tokens": 44, "error": null, "t": "2026-11-12T09:19:47"}
+{"what": "judge requests/Q31 agent", "cost_usd": 0.009700199999999999, "input_tokens": 3599, "output_tokens": 44, "error": null, "t": "2026-11-12T09:19:47"}
+{"what": "judge pytest/Q11 agent", "cost_usd": 0.009925199999999999, "input_tokens": 3644, "output_tokens": 44, "error": null, "t": "2026-11-12T09:19:49"}
+{"what": "judge pytest/Q9 agent", "cost_usd": 0.010250200000000001, "input_tokens": 3709, "output_tokens": 44, "error": null, "t": "2026-11-12T09:19:49"}
+{"what": "judge requests/Q4 agent", "cost_usd": 0.0097802, "input_tokens": 3615, "output_tokens": 44, "error": null, "t": "2026-11-12T09:19:49"}
+{"what": "judge flask/Q19 agent", "cost_usd": 0.0102452, "input_tokens": 3708, "output_tokens": 44, "error": null, "t": "2026-11-12T09:19:51"}
+{"what": "judge pytest/Q12 agent", "cost_usd": 0.0096352, "input_tokens": 3586, "output_tokens": 44, "error": null, "t": "2026-11-12T09:19:51"}
+{"what": "judge pytest/Q26 agent", "cost_usd": 0.0105552, "input_tokens": 3770, "output_tokens": 44, "error": null, "t": "2026-11-12T09:19:51"}
+{"what": "judge flask/Q8 agent", "cost_usd": 0.009390200000000001, "input_tokens": 3537, "output_tokens": 44, "error": null, "t": "2026-11-12T09:19:53"}
+{"what": "judge flask/Q39 agent", "cost_usd": 0.0086752, "input_tokens": 3394, "output_tokens": 44, "error": null, "t": "2026-11-12T09:19:53"}
+{"what": "judge flask/Q24 agent", "cost_usd": 0.0104302, "input_tokens": 3745, "output_tokens": 44, "error": null, "t": "2026-11-12T09:19:53"}
+{"what": "judge requests/Q28 agent", "cost_usd": 0.009255199999999998, "input_tokens": 3510, "output_tokens": 44, "error": null, "t": "2026-11-12T09:19:54"}
+{"what": "judge pytest/Q48 agent", "cost_usd": 0.0088652, "input_tokens": 3432, "output_tokens": 44, "error": null, "t": "2026-11-12T09:19:55"}
+{"what": "judge pytest/Q5 agent", "cost_usd": 0.0108452, "input_tokens": 3828, "output_tokens": 44, "error": null, "t": "2026-11-12T09:19:55"}
+{"what": "judge flask/Q40 agent", "cost_usd": 0.010130199999999999, "input_tokens": 3685, "output_tokens": 44, "error": null, "t": "2026-11-12T09:19:56"}
+{"what": "judge requests/Q40 agent", "cost_usd": 0.009525200000000001, "input_tokens": 3564, "output_tokens": 44, "error": null, "t": "2026-11-12T09:19:57"}
+{"what": "judge requests/Q47 agent", "cost_usd": 0.008925200000000001, "input_tokens": 3444, "output_tokens": 44, "error": null, "t": "2026-11-12T09:19:57"}
+{"what": "judge requests/Q23 agent", "cost_usd": 0.0086152, "input_tokens": 3382, "output_tokens": 44, "error": null, "t": "2026-11-12T09:19:58"}
+{"what": "judge requests/Q10 agent", "cost_usd": 0.009235199999999999, "input_tokens": 3506, "output_tokens": 44, "error": null, "t": "2026-11-12T09:19:58"}
+{"what": "judge flask/Q25 agent", "cost_usd": 0.010515199999999999, "input_tokens": 3762, "output_tokens": 44, "error": null, "t": "2026-11-12T09:19:59"}
+{"what": "judge pytest/Q22 agent", "cost_usd": 0.008815199999999999, "input_tokens": 3422, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:00"}
+{"what": "judge flask/Q43 agent", "cost_usd": 0.008245200000000001, "input_tokens": 3308, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:00"}
+{"what": "judge requests/Q25 agent", "cost_usd": 0.0095102, "input_tokens": 3561, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:01"}
+{"what": "judge flask/Q41 agent", "cost_usd": 0.010375200000000001, "input_tokens": 3734, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:02"}
+{"what": "judge pytest/Q16 agent", "cost_usd": 0.011225200000000001, "input_tokens": 3904, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:02"}
+{"what": "judge flask/Q21 agent", "cost_usd": 0.010160200000000001, "input_tokens": 3691, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:03"}
+{"what": "judge pytest/Q38 agent", "cost_usd": 0.013755199999999999, "input_tokens": 3790, "output_tokens": 199, "error": null, "t": "2026-11-12T09:20:04"}
+{"what": "judge requests/Q38 agent", "cost_usd": 0.009140200000000001, "input_tokens": 3487, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:04"}
+{"what": "judge requests/Q8 agent", "cost_usd": 0.010320199999999998, "input_tokens": 3723, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:05"}
+{"what": "judge flask/Q31 agent", "cost_usd": 0.0102602, "input_tokens": 3711, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:05"}
+{"what": "judge requests/Q36 agent", "cost_usd": 0.009855200000000001, "input_tokens": 3630, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:06"}
+{"what": "judge flask/Q30 agent", "cost_usd": 0.011065199999999997, "input_tokens": 3872, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:07"}
+{"what": "judge flask/Q16 agent", "cost_usd": 0.0097602, "input_tokens": 3611, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:07"}
+{"what": "judge pytest/Q46 agent", "cost_usd": 0.0108802, "input_tokens": 3835, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:08"}
+{"what": "judge pytest/Q43 agent", "cost_usd": 0.007720199999999999, "input_tokens": 3203, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:09"}
+{"what": "judge pytest/Q32 agent", "cost_usd": 0.008665200000000001, "input_tokens": 3392, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:09"}
+{"what": "judge flask/Q14 agent", "cost_usd": 0.0105202, "input_tokens": 3763, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:10"}
+{"what": "judge pytest/Q47 agent", "cost_usd": 0.009595200000000002, "input_tokens": 3578, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:11"}
+{"what": "judge requests/Q30 agent", "cost_usd": 0.0081152, "input_tokens": 3282, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:11"}
+{"what": "judge requests/Q1 agent", "cost_usd": 0.0091052, "input_tokens": 3480, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:12"}
+{"what": "judge requests/Q27 agent", "cost_usd": 0.0098502, "input_tokens": 3629, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:13"}
+{"what": "judge pytest/Q29 agent", "cost_usd": 0.0093752, "input_tokens": 3534, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:13"}
+{"what": "judge pytest/Q4 agent", "cost_usd": 0.010300199999999999, "input_tokens": 3719, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:14"}
+{"what": "judge requests/Q32 agent", "cost_usd": 0.008585200000000001, "input_tokens": 3376, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:15"}
+{"what": "judge flask/Q15 agent", "cost_usd": 0.010535200000000002, "input_tokens": 3766, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:15"}
+{"what": "judge flask/Q11 agent", "cost_usd": 0.011465199999999998, "input_tokens": 3952, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:16"}
+{"what": "judge flask/Q2 agent", "cost_usd": 0.0091152, "input_tokens": 3482, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:16"}
+{"what": "judge flask/Q26 agent", "cost_usd": 0.0093402, "input_tokens": 3527, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:17"}
+{"what": "judge pytest/Q36 agent", "cost_usd": 0.0101802, "input_tokens": 3695, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:18"}
+{"what": "judge requests/Q11 agent", "cost_usd": 0.0114152, "input_tokens": 3942, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:18"}
+{"what": "judge pytest/Q25 agent", "cost_usd": 0.0101452, "input_tokens": 3688, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:18"}
+{"what": "judge pytest/Q21 agent", "cost_usd": 0.0086252, "input_tokens": 3384, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:20"}
+{"what": "judge flask/Q45 agent", "cost_usd": 0.008475199999999999, "input_tokens": 3354, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:20"}
+{"what": "judge flask/Q42 agent", "cost_usd": 0.0084202, "input_tokens": 3207, "output_tokens": 78, "error": null, "t": "2026-11-12T09:20:20"}
+{"what": "judge requests/Q20 agent", "cost_usd": 0.009765199999999998, "input_tokens": 3612, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:21"}
+{"what": "judge requests/Q46 agent", "cost_usd": 0.0096002, "input_tokens": 3579, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:22"}
+{"what": "judge pytest/Q8 agent", "cost_usd": 0.0088752, "input_tokens": 3434, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:22"}
+{"what": "judge pytest/Q2 agent", "cost_usd": 0.0091602, "input_tokens": 3491, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:23"}
+{"what": "judge requests/Q24 agent", "cost_usd": 0.0096552, "input_tokens": 3590, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:24"}
+{"what": "judge pytest/Q23 agent", "cost_usd": 0.0085252, "input_tokens": 3364, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:24"}
+{"what": "judge flask/Q6 agent", "cost_usd": 0.0108802, "input_tokens": 3835, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:24"}
+{"what": "judge requests/Q42 agent", "cost_usd": 0.0077702, "input_tokens": 3213, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:26"}
+{"what": "judge requests/Q43 agent", "cost_usd": 0.0095352, "input_tokens": 3566, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:26"}
+{"what": "judge pytest/Q28 agent", "cost_usd": 0.010425199999999999, "input_tokens": 3744, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:27"}
+{"what": "judge requests/Q16 agent", "cost_usd": 0.008405200000000002, "input_tokens": 3340, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:28"}
+{"what": "judge pytest/Q35 agent", "cost_usd": 0.0159252, "input_tokens": 3724, "output_tokens": 324, "error": null, "t": "2026-11-12T09:20:29"}
+{"what": "judge flask/Q28 agent", "cost_usd": 0.009630200000000002, "input_tokens": 3585, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:29"}
+{"what": "judge flask/Q5 agent", "cost_usd": 0.011070199999999999, "input_tokens": 3873, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:30"}
+{"what": "judge requests/Q14 agent", "cost_usd": 0.0075502, "input_tokens": 3169, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:31"}
+{"what": "judge flask/Q7 agent", "cost_usd": 0.008075200000000001, "input_tokens": 3274, "output_tokens": 44, "error": null, "t": "2026-11-12T09:20:31"}
+{"what": "flask closed1 b0", "cost_usd": 0.020708999999999998, "input_tokens": 820, "output_tokens": 671, "error": null, "t": "2026-11-12T09:21:31"}
+{"what": "requests closed1 b0", "cost_usd": 0.019204000000000002, "input_tokens": 826, "output_tokens": 595, "error": null, "t": "2026-11-12T09:21:31"}
+{"what": "pytest closed1 b0", "cost_usd": 0.020869000000000002, "input_tokens": 819, "output_tokens": 679, "error": null, "t": "2026-11-12T09:21:32"}
+{"what": "flask closed1 b2", "cost_usd": 0.016244, "input_tokens": 799, "output_tokens": 453, "error": null, "t": "2026-11-12T09:21:39"}
+{"what": "flask closed1 b3", "cost_usd": 0.017769, "input_tokens": 793, "output_tokens": 531, "error": null, "t": "2026-11-12T09:21:40"}
+{"what": "flask closed1 b1", "cost_usd": 0.025768999999999997, "input_tokens": 813, "output_tokens": 926, "error": null, "t": "2026-11-12T09:21:43"}
+{"what": "flask closed1 b4", "cost_usd": 0.018744, "input_tokens": 822, "output_tokens": 572, "error": null, "t": "2026-11-12T09:21:46"}
+{"what": "flask closed1 b5", "cost_usd": 0.020389, "input_tokens": 797, "output_tokens": 661, "error": null, "t": "2026-11-12T09:21:49"}
+{"what": "flask closed1 b7", "cost_usd": 0.015584, "input_tokens": 816, "output_tokens": 416, "error": null, "t": "2026-11-12T09:21:51"}
+{"what": "flask closed1 b6", "cost_usd": 0.023578999999999996, "input_tokens": 810, "output_tokens": 817, "error": null, "t": "2026-11-12T09:21:53"}
+{"what": "flask closed1 b8", "cost_usd": 0.022954000000000002, "input_tokens": 807, "output_tokens": 787, "error": null, "t": "2026-11-12T09:21:58"}
+{"what": "flask closed1 b10", "cost_usd": 0.021359000000000003, "input_tokens": 810, "output_tokens": 706, "error": null, "t": "2026-11-12T09:22:01"}
+{"what": "flask closed1 b9", "cost_usd": 0.026449, "input_tokens": 800, "output_tokens": 963, "error": null, "t": "2026-11-12T09:22:02"}
+{"what": "flask closed1 b11", "cost_usd": 0.019649000000000003, "input_tokens": 811, "output_tokens": 620, "error": null, "t": "2026-11-12T09:22:05"}
+{"what": "pytest closed1 b1", "cost_usd": 0.017884, "input_tokens": 817, "output_tokens": 530, "error": null, "t": "2026-11-12T09:22:08"}
+{"what": "pytest closed1 b2", "cost_usd": 0.023499, "input_tokens": 846, "output_tokens": 804, "error": null, "t": "2026-11-12T09:22:11"}
+{"what": "pytest closed1 b3", "cost_usd": 0.022154, "input_tokens": 833, "output_tokens": 739, "error": null, "t": "2026-11-12T09:22:14"}
+{"what": "pytest closed1 b4", "cost_usd": 0.026389, "input_tokens": 819, "output_tokens": 955, "error": null, "t": "2026-11-12T09:22:17"}
+{"what": "pytest closed1 b5", "cost_usd": 0.027544, "input_tokens": 851, "output_tokens": 1004, "error": null, "t": "2026-11-12T09:22:22"}
+{"what": "pytest closed1 b6", "cost_usd": 0.030919000000000002, "input_tokens": 820, "output_tokens": 1181, "error": null, "t": "2026-11-12T09:22:26"}
+{"what": "pytest closed1 b7", "cost_usd": 0.023879, "input_tokens": 820, "output_tokens": 829, "error": null, "t": "2026-11-12T09:22:27"}
+{"what": "pytest closed1 b8", "cost_usd": 0.027009, "input_tokens": 842, "output_tokens": 980, "error": null, "t": "2026-11-12T09:22:33"}
+{"what": "pytest closed1 b10", "cost_usd": 0.020594, "input_tokens": 835, "output_tokens": 661, "error": null, "t": "2026-11-12T09:22:35"}
+{"what": "pytest closed1 b9", "cost_usd": 0.028299, "input_tokens": 850, "output_tokens": 1042, "error": null, "t": "2026-11-12T09:22:37"}
+{"what": "pytest closed1 b11", "cost_usd": 0.019544000000000002, "input_tokens": 821, "output_tokens": 612, "error": null, "t": "2026-11-12T09:22:42"}
+{"what": "requests closed1 b1", "cost_usd": 0.022454000000000002, "input_tokens": 826, "output_tokens": 757, "error": null, "t": "2026-11-12T09:22:43"}
+{"what": "requests closed1 b2", "cost_usd": 0.020629, "input_tokens": 806, "output_tokens": 671, "error": null, "t": "2026-11-12T09:22:45"}
+{"what": "requests closed1 b4", "cost_usd": 0.012874, "input_tokens": 816, "output_tokens": 281, "error": null, "t": "2026-11-12T09:22:48"}
+{"what": "requests closed1 b3", "cost_usd": 0.021199000000000003, "input_tokens": 824, "output_tokens": 695, "error": null, "t": "2026-11-12T09:22:50"}
+{"what": "requests closed1 b5", "cost_usd": 0.024194, "input_tokens": 818, "output_tokens": 846, "error": null, "t": "2026-11-12T09:22:54"}
+{"what": "requests closed1 b6", "cost_usd": 0.017613999999999998, "input_tokens": 822, "output_tokens": 516, "error": null, "t": "2026-11-12T09:22:54"}
+{"what": "requests closed1 b7", "cost_usd": 0.018414, "input_tokens": 816, "output_tokens": 558, "error": null, "t": "2026-11-12T09:22:57"}
+{"what": "requests closed1 b8", "cost_usd": 0.016159, "input_tokens": 801, "output_tokens": 449, "error": null, "t": "2026-11-12T09:23:01"}
+{"what": "requests closed1 b10", "cost_usd": 0.015979, "input_tokens": 797, "output_tokens": 441, "error": null, "t": "2026-11-12T09:23:03"}
+{"what": "requests closed1 b9", "cost_usd": 0.031148999999999996, "input_tokens": 822, "output_tokens": 1193, "error": null, "t": "2026-11-12T09:23:06"}
+{"what": "requests closed1 b11", "cost_usd": 0.026473999999999998, "input_tokens": 852, "output_tokens": 952, "error": null, "t": "2026-11-12T09:23:12"}
+{"what": "judge requests/Q30 closed1", "cost_usd": 0.0080852, "input_tokens": 3276, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:13"}
+{"what": "judge pytest/Q23 closed1", "cost_usd": 0.0082552, "input_tokens": 3310, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:16"}
+{"what": "judge pytest/Q36 closed1", "cost_usd": 0.0099852, "input_tokens": 3656, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:16"}
+{"what": "judge flask/Q19 closed1", "cost_usd": 0.009960199999999999, "input_tokens": 3651, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:16"}
+{"what": "judge requests/Q20 closed1", "cost_usd": 0.009525200000000001, "input_tokens": 3564, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:18"}
+{"what": "judge flask/Q11 closed1", "cost_usd": 0.011205199999999998, "input_tokens": 3900, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:18"}
+{"what": "judge pytest/Q5 closed1", "cost_usd": 0.0106552, "input_tokens": 3790, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:19"}
+{"what": "judge pytest/Q4 closed1", "cost_usd": 0.010365200000000001, "input_tokens": 3732, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:19"}
+{"what": "judge pytest/Q29 closed1", "cost_usd": 0.0093852, "input_tokens": 3536, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:20"}
+{"what": "judge requests/Q31 closed1", "cost_usd": 0.009665199999999999, "input_tokens": 3592, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:21"}
+{"what": "judge flask/Q45 closed1", "cost_usd": 0.0084152, "input_tokens": 3342, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:21"}
+{"what": "judge requests/Q4 closed1", "cost_usd": 0.009605200000000001, "input_tokens": 3580, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:22"}
+{"what": "judge requests/Q10 closed1", "cost_usd": 0.009190199999999999, "input_tokens": 3497, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:23"}
+{"what": "judge flask/Q5 closed1", "cost_usd": 0.011045200000000002, "input_tokens": 3868, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:23"}
+{"what": "judge flask/Q28 closed1", "cost_usd": 0.0096452, "input_tokens": 3588, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:24"}
+{"what": "judge flask/Q14 closed1", "cost_usd": 0.010455200000000001, "input_tokens": 3750, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:25"}
+{"what": "judge requests/Q28 closed1", "cost_usd": 0.0091252, "input_tokens": 3484, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:25"}
+{"what": "judge pytest/Q46 closed1", "cost_usd": 0.010625200000000001, "input_tokens": 3784, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:26"}
+{"what": "judge flask/Q15 closed1", "cost_usd": 0.0102602, "input_tokens": 3711, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:27"}
+{"what": "judge flask/Q39 closed1", "cost_usd": 0.008540200000000001, "input_tokens": 3367, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:27"}
+{"what": "judge flask/Q8 closed1", "cost_usd": 0.0093202, "input_tokens": 3523, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:28"}
+{"what": "judge requests/Q11 closed1", "cost_usd": 0.0112902, "input_tokens": 3917, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:29"}
+{"what": "judge pytest/Q21 closed1", "cost_usd": 0.0083902, "input_tokens": 3337, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:29"}
+{"what": "judge requests/Q46 closed1", "cost_usd": 0.009245199999999999, "input_tokens": 3508, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:30"}
+{"what": "judge flask/Q25 closed1", "cost_usd": 0.010445200000000002, "input_tokens": 3748, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:31"}
+{"what": "judge pytest/Q47 closed1", "cost_usd": 0.0093502, "input_tokens": 3529, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:31"}
+{"what": "judge requests/Q16 closed1", "cost_usd": 0.0082652, "input_tokens": 3312, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:32"}
+{"what": "judge flask/Q41 closed1", "cost_usd": 0.0103952, "input_tokens": 3738, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:33"}
+{"what": "judge pytest/Q9 closed1", "cost_usd": 0.010040199999999999, "input_tokens": 3667, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:34"}
+{"what": "judge pytest/Q39 closed1", "cost_usd": 0.0096102, "input_tokens": 3581, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:34"}
+{"what": "judge pytest/Q11 closed1", "cost_usd": 0.009505199999999998, "input_tokens": 3560, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:35"}
+{"what": "judge requests/Q22 closed1", "cost_usd": 0.009060200000000001, "input_tokens": 3471, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:36"}
+{"what": "judge pytest/Q35 closed1", "cost_usd": 0.0117752, "input_tokens": 3674, "output_tokens": 129, "error": null, "t": "2026-11-12T09:23:36"}
+{"what": "judge flask/Q32 closed1", "cost_usd": 0.0091252, "input_tokens": 3484, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:37"}
+{"what": "judge requests/Q42 closed1", "cost_usd": 0.0076802, "input_tokens": 3195, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:38"}
+{"what": "judge requests/Q47 closed1", "cost_usd": 0.0086902, "input_tokens": 3397, "output_tokens": 44, "error": null, "t": "2026-11-12T09:23:39"}

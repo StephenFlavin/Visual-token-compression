@@ -3,7 +3,7 @@
     python finetune_qwen.py --encoding latin_p8 --smoke                      # 500 steps, the loop check
     python finetune_qwen.py --encoding col_b4 --steps 5000 --run-name round3_ft
 
-Plan: encoder_probe/ROUND3.md (R3-1). Runbook (RTX 3090): docs/LOCAL_GPU.md, "Round 3 on the 3090".
+Plan: encoder_probe/ROUND3.md (R3-1). Runbook (RTX 3090): docs/gpu/LOCAL_GPU.md, "Round 3 on the 3090".
 
 * Model (ep/qwen_ft.py): LoRA r=16 (alpha 32, dropout 0.05) on every LLM attention + MLP projection, the patch
   merger and the last 4 vision blocks trainable (fp32), everything else frozen; bf16 weights + bf16 autocast on

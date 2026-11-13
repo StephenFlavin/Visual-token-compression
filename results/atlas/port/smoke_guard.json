@@ -1,0 +1,38 @@
+{
+ "what": "smoke",
+ "killed": "guard",
+ "cost": 0.06563139999999999,
+ "reported": 0.06563139999999999,
+ "est_all": 0.0674868,
+ "results": [
+  [
+   "error_max_budget_usd",
+   11,
+   0.06563139999999999
+  ]
+ ],
+ "est_at_results": [
+  0.0675
+ ],
+ "first_call_input": 5146,
+ "image_tokens_formula": 0,
+ "pages_arrived": true,
+ "turns": {
+  "api_calls": 2,
+  "ack_calls": 0,
+  "cli_turns": 11,
+  "agent_s": 19,
+  "n_results": 1,
+  "usage": {
+   "input_tokens": 4,
+   "cache_creation_input_tokens": 4396,
+   "cache_read_input_tokens": 9277,
+   "output_tokens": 2089
+  }
+ },
+ "store_files": [
+  "624de02b-100b-4311-8ffa-6f63858dd424.jsonl"
+ ],
+ "built": false,
+ "session": true
+}

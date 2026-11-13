@@ -1,5 +1,14 @@
 # SWE-bench Verified (Django), text vs page images: pre-registration (2026-11-11, before any agent call)
 
+> **In brief (added in the clean-up, 2026-11-12).** Question: does a coding agent fix real issues as well when the
+> file contents and command output it reads are page images? Answer, on 50 hard Django tasks from SWE-bench Verified
+> (Opus 5.5, high effort): yes, 50 of 50 with text and 50 of 50 with images, and the images cost 3.1x fewer tokens
+> than the text they replaced; but the total cost did not fall ($6.08 against $5.78), because reading is a small
+> share of what an agent pays for. `vbhook` is the arm with the page-image hooks. Why the cost does not fall:
+> [docs/claude/SWE_IMAGES.md](../../docs/claude/SWE_IMAGES.md). The files in `analysis/` were computed from the
+> runs' full transcripts, which are not kept in the repo; do not re-run `experiments/readhook/swe/analyse.py`
+> without them (it would overwrite `analysis/` with empty results).
+
 Question: does an agent fix real issues as well when the code and command output it reads are shown as page images
 (vbhook at 88.2 px²/char, ~2.9x denser than text for prose) instead of text?
 

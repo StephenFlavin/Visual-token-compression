@@ -1,4 +1,4 @@
-"""RGB overlay encodings: up to three text streams per line, one per colour channel (docs/IDEAS.md).
+"""RGB overlay encodings: up to three text streams per line, one per colour channel (docs/background/IDEAS.md).
 
 All pages are 224x224 RGB uint8 with lines of integer pitch p (line i = rows [i*p, (i+1)*p)), rendered like
 ``latin_p``: em = p/1.2, line spacing 1.2, no margin, 4x supersampled then BOX-downsampled (vbpe.layout).

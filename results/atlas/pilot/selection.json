@@ -1,0 +1,202 @@
+{
+ "rule": "Per repository: tasks ordered by the number of gold files (source files in the patch, new files included;\nmost first; ties: lowest instance id); keep the first PER_REPO whose atlas at the base commit is at most\nRA.FIT_TOKENS image tokens. Scored gold = the gold files that exist at the base commit (``gold``); files the fix\ncreates (``gold_new``) cannot be named as they appear in the repository and are reported, not scored.",
+ "tasks": [
+  {
+   "id": "psf__requests-1142",
+   "repo": "psf/requests",
+   "base_commit": "22623bd8c265b78b161542663ee980738441c307",
+   "gold": [
+    "requests/models.py"
+   ],
+   "gold_new": [],
+   "patch_files": [
+    "requests/models.py"
+   ],
+   "funcs": [
+    "prepare_body"
+   ],
+   "atlas_image_tokens": 72450
+  },
+  {
+   "id": "psf__requests-1724",
+   "repo": "psf/requests",
+   "base_commit": "1ba83c47ce7b177efe90d5f51f7760680f72eda0",
+   "gold": [
+    "requests/sessions.py"
+   ],
+   "gold_new": [],
+   "patch_files": [
+    "requests/sessions.py"
+   ],
+   "funcs": [
+    "request"
+   ],
+   "atlas_image_tokens": 79350
+  },
+  {
+   "id": "gin-gonic__gin-1957",
+   "repo": "gin-gonic/gin",
+   "base_commit": "09a3650c97ca7ef3a542d428a9fb2c8da8c18002",
+   "gold": [
+    "binding/binding.go",
+    "context.go"
+   ],
+   "gold_new": [
+    "binding/header.go"
+   ],
+   "patch_files": [
+    "README.md",
+    "binding/binding.go",
+    "binding/header.go",
+    "context.go"
+   ],
+   "funcs": [
+    "headerBinding",
+    "Name",
+    "Bind",
+    "mapHeader",
+    "TrySet",
+    "BindYAML",
+    "BindHeader",
+    "ShouldBindYAML",
+    "ShouldBindHeader"
+   ],
+   "atlas_image_tokens": 31947
+  },
+  {
+   "id": "gin-gonic__gin-1805",
+   "repo": "gin-gonic/gin",
+   "base_commit": "70a0aba3e423246be37462cfdaedd510c26c566e",
+   "gold": [
+    "routergroup.go"
+   ],
+   "gold_new": [],
+   "patch_files": [
+    "routergroup.go"
+   ],
+   "funcs": [
+    "createStaticHandler"
+   ],
+   "atlas_image_tokens": 31395
+  },
+  {
+   "id": "sharkdp__bat-1892",
+   "repo": "sharkdp/bat",
+   "base_commit": "59d4cfb75c1a17a26b2b38956ee08d8c53f04e04",
+   "gold": [
+    "src/assets.rs",
+    "src/assets/ignored_suffixes.rs",
+    "src/bin/bat/app.rs",
+    "src/bin/bat/clap_app.rs",
+    "src/syntax_mapping.rs"
+   ],
+   "gold_new": [
+    "src/syntax_mapping/ignored_suffixes.rs"
+   ],
+   "patch_files": [
+    "CHANGELOG.md",
+    "src/assets.rs",
+    "src/assets/ignored_suffixes.rs",
+    "src/bin/bat/app.rs",
+    "src/bin/bat/clap_app.rs",
+    "src/syntax_mapping.rs",
+    "src/syntax_mapping/ignored_suffixes.rs"
+   ],
+   "funcs": [
+    "get_syntax_for_file_name",
+    "try_with_stripped_suffix",
+    "build_app",
+    "MappingTarget",
+    "insert_ignored_suffix",
+    "IgnoredSuffixes",
+    "default",
+    "add_suffix",
+    "strip_suffix",
+    "internal_suffixes",
+    "external_suffixes"
+   ],
+   "atlas_image_tokens": 29532
+  },
+  {
+   "id": "sharkdp__bat-2393",
+   "repo": "sharkdp/bat",
+   "base_commit": "7c847d84b0c3c97df6badfbb39d153ad93aec74e",
+   "gold": [
+    "src/bin/bat/assets.rs",
+    "src/bin/bat/main.rs"
+   ],
+   "gold_new": [],
+   "patch_files": [
+    "CHANGELOG.md",
+    "src/bin/bat/assets.rs",
+    "src/bin/bat/main.rs"
+   ],
+   "funcs": [
+    "config_dir",
+    "cache_dir",
+    "clear_assets",
+    "assets_from_cache_or_binary",
+    "clear_asset",
+    "build_assets",
+    "run_cache_subcommand",
+    "get_syntax_mapping_to_paths",
+    "get_languages",
+    "theme_preview_file",
+    "list_themes",
+    "run_controller",
+    "invoke_bugreport",
+    "run"
+   ],
+   "atlas_image_tokens": 34224
+  },
+  {
+   "id": "preactjs__preact-3689",
+   "repo": "preactjs/preact",
+   "base_commit": "9457b221fdacd1052ffdb385918e1bab4b10e833",
+   "gold": [
+    "hooks/src/index.d.ts",
+    "hooks/src/index.js",
+    "hooks/src/internal.d.ts"
+   ],
+   "gold_new": [],
+   "patch_files": [
+    "hooks/src/index.d.ts",
+    "hooks/src/index.js",
+    "hooks/src/internal.d.ts"
+   ],
+   "funcs": [
+    "useContext",
+    "useDebugValue",
+    "useErrorBoundary",
+    "componentDidCatch",
+    "ContextHookState"
+   ],
+   "atlas_image_tokens": 38019
+  },
+  {
+   "id": "preactjs__preact-3010",
+   "repo": "preactjs/preact",
+   "base_commit": "c12331064f4ea967641cd5e419204422af050fbb",
+   "gold": [
+    "src/diff/children.js",
+    "src/index.d.ts"
+   ],
+   "gold_new": [],
+   "patch_files": [
+    "src/diff/children.js",
+    "src/index.d.ts"
+   ],
+   "funcs": [
+    "diffChildren"
+   ],
+   "atlas_image_tokens": 35535
+  }
+ ],
+ "skipped": [],
+ "pool": {
+  "psf/requests": 8,
+  "gin-gonic/gin": 8,
+  "sharkdp/bat": 8,
+  "preactjs/preact": 17
+ }
+}

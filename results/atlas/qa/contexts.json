@@ -1,0 +1,225 @@
+{
+ "flask": {
+  "repo": "pallets/flask",
+  "commit": "85c5d93cbd049c4bd0679c36fd1ddcae8c37b642",
+  "files": 33,
+  "uncovered": 0,
+  "chars": {
+   "map": 30216,
+   "text": 347533,
+   "atlas_index": 1446
+  },
+  "text_tokens_est": 120466,
+  "pages": 8,
+  "image_tokens": 35604,
+  "page_sizes": [
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1120
+   ]
+  ],
+  "atlas_dir": "/tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/qa/ctx/flask/atlas"
+ },
+ "pytest": {
+  "repo": "pytest-dev/pytest",
+  "commit": "5989efe3efec31a9d14f550d89903b6311dfc828",
+  "files": 110,
+  "uncovered": 6,
+  "chars": {
+   "map": 143479,
+   "text": 1374872,
+   "atlas_index": 4154
+  },
+  "text_tokens_est": 477937,
+  "pages": 30,
+  "image_tokens": 140622,
+  "page_sizes": [
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1848
+   ]
+  ],
+  "atlas_dir": "/tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/qa/ctx/pytest/atlas"
+ },
+ "requests": {
+  "repo": "psf/requests",
+  "commit": "46e939b5525d9c72b677340985582b04b128478a",
+  "files": 29,
+  "uncovered": 3,
+  "chars": {
+   "map": 11938,
+   "text": 197670,
+   "atlas_index": 1268
+  },
+  "text_tokens_est": 68307,
+  "pages": 5,
+  "image_tokens": 20424,
+  "page_sizes": [
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    1904
+   ],
+   [
+    1932,
+    672
+   ]
+  ],
+  "atlas_dir": "/tmp/claude-0/-home-user-visual-bpe/588efa4c-1231-5348-b908-e0ab20b8aad7/scratchpad/qa/ctx/requests/atlas"
+ }
+}

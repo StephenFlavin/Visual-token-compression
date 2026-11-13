@@ -1,0 +1,10 @@
+[ra] 8 agent runs to make; spent so far $2.46 (cap $12.0)
+[ra] psf__requests-1142           agent  all=True  first=True  share=1.00 turns=2 in=11,564 $0.024 6s tools={'Grep': 1} files=['requests/models.py']
+[ra] psf__requests-1724           agent  all=True  first=False share=1.00 turns=2 in=17,239 $0.044 9s tools={'Grep': 1} files=['requests/models.py', 'requests/sessions.py']
+[ra] gin-gonic__gin-1957          agent  all=True  first=False share=1.00 turns=3 in=17,501 $0.031 9s tools={'Glob': 1, 'Grep': 1} files=['binding/header.go', 'binding/binding.go', 'context.go', 'binding/binding_test.go', 'context_test.go']
+[ra] gin-gonic__gin-1805          agent  all=True  first=True  share=1.00 turns=2 in=12,640 $0.040 11s tools={'Grep': 1} files=['routergroup.go', 'routes_test.go']
+[ra] sharkdp__bat-1892            agent  all=True  first=True  share=1.00 turns=4 in=17,835 $0.037 10s tools={'Grep': 2, 'Read': 1} files=['src/assets.rs', 'src/assets/ignored_suffixes.rs', 'src/syntax_mapping.rs', 'src/bin/bat/clap_app.rs', 'src/bin/bat/app.rs']
+[ra] preactjs__preact-3689        agent  all=True  first=True  share=1.00 turns=3 in=18,246 $0.034 9s tools={'Grep': 2} files=['hooks/src/index.js', 'hooks/src/index.d.ts', 'hooks/src/internal.d.ts', 'hooks/test/browser/useErrorBoundary.test.js']
+[ra] preactjs__preact-3010        agent  all=True  first=True  share=1.00 turns=4 in=17,177 $0.033 9s tools={'Grep': 3} files=['src/diff/children.js', 'src/index.d.ts']
+[ra] sharkdp__bat-2393            agent  all=True  first=True  share=1.00 turns=5 in=28,592 $0.058 14s tools={'Grep': 1, 'Read': 3} files=['src/bin/bat/assets.rs', 'src/bin/bat/main.rs', 'src/bin/bat/clap_app.rs', 'tests/integration_tests.rs']
+[ra] spent $2.76 list price

@@ -1,10 +1,37 @@
-# Frozen-encoder probe: does a pretrained vision encoder keep fine pixel / colour detail?
+# Round 1 plan: does a pretrained vision encoder keep fine pixel and colour detail?
 
-> **Status (2026-11-05): round 1, done.** Colour-pixel encoding is **dead for frozen-encoder VLMs**: no colour encoding
-> gets below 62% CER through SigLIP (raw pixels: col_b1 0.06%), and round 2 confirmed it through DeepEncoder (71-73%).
-> Grey-level learned glyphs are **not supported**: learned banks stay whole-pixel. Results:
-> [RESULTS.md](RESULTS.md#round-1-siglip-b16-2026-11-03); follow-ups: [ROUND2.md](ROUND2.md) (DeepEncoder),
-> [ROUND3.md](ROUND3.md) (Qwen2.5-VL fine-tuning). This file is the pre-registered round-1 record.
+**Status: finished 2026-11-03. This file is the pre-registered design of round 1, kept as written.** Results and
+tables: [RESULTS.md, round 1](RESULTS.md#round-1-siglip-b16-2026-11-03). Follow-ups: [ROUND2.md](ROUND2.md)
+(DeepSeek-OCR's encoder) and [ROUND3.md](ROUND3.md) (Qwen2.5-VL, frozen and fine-tuned).
+
+**What was asked.** Two ideas (one colour block per character; learned glyphs that use grey levels) only help a
+vision-language model if its pretrained image encoder passes that fine detail on to its output tokens. Does
+SigLIP-B/16, a general image-text encoder, do so?
+
+**What was found.** No. From raw pixels a small reader gets 1x1-px colour blocks at 0.06% character error (256
+characters per token). Through frozen SigLIP no colour code gets below 62%, at any block size, at the last layer
+or the middle one. Round 2 confirmed it through DeepEncoder (71-73%). Grey-level glyphs lose their advantage
+behind the encoder, so learned glyph alphabets stay whole-pixel.
+
+| Pre-registered prediction | Outcome |
+|---|---|
+| 1. Raw pixels: 1x1 colour blocks under 3% error | pass (0.06%) |
+| 2. Raw pixels after JPEG: 1x1 blocks over 20% | pass (28.8%) |
+| 3. Through SigLIP: 1x1 blocks over 20% | pass (72.6%) |
+| 4. Through SigLIP the grey-level glyphs' advantage shrinks or reverses | pass (reverses at layer 6: 75.9% against 54.7%) |
+
+Both decision rules failed: colour blocks are not worth a GPU follow-up, and grey-level glyphs are not used.
+
+**Terms.** *Vision token:* one vector an image encoder outputs for one patch of the page. *Frozen encoder:* a
+pretrained encoder whose weights are not changed. *Probe:* a small network trained from scratch to read the text
+back from the encoder's tokens; the same probe on raw pixel patches (`identity`) gives the ceiling. *CER:*
+character error rate; a reader that gets nothing from the page scores about 72-75% here. *CTC:* the probe's
+sequence loss. *jpeg75:* the page after JPEG compression at quality 75. Code names: `latin_p<N>` plain text with
+N-px lines, `col_b<N>` one NxN-px colour block per character, `lg_pb_*` / `lg_free_*` learned glyph alphabets with
+whole pixels / with grey levels, `mono_p<N>` fixed-width text, `rgb3_p<N>` three fixed-width texts overlaid, one
+per colour channel. Full glossary: [RESULTS.md](RESULTS.md#terms-used-on-this-page).
+
+## The design as pre-registered
 
 Sub-project of Visual BPE. It tests the assumption shared by two ideas:
 * **Colour-pixel encoding** (one solid b×b colour block per character; user idea, 2026-11-03), and

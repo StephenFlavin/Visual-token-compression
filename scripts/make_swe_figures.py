@@ -1,4 +1,4 @@
-"""Figures for docs/SWE_IMAGES.md from results/readhook_swe/analysis/summary.json (experiments/readhook/swe/analyse.py).
+"""Figures for docs/claude/SWE_IMAGES.md from results/readhook_swe/analysis/summary.json (experiments/readhook/swe/analyse.py).
 
     python3 scripts/make_swe_figures.py
 """
@@ -79,6 +79,10 @@ def fig_bridge():
              ("output\n(more reasoning)", comp(v, "share_output") - comp(t, "share_output")),
              ("agent's messages\nre-read (more calls)", comp(v, "share_other_context") - comp(t, "share_other_context")),
              ("starting context\nre-read", comp(v, "share_start_context") - comp(t, "share_start_context"))]
+    # The slices are built from each call's usage record and do not sum exactly to the CLI's own cost (text arm
+    # 100.1%, image arm 102.9%: analyse.py). Show the difference as its own step so that the bridge closes.
+    resid = (v["cost"] - t["cost"]) - sum(d for _, d in steps)
+    steps.append(("per-call records\nabove the CLI total", resid))
     H = 4.6
     fig, ax = plt.subplots(figsize=(10.4, H), dpi=150)
     fig.subplots_adjust(left=0.08, right=0.97, top=1 - 1.25 / H, bottom=0.75 / H)
@@ -89,6 +93,8 @@ def fig_bridge():
     for lab, d in steps:
         x += 1
         col = "#1baf7a" if d < 0 else "#c2493d"     # not the orange of "tool results" in the other figure
+        if lab.startswith("per-call"):
+            col = "#898781"
         ax.bar(x, d, bottom=level, color=col, width=0.6)
         ax.text(x, max(level, level + d) + 0.12, f"{'+' if d >= 0 else '−'}${abs(d):.2f}", ha="center", fontsize=9,
                 color=M.INK_1)
@@ -98,7 +104,7 @@ def fig_bridge():
     ax.bar(x, v["cost"], color="#c9c8c1", width=0.6)
     ax.text(x, v["cost"] + 0.12, f"${v['cost']:.2f}", ha="center", fontsize=9, color=M.INK_1)
     labels.append("page images")
-    ax.set_xticks(range(len(labels)), labels, fontsize=8.5)
+    ax.set_xticks(range(len(labels)), labels, fontsize=8)
     lo = min(t["cost"], v["cost"]) - 2.2
     ax.set_ylim(lo, max(t["cost"], v["cost"]) + 0.8)
     ax.set_ylabel("list-price cost, all tasks ($)")
@@ -107,7 +113,7 @@ def fig_bridge():
     best = comp(t, "share_tool_results") * (1 - v["image_tokens"] / max(1, v["image_text_tokens"]))
     header(fig, H, "Why the total did not fall: images saved on tool results, then more output and more calls ate it",
            f"All {t['runs']} tasks (Django and Rust/Java), same tasks per arm; y axis starts at ${lo:.0f}. Green: cheaper "
-           f"with images; red: dearer.\nUpper bound if every tool result had been an image at the measured "
+           f"with images; red: dearer; grey: the slices' excess over the CLI total (see text).\nUpper bound if every tool result had been an image at the measured "
            f"{v['image_text_tokens'] / max(1, v['image_tokens']):.1f}x: −${best:.2f} "
            f"({100 * best / t['cost']:.0f}% of the text arm's cost), with everything else unchanged.")
     save(fig, "swe_cost_bridge.png")

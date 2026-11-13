@@ -1,4 +1,4 @@
-"""Tests for vbpe/analysis.py and experiments/phase1_sweep.py (fake transcriber; never calls Claude)."""
+"""Tests for vbpe/analysis.py and experiments/phases/phase1_sweep.py (fake transcriber; never calls Claude)."""
 from __future__ import annotations
 
 import importlib.util
@@ -16,7 +16,7 @@ GRID = [2, 4, 8, 16, 32, 64, 128, 256]
 
 
 def _sweep_module():
-    spec = importlib.util.spec_from_file_location("phase1_sweep", ROOT / "experiments" / "phase1_sweep.py")
+    spec = importlib.util.spec_from_file_location("phase1_sweep", ROOT / "experiments" / "phases" / "phase1_sweep.py")
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod

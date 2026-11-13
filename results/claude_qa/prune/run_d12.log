@@ -1,0 +1,34 @@
+[claude] 1/8  new cost $0.1041  cached 0  errors 0  31s
+[claude] 2/8  new cost $1.4786  cached 0  errors 0  43s
+[claude] 3/8  new cost $2.1860  cached 0  errors 0  54s
+[claude] 4/8  new cost $2.7850  cached 0  errors 0  62s
+[claude] 5/8  new cost $3.7769  cached 0  errors 0  108s
+[claude] 6/8  new cost $4.3201  cached 0  errors 0  134s
+[claude] 7/8  new cost $4.8902  cached 0  errors 0  144s
+[claude] 8/8  new cost $5.7694  cached 0  errors 0  164s
+[run] d1 none: acc 0.081 complex 0.00, needle 0.00, number 0.33, small 0.00; in 7,194 out 3,406 $0.10 31s incomplete False refused False unanswered 0
+[run] d1 text: acc 1.000 complex 1.00, needle 1.00, number 1.00, small 1.00; in 251,113 out 5,945 $1.37 43s incomplete False refused False unanswered 0
+[run] d1 page118: acc 0.969 complex 1.00, needle 1.00, number 1.00, small 0.88; in 114,131 out 6,839 $0.71 52s incomplete False refused False unanswered 0
+[run] d1 page88: acc 0.981 complex 0.97, needle 1.00, number 1.00, small 0.95; in 87,412 out 8,098 $0.60 60s incomplete False refused False unanswered 0
+[run] d1 page59: acc 0.900 complex 0.72, needle 0.97, number 1.00, small 0.90; in 60,692 out 13,333 $0.57 112s incomplete False refused False unanswered 0
+[run] d1 ptext22: acc 0.887 complex 1.00, needle 1.00, number 0.95, small 0.60; in 115,489 out 15,087 $0.88 121s incomplete False refused False unanswered 0
+[run] d1 ptext15: acc 0.956 complex 0.97, needle 0.97, number 1.00, small 0.88; in 170,053 out 7,080 $0.99 54s incomplete False refused False unanswered 0
+[run] d1 ppage15: acc 0.912 complex 1.00, needle 1.00, number 0.90, small 0.75; in 73,964 out 8,672 $0.54 71s incomplete False refused False unanswered 0
+[run] spent so far $11.85
+[claude] 1/8  new cost $0.0968  cached 0  errors 0  29s
+[claude] 2/8  new cost $1.4584  cached 0  errors 0  49s
+[claude] 3/8  new cost $2.1656  cached 0  errors 0  53s
+[claude] 4/8  new cost $2.7704  cached 0  errors 0  66s
+[claude] 5/8  new cost $3.7492  cached 0  errors 0  112s
+[claude] 6/8  new cost $4.4980  cached 0  errors 0  120s
+[claude] 7/8  new cost $5.0547  cached 0  errors 0  142s
+[claude] 8/8  new cost $5.6694  cached 0  errors 0  156s
+[run] d2 none: acc 0.044 complex 0.00, needle 0.00, number 0.17, small 0.00; in 7,188 out 3,043 $0.10 29s incomplete False refused False unanswered 0
+[run] d2 text: acc 1.000 complex 1.00, needle 1.00, number 1.00, small 1.00; in 245,548 out 6,695 $1.36 49s incomplete False refused False unanswered 0
+[run] d2 page118: acc 0.969 complex 1.00, needle 1.00, number 1.00, small 0.88; in 114,194 out 6,809 $0.71 52s incomplete False refused False unanswered 0
+[run] d2 page88: acc 0.994 complex 0.97, needle 1.00, number 1.00, small 1.00; in 87,405 out 8,391 $0.60 64s incomplete False refused False unanswered 0
+[run] d2 page59: acc 0.919 complex 0.85, needle 1.00, number 1.00, small 0.82; in 60,684 out 15,563 $0.61 126s incomplete False refused False unanswered 0
+[run] d2 ptext22: acc 0.838 complex 0.93, needle 1.00, number 0.93, small 0.50; in 114,670 out 8,773 $0.75 72s incomplete False refused False unanswered 0
+[run] d2 ptext15: acc 0.969 complex 1.00, needle 1.00, number 1.00, small 0.88; in 165,241 out 7,628 $0.98 59s incomplete False refused False unanswered 0
+[run] d2 ppage15: acc 0.875 complex 0.97, needle 1.00, number 0.95, small 0.57; in 73,472 out 9,466 $0.56 75s incomplete False refused False unanswered 0
+[run] spent so far $17.52

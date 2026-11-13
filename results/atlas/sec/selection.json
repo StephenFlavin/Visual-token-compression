@@ -1,0 +1,3953 @@
+{
+ "rule": "Rules 1-5 in order (see the README): published from SINCE, newest first; not withdrawn; exactly one fix commit\non GitHub, fetchable, committed on or after SINCE; the fix changes 1-5 counted source files, all with a minifier;\nat most PER_REPO per repository; at least one gold file exists at the parent and every one that does is in the\natlas's file set (repo_atlas.collect); the atlas at the parent is MIN_TOKENS-MAX_TOKENS image tokens. Stop at MAX_TASKS tasks or MAX_EXAMINED advisories examined.",
+ "since": "2026-07-01",
+ "examined": 142,
+ "date_range": [
+  "2026-11-09T18:47:27Z",
+  "2026-11-11T00:47:20Z"
+ ],
+ "counts": {
+  "no fix commit on GitHub": 15,
+  "atlas too large (path count)": 8,
+  "more than 5 source files changed": 9,
+  "more than one fix commit on GitHub": 51,
+  "withdrawn": 13,
+  "a changed source file has no minifier": 4,
+  "selected": 14,
+  "repository already has 2 tasks": 7,
+  "atlas too large": 7,
+  "a gold file is outside the atlas's file set": 3,
+  "fix commit before 2026-07-01": 11
+ },
+ "tasks": [
+  {
+   "advisory": "GHSA-6889-vf6x-f3g5",
+   "published": "2026-11-10T21:18:23Z",
+   "cwes": [
+    "CWE-347"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": "digitalbazaar/forge",
+   "fix": "1b77e6f20082d7484479303d0252d5f427651295",
+   "parent": "2bd5146c042aabcba86977372befbd80f89c418e",
+   "fix_date": "2026-11-03T20:04:20-05:00",
+   "changed": [
+    "CHANGELOG.md",
+    "lib/ed25519.js",
+    "tests/pocs/ghsa-6889-vf6x-f3g5.js",
+    "tests/unit/ed25519.js"
+   ],
+   "gold": [
+    "lib/ed25519.js"
+   ],
+   "atlas_image_tokens": 117852,
+   "atlas_files": 67,
+   "why": null,
+   "id": "digitalbazaar__forge@2bd5146c"
+  },
+  {
+   "advisory": "GHSA-w4xr-hqv8-ch44",
+   "published": "2026-11-10T21:17:14Z",
+   "cwes": [
+    "CWE-20",
+    "CWE-248"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": "digitalbazaar/forge",
+   "fix": "1d9816d333c23c523ef2bd8b24282c87db2654ef",
+   "parent": "326a4d0903ee46358bc849a5c3fd96d9c21489bd",
+   "fix_date": "2026-11-03T20:04:20-05:00",
+   "changed": [
+    "CHANGELOG.md",
+    "lib/tls.js",
+    "tests/pocs/ghsa-w4xr-hqv8-ch44.js",
+    "tests/unit/tls.js"
+   ],
+   "gold": [
+    "lib/tls.js"
+   ],
+   "atlas_image_tokens": 120474,
+   "atlas_files": 67,
+   "why": null,
+   "id": "digitalbazaar__forge@326a4d09"
+  },
+  {
+   "advisory": "GHSA-474x-hrwr-fgx4",
+   "published": "2026-11-10T21:09:44Z",
+   "cwes": [
+    "CWE-407"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": "naturalintelligence/fast-xml-parser",
+   "fix": "0c3659348364959da62954b73728fb3bd05ebcb4",
+   "parent": "56805655d9ed564352baf0ed51553fd446ab608a",
+   "fix_date": "2026-11-03T16:47:57+05:30",
+   "changed": [
+    "src/xmlparser/OrderedObjParser.js"
+   ],
+   "gold": [
+    "src/xmlparser/OrderedObjParser.js"
+   ],
+   "atlas_image_tokens": 48852,
+   "atlas_files": 93,
+   "why": null,
+   "id": "naturalintelligence__fast-xml-parser@56805655"
+  },
+  {
+   "advisory": "GHSA-rm8w-w798-g545",
+   "published": "2026-11-10T15:57:22Z",
+   "cwes": [
+    "CWE-200",
+    "CWE-532"
+   ],
+   "ecosystems": [
+    "GitHub Actions",
+    "PyPI"
+   ],
+   "repo": "tmatens/compose-lint",
+   "fix": "31ec460399e06e98aa0d1cc578368a1960a8a0b3",
+   "parent": "8e4fac954c152f2254e95194a6a81121c0c72d5e",
+   "fix_date": "2026-10-03T21:44:14-05:00",
+   "changed": [
+    "CHANGELOG.md",
+    "src/compose_lint/engine.py",
+    "tests/test_finding_cap.py"
+   ],
+   "gold": [
+    "src/compose_lint/engine.py"
+   ],
+   "atlas_image_tokens": 87492,
+   "atlas_files": 102,
+   "why": null,
+   "id": "tmatens__compose-lint@8e4fac95"
+  },
+  {
+   "advisory": "GHSA-xxrh-5hgg-gj4h",
+   "published": "2026-11-10T15:57:12Z",
+   "cwes": [
+    "CWE-400",
+    "CWE-770"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": "nuxt/content",
+   "fix": "847d523a48e76d861175b325abf0de40dc5864ed",
+   "parent": "d8fed0c3ddbcad5805772e1ef8da9fbe841e772e",
+   "fix_date": "2026-07-23T13:56:46+02:00",
+   "changed": [
+    "src/runtime/internal/security.ts",
+    "test/unit/assertSafeQuery.test.ts"
+   ],
+   "gold": [
+    "src/runtime/internal/security.ts"
+   ],
+   "atlas_image_tokens": 36915,
+   "atlas_files": 123,
+   "why": null,
+   "id": "nuxt__content@d8fed0c3"
+  },
+  {
+   "advisory": "GHSA-6f4g-xm8v-pgv6",
+   "published": "2026-11-10T15:56:59Z",
+   "cwes": [
+    "CWE-117",
+    "CWE-150"
+   ],
+   "ecosystems": [
+    "GitHub Actions",
+    "PyPI"
+   ],
+   "repo": "tmatens/compose-lint",
+   "fix": "672bd11145621f787c295fb11f3a859cdec1b38d",
+   "parent": "c43204ad4dab11d54e20574a52bc4e5835246ca5",
+   "fix_date": "2026-09-26T19:54:05-05:00",
+   "changed": [
+    "CHANGELOG.md",
+    "action.yml",
+    "docs/ASSURANCE.md",
+    "src/compose_lint/_output.py",
+    "tests/_workflow_commands.py",
+    "tests/test_action_contract.py",
+    "tests/test_output_sanitizing.py"
+   ],
+   "gold": [
+    "src/compose_lint/_output.py"
+   ],
+   "atlas_image_tokens": 84387,
+   "atlas_files": 101,
+   "why": null,
+   "id": "tmatens__compose-lint@c43204ad"
+  },
+  {
+   "advisory": "GHSA-gcwf-c25f-p9rv",
+   "published": "2026-11-09T23:24:14Z",
+   "cwes": [
+    "CWE-601"
+   ],
+   "ecosystems": [
+    "PyPI"
+   ],
+   "repo": "kiwitcms/kiwi",
+   "fix": "65d8f7c2743d7f06a4fca77c060b9d561f02f948",
+   "parent": "494385fc5c1c5e295fca4ae4515eeceff4122382",
+   "fix_date": "2026-07-20T20:27:36+03:00",
+   "changed": [
+    "tcms/kiwi_auth/views.py"
+   ],
+   "gold": [
+    "tcms/kiwi_auth/views.py"
+   ],
+   "atlas_image_tokens": 102603,
+   "atlas_files": 342,
+   "why": null,
+   "id": "kiwitcms__kiwi@494385fc"
+  },
+  {
+   "advisory": "GHSA-44r8-3p76-84mw",
+   "published": "2026-11-09T22:20:08Z",
+   "cwes": [
+    "CWE-862"
+   ],
+   "ecosystems": [
+    "Packagist"
+   ],
+   "repo": "filegator/filegator",
+   "fix": "cae442a8323fddae7c8cee0924cdbb1aa6eea702",
+   "parent": "d876ac382530ece4efaddd5c1257ae6858f2b376",
+   "fix_date": "2026-08-13T13:31:18+02:00",
+   "changed": [
+    "CHANGELOG.md",
+    "backend/Controllers/UploadController.php",
+    "tests/backend/Feature/UploadAuthorizationTest.php"
+   ],
+   "gold": [
+    "backend/Controllers/UploadController.php"
+   ],
+   "atlas_image_tokens": 27738,
+   "atlas_files": 103,
+   "why": null,
+   "id": "filegator__filegator@d876ac38"
+  },
+  {
+   "advisory": "GHSA-f74m-x83r-c4v4",
+   "published": "2026-11-09T22:17:36Z",
+   "cwes": [
+    "CWE-330",
+    "CWE-862"
+   ],
+   "ecosystems": [
+    "Packagist"
+   ],
+   "repo": "filegator/filegator",
+   "fix": "638737e560cbf20cbeb5da4e4e6c974f8a080531",
+   "parent": "c6715ff7897c7ffeb6f46f91d06adb5feebc76ed",
+   "fix_date": "2026-08-12T07:09:24+02:00",
+   "changed": [
+    "CHANGELOG.md",
+    "backend/Controllers/DownloadController.php",
+    "backend/Services/Archiver/Adapters/ZipArchiver.php",
+    "tests/backend/Feature/BatchDownloadAuthorizationTest.php",
+    "tests/backend/MockUsers.php"
+   ],
+   "gold": [
+    "backend/Controllers/DownloadController.php",
+    "backend/Services/Archiver/Adapters/ZipArchiver.php"
+   ],
+   "atlas_image_tokens": 27600,
+   "atlas_files": 103,
+   "why": null,
+   "id": "filegator__filegator@c6715ff7"
+  },
+  {
+   "advisory": "GHSA-cp25-j9x5-p5xm",
+   "published": "2026-11-09T22:05:06Z",
+   "cwes": [
+    "CWE-116",
+    "CWE-248",
+    "CWE-775"
+   ],
+   "ecosystems": [
+    "PyPI"
+   ],
+   "repo": "urwid/urwid",
+   "fix": "b79d9a96843a6f5950bb2bfab5d059bdc61c538b",
+   "parent": "567e3006d6c26ace8e7e73117645314be09dfc81",
+   "fix_date": "2026-07-24T10:40:48+02:00",
+   "changed": [
+    "urwid/display/web.py"
+   ],
+   "gold": [
+    "urwid/display/web.py"
+   ],
+   "atlas_image_tokens": 111504,
+   "atlas_files": 77,
+   "why": null,
+   "id": "urwid__urwid@567e3006"
+  },
+  {
+   "advisory": "GHSA-rr8v-fxxf-c986",
+   "published": "2026-11-09T21:48:13Z",
+   "cwes": [
+    "CWE-22"
+   ],
+   "ecosystems": [
+    "Maven"
+   ],
+   "repo": "gradleup/shadow",
+   "fix": "0c2744fcc050e34a084f5131d5e167b13c342bfd",
+   "parent": "e822f993dba4f10fb69bfec26ca8959bdaa50ffd",
+   "fix_date": "2026-07-09T09:19:23+08:00",
+   "changed": [
+    "docs/changes/README.md",
+    "src/main/kotlin/com/github/jengelman/gradle/plugins/shadow/internal/Utils.kt",
+    "src/test/kotlin/com/github/jengelman/gradle/plugins/shadow/internal/ZipEntryValidationTest.kt"
+   ],
+   "gold": [
+    "src/main/kotlin/com/github/jengelman/gradle/plugins/shadow/internal/Utils.kt"
+   ],
+   "atlas_image_tokens": 53475,
+   "atlas_files": 101,
+   "why": null,
+   "id": "gradleup__shadow@e822f993"
+  },
+  {
+   "advisory": "GHSA-6w3r-6hpr-hp6p",
+   "published": "2026-11-09T21:08:28Z",
+   "cwes": [
+    "CWE-770"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": "agamnentzar/ag-psd",
+   "fix": "57ea7d865238b6b7c8a2e976bcf2a77e03116e2f",
+   "parent": "e64f0c96a5b8f9ea7c79599d08bbcfc57345b781",
+   "fix_date": "2026-07-01T16:28:29+02:00",
+   "changed": [
+    "CHANGELOG.md",
+    "package.json",
+    "src/psdReader.ts"
+   ],
+   "gold": [
+    "src/psdReader.ts"
+   ],
+   "atlas_image_tokens": 69552,
+   "atlas_files": 34,
+   "why": null,
+   "id": "agamnentzar__ag-psd@e64f0c96"
+  },
+  {
+   "advisory": "GHSA-v2g6-7r9j-v6px",
+   "published": "2026-11-09T21:03:31Z",
+   "cwes": [
+    "CWE-23"
+   ],
+   "ecosystems": [
+    "Maven"
+   ],
+   "repo": "zeroturnaround/zt-zip",
+   "fix": "1b625467b4c3cd3a9bee9efc35bdef2f8d9c8dad",
+   "parent": "780a2fd9acd9d8dc453462c85079da3b1e13bc54",
+   "fix_date": "2026-07-01T16:24:20+03:00",
+   "changed": [
+    "CHANGELOG.md",
+    "README.md",
+    "src/main/java/org/zeroturnaround/zip/ZipUtil.java",
+    "src/test/java/org/zeroturnaround/zip/DirectoryTraversalMaliciousTest.java"
+   ],
+   "gold": [
+    "src/main/java/org/zeroturnaround/zip/ZipUtil.java"
+   ],
+   "atlas_image_tokens": 35673,
+   "atlas_files": 54,
+   "why": null,
+   "id": "zeroturnaround__zt-zip@780a2fd9"
+  },
+  {
+   "advisory": "GHSA-52c6-99qm-3hqr",
+   "published": "2026-11-09T18:47:27Z",
+   "cwes": [
+    "CWE-22"
+   ],
+   "ecosystems": [
+    "Maven"
+   ],
+   "repo": "zeroturnaround/zt-zip",
+   "fix": "59a76ad576b0fcd50ea018e3608afb946c1492fd",
+   "parent": "0a9d0e1f333bd45493d492376b3d864f19c6d9fe",
+   "fix_date": "2026-07-01T00:32:51+03:00",
+   "changed": [
+    "src/main/java/org/zeroturnaround/zip/ZipUtil.java",
+    "src/main/java/org/zeroturnaround/zip/Zips.java",
+    "src/test/java/org/zeroturnaround/zip/DirectoryTraversalMaliciousTest.java"
+   ],
+   "gold": [
+    "src/main/java/org/zeroturnaround/zip/ZipUtil.java",
+    "src/main/java/org/zeroturnaround/zip/Zips.java"
+   ],
+   "atlas_image_tokens": 34983,
+   "atlas_files": 54,
+   "why": null,
+   "id": "zeroturnaround__zt-zip@0a9d0e1f"
+  }
+ ],
+ "funnel": [
+  {
+   "advisory": "GHSA-x8x8-p968-x646",
+   "published": "2026-11-11T00:47:20Z",
+   "cwes": [
+    "CWE-122"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "no fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-xf35-v9jh-g65w",
+   "published": "2026-11-11T00:46:12Z",
+   "cwes": [
+    "CWE-121",
+    "CWE-822"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "no fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-6856-87hx-p5x7",
+   "published": "2026-11-11T00:39:12Z",
+   "cwes": [
+    "CWE-284"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "no fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-fpxj-5c99-g7vj",
+   "published": "2026-11-11T00:35:02Z",
+   "cwes": [
+    "CWE-121",
+    "CWE-502"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "no fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-r8h3-p8p6-ggp7",
+   "published": "2026-11-11T00:34:13Z",
+   "cwes": [
+    "CWE-122"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "no fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-3cgx-w6gm-fqrx",
+   "published": "2026-11-11T00:32:59Z",
+   "cwes": [
+    "CWE-122"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "no fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-q6jf-24jf-m3cg",
+   "published": "2026-11-11T00:31:23Z",
+   "cwes": [
+    "CWE-532"
+   ],
+   "ecosystems": [
+    "NuGet",
+    "npm"
+   ],
+   "repo": "microsoft/aspire",
+   "fix": "c408ec5bf44e43203c278990a43aea93145248f3",
+   "parent": "c3d649db33907f697f5fa29bdaae5d92b8ba975c",
+   "fix_date": "2026-11-03T23:46:22+00:00",
+   "changed": [
+    "src/Aspire.Cli/Agents/DeprecatedMcpCommandScanner.cs"
+   ],
+   "gold": [
+    "src/Aspire.Cli/Agents/DeprecatedMcpCommandScanner.cs"
+   ],
+   "atlas_paths": 5880,
+   "why": "atlas too large (path count)"
+  },
+  {
+   "advisory": "GHSA-m63f-xhvm-6mv5",
+   "published": "2026-11-11T00:30:06Z",
+   "cwes": [
+    "CWE-379"
+   ],
+   "ecosystems": [
+    "NuGet",
+    "npm"
+   ],
+   "repo": "microsoft/aspire",
+   "fix": "1ecd7cc70b5a5a5b8571fe3af69faa1646b8de47",
+   "parent": "f017f668fd6e0938e23058dc0450a1403f409809",
+   "fix_date": "2026-11-06T20:48:20+00:00",
+   "changed": [
+    "docs/specs/cli-output-formats.md",
+    "src/Aspire.Cli/Commands/Sdk/SdkDumpCommand.cs",
+    "src/Aspire.Cli/Commands/Sdk/SdkExportCommand.cs",
+    "src/Aspire.Cli/Commands/Sdk/SdkGenerateCommand.cs",
+    "src/Aspire.Cli/DotNet/DotNetCliRunner.cs",
+    "src/Aspire.Cli/Projects/AppHostServerProject.cs",
+    "src/Aspire.Cli/Projects/DotNetBasedAppHostServerProject.cs",
+    "src/Aspire.Cli/Projects/PrebuiltAppHostServer.cs",
+    "src/Aspire.Cli/Utils/CliPathHelper.cs",
+    "tests/Aspire.Cli.Tests/Commands/Sdk/SdkResponseFileTests.cs",
+    "tests/Aspire.Cli.Tests/Commands/SdkCommandTests.cs",
+    "tests/Aspire.Cli.Tests/Commands/SdkDumpCommandTests.cs",
+    "tests/Aspire.Cli.Tests/DotNet/DotNetCliRunnerTests.cs",
+    "tests/Aspire.Cli.Tests/DotNet/ProcessInvocationOptionsTests.cs",
+    "tests/Aspire.Cli.Tests/Projects/AppHostServerProjectTests.cs",
+    "tests/Aspire.Cli.Tests/Projects/PrebuiltAppHostServerTests.cs",
+    "tests/Aspire.Cli.Tests/TestServices/TestAppHostServerProjectFactory.cs"
+   ],
+   "gold": [
+    "src/Aspire.Cli/Commands/Sdk/SdkDumpCommand.cs",
+    "src/Aspire.Cli/Commands/Sdk/SdkExportCommand.cs",
+    "src/Aspire.Cli/Commands/Sdk/SdkGenerateCommand.cs",
+    "src/Aspire.Cli/DotNet/DotNetCliRunner.cs",
+    "src/Aspire.Cli/Projects/AppHostServerProject.cs",
+    "src/Aspire.Cli/Projects/DotNetBasedAppHostServerProject.cs",
+    "src/Aspire.Cli/Projects/PrebuiltAppHostServer.cs",
+    "src/Aspire.Cli/Utils/CliPathHelper.cs"
+   ],
+   "why": "more than 5 source files changed"
+  },
+  {
+   "advisory": "GHSA-3893-7fxc-qvff",
+   "published": "2026-11-11T00:28:01Z",
+   "cwes": [
+    "CWE-401"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-7phj-vgxq-r67h",
+   "published": "2026-11-11T00:25:04Z",
+   "cwes": [
+    "CWE-362"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-8w29-6cjc-h6w4",
+   "published": "2026-11-11T00:24:05Z",
+   "cwes": [
+    "CWE-41"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "no fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-wr8v-9x5q-ggcm",
+   "published": "2026-11-11T00:23:32Z",
+   "cwes": [
+    "CWE-401"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-r3qf-p3jm-8h4p",
+   "published": "2026-11-11T00:22:43Z",
+   "cwes": [
+    "CWE-407"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-67wp-ghc2-fw2g",
+   "published": "2026-11-11T00:21:56Z",
+   "cwes": [
+    "CWE-863"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-6vjv-7wm8-p67r",
+   "published": "2026-11-11T00:20:47Z",
+   "cwes": [
+    "CWE-908"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "no fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-5h82-77p6-2wp3",
+   "published": "2026-11-11T00:11:03Z",
+   "cwes": [
+    "CWE-770"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "no fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-q7j6-px74-p2vw",
+   "published": "2026-11-11T00:09:46Z",
+   "cwes": [
+    "CWE-367"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-xw2x-23jm-j582",
+   "published": "2026-11-10T23:33:36Z",
+   "cwes": [
+    "CWE-352"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "no fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-6527-9fp8-r4x6",
+   "published": "2026-11-10T23:32:00Z",
+   "cwes": [
+    "CWE-770"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": "dotnet/aspnetcore",
+   "fix": "9a26c7414a4fbff45535c0830253c1b4479b0073",
+   "parent": "9db1dc646f063b7cecf28fc499e1cac02c3d96a4",
+   "fix_date": "2026-10-27T18:21:51+00:00",
+   "changed": [
+    "src/Http/WebUtilities/src/FileBufferingReadStream.cs",
+    "src/Http/WebUtilities/src/Microsoft.AspNetCore.WebUtilities.csproj",
+    "src/Http/WebUtilities/test/FileBufferingReadStreamTests.cs",
+    "src/Http/WebUtilities/test/PooledMemoryStreamTests.cs",
+    "src/Shared/PooledMemoryStream.cs"
+   ],
+   "gold": [
+    "src/Http/WebUtilities/src/FileBufferingReadStream.cs",
+    "src/Shared/PooledMemoryStream.cs"
+   ],
+   "atlas_paths": 4646,
+   "why": "atlas too large (path count)"
+  },
+  {
+   "advisory": "GHSA-f7vh-h5g3-7jrh",
+   "published": "2026-11-10T23:24:48Z",
+   "cwes": [
+    "CWE-201"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": "microsoft/aspire",
+   "fix": "f017f668fd6e0938e23058dc0450a1403f409809",
+   "parent": "c408ec5bf44e43203c278990a43aea93145248f3",
+   "fix_date": "2026-11-06T20:44:14+00:00",
+   "changed": [
+    "src/Aspire.Hosting/ApplicationModel/HostUrl.cs",
+    "src/Aspire.Hosting/ApplicationModel/ResourceExtensions.cs",
+    "src/Aspire.Hosting/Dcp/ContainerCreator.cs",
+    "tests/Aspire.Hosting.Tests/Dcp/DcpExecutorTests.cs",
+    "tests/Aspire.Hosting.Tests/ExecutionConfigurationGathererTests.cs"
+   ],
+   "gold": [
+    "src/Aspire.Hosting/ApplicationModel/HostUrl.cs",
+    "src/Aspire.Hosting/ApplicationModel/ResourceExtensions.cs",
+    "src/Aspire.Hosting/Dcp/ContainerCreator.cs"
+   ],
+   "atlas_paths": 5880,
+   "why": "atlas too large (path count)"
+  },
+  {
+   "advisory": "GHSA-3g4v-f5gv-c7xf",
+   "published": "2026-11-10T23:22:54Z",
+   "cwes": [
+    "CWE-121"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "no fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-cpw3-h88j-9f6x",
+   "published": "2026-11-10T23:21:36Z",
+   "cwes": [
+    "CWE-407"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "no fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-vmv3-wvjp-wqpj",
+   "published": "2026-11-10T23:20:27Z",
+   "cwes": [
+    "CWE-407"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "no fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-m28h-pj36-4364",
+   "published": "2026-11-10T23:08:34Z",
+   "cwes": [
+    "CWE-407"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "no fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-x33c-w48q-qrgc",
+   "published": "2026-11-10T23:06:32Z",
+   "cwes": [
+    "CWE-770"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-xhj5-c3g8-pfj8",
+   "published": "2026-11-10T23:02:40Z",
+   "cwes": [
+    "CWE-116"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-xqc2-xf4c-x3h3",
+   "published": "2026-11-10T22:44:12Z",
+   "cwes": [
+    "CWE-502"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-8v59-qmwv-4p6q",
+   "published": "2026-11-10T21:58:53Z",
+   "cwes": [
+    "CWE-117",
+    "CWE-150"
+   ],
+   "ecosystems": [
+    "PyPI"
+   ],
+   "repo": "tmatens/compose-lint",
+   "fix": "542e63126f795564a65c63887ea0dc558a500688",
+   "parent": "977da9724789264c2662afe47f79220e915442c2",
+   "fix_date": "2026-09-28T09:40:28-05:00",
+   "changed": [
+    "CHANGELOG.md",
+    "action.yml",
+    "docs/ASSURANCE.md",
+    "src/compose_lint/_output.py",
+    "src/compose_lint/cli.py",
+    "src/compose_lint/rules/CL0004_image_not_pinned.py",
+    "src/compose_lint/rules/CL0005_unbound_ports.py",
+    "src/compose_lint/rules/CL0009_security_profile.py",
+    "src/compose_lint/rules/CL0010_host_namespace.py",
+    "src/compose_lint/rules/CL0011_dangerous_cap_add.py",
+    "src/compose_lint/rules/CL0013_sensitive_mount.py",
+    "src/compose_lint/rules/CL0016_dangerous_devices.py",
+    "src/compose_lint/rules/CL0019_image_no_digest.py",
+    "src/compose_lint/rules/CL0020_credential_env_keys.py",
+    "src/compose_lint/rules/CL0021_connection_string_credentials.py",
+    "src/compose_lint/rules/CL0022_tmpfs_insecure_options.py",
+    "src/compose_lint/rules/CL0024_host_exec_cap_add.py",
+    "src/compose_lint/rules/CL0025_writable_host_root.py",
+    "src/compose_lint/rules/CL0027_lesser_cap_add.py",
+    "src/compose_lint/rules/CL0028_host_reach_cap_add.py",
+    "src/compose_lint/rules/CL0029_host_availability_cap_add.py",
+    "src/compose_lint/rules/CL0030_host_disclosure_cap_add.py",
+    "tests/test_action_contract.py",
+    "tests/test_guidance_inline_values.py",
+    "tests/test_sarif.py",
+    "tests/test_workflow_command_openers.py"
+   ],
+   "gold": [
+    "src/compose_lint/_output.py",
+    "src/compose_lint/cli.py",
+    "src/compose_lint/rules/CL0004_image_not_pinned.py",
+    "src/compose_lint/rules/CL0005_unbound_ports.py",
+    "src/compose_lint/rules/CL0009_security_profile.py",
+    "src/compose_lint/rules/CL0010_host_namespace.py",
+    "src/compose_lint/rules/CL0011_dangerous_cap_add.py",
+    "src/compose_lint/rules/CL0013_sensitive_mount.py",
+    "src/compose_lint/rules/CL0016_dangerous_devices.py",
+    "src/compose_lint/rules/CL0019_image_no_digest.py",
+    "src/compose_lint/rules/CL0020_credential_env_keys.py",
+    "src/compose_lint/rules/CL0021_connection_string_credentials.py",
+    "src/compose_lint/rules/CL0022_tmpfs_insecure_options.py",
+    "src/compose_lint/rules/CL0024_host_exec_cap_add.py",
+    "src/compose_lint/rules/CL0025_writable_host_root.py",
+    "src/compose_lint/rules/CL0027_lesser_cap_add.py",
+    "src/compose_lint/rules/CL0028_host_reach_cap_add.py",
+    "src/compose_lint/rules/CL0029_host_availability_cap_add.py",
+    "src/compose_lint/rules/CL0030_host_disclosure_cap_add.py"
+   ],
+   "why": "more than 5 source files changed"
+  },
+  {
+   "advisory": "GHSA-xcf7-88g6-7xr8",
+   "published": "2026-11-10T21:50:54Z",
+   "cwes": [
+    "CWE-117",
+    "CWE-150"
+   ],
+   "ecosystems": [
+    "GitHub Actions"
+   ],
+   "repo": "tmatens/compose-lint",
+   "fix": "542e63126f795564a65c63887ea0dc558a500688",
+   "parent": "977da9724789264c2662afe47f79220e915442c2",
+   "fix_date": "2026-09-28T09:40:28-05:00",
+   "changed": [
+    "CHANGELOG.md",
+    "action.yml",
+    "docs/ASSURANCE.md",
+    "src/compose_lint/_output.py",
+    "src/compose_lint/cli.py",
+    "src/compose_lint/rules/CL0004_image_not_pinned.py",
+    "src/compose_lint/rules/CL0005_unbound_ports.py",
+    "src/compose_lint/rules/CL0009_security_profile.py",
+    "src/compose_lint/rules/CL0010_host_namespace.py",
+    "src/compose_lint/rules/CL0011_dangerous_cap_add.py",
+    "src/compose_lint/rules/CL0013_sensitive_mount.py",
+    "src/compose_lint/rules/CL0016_dangerous_devices.py",
+    "src/compose_lint/rules/CL0019_image_no_digest.py",
+    "src/compose_lint/rules/CL0020_credential_env_keys.py",
+    "src/compose_lint/rules/CL0021_connection_string_credentials.py",
+    "src/compose_lint/rules/CL0022_tmpfs_insecure_options.py",
+    "src/compose_lint/rules/CL0024_host_exec_cap_add.py",
+    "src/compose_lint/rules/CL0025_writable_host_root.py",
+    "src/compose_lint/rules/CL0027_lesser_cap_add.py",
+    "src/compose_lint/rules/CL0028_host_reach_cap_add.py",
+    "src/compose_lint/rules/CL0029_host_availability_cap_add.py",
+    "src/compose_lint/rules/CL0030_host_disclosure_cap_add.py",
+    "tests/test_action_contract.py",
+    "tests/test_guidance_inline_values.py",
+    "tests/test_sarif.py",
+    "tests/test_workflow_command_openers.py"
+   ],
+   "gold": [
+    "src/compose_lint/_output.py",
+    "src/compose_lint/cli.py",
+    "src/compose_lint/rules/CL0004_image_not_pinned.py",
+    "src/compose_lint/rules/CL0005_unbound_ports.py",
+    "src/compose_lint/rules/CL0009_security_profile.py",
+    "src/compose_lint/rules/CL0010_host_namespace.py",
+    "src/compose_lint/rules/CL0011_dangerous_cap_add.py",
+    "src/compose_lint/rules/CL0013_sensitive_mount.py",
+    "src/compose_lint/rules/CL0016_dangerous_devices.py",
+    "src/compose_lint/rules/CL0019_image_no_digest.py",
+    "src/compose_lint/rules/CL0020_credential_env_keys.py",
+    "src/compose_lint/rules/CL0021_connection_string_credentials.py",
+    "src/compose_lint/rules/CL0022_tmpfs_insecure_options.py",
+    "src/compose_lint/rules/CL0024_host_exec_cap_add.py",
+    "src/compose_lint/rules/CL0025_writable_host_root.py",
+    "src/compose_lint/rules/CL0027_lesser_cap_add.py",
+    "src/compose_lint/rules/CL0028_host_reach_cap_add.py",
+    "src/compose_lint/rules/CL0029_host_availability_cap_add.py",
+    "src/compose_lint/rules/CL0030_host_disclosure_cap_add.py"
+   ],
+   "why": "more than 5 source files changed"
+  },
+  {
+   "advisory": "GHSA-hr4h-4c45-v4q4",
+   "published": "2026-11-10T21:40:50Z",
+   "cwes": [
+    "CWE-117",
+    "CWE-150"
+   ],
+   "ecosystems": [
+    "PyPI"
+   ],
+   "repo": "tmatens/compose-lint",
+   "fix": "542e63126f795564a65c63887ea0dc558a500688",
+   "parent": "977da9724789264c2662afe47f79220e915442c2",
+   "fix_date": "2026-09-28T09:40:28-05:00",
+   "changed": [
+    "CHANGELOG.md",
+    "action.yml",
+    "docs/ASSURANCE.md",
+    "src/compose_lint/_output.py",
+    "src/compose_lint/cli.py",
+    "src/compose_lint/rules/CL0004_image_not_pinned.py",
+    "src/compose_lint/rules/CL0005_unbound_ports.py",
+    "src/compose_lint/rules/CL0009_security_profile.py",
+    "src/compose_lint/rules/CL0010_host_namespace.py",
+    "src/compose_lint/rules/CL0011_dangerous_cap_add.py",
+    "src/compose_lint/rules/CL0013_sensitive_mount.py",
+    "src/compose_lint/rules/CL0016_dangerous_devices.py",
+    "src/compose_lint/rules/CL0019_image_no_digest.py",
+    "src/compose_lint/rules/CL0020_credential_env_keys.py",
+    "src/compose_lint/rules/CL0021_connection_string_credentials.py",
+    "src/compose_lint/rules/CL0022_tmpfs_insecure_options.py",
+    "src/compose_lint/rules/CL0024_host_exec_cap_add.py",
+    "src/compose_lint/rules/CL0025_writable_host_root.py",
+    "src/compose_lint/rules/CL0027_lesser_cap_add.py",
+    "src/compose_lint/rules/CL0028_host_reach_cap_add.py",
+    "src/compose_lint/rules/CL0029_host_availability_cap_add.py",
+    "src/compose_lint/rules/CL0030_host_disclosure_cap_add.py",
+    "tests/test_action_contract.py",
+    "tests/test_guidance_inline_values.py",
+    "tests/test_sarif.py",
+    "tests/test_workflow_command_openers.py"
+   ],
+   "gold": [
+    "src/compose_lint/_output.py",
+    "src/compose_lint/cli.py",
+    "src/compose_lint/rules/CL0004_image_not_pinned.py",
+    "src/compose_lint/rules/CL0005_unbound_ports.py",
+    "src/compose_lint/rules/CL0009_security_profile.py",
+    "src/compose_lint/rules/CL0010_host_namespace.py",
+    "src/compose_lint/rules/CL0011_dangerous_cap_add.py",
+    "src/compose_lint/rules/CL0013_sensitive_mount.py",
+    "src/compose_lint/rules/CL0016_dangerous_devices.py",
+    "src/compose_lint/rules/CL0019_image_no_digest.py",
+    "src/compose_lint/rules/CL0020_credential_env_keys.py",
+    "src/compose_lint/rules/CL0021_connection_string_credentials.py",
+    "src/compose_lint/rules/CL0022_tmpfs_insecure_options.py",
+    "src/compose_lint/rules/CL0024_host_exec_cap_add.py",
+    "src/compose_lint/rules/CL0025_writable_host_root.py",
+    "src/compose_lint/rules/CL0027_lesser_cap_add.py",
+    "src/compose_lint/rules/CL0028_host_reach_cap_add.py",
+    "src/compose_lint/rules/CL0029_host_availability_cap_add.py",
+    "src/compose_lint/rules/CL0030_host_disclosure_cap_add.py"
+   ],
+   "why": "more than 5 source files changed"
+  },
+  {
+   "advisory": "GHSA-v924-7rp8-4mxh",
+   "published": "2026-11-10T21:38:55Z",
+   "cwes": [
+    "CWE-646"
+   ],
+   "ecosystems": [
+    "RubyGems"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-hfr4-8rjc-97m2",
+   "published": "2026-11-10T21:37:19Z",
+   "cwes": [
+    "CWE-602"
+   ],
+   "ecosystems": [
+    "RubyGems"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-8474-xrp6-wh69",
+   "published": "2026-11-10T21:34:11Z",
+   "cwes": [
+    "CWE-74"
+   ],
+   "ecosystems": [
+    "RubyGems"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-fgfw-85w4-gx99",
+   "published": "2026-11-10T21:33:44Z",
+   "cwes": [
+    "CWE-532"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "withdrawn"
+  },
+  {
+   "advisory": "GHSA-hfpm-4fc4-g2wc",
+   "published": "2026-11-10T21:33:43Z",
+   "cwes": [
+    "CWE-379"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "withdrawn"
+  },
+  {
+   "advisory": "GHSA-p2pm-g2h6-7j5j",
+   "published": "2026-11-10T21:33:12Z",
+   "cwes": [
+    "CWE-248"
+   ],
+   "ecosystems": [
+    "RubyGems"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-cfv6-4v53-fff6",
+   "published": "2026-11-10T21:33:10Z",
+   "cwes": [
+    "CWE-122"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "withdrawn"
+  },
+  {
+   "advisory": "GHSA-cjjx-gv54-83qh",
+   "published": "2026-11-10T21:32:52Z",
+   "cwes": [
+    "CWE-122"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "withdrawn"
+  },
+  {
+   "advisory": "GHSA-95x6-7hq8-2c37",
+   "published": "2026-11-10T21:32:52Z",
+   "cwes": [
+    "CWE-362"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "withdrawn"
+  },
+  {
+   "advisory": "GHSA-mqcg-252r-5fj7",
+   "published": "2026-11-10T21:32:51Z",
+   "cwes": [
+    "CWE-121"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "withdrawn"
+  },
+  {
+   "advisory": "GHSA-hm4p-mv9w-4w8f",
+   "published": "2026-11-10T21:32:51Z",
+   "cwes": [
+    "CWE-121"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "withdrawn"
+  },
+  {
+   "advisory": "GHSA-gxg8-5rwf-cg43",
+   "published": "2026-11-10T21:32:51Z",
+   "cwes": [
+    "CWE-401"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "withdrawn"
+  },
+  {
+   "advisory": "GHSA-c827-j3xf-67v6",
+   "published": "2026-11-10T21:32:51Z",
+   "cwes": [
+    "CWE-41"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "withdrawn"
+  },
+  {
+   "advisory": "GHSA-6rff-vv3p-7mrw",
+   "published": "2026-11-10T21:32:51Z",
+   "cwes": [
+    "CWE-122"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "withdrawn"
+  },
+  {
+   "advisory": "GHSA-49q5-vjx7-5gwr",
+   "published": "2026-11-10T21:32:51Z",
+   "cwes": [
+    "CWE-401"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "withdrawn"
+  },
+  {
+   "advisory": "GHSA-wrm2-c2h2-4w82",
+   "published": "2026-11-10T21:32:29Z",
+   "cwes": [
+    "CWE-407"
+   ],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "withdrawn"
+  },
+  {
+   "advisory": "GHSA-r33q-3g5w-gqx6",
+   "published": "2026-11-10T21:32:22Z",
+   "cwes": [],
+   "ecosystems": [
+    "NuGet"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "withdrawn"
+  },
+  {
+   "advisory": "GHSA-5957-c7qm-m469",
+   "published": "2026-11-10T21:28:16Z",
+   "cwes": [
+    "CWE-294"
+   ],
+   "ecosystems": [
+    "RubyGems"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-2w9f-fxwj-w2qf",
+   "published": "2026-11-10T21:27:12Z",
+   "cwes": [
+    "CWE-79"
+   ],
+   "ecosystems": [
+    "RubyGems"
+   ],
+   "repo": "rails/rails",
+   "fix": "4ca090665976e6fbc471c38689b399f84b43cdc7",
+   "parent": "d479192cf88a8b30a335a8bc25188a2d8e0f8d9f",
+   "fix_date": "2026-11-03T15:27:06-05:00",
+   "changed": [
+    "activesupport/CHANGELOG.md",
+    "activesupport/lib/active_support/message_pack/extensions.rb",
+    "activesupport/test/message_pack/shared_serializer_tests.rb"
+   ],
+   "gold": [
+    "activesupport/lib/active_support/message_pack/extensions.rb"
+   ],
+   "why": "a changed source file has no minifier"
+  },
+  {
+   "advisory": "GHSA-r9jg-fmfx-2gv6",
+   "published": "2026-11-10T21:26:12Z",
+   "cwes": [
+    "CWE-436"
+   ],
+   "ecosystems": [
+    "RubyGems"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-gmj8-hvj3-49mw",
+   "published": "2026-11-10T21:25:18Z",
+   "cwes": [
+    "CWE-352"
+   ],
+   "ecosystems": [
+    "RubyGems"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-4v2w-w6g6-f8f8",
+   "published": "2026-11-10T21:24:31Z",
+   "cwes": [
+    "CWE-772"
+   ],
+   "ecosystems": [
+    "RubyGems"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-2gff-2mmg-m73p",
+   "published": "2026-11-10T21:20:06Z",
+   "cwes": [
+    "CWE-348"
+   ],
+   "ecosystems": [
+    "RubyGems"
+   ],
+   "repo": "rails/rails",
+   "fix": "2a01a5ac521184419d9a92fa2c25e102e68cd227",
+   "parent": "8ba746e0a786458c281060823f2ccc5c5f6312ac",
+   "fix_date": "2026-11-03T15:16:22-05:00",
+   "changed": [
+    "actionpack/CHANGELOG.md",
+    "actionpack/lib/action_dispatch/middleware/remote_ip.rb",
+    "actionpack/test/dispatch/request_test.rb",
+    "guides/source/configuring.md"
+   ],
+   "gold": [
+    "actionpack/lib/action_dispatch/middleware/remote_ip.rb"
+   ],
+   "why": "a changed source file has no minifier"
+  },
+  {
+   "advisory": "GHSA-2586-8ghr-69fj",
+   "published": "2026-11-10T21:19:09Z",
+   "cwes": [
+    "CWE-613"
+   ],
+   "ecosystems": [
+    "RubyGems"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-6889-vf6x-f3g5",
+   "published": "2026-11-10T21:18:23Z",
+   "cwes": [
+    "CWE-347"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": "digitalbazaar/forge",
+   "fix": "1b77e6f20082d7484479303d0252d5f427651295",
+   "parent": "2bd5146c042aabcba86977372befbd80f89c418e",
+   "fix_date": "2026-11-03T20:04:20-05:00",
+   "changed": [
+    "CHANGELOG.md",
+    "lib/ed25519.js",
+    "tests/pocs/ghsa-6889-vf6x-f3g5.js",
+    "tests/unit/ed25519.js"
+   ],
+   "gold": [
+    "lib/ed25519.js"
+   ],
+   "atlas_image_tokens": 117852,
+   "atlas_files": 67,
+   "why": null
+  },
+  {
+   "advisory": "GHSA-w4xr-hqv8-ch44",
+   "published": "2026-11-10T21:17:14Z",
+   "cwes": [
+    "CWE-20",
+    "CWE-248"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": "digitalbazaar/forge",
+   "fix": "1d9816d333c23c523ef2bd8b24282c87db2654ef",
+   "parent": "326a4d0903ee46358bc849a5c3fd96d9c21489bd",
+   "fix_date": "2026-11-03T20:04:20-05:00",
+   "changed": [
+    "CHANGELOG.md",
+    "lib/tls.js",
+    "tests/pocs/ghsa-w4xr-hqv8-ch44.js",
+    "tests/unit/tls.js"
+   ],
+   "gold": [
+    "lib/tls.js"
+   ],
+   "atlas_image_tokens": 120474,
+   "atlas_files": 67,
+   "why": null
+  },
+  {
+   "advisory": "GHSA-6cv4-p8m7-4r25",
+   "published": "2026-11-10T21:16:22Z",
+   "cwes": [
+    "CWE-1333"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": "digitalbazaar/forge",
+   "fix": "326a4d0903ee46358bc849a5c3fd96d9c21489bd",
+   "parent": "2cfaeb516cb3d4aff1c0569d39394df41c5cb17c",
+   "fix_date": "2026-11-03T20:04:20-05:00",
+   "changed": [
+    "CHANGELOG.md",
+    "lib/http.js",
+    "tests/security/ghsa-6cv4-p8m7-4r25.js",
+    "tests/security/index.js"
+   ],
+   "gold": [
+    "lib/http.js"
+   ],
+   "why": "repository already has 2 tasks"
+  },
+  {
+   "advisory": "GHSA-j8rw-jp99-435v",
+   "published": "2026-11-10T21:14:26Z",
+   "cwes": [
+    "CWE-476"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": "digitalbazaar/forge",
+   "fix": "2cfaeb516cb3d4aff1c0569d39394df41c5cb17c",
+   "parent": "6b23eae8beac316b6867bdb0e7ad7c2c959a97f6",
+   "fix_date": "2026-11-03T20:04:20-05:00",
+   "changed": [
+    "CHANGELOG.md",
+    "lib/tls.js",
+    "tests/pocs/ghsa-j8rw-jp99-435v.js",
+    "tests/unit/tls.js"
+   ],
+   "gold": [
+    "lib/tls.js"
+   ],
+   "why": "repository already has 2 tasks"
+  },
+  {
+   "advisory": "GHSA-474x-hrwr-fgx4",
+   "published": "2026-11-10T21:09:44Z",
+   "cwes": [
+    "CWE-407"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": "naturalintelligence/fast-xml-parser",
+   "fix": "0c3659348364959da62954b73728fb3bd05ebcb4",
+   "parent": "56805655d9ed564352baf0ed51553fd446ab608a",
+   "fix_date": "2026-11-03T16:47:57+05:30",
+   "changed": [
+    "src/xmlparser/OrderedObjParser.js"
+   ],
+   "gold": [
+    "src/xmlparser/OrderedObjParser.js"
+   ],
+   "atlas_image_tokens": 48852,
+   "atlas_files": 93,
+   "why": null
+  },
+  {
+   "advisory": "GHSA-wr5m-5jph-8m96",
+   "published": "2026-11-10T20:57:18Z",
+   "cwes": [
+    "CWE-843"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-8332-j7wj-wjw4",
+   "published": "2026-11-10T20:56:16Z",
+   "cwes": [
+    "CWE-1321"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-v995-44v6-5fqm",
+   "published": "2026-11-10T20:52:38Z",
+   "cwes": [
+    "CWE-611",
+    "CWE-918"
+   ],
+   "ecosystems": [
+    "RubyGems"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-3w22-6jfg-527w",
+   "published": "2026-11-10T20:51:19Z",
+   "cwes": [
+    "CWE-416"
+   ],
+   "ecosystems": [
+    "RubyGems"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-4p39-36wj-23h4",
+   "published": "2026-11-10T20:47:36Z",
+   "cwes": [
+    "CWE-116",
+    "CWE-79"
+   ],
+   "ecosystems": [
+    "RubyGems"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-6972-9mcm-vhwj",
+   "published": "2026-11-10T20:46:33Z",
+   "cwes": [
+    "CWE-1321"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-gg4r-jv3p-qx3c",
+   "published": "2026-11-10T19:56:12Z",
+   "cwes": [
+    "CWE-943"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-pcrw-h46h-c93h",
+   "published": "2026-11-10T19:37:32Z",
+   "cwes": [
+    "CWE-943"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-5v64-555j-wjxm",
+   "published": "2026-11-10T19:35:49Z",
+   "cwes": [
+    "CWE-400"
+   ],
+   "ecosystems": [
+    "RubyGems"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-p8x9-v4hv-2w4g",
+   "published": "2026-11-10T19:26:28Z",
+   "cwes": [
+    "CWE-436"
+   ],
+   "ecosystems": [
+    "RubyGems"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-wrr5-j383-f7h2",
+   "published": "2026-11-10T19:20:14Z",
+   "cwes": [
+    "CWE-918"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-2j8w-xcrc-x985",
+   "published": "2026-11-10T19:11:28Z",
+   "cwes": [
+    "CWE-1286"
+   ],
+   "ecosystems": [
+    "RubyGems"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-wvg4-6p58-3gh3",
+   "published": "2026-11-10T18:50:07Z",
+   "cwes": [
+    "CWE-180"
+   ],
+   "ecosystems": [
+    "RubyGems"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-r7j4-crjv-h467",
+   "published": "2026-11-10T18:28:35Z",
+   "cwes": [
+    "CWE-117",
+    "CWE-150"
+   ],
+   "ecosystems": [
+    "PyPI"
+   ],
+   "repo": "tmatens/compose-lint",
+   "fix": "542e63126f795564a65c63887ea0dc558a500688",
+   "parent": "977da9724789264c2662afe47f79220e915442c2",
+   "fix_date": "2026-09-28T09:40:28-05:00",
+   "changed": [
+    "CHANGELOG.md",
+    "action.yml",
+    "docs/ASSURANCE.md",
+    "src/compose_lint/_output.py",
+    "src/compose_lint/cli.py",
+    "src/compose_lint/rules/CL0004_image_not_pinned.py",
+    "src/compose_lint/rules/CL0005_unbound_ports.py",
+    "src/compose_lint/rules/CL0009_security_profile.py",
+    "src/compose_lint/rules/CL0010_host_namespace.py",
+    "src/compose_lint/rules/CL0011_dangerous_cap_add.py",
+    "src/compose_lint/rules/CL0013_sensitive_mount.py",
+    "src/compose_lint/rules/CL0016_dangerous_devices.py",
+    "src/compose_lint/rules/CL0019_image_no_digest.py",
+    "src/compose_lint/rules/CL0020_credential_env_keys.py",
+    "src/compose_lint/rules/CL0021_connection_string_credentials.py",
+    "src/compose_lint/rules/CL0022_tmpfs_insecure_options.py",
+    "src/compose_lint/rules/CL0024_host_exec_cap_add.py",
+    "src/compose_lint/rules/CL0025_writable_host_root.py",
+    "src/compose_lint/rules/CL0027_lesser_cap_add.py",
+    "src/compose_lint/rules/CL0028_host_reach_cap_add.py",
+    "src/compose_lint/rules/CL0029_host_availability_cap_add.py",
+    "src/compose_lint/rules/CL0030_host_disclosure_cap_add.py",
+    "tests/test_action_contract.py",
+    "tests/test_guidance_inline_values.py",
+    "tests/test_sarif.py",
+    "tests/test_workflow_command_openers.py"
+   ],
+   "gold": [
+    "src/compose_lint/_output.py",
+    "src/compose_lint/cli.py",
+    "src/compose_lint/rules/CL0004_image_not_pinned.py",
+    "src/compose_lint/rules/CL0005_unbound_ports.py",
+    "src/compose_lint/rules/CL0009_security_profile.py",
+    "src/compose_lint/rules/CL0010_host_namespace.py",
+    "src/compose_lint/rules/CL0011_dangerous_cap_add.py",
+    "src/compose_lint/rules/CL0013_sensitive_mount.py",
+    "src/compose_lint/rules/CL0016_dangerous_devices.py",
+    "src/compose_lint/rules/CL0019_image_no_digest.py",
+    "src/compose_lint/rules/CL0020_credential_env_keys.py",
+    "src/compose_lint/rules/CL0021_connection_string_credentials.py",
+    "src/compose_lint/rules/CL0022_tmpfs_insecure_options.py",
+    "src/compose_lint/rules/CL0024_host_exec_cap_add.py",
+    "src/compose_lint/rules/CL0025_writable_host_root.py",
+    "src/compose_lint/rules/CL0027_lesser_cap_add.py",
+    "src/compose_lint/rules/CL0028_host_reach_cap_add.py",
+    "src/compose_lint/rules/CL0029_host_availability_cap_add.py",
+    "src/compose_lint/rules/CL0030_host_disclosure_cap_add.py"
+   ],
+   "why": "more than 5 source files changed"
+  },
+  {
+   "advisory": "GHSA-xwgp-w3pj-q5h3",
+   "published": "2026-11-10T15:57:51Z",
+   "cwes": [
+    "CWE-79"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-9wg5-mj3p-v49q",
+   "published": "2026-11-10T15:57:48Z",
+   "cwes": [
+    "CWE-347"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": "digitalbazaar/forge",
+   "fix": "c7f42614d5166a77ddf11ce174b2601b14f6956b",
+   "parent": "696db92348623e88cc63c35f0a89ede481d55ad0",
+   "fix_date": "2026-10-27T00:39:37-04:00",
+   "changed": [
+    "CHANGELOG.md",
+    "lib/x509.js",
+    "tests/unit/x509.js"
+   ],
+   "gold": [
+    "lib/x509.js"
+   ],
+   "why": "repository already has 2 tasks"
+  },
+  {
+   "advisory": "GHSA-2vgq-wchc-25w7",
+   "published": "2026-11-10T15:57:46Z",
+   "cwes": [
+    "CWE-20",
+    "CWE-354"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": "digitalbazaar/forge",
+   "fix": "81774ff99e2da64aec9a43591df45a360040c136",
+   "parent": "236845d96c71207259f91638d0138bba8e2fd624",
+   "fix_date": "2026-10-27T00:39:37-04:00",
+   "changed": [
+    "CHANGELOG.md",
+    "lib/cipherModes.js",
+    "tests/unit/aes.js"
+   ],
+   "gold": [
+    "lib/cipherModes.js"
+   ],
+   "why": "repository already has 2 tasks"
+  },
+  {
+   "advisory": "GHSA-h46v-rmh6-fq4f",
+   "published": "2026-11-10T15:57:43Z",
+   "cwes": [
+    "CWE-295"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": "digitalbazaar/forge",
+   "fix": "696db92348623e88cc63c35f0a89ede481d55ad0",
+   "parent": "58c06bc251856b409c30ecb35a93f5f6c9bbc84a",
+   "fix_date": "2026-10-27T00:39:37-04:00",
+   "changed": [
+    "CHANGELOG.md",
+    "lib/x509.js",
+    "tests/pocs/ghsa-h46v-rmh6-fq4f.js",
+    "tests/unit/x509.js"
+   ],
+   "gold": [
+    "lib/x509.js"
+   ],
+   "why": "repository already has 2 tasks"
+  },
+  {
+   "advisory": "GHSA-rhr8-3pm8-cq29",
+   "published": "2026-11-10T15:57:41Z",
+   "cwes": [
+    "CWE-400",
+    "CWE-674"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-6qrw-m8cv-hcxf",
+   "published": "2026-11-10T15:57:34Z",
+   "cwes": [
+    "CWE-347"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": "digitalbazaar/forge",
+   "fix": "2bce9d477a2ff436e86ff9694ae999f1552aa2bb",
+   "parent": "723240415b25120d47146f982809fa69344ab890",
+   "fix_date": "2026-10-27T00:39:37-04:00",
+   "changed": [
+    "CHANGELOG.md",
+    "lib/rsa.js",
+    "tests/pocs/ghsa-2g46-22mc-6gwp.js",
+    "tests/unit/rsa.js"
+   ],
+   "gold": [
+    "lib/rsa.js"
+   ],
+   "why": "repository already has 2 tasks"
+  },
+  {
+   "advisory": "GHSA-chp3-j5qr-2vfr",
+   "published": "2026-11-10T15:57:32Z",
+   "cwes": [
+    "CWE-20",
+    "CWE-74"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-p623-mxf7-qxjm",
+   "published": "2026-11-10T15:57:29Z",
+   "cwes": [
+    "CWE-79"
+   ],
+   "ecosystems": [
+    "PyPI"
+   ],
+   "repo": "octoprint/octoprint",
+   "fix": "059495787a1086868a28ba9eca8d089729242646",
+   "parent": "ef8d4cce669925787196722da6cddebd3024719c",
+   "fix_date": "2026-10-14T15:50:43+02:00",
+   "changed": [
+    "src/octoprint/templates/dialogs/settings/printerconnection.jinja2"
+   ],
+   "gold": [
+    "src/octoprint/templates/dialogs/settings/printerconnection.jinja2"
+   ],
+   "why": "a changed source file has no minifier"
+  },
+  {
+   "advisory": "GHSA-752m-7p75-49gf",
+   "published": "2026-11-10T15:57:27Z",
+   "cwes": [
+    "CWE-79",
+    "CWE-829"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-8vv3-6qpc-gpw6",
+   "published": "2026-11-10T15:57:25Z",
+   "cwes": [
+    "CWE-354"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-rm8w-w798-g545",
+   "published": "2026-11-10T15:57:22Z",
+   "cwes": [
+    "CWE-200",
+    "CWE-532"
+   ],
+   "ecosystems": [
+    "GitHub Actions",
+    "PyPI"
+   ],
+   "repo": "tmatens/compose-lint",
+   "fix": "31ec460399e06e98aa0d1cc578368a1960a8a0b3",
+   "parent": "8e4fac954c152f2254e95194a6a81121c0c72d5e",
+   "fix_date": "2026-10-03T21:44:14-05:00",
+   "changed": [
+    "CHANGELOG.md",
+    "src/compose_lint/engine.py",
+    "tests/test_finding_cap.py"
+   ],
+   "gold": [
+    "src/compose_lint/engine.py"
+   ],
+   "atlas_image_tokens": 87492,
+   "atlas_files": 102,
+   "why": null
+  },
+  {
+   "advisory": "GHSA-3hch-x692-6qj3",
+   "published": "2026-11-10T15:57:20Z",
+   "cwes": [
+    "CWE-639",
+    "CWE-862"
+   ],
+   "ecosystems": [
+    "PyPI"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-2h4w-29cv-2cmv",
+   "published": "2026-11-10T15:57:17Z",
+   "cwes": [
+    "CWE-184",
+    "CWE-78"
+   ],
+   "ecosystems": [
+    "PyPI"
+   ],
+   "repo": "ag2ai/ag2",
+   "fix": "3cd86726bb731eb11d6270f0ef9e50e42b5abb39",
+   "parent": "f8dc76beb237ee94a2d559356abb6335787156d9",
+   "fix_date": "2026-09-29T22:46:38+03:00",
+   "changed": [
+    "ag2/tools/sandbox/adapter/shell.py",
+    "ag2/tools/sandbox/filter.py",
+    "ag2/tools/shell/tool.py",
+    "test/tools/sandbox/adapter/test_shell_adapter.py",
+    "test/tools/test_local_shell.py",
+    "website/docs/user-guide/tools/local_shell.mdx"
+   ],
+   "gold": [
+    "ag2/tools/sandbox/adapter/shell.py",
+    "ag2/tools/sandbox/filter.py",
+    "ag2/tools/shell/tool.py"
+   ],
+   "atlas_image_tokens": 370116,
+   "atlas_files": 534,
+   "why": "atlas too large"
+  },
+  {
+   "advisory": "GHSA-62m9-f875-rqw6",
+   "published": "2026-11-10T15:57:15Z",
+   "cwes": [
+    "CWE-294",
+    "CWE-347"
+   ],
+   "ecosystems": [
+    "PyPI"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-xxrh-5hgg-gj4h",
+   "published": "2026-11-10T15:57:12Z",
+   "cwes": [
+    "CWE-400",
+    "CWE-770"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": "nuxt/content",
+   "fix": "847d523a48e76d861175b325abf0de40dc5864ed",
+   "parent": "d8fed0c3ddbcad5805772e1ef8da9fbe841e772e",
+   "fix_date": "2026-07-23T13:56:46+02:00",
+   "changed": [
+    "src/runtime/internal/security.ts",
+    "test/unit/assertSafeQuery.test.ts"
+   ],
+   "gold": [
+    "src/runtime/internal/security.ts"
+   ],
+   "atlas_image_tokens": 36915,
+   "atlas_files": 123,
+   "why": null
+  },
+  {
+   "advisory": "GHSA-whr6-fgpq-fpv9",
+   "published": "2026-11-10T15:57:10Z",
+   "cwes": [
+    "CWE-209",
+    "CWE-59"
+   ],
+   "ecosystems": [
+    "GitHub Actions",
+    "PyPI"
+   ],
+   "repo": "tmatens/compose-lint",
+   "fix": "364814329417dbbc34d1ad2f3981f8a7a023799e",
+   "parent": "cfa72f05c2ef08d94c5feaeeab7fab5fd8b274ec",
+   "fix_date": "2026-08-24T18:54:10-05:00",
+   "changed": [
+    "CHANGELOG.md",
+    "src/compose_lint/_safe_read.py",
+    "src/compose_lint/_selection.py",
+    "src/compose_lint/_service_env.py",
+    "src/compose_lint/parser.py",
+    "tests/test_output_sanitizing.py"
+   ],
+   "gold": [
+    "src/compose_lint/_safe_read.py",
+    "src/compose_lint/_selection.py",
+    "src/compose_lint/_service_env.py",
+    "src/compose_lint/parser.py"
+   ],
+   "atlas_image_tokens": 71346,
+   "atlas_files": 94,
+   "why": "a gold file is outside the atlas's file set"
+  },
+  {
+   "advisory": "GHSA-88f4-frh5-gmcr",
+   "published": "2026-11-10T15:57:07Z",
+   "cwes": [
+    "CWE-209",
+    "CWE-59"
+   ],
+   "ecosystems": [
+    "GitHub Actions",
+    "PyPI"
+   ],
+   "repo": "tmatens/compose-lint",
+   "fix": "e80547d33b2114040c4bc0e34ef210aee51f5058",
+   "parent": "1d3b62db8906f7060cdf318bfb80c7abe3ba60fa",
+   "fix_date": "2026-09-28T09:12:18-05:00",
+   "changed": [
+    "CHANGELOG.md",
+    "docs/ASSURANCE.md",
+    "docs/what-a-run-reads.md",
+    "src/compose_lint/_selection.py",
+    "src/compose_lint/_yaml_error.py",
+    "src/compose_lint/cli.py",
+    "src/compose_lint/config.py",
+    "src/compose_lint/parser.py",
+    "tests/test_link_containment.py"
+   ],
+   "gold": [
+    "src/compose_lint/_selection.py",
+    "src/compose_lint/_yaml_error.py",
+    "src/compose_lint/cli.py",
+    "src/compose_lint/config.py",
+    "src/compose_lint/parser.py"
+   ],
+   "atlas_image_tokens": 85422,
+   "atlas_files": 101,
+   "why": "a gold file is outside the atlas's file set"
+  },
+  {
+   "advisory": "GHSA-jf3h-8jvx-vcrg",
+   "published": "2026-11-10T15:57:05Z",
+   "cwes": [
+    "CWE-200",
+    "CWE-532"
+   ],
+   "ecosystems": [
+    "GitHub Actions",
+    "PyPI"
+   ],
+   "repo": "tmatens/compose-lint",
+   "fix": "977da9724789264c2662afe47f79220e915442c2",
+   "parent": "e80547d33b2114040c4bc0e34ef210aee51f5058",
+   "fix_date": "2026-09-28T09:22:41-05:00",
+   "changed": [
+    "CHANGELOG.md",
+    "docs/what-a-run-reads.md",
+    "src/compose_lint/_merge.py",
+    "src/compose_lint/cli.py",
+    "src/compose_lint/engine.py",
+    "src/compose_lint/fix.py",
+    "src/compose_lint/parser.py",
+    "tests/test_env_value_quoting.py"
+   ],
+   "gold": [
+    "src/compose_lint/_merge.py",
+    "src/compose_lint/cli.py",
+    "src/compose_lint/engine.py",
+    "src/compose_lint/fix.py",
+    "src/compose_lint/parser.py"
+   ],
+   "atlas_image_tokens": 85836,
+   "atlas_files": 102,
+   "why": "a gold file is outside the atlas's file set"
+  },
+  {
+   "advisory": "GHSA-65v8-q222-64xx",
+   "published": "2026-11-10T15:57:02Z",
+   "cwes": [
+    "CWE-193"
+   ],
+   "ecosystems": [
+    "PyPI"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-6f4g-xm8v-pgv6",
+   "published": "2026-11-10T15:56:59Z",
+   "cwes": [
+    "CWE-117",
+    "CWE-150"
+   ],
+   "ecosystems": [
+    "GitHub Actions",
+    "PyPI"
+   ],
+   "repo": "tmatens/compose-lint",
+   "fix": "672bd11145621f787c295fb11f3a859cdec1b38d",
+   "parent": "c43204ad4dab11d54e20574a52bc4e5835246ca5",
+   "fix_date": "2026-09-26T19:54:05-05:00",
+   "changed": [
+    "CHANGELOG.md",
+    "action.yml",
+    "docs/ASSURANCE.md",
+    "src/compose_lint/_output.py",
+    "tests/_workflow_commands.py",
+    "tests/test_action_contract.py",
+    "tests/test_output_sanitizing.py"
+   ],
+   "gold": [
+    "src/compose_lint/_output.py"
+   ],
+   "atlas_image_tokens": 84387,
+   "atlas_files": 101,
+   "why": null
+  },
+  {
+   "advisory": "GHSA-6wcv-rj3c-mhv3",
+   "published": "2026-11-10T15:56:56Z",
+   "cwes": [
+    "CWE-22",
+    "CWE-59"
+   ],
+   "ecosystems": [
+    "GitHub Actions",
+    "PyPI"
+   ],
+   "repo": "tmatens/compose-lint",
+   "fix": "c43204ad4dab11d54e20574a52bc4e5835246ca5",
+   "parent": "162cf90f41b78d475751fca69bd5553e1511b4b9",
+   "fix_date": "2026-09-26T19:48:07-05:00",
+   "changed": [
+    "CHANGELOG.md",
+    "docs/ASSURANCE.md",
+    "docs/what-a-run-reads.md",
+    "src/compose_lint/_env_file.py",
+    "src/compose_lint/_selection.py",
+    "src/compose_lint/_service_env.py",
+    "src/compose_lint/parser.py",
+    "tests/test_env_file.py",
+    "tests/test_env_input_reach.py",
+    "tests/test_include.py"
+   ],
+   "gold": [
+    "src/compose_lint/_env_file.py",
+    "src/compose_lint/_selection.py",
+    "src/compose_lint/_service_env.py",
+    "src/compose_lint/parser.py"
+   ],
+   "why": "repository already has 2 tasks"
+  },
+  {
+   "advisory": "GHSA-ghwv-vrp2-2975",
+   "published": "2026-11-10T15:56:54Z",
+   "cwes": [
+    "CWE-367"
+   ],
+   "ecosystems": [
+    "Go"
+   ],
+   "repo": "ultravioletrs/cocos",
+   "fix": "80bf813c48300f02259b338b91f844c71be582ea",
+   "parent": "42b05524c83b8d38845f2891e7987e5ed0491338",
+   "fix_date": "2026-03-26T16:57:09+01:00",
+   "changed": [
+    "pkg/atls/atls.go",
+    "pkg/atls/atls_test.go",
+    "pkg/atls/attestation_provider.go",
+    "pkg/atls/certificate_provider.go",
+    "pkg/atls/certificate_verifier.go",
+    "pkg/atls/certificate_verifier_test.go",
+    "pkg/atls/ea/authenticator.go",
+    "pkg/atls/ea/authenticator_test.go",
+    "pkg/atls/ea/certificate.go",
+    "pkg/atls/ea/certverify.go",
+    "pkg/atls/ea/cmw_attestation.go",
+    "pkg/atls/ea/exporters.go",
+    "pkg/atls/ea/extensions.go",
+    "pkg/atls/ea/finished.go",
+    "pkg/atls/ea/handshake.go",
+    "pkg/atls/ea/policy.go",
+    "pkg/atls/ea/request.go",
+    "pkg/atls/ea/session.go",
+    "pkg/atls/ea/sigscheme.go",
+    "pkg/atls/ea/util.go",
+    "pkg/atls/eaattestation/binding.go",
+    "pkg/atls/eaattestation/binding_test.go",
+    "pkg/atls/eaattestation/types.go",
+    "pkg/atls/eaattestation/verify.go",
+    "pkg/atls/evidence_verifier.go",
+    "pkg/atls/internal_transport/conn.go",
+    "pkg/atls/internal_transport/conn_test.go",
+    "pkg/atls/internal_transport/listener.go",
+    "pkg/atls/internal_transport/protocol.go",
+    "pkg/atls/internal_transport/protocol_test.go",
+    "pkg/atls/mocks/certificateprovider.go",
+    "pkg/atls/provider.go",
+    "pkg/atls/server_tls.go",
+    "pkg/atls/tls_helpers.go",
+    "pkg/atls/transport.go",
+    "pkg/atls/transport_test.go",
+    "pkg/clients/clients.go",
+    "pkg/clients/grpc/connect_test.go",
+    "pkg/clients/grpc/grpc.go",
+    "pkg/clients/http/client.go",
+    "pkg/clients/http/client_test.go",
+    "pkg/ingress/proxy.go",
+    "pkg/ingress/proxy_test.go",
+    "pkg/tls/tls.go",
+    "pkg/tls/tls_test.go"
+   ],
+   "gold": null,
+   "why": "fix commit before 2026-07-01"
+  },
+  {
+   "advisory": "GHSA-xggf-m53x-jc3f",
+   "published": "2026-11-10T15:56:52Z",
+   "cwes": [
+    "CWE-1188",
+    "CWE-285",
+    "CWE-636",
+    "CWE-863"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": "node-opcua/node-opcua",
+   "fix": "0261e873900800983c622e01120f484dc6063698",
+   "parent": "c2e0dfe852d0a75eb69494ce59df942dc82514d4",
+   "fix_date": "2026-08-28T19:55:08+02:00",
+   "changed": [
+    "packages/node-opcua-address-space/source/session_context.ts",
+    "packages/node-opcua-address-space/test/test_session_context_namespace_default_permissions.ts",
+    "packages/node-opcua-server/source/server_engine.ts",
+    "packages/node-opcua-server/test/test_server_engine_namespace_default_permissions.ts"
+   ],
+   "gold": [
+    "packages/node-opcua-address-space/source/session_context.ts",
+    "packages/node-opcua-server/source/server_engine.ts"
+   ],
+   "atlas_paths": 3170,
+   "why": "atlas too large (path count)"
+  },
+  {
+   "advisory": "GHSA-5m6c-38r8-5w76",
+   "published": "2026-11-10T15:56:49Z",
+   "cwes": [
+    "CWE-22",
+    "CWE-863"
+   ],
+   "ecosystems": [
+    "Go"
+   ],
+   "repo": "dagucloud/dagu",
+   "fix": "c15c5406bb7b9551f94ab276705f9fd1cebbf2d2",
+   "parent": "9b414971fbdb6f4b1e582a18530e5eb285395834",
+   "fix_date": "2026-07-25T12:47:36+09:00",
+   "changed": [
+    "internal/cmd/helper.go",
+    "internal/cmd/start_test.go",
+    "internal/persis/file/dag/store.go",
+    "internal/persis/file/dag/store_test.go",
+    "internal/service/frontend/api/v1/dagruns_test.go"
+   ],
+   "gold": [
+    "internal/cmd/helper.go",
+    "internal/persis/file/dag/store.go"
+   ],
+   "atlas_image_tokens": 1133877,
+   "atlas_files": 1236,
+   "why": "atlas too large"
+  },
+  {
+   "advisory": "GHSA-358w-w75h-x6rx",
+   "published": "2026-11-10T15:56:49Z",
+   "cwes": [
+    "CWE-125",
+    "CWE-129"
+   ],
+   "ecosystems": [
+    "Go"
+   ],
+   "repo": "gopacket/gopacket",
+   "fix": "508044327cc2c065b3db753c010a027e7d1ca621",
+   "parent": "18c5805028329a6a8944f054d8d3f64ebc0f1373",
+   "fix_date": "2026-09-15T13:04:03+12:00",
+   "changed": [
+    "layers/decode_oob_test.go",
+    "layers/sctp.go"
+   ],
+   "gold": [
+    "layers/sctp.go"
+   ],
+   "atlas_image_tokens": 179814,
+   "atlas_files": 154,
+   "why": "atlas too large"
+  },
+  {
+   "advisory": "GHSA-g3qx-frcg-j979",
+   "published": "2026-11-09T23:25:58Z",
+   "cwes": [
+    "CWE-79"
+   ],
+   "ecosystems": [
+    "Go"
+   ],
+   "repo": "kubeflow/pipelines",
+   "fix": "fedc25e3f7251933d4a37b964bc3e8176beea28e",
+   "parent": "658da501c2e76fd74a667aad447847563afb8afc",
+   "fix_date": "2025-10-10T12:28:14+00:00",
+   "changed": [
+    "backend/src/apiserver/server/pipeline_upload_server.go",
+    "backend/src/apiserver/server/pipeline_upload_server_test.go",
+    "frontend/server/app.test.ts",
+    "frontend/server/handlers/artifacts.ts",
+    "frontend/server/handlers/tensorboard.ts",
+    "frontend/server/k8s-helper.ts",
+    "frontend/server/utils.ts"
+   ],
+   "gold": null,
+   "why": "fix commit before 2026-07-01"
+  },
+  {
+   "advisory": "GHSA-r4mx-2gr2-8277",
+   "published": "2026-11-09T23:25:00Z",
+   "cwes": [
+    "CWE-89"
+   ],
+   "ecosystems": [
+    "Go"
+   ],
+   "repo": "kubeflow/pipelines",
+   "fix": "ac3a4c65677a3bc7a3d5b1e264fba41178d4ab32",
+   "parent": "f8ee99ce89fc0654a68ca13dc4e84b701874b3e0",
+   "fix_date": "2026-04-03T21:06:07+00:00",
+   "changed": [
+    "backend/src/apiserver/filter/filter.go",
+    "backend/src/apiserver/list/list.go",
+    "backend/src/apiserver/list/list_test.go",
+    "backend/src/apiserver/model/experiment.go",
+    "backend/src/apiserver/model/job.go",
+    "backend/src/apiserver/model/pipeline.go",
+    "backend/src/apiserver/model/pipeline_version.go",
+    "backend/src/apiserver/model/run.go",
+    "backend/src/apiserver/model/task.go",
+    "backend/src/apiserver/server/list_request_util.go",
+    "backend/src/apiserver/server/list_request_util_test.go",
+    "backend/src/apiserver/storage/run_store.go",
+    "backend/src/apiserver/storage/run_store_test.go"
+   ],
+   "gold": null,
+   "why": "fix commit before 2026-07-01"
+  },
+  {
+   "advisory": "GHSA-gcwf-c25f-p9rv",
+   "published": "2026-11-09T23:24:14Z",
+   "cwes": [
+    "CWE-601"
+   ],
+   "ecosystems": [
+    "PyPI"
+   ],
+   "repo": "kiwitcms/kiwi",
+   "fix": "65d8f7c2743d7f06a4fca77c060b9d561f02f948",
+   "parent": "494385fc5c1c5e295fca4ae4515eeceff4122382",
+   "fix_date": "2026-07-20T20:27:36+03:00",
+   "changed": [
+    "tcms/kiwi_auth/views.py"
+   ],
+   "gold": [
+    "tcms/kiwi_auth/views.py"
+   ],
+   "atlas_image_tokens": 102603,
+   "atlas_files": 342,
+   "why": null
+  },
+  {
+   "advisory": "GHSA-ghgh-57qv-h687",
+   "published": "2026-11-09T22:48:03Z",
+   "cwes": [
+    "CWE-285",
+    "CWE-863"
+   ],
+   "ecosystems": [
+    "Go"
+   ],
+   "repo": "kubeflow/pipelines",
+   "fix": "186dd1f3b0403af841c9b4ea7ab94f405339ef6c",
+   "parent": "04697ab9f66caf9e4656395de9d48aa32c268858",
+   "fix_date": "2026-04-20T17:00:29+00:00",
+   "changed": [
+    ".github/resources/scripts/deploy-kfp.sh",
+    ".pre-commit-config.yaml",
+    "backend/src/apiserver/server/pipeline_server.go",
+    "backend/src/apiserver/server/pipeline_server_test.go",
+    "test_data/kubernetes/seaweedfs/shared-pipeline-rbac.yaml"
+   ],
+   "gold": null,
+   "why": "fix commit before 2026-07-01"
+  },
+  {
+   "advisory": "GHSA-f7vj-6669-qvv4",
+   "published": "2026-11-09T22:44:17Z",
+   "cwes": [
+    "CWE-441",
+    "CWE-918"
+   ],
+   "ecosystems": [
+    "Go"
+   ],
+   "repo": "kubeflow/pipelines",
+   "fix": "504d7797c1e061327ddb2bcb8bc1c5dd4940cfc3",
+   "parent": "9af3b2adb8385fdbb2d579670eb4a75f3a87c5e5",
+   "fix_date": "2026-05-17T16:25:02+00:00",
+   "changed": [
+    "backend/src/apiserver/common/config.go",
+    "backend/src/apiserver/server/pipeline_server.go",
+    "backend/src/apiserver/server/pipeline_server_test.go",
+    "backend/src/apiserver/validation/pipeline_url.go",
+    "backend/src/apiserver/validation/pipeline_url_test.go"
+   ],
+   "gold": null,
+   "why": "fix commit before 2026-07-01"
+  },
+  {
+   "advisory": "GHSA-2xwh-426q-42c5",
+   "published": "2026-11-09T22:43:33Z",
+   "cwes": [
+    "CWE-345",
+    "CWE-639"
+   ],
+   "ecosystems": [
+    "Go"
+   ],
+   "repo": "kubeflow/pipelines",
+   "fix": "620d0cc89ae0d042a484a003f8ffe6e9a55d347e",
+   "parent": "1a414abec58548ffa7d3b2b503b4a5acd021f68c",
+   "fix_date": "2026-09-10T17:26:10+00:00",
+   "changed": [
+    "backend/src/cache/README.md",
+    "backend/src/cache/model/execution_cache.go",
+    "backend/src/cache/server/legacy_fallback_test.go",
+    "backend/src/cache/server/mutation.go",
+    "backend/src/cache/server/mutation_test.go",
+    "backend/src/cache/server/namespace_isolation_test.go",
+    "backend/src/cache/server/watcher.go",
+    "backend/src/cache/storage/execution_cache_store.go",
+    "backend/src/cache/storage/execution_cache_store_test.go",
+    "backend/src/cache/storage/legacy_fallback_test.go",
+    "backend/src/cache/storage/namespace_isolation_test.go"
+   ],
+   "gold": [
+    "backend/src/cache/model/execution_cache.go",
+    "backend/src/cache/server/mutation.go",
+    "backend/src/cache/server/watcher.go",
+    "backend/src/cache/storage/execution_cache_store.go"
+   ],
+   "atlas_paths": 2957,
+   "why": "atlas too large (path count)"
+  },
+  {
+   "advisory": "GHSA-5xjx-9qx6-jcrv",
+   "published": "2026-11-09T22:42:03Z",
+   "cwes": [
+    "CWE-367",
+    "CWE-59"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "no fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-x89h-7h96-v88f",
+   "published": "2026-11-09T22:40:12Z",
+   "cwes": [
+    "CWE-73"
+   ],
+   "ecosystems": [
+    "Go"
+   ],
+   "repo": "schollz/croc",
+   "fix": "25fe49b6f14db99f517e902cfef76299ad0a95a3",
+   "parent": "b6f27da9401f2c3647c1adb6b77a46bb8c0923d2",
+   "fix_date": "2026-09-09T03:07:53-07:00",
+   "changed": [
+    "src/croc/croc.go",
+    "src/croc/overwrite_test.go"
+   ],
+   "gold": [
+    "src/croc/croc.go"
+   ],
+   "atlas_image_tokens": 175398,
+   "atlas_files": 181,
+   "why": "atlas too large"
+  },
+  {
+   "advisory": "GHSA-9hq4-hm3j-jmph",
+   "published": "2026-11-09T22:37:58Z",
+   "cwes": [
+    "CWE-22",
+    "CWE-59"
+   ],
+   "ecosystems": [
+    "Go"
+   ],
+   "repo": "ddev/ddev",
+   "fix": "7034963403c5374fecceb02070d27b335329cede",
+   "parent": "e40c5e6bd74b76cf4207aded80532c096ec03e49",
+   "fix_date": "2026-07-29T15:53:38-06:00",
+   "changed": [
+    "CLAUDE.md",
+    "pkg/archive/archive.go",
+    "pkg/archive/archive_test.go",
+    "pkg/ddevapp/ddevapp_test.go",
+    "pkg/ddevapp/magento.go"
+   ],
+   "gold": [
+    "pkg/archive/archive.go",
+    "pkg/ddevapp/magento.go"
+   ],
+   "atlas_image_tokens": 448431,
+   "atlas_files": 697,
+   "why": "atlas too large"
+  },
+  {
+   "advisory": "GHSA-h89v-g948-47vp",
+   "published": "2026-11-09T22:31:16Z",
+   "cwes": [
+    "CWE-835"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-9qq5-422f-33c2",
+   "published": "2026-11-09T22:25:14Z",
+   "cwes": [
+    "CWE-862"
+   ],
+   "ecosystems": [
+    "Go"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-rjr3-43j3-4q8g",
+   "published": "2026-11-09T22:22:41Z",
+   "cwes": [
+    "CWE-639",
+    "CWE-862"
+   ],
+   "ecosystems": [
+    "Go"
+   ],
+   "repo": "kubeflow/pipelines",
+   "fix": "62516d8c525f146b754cb515cf441dd0290ad841",
+   "parent": "c8effaed62476a8d8c99d3a6cfdd404a04ef99d8",
+   "fix_date": "2026-09-09T23:41:19+00:00",
+   "changed": [
+    "backend/src/apiserver/server/pipeline_upload_server.go",
+    "backend/src/apiserver/server/pipeline_upload_server_test.go",
+    "backend/test/end2end/e2e_suite_test.go",
+    "backend/test/testutil/pipeline_upload_test.go",
+    "backend/test/testutil/pipeline_utils.go"
+   ],
+   "gold": [
+    "backend/src/apiserver/server/pipeline_upload_server.go"
+   ],
+   "atlas_paths": 2946,
+   "why": "atlas too large (path count)"
+  },
+  {
+   "advisory": "GHSA-44r8-3p76-84mw",
+   "published": "2026-11-09T22:20:08Z",
+   "cwes": [
+    "CWE-862"
+   ],
+   "ecosystems": [
+    "Packagist"
+   ],
+   "repo": "filegator/filegator",
+   "fix": "cae442a8323fddae7c8cee0924cdbb1aa6eea702",
+   "parent": "d876ac382530ece4efaddd5c1257ae6858f2b376",
+   "fix_date": "2026-08-13T13:31:18+02:00",
+   "changed": [
+    "CHANGELOG.md",
+    "backend/Controllers/UploadController.php",
+    "tests/backend/Feature/UploadAuthorizationTest.php"
+   ],
+   "gold": [
+    "backend/Controllers/UploadController.php"
+   ],
+   "atlas_image_tokens": 27738,
+   "atlas_files": 103,
+   "why": null
+  },
+  {
+   "advisory": "GHSA-f74m-x83r-c4v4",
+   "published": "2026-11-09T22:17:36Z",
+   "cwes": [
+    "CWE-330",
+    "CWE-862"
+   ],
+   "ecosystems": [
+    "Packagist"
+   ],
+   "repo": "filegator/filegator",
+   "fix": "638737e560cbf20cbeb5da4e4e6c974f8a080531",
+   "parent": "c6715ff7897c7ffeb6f46f91d06adb5feebc76ed",
+   "fix_date": "2026-08-12T07:09:24+02:00",
+   "changed": [
+    "CHANGELOG.md",
+    "backend/Controllers/DownloadController.php",
+    "backend/Services/Archiver/Adapters/ZipArchiver.php",
+    "tests/backend/Feature/BatchDownloadAuthorizationTest.php",
+    "tests/backend/MockUsers.php"
+   ],
+   "gold": [
+    "backend/Controllers/DownloadController.php",
+    "backend/Services/Archiver/Adapters/ZipArchiver.php"
+   ],
+   "atlas_image_tokens": 27600,
+   "atlas_files": 103,
+   "why": null
+  },
+  {
+   "advisory": "GHSA-85gg-2gfq-q95m",
+   "published": "2026-11-09T22:16:41Z",
+   "cwes": [
+    "CWE-22",
+    "CWE-59"
+   ],
+   "ecosystems": [
+    "PyPI"
+   ],
+   "repo": "vitali87/code-graph-rag",
+   "fix": "2648c95aa550ce2d9361a8e75ed669d5f4b451b8",
+   "parent": "7c79f7e1042286aee61cb0514f38969c0a4af384",
+   "fix_date": "2026-08-10T01:37:19+02:00",
+   "changed": [
+    "codebase_rag/tests/test_symlink_containment.py",
+    "codebase_rag/utils/path_utils.py"
+   ],
+   "gold": [
+    "codebase_rag/utils/path_utils.py"
+   ],
+   "atlas_image_tokens": 386607,
+   "atlas_files": 361,
+   "why": "atlas too large"
+  },
+  {
+   "advisory": "GHSA-gj9m-f8ph-pmhr",
+   "published": "2026-11-09T22:15:27Z",
+   "cwes": [
+    "CWE-287",
+    "CWE-290",
+    "CWE-346"
+   ],
+   "ecosystems": [
+    "PyPI"
+   ],
+   "repo": "gpustack/gpustack",
+   "fix": "53f42a6a553542974396d16a4ff6b12bcbedb48d",
+   "parent": "aff1b0d15153349d730ffab46969a26ee2317259",
+   "fix_date": "2026-05-19T18:30:10+08:00",
+   "changed": [
+    "docs/cli-reference/start.md",
+    "gpustack/api/auth.py",
+    "gpustack/cmd/start.py",
+    "gpustack/config/config.py",
+    "tests/api/test_auth.py"
+   ],
+   "gold": null,
+   "why": "fix commit before 2026-07-01"
+  },
+  {
+   "advisory": "GHSA-rm8c-2cv8-jwf6",
+   "published": "2026-11-09T22:12:21Z",
+   "cwes": [
+    "CWE-345"
+   ],
+   "ecosystems": [
+    "Go"
+   ],
+   "repo": "pocket-id/pocket-id",
+   "fix": "43aaccd5bfacb76283b11ce039fb3f0716196fcb",
+   "parent": "6bd4679bab03e16b85a0591d2c95ebdd530cf785",
+   "fix_date": "2026-07-27T20:00:59+02:00",
+   "changed": [
+    "backend/internal/bootstrap/router_bootstrap.go",
+    "backend/internal/bootstrap/scheduler_bootstrap.go",
+    "backend/internal/bootstrap/services_bootstrap.go",
+    "backend/internal/controller/app_config_controller.go",
+    "backend/internal/controller/user_controller.go",
+    "backend/internal/email/module.go",
+    "backend/internal/email/module_test.go",
+    "backend/internal/email/templates.go",
+    "backend/internal/emailverification/actor.go",
+    "backend/internal/emailverification/handler.go",
+    "backend/internal/emailverification/module.go",
+    "backend/internal/emailverification/service.go",
+    "backend/internal/emailverification/service_test.go",
+    "backend/internal/job/api_key_expiry_job.go",
+    "backend/internal/job/db_cleanup_job.go",
+    "backend/internal/middleware/auth_middleware_test.go",
+    "backend/internal/model/email_verification_token.go",
+    "backend/internal/onetimeaccess/module.go",
+    "backend/internal/onetimeaccess/service.go",
+    "backend/internal/onetimeaccess/service_test.go",
+    "backend/internal/service/audit_log_service.go",
+    "backend/internal/service/e2etest_service.go",
+    "backend/internal/service/email_service.go",
+    "backend/internal/service/email_service_templates.go",
+    "backend/internal/service/ldap_service_test.go",
+    "backend/internal/service/one_time_access_email_sender.go",
+    "backend/internal/service/user_service.go",
+    "backend/internal/service/user_service_test.go",
+    "backend/internal/utils/email/composer.go",
+    "backend/internal/utils/email/composer_test.go",
+    "backend/internal/utils/email/email_service_templates.go",
+    "backend/resources/migrations/postgres/20260727120000_email_verification_actors.down.sql",
+    "backend/resources/migrations/postgres/20260727120000_email_verification_actors.up.sql",
+    "backend/resources/migrations/sqlite/20260727120000_email_verification_actors.down.sql",
+    "backend/resources/migrations/sqlite/20260727120000_email_verification_actors.up.sql",
+    "tests/resources/export/database.json"
+   ],
+   "gold": [
+    "backend/internal/bootstrap/router_bootstrap.go",
+    "backend/internal/bootstrap/scheduler_bootstrap.go",
+    "backend/internal/bootstrap/services_bootstrap.go",
+    "backend/internal/controller/app_config_controller.go",
+    "backend/internal/controller/user_controller.go",
+    "backend/internal/email/module.go",
+    "backend/internal/email/templates.go",
+    "backend/internal/emailverification/actor.go",
+    "backend/internal/emailverification/handler.go",
+    "backend/internal/emailverification/module.go",
+    "backend/internal/emailverification/service.go",
+    "backend/internal/job/api_key_expiry_job.go",
+    "backend/internal/job/db_cleanup_job.go",
+    "backend/internal/model/email_verification_token.go",
+    "backend/internal/onetimeaccess/module.go",
+    "backend/internal/onetimeaccess/service.go",
+    "backend/internal/service/audit_log_service.go",
+    "backend/internal/service/e2etest_service.go",
+    "backend/internal/service/email_service.go",
+    "backend/internal/service/email_service_templates.go",
+    "backend/internal/service/one_time_access_email_sender.go",
+    "backend/internal/service/user_service.go",
+    "backend/internal/utils/email/composer.go",
+    "backend/internal/utils/email/email_service_templates.go"
+   ],
+   "why": "more than 5 source files changed"
+  },
+  {
+   "advisory": "GHSA-cp25-j9x5-p5xm",
+   "published": "2026-11-09T22:05:06Z",
+   "cwes": [
+    "CWE-116",
+    "CWE-248",
+    "CWE-775"
+   ],
+   "ecosystems": [
+    "PyPI"
+   ],
+   "repo": "urwid/urwid",
+   "fix": "b79d9a96843a6f5950bb2bfab5d059bdc61c538b",
+   "parent": "567e3006d6c26ace8e7e73117645314be09dfc81",
+   "fix_date": "2026-07-24T10:40:48+02:00",
+   "changed": [
+    "urwid/display/web.py"
+   ],
+   "gold": [
+    "urwid/display/web.py"
+   ],
+   "atlas_image_tokens": 111504,
+   "atlas_files": 77,
+   "why": null
+  },
+  {
+   "advisory": "GHSA-g3c2-rjq2-c763",
+   "published": "2026-11-09T22:03:29Z",
+   "cwes": [
+    "CWE-22"
+   ],
+   "ecosystems": [
+    "Go"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-9vhv-g5hf-m7m7",
+   "published": "2026-11-09T22:01:34Z",
+   "cwes": [
+    "CWE-306",
+    "CWE-78"
+   ],
+   "ecosystems": [
+    "PyPI"
+   ],
+   "repo": "evalstate/fast-agent",
+   "fix": "ba99f89c3ec7f1ef1c8b1ebce381c12b60dfea29",
+   "parent": "b8d81d6ada74e56e64598c6d2912f1e8826c2e72",
+   "fix_date": "2026-06-20T00:25:00+01:00",
+   "changed": [
+    "2026-06-03-cleanup-handover.md",
+    "2026-06-03-main-merge-mcp-registry-handover.md",
+    "docs/docs/_generated/model_aliases_hf.md",
+    "docs/docs/_generated/models_reference.md",
+    "docs/docs/_generated/plugin_api.md",
+    "docs/docs/_generated/request_params_reference.md",
+    "docs/docs/agents/running.md",
+    "docs/docs/guides/batch-processing.md",
+    "docs/docs/guides/hf-dev.md",
+    "docs/docs/guides/tui.md",
+    "docs/docs/mcp/mcp-server.md",
+    "docs/docs/ref/batch.md",
+    "docs/docs/ref/class_reference.md",
+    "docs/docs/ref/cmd_switches.md",
+    "docs/docs/ref/config_file.md",
+    "docs/docs/ref/export_command.md",
+    "examples/markdown/fast-agent-theme.ini",
+    "examples/setup/fast-agent.yaml",
+    "gepa-further-handover.md",
+    "plan/03-07-structured-handling.md",
+    "plan/done/03-10-ty-cleanup.md",
+    "plan/done/acp-auth-methods-survey.md",
+    "plan/done/acp-mcp-watch.md",
+    "plan/done/acp-registry-auth-methods-plan.md",
+    "plan/done/agent-card-origin-review.md",
+    "plan/done/agent-card-rfc-sample.md",
+    "plan/done/agent-card-rfc.md",
+    "plan/done/agentcard-standards-mini-article.md",
+    "plan/done/anthropic-tool-search.md",
+    "plan/done/chips.md",
+    "plan/done/fastagent-acp-sessions-without-acp.md",
+    "plan/done/fastagent-agent-per-chat-session.md",
+    "plan/done/fastagent-multi-instance-risks.md",
+    "plan/done/fix-async-event-bus.md",
+    "plan/done/hook-tool-declarative.md",
+    "plan/done/hot-mcp-acp-oauth.md",
+    "plan/done/hot-mcp-auth.md",
+    "plan/done/hot-mcp-impl-review.md",
+    "plan/done/hot-mcp-slices.md",
+    "plan/done/hot-mcp.md",
+    "plan/done/internal_resources.md",
+    "plan/done/model-namespace.md",
+    "plan/done/model-onboarding-sequence.md",
+    "plan/done/modelux.md",
+    "plan/done/plan_manifest.md",
+    "plan/done/prompt-refactor.md",
+    "plan/done/refactor-enhanced-prompt.md",
+    "plan/done/refactor_provider_handover.md",
+    "plan/done/session-size.md",
+    "plan/plugin-spec.md",
+    "plan/styling.md",
+    "plugins/README.md",
+    "plugins/images/images.py",
+    "plugins/images/plugin.yaml",
+    "pyproject.toml",
+    "scripts/test_plugins_cli_env.sh",
+    "src/fast_agent/__init__.py",
+    "src/fast_agent/acp/slash/command_catalog.py",
+    "src/fast_agent/acp/slash/dispatch.py",
+    "src/fast_agent/acp/slash/handlers/plugins.py",
+    "src/fast_agent/acp/slash_commands.py",
+    "src/fast_agent/batch/structured.py",
+    "src/fast_agent/cli/commands/README.md",
+    "src/fast_agent/cli/commands/acp.py",
+    "src/fast_agent/cli/commands/batch.py",
+    "src/fast_agent/cli/commands/go.py",
+    "src/fast_agent/cli/commands/plugins.py",
+    "src/fast_agent/cli/commands/serve.py",
+    "src/fast_agent/cli/runtime/agent_setup.py",
+    "src/fast_agent/cli/runtime/request_builders.py",
+    "src/fast_agent/cli/runtime/runner.py",
+    "src/fast_agent/cli/runtime/shell_cwd_policy.py",
+    "src/fast_agent/command_actions/__init__.py",
+    "src/fast_agent/command_actions/config.py",
+    "src/fast_agent/command_actions/loader.py",
+    "src/fast_agent/command_actions/models.py",
+    "src/fast_agent/commands/handlers/plugins.py",
+    "src/fast_agent/commands/results.py",
+    "src/fast_agent/config.py",
+    "src/fast_agent/constants.py",
+    "src/fast_agent/core/fastagent.py",
+    "src/fast_agent/event_progress.py",
+    "src/fast_agent/history/compaction.py",
+    "src/fast_agent/hooks/session_history.py",
+    "src/fast_agent/integrations/gepa.py",
+    "src/fast_agent/interfaces.py",
+    "src/fast_agent/llm/model_database.py",
+    "src/fast_agent/llm/model_factory.py",
+    "src/fast_agent/llm/model_selection.py",
+    "src/fast_agent/llm/provider/anthropic/llm_anthropic.py",
+    "src/fast_agent/llm/provider/google/llm_google_native.py",
+    "src/fast_agent/llm/provider/openai/codex_oauth.py",
+    "src/fast_agent/llm/provider/openai/llm_huggingface.py",
+    "src/fast_agent/llm/provider/openai/llm_openai.py",
+    "src/fast_agent/llm/provider/openai/openresponses.py",
+    "src/fast_agent/llm/provider/openai/responses.py",
+    "src/fast_agent/llm/provider/streaming_timeouts.py",
+    "src/fast_agent/mcp/prompts/prompt_server.py",
+    "src/fast_agent/mcp/server/agent_server.py",
+    "src/fast_agent/plugins/configuration.py",
+    "src/fast_agent/plugins/manifest.py",
+    "src/fast_agent/session/__init__.py",
+    "src/fast_agent/session/git_metadata.py",
+    "src/fast_agent/session/snapshot.py",
+    "src/fast_agent/session/trace_export_codex.py",
+    "src/fast_agent/skills/provenance.py",
+    "src/fast_agent/tools/local_shell_executor.py",
+    "src/fast_agent/ui/adapters/tui_io.py",
+    "src/fast_agent/ui/enhanced_prompt.py",
+    "src/fast_agent/ui/interactive/command_dispatch.py",
+    "src/fast_agent/ui/interactive_prompt.py",
+    "src/fast_agent/ui/prompt/__init__.py",
+    "src/fast_agent/ui/prompt/completer.py",
+    "src/fast_agent/ui/prompt/input.py",
+    "src/fast_agent/ui/rich_progress.py",
+    "src/fast_agent/ui/terminal_images/__init__.py",
+    "src/fast_agent/ui/terminal_images/renderer.py",
+    "tests/integration/acp/test_acp_plugins_manager.py",
+    "tests/integration/acp/test_acp_slash_commands.py",
+    "tests/unit/fast_agent/acp/test_slash_commands_models.py",
+    "tests/unit/fast_agent/acp/test_slash_plugins_commands.py",
+    "tests/unit/fast_agent/acp/test_slash_status_clear.py",
+    "tests/unit/fast_agent/batch/test_structured_preflight.py",
+    "tests/unit/fast_agent/commands/test_batch_command.py",
+    "tests/unit/fast_agent/commands/test_go_command.py",
+    "tests/unit/fast_agent/commands/test_plugins_command.py",
+    "tests/unit/fast_agent/commands/test_runtime_model_picker_bootstrap.py",
+    "tests/unit/fast_agent/commands/test_runtime_request_builders.py",
+    "tests/unit/fast_agent/commands/test_runtime_result_export.py",
+    "tests/unit/fast_agent/commands/test_serve_command.py",
+    "tests/unit/fast_agent/core/test_acp_startup_mode.py",
+    "tests/unit/fast_agent/core/test_fastagent_settings.py",
+    "tests/unit/fast_agent/history/test_compaction.py",
+    "tests/unit/fast_agent/integrations/test_gepa.py",
+    "tests/unit/fast_agent/llm/providers/test_codex_oauth.py",
+    "tests/unit/fast_agent/llm/test_model_database.py",
+    "tests/unit/fast_agent/llm/test_model_factory.py",
+    "tests/unit/fast_agent/llm/test_openai_stream_dedup.py",
+    "tests/unit/fast_agent/mcp/prompts/test_prompt_server.py",
+    "tests/unit/fast_agent/mcp/test_agent_server_auth_passthrough.py",
+    "tests/unit/fast_agent/plugins/test_images_plugin.py",
+    "tests/unit/fast_agent/session/test_snapshot.py",
+    "tests/unit/fast_agent/session/test_trace_exporter.py",
+    "tests/unit/fast_agent/skills/test_provenance.py",
+    "tests/unit/fast_agent/test_config_plugin_commands.py",
+    "tests/unit/fast_agent/tools/test_shell_runtime.py",
+    "tests/unit/fast_agent/ui/test_command_dispatch_routes.py",
+    "tests/unit/fast_agent/ui/test_interactive_prompt_resource_mentions.py",
+    "tests/unit/fast_agent/ui/test_model_display.py",
+    "tests/unit/fast_agent/ui/test_plugin_command_actions_tui.py",
+    "tests/unit/fast_agent/ui/test_terminal_images.py",
+    "tests/unit/fast_agent/ui/test_tui_io.py",
+    "uv.lock"
+   ],
+   "gold": null,
+   "why": "fix commit before 2026-07-01"
+  },
+  {
+   "advisory": "GHSA-j8j4-rw65-56r6",
+   "published": "2026-11-09T21:59:49Z",
+   "cwes": [
+    "CWE-306",
+    "CWE-862"
+   ],
+   "ecosystems": [
+    "Go"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-6j3h-rp73-6rvf",
+   "published": "2026-11-09T21:58:00Z",
+   "cwes": [
+    "CWE-639"
+   ],
+   "ecosystems": [
+    "Go"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-f42p-wjw5-97qh",
+   "published": "2026-11-09T21:56:25Z",
+   "cwes": [
+    "CWE-532"
+   ],
+   "ecosystems": [
+    "PyPI"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-wchh-mrv2-5h4q",
+   "published": "2026-11-09T21:51:28Z",
+   "cwes": [
+    "CWE-348"
+   ],
+   "ecosystems": [
+    "Go"
+   ],
+   "repo": "mayswind/ezbookkeeping",
+   "fix": "d79a5beb8037e529dc4dc64a6d22bd2d02b2e986",
+   "parent": "92b568b835b9396aaa99755b95ce77a3b283bef7",
+   "fix_date": "2026-06-16T23:42:42+08:00",
+   "changed": [
+    "cmd/webserver.go",
+    "conf/ezbookkeeping.ini",
+    "pkg/core/context_web.go",
+    "pkg/settings/setting.go"
+   ],
+   "gold": null,
+   "why": "fix commit before 2026-07-01"
+  },
+  {
+   "advisory": "GHSA-m27g-v28p-f9fx",
+   "published": "2026-11-09T21:49:04Z",
+   "cwes": [
+    "CWE-346"
+   ],
+   "ecosystems": [
+    "RubyGems"
+   ],
+   "repo": "omniauth/omniauth",
+   "fix": "943b44faea242f063fa9230254fe7d60cfcc9c90",
+   "parent": "a241c941c86dd7c4133b3e64f0aad15cc14feae6",
+   "fix_date": "2026-10-22T07:05:24-07:00",
+   "changed": [
+    "CHANGELOG.md",
+    "README.md",
+    "lib/omniauth.rb",
+    "lib/omniauth/strategy.rb",
+    "lib/omniauth/strategy/hosts.rb",
+    "sig/omniauth.rbs",
+    "spec/omniauth/configuration_spec.rb",
+    "spec/omniauth/strategy/hosts_spec.rb",
+    "spec/omniauth/strategy_spec.rb"
+   ],
+   "gold": [
+    "lib/omniauth.rb",
+    "lib/omniauth/strategy.rb",
+    "lib/omniauth/strategy/hosts.rb",
+    "spec/omniauth/configuration_spec.rb",
+    "spec/omniauth/strategy/hosts_spec.rb",
+    "spec/omniauth/strategy_spec.rb"
+   ],
+   "why": "a changed source file has no minifier"
+  },
+  {
+   "advisory": "GHSA-rr8v-fxxf-c986",
+   "published": "2026-11-09T21:48:13Z",
+   "cwes": [
+    "CWE-22"
+   ],
+   "ecosystems": [
+    "Maven"
+   ],
+   "repo": "gradleup/shadow",
+   "fix": "0c2744fcc050e34a084f5131d5e167b13c342bfd",
+   "parent": "e822f993dba4f10fb69bfec26ca8959bdaa50ffd",
+   "fix_date": "2026-07-09T09:19:23+08:00",
+   "changed": [
+    "docs/changes/README.md",
+    "src/main/kotlin/com/github/jengelman/gradle/plugins/shadow/internal/Utils.kt",
+    "src/test/kotlin/com/github/jengelman/gradle/plugins/shadow/internal/ZipEntryValidationTest.kt"
+   ],
+   "gold": [
+    "src/main/kotlin/com/github/jengelman/gradle/plugins/shadow/internal/Utils.kt"
+   ],
+   "atlas_image_tokens": 53475,
+   "atlas_files": 101,
+   "why": null
+  },
+  {
+   "advisory": "GHSA-vvr2-h2jp-838m",
+   "published": "2026-11-09T21:21:32Z",
+   "cwes": [
+    "CWE-22"
+   ],
+   "ecosystems": [
+    "PyPI"
+   ],
+   "repo": "vitali87/code-graph-rag",
+   "fix": "6541e920a27961fa8f3ff49ef38c0e0bd09cd626",
+   "parent": "daea785ded2d3924c8d88907dde9c32be0613c18",
+   "fix_date": "2026-07-14T21:12:52+04:00",
+   "changed": [
+    "codebase_rag/mcp/tools.py",
+    "codebase_rag/tests/test_mcp_read_file.py"
+   ],
+   "gold": [
+    "codebase_rag/mcp/tools.py"
+   ],
+   "atlas_image_tokens": 297666,
+   "atlas_files": 282,
+   "why": "atlas too large"
+  },
+  {
+   "advisory": "GHSA-56x6-q882-mf27",
+   "published": "2026-11-09T21:18:29Z",
+   "cwes": [
+    "CWE-348",
+    "CWE-807"
+   ],
+   "ecosystems": [
+    "Go"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-q4xm-p75h-h9p3",
+   "published": "2026-11-09T21:17:04Z",
+   "cwes": [
+    "CWE-20",
+    "CWE-863"
+   ],
+   "ecosystems": [
+    "Go"
+   ],
+   "repo": "pocket-id/pocket-id",
+   "fix": "8158452b37304115c97c61c3a56082ce938ce6f0",
+   "parent": "dbbe2a403aa6afc39e14cf559bd074c6640e3b0c",
+   "fix_date": "2026-06-22T18:42:02+02:00",
+   "changed": [
+    "backend/frontend/frontend_excluded.go",
+    "backend/frontend/frontend_included.go",
+    "backend/frontend/frontend_included_test.go",
+    "backend/go.mod",
+    "backend/go.sum",
+    "backend/internal/bootstrap/router_bootstrap.go",
+    "backend/internal/bootstrap/services_bootstrap.go",
+    "backend/internal/common/claims.go",
+    "backend/internal/common/errors.go",
+    "backend/internal/controller/e2etest_controller.go",
+    "backend/internal/controller/oidc_controller.go",
+    "backend/internal/controller/oidc_controller_test.go",
+    "backend/internal/controller/webauthn_controller.go",
+    "backend/internal/controller/well_known_controller.go",
+    "backend/internal/dto/oidc_dto.go",
+    "backend/internal/dto/validations.go",
+    "backend/internal/dto/validations_test.go",
+    "backend/internal/job/db_cleanup_job.go",
+    "backend/internal/middleware/auth_middleware.go",
+    "backend/internal/middleware/cors.go",
+    "backend/internal/middleware/csp_middleware.go",
+    "backend/internal/middleware/jwt_auth.go",
+    "backend/internal/model/oidc.go",
+    "backend/internal/model/types/string_list.go",
+    "backend/internal/oidc/authorization_handler.go",
+    "backend/internal/oidc/authorization_service.go",
+    "backend/internal/oidc/authorization_service_test.go",
+    "backend/internal/oidc/claims_service.go",
+    "backend/internal/oidc/claims_service_test.go",
+    "backend/internal/oidc/cleanup.go",
+    "backend/internal/oidc/cleanup_test.go",
+    "backend/internal/oidc/client.go",
+    "backend/internal/oidc/device_handler.go",
+    "backend/internal/oidc/device_service.go",
+    "backend/internal/oidc/device_service_test.go",
+    "backend/internal/oidc/end_session_handler.go",
+    "backend/internal/oidc/end_session_service.go",
+    "backend/internal/oidc/end_session_service_test.go",
+    "backend/internal/oidc/federated_client_auth.go",
+    "backend/internal/oidc/federated_client_auth_test.go",
+    "backend/internal/oidc/interaction_session_dto.go",
+    "backend/internal/oidc/interaction_session_service.go",
+    "backend/internal/oidc/introspection_handler.go",
+    "backend/internal/oidc/introspection_handler_test.go",
+    "backend/internal/oidc/models.go",
+    "backend/internal/oidc/module.go",
+    "backend/internal/oidc/par_handler.go",
+    "backend/internal/oidc/preview.go",
+    "backend/internal/oidc/preview_test.go",
+    "backend/internal/oidc/provider.go",
+    "backend/internal/oidc/provider_test.go",
+    "backend/internal/oidc/session.go",
+    "backend/internal/oidc/session_test.go",
+    "backend/internal/oidc/signer.go",
+    "backend/internal/oidc/store.go",
+    "backend/internal/oidc/store_test.go",
+    "backend/internal/oidc/token_handler.go",
+    "backend/internal/oidc/token_handler_test.go",
+    "backend/internal/oidc/tx.go",
+    "backend/internal/oidc/userinfo_handler.go",
+    "backend/internal/oidc/userinfo_handler_test.go",
+    "backend/internal/service/e2etest_service.go",
+    "backend/internal/service/jwt_service.go",
+    "backend/internal/service/jwt_service_test.go",
+    "backend/internal/service/oidc_service.go",
+    "backend/internal/service/oidc_service_test.go",
+    "backend/internal/service/scim_service.go",
+    "backend/internal/service/webauthn_service.go",
+    "backend/internal/service/webauthn_service_test.go",
+    "backend/internal/utils/callback_url_util.go",
+    "backend/internal/utils/callback_url_util_test.go",
+    "backend/internal/utils/cookie/add_cookie.go",
+    "backend/internal/utils/cookie/cookie_names.go",
+    "backend/internal/utils/csp.go",
+    "backend/resources/migrations/postgres/20260607120000_oauth2_storage.down.sql",
+    "backend/resources/migrations/postgres/20260607120000_oauth2_storage.up.sql",
+    "backend/resources/migrations/sqlite/20260607120000_oauth2_storage.down.sql",
+    "backend/resources/migrations/sqlite/20260607120000_oauth2_storage.up.sql",
+    "frontend/messages/en.json",
+    "frontend/src/lib/components/header/header.svelte",
+    "frontend/src/lib/components/scope-list.svelte",
+    "frontend/src/lib/services/oidc-service.ts",
+    "frontend/src/lib/services/webauthn-service.ts",
+    "frontend/src/lib/types/oidc.type.ts",
+    "frontend/src/lib/utils/form-util.ts",
+    "frontend/src/lib/utils/redirection-util.ts",
+    "frontend/src/lib/utils/zod-util.ts",
+    "frontend/src/routes/authorize/+page.svelte",
+    "frontend/src/routes/authorize/+page.ts",
+    "frontend/src/routes/device/+page.svelte",
+    "frontend/src/routes/device/+page.ts",
+    "frontend/src/routes/interaction/+page.svelte",
+    "frontend/src/routes/interaction/+page.ts",
+    "frontend/src/routes/settings/admin/oidc-clients/federated-identities-input.svelte",
+    "frontend/src/routes/settings/admin/oidc-clients/oidc-client-form.svelte",
+    "frontend/vite.config.ts",
+    "tests/data.ts",
+    "tests/resources/export/database.json",
+    "tests/specs/oidc.spec.ts",
+    "tests/utils/oidc.util.ts"
+   ],
+   "gold": null,
+   "why": "fix commit before 2026-07-01"
+  },
+  {
+   "advisory": "GHSA-h7c4-q426-7jh9",
+   "published": "2026-11-09T21:14:51Z",
+   "cwes": [
+    "CWE-400"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": "tsparticles/tsparticles",
+   "fix": "d3b5672bd61bb847abfa21193c34eabf7aba6896",
+   "parent": "fa9070eb1f1e542fa2b89cf6295b7cd312d37e2f",
+   "fix_date": "2026-07-10T08:35:12+02:00",
+   "changed": [
+    ".github/workflows/npm-publish.yml",
+    "integrations/mcp-server/src/index.ts"
+   ],
+   "gold": [
+    "integrations/mcp-server/src/index.ts"
+   ],
+   "atlas_paths": 8082,
+   "why": "atlas too large (path count)"
+  },
+  {
+   "advisory": "GHSA-4p8p-pjpq-2w7h",
+   "published": "2026-11-09T21:13:55Z",
+   "cwes": [
+    "CWE-248"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": "tsparticles/tsparticles",
+   "fix": "25fb70e7f527a91568adaef576570289083f243b",
+   "parent": "97bae92be72deebcf47220862342ed79be2ed064",
+   "fix_date": "2026-07-01T11:08:24+02:00",
+   "changed": [
+    "integrations/mcp-server/src/index.ts"
+   ],
+   "gold": [
+    "integrations/mcp-server/src/index.ts"
+   ],
+   "atlas_paths": 8078,
+   "why": "atlas too large (path count)"
+  },
+  {
+   "advisory": "GHSA-ghc9-756g-vrcv",
+   "published": "2026-11-09T21:12:46Z",
+   "cwes": [
+    "CWE-400",
+    "CWE-770"
+   ],
+   "ecosystems": [
+    "Maven"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-447x-qqwf-m7xq",
+   "published": "2026-11-09T21:10:46Z",
+   "cwes": [
+    "CWE-400"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-6w3r-6hpr-hp6p",
+   "published": "2026-11-09T21:08:28Z",
+   "cwes": [
+    "CWE-770"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": "agamnentzar/ag-psd",
+   "fix": "57ea7d865238b6b7c8a2e976bcf2a77e03116e2f",
+   "parent": "e64f0c96a5b8f9ea7c79599d08bbcfc57345b781",
+   "fix_date": "2026-07-01T16:28:29+02:00",
+   "changed": [
+    "CHANGELOG.md",
+    "package.json",
+    "src/psdReader.ts"
+   ],
+   "gold": [
+    "src/psdReader.ts"
+   ],
+   "atlas_image_tokens": 69552,
+   "atlas_files": 34,
+   "why": null
+  },
+  {
+   "advisory": "GHSA-v2g6-7r9j-v6px",
+   "published": "2026-11-09T21:03:31Z",
+   "cwes": [
+    "CWE-23"
+   ],
+   "ecosystems": [
+    "Maven"
+   ],
+   "repo": "zeroturnaround/zt-zip",
+   "fix": "1b625467b4c3cd3a9bee9efc35bdef2f8d9c8dad",
+   "parent": "780a2fd9acd9d8dc453462c85079da3b1e13bc54",
+   "fix_date": "2026-07-01T16:24:20+03:00",
+   "changed": [
+    "CHANGELOG.md",
+    "README.md",
+    "src/main/java/org/zeroturnaround/zip/ZipUtil.java",
+    "src/test/java/org/zeroturnaround/zip/DirectoryTraversalMaliciousTest.java"
+   ],
+   "gold": [
+    "src/main/java/org/zeroturnaround/zip/ZipUtil.java"
+   ],
+   "atlas_image_tokens": 35673,
+   "atlas_files": 54,
+   "why": null
+  },
+  {
+   "advisory": "GHSA-8cfq-jgf7-8m27",
+   "published": "2026-11-09T20:55:17Z",
+   "cwes": [
+    "CWE-863"
+   ],
+   "ecosystems": [
+    "Go"
+   ],
+   "repo": "traptitech/traq",
+   "fix": "5510fe8aa9bb15fc4755c78792381dbb03d576c3",
+   "parent": "16d735491331ea8ce21cedfc1bf972b9a28f18ff",
+   "fix_date": "2026-06-29T22:49:40+09:00",
+   "changed": [
+    "router/oauth2/authorization_endpoint.go",
+    "router/oauth2/authorization_endpoint_test.go"
+   ],
+   "gold": null,
+   "why": "fix commit before 2026-07-01"
+  },
+  {
+   "advisory": "GHSA-p74g-f95m-7fx7",
+   "published": "2026-11-09T20:52:49Z",
+   "cwes": [
+    "CWE-79"
+   ],
+   "ecosystems": [
+    "Go"
+   ],
+   "repo": "traptitech/traq",
+   "fix": "3db29e7771661f6418d88d186d8ff7817f5d6b6e",
+   "parent": "b0d8aab2f6527699efbe6c607212c7e9e8cd6297",
+   "fix_date": "2026-06-27T23:28:46+09:00",
+   "changed": [
+    "docs/v3-api.yaml",
+    "router/utils/common.go"
+   ],
+   "gold": null,
+   "why": "fix commit before 2026-07-01"
+  },
+  {
+   "advisory": "GHSA-cw2g-2vwq-88w6",
+   "published": "2026-11-09T20:13:52Z",
+   "cwes": [
+    "CWE-22"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": "isomorphic-git/isomorphic-git",
+   "fix": "823843d1cd19182df79bc907c767f5bcecb39a0b",
+   "parent": "1395431bc1ee8770e6936eeb26da3ec34ca0ae7b",
+   "fix_date": "2026-07-01T00:11:22+02:00",
+   "changed": [
+    "__tests__/server-only.test-checkout-symlink-leading-path.js",
+    "__tests__/test-GitRefManager-symref-cycle.js",
+    "__tests__/test-GitTree-entry-name-validation.js",
+    "__tests__/test-applyDelta-bounded-allocation.js",
+    "src/commands/checkout.js",
+    "src/internal-apis.js",
+    "src/managers/GitRefManager.js",
+    "src/models/GitTree.js",
+    "src/utils/applyDelta.js"
+   ],
+   "gold": [
+    "__tests__/server-only.test-checkout-symlink-leading-path.js",
+    "__tests__/test-GitRefManager-symref-cycle.js",
+    "__tests__/test-GitTree-entry-name-validation.js",
+    "__tests__/test-applyDelta-bounded-allocation.js",
+    "src/commands/checkout.js",
+    "src/internal-apis.js",
+    "src/managers/GitRefManager.js",
+    "src/models/GitTree.js",
+    "src/utils/applyDelta.js"
+   ],
+   "why": "more than 5 source files changed"
+  },
+  {
+   "advisory": "GHSA-96wc-2m84-2cj7",
+   "published": "2026-11-09T19:58:32Z",
+   "cwes": [
+    "CWE-674",
+    "CWE-835"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": "isomorphic-git/isomorphic-git",
+   "fix": "823843d1cd19182df79bc907c767f5bcecb39a0b",
+   "parent": "1395431bc1ee8770e6936eeb26da3ec34ca0ae7b",
+   "fix_date": "2026-07-01T00:11:22+02:00",
+   "changed": [
+    "__tests__/server-only.test-checkout-symlink-leading-path.js",
+    "__tests__/test-GitRefManager-symref-cycle.js",
+    "__tests__/test-GitTree-entry-name-validation.js",
+    "__tests__/test-applyDelta-bounded-allocation.js",
+    "src/commands/checkout.js",
+    "src/internal-apis.js",
+    "src/managers/GitRefManager.js",
+    "src/models/GitTree.js",
+    "src/utils/applyDelta.js"
+   ],
+   "gold": [
+    "__tests__/server-only.test-checkout-symlink-leading-path.js",
+    "__tests__/test-GitRefManager-symref-cycle.js",
+    "__tests__/test-GitTree-entry-name-validation.js",
+    "__tests__/test-applyDelta-bounded-allocation.js",
+    "src/commands/checkout.js",
+    "src/internal-apis.js",
+    "src/managers/GitRefManager.js",
+    "src/models/GitTree.js",
+    "src/utils/applyDelta.js"
+   ],
+   "why": "more than 5 source files changed"
+  },
+  {
+   "advisory": "GHSA-9qw7-j9xw-fv9c",
+   "published": "2026-11-09T19:53:44Z",
+   "cwes": [
+    "CWE-22",
+    "CWE-59"
+   ],
+   "ecosystems": [
+    "npm"
+   ],
+   "repo": "isomorphic-git/isomorphic-git",
+   "fix": "823843d1cd19182df79bc907c767f5bcecb39a0b",
+   "parent": "1395431bc1ee8770e6936eeb26da3ec34ca0ae7b",
+   "fix_date": "2026-07-01T00:11:22+02:00",
+   "changed": [
+    "__tests__/server-only.test-checkout-symlink-leading-path.js",
+    "__tests__/test-GitRefManager-symref-cycle.js",
+    "__tests__/test-GitTree-entry-name-validation.js",
+    "__tests__/test-applyDelta-bounded-allocation.js",
+    "src/commands/checkout.js",
+    "src/internal-apis.js",
+    "src/managers/GitRefManager.js",
+    "src/models/GitTree.js",
+    "src/utils/applyDelta.js"
+   ],
+   "gold": [
+    "__tests__/server-only.test-checkout-symlink-leading-path.js",
+    "__tests__/test-GitRefManager-symref-cycle.js",
+    "__tests__/test-GitTree-entry-name-validation.js",
+    "__tests__/test-applyDelta-bounded-allocation.js",
+    "src/commands/checkout.js",
+    "src/internal-apis.js",
+    "src/managers/GitRefManager.js",
+    "src/models/GitTree.js",
+    "src/utils/applyDelta.js"
+   ],
+   "why": "more than 5 source files changed"
+  },
+  {
+   "advisory": "GHSA-p2mm-64f6-gmpp",
+   "published": "2026-11-09T19:48:08Z",
+   "cwes": [
+    "CWE-116",
+    "CWE-94"
+   ],
+   "ecosystems": [
+    "PyPI"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-6xmv-cjr5-w3q8",
+   "published": "2026-11-09T19:46:27Z",
+   "cwes": [
+    "CWE-116",
+    "CWE-94"
+   ],
+   "ecosystems": [
+    "PyPI"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-h667-4jj2-cgv4",
+   "published": "2026-11-09T18:50:00Z",
+   "cwes": [
+    "CWE-116",
+    "CWE-94"
+   ],
+   "ecosystems": [
+    "PyPI"
+   ],
+   "repo": null,
+   "fix": null,
+   "parent": null,
+   "fix_date": null,
+   "changed": null,
+   "gold": null,
+   "why": "more than one fix commit on GitHub"
+  },
+  {
+   "advisory": "GHSA-52c6-99qm-3hqr",
+   "published": "2026-11-09T18:47:27Z",
+   "cwes": [
+    "CWE-22"
+   ],
+   "ecosystems": [
+    "Maven"
+   ],
+   "repo": "zeroturnaround/zt-zip",
+   "fix": "59a76ad576b0fcd50ea018e3608afb946c1492fd",
+   "parent": "0a9d0e1f333bd45493d492376b3d864f19c6d9fe",
+   "fix_date": "2026-07-01T00:32:51+03:00",
+   "changed": [
+    "src/main/java/org/zeroturnaround/zip/ZipUtil.java",
+    "src/main/java/org/zeroturnaround/zip/Zips.java",
+    "src/test/java/org/zeroturnaround/zip/DirectoryTraversalMaliciousTest.java"
+   ],
+   "gold": [
+    "src/main/java/org/zeroturnaround/zip/ZipUtil.java",
+    "src/main/java/org/zeroturnaround/zip/Zips.java"
+   ],
+   "atlas_image_tokens": 34983,
+   "atlas_files": 54,
+   "why": null
+  }
+ ]
+}

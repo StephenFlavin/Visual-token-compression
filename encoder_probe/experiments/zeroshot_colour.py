@@ -1,4 +1,4 @@
-"""Colour-channel Latin, zero-shot (step Z0 of docs/COLOUR_GIST.md): can pretrained Qwen2.5-VL-3B read two passages
+"""Colour-channel Latin, zero-shot (step Z0 of docs/gpu/COLOUR_GIST.md): can pretrained Qwen2.5-VL-3B read two passages
 overlaid in different colour channels, with no training at all?
 
 Pages are 448 x 448 (256 vision tokens), DejaVu Sans Mono, word-wrapped, large pitch (default 16 px). Conditions:

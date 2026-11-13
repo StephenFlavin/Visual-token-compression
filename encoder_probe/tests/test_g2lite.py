@@ -237,7 +237,7 @@ def test_build_only_and_run_lock(tmp_path):
 def test_device_cuda_without_gpu_exits_clearly(tmp_path):
     import pytest
     if torch.cuda.is_available():
-        pytest.skip("a GPU is present: covered by the GPU smoke in docs/GPU_RUNNER.md")
+        pytest.skip("a GPU is present: covered by the GPU smoke in docs/gpu/GPU_RUNNER.md")
     with pytest.raises(SystemExit, match="cuda"):
         _run(tmp_path / "o", tmp_path / "c", "trained", "--device", "cuda")
 

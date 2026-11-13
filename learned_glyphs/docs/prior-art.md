@@ -1,6 +1,20 @@
 # Prior art: learned glyph alphabets for machine reading (WP-LG4)
 
-*Searched 2026-11-02. This adds to `../../docs/prior-art.md` ([P]), which already covers optical compression, PIXEL, FontCode and Neural Glyph. "Unverified" means seen only in an abstract or a secondary summary. "(ours)" marks our own arithmetic.*
+**Status: a record.** The literature search of 2026-11-02 that shaped the learned-glyph plan, kept as written.
+Its claims about other work come from the papers in [References](#references) and were not re-checked in the
+clean-up of 2026-11-13; entries marked "unverified" were never checked.
+
+**How its warnings held up** (from [../RESULTS.md](../RESULTS.md), re-checked against the rows):
+
+| Warning or recommendation here | What happened |
+|---|---|
+| The bank may only work on the simulated channel (point 3) | Partly true. Unrestricted banks read at 35-68% error on degradations they were not trained on; whole-pixel banks at 12-22%. The bridge score (the unchanged Phase 2 pipeline) still shows 0.57x Latin's pixels |
+| A per-character gain above about 3x means the bank is exploiting the channel (point 4) | Not triggered: the largest gain is 1.74x |
+| Must-haves (point 5): hard binary glyphs, test-only distortions, a fresh-reader transfer test | Done: banks are binarised from 60% of training on, every joint run has a held-out degradation score, and E2 is the transfer test |
+| Must-have: a random-codebook baseline; also a 3x2 block code and a 4x6 pixel font | Never run. `GlyphBank.random_binary` exists and is unit-tested only |
+| Nobody has learned glyphs as input for a vision-language model (point 1) | Tried here: frozen encoders lose the banks and a short fine-tune of Qwen2.5-VL-3B does not read them |
+
+*Searched 2026-11-02. This adds to `../../docs/background/prior-art.md` ([P]), which already covers optical compression, PIXEL, FontCode and Neural Glyph. "Unverified" means seen only in an abstract or a secondary summary. "(ours)" marks our own arithmetic.*
 
 ## Bottom line
 

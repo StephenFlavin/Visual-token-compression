@@ -1,5 +1,14 @@
 # Compaction archive at scale: pre-registration (2026-11-11, written before any agent call)
 
+> **In brief (added in the clean-up, 2026-11-12).** Question: does the page archive of
+> [results/compaction](../compaction/README.md) still work through real Claude Code hooks, with nothing in the prompt,
+> on code and logs as well as prose? Answer: yes. Over 9 sessions the archive answered 96.1% of 360 questions
+> (98.9% after a hook bug was fixed, post hoc) against 78.3% after normal compaction and 100% with no compaction,
+> at 2.1x lower cost per correct answer. Two of the five thresholds set in advance were missed (normal compaction
+> lost 21.7 points, not 30; the archive's lead on the task turn was 20 points, not 30). Arms: D = no compaction,
+> A = normal compaction, B = compaction plus page archive. The hooks are in `experiments/compaction/hooks/`; the
+> numbers below reproduce from the rows with `python3 experiments/compaction/analyse_scale.py`.
+
 Follow-up to [results/compaction](../compaction/README.md) (3 research sessions: normal compaction 36.9%, page archive
 100%, 31% cheaper). That test left four gaps, which this one closes:
 

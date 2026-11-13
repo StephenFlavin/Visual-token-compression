@@ -1,0 +1,32 @@
+[package]
+name = "gitleaks"
+version = "8.0.0"
+edition = "2021"
+
+[[bin]]
+name = "gitleaks"
+path = "src/main.rs"
+
+[dependencies]
+regex = "1"
+regex-syntax = "0.8"
+toml = { version = "0.8", default-features = false, features = ["parse"] }
+serde_json = { version = "1", features = ["preserve_order"] }
+chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
+aho-corasick = "1"
+libc = "0.2"
+unicode-width = "0.1"
+flate2 = "1"
+tar = "0.4"
+zip = { version = "2", default-features = false, features = ["deflate", "bzip2"] }
+lzma-rs = "0.3"
+ruzstd = "0.7"
+bzip2 = "0.4"
+sevenz-rust = "0.6"
+lz4_flex = "0.11"
+brotli-decompressor = "4"
+snap = "1"
+
+[profile.release]
+opt-level = 3
+debug = false

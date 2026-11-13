@@ -2,7 +2,7 @@
 
     python3 scripts/build_data.py            # build whatever is missing
     python3 scripts/build_data.py --force    # rebuild everything
-    python3 scripts/build_data.py --report   # also (re)write docs/dictionary-report.md (K1)
+    python3 scripts/build_data.py --report   # also (re)write docs/glyphs/dictionary-report.md (K1)
 
 Outputs (data/, git-ignored): train.txt val.txt test.txt, passages_{natural,scrambled}.jsonl,
 dict_3000.json (master) and its prefixes dict_{100,300,1000}.json.
@@ -24,7 +24,7 @@ SIZES = (100, 300, 1000, 3000)
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--force", action="store_true", help="rebuild even if cached")
-    ap.add_argument("--report", action="store_true", help="write docs/dictionary-report.md")
+    ap.add_argument("--report", action="store_true", help="write docs/glyphs/dictionary-report.md")
     args = ap.parse_args()
     config.DATA.mkdir(parents=True, exist_ok=True)
 
@@ -76,7 +76,7 @@ def _fit_ratio(d: dictionary.Dictionary, text: str, W: int = 768, H: int = 768) 
     return fit_em(sub, W, H) / fit_em(cond, W, H)
 
 
-def write_report(master: dictionary.Dictionary, path: Path = config.ROOT / "docs" / "dictionary-report.md") -> None:
+def write_report(master: dictionary.Dictionary, path: Path = config.ROOT / "docs" / "glyphs" / "dictionary-report.md") -> None:
     val = corpus.read_paragraphs("val")
     rows, stats = [], {}
     for n in SIZES:

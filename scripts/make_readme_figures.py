@@ -494,7 +494,7 @@ def fig_moonshot():
 
 # --------------------------------------------------------------------------- charts: shared data and style
 RES = ROOT / "encoder_probe" / "results"
-TEXT_CPT = 4.33        # chars per text token, Qwen tokenizer on held-out WikiText (docs/CONTEXT_BUDGET.md)
+TEXT_CPT = 4.33        # chars per text token, Qwen tokenizer on held-out WikiText (docs/claude/CONTEXT_BUDGET.md)
 # DeepSeek-OCR (arXiv 2510.18234): ~97% OCR precision at <= 10x compression (text tokens per vision token, Fox
 # benchmark). Converted to chars per vision token with TEXT_CPT (Qwen's tokenizer on WikiText; DeepSeek's own
 # chars per token on Fox are not published), so the x position is approximate.

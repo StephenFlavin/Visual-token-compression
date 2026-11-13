@@ -94,6 +94,9 @@ def analyse(path: Path) -> dict:
 
 
 def main() -> int:
+    if not SCR.is_dir():
+        sys.exit(f"transcripts not found at {SCR} (they were in an earlier session's scratchpad and are gone); "
+                 "not overwriting results/readhook_swe/analysis")
     rows = []
     for ds, i, a, p, row in runs():
         x = analyse(p)

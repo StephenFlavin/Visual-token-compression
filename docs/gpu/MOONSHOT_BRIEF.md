@@ -1,0 +1,119 @@
+# Research brief: the moonshot (RGB-overlaid learned-glyph pages as dense optical context)
+
+Written 2026-11-04 for an external research task. Numbers are from this repo (claude/validation-harness); Q1 and G0
+numbers are preliminary.
+
+> **Status: a record, kept as sent on 2026-11-04. The moonshot line is closed (2026-11-12).** This is the brief
+> that was given to an external literature search. The report it asked for is
+> [research/2026-11-04_rgb3_lg_go_no_go_report.md](../background/research/2026-11-04_rgb3_lg_go_no_go_report.md).
+> What happened to the moonshot: readable from raw pixels (1.07% character error), not read by Qwen2.5-VL-3B frozen
+> or after a 1000-step fine-tune; results in
+> [encoder_probe/RESULTS.md](../../encoder_probe/RESULTS.md#round-3-qwen25-vl-3b-can-a-vlm-learn-to-read-the-codes-2026-11-05),
+> analysis in [ANALYSIS.md](../background/ANALYSIS.md). Each section below has a status line dated 2026-11-05.
+>
+> **Reading aid.** "Moonshot" = pages of a learned glyph alphabet drawn in three colour channels at once, in effect
+> a colour QR code. CER = character error rate. KV = the per-position cache a language model keeps for its
+> context. G0, Q1, G2-lite, R3-1, G3 = the steps and gates of round 3
+> ([encoder_probe/ROUND3.md](../../encoder_probe/ROUND3.md)). Claims about external models and papers in this
+> brief (DeepSeek-OCR, DeepSeek-V4.1-Flash, C3, VTCBench, LensVLM, Glyph) are as the brief's author understood
+> them on 2026-11-04 and were **not re-checked** in the clean-up.
+>
+> **Two numbers below were preliminary and are corrected by the final rows:** the Q1 line in the evidence table
+> (final Q1: the glyph pages stay partly pixel-like through the vision tower and are lost at the 2x2 merger), and
+> "every dense code at the floor (≥ 62% CER)" for SigLIP, which holds for its last layer (73-85%) and for colour
+> codes at layer 6 (62-72%); whole-pixel learned glyphs reach 53-55% at layer 6, still unread.
+
+## What it is
+*Status 2026-11-05: unchanged. `rgb3_lg_free_h4` (405) was dropped after Q1; `rgb3_lg_pb_h5` (322) is the moonshot.*
+
+**Visual BPE moonshot, `rgb3_lg`:** render long text as page images that a vision-language model reads in place of
+text tokens, packing far more characters into each vision token than ordinary typography.
+* **Learned glyph alphabet ("Visual BPE").** A bank of 395 small learned glyphs (4-5 px line pitch). Each glyph stands
+  for a single character or a frequent character chunk (dictionary tokens like " the "), so text becomes a stream of
+  tiny symbols.
+* **RGB overlay.** Three independent text streams on one page, one per colour channel. Each channel is a black-on-white
+  glyph page, so the channels don't occlude each other. That is about 3x the density of one glyph page.
+* **Density.** At Qwen2.5-VL's geometry (448 px page, 256 tokens of 28x28 px), the variants hold 322 chars per
+  vision token (`rgb3_lg_pb_h5`) and 405 (`rgb3_lg_free_h4`). For comparison:
+  * text tokens: ~4.3 chars each;
+  * plain Latin page images, Glyph-style: ~15;
+  * the single glyph bank: ~107.
+
+## Origin and aim
+*Status 2026-11-05: aim and bar unchanged (G3: >= 1.5x fine-tuned Latin at < 3% CER, with Latin now pushed to
+p8/p6/p5 = ~28/51/72 chars/token). Not reached: only latin_p8 is read after a 1000-step fine-tune.*
+
+* **Inspiration.** DeepSeek-OCR's "contexts optical compression" (Oct 2025): render text, read it back from far fewer
+  vision tokens (~97% OCR precision at ~10x, ~60% at ~20x). DeepSeek-V4.1-Flash, the user's motivating long-context
+  model (552B MoE, 1M-token window, 890 B/token KV), is multimodal, but its paper abstract does not say how it encodes
+  images.
+* **Caveat for the research task.** Check whether V4.1-Flash itself uses optical compression. Its published KV savings
+  come from attention design (CSA2, cross-layer KV reuse, FP4 KV), not OCR as far as the abstract says.
+* **Aim.** Show a local model on one RTX 3090 (Qwen2.5-VL-3B) holding much more context than its default. A vision
+  token is one KV position, like a text token, so chars per position is the saving.
+  * Qwen-3B default: ~140k chars in its 32k window.
+  * At 322 chars/position: ~10M chars in the same window, with ~98.7% less KV per char and ~0.03x the prefill compute
+    per char (estimates).
+* **Bar for success.** After equal fine-tuning, the code must beat fine-tuned Latin images by ≥ 1.5x chars/token at
+  < 3% transcription CER, and keep long-context QA (needle, cloze) accuracy at ≤ 0.67x Latin's KV bytes.
+
+## Evidence so far
+*Status 2026-11-05: superseded by the round-3 results. Moonshot G0 (raw pixels) **1.07% CER**, passes. Q1 final: glyph
+codes stay pixel-like through the ViT and collapse linearly at the merger. G2-lite (CPU probe): "ViT output is the
+wall at this budget" (no-merger arm ~29% of chars matched vs ~15% through the merger). R3-1 (LoRA, 1000 steps, RTX
+4090): only latin_p8 (28) is read, 55% CER vs blind 88.5%; the moonshot sits at its blind floor (83.6% vs 89.9%,
+loss equal to the blind run's). G3 undecidable. The table below is the state on 2026-11-04.*
+
+| Test | Result |
+|---|---|
+| Raw pixels, trained reader (the "identity ceiling": is the page itself readable?) | Single glyph banks, rgb3 Latin and colour codes: all < 3% CER. Moonshot: 15.2% (pb_h5) and 37.0% (free_h4) at step 500 of 3000, still falling; full run (G0, gate < 10%) pending |
+| Frozen SigLIP-B/16 | every dense code at the floor (≥ 62% CER); Latin needs ~2 chars/token for 5% at layer 6 |
+| Frozen DeepSeek-OCR DeepEncoder (1000 train pages) | colour 71-73%, rgb3 83.5%, glyph banks 82%, Latin ≥ 15 chars/token at the floor; only Latin at 8.5 chars/token reads (15-19%) |
+| Q1: layer-wise linear pixel readout of frozen Qwen2.5-VL ViT (preliminary) | moonshot R² 0.69 at block 8 vs Latin 0.97, but equal or better than Latin from block 24 on; all three colour channels survive about equally; nothing linearly recoverable after the 2x2 patch merger (expected: 2048 dims vs 2352 dense pixel values) |
+| Fine-tuned Qwen (LoRA + last 4 ViT blocks + merger), long-context QA | not run yet (code built, CPU-tested; GPU runs next week) |
+
+## Hardest parts and where it's failing
+*Status 2026-11-05: points 1-2 are now measured, not hypothesised. Q1 and G2-lite place the loss in the ViT
+output and the 2x2 merger, and a 1000-step fine-tune of the merger + last 4 ViT blocks does not move the moonshot
+off its blind floor. Points 3-7 are untested (no long-context QA has run).*
+
+1. **Pretrained encoders throw away the fine detail the codes need.** This is the main failure so far. Every frozen
+   encoder tested puts every dense code at the floor, while the same pages read near-perfectly as raw pixels. The
+   information is in the pixels and lost in the encoder. Open question: can fine-tuning the encoder's later layers
+   recover it, or must the early layers / patch stem be retrained (much more expensive)?
+2. **Token merging bottleneck.** Qwen merges 2x2 patches (4 x 1280 dims -> 2048) and DeepEncoder compresses 16x.
+   A moonshot token carries ~2352 dense pixel values and hundreds of characters. Whether 2048 dims can carry ~322
+   chars (the bits per token budget) is unknown in practice.
+3. **No language prior.** The glyphs are arbitrary symbols. OCR models lean heavily on language priors: DeepSeek-OCR
+   drops from 88-98% to 20-62% on random letters. One misread glyph can corrupt a name or number, so exact recall
+   (needle tests) is expected to fail first.
+4. **Learnability and decoding.**
+   * 1185 channel-tagged classes (3 channels x 395 glyphs).
+   * Lines hold ~600 interleaved labels, right at the CTC frame budget (lines wrap 1 px early to fit).
+   * Probes learn the moonshot ~2x slower per step than a single bank.
+   * The free_h4 variant is clearly harder than pb_h5.
+5. **Reading is not reasoning.** The KV saving only counts if the model answers questions directly from the image
+   tokens. If it transcribes first, the output refills the KV cache. Prior art: VTCBench finds VLMs OCR rendered text
+   but understand long contexts in it poorly, and naive reading at 5x scores 31% vs 72% for text (LensVLM).
+6. **Training scale and data.** Probes memorise 200 training pages; ≥ 1000 are needed (Latin through DeepEncoder:
+   85% -> 15% from 200 to 5000 pages). Our fine-tune is a LoRA on a 3B model on one GPU, far less than Glyph's
+   continual pretraining + RL. A negative result would be weak evidence; a positive one strong.
+7. **Competing approaches may dominate.** Text-side learned compression matches or beats the vision path in the
+   literature: C3 98% at 20x; a learned hierarchical encoder beats vision on reconstruction perplexity. If we train
+   our own encoder, rendering to pixels may be a detour.
+
+## Questions for the research task
+*Status 2026-11-05: answered by the research report (link above); its go region of ~30-90 chars/token shaped the
+round-3 density sweep and gates (ROUND3.md, "Re-scope after the literature report").*
+
+* Has anyone trained a VLM or ViT to read dense synthetic visual codes (2D barcodes / data matrix, colour-multiplexed
+  or steganographic channels, learned glyph alphabets)? What capacity per token did they reach, and which layers had
+  to be trained?
+* How do pretrained ViTs handle colour-channel-separated information: is it mixed or kept in early layers? Any work
+  on per-channel multiplexing through CLIP/SigLIP-style encoders?
+* How does DeepSeek-V4.1-Flash (and DeepSeek-OCR 2) encode images, and does V4.1-Flash use optical compression for
+  long context at all?
+* Information capacity of a VLM vision token after patch merging: empirical bits/token for text rendered at
+  increasing density.
+* The strongest current results for long-context QA over rendered text (Glyph, LensVLM, VTCBench, "Text or Pixels? It
+  Takes Half") and for text-side compression (C3, ICAE, gist tokens). At equal KV, which wins?

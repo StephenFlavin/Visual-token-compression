@@ -115,7 +115,7 @@ def main(argv=None) -> int:
             raise SystemExit("--bridge-cmd needs --banks")
         names = [scheme_name_for(b) for b in banks]
         ems = a.ems or [4, 5, 6, 7, 8]
-        cmd = (f"python3 experiments/phase2_train.py --schemes {' '.join(shlex.quote(n) for n in names)} "
+        cmd = (f"python3 experiments/phases/phase2_train.py --schemes {' '.join(shlex.quote(n) for n in names)} "
                f"--ems {' '.join(f'{e:g}' for e in ems)} --steps {a.steps} --parallel {max(1, a.parallel)} "
                f"--threads 1 --run-name {a.run_name or 'lg_bridge'}")
         print(cmd)

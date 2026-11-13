@@ -31,7 +31,7 @@ from vbpe.layout import _draw_lines, glyph_advance, wrap
 from vbpe.metrics import normalize
 
 # EP_TRAIN_R2_CAP raises the cap for a fresh build (same prefix, so existing pages are unchanged); needed for
-# > ~1000 train pages of the densest encodings (see docs/LOCAL_GPU.md)
+# > ~1000 train pages of the densest encodings (see docs/gpu/LOCAL_GPU.md)
 TRAIN_R2_CAP = int(os.environ.get("EP_TRAIN_R2_CAP", 64_000_000))
 MIN_TEST_PAGES = 4
 
@@ -168,7 +168,7 @@ class SizedRGB3(Sized, R1.RGB3Encoding):
 
 from dataclasses import dataclass, field  # noqa: E402
 
-# colour-gist phase A (docs/COLOUR_GIST.md): stream c darkens only its own channel(s) on a white page
+# colour-gist phase A (docs/gpu/COLOUR_GIST.md): stream c darkens only its own channel(s) on a white page
 STREAM_INKS = {1: [("black", (0, 1, 2))],
                2: [("cyan", (0,)), ("magenta", (1,))],
                3: [("cyan", (0,)), ("magenta", (1,)), ("yellow", (2,))],

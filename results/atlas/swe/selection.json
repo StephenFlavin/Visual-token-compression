@@ -1,0 +1,275 @@
+{
+ "python-wheel-build__fromager-1124": {
+  "created_at": "2026-05-07",
+  "n_gold": 3,
+  "gold": [
+   "src/fromager/resolver.py",
+   "src/fromager/sources.py",
+   "src/fromager/wheels.py"
+  ],
+  "f2p": 7,
+  "p2p": 28,
+  "n_files": 182,
+  "pages": 18,
+  "image_tokens_formula": 83559,
+  "map_chars": 60000
+ },
+ "celestoai__smolvm-172": {
+  "created_at": "2026-04-18",
+  "n_gold": 6,
+  "gold": [
+   "scripts/internal/configure-runtime-sudoers.sh",
+   "scripts/internal/install-firecracker.sh",
+   "scripts/system-setup.sh",
+   "src/smolvm/cli/main.py",
+   "src/smolvm/host/doctor.py",
+   "src/smolvm/host/setup.py"
+  ],
+  "f2p": 8,
+  "p2p": 94,
+  "n_files": 92,
+  "pages": 20,
+  "image_tokens_formula": 90390,
+  "map_chars": 57328
+ },
+ "nesquena__hermes-webui-330_interface": {
+  "created_at": "2026-04-12",
+  "n_gold": 3,
+  "gold": [
+   "api/onboarding.py",
+   "bootstrap.py",
+   "static/index.html"
+  ],
+  "f2p": 4,
+  "p2p": 4,
+  "n_files": 42,
+  "pages": 20,
+  "image_tokens_formula": 91080,
+  "map_chars": 20404
+ },
+ "tox-dev__tox-3904": {
+  "created_at": "2026-03-26",
+  "n_gold": 3,
+  "gold": [
+   "pyproject.toml",
+   "src/tox/config/loader/ini/factor.py",
+   "src/tox/config/loader/toml/_replace.py"
+  ],
+  "f2p": 2,
+  "p2p": 166,
+  "n_files": 126,
+  "pages": 14,
+  "image_tokens_formula": 64584,
+  "map_chars": 75512
+ },
+ "pytest-dev__pyfakefs-1286": {
+  "created_at": "2026-02-22",
+  "n_gold": 6,
+  "gold": [
+   "pyfakefs/fake_filesystem_shutil.py",
+   "pyfakefs/fake_io.py",
+   "pyfakefs/fake_open.py",
+   "pyfakefs/fake_os.py",
+   "pyfakefs/fake_path.py",
+   "pyfakefs/fake_pathlib.py"
+  ],
+  "f2p": 28,
+  "p2p": 0,
+  "n_files": 29,
+  "pages": 10,
+  "image_tokens_formula": 43953,
+  "map_chars": 40028
+ },
+ "pyjanitor-devs__pyjanitor-1593": {
+  "created_at": "2026-02-11",
+  "n_gold": 5,
+  "gold": [
+   "janitor/functions/case_when.py",
+   "janitor/functions/complete.py",
+   "janitor/functions/conditional_join.py",
+   "janitor/functions/expand_grid.py",
+   "janitor/functions/filter.py"
+  ],
+  "f2p": 3,
+  "p2p": 34,
+  "n_files": 161,
+  "pages": 28,
+  "image_tokens_formula": 131169,
+  "map_chars": 70805
+ },
+ "scientific-python__docstub-123": {
+  "created_at": "2026-01-14",
+  "n_gold": 7,
+  "gold": [
+   "src/docstub-stubs/_concurrency.pyi",
+   "src/docstub-stubs/_docstrings.pyi",
+   "src/docstub-stubs/_utils.pyi",
+   "src/docstub/_concurrency.py",
+   "src/docstub/_docstrings.py",
+   "src/docstub/_utils.py",
+   "src/docstub/doctype.lark"
+  ],
+  "f2p": 6,
+  "p2p": 141,
+  "n_files": 41,
+  "pages": 5,
+  "image_tokens_formula": 19803,
+  "map_chars": 23035
+ },
+ "jsonpickle__jsonpickle-588": {
+  "created_at": "2026-01-12",
+  "n_gold": 3,
+  "gold": [
+   "jsonpickle/pickler.py",
+   "jsonpickle/tags.py",
+   "jsonpickle/unpickler.py"
+  ],
+  "f2p": 1,
+  "p2p": 82,
+  "n_files": 44,
+  "pages": 6,
+  "image_tokens_formula": 23598,
+  "map_chars": 19251
+ },
+ "jsonpickle__jsonpickle-587": {
+  "created_at": "2026-01-11",
+  "n_gold": 4,
+  "gold": [
+   ".gitignore",
+   ".pre-commit-config.yaml",
+   "jsonpickle/pickler.py",
+   "pyproject.toml"
+  ],
+  "f2p": 2,
+  "p2p": 80,
+  "n_files": 44,
+  "pages": 5,
+  "image_tokens_formula": 23460,
+  "map_chars": 19191
+ },
+ "niconoe__pyinaturalist-643": {
+  "created_at": "2026-01-07",
+  "n_gold": 3,
+  "gold": [
+   "pyinaturalist/controllers/observation_controller.py",
+   "pyinaturalist/converters.py",
+   "pyinaturalist/v1/observations.py"
+  ],
+  "f2p": 1,
+  "p2p": 315,
+  "n_files": 70,
+  "pages": 9,
+  "image_tokens_formula": 41538,
+  "map_chars": 33146
+ },
+ "microsoft__fabric-cicd-670": {
+  "created_at": "2025-12-07",
+  "n_gold": 4,
+  "gold": [
+   "src/fabric_cicd/_common/_validate_input.py",
+   "src/fabric_cicd/_parameter/_parameter.py",
+   "src/fabric_cicd/_parameter/_utils.py",
+   "src/fabric_cicd/fabric_workspace.py"
+  ],
+  "f2p": 2,
+  "p2p": 63,
+  "n_files": 104,
+  "pages": 9,
+  "image_tokens_formula": 41607,
+  "map_chars": 22443
+ },
+ "tobymao__sqlglot-6067": {
+  "created_at": "2025-10-09",
+  "n_gold": 3,
+  "gold": [
+   "sqlglot/expressions.py",
+   "sqlglot/generator.py",
+   "sqlglot/parser.py"
+  ],
+  "f2p": 1,
+  "p2p": 25,
+  "n_files": 94,
+  "pages": 31,
+  "image_tokens_formula": 144555,
+  "map_chars": 114033
+ },
+ "agronholm__anyio-975": {
+  "created_at": "2025-09-14",
+  "n_gold": 5,
+  "gold": [
+   "pyproject.toml",
+   "src/anyio/_backends/_asyncio.py",
+   "src/anyio/_backends/_trio.py",
+   "src/anyio/_core/_tasks.py",
+   "src/anyio/from_thread.py"
+  ],
+  "f2p": 10,
+  "p2p": 375,
+  "n_files": 42,
+  "pages": 10,
+  "image_tokens_formula": 44712,
+  "map_chars": 78209
+ },
+ "stanfordnlp__dspy-8607": {
+  "created_at": "2025-08-07",
+  "n_gold": 4,
+  "gold": [
+   "dspy/clients/base_lm.py",
+   "dspy/dsp/utils/settings.py",
+   "dspy/predict/predict.py",
+   "dspy/utils/dummies.py"
+  ],
+  "f2p": 2,
+  "p2p": 52,
+  "n_files": 124,
+  "pages": 18,
+  "image_tokens_formula": 80523,
+  "map_chars": 66146
+ },
+ "pypa__virtualenv-2940": {
+  "created_at": "2025-08-05",
+  "n_gold": 3,
+  "gold": [
+   "src/virtualenv/activation/bash/__init__.py",
+   "src/virtualenv/activation/bash/activate.sh",
+   "src/virtualenv/discovery/py_info.py"
+  ],
+  "f2p": 2,
+  "p2p": 4,
+  "n_files": 89,
+  "pages": 7,
+  "image_tokens_formula": 31464,
+  "map_chars": 32218
+ },
+ "MAIF__arta-50": {
+  "created_at": "2025-07-21",
+  "n_gold": 4,
+  "gold": [
+   ".pre-commit-config.yaml",
+   "pyproject.toml",
+   "src/arta/condition.py",
+   "src/arta/rule.py"
+  ],
+  "f2p": 2,
+  "p2p": 14,
+  "n_files": 15,
+  "pages": 2,
+  "image_tokens_formula": 7521,
+  "map_chars": 3975
+ },
+ "tobymao__sqlglot-5359": {
+  "created_at": "2025-07-07",
+  "n_gold": 3,
+  "gold": [
+   "sqlglot/dialects/duckdb.py",
+   "sqlglot/expressions.py",
+   "sqlglot/generator.py"
+  ],
+  "f2p": 1,
+  "p2p": 20,
+  "n_files": 92,
+  "pages": 28,
+  "image_tokens_formula": 129168,
+  "map_chars": 105408
+ }
+}
