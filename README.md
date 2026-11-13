@@ -83,7 +83,9 @@ on its raw pixels reads it at 1.07% error.
 ![A strip of a real moonshot page, magnified, with its three channels](docs/img/rgb3_lg_pb_h5_strip.png)
 
 At which point it became clear what this is: a small bitmap alphabet, packed on a grid, in three colour layers. I
-had re-invented the colour QR code. 🙄
+had re-invented the colour barcode, which already has a standard: [JAB Code](https://en.wikipedia.org/wiki/JAB_Code)
+(ISO/IEC 23634:2022, "JAB Code polychrome bar code symbology specification"), a QR-like grid of coloured
+modules in 4 or 8 colours. Three on-off colour channels are exactly 8 colours. 🙄
 
 ## 3. What happened when a real model had to read them
 
@@ -127,8 +129,23 @@ facts but loses chains and counts, and at 7.8x it can transcribe a page at 3% er
 over a document.
 
 And for a model you can train, pixels are a detour: a compressor built on the text side reaches the same slots
-without a rendering step. That has been published by others, and current local models get much of the payoff from
-their architecture, so it was built here but not run ([docs/gpu/TEXT_SLOTS.md](docs/gpu/TEXT_SLOTS.md)).
+without a rendering step. Two papers say this directly:
+
+* **[Context Cascade Compression: Exploring the Upper Limits of Text Compression](https://arxiv.org/abs/2511.15244)**
+  (Liu and Qiu, 2025) compresses text with a small language model instead of a vision encoder. Its abstract: "at a
+  20x compression ratio (where the number of text tokens is 20 times the number of latent tokens), our model
+  achieves 98% decoding accuracy, compared to approximately 60% for DeepSeek-OCR."
+* **[Optical Context Compression Is Just (Bad) Autoencoding](https://arxiv.org/abs/2512.03643)** (Lee, Yang and
+  Berg-Kirkpatrick, 2025) compares DeepSeek-OCR's vision encoder with mean pooling and a learned text encoder and
+  finds that "these simple approaches match or surpass vision for reconstruction at matched compression ratios";
+  for language modelling the first version says vision "fails to beat truncation", softened in the second to
+  performing comparably to it. Its conclusion is that the excitement around optical compression outpaces the
+  evidence.
+
+So the vision route is a text compressor with a lossy rendering step in front, and not a good one. Current local
+models also get much of the payoff from their architecture. A text-side compressor was therefore built here but not
+run ([docs/gpu/TEXT_SLOTS.md](docs/gpu/TEXT_SLOTS.md); more prior work in
+[docs/background/prior-art.md](docs/background/prior-art.md)).
 
 ## 5. The accident: plain Latin pages on a closed model
 
@@ -170,15 +187,18 @@ packaged as read and bash-output hooks in [experiments/readhook/vbhook](experime
 for coding they do not pay). A harness that adopts this should re-run a page of planted facts whenever the model
 changes: "lossless" is per model and per release.
 
-## What is left
+## Read next, and what is left
 
-* **The full Claude write-up, with every use case tried, worked or failed:** [docs/claude/CLAUDE_QA.md](docs/claude/CLAUDE_QA.md).
-* **One GPU run to finish:** does the page-image trick carry over to a local model with no training? Qwen3.8-27B on
-  an RTX 3090, the Claude QA test in small, one evening. Plan in [docs/gpu/LOCAL_QWEN.md](docs/gpu/LOCAL_QWEN.md);
-  **the prompt to run is at the top of [docs/HANDOFF.md](docs/HANDOFF.md)**.
-* **Stopped, not finished:** the trained-encoder runs on Latin (the fair last test of the original idea) are
-  parked in [docs/gpu/PLAN_3090.md](docs/gpu/PLAN_3090.md); the dense-glyph and colour stages after them are
-  closed.
+**Finished: the Claude write-up.** Every use case tried, with what worked and what failed, is in
+[docs/claude/CLAUDE_QA.md](docs/claude/CLAUDE_QA.md). Nothing in it is waiting on a run.
+
+**Left to do: one GPU run.** Does the page-image trick carry over to a local model with no training? Qwen3.8-27B
+on an RTX 3090, the Claude QA test in small, one evening. Plan in
+[docs/gpu/LOCAL_QWEN.md](docs/gpu/LOCAL_QWEN.md); **the prompt to run is at the top of
+[docs/HANDOFF.md](docs/HANDOFF.md)**.
+
+**Parked:** the trained-encoder runs on Latin, the fair last test of the original idea
+([docs/gpu/PLAN_3090.md](docs/gpu/PLAN_3090.md)). **Closed:** the dense-glyph and colour stages after them.
 
 ## Terms
 
