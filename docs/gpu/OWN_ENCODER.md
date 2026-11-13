@@ -187,7 +187,7 @@ recipe can reach.
   ~6-7 h, ~$3-5 on Community Cloud. The smoke measures the real numbers.
 * **Setup:**
   ```bash
-  cd /workspace && git clone https://github.com/StephenFlavin/visual-text-compression && cd visual-text-compression
+  cd /workspace && git clone https://github.com/StephenFlavin/visual-token-compaction && cd visual-token-compaction
   git checkout claude/validation-harness
   export HF_HOME=/workspace/hf
   pip install -r requirements.txt "peft>=0.17"            # keep the pod's CUDA torch; check torch.cuda.is_available()

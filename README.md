@@ -1,4 +1,4 @@
-# Visual text compression
+# Visual token compaction
 
 **Claude Opus reading a long document for about a third of the input tokens was not the goal. It is where this
 ended up.** Render the document as page images of ordinary small text and Opus answers lookups, chains and counts

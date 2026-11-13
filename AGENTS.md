@@ -1,4 +1,4 @@
-# AGENTS.md: how to work in this repo (visual-text-compression)
+# AGENTS.md: how to work in this repo (visual-token-compaction)
 
 **State (2026-11-12): a finished study, wound down.** The story and results are in [README.md](README.md). One run
 is left, on the user's local GPU.
