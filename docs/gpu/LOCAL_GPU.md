@@ -7,7 +7,7 @@ rounds, kept for its setup notes, limits and measured speeds.
 For any other GPU machine (rented, cloud, unknown hardware) start from [GPU_RUNNER.md](GPU_RUNNER.md) instead.
 
 The PC: RTX 3090 (24 GB, native bf16), Ryzen 9 5900X (12 cores / 24 threads, AVX2 only), **Windows 11**. Use Git
-Bash, the venv's `python` (not `python3`) and `PYTHONUTF8=1`; the repo is at `/c/git/visual-bpe-run` and
+Bash, the venv's `python` (not `python3`) and `PYTHONUTF8=1`; the repo is at `/c/git/visual-token-compaction-run` and
 `. .venv/env.sh` sets the environment. Sections 1-7 were written for Linux before the PC turned out to be Windows,
 so their commands say `python3`. Windows pitfalls: [GOTCHAS.md](../GOTCHAS.md), "GPU runners". Times are
 **estimates** unless marked measured.
@@ -241,7 +241,7 @@ original grid and was never run here. *(Status updated 2026-11-13.)*
 
 ### Setup (Windows, Git Bash, the round-2 venv)
 ```bash
-cd /c/git/visual-bpe-run && . .venv/env.sh            # PYTHONUTF8=1 EP_PAGE_CACHE=1 EP_TRAIN_R2_CAP=400000000, venv on PATH
+cd /c/git/visual-token-compaction-run && . .venv/env.sh            # PYTHONUTF8=1 EP_PAGE_CACHE=1 EP_TRAIN_R2_CAP=400000000, venv on PATH
 git pull --rebase origin claude/validation-harness
 pip install "peft>=0.17"                               # now in requirements.txt (runner tested 0.21.2); pulls accelerate
 python -m pytest -q encoder_probe/tests/test_round3.py # ~1 min on the CPU, no download (tiny model)
@@ -383,7 +383,7 @@ real run: read its log before queueing anything.
 Same venv, weights and data as section 8 (`. .venv/env.sh`, `python`, `PYTHONUTF8=1`; `data/train.txt` and
 `data/test.txt` from `scripts/build_data.py`). No pages are rendered and no vision tower runs.
 ```bash
-cd /c/git/visual-bpe-run && . .venv/env.sh
+cd /c/git/visual-token-compaction-run && . .venv/env.sh
 git fetch origin claude/sharp-mendel-kkhg4g && git merge origin/claude/sharp-mendel-kkhg4g
 python -m pytest -q encoder_probe/tests/test_text_slots.py encoder_probe/tests/test_text_compress.py   # tiny model, ~20 s
 ```
@@ -452,7 +452,7 @@ only. The first real request (step 2 of the prompt) is the check.
 * **Commands** (the same as in the prompt and in [LOCAL_QWEN.md](LOCAL_QWEN.md); checked against
   `local_qa.py --help` on 2026-11-13):
 ```bash
-cd /c/git/visual-bpe-run && . .venv/env.sh
+cd /c/git/visual-token-compaction-run && . .venv/env.sh
 python -m pytest -q tests/test_local_qa.py                           # 5 tests, mock server
 python experiments/claude_qa/local_qa.py run --dry-run --doc 0 1 2   # sizes only, no server
 llama-server -m models/qwen38/Qwen3.8-27B-UD-Q4_K_M.gguf --mmproj models/qwen38/mmproj-F16.gguf \

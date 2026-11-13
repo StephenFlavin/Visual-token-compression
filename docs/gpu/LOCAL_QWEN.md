@@ -98,7 +98,7 @@ it as such, with the largest text document that did fit.
 ## Runbook (Windows, Git Bash)
 
 ```bash
-cd /c/git/visual-bpe-run && . .venv/env.sh
+cd /c/git/visual-token-compaction-run && . .venv/env.sh
 git fetch origin claude/sharp-mendel-kkhg4g && git merge origin/claude/sharp-mendel-kkhg4g
 python -m pytest -q tests/test_local_qa.py                    # mock server, ~10 s
 python experiments/claude_qa/local_qa.py run --dry-run --doc 0 1 2      # page and token counts, no server

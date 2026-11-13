@@ -33,8 +33,7 @@ OMP_NUM_THREADS=1 python3 -m pytest -q tests encoder_probe/tests learned_glyphs/
 python3 scripts/check_links.py                        # every markdown link and path must resolve
 ```
 
-Start cloud sessions in the `visual-bpe` environment (it keeps the repo's old name): the Default one cannot
-reach Hugging Face.
+Start cloud sessions in the `visual-token-compaction` environment: the Default one cannot reach Hugging Face.
 `data/`, fonts, caches, checkpoints and adapters are git-ignored and regenerate from these commands.
 
 ## Rules

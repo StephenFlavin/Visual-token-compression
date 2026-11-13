@@ -33,7 +33,7 @@ per colour channel. Full glossary: [RESULTS.md](RESULTS.md#terms-used-on-this-pa
 
 ## The design as pre-registered
 
-Sub-project of Visual BPE. It tests the assumption shared by two ideas:
+Sub-project of visual-token-compaction. It tests the assumption shared by two ideas:
 * **Colour-pixel encoding** (one solid b×b colour block per character; user idea, 2026-11-03), and
 * **grey-level learned glyphs** (learned_glyphs/: the unconstrained banks win partly through grey-level codes).
 
