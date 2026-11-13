@@ -1,7 +1,26 @@
-# Frozen-encoder probe, round 2: OCR-capable VLM encoders at their own token geometry
+# Round 2 plan: the encoder of a model built to read (DeepSeek-OCR's DeepEncoder)
 
-## Status and summary (2026-11-05)
-**Finished; DeepEncoder only.** Qwen2.5-VL was dropped on 2026-11-04 before any of its jobs ran (user decision); Qwen
+**Status: finished 2026-11-04. This file is the pre-registered design of round 2, kept as written below the line;
+the summary on top was added afterwards.**
+
+**What was asked.** Round 1's encoder (SigLIP) was never trained to read. Do the dense codes survive the encoder of
+a model that was: DeepEncoder, the vision encoder of DeepSeek-OCR, which turns a 512-px page into 64 tokens?
+
+**What was found.** No. Through DeepEncoder every dense code scores as if nothing were read, while all of them
+read at 0.5% error or less from the raw pixels of the same pages. Only large plain Latin (32-px lines, 8.5
+characters per token) is read by this probe.
+
+**Terms.** *Vision token:* one vector an image encoder outputs for one patch of the page. *Frozen encoder:* a
+pretrained encoder whose weights are not changed. *Probe:* a small network trained from scratch to read the text
+back from the encoder's tokens; the same probe on raw pixel patches (`identity`) gives the ceiling. *CER:*
+character error rate; a reader that gets nothing from the page scores about 72-75% here. *CTC:* the probe's
+sequence loss. *jpeg75:* the page after JPEG compression at quality 75. Code names: `latin_p<N>` plain text with
+N-px lines, `col_b<N>` one NxN-px colour block per character, `lg_pb_*` / `lg_free_*` learned glyph alphabets with
+whole pixels / with grey levels, `mono_p<N>` fixed-width text, `rgb3_p<N>` three fixed-width texts overlaid, one
+per colour channel. Full glossary: [RESULTS.md](RESULTS.md#terms-used-on-this-page).
+
+## Summary (2026-11-05)
+**DeepEncoder only.** Qwen2.5-VL was dropped on 2026-11-04 before any of its jobs ran (user decision); Qwen
 work moved to [ROUND3.md](ROUND3.md). The grid ran on the user's RTX 3090 (`results/round2_gpu_tp{200,1000,3000,5000}/`);
 the cloud rows (`results/round2/`, 200 pages) are a CPU cross-check. Full tables:
 [RESULTS.md, round 2](RESULTS.md#round-2-deepseek-ocrs-deepencoder-at-its-own-geometry-2026-11-04). Everything below
@@ -30,7 +49,8 @@ running; round 2 lives in new files only.
 Round 1 used frozen SigLIP-B/16 at 224 px, a contrastive caption-matching encoder with no OCR training. Through
 its last layer every dense encoding sits at the unigram floor (60-85% CER). Through layer 6, plain DejaVu Latin
 reaches only 4.9% CER at 16-px lines (latin_p16, 2.1 chars per 16-px token), and colour blocks, learned glyph banks
-and small Latin stay at 62-85%. That shows a low-resolution caption encoder destroys dense codes. It does not
+and small Latin stay at 62-85%. *(Correction 2026-11-12: the whole-pixel glyph banks reached 53-55% at layer 6, below
+this range but still unread; colour blocks 62-72%, grey-level banks 76-85%.)* That shows a low-resolution caption encoder destroys dense codes. It does not
 show what the encoder of an OCR-capable VLM does. Round 2 asks: do dense pre-rendering codes (learned glyphs,
 colour blocks, RGB overlay) survive the image encoder of an OCR-capable VLM, measured at that encoder's own
 token geometry?
@@ -168,8 +188,8 @@ dropped. See the status block at the top.*
 **Local GPU runbook (RTX 3090): [docs/gpu/LOCAL_GPU.md](../docs/gpu/LOCAL_GPU.md)** (`--device`, page cache, the prioritised
 P0-P3 list with commands, decision rules, analysis with `experiments/analyse2.py`).
 
-`results/queue_probe_c.txt` (one command per line, logs in `results/queue_logs/probe_c/`, 94 lines), started by a
-waiter only after round 1's queue (`results/queue_probe_b.txt`) has exited:
+`results/archive/queue_probe_c.txt` (one command per line, logs in `results/queue_logs/probe_c/`, 94 lines), started by a
+waiter only after round 1's queue (`results/archive/queue_probe_b.txt`) has exited:
 1. `build_tokens2.py --encoders deepencoder qwen25vl --conds clean jpeg75`: one process, holds the global VLM lock
    (`encoder_probe/cache/tokens/.vlm.lock`), writes caches in queue order: DeepEncoder clean (16), DeepEncoder
    jpeg75 (16), Qwen clean (15), Qwen jpeg75 (15).
@@ -194,7 +214,7 @@ waiter only after round 1's queue (`results/queue_probe_b.txt`) has exited:
    All 200-page deepencoder rows sit near the floor (latin_p32 89% with train CTC 0.04 = memorisation), so the probe
    is data-limited. The cloud finishes only the claimed jobs: rgb3_p8 and latin_p8 (200 pages) and latin_p32 with 1000
    (`round2_tp`) and 2000 (`round2_tp2000`) train pages, ~18:00 UTC; it is a CPU cross-check for the GPU sweep.
-   The untrimmed queue is kept in results/queue_probe_c_full_backup.txt.
+   The untrimmed queue is kept in results/archive/queue_probe_c_full_backup.txt.
    **Reordered 2026-11-03, before round 2 started:** DeepSeek-OCR's encoder is the primary target (user), so its
    geometry runs first. The 4 identity32 anchors come first so a probe failure at this geometry shows within ~1.5 h.
 * A probe job whose cache is not there yet waits for it while the builder holds the lock. If no builder is alive

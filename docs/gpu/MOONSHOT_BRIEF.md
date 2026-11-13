@@ -3,9 +3,25 @@
 Written 2026-11-04 for an external research task. Numbers are from this repo (claude/validation-harness); Q1 and G0
 numbers are preliminary.
 
-> **Status 2026-11-05:** the brief is kept as sent. The research report it asked for is
-> [research/2026-11-04_rgb3_lg_go_no_go_report.md](../background/research/2026-11-04_rgb3_lg_go_no_go_report.md); current results are in
-> [RESULTS.md](../glyphs/RESULTS.md) (round 3) and [HANDOFF.md](../HANDOFF.md). Each section below has a dated status line.
+> **Status: a record, kept as sent on 2026-11-04. The moonshot line is closed (2026-11-12).** This is the brief
+> that was given to an external literature search. The report it asked for is
+> [research/2026-11-04_rgb3_lg_go_no_go_report.md](../background/research/2026-11-04_rgb3_lg_go_no_go_report.md).
+> What happened to the moonshot: readable from raw pixels (1.07% character error), not read by Qwen2.5-VL-3B frozen
+> or after a 1000-step fine-tune; results in
+> [encoder_probe/RESULTS.md](../../encoder_probe/RESULTS.md#round-3-qwen25-vl-3b-can-a-vlm-learn-to-read-the-codes-2026-11-05),
+> analysis in [ANALYSIS.md](../background/ANALYSIS.md). Each section below has a status line dated 2026-11-05.
+>
+> **Reading aid.** "Moonshot" = pages of a learned glyph alphabet drawn in three colour channels at once, in effect
+> a colour QR code. CER = character error rate. KV = the per-position cache a language model keeps for its
+> context. G0, Q1, G2-lite, R3-1, G3 = the steps and gates of round 3
+> ([encoder_probe/ROUND3.md](../../encoder_probe/ROUND3.md)). Claims about external models and papers in this
+> brief (DeepSeek-OCR, DeepSeek-V4.1-Flash, C3, VTCBench, LensVLM, Glyph) are as the brief's author understood
+> them on 2026-11-04 and were **not re-checked** in the clean-up.
+>
+> **Two numbers below were preliminary and are corrected by the final rows:** the Q1 line in the evidence table
+> (final Q1: the glyph pages stay partly pixel-like through the vision tower and are lost at the 2x2 merger), and
+> "every dense code at the floor (≥ 62% CER)" for SigLIP, which holds for its last layer (73-85%) and for colour
+> codes at layer 6 (62-72%); whole-pixel learned glyphs reach 53-55% at layer 6, still unread.
 
 ## What it is
 *Status 2026-11-05: unchanged. `rgb3_lg_free_h4` (405) was dropped after Q1; `rgb3_lg_pb_h5` (322) is the moonshot.*
