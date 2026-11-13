@@ -58,7 +58,7 @@ run = the same training with images swapped between pages; ViT = the vision tran
 - **Mixed-em training learns far slower per step** than per-em models (latin em7 18% vs ~2% at 1500 steps). Use per-em runs.
 - **Render caches written before per-line `heights.npy` existed load 1 row taller** than fresh batches (latin em4: 62% CER vs 3.8% fresh). `build_lineset` treats them as misses. Low train loss + terrible val CER → suspect train/val geometry mismatch first.
 - GroupNorm worse than BatchNorm. Substitution (1000+ classes) and quadrant models learn much slower than Latin: check `curves/` for convergence before trusting a crossing; re-run critical ems with more steps if still improving.
-- Cite `results/phase2/merged/` (`scripts/merge_phase2.py`: longest run per scheme/em), not single runs.
+- Cite `results/phase2/merged/` (`scripts/merge_phase2.py`: longest run per scheme/em), not single runs. After merging, regenerate its summary with `python3 -m vbpe.analysis results/phase2/merged/runs.jsonl --out results/phase2/merged` (the summary went stale once: 28 rows summarised, 32 merged).
 - Learned banks: train ≥ 10.5k steps (tokens look useless at 3.5k); judge banks by the bridge (frozen bank, Phase-2 pipeline), not joint CER. `vbpe.analysis` keys rows by em: set `budget=px_per_char` for banks with non-default cell widths.
 
 ## Analysis
