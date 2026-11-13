@@ -98,10 +98,10 @@ DeepSeek-OCR's published operating point (approximate: converted at 4.33 charact
 | Step | What was tried | What happened |
 |---|---|---|
 | Frozen encoders | SigLIP and DeepSeek-OCR's own DeepEncoder, a probe reading text back from their tokens | Colour codes never get below 62% error through SigLIP; through DeepEncoder colour blocks, the RGB overlay and learned glyphs sit at the floor (71-84%). Only low-density Latin (8.5 chars per token) is read. [encoder_probe/RESULTS.md](encoder_probe/RESULTS.md) |
-| A full vision-language model, frozen | Qwen2.5-VL-3B | Glyph pages stay intact through its vision transformer and collapse where it merges 2x2 patches into one token. [encoder_probe/ROUND3.md](encoder_probe/ROUND3.md) |
+| A full vision-language model, frozen | Qwen2.5-VL-3B | Glyph pages fade through its vision transformer and are gone after it merges 2x2 patches into one token. [encoder_probe/ROUND3.md](encoder_probe/ROUND3.md) |
 | Fine-tuning that model | LoRA on the language model plus the last vision blocks, 1000 steps, every arm with a blind control | Only plain Latin at 28 chars per token is read at all (55% error against 88.5% blind). Latin at 72 gets the gist. Learned glyphs (107) and the moonshot (322) end exactly at their blind controls: not read. [docs/background/ANALYSIS.md](docs/background/ANALYSIS.md) |
 | The overlay on its own | Latin in 2 colour channels, fine-tuned | The model reads the two layers as one blended text; two layers deliver less per token than one. [docs/gpu/COLOUR_GIST.md](docs/gpu/COLOUR_GIST.md) |
-| Building the encoder ourselves | a vision encoder from scratch; a text-side compressor into a frozen model | Neither control became readable at the budget available. [docs/gpu/OWN_ENCODER.md](docs/gpu/OWN_ENCODER.md) |
+| Building the encoder ourselves | a vision encoder from scratch; a text-side compressor into a frozen model | Neither became readable at the budget available: the from-scratch encoder showed no gap to its control, and the text compressor's easiest setting kept the gist but not the words (64% error against 78% blind). [docs/gpu/OWN_ENCODER.md](docs/gpu/OWN_ENCODER.md) |
 | Claude | coded and scrambled pages | Refused or cut off by safety classifiers. Claude can only be measured on natural text. [docs/glyphs/RESULTS.md](docs/glyphs/RESULTS.md) |
 
 ![Fine-tune: error and multiple-choice accuracy per arm next to its blind control](docs/img/readme_r3_1.png)
