@@ -5,10 +5,13 @@
 1. claude_uses_overview.png   every tested use of page images on Claude: accuracy change and cost change
 2. claude_repeat_calls.png    wording-sensitive questions: accuracy of each repeat call, pages vs text
 3. claude_prune_vs_pages.png  pruned text vs pages: accuracy against input tokens
+4. claude_gradient.png        graded resolution (old third dense, recent third sharp, and the reverse): lookups by
+                              third and overall accuracy against input tokens
 
 Sources: results/claude_qa/analysis_v2*/summary.json and the v2 runs (make_claude_qa_figures.costs),
 results/claude_qa/{research,prune/analysis,repeat/analysis}/summary.json, results/rag/summary.json,
-results/compaction_scale/summary.json, results/readhook_swe/analysis/summary.json.
+results/compaction_scale/summary.json, results/readhook_swe/analysis/summary.json,
+results/claude_qa/gradient/summary.json.
 """
 from __future__ import annotations
 
@@ -245,8 +248,97 @@ def fig_prune():
     plt.close(fig)
 
 
+# ------------------------------------------------------------------------------------------- 4. graded resolution
+DENSITY_C = {117.6: "#1c4f99", 88.2: "#3987e5", 58.8: "#9cc3f2"}     # one hue, darker = sharper (more px² per char)
+
+
+def fig_gradient():
+    plt = M.chart_style()
+    g = load("claude_qa/gradient/summary.json")["arms"]
+    arms = [("uniform 117.6", "uniform\n117.6", "o"), ("uniform 88.2", "uniform\n88.2", "o"),
+            ("uniform 58.8", "uniform\n58.8", "o"), ("recent_sharp", "recent\nsharp", "D"),
+            ("old_sharp", "old\nsharp", "s")]
+    H = 5.6
+    fig, (axl, axr) = plt.subplots(1, 2, figsize=(10.4, H), dpi=150, gridspec_kw={"width_ratios": [1.45, 1]})
+    fig.subplots_adjust(left=0.07, right=0.985, top=1 - 1.75 / H, bottom=0.62 / H, wspace=0.2)
+    # left: lookups by third, each mark coloured by the density that third was drawn at
+    step = 0.17
+    for t in range(3):
+        for i, (key, short, mk) in enumerate(arms):
+            x = t + (i - 2) * step
+            c = g[key]["lookup_by_tier"][str(t)]
+            b = g[key]["budgets"][t]
+            y, lo, hi = 100 * c["acc"], 100 * c["lo"], 100 * c["hi"]
+            axl.plot([x, x], [lo, hi], color=DENSITY_C[b], lw=1.4, alpha=0.6, zorder=2, solid_capstyle="round")
+            axl.scatter([x], [y], s=62 if mk == "o" else 58, marker=mk, color=DENSITY_C[b], edgecolor=M.INK_2, lw=0.7,
+                        zorder=3)
+            axl.text(x, 90.6, f"{b:g}", ha="center", va="top", fontsize=6.8, color=M.INK_2,
+                     rotation=90)
+        if t:
+            axl.axvline(t - 0.5, color=M.GRID, lw=0.8)
+    handles = [axl.scatter([], [], s=50, marker=mk, color=M.SURFACE, edgecolor=M.INK_2, lw=0.9,
+                           label=short.replace("\n", " ")) for (key, short, mk) in arms if key != "uniform 88.2"
+               and key != "uniform 58.8"]
+    handles[0].set_label("uniform 117.6, 88.2, 58.8 (first three in each third)")
+    handles += [axl.scatter([], [], s=50, marker="o", color=DENSITY_C[b], edgecolor=M.INK_2, lw=0.7,
+                            label=f"drawn at {b:g} px²/char") for b in (117.6, 88.2, 58.8)]
+    axl.legend(handles=handles, loc="lower left", fontsize=7.4, frameon=True, framealpha=1, edgecolor=M.GRID, ncol=2,
+               handletextpad=0.3, columnspacing=1.0, borderpad=0.5, title="number under each mark = its px²/char",
+               title_fontsize=7.4)
+    axl.set_xticks([0, 1, 2], ["first (oldest) third", "middle third", "last (most recent) third"])
+    axl.tick_params(axis="x", length=0)
+    axl.set_xlim(-0.55, 2.55)
+    axl.set_ylim(80, 101)
+    axl.set_yticks([90, 92, 94, 96, 98, 100], ["90", "92", "94", "96", "98", "100%"])
+    axl.grid(axis="y", color=M.GRID, lw=0.8)
+    axl.set_axisbelow(True)
+    axl.set_ylabel("lookups right (%), 95% interval")
+    axl.set_title("Lookups by third: each third scores like its density", fontsize=9.5,
+                  fontweight="bold", loc="left", color=M.INK_1)
+    # right: overall accuracy against input tokens
+    pts = [("text", "text", M.INK_2, "*", (0, -16), "center")]
+    pts += [(f"uniform {b}", f"uniform {b:g}", DENSITY_C[b], "o", off, ha) for b, off, ha in
+            ((117.6, (0, -15), "center"), (88.2, (0, 9), "center"), (58.8, (9, -3), "left"))]
+    pts += [("recent_sharp", "recent sharp", "#5f8fc9", "D", (-9, -3), "right"),
+            ("old_sharp", "old sharp", "#5f8fc9", "s", (9, -3), "left")]
+    ux = [g[f"uniform {b}"]["input_tokens_mean"] / 1000 for b in (58.8, 88.2, 117.6)]
+    uy = [100 * g[f"uniform {b}"]["all"]["acc"] for b in (58.8, 88.2, 117.6)]
+    axr.plot(ux, uy, color=PAGE_C, lw=1.2, alpha=0.5, zorder=1)
+    for key, lab, col, mk, off, ha in pts:
+        a = g[key]
+        x, y = a["input_tokens_mean"] / 1000, 100 * a["all"]["acc"]
+        axr.plot([x, x], [100 * a["all"]["lo"], 100 * a["all"]["hi"]], color=col, lw=1.4, alpha=0.6, zorder=2)
+        axr.scatter([x], [y], s=150 if mk == "*" else 58, marker=mk, color=col, edgecolor=M.INK_2, lw=0.7, zorder=3)
+        if key in ("recent_sharp", "old_sharp"):
+            lab = f"{lab}\n{y:.1f}%"
+        else:
+            lab = f"{lab} {y:.1f}%"
+        axr.annotate(lab, (x, y), xytext=off, textcoords="offset points", ha=ha, va="center", fontsize=8,
+                     color=M.INK_1, linespacing=1.15)
+    axr.set_xlim(40, 265)
+    axr.set_ylim(85, 101)
+    axr.set_yticks([86, 88, 90, 92, 94, 96, 98, 100], ["86", "88", "90", "92", "94", "96", "98", "100%"])
+    axr.grid(color=M.GRID, lw=0.8)
+    axr.set_axisbelow(True)
+    axr.set_xlabel("input tokens per call (thousands)")
+    axr.set_ylabel("all 120 questions right (%)")
+    axr.set_title("Overall: uniform 88.2's tokens, fewer right", fontsize=9.5,
+                  fontweight="bold", loc="left", color=M.INK_1)
+    rs, os_, u88 = g["recent_sharp"], g["old_sharp"], g["uniform 88.2"]
+    header(fig, H, "Graded resolution on long-document Q&A: each third reads like its density, so grading is a trade",
+           "Opus 5.5, high effort, 3 documents x 120 questions. Mixed arms: the document cut into thirds, each drawn at "
+           "its own px² per character\n(recent sharp: 58.8 / 88.2 / 117.6 from oldest to newest; old sharp: the "
+           f"reverse), {rs['calls']} calls each; uniform arms and text: the v2 rows, 3 calls each.\nMark colour = the "
+           "density that third was drawn at (darker = sharper). Lookups = invented facts and numbers in sentences. "
+           f"Both mixed arms use {rs['input_tokens_mean'] / u88['input_tokens_mean']:.2f}x the\ninput tokens of "
+           "uniform 88.2; their loss is in multi-step questions with a fact in the 58.8 third, counts above all.")
+    save(fig, "claude_gradient.png")
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     fig_overview()
     fig_repeat()
     fig_prune()
-    print("claude_uses_overview.png claude_repeat_calls.png claude_prune_vs_pages.png")
+    fig_gradient()
+    print("claude_uses_overview.png claude_repeat_calls.png claude_prune_vs_pages.png claude_gradient.png")

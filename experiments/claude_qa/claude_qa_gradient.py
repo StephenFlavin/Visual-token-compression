@@ -48,6 +48,7 @@ EST_PER_CALL = 1.0       # list price, upper estimate: a 1932-px v2 call at high
 SHARP = 117.6
 DENSE = 58.8
 LOOKUP = ("needle", "number")
+SUBS = ("two_hop", "three_hop", "sum", "max", "count")
 REFUSAL = re.compile(r"usage policy|acceptable use|violat|I can(?:no|')t help with|I won't|refus", re.I)
 
 
@@ -349,7 +350,8 @@ def analyse(rows: list[dict], v2: dict, qtiers: dict) -> dict:
              "all": acc([p["correct"] for _, p in per]),
              "lookup": acc([p["correct"] for _, p in per if p["kind"] in LOOKUP]),
              "complex": acc([p["correct"] for _, p in per if p["kind"] == "complex"]),
-             "per_call": [r["acc_all"] for _, r in entries]}
+             "per_call": [r["acc_all"] for _, r in entries],
+             "complex_by_sub": {s: acc([p["correct"] for _, p in per if p.get("sub") == s]) for s in SUBS}}
         x["lookup_by_tier"] = {t: acc([p["correct"] for d, p in per if p["kind"] in LOOKUP and qtiers[d][p["id"]][0] == t])
                                for t in range(3)}
         if budgets[name] is not None:
@@ -446,6 +448,9 @@ def summary_md(res: dict) -> str:
             continue
         r, o = x["complex_by_recent_sharp_tiers"], x["complex_by_old_sharp_tiers"]
         md.append(f"| {a} | {fmt(r['sharp'])} | {fmt(r['dense'])} | {fmt(o['sharp'])} | {fmt(o['dense'])} |")
+    md += ["", "Multi-step questions by type:", "", "| arm | " + " | ".join(SUBS) + " |", "|---|" + "---|" * len(SUBS)]
+    for a in order:
+        md.append(f"| {a} | " + " | ".join(fmt(ar[a]["complex_by_sub"][s]) for s in SUBS) + " |")
     md += ["", "Paired tests (arm - reference, points; Newcombe 95% interval; exact McNemar on discordant pairs):", "",
            "| comparison | pairs | arm - ref | 95% interval | ref-only right | arm-only right | p |", "|---|---|---|---|---|---|---|"]
     for k, t in res["tests"].items():

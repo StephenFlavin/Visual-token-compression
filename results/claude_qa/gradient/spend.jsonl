@@ -4,3 +4,9 @@
 {"what": "d0 old_sharp r0", "cost_usd": 0.597583, "input_tokens": 85957, "output_tokens": 8390, "error": null}
 {"what": "d1 recent_sharp r0", "cost_usd": 0.593823, "input_tokens": 85861, "output_tokens": 8226, "error": null}
 {"what": "d0 recent_sharp r0", "cost_usd": 0.614598, "input_tokens": 85956, "output_tokens": 9241, "error": null}
+{"what": "d2 old_sharp r1", "cost_usd": 0.10240439999999998, "input_tokens": 85920, "output_tokens": 4186, "error": null}
+{"what": "d1 old_sharp r1", "cost_usd": 0.1366928, "input_tokens": 85862, "output_tokens": 5901, "error": null}
+{"what": "d1 recent_sharp r1", "cost_usd": 0.1641128, "input_tokens": 85862, "output_tokens": 7272, "error": null}
+{"what": "d2 recent_sharp r1", "cost_usd": 0.16742940000000003, "input_tokens": 85921, "output_tokens": 7437, "error": null}
+{"what": "d0 recent_sharp r1", "cost_usd": 0.17007160000000002, "input_tokens": 85956, "output_tokens": 7569, "error": null}
+{"what": "d0 old_sharp r1", "cost_usd": 0.25158160000000007, "input_tokens": 85954, "output_tokens": 11645, "error": null}

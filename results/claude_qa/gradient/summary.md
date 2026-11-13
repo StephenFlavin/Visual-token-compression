@@ -8,6 +8,8 @@ Pooled over every valid call of each arm (uniform arms and text: the v2 rows, on
 | uniform 117.6 | 117.6 / 117.6 / 117.6 | 3 | 112,470 | $0.14 | 99.7% (359/360) | 99.6% (239/240) | 100.0% (120/120) |
 | uniform 88.2 | 88.2 / 88.2 / 88.2 | 3 | 85,889 | $0.14 | 100.0% (360/360) | 100.0% (240/240) | 100.0% (120/120) |
 | uniform 58.8 | 58.8 / 58.8 / 58.8 | 3 | 59,283 | $0.50 | 91.7% (330/360) | 97.9% (235/240) | 79.2% (95/120) |
+| recent_sharp | 58.8 / 88.2 / 117.6 | 6 | 85,913 | $0.38 | 95.1% (685/720) | 99.2% (476/480) | 87.1% (209/240) |
+| old_sharp | 117.6 / 88.2 / 58.8 | 6 | 85,912 | $0.36 | 95.8% (690/720) | 99.2% (476/480) | 89.2% (214/240) |
 
 Lookups (needle + number questions) by the third their fact is in (density drawn at in brackets):
 
@@ -17,6 +19,8 @@ Lookups (needle + number questions) by the third their fact is in (density drawn
 | uniform 117.6 | 100.0% (79/79) [117.6] | 98.8% (83/84) [117.6] | 100.0% (77/77) [117.6] |
 | uniform 88.2 | 100.0% (79/79) [88.2] | 100.0% (84/84) [88.2] | 100.0% (77/77) [88.2] |
 | uniform 58.8 | 97.5% (77/79) [58.8] | 98.8% (83/84) [58.8] | 97.4% (75/77) [58.8] |
+| recent_sharp | 97.5% (154/158) [58.8] | 100.0% (168/168) [88.2] | 100.0% (154/154) [117.6] |
+| old_sharp | 100.0% (158/158) [117.6] | 100.0% (168/168) [88.2] | 97.4% (150/154) [58.8] |
 
 Multi-step questions by the tiers their facts touch. 'dense' = at least one fact in a third that the named mixed arm draws at 58.8; 'sharp' = all facts in its 88.2 / 117.6 thirds. Each arm is scored on the same question split:
 
@@ -25,19 +29,63 @@ Multi-step questions by the tiers their facts touch. 'dense' = at least one fact
 | uniform 117.6 | 100.0% (24/24) | 100.0% (96/96) | 100.0% (24/24) | 100.0% (96/96) |
 | uniform 88.2 | 100.0% (24/24) | 100.0% (96/96) | 100.0% (24/24) | 100.0% (96/96) |
 | uniform 58.8 | 91.7% (22/24) | 76.0% (73/96) | 100.0% (24/24) | 74.0% (71/96) |
+| recent_sharp | 100.0% (48/48) | 83.9% (161/192) | 97.9% (47/48) | 84.4% (162/192) |
+| old_sharp | 83.3% (40/48) | 90.6% (174/192) | 100.0% (48/48) | 86.5% (166/192) |
+
+Multi-step questions by type:
+
+| arm | two_hop | three_hop | sum | max | count |
+|---|---|---|---|---|---|
+| text | 100.0% (30/30) | 100.0% (24/24) | 100.0% (30/30) | 100.0% (18/18) | 94.4% (17/18) |
+| uniform 117.6 | 100.0% (30/30) | 100.0% (24/24) | 100.0% (30/30) | 100.0% (18/18) | 100.0% (18/18) |
+| uniform 88.2 | 100.0% (30/30) | 100.0% (24/24) | 100.0% (30/30) | 100.0% (18/18) | 100.0% (18/18) |
+| uniform 58.8 | 90.0% (27/30) | 66.7% (16/24) | 100.0% (30/30) | 94.4% (17/18) | 27.8% (5/18) |
+| recent_sharp | 93.3% (56/60) | 89.6% (43/48) | 98.3% (59/60) | 100.0% (36/36) | 41.7% (15/36) |
+| old_sharp | 98.3% (59/60) | 87.5% (42/48) | 93.3% (56/60) | 100.0% (36/36) | 58.3% (21/36) |
 
 Paired tests (arm - reference, points; Newcombe 95% interval; exact McNemar on discordant pairs):
 
 | comparison | pairs | arm - ref | 95% interval | ref-only right | arm-only right | p |
 |---|---|---|---|---|---|---|
+| recent_sharp vs text (first_call) | 360 | -5.0 | -7.8 to -2.7 | 19 | 1 | 4.01e-05 |
+| recent_sharp vs text (all_calls) | 720 | -4.6 | -6.4 to -3.1 | 34 | 1 | 2.1e-09 |
+| recent_sharp vs uniform 88.2 (first_call) | 360 | -5.3 | -8.1 to -3.1 | 19 | 0 | 3.81e-06 |
+| recent_sharp vs uniform 88.2 (all_calls) | 720 | -4.9 | -6.7 to -3.4 | 35 | 0 | 5.82e-11 |
+| recent_sharp vs uniform 117.6 (first_call) | 360 | -5.0 | -7.8 to -2.7 | 19 | 1 | 4.01e-05 |
+| recent_sharp vs uniform 117.6 (all_calls) | 720 | -4.6 | -6.4 to -3.0 | 35 | 2 | 1.02e-08 |
+| recent_sharp vs uniform 58.8 (first_call) | 360 | +3.1 | +0.7 to +5.7 | 4 | 15 | 0.0192 |
+| recent_sharp vs uniform 58.8 (all_calls) | 720 | +3.5 | +1.8 to +5.3 | 8 | 33 | 0.000112 |
+| old_sharp vs text (first_call) | 360 | -3.1 | -5.4 to -1.4 | 11 | 0 | 0.000977 |
+| old_sharp vs text (all_calls) | 720 | -3.9 | -5.6 to -2.6 | 28 | 0 | 7.45e-09 |
+| old_sharp vs uniform 88.2 (first_call) | 360 | -3.3 | -5.7 to -1.6 | 12 | 0 | 0.000488 |
+| old_sharp vs uniform 88.2 (all_calls) | 720 | -4.2 | -5.9 to -2.8 | 30 | 0 | 1.86e-09 |
+| old_sharp vs uniform 117.6 (first_call) | 360 | -3.1 | -5.5 to -1.1 | 12 | 1 | 0.00342 |
+| old_sharp vs uniform 117.6 (all_calls) | 720 | -3.9 | -5.6 to -2.4 | 30 | 2 | 2.46e-07 |
+| old_sharp vs uniform 58.8 (first_call) | 360 | +5.0 | +2.1 to +8.2 | 6 | 24 | 0.00143 |
+| old_sharp vs uniform 58.8 (all_calls) | 720 | +4.2 | +2.0 to +6.4 | 17 | 47 | 0.000227 |
 
 Calls:
 
 | doc | arm | repeat | all | input tokens | image-token formula | output | cost | s | valid |
 |---|---|---|---|---|---|---|---|---|---|
+| d0 | old_sharp | 0 | 95.8% | 85,957 | 79,887 | 8,390 | $0.60 | 64 | True |
+| d0 | old_sharp | 1 | 96.7% | 85,954 | 79,887 | 11,645 | $0.25 | 92 | True |
+| d0 | recent_sharp | 0 | 99.2% | 85,956 | 79,887 | 9,241 | $0.61 | 73 | True |
+| d0 | recent_sharp | 1 | 97.5% | 85,956 | 79,887 | 7,569 | $0.17 | 60 | True |
+| d1 | old_sharp | 0 | 96.7% | 85,862 | 79,749 | 5,678 | $0.54 | 51 | True |
+| d1 | old_sharp | 1 | 93.3% | 85,862 | 79,749 | 5,901 | $0.14 | 49 | True |
+| d1 | recent_sharp | 0 | 92.5% | 85,861 | 79,749 | 8,226 | $0.59 | 67 | True |
+| d1 | recent_sharp | 1 | 93.3% | 85,862 | 79,749 | 7,272 | $0.16 | 58 | True |
+| d2 | old_sharp | 0 | 97.5% | 85,919 | 79,818 | 5,453 | $0.54 | 45 | True |
+| d2 | old_sharp | 1 | 95.0% | 85,920 | 79,818 | 4,186 | $0.10 | 35 | True |
+| d2 | recent_sharp | 0 | 92.5% | 85,920 | 79,818 | 7,021 | $0.57 | 56 | True |
+| d2 | recent_sharp | 1 | 95.8% | 85,921 | 79,818 | 7,437 | $0.17 | 59 | True |
 
 Invalid calls: none
 
 ## Pre-registered predictions
 
-Not judged yet: rows for every arm are needed.
+* **N1 PASS** (each third within 3 points of the uniform arm at its density): recent_sharp third 1 @58.8: 97.5 vs 97.5 (+0.0); recent_sharp third 2 @88.2: 100.0 vs 100.0 (+0.0); recent_sharp third 3 @117.6: 100.0 vs 100.0 (+0.0); old_sharp third 1 @117.6: 100.0 vs 100.0 (+0.0); old_sharp third 2 @88.2: 100.0 vs 100.0 (+0.0); old_sharp third 3 @58.8: 97.4 vs 97.4 (+0.0)
+* **N2 PASS** (recent_sharp - old_sharp overall within 3 points): -0.7
+* **N3 PASS** (both mixed arms in [uniform 58.8, uniform 88.2)): 58.8 91.7, 88.2 100.0, recent_sharp 95.1, old_sharp 95.8
+* **N4 PASS** (multi-step with a 58.8 fact loses >= 10 points against uniform 117.6 on the same questions; all-sharp ones do not): recent_sharp: dense 83.9 vs 100.0 (-16.1, n=192), sharp 100.0 vs 100.0 (+0.0, n=48); old_sharp: dense 86.5 vs 100.0 (-13.5, n=192), sharp 100.0 vs 100.0 (+0.0, n=48)
