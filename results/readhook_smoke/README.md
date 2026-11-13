@@ -1,5 +1,12 @@
 # Read-as-image smoke test (2026-11-11)
 
+> **In brief (added in the clean-up, 2026-11-12).** A first check that Claude Code can refactor code it only sees
+> as page images. On 6 small Python tasks, 3 runs each, every run in both arms produced code equivalent to the
+> original (18 of 18 with text; 18 of 18 with images in each of the hook versions tried). The second half of this
+> file is the engineering log of the full hook set (`experiments/readhook/vbhook/`): three versions, each fixing what
+> the one before exposed. The larger test is [results/readhook_swe](../readhook_swe/README.md); the summary is
+> [docs/claude/SWE_IMAGES.md](../../docs/claude/SWE_IMAGES.md).
+
 6 refactor-for-performance tasks (`experiments/readhook/smoke/tasks/`), Opus 5.5 at high effort, Claude Code
 headless with Read, Edit, Write and `python3 -m pytest` only. Arms: `text` (normal Read) and `image` (Read of a .py
 file returns minified Python rendered at 117.6 px²/char; Edit matched ignoring whitespace and re-indented, both by

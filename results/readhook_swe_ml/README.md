@@ -1,5 +1,11 @@
 # SWE-bench Multilingual, Rust and Java: text vs page images, pre-registration (2026-11-11, before any agent call)
 
+> **In brief (added in the clean-up, 2026-11-12).** The Django test of
+> [results/readhook_swe](../readhook_swe/README.md) repeated on other languages: 29 Rust and Java tasks from
+> SWE-bench Multilingual (Opus 5.5, high effort). 28 of 29 resolved with text and 29 of 29 with page images; cost
+> $4.83 against $4.75; no failed edit in either arm. `vbhook` is the arm with the page-image hooks. Summary over
+> both tests: [docs/claude/SWE_IMAGES.md](../../docs/claude/SWE_IMAGES.md).
+
 Same question and arms as `results/readhook_swe/` (Django), now on brace languages, where vbhook's minifier drops
 cosmetic whitespace and shows indentation as `»` levels (edit-safe mode; +3.5% page tokens over no levels).
 

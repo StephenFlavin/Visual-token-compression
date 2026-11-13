@@ -1,5 +1,13 @@
 # Test A: pruned text against page images (Claude QA)
 
+> **In brief (added in the clean-up, 2026-11-12).** Question: can deleting words from the text (LLMLingua-2) save
+> tokens the way page images do, or add to them? Answer: no. Pruned text with the same tokens as 2.2x pages scored
+> 86.0% against 97.7% for the pages and 100% for text (480 questions, Opus 5.5, high effort), because the pruner
+> deletes small words that carry the meaning ("not", "all but", "was ... by"); pruned text drawn as pages was no
+> better than plain denser pages. Chart and context:
+> [docs/claude/CLAUDE_QA.md](../../../docs/claude/CLAUDE_QA.md#tested-pruned-text). The numbers below reproduce
+> from the rows with `python3 experiments/claude_qa/claude_qa_prune.py analyse`.
+
 *2026-11-12.* Pre-registered (commit 4fb07a5, before any scored call; the pre-registration is unchanged below the
 results). Design draft: [docs/background/REVIEW_2026-11-11.md](../../../docs/background/REVIEW_2026-11-11.md), "Test A". It extends the v2
 test in [docs/claude/CLAUDE_QA.md](../../../docs/claude/CLAUDE_QA.md) (A1, A4).

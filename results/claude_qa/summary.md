@@ -1,5 +1,12 @@
 # Claude QA over a rendered document vs its text (2026-11-10)
 
+> **In brief (added in the clean-up, 2026-11-12).** This is the run log of the question-answering tests: the
+> exploratory runs first, then the pre-registration of the three-model test and its commands. The result: Opus 5.5
+> answers as well from page images as from text at 2.2x fewer input tokens (and at 2.9x at high effort), Sonnet 5.5 at
+> 2.2x at high effort, Haiku 5.5 at no density tested; at 4.2x chains and counts fail first. The write-up with
+> charts is [docs/claude/CLAUDE_QA.md](../../docs/claude/CLAUDE_QA.md); the pooled tables are in `analysis_v2*/summary.md`
+> and reproduce from the rows with `experiments/claude_qa/analyse_claude_qa.py`.
+
 Write-up with charts and the cost of every run: [docs/claude/CLAUDE_QA.md](../../docs/claude/CLAUDE_QA.md). This file is the run log.
 
 `experiments/claude_qa/claude_qa_render.py`, headless Claude (same model as Phase 1, effort low), one document: 503,630 chars of

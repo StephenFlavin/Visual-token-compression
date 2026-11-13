@@ -1,5 +1,12 @@
 # Repeat calls on wording-sensitive questions (Claude QA)
 
+> **In brief (added in the clean-up, 2026-11-12).** Question: Test A saw 2.2x pages answer every passive-voice
+> question backwards in two of three calls; chance or density? Answer: chance, at both densities. Over 15 calls each,
+> 5 of 30 page calls flip every passive and 0 of 6 text calls do; pages lose about 3 points on wording-sensitive
+> questions (97.2% and 96.2% against 100%) and stay within 0.7 points on the original 120 questions. Chart and
+> context: [docs/claude/CLAUDE_QA.md](../../../docs/claude/CLAUDE_QA.md#tested-repeat-calls-on-wording-sensitive-questions).
+> The numbers below reproduce from the rows with `python3 experiments/claude_qa/claude_qa_repeat.py analyse`.
+
 *2026-11-12.* Pre-registered below, committed before any scored call. Follows Test A
 ([../prune/README.md](../prune/README.md)); the v2 test and its rules: [docs/claude/CLAUDE_QA.md](../../../docs/claude/CLAUDE_QA.md).
 

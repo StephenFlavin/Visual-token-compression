@@ -6,6 +6,19 @@ whitespace that wastes page area (indentation, line breaks, blank lines, alignme
 needs. See `minify/base.py` for the contract and invariant; `experiments/readhook/pymin.py` is the reference
 (Python; 119/119 files rebuild to the same AST).
 
+Two things were learnt after this spec was first written (2026-11-11) and are now the default:
+
+* **Code minifiers are edit-safe by default.** Claude Code checks an Edit's `old_string` against the file before any
+  hook runs, so the Edit hook's whitespace-insensitive match (rule 1) cannot rescue a copied string whose spacing
+  differs. The Python and brace-language minifiers therefore keep the spaces inside a line and tag every line; rule
+  5's tighter spacing applies only to the dense variant (`VBHOOK_TIGHT=1`) and to kinds that are read, not edited
+  (command output).
+* **The Python minifier refuses a file that itself contains the marker characters `§` or `»`** (rule 6); the caller
+  then falls back to a plainer form or to text.
+
+Terms: a *flow* is the minified text as one long string, laid out by the renderer like prose; *cpt* is characters
+per Claude text token.
+
 Rules
 1. Never change or drop a non-whitespace character (except a declared `normalise`, e.g. ANSI codes). Readers copy
    exact text from the image into Edit calls; the Edit hook matches ignoring whitespace only.
