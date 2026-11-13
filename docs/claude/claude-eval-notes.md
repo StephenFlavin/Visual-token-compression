@@ -1,6 +1,23 @@
-# Claude zero-shot OCR client: measurements (WP-E1)
+# Claude as a zero-shot page reader: client measurements
 
-Date: 2026-11-02. Model `claude-opus-5-5` (served model = requested in every call), Claude Code CLI 2.1.316.
+*Status: reference, measured 2026-11-02 before Phase 1 (work package "WP-E1" of the original plan,
+[glyphs/PLAN.md](../glyphs/PLAN.md)); spot-checked against the JSON files in `results/claude_checks/` in the
+2026-11-12 clean-up. It records how the headless Claude client is called, how images are charged, and where plain
+text stops being legible. "Zero-shot" means the model is used as it is, with no training. Two things learnt later
+are added in the box below; the rest is as measured.*
+
+> **Learnt later (2026-11-10 to 12, see [GOTCHAS.md](../GOTCHAS.md) and [CLAUDE_QA.md](CLAUDE_QA.md)):**
+> * Opus 5.5 reads images up to 1932 x 1932 px (4,764 tokens) without downscaling when the client is called with
+>   `hires=True`; the limits in section 2 are those of the default path.
+> * Legible is not the same as usable. At 29.4 px² per character a page transcribes at about 3% error, but questions
+>   over a long document at that density fail; question answering needs about 117.6 px² per character.
+> * One request with more than about 175k image tokens can silently lose its earliest pages.
+
+**Terms:** CER = character error rate (edit distance divided by reference length); px² per character = image area
+divided by characters shown (lower is denser); em = font size in pixels; effort = the command line's
+`--effort` setting for how much the model reasons.
+
+Model `claude-opus-5-5` (served model = requested in every call), Claude Code CLI 2.1.316.
 Raw data: `results/claude_checks/{tokens,tokens_large,legibility,determinism,effort,hidden_calls,cost_model}.json`,
 rendered test images in `results/claude_checks/img/`. Reproduce with `python scripts/check_claude_vision.py all`
 (about $0.45).
@@ -94,7 +111,7 @@ so W·H/750 overestimates by about 4.5%. Small images pay for partial patches. I
   planned {4 ... 60}: 4 is pointless, and 60 is saturated for Latin, though it may still be needed for subst/quad.
 * Below the cliff, Claude does not degrade gracefully. It **confabulates fluent English** (CER 0.5 to 0.7, with
   outputs roughly the right length) or **refuses**. The prompt should forbid refusals and ask for a best guess.
-  CER near 0.6 to 0.8 then means "illegible" whatever the cause. The language prior is strong (R7): the opening
+  CER near 0.6 to 0.8 then means "illegible" whatever the cause. The language prior is strong (risk R7 of the original plan): the opening
   sentences are read right even when the rest is invented.
 * With 3 000-char passages, the canvases will be about 210 to 330 px per side. That is small enough that 28-px
   patch rounding matters (see §2).

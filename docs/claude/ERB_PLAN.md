@@ -1,7 +1,7 @@
 # EnterpriseRAG-Bench with page images: plan (prepared, not run)
 
 *Status: parked. The preparation was done on 2026-11-11 (corpus parsed, retrieval rebuilt and checked, runner and
-judge written); no Claude call was made, and the study was wound down on 2026-11-12 before the pilot was approved
+judge written); no Claude call was made, and the pilot had not been run when the study was wound down on 2026-11-12
 (its cost, ~$75-85 for 50 questions, is mostly the judge). The retrieval figures below were recomputed from
 [`results/erb/retrieval.jsonl`](../../results/erb/README.md) in the clean-up and match. What page images do for
 retrieval was measured instead on three smaller sets: [RAG_PLAN.md](RAG_PLAN.md),
