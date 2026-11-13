@@ -1,12 +1,38 @@
-# Learned glyph alphabet (end-to-end) — plan
+# Learned glyph alphabet: plan
 
-**Outcome (2026-11-03): qualified GO**, see `RESULTS.md` (bridge 0.57× Latin px²/char at 3% CER; transfer 0.74×; survives harsh;
-grey-level coding and held-out brittleness are the caveats).
+**Status: finished, 2026-11-03. Outcome: qualified go, in pixel space only.** Results and charts:
+[RESULTS.md](RESULTS.md). The plan below is as pre-registered; only this header was added later (2026-11-05 and
+the clean-up of 2026-11-13), and the paths follow the 2026-11-12 restructure.
 
-**VLM status (2026-11-05):** frozen VLM encoders (SigLIP, DeepEncoder) lose the banks, and a LoRA-fine-tuned Qwen2.5-VL-3B
-does not read `lg_pb_h5` (107 chars/token) or its RGB overlay (322) after 1000 steps: both sit at their blind floors
-([encoder_probe/ROUND3.md](../encoder_probe/ROUND3.md), [results](../encoder_probe/RESULTS.md#round-3-qwen25-vl-3b-can-a-vlm-learn-to-read-the-codes-2026-11-05)). The CRNN result below stands;
-the VLM case is open.
+## What was asked, and what was found
+
+**Asked:** hand-picked glyphs had lost to plain Latin ([docs/glyphs/RESULTS.md](../docs/glyphs/RESULTS.md)). If
+the glyphs are instead *learned* together with a reader, one shape per character and per frequent character run
+("chunk"), do they beat ordinary typography per pixel?
+
+**Found:** yes, against a reader trained for them.
+
+| Pre-registered condition for a go | Outcome |
+|---|---|
+| Bridge (E3: the frozen glyphs scored in the unchanged Phase 2 pipeline): at least 30% fewer px² per character than the best Latin | 43% fewer (3.75 against 6.54 at 3% character error): passes |
+| Transfer (E2: a fresh reader on the frozen glyphs): at least 30% fewer | 26% fewer at 3% error, 37% fewer at 1%: borderline |
+| The gain survives the harsh channel | it grows (3.45% against 42.8% error): passes |
+| Font effect S1 and chunk effect S2 | both present: characters alone already beat Latin, and 300 chunks need 0.74x the pixels of characters alone at about 0.6% error |
+
+The qualifications: part of the gain is grey-level coding (whole-pixel glyphs win by 12-23% only), and the densest
+banks break on degradations they were not trained on. The go was for GPU work on vision models. That work found
+that frozen encoders (SigLIP, DeepEncoder) lose the banks and a 1,000-step fine-tune of Qwen2.5-VL-3B does not
+read them ([RESULTS.md](RESULTS.md#what-happened-when-a-vision-model-had-to-read-them)); the line was closed on
+2026-11-12.
+
+Planned but run only in part or not at all: E1b (the fixed Chinese-character bank as a cross-check) ran once at
+3,500 steps (`lg_fixed_n300`: 14.3% error at 11.0 px² per character, `results/e1/`) and was not repeated at
+10,500. Not run: the E4 scaling to 1000 chunks, the extra baselines from the prior-art amendments (random binary
+codebook, 3x2 block code, a 4x6 pixel font) and E5 (glyphs optimised against a frozen reader).
+
+---
+
+## The plan as pre-registered
 
 Hand-designed Visual BPE (CJK proxy glyphs, quadrant packing) looks weak (see ../docs/glyphs/PLAN.md, ../AGENTS.md,
 ../docs/background/prior-art.md). The remaining credible version of the idea: **learn the glyphs themselves**,
@@ -136,4 +162,4 @@ px_per_char, cer, symbol_cer, steps, train_mode ("joint"|"transfer"|"bridge"), c
 | LG1 renderer + channel + calibration | `lg/glyphs.py`, `lg/compose.py`, `lg/channel.py`, `experiments/calibrate_channel.py`, `tests/test_render.py` | E0 tooling |
 | LG2 alphabet + joint trainer | `lg/alphabet.py`, `lg/train.py`, `experiments/train_joint.py`, `tests/test_train.py` | E1 |
 | LG3 transfer + bridge + report | `lg/transfer.py`, `lg/scheme.py`, `lg/report.py`, `experiments/transfer_eval.py`, `tests/test_transfer.py` | E2, E3, atlases/confusions |
-| LG4 prior art (learned/optimised fonts for OCR) | `docs/background/prior-art.md` | novelty + known pitfalls |
+| LG4 prior art (learned/optimised fonts for OCR) | `docs/prior-art.md` (in this folder) | novelty + known pitfalls |
