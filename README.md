@@ -198,6 +198,14 @@ on an RTX 3090, the Claude QA test in small, one evening. Plan in
 [docs/gpu/LOCAL_QWEN.md](docs/gpu/LOCAL_QWEN.md); **the prompt to run is at the top of
 [docs/HANDOFF.md](docs/HANDOFF.md)**.
 
+**Further work, first look done: graded resolution.** DeepSeek-OCR suggests re-rendering older context at lower
+resolution, like forgetting. A quick test on the long-document Q&A (thirds of the document at 4.2x, 2.9x and 2.2x,
+in either order, 12 calls) found that each third reads exactly like its density, and that at equal tokens the graded
+page scores 3 to 5 points below a uniform one: a trade, not a gain.
+[Details](docs/claude/CLAUDE_QA.md#further-work-first-look-graded-resolution-2026-11-13)
+
+![Graded resolution: lookups by third of the document, and overall accuracy against input tokens](docs/img/claude_gradient.png)
+
 **Parked:** the trained-encoder runs on Latin, the fair last test of the original idea
 ([docs/gpu/PLAN_3090.md](docs/gpu/PLAN_3090.md)). **Closed:** the dense-glyph and colour stages after them.
 

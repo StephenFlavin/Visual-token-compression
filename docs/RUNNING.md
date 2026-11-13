@@ -121,6 +121,7 @@ questions without calls.
 | Deep-research sources | `python3 experiments/claude_qa/claude_qa_research.py --dry-run`, `--yes`, `--analyse` | 3 corpora x 5 arms |
 | Test A: pruned text against pages | `python3 experiments/claude_qa/claude_qa_prune.py build`, then its run and analysis steps ([results/claude_qa/prune](../results/claude_qa/prune/README.md)) | LLMLingua-2 on CPU, ~7 min per document; $17.52; tests `tests/test_claude_qa_prune.py` |
 | Repeat calls of Test A's arms | `python3 experiments/claude_qa/claude_qa_repeat.py check`, `locate`, `run`, `analyse` | rows `results/claude_qa/repeat/`; $16.17 |
+| Graded resolution (thirds at different densities) | `python3 experiments/claude_qa/claude_qa_gradient.py check`, `run --yes`, `analyse` | finished 2026-11-13; rows `results/claude_qa/gradient/`; chart from `scripts/make_claude_docs_figures.py`; $4.45 |
 | Vision checks | `python3 scripts/check_claude_vision.py` | token formula, legibility, latency; ~$0.5 |
 
 ## 8. Claude: retrieval, compaction, coding agents (finished)

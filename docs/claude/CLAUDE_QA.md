@@ -55,6 +55,7 @@ reading text, at lower cost.
 | Coding agents | file contents and command output as pages, 79 SWE-bench tasks | no task lost; total cost unchanged ($10.82 against $10.61) | **Works, does not pay.** [Details](#tested-coding-agents) |
 | Questions that turn on one small word | 40 extra questions per document, 15 calls per density | 97.2% (2.2x) and 96.2% (2.9x) against 100% from text; 5 of 30 page calls read every passive backwards | **Limit**: about 3 points lost. [Details](#tested-repeat-calls-on-wording-sensitive-questions) |
 | Denser pages | 4.2x fewer tokens; 7.8x in the first exploratory run | Opus −8.1 points (high effort) to −15.3 (low) at 4.2x, chains and counts first; 7.8x fails outright (33-42%) | **Fails** beyond ~3x. [Details](#where-it-breaks) |
+| Graded resolution (old text blurrier, or the reverse) | thirds of the document at 4.2x / 2.9x / 2.2x, 12 calls | each third reads like its density; at equal tokens 3-5 points below uniform 2.9x pages | **A trade, not a gain**; [details](#further-work-first-look-graded-resolution-2026-11-13) |
 | Pruned text instead of pages, or under them | LLMLingua-2 word pruning, 480 questions | 86.0% against 97.7% for pages at the same tokens; pruned text drawn as pages no better than denser pages | **Fails.** [Details](#tested-pruned-text) |
 | Coded or scrambled pages | glyph codes, substitution ciphers, word-scrambled English (the project's original idea) | refused or cut off by safety classifiers | **Not possible** on Claude. [glyphs/RESULTS.md](../glyphs/RESULTS.md) |
 | A local model (Qwen3.8-27B) | not run | plan and harness ready | **Planned.** [LOCAL_QWEN.md](../gpu/LOCAL_QWEN.md) |
@@ -418,6 +419,48 @@ model already knows the code; a bare file list is enough to locate a fix or a fl
 and the two early hints that the atlas gives an agent a head start (3 tasks to 0, one run per task) disappeared
 or stayed unrepeated when the tasks were run again. An orchestrator that plans from the atlas wrote briefs no
 better than one that saw only the file list.
+
+## Further work, first look: graded resolution (2026-11-13)
+
+**The idea.** The DeepSeek-OCR paper suggests, without testing it, a context memory that forgets: older text is
+re-rendered at lower resolution, so recent text is sharp and costly and old text is blurry and cheap.
+
+**The test** (Opus 5.5, high effort, 12 calls, $4.45; pre-registration and rows in
+[results/claude_qa/gradient](../../results/claude_qa/gradient/README.md)). The long-document Q&A test again, with
+each document cut into thirds drawn at 58.8, 88.2 and 117.6 px² per character: the most recent third sharp
+("recent sharp"), and the reverse as a control ("old sharp"). Both use exactly the input tokens of uniform 88.2
+pages (2.9x fewer than text).
+
+![Graded resolution: lookups by third of the document, and overall accuracy against input tokens](../img/claude_gradient.png)
+
+*Left: lookups by the third of the document their fact is in; each mark is labelled with the density that third
+was drawn at. Right: all questions against input tokens per call; the two graded arms sit directly below uniform
+88.2, which costs the same.*
+
+| arm | thirds, oldest to newest (px² per char) | all questions | lookups | multi-step | input tokens per call |
+|---|---|---|---|---|---|
+| text | – | 99.7% | 100.0% | 99.2% | 246,192 |
+| uniform 117.6 | 117.6 | 99.7% | 99.6% | 100.0% | 112,470 |
+| uniform 88.2 | 88.2 | 100.0% | 100.0% | 100.0% | 85,889 |
+| uniform 58.8 | 58.8 | 91.7% | 97.9% | 79.2% | 59,283 |
+| recent sharp | 58.8 / 88.2 / 117.6 | 95.1% | 99.2% | 87.1% | 85,913 |
+| old sharp | 117.6 / 88.2 / 58.8 | 95.8% | 99.2% | 89.2% | 85,912 |
+
+* **Each third reads like a whole document at its density.** Lookups in the 58.8 third score 97.5% and 97.4%, as
+  uniform 58.8 does; the sharper thirds score 100%. Mixing densities costs nothing extra (lookups are near their
+  ceiling, so a penalty under about 8 points in one third could not be seen).
+* **Position does not matter:** 95.1% with the recent third sharp, 95.8% with the old third sharp.
+* **It is a trade, not a gain.** At the same token count both graded arms score 3 to 5 points below uniform 88.2
+  (-5.3 and -3.3 points on the first call per document; both intervals exclude 0).
+* **The loss is in questions that need a fact from the blurry third:** 13 to 16 points lost on multi-step
+  questions with a fact there, none on those whose facts are all in sharper thirds. Most of it is counts across
+  the whole document (42% and 58% right).
+* All four pre-registered predictions held.
+
+**What it means.** Grading resolution moves accuracy to where it is wanted; it does not add any. At a fixed token
+budget uniform pages are better, unless the old text will rarely be asked about, and then it only pays if the
+blurry part is not needed for anything that spans the document. Not tested: a real session where old context is
+re-rendered as it ages, more than three tiers, and tiers denser than 58.8.
 
 ## Where to use it, and where not
 
