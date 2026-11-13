@@ -356,7 +356,7 @@ glyph error):
 
 **Implementation note (2026-11-04, before the first row).** The design above is implemented as written:
 `ep/g2lite.py`, `experiments/run_g2lite.py`, tests in `tests/test_g2lite.py`. The cache is `qwen25vl_h32`, built
-with `build_tokens2.py --split 32` in chunks of 25 pages. The queue is `results/queue_g2lite.txt` (print it with
+with `build_tokens2.py --split 32` in chunks of 25 pages. The queue is `results/archive/queue_g2lite.txt` (print it with
 `run_g2lite.py --print-queue`). Rows go to `encoder_probe/results/g2lite/runs.jsonl`, keyed by (encoding, arm,
 steps, train_pages, seed). These choices are not fixed by the design:
 * **Standardisation.**
@@ -550,7 +550,7 @@ pages). GridProbe reads through a pixel reconstruction, which under-reads Latin.
 arms, the latin_p5/p6 sweep, the latin_p8 frozen and direct arms, and a 3000-step blind floor were not run tonight:
 * the latin_p5 cache chunks are kept locally (the lg_pb_h5 cache was never built); all of these go to the 3090
   rerun at 1000+ pages;
-* the queue lines are in `results/queue_g2lite.txt` (old order, do not re-run from line 1) and `--print-queue`.
+* the queue lines are in `results/archive/queue_g2lite.txt` (old order, do not re-run from line 1) and `--print-queue`.
 
 ### Moonshot levers (beyond the go/no-go; user: "shoot for the moon")
 Ways to push density past the literature's 30-90 chars/token, each testable on its own:
