@@ -206,6 +206,16 @@ page scores 3 to 5 points below a uniform one: a trade, not a gain.
 
 ![Graded resolution: lookups by third of the document, and overall accuracy against input tokens](docs/img/claude_gradient.png)
 
+**Further work, first look done: facts large, filler small.** Mixed resolution throughout the page: a rule-based
+detector (regular expressions and word lists, no model) marks numbers, names and words that flip meaning; those
+are drawn large and the rest is shrunk until the page costs what a 4.2x page costs. Overall it scores the same as
+a uniform 4.2x page (90.6% against 91.7%), but it loses different questions: every chain is right and every
+wording-sensitive question is right (120 of 120, better than the safe 2.2x pages), while every count is wrong,
+because the filler ended up too small to read. A version that keeps the filler legible is the next test.
+[Details](docs/claude/CLAUDE_QA.md#further-work-first-look-facts-large-filler-small-2026-11-13)
+
+![Facts large, filler small: overall accuracy against tokens, and where the losses are](docs/img/claude_salient.png)
+
 **Parked:** the trained-encoder runs on Latin, the fair last test of the original idea
 ([docs/gpu/PLAN_3090.md](docs/gpu/PLAN_3090.md)). **Closed:** the dense-glyph and colour stages after them.
 

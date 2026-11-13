@@ -56,6 +56,7 @@ reading text, at lower cost.
 | Questions that turn on one small word | 40 extra questions per document, 15 calls per density | 97.2% (2.2x) and 96.2% (2.9x) against 100% from text; 5 of 30 page calls read every passive backwards | **Limit**: about 3 points lost. [Details](#tested-repeat-calls-on-wording-sensitive-questions) |
 | Denser pages | 4.2x fewer tokens; 7.8x in the first exploratory run | Opus −8.1 points (high effort) to −15.3 (low) at 4.2x, chains and counts first; 7.8x fails outright (33-42%) | **Fails** beyond ~3x. [Details](#where-it-breaks) |
 | Graded resolution (old text blurrier, or the reverse) | thirds of the document at 4.2x / 2.9x / 2.2x, 12 calls | each third reads like its density; at equal tokens 3-5 points below uniform 2.9x pages | **A trade, not a gain**; [details](#further-work-first-look-graded-resolution-2026-11-13) |
+| Facts large, filler small (a rule-based detector picks what to enlarge) | marked words at the 2.2x size, filler shrunk to the 4.2x pages' tokens, 15 calls | 90.6% against 91.7% for uniform 4.2x pages: no gain overall; chains 100%, wording-sensitive questions 100%, counts 0% | **Moves the loss, does not remove it**; [details](#further-work-first-look-facts-large-filler-small-2026-11-13) |
 | Pruned text instead of pages, or under them | LLMLingua-2 word pruning, 480 questions | 86.0% against 97.7% for pages at the same tokens; pruned text drawn as pages no better than denser pages | **Fails.** [Details](#tested-pruned-text) |
 | Coded or scrambled pages | glyph codes, substitution ciphers, word-scrambled English (the project's original idea) | refused or cut off by safety classifiers | **Not possible** on Claude. [glyphs/RESULTS.md](../glyphs/RESULTS.md) |
 | A local model (Qwen3.8-27B) | not run | plan and harness ready | **Planned.** [LOCAL_QWEN.md](../gpu/LOCAL_QWEN.md) |
@@ -461,6 +462,53 @@ was drawn at. Right: all questions against input tokens per call; the two graded
 budget uniform pages are better, unless the old text will rarely be asked about, and then it only pays if the
 blurry part is not needed for anything that spans the document. Not tested: a real session where old context is
 re-rendered as it ages, more than three tiers, and tiers denser than 58.8.
+
+## Further work, first look: facts large, filler small (2026-11-13)
+
+**The idea.** Mixed resolution throughout the page, chosen by content: what must be exact is drawn large and
+safe, the rest small and cheap, with a cheap way to find the facts when the page is made.
+
+**The test** (Opus 5.5, high effort, 15 calls, $5.08; pre-registration, detector rules and rows in
+[results/claude_qa/salient](../../results/claude_qa/salient/README.md)). A detector made only of regular
+expressions and word lists marks numbers, names and words that flip meaning (not, never, except, all but, at
+most, by ...): 30-34% of the characters. Marked words are drawn at the size of the safe 117.6 pages; everything
+else is shrunk until the document costs exactly the tokens of uniform 58.8 pages (4.2x fewer than text), the
+budget where uniform pages lose 8 points. A control swaps the two sizes.
+
+![A strip of a mixed page: marked words large, filler tiny; and the control with the sizes swapped](../img/claude_salient_sample.png)
+
+*Top: the tested page. Bottom: the control. Because almost every line holds a marked word and takes the large
+line height, the filler had to shrink to about 4 px to hit the token budget: far smaller than anything Claude
+transcribes, and unreadable to a person.*
+
+![Facts large, filler small: overall accuracy against tokens, and where the losses are](../img/claude_salient.png)
+
+| arm | all questions | invented facts | numbers in sentences | chains, sums, largest | counts | input tokens per call |
+|---|---|---|---|---|---|---|
+| uniform 88.2 | 100.0% | 100% | 100% | 100% | 100% | 85,889 |
+| uniform 58.8 | 91.7% | 97.5% | 98.3% | 88% | 28% | 59,283 |
+| facts large, filler small | 90.6% | 99.2% | 88.3% | 99% | 0% | 59,284 |
+| control: facts small, filler large | 19.4% | 0% | 55.0% | – | – | 59,238 |
+
+* **No gain overall at equal tokens:** 90.6% against 91.7% for uniform 58.8 pages (-1.1 points, interval -3.5 to
+  +1.3). The prediction of a gain of 3 points or more failed.
+* **But a different profile.** Every two-hop and three-hop chain is right (uniform 58.8: 90% and 67%), because
+  the names and numbers a chain runs on are all large.
+* **Wording-sensitive questions: 120 of 120 right**, against 97.2% for the safe 117.6 pages over 15 calls and
+  82.5% for 58.8 pages. Drawing the small words large is the first thing that has fixed that weakness. It rests
+  on 3 calls, and the word list was written knowing the question types, so it is an upper bound.
+* **Counts: 0 of 36.** The things being counted differ only in an ordinary noun, which is filler, so Claude
+  finds none. Number-in-sentence questions drop to 88%: the number is large, but the sentence is found from its
+  tiny opening words, and sometimes the wrong sentence is found.
+* **The detector's choice is what carries the facts:** with the sizes swapped the page scores 19%.
+
+**What it means, and what it does not.** At this budget the idea moves the loss, it does not remove it: what the
+detector marks is read perfectly and what it misses is gone. Two things make this a first look only. The planted
+facts are numbers and invented names, the detector's best case. And the layout forced the filler to an
+unreadable size; a version that keeps the filler legible (for example marked words at the 117.6 size inside 58.8
+text, at a budget between the two) or that does not give every line the large height is the obvious next test.
+The wording result suggests a cheaper use: keep uniform pages and enlarge only the handful of words that flip
+meaning.
 
 ## Where to use it, and where not
 
