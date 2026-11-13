@@ -28,7 +28,7 @@ at most 3 probe jobs or one fine-tune at a time (Windows pages GPU memory instea
 ## 1. Setup
 
 ```bash
-git clone https://github.com/StephenFlavin/visual-bpe && cd visual-bpe
+git clone https://github.com/StephenFlavin/visual-text-compression && cd visual-text-compression
 git checkout claude/validation-harness
 python3 -m venv .venv && . .venv/bin/activate          # Python >= 3.11 (the runner uses 3.13)
 pip install -r requirements.txt

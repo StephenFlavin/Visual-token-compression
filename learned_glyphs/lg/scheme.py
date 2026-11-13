@@ -55,7 +55,7 @@ from PIL import Image, ImageDraw
 
 _HERE = Path(__file__).resolve()
 LG_ROOT = _HERE.parent.parent            # learned_glyphs/
-REPO_ROOT = LG_ROOT.parent               # visual-bpe/
+REPO_ROOT = LG_ROOT.parent               # the repo root
 RESULTS = LG_ROOT / "results"
 if str(REPO_ROOT) not in sys.path:     # vbpe (normally already importable)
     sys.path.append(str(REPO_ROOT))

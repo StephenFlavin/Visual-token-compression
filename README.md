@@ -1,4 +1,4 @@
-# Visual BPE
+# Visual text compression
 
 **Claude Opus reading a long document for about a third of the input tokens was not the goal. It is where this
 ended up.** Render the document as page images of ordinary small text and Opus answers lookups, chains and counts
@@ -42,7 +42,8 @@ That belief was wrong, and most of this repo is the work of finding out why (sec
 Braille is built to be read at very low resolution: six dots a cell. A model's reader could be given an alphabet
 made for small bitmaps instead of one made for pens. And once the alphabet is ours to design, there is no reason to
 stop at letters: byte-pair encoding merges frequent letter runs (`the`, `ing`, ` of the `) into single tokens, so
-each of those can have its own glyph. That is the name of the repo.
+each of those can have its own glyph. That was "Visual BPE", the working name of this project (the code package is
+still `vbpe`).
 
 ![Plain text vs learned glyphs](docs/img/glyphs.png)
 
